@@ -238,6 +238,11 @@ input[type='radio']:checked {
 .rc-tooltip {
   opacity: 1 !important;
 }
+.oncokb-search-overlay {
+  .rc-tooltip-inner {
+    max-width: 320px !important;
+  }
+}
 
 // Overwrite react-table styles
 .oncokbReactTable.ReactTable {
