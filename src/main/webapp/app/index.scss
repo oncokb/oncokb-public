@@ -186,6 +186,10 @@ fieldset.form-group {
   margin-bottom: 0;
 }
 
+.breadcrumb {
+  align-items: center;
+}
+
 // Change the default checkbox/radio icon to fontawesome to have a more clear message
 input[type='checkbox'],
 input[type='radio'] {

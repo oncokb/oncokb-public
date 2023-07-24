@@ -3,12 +3,8 @@ import { inject, observer } from 'mobx-react';
 import { AnnotationStore, IAnnotationStore } from 'app/store/AnnotationStore';
 import { computed, IReactionDisposer, observable, reaction } from 'mobx';
 import AppStore from 'app/store/AppStore';
-import LoadingIndicator, {
-  LoaderSize,
-} from 'app/components/loadingIndicator/LoadingIndicator';
 import { RouterStore } from 'mobx-react-router';
 import DocumentTitle from 'react-document-title';
-import { Else, If, Then } from 'react-if';
 import { RouteComponentProps } from 'react-router';
 import AnnotationPage, {
   AnnotationType,
@@ -20,7 +16,6 @@ import {
   QUERY_SEPARATOR_FOR_QUERY_STRING,
   REFERENCE_GENOME,
 } from 'app/config/constants';
-import { Alert } from 'react-bootstrap';
 import autobind from 'autobind-decorator';
 import {
   AlterationPageHashQueries,
@@ -49,7 +44,7 @@ export default class GenomicPage extends React.Component<GenomicPageProps> {
   private readonly annotationType: AnnotationType;
   private selectedTab: ANNOTATION_PAGE_TAB_KEYS;
 
-  private store: AnnotationStore;
+  private readonly store: AnnotationStore;
   readonly reactions: IReactionDisposer[] = [];
 
   constructor(props: any) {
@@ -64,14 +59,17 @@ export default class GenomicPage extends React.Component<GenomicPageProps> {
 
     if (props.match.params) {
       const params: IAnnotationStore = {
+        type: AnnotationType.HGVSG,
         tumorTypeQuery: this.tumorType,
         referenceGenomeQuery: this.refGenome,
       };
       switch (this.annotationType) {
         case AnnotationType.HGVSG:
+          params.type = AnnotationType.HGVSG;
           params.hgsvgQuery = props.match.params.query;
           break;
         case AnnotationType.GENOMIC_CHANGE:
+          params.type = AnnotationType.GENOMIC_CHANGE;
           params.genomicChangeQuery = props.match.params.query;
           break;
         default:
@@ -128,21 +126,6 @@ export default class GenomicPage extends React.Component<GenomicPageProps> {
   }
 
   @computed
-  get annotationData() {
-    switch (this.annotationType) {
-      case AnnotationType.GENOMIC_CHANGE:
-        return this.store.annotationResultByGenomicChange;
-        break;
-      case AnnotationType.HGVSG:
-        return this.store.annotationResultByHgvsg;
-        break;
-      default:
-        return this.store.defaultAnnotationResult;
-        break;
-    }
-  }
-
-  @computed
   get searchQueries() {
     const queryString: Partial<AlterationPageSearchQueries> = {};
     if (this.refGenome) {
@@ -161,23 +144,18 @@ export default class GenomicPage extends React.Component<GenomicPageProps> {
   @computed
   get documentTitle() {
     const content = [];
-    if (this.annotationData.isComplete) {
-      if (this.annotationData.result.query.hugoSymbol) {
-        content.push(this.annotationData.result.query.hugoSymbol);
+    if (this.store.annotationData.isComplete) {
+      if (this.store.annotationData.result.query.hugoSymbol) {
+        content.push(this.store.annotationData.result.query.hugoSymbol);
       }
-      if (this.annotationData.result.query.alteration) {
-        content.push(this.annotationData.result.query.alteration);
+      if (this.store.annotationData.result.query.alteration) {
+        content.push(this.store.annotationData.result.query.alteration);
       }
       if (this.store.tumorTypeQuery) {
         content.push(`in ${this.store.tumorTypeQuery}`);
       }
     }
     return content.join(', ');
-  }
-
-  @computed
-  get pageShouldBeRendered() {
-    return this.annotationData.isComplete;
   }
 
   @autobind
@@ -203,58 +181,17 @@ export default class GenomicPage extends React.Component<GenomicPageProps> {
   render() {
     return (
       <DocumentTitle title={this.documentTitle}>
-        <If condition={this.pageShouldBeRendered}>
-          <Then>
-            <If condition={!!this.annotationData.result.query.hugoSymbol}>
-              <Then>
-                <AnnotationPage
-                  appStore={this.props.appStore}
-                  windowStore={this.props.windowStore}
-                  authenticationStore={this.props.authenticationStore}
-                  annotationType={this.annotationType}
-                  hugoSymbol={this.annotationData.result.query.hugoSymbol}
-                  oncogene={this.store.gene.result.oncogene}
-                  tsg={this.store.gene.result.tsg}
-                  alteration={this.annotationData.result.query.alteration}
-                  matchedAlteration={this.store.alteration.result}
-                  tumorType={this.store.tumorTypeQuery}
-                  refGenome={this.store.referenceGenomeQuery}
-                  annotation={this.annotationData.result}
-                  biologicalAlterations={
-                    this.store.biologicalAlterations.result
-                  }
-                  relevantAlterations={this.store.relevantAlterations.result}
-                  onChangeTumorType={newTumorType =>
-                    (this.tumorType = newTumorType)
-                  }
-                  defaultSelectedTab={this.selectedTab}
-                  onChangeTab={this.onChangeTab}
-                />
-              </Then>
-              <Else>
-                <Alert variant="warning" className={'text-center'}>
-                  We do not have any information for this variant
-                </Alert>
-              </Else>
-            </If>
-          </Then>
-          <Else>
-            <If condition={this.annotationData.isError}>
-              <Then>
-                <Alert variant="warning" className={'text-center'}>
-                  An error occurred while annotating your variant.
-                </Alert>
-              </Then>
-              <Else>
-                <LoadingIndicator
-                  size={LoaderSize.LARGE}
-                  center={true}
-                  isLoading={true}
-                />
-              </Else>
-            </If>
-          </Else>
-        </If>
+        <AnnotationPage
+          appStore={this.props.appStore}
+          windowStore={this.props.windowStore}
+          routing={this.props.routing}
+          store={this.store}
+          authenticationStore={this.props.authenticationStore}
+          annotationType={this.annotationType}
+          onChangeTumorType={newTumorType => (this.tumorType = newTumorType)}
+          defaultSelectedTab={this.selectedTab}
+          onChangeTab={this.onChangeTab}
+        />
       </DocumentTitle>
     );
   }

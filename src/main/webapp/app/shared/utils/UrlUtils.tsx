@@ -137,6 +137,39 @@ export const AlterationPageLink: React.FunctionComponent<{
   );
 };
 
+export const getGenomicPageLocation = (props: {
+  rootRoute: PAGE_ROUTE.GENOMIC_CHANGE | PAGE_ROUTE.HGVSG;
+  query: string;
+  refGenome?: REFERENCE_GENOME;
+  cancerType?: string;
+}): any => {
+  const location = {
+    pathname: `${props.rootRoute}/${props.query}`,
+    search: {} as any,
+  };
+  if (props.refGenome) {
+    location.search.refGenome = props.refGenome;
+  }
+  if (props.cancerType) {
+    location.search.tumorType = encodeSlash(props.cancerType);
+  }
+  return location;
+};
+
+export const getGenomicPageLink = (props: {
+  rootRoute: PAGE_ROUTE.GENOMIC_CHANGE | PAGE_ROUTE.HGVSG;
+  query: string;
+  refGenome?: REFERENCE_GENOME;
+  cancerType?: string;
+}): string => {
+  const location = getGenomicPageLocation(props);
+  let pageLink = location.pathname;
+  if (Object.keys(location.search).length > 0) {
+    pageLink = `${pageLink}?${QueryString.stringify(location.search)}`;
+  }
+  return pageLink;
+};
+
 export const TumorTypePageLink: React.FunctionComponent<{
   hugoSymbol: string;
   alteration: string;
