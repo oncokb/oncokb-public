@@ -423,7 +423,7 @@ export default class AnnotationPage extends React.Component<
           } as IDropdownBreadcrumb,
           {
             type: 'input',
-            key: 'hgvgs',
+            key: 'hgvsg',
             text: this.props.store.hgvsgQuery,
             onChange: (newQuery: string) => {
               const location = getGenomicPageLocation({
