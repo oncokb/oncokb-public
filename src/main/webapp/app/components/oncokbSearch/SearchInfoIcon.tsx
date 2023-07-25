@@ -80,7 +80,7 @@ export default class SearchInfoIcon extends React.Component<ISearchInfoIcon> {
               <li>The search box supports blurry search</li>
               <li>HGVSg and GC searches default to GRCh37. To search variants in GRCh38, please add GRCh38 as
                 prefix.
-                Example: {this.getQueryLink('grch38:7:g.140453136A>T')}, {this.getQueryLink('grch38:7,140453136,140453136,A,T')}
+                Example: {this.getQueryLink('grch38:7:g.140753336A>T')}, {this.getQueryLink('grch38:7,140753336,140753336,A,T')}
               </li>
             </ul>
           </div>
