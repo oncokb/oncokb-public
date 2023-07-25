@@ -12,6 +12,7 @@ import AppStore from 'app/store/AppStore';
 import { FeedbackIcon } from 'app/components/feedback/FeedbackIcon';
 import { FeedbackType } from 'app/components/feedback/types';
 import { ONCOKB_TM } from 'app/config/constants';
+import { Alteration } from 'app/shared/api/generated/OncoKbPrivateAPI';
 
 export enum SearchOptionType {
   GENE = 'GENE',
@@ -175,6 +176,47 @@ const CancerTypeSearchOption: React.FunctionComponent<{
   search: string;
   data: ExtendedTypeaheadSearchResp;
 }> = props => {
+  const groupAlterationsByGene = (alterations: Alteration[]) => {
+    const groupedAlterations: { [key: string]: string[] } = {};
+    alterations.forEach(alteration => {
+      const gene = alteration.gene.hugoSymbol;
+      if (!groupedAlterations[gene]) {
+        groupedAlterations[gene] = [];
+      }
+      groupedAlterations[gene].push(alteration.alteration);
+    });
+    return groupedAlterations;
+  };
+
+  const renderAlterations = (alterationsByGene: {
+    [key: string]: string[];
+  }) => {
+    const maxElementsToDisplay = 3;
+    const geneKeys = Object.keys(alterationsByGene);
+    const totalGenes = geneKeys.length;
+    const genesToDisplay = Math.min(maxElementsToDisplay, totalGenes);
+    // displaying 3 genes
+    return geneKeys.slice(0, genesToDisplay).map((gene, index) => {
+      const geneAlterations = alterationsByGene[gene];
+
+      const showAndMore = geneAlterations.length > maxElementsToDisplay;
+
+      const displayAlterations = showAndMore
+        ? geneAlterations.slice(0, maxElementsToDisplay).join(', ') +
+          ', and more'
+        : geneAlterations.join(', ');
+
+      const separator = index < genesToDisplay - 2 ? ', ' : '';
+
+      return (
+        <span key={index}>
+          {gene} ({displayAlterations}){separator}
+          {showAndMore && index === genesToDisplay - 1 ? ', and more' : ''}
+        </span>
+      );
+    });
+  };
+
   return (
     <>
       <div>
@@ -183,18 +225,26 @@ const CancerTypeSearchOption: React.FunctionComponent<{
           textToHighlight={props.data.tumorTypesName}
         />
       </div>
-      {props.data.gene !== null ? (
-        <div className={styles.subTitle}>
-          <LevelString
-            highestSensitiveLevel={props.data.highestSensitiveLevel}
-            highestResistanceLevel={props.data.highestResistanceLevel}
-          />
-          in
-          {` ${props.data.gene.hugoSymbol} `}
-          {props.data.variants.length > 1
-            ? `(${props.data.alterationsName})`
-            : ''}
-          {props.data.variants.length === 1 ? props.data.alterationsName : ''}
+      {props.data.alterationsByLevel !== null ? (
+        <div>
+          {Object.entries(props.data.alterationsByLevel).map(
+            ([level, alterations]) => (
+              <div className={styles.subTitle}>
+                <LevelString
+                  // removing the "LEVEL_" so it only shows level number
+                  highestSensitiveLevel={
+                    level.startsWith('LEVEL_R') ? undefined : level.substring(6)
+                  }
+                  highestResistanceLevel={
+                    level.startsWith('LEVEL_R')
+                      ? level.substring(6) + ' '
+                      : undefined
+                  }
+                />
+                in {renderAlterations(groupAlterationsByGene(alterations))}
+              </div>
+            )
+          )}
         </div>
       ) : (
         <div>No evidence found.</div>

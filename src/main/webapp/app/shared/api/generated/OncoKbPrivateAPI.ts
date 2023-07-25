@@ -464,6 +464,8 @@ export type TypeaheadSearchResp = {
 
         'vus': boolean
 
+        'alterationsByLevel': { [key: string]: Alteration[] } | null
+
 };
 export type VariantAnnotationTumorType = {
     'evidences': Array < Evidence >
