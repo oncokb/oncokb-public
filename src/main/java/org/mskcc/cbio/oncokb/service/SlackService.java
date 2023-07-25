@@ -33,7 +33,6 @@ import org.mskcc.cbio.oncokb.web.rest.slack.BlockId;
 import org.mskcc.cbio.oncokb.web.rest.slack.DropdownEmailOption;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.scheduling.annotation.Async;
 import org.springframework.stereotype.Service;
 import org.thymeleaf.context.Context;
@@ -70,15 +69,16 @@ public class SlackService {
     private final MailService mailService;
     private final EmailService emailService;
     private final UserMailsService userMailsService;
+    private final UserMapper userMapper;
+    private final Slack slack;
 
-    @Autowired
-    private UserMapper userMapper;
-
-    public SlackService(ApplicationProperties applicationProperties, MailService mailService, EmailService emailService, UserMailsService userMailsService) {
+    public SlackService(ApplicationProperties applicationProperties, MailService mailService, EmailService emailService, UserMailsService userMailsService, UserMapper userMapper, Slack slack) {
         this.applicationProperties = applicationProperties;
         this.mailService = mailService;
         this.emailService = emailService;
         this.userMailsService = userMailsService;
+        this.userMapper = userMapper;
+        this.slack = slack;
     }
 
     @Async
@@ -119,7 +119,6 @@ public class SlackService {
             .text(text)
             .build();
 
-        Slack slack = Slack.getInstance();
         try {
             // This is an automatic message when user from whitelist is registered.
             WebhookResponse response = slack.send(this.applicationProperties.getSlack().getUserRegistrationWebhook(), payload);
@@ -135,7 +134,6 @@ public class SlackService {
             .text(userDTO.getEmail() + " has read and agreed to the trial license agreement. The account has been activated, the trial period ends on " + expirationDate)
             .build();
 
-        Slack slack = Slack.getInstance();
         try {
             WebhookResponse response = slack.send(this.applicationProperties.getSlack().getUserRegistrationWebhook(), payload);
 
@@ -158,7 +156,6 @@ public class SlackService {
 
     public List<UserIdMessagePair> getAllUnapprovedUserRequestsSentAfter(int daysAgo) {
         List<UserIdMessagePair> userList = new ArrayList<>();
-        Slack slack = Slack.getInstance();
         final String REQUEST_MESSAGE_TEXT = "This content can't be displayed.";
 
         try {
@@ -228,7 +225,6 @@ public class SlackService {
             .blocks(layoutBlocks)
             .build();
 
-        Slack slack = Slack.getInstance();
         try {
             WebhookResponse response = slack.send(url, payload);
             log.info("Send the latest user blocks to slack with response code " + response.getCode());
@@ -677,7 +673,6 @@ public class SlackService {
             .view(view)
             .build();
 
-        Slack slack = Slack.getInstance();
         try {
             ViewsOpenResponse response = slack.methods().viewsOpen(request);
             if (!response.isOk()) {

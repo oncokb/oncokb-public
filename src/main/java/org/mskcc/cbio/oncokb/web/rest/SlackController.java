@@ -20,7 +20,6 @@ import org.mskcc.cbio.oncokb.web.rest.slack.BlockId;
 import org.mskcc.cbio.oncokb.web.rest.slack.DropdownEmailOption;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -40,18 +39,18 @@ public class SlackController {
 
     private final UserService userService;
 
-    @Autowired
-    private UserMapper userMapper;
+    private final UserMapper userMapper;
 
     private final UserRepository userRepository;
 
     private final MailService mailService;
 
-    public SlackController(UserService userService, UserRepository userRepository, MailService mailService, SlackService slackService) {
+    public SlackController(UserService userService, UserRepository userRepository, MailService mailService, SlackService slackService, UserMapper userMapper) {
         this.userService = userService;
         this.userRepository = userRepository;
         this.mailService = mailService;
         this.slackService = slackService;
+        this.userMapper = userMapper;
     }
 
     // We do not put any auth protection for the slack call
