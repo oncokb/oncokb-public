@@ -32,7 +32,6 @@ const LevelString: React.FunctionComponent<{
 }> = props => {
   return (
     <>
-      {' '}
       {props.highestSensitiveLevel ? (
         <span
           className={`oncokb level-${levelOfEvidence2Level(
@@ -40,7 +39,7 @@ const LevelString: React.FunctionComponent<{
             true
           )}`}
         >
-          Level {props.highestSensitiveLevel}{' '}
+          Level {props.highestSensitiveLevel}
         </span>
       ) : undefined}
       {props.highestResistanceLevel ? (
@@ -181,11 +180,10 @@ const DrugSearchOption: React.FunctionComponent<{
         />
       </div>
       <div className={styles.subTitle}>
-        The drug is
         <LevelString
           highestSensitiveLevel={props.data.highestSensitiveLevel}
           highestResistanceLevel={props.data.highestResistanceLevel}
-        />
+        /> :{' '}
         {` ${props.data.gene.hugoSymbol} `}
         {props.data.variants.length > 1
           ? `(${props.data.alterationsName})`
