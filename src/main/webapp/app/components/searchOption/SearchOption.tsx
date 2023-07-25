@@ -206,7 +206,7 @@ const CancerTypeSearchOption: React.FunctionComponent<{
           ', and more'
         : geneAlterations.join(', ');
 
-      const separator = index < genesToDisplay - 2 ? ', ' : '';
+      const separator = index < genesToDisplay - 1 ? ', ' : '';
 
       return (
         <span key={index}>
