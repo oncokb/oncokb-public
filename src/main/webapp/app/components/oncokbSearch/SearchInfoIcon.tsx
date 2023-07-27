@@ -47,12 +47,6 @@ export default class SearchInfoIcon extends React.Component<ISearchInfoIcon> {
                 content: this.getQueryLink('BRAF V600E')
               }]
             }, {
-              key: 'cancer',
-              content: [{key: 'cancer-0', content: 'Cancer Type'}, {
-                key: 'cancer-1',
-                content: this.getQueryLink('Melanoma')
-              }]
-            }, {
               key: 'drug',
               content: [{key: 'drug-0', content: 'Drug'}, {
                 key: 'drug-1',
