@@ -115,7 +115,7 @@ export const AlterationPageLink: React.FunctionComponent<{
   showGene?: boolean;
   onClick?: () => void;
 }> = props => {
-  const alterationName = getAlterationName(props.alteration);
+  const alterationName = getAlterationName(props.alteration, true);
   const pageLink = getAlterationPageLink({
     hugoSymbol: props.hugoSymbol,
     alteration: props.alteration,
