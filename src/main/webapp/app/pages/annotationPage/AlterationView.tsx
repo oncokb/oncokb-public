@@ -21,10 +21,7 @@ import {
   FdaImplication,
   TherapeuticImplication,
 } from 'app/store/AnnotationStore';
-import {
-  getAlterationName,
-  isCategoricalAlteration,
-} from 'app/shared/utils/Utils';
+import { isCategoricalAlteration } from 'app/shared/utils/Utils';
 import CancerTypeSelect from 'app/shared/dropdown/CancerTypeSelect';
 import AlterationTableTabs from 'app/pages/annotationPage/AlterationTableTabs';
 import { getSummaries, SummaryKey } from 'app/pages/annotationPage/Utils';
@@ -104,19 +101,6 @@ export default class AlterationView extends React.Component<
     } else {
       return [];
     }
-  }
-
-  @computed
-  get alterationName() {
-    return getAlterationName(
-      this.props.matchedAlteration === undefined
-        ? this.props.alteration
-        : {
-            alteration: this.props.matchedAlteration.alteration,
-            name: this.props.matchedAlteration.name,
-          },
-      true
-    );
   }
 
   render() {

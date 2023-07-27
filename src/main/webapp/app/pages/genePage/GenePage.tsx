@@ -29,7 +29,6 @@ import { DefaultTooltip } from 'cbioportal-frontend-commons';
 import {
   ANNOTATION_PAGE_TAB_KEYS,
   DEFAULT_GENE,
-  PAGE_TITLE,
   LEVEL_CLASSIFICATION,
   LEVEL_TYPES,
   ONCOGENIC_MUTATIONS,
@@ -61,6 +60,7 @@ import GeneAdditionalInfoTable from 'app/pages/genePage/GeneAdditionalInfoTable'
 import OncokbLollipopPlot from './OncokbLollipopPlot';
 import { getUniqueFdaImplications } from 'app/pages/annotationPage/Utils';
 import ShowHideText from 'app/shared/texts/ShowHideText';
+import { AnnotationType } from 'app/pages/annotationPage/AnnotationPage';
 
 interface MatchParams {
   hugoSymbol: string;
@@ -276,6 +276,7 @@ export default class GenePage extends React.Component<GenePageProps, any> {
       ? props.match.params.hugoSymbol
       : undefined;
     this.store = new AnnotationStore({
+      type: AnnotationType.GENE,
       hugoSymbolQuery: this.hugoSymbolQuery,
     });
     const queryStringsHash = QueryString.parse(

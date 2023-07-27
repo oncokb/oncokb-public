@@ -17,6 +17,7 @@ export enum SearchOptionType {
   GENE = 'GENE',
   VARIANT = 'VARIANT',
   DRUG = 'DRUG',
+  GENOMIC = 'GENOMIC',
   TEXT = 'TEXT',
 }
 type SearchOptionProps = {
@@ -31,7 +32,6 @@ const LevelString: React.FunctionComponent<{
 }> = props => {
   return (
     <>
-      {' '}
       {props.highestSensitiveLevel ? (
         <span
           className={`oncokb level-${levelOfEvidence2Level(
@@ -39,7 +39,7 @@ const LevelString: React.FunctionComponent<{
             true
           )}`}
         >
-          Level {props.highestSensitiveLevel}{' '}
+          Level {props.highestSensitiveLevel}
         </span>
       ) : undefined}
       {props.highestResistanceLevel ? (
@@ -140,6 +140,32 @@ const AlterationSearchOption: React.FunctionComponent<{
     </>
   );
 };
+const GenomicSearchOption: React.FunctionComponent<{
+  search: string;
+  data: ExtendedTypeaheadSearchResp;
+  appStore: AppStore;
+}> = props => {
+  return (
+    <>
+      <div className={'d-flex align-items-center'}>
+        Query is annotated as {props.data.gene.hugoSymbol} /{' '}
+        {props.data.alterationsName}
+        <OncoKBAnnotationIcon
+          className={'mb-1 ml-1'}
+          oncogenicity={props.data.oncogenicity}
+          vus={props.data.vus}
+          sensitiveLevel={props.data.highestSensitiveLevel}
+          resistanceLevel={props.data.highestResistanceLevel}
+        />
+      </div>
+      {props.data.annotation ? (
+        <div className={styles.subTitle}>
+          <span>{props.data.annotation}</span>
+        </div>
+      ) : undefined}
+    </>
+  );
+};
 
 const DrugSearchOption: React.FunctionComponent<{
   search: string;
@@ -154,11 +180,10 @@ const DrugSearchOption: React.FunctionComponent<{
         />
       </div>
       <div className={styles.subTitle}>
-        The drug is
         <LevelString
           highestSensitiveLevel={props.data.highestSensitiveLevel}
           highestResistanceLevel={props.data.highestResistanceLevel}
-        />
+        /> :{' '}
         {` ${props.data.gene.hugoSymbol} `}
         {props.data.variants.length > 1
           ? `(${props.data.alterationsName})`
@@ -193,10 +218,21 @@ export const SearchOption: React.FunctionComponent<SearchOptionProps> = props =>
                   <DrugSearchOption search={searchKeyword} data={props.data} />
                 </Then>
                 <Else>
-                  <If condition={props.type === SearchOptionType.TEXT}>
+                  <If condition={props.type === SearchOptionType.GENOMIC}>
                     <Then>
-                      <span>{props.data.annotation}</span>
+                      <GenomicSearchOption
+                        search={searchKeyword}
+                        data={props.data}
+                        appStore={props.appStore}
+                      />
                     </Then>
+                    <Else>
+                      <If condition={props.type === SearchOptionType.TEXT}>
+                        <Then>
+                          <span>{props.data.annotation}</span>
+                        </Then>
+                      </If>
+                    </Else>
                   </If>
                 </Else>
               </If>

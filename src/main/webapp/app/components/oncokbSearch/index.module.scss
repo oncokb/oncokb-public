@@ -1,0 +1,16 @@
+.simpleTable {
+  margin-bottom: 0 !important;
+
+  th {
+    font-family: "Gotham Medium";
+    border-top: 0 !important;
+  }
+
+  td {
+    white-space: nowrap;
+  }
+
+  th, td {
+    padding: 0.25rem !important;
+  }
+}

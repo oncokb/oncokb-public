@@ -13,14 +13,12 @@ import { Button, Col, Row } from 'react-bootstrap';
 import { HomePageNumber } from 'app/components/HomePageNumber';
 import pluralize from 'pluralize';
 import {
-  AsteriskMark,
   FdaRecognitionDisclaimer,
   LEVEL_BUTTON_DESCRIPTION,
   LEVEL_CLASSIFICATION,
   LEVEL_TYPE_NAMES,
   LEVEL_TYPES,
   LEVELS,
-  ONCOKB_TM,
   PAGE_ROUTE,
 } from 'app/config/constants';
 import { LevelButton } from 'app/components/levelButton/LevelButton';
