@@ -38,7 +38,6 @@ import { BarChartDatum } from 'app/components/barChart/BarChart';
 import {
   getAlterationName,
   getCancerTypeNameFromOncoTreeType,
-  getPageTitle,
   isOncogenic,
   shortenOncogenicity,
 } from 'app/shared/utils/Utils';
@@ -562,21 +561,33 @@ export class AnnotationStore {
     }
   }
 
-  @computed
-  get alterationName() {
-    if (this.annotationType === AnnotationType.PROTEIN_CHANGE) {
+  // need to pass all observables from @computed, so they can bo monitored by mobx
+  computeAlterationName(annotationType, alteration, alterationQuery, annotationData, showDiff: boolean) {
+    if (annotationType === AnnotationType.PROTEIN_CHANGE) {
       return getAlterationName(
-        this.alteration.result === undefined
-          ? this.alterationQuery
+        alteration.result === undefined
+          ? alterationQuery
           : {
-              alteration: this.alteration.result.alteration,
-              name: this.alteration.result.name,
-            },
-        true
+            alteration: alteration.result.alteration,
+            name: alteration.result.name,
+          },
+        showDiff
       );
     } else {
-      return this.annotationData.result.query.alteration || '';
+      return annotationData.result.query.alteration || '';
     }
+  }
+
+  @computed
+  get alterationName() {
+    return this.computeAlterationName(
+      this.annotationType, this.alteration, this.alterationQuery, this.annotationData, false);
+  }
+
+  @computed
+  get alterationNameWithDiff() {
+    return this.computeAlterationName(
+      this.annotationType, this.alteration, this.alterationQuery, this.annotationData, true);
   }
 
   @computed

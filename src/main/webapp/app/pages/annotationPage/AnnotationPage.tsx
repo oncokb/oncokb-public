@@ -395,7 +395,7 @@ export default class AnnotationPage extends React.Component<
           {
             type: 'link',
             key: 'alteration',
-            text: this.props.store.alterationName,
+            text: this.props.store.alterationNameWithDiff,
             to: getAlterationPageLink({
               hugoSymbol: this.props.store.hugoSymbol,
               alteration: this.props.store.alterationName,
@@ -506,7 +506,7 @@ export default class AnnotationPage extends React.Component<
               {this.showGeneName && (
                 <span className={'mr-2'}>{this.props.store.hugoSymbol}</span>
               )}
-              <span>{this.props.store.alterationName}</span>
+              <span>{this.props.store.alterationNameWithDiff}</span>
               {this.props.store.cancerTypeName && (
                 <span className={'mx-2'}>
                   in {this.props.store.cancerTypeName}
