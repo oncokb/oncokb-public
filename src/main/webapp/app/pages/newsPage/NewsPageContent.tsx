@@ -25,6 +25,7 @@ import {
   MSILink,
   SopPageLink,
   YearEndReviewPageLink,
+  getAlterationPageLink,
 } from 'app/shared/utils/UrlUtils';
 import { PMIDLink } from 'app/shared/links/PMIDLink';
 import { Linkout } from 'app/shared/links/Linkout';
@@ -205,7 +206,14 @@ export const NEWS_BY_DATE: { [date: string]: NewsData } = {
         content: [
           [
             'FLT3',
-            'Internal Tandem Duplications (ITD)',
+            <Link
+              to={getAlterationPageLink({
+                hugoSymbol: 'FLT3',
+                alteration: 'Internal tandem duplication',
+              })}
+            >
+              Internal Tandem Duplications (ITD)
+            </Link>,
             'Acute Myeloid Leukemia',
             '1',
             <WithSeparator
