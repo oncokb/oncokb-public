@@ -25,6 +25,7 @@ import {
   MSILink,
   SopPageLink,
   YearEndReviewPageLink,
+  getAlterationPageLink,
 } from 'app/shared/utils/UrlUtils';
 import { PMIDLink } from 'app/shared/links/PMIDLink';
 import { Linkout } from 'app/shared/links/Linkout';
@@ -198,6 +199,86 @@ const EVIDENCE_COLUMN_SEPARATOR = '; ';
 // https://stackoverflow.com/questions/41947168/is-it-possible-to-use-keyof-operator-on-literals-instead-of-interfaces
 
 export const NEWS_BY_DATE: { [date: string]: NewsData } = {
+  '07282023': {
+    changedAnnotations: [
+      {
+        columnHeaderType: AnnotationColumnHeaderType.ADDITIONAL_SAME_LEVEL_DRUG,
+        content: [
+          [
+            'FLT3',
+            <Link
+              to={getAlterationPageLink({
+                hugoSymbol: 'FLT3',
+                alteration: 'Internal tandem duplication',
+              })}
+            >
+              Internal Tandem Duplications (ITD)
+            </Link>,
+            'Acute Myeloid Leukemia',
+            '1',
+            <WithSeparator
+              separator={
+                <>
+                  ,<br />
+                </>
+              }
+            >
+              <>
+                Gilteritinib
+                <br />
+                (Level 1)
+              </>
+              <>
+                Midostaurin + High Dose Chemotherapy
+                <br />
+                (Level 1)
+              </>
+              <>
+                Crenolanib
+                <br />
+                (Level 3A)
+              </>
+              <>
+                Quizartinib
+                <br />
+                (Level 3A)
+              </>
+            </WithSeparator>,
+            <>
+              Quizartinib
+              <br />
+              (Promoted to Level 1)
+            </>,
+            <WithSeparator separator={EVIDENCE_COLUMN_SEPARATOR}>
+              <FdaApprovalLink
+                approval={'Quizartinib'}
+                link={
+                  'https://www.fda.gov/drugs/drug-approvals-and-databases/fda-approves-quizartinib-newly-diagnosed-acute-myeloid-leukemia'
+                }
+              />
+              <PMIDLink pmids={'37116523'} />
+            </WithSeparator>,
+          ],
+        ],
+      },
+    ],
+    newlyAddedGenes: [
+      'CACNA1D',
+      'CANT1',
+      'CBFA2T3',
+      'CD22',
+      'CD74',
+      'CDH2',
+      'CDH4',
+      'CDH11',
+      'CLTCL1',
+      'CNTRL',
+      'COL1A1',
+      'CUL4A',
+      'DDX5',
+      'FSTL1',
+    ],
+  },
   '07122023': {
     news: [
       <span>
