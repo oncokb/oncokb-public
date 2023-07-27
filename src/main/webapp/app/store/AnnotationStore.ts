@@ -561,8 +561,8 @@ export class AnnotationStore {
     }
   }
 
-  // need to pass all observables from @computed, so they can bo monitored by mobx
-  computeAlterationName(annotationType, alteration, alterationQuery, annotationData, showDiff: boolean) {
+  // need to pass all observables from @computed, so they can be monitored by mobx
+  computeAlterationName(annotationType: AnnotationType, alteration: any, alterationQuery: string, annotationData: any, showDiff: boolean) {
     if (annotationType === AnnotationType.PROTEIN_CHANGE) {
       return getAlterationName(
         alteration.result === undefined
