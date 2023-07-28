@@ -230,11 +230,12 @@ export const DX_LEVELS = [LEVELS.Dx1, LEVELS.Dx2, LEVELS.Dx3];
 export const PX_LEVELS = [LEVELS.Px1, LEVELS.Px2, LEVELS.Px3];
 export const ONCOKB_LEVELS = TX_LEVELS.concat(DX_LEVELS).concat(PX_LEVELS);
 
-// the bigger of the index, the higher the priority
+// bigger the index, higher the priority
 export const LEVEL_PRIORITY: LEVELS[] = [
   LEVELS.Fda3,
   LEVELS.Fda2,
   LEVELS.Fda1,
+  LEVELS.Px3,
   LEVELS.Px2,
   LEVELS.Px1,
   LEVELS.Dx3,
@@ -247,6 +248,26 @@ export const LEVEL_PRIORITY: LEVELS[] = [
   LEVELS.Tx3,
   LEVELS.Tx2,
   LEVELS.R1,
+  LEVELS.Tx1,
+];
+
+export const LEVEL_PRIORITY_BY_TYPE: LEVELS[] = [
+  LEVELS.Fda3,
+  LEVELS.Fda2,
+  LEVELS.Fda1,
+  LEVELS.Px3,
+  LEVELS.Px2,
+  LEVELS.Px1,
+  LEVELS.Dx3,
+  LEVELS.Dx2,
+  LEVELS.Dx1,
+  LEVELS.R2,
+  LEVELS.R1,
+  LEVELS.Tx4,
+  LEVELS.Tx3B,
+  LEVELS.Tx3A,
+  LEVELS.Tx3,
+  LEVELS.Tx2,
   LEVELS.Tx1,
 ];
 

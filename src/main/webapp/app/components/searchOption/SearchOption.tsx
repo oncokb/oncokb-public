@@ -11,8 +11,10 @@ import classnames from 'classnames';
 import AppStore from 'app/store/AppStore';
 import { FeedbackIcon } from 'app/components/feedback/FeedbackIcon';
 import { FeedbackType } from 'app/components/feedback/types';
-import { ONCOKB_TM } from 'app/config/constants';
+import {LEVEL_PRIORITY_BY_TYPE, ONCOKB_TM} from 'app/config/constants';
 import { Alteration } from 'app/shared/api/generated/OncoKbPrivateAPI';
+import {sortByLevel, sortByLevelWithLevels} from "app/shared/utils/ReactTableUtils";
+import WithSeparator from "react-with-separator";
 
 export enum SearchOptionType {
   GENE = 'GENE',
@@ -29,31 +31,16 @@ type SearchOptionProps = {
   appStore: AppStore;
 };
 const LevelString: React.FunctionComponent<{
-  highestSensitiveLevel: string | undefined;
-  highestResistanceLevel: string | undefined;
+  level: string;
 }> = props => {
+  const level = levelOfEvidence2Level(props.level)
   return (
     <>
-      {props.highestSensitiveLevel ? (
-        <span
-          className={`oncokb level-${levelOfEvidence2Level(
-            props.highestSensitiveLevel,
-            true
-          )}`}
-        >
-          Level {props.highestSensitiveLevel}
+      <span
+        className={`oncokb level-${level} text-nowrap`}
+      >
+          Level {level}
         </span>
-      ) : undefined}
-      {props.highestResistanceLevel ? (
-        <span
-          className={`oncokb level-${levelOfEvidence2Level(
-            props.highestResistanceLevel,
-            true
-          )}`}
-        >
-          Level {props.highestResistanceLevel}
-        </span>
-      ) : undefined}
     </>
   );
 };
@@ -63,20 +50,27 @@ const GeneSearchOption: React.FunctionComponent<{
 }> = props => {
   return (
     <>
-      <div>
+      <div className={'d-flex'}>
         <Highlighter
           searchWords={[props.search]}
           textToHighlight={`${props.data.gene.hugoSymbol} (Entrez Gene: ${props.data.gene.entrezGeneId})`}
         />
         {props.data.highestSensitiveLevel ||
         props.data.highestResistanceLevel ? (
-          <span className={styles.subTitle}>
-            {' '}
-            Highest level of evidence:
-            <LevelString
-              highestSensitiveLevel={props.data.highestSensitiveLevel}
-              highestResistanceLevel={props.data.highestResistanceLevel}
-            />
+          <span className={classnames(styles.subTitle, 'ml-2')}>
+            <span className={'mr-2'}>Highest level of evidence:</span>
+            <WithSeparator separator={' '}>
+              {props.data.highestSensitiveLevel && (
+                <LevelString
+                  level={props.data.highestSensitiveLevel}
+                />
+              )}
+              {props.data.highestResistanceLevel && (
+                <LevelString
+                  level={props.data.highestResistanceLevel}
+                />
+              )}
+            </WithSeparator>
           </span>
         ) : undefined}
       </div>
@@ -182,10 +176,16 @@ const DrugSearchOption: React.FunctionComponent<{
         />
       </div>
       <div className={styles.subTitle}>
-        <LevelString
-          highestSensitiveLevel={props.data.highestSensitiveLevel}
-          highestResistanceLevel={props.data.highestResistanceLevel}
-        /> :{' '}
+        {props.data.highestSensitiveLevel && (
+          <LevelString
+            level={props.data.highestSensitiveLevel}
+          />
+        )}
+        {props.data.highestResistanceLevel && (
+          <LevelString
+            level={props.data.highestResistanceLevel}
+          />
+        )} :{' '}
         {` ${props.data.gene.hugoSymbol} `}
         {props.data.variants.length > 1
           ? `(${props.data.alterationsName})`
@@ -263,26 +263,23 @@ const CancerTypeSearchOption: React.FunctionComponent<{
           textToHighlight={props.data.tumorTypesName}
         />
       </div>
-      {props.data.alterationsByLevel !== null ? (
+      {props.data.annotationByLevel !== null ? (
         <div>
-          {Object.entries(props.data.alterationsByLevel).map(
-            ([level, alterations]) => (
-              <div className={styles.subTitle}>
-                <LevelString
-                  // removing the "LEVEL_" so it only shows level number
-                  highestSensitiveLevel={
-                    level.startsWith('LEVEL_R') ? undefined : level.substring(6)
-                  }
-                  highestResistanceLevel={
-                    level.startsWith('LEVEL_R')
-                      ? level.substring(6) + ' '
-                      : undefined
-                  }
-                />
-                : {renderAlterations(groupAlterationsByGene(alterations))}
-              </div>
-            )
-          )}
+          {Object.keys(props.data.annotationByLevel)
+            .sort((a, b) => sortByLevelWithLevels(a, b, LEVEL_PRIORITY_BY_TYPE))
+            .map(
+              (level) => {
+                const annotation = props.data.annotationByLevel[level]
+                return (
+                  <div className={styles.subTitle} key={`${props.data.tumorTypesName}-${level}`}>
+                    <LevelString
+                      level={level}
+                    />
+                    : {annotation}
+                  </div>
+                )
+              }
+            )}
         </div>
       ) : (
         <div>No evidence found.</div>
