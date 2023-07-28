@@ -12,12 +12,14 @@ import AppStore from 'app/store/AppStore';
 import { FeedbackIcon } from 'app/components/feedback/FeedbackIcon';
 import { FeedbackType } from 'app/components/feedback/types';
 import { ONCOKB_TM } from 'app/config/constants';
+import { Alteration } from 'app/shared/api/generated/OncoKbPrivateAPI';
 
 export enum SearchOptionType {
   GENE = 'GENE',
   VARIANT = 'VARIANT',
   DRUG = 'DRUG',
   GENOMIC = 'GENOMIC',
+  CANCER_TYPE = 'CANCER_TYPE',
   TEXT = 'TEXT',
 }
 type SearchOptionProps = {
@@ -195,6 +197,100 @@ const DrugSearchOption: React.FunctionComponent<{
   );
 };
 
+const CancerTypeSearchOption: React.FunctionComponent<{
+  search: string;
+  data: ExtendedTypeaheadSearchResp;
+}> = props => {
+  const groupAlterationsByGene = (alterations: Alteration[]) => {
+    const groupedAlterations: { [key: string]: string[] } = {};
+    alterations.forEach(alteration => {
+      const gene = alteration.gene.hugoSymbol;
+      if (!groupedAlterations[gene]) {
+        groupedAlterations[gene] = [];
+      }
+      // Check for parentheses in the alteration name
+      const alterationName = alteration.name.replace(/[()]/g, '').trim();
+      groupedAlterations[gene].push(alterationName);
+    });
+    return groupedAlterations;
+  };
+
+  const renderAlterations = (alterationsByGene: {
+    [key: string]: string[];
+  }) => {
+    const maxElementsToDisplay = 3;
+    const geneKeys = Object.keys(alterationsByGene);
+    // TODO detect key of other biomarkers and change accordingly
+    const totalGenes = geneKeys.length;
+    const genesToDisplay = Math.min(maxElementsToDisplay, totalGenes);
+    // displaying 3 genes
+    return geneKeys.slice(0, genesToDisplay).map((gene, index) => {
+      const geneAlterations = alterationsByGene[gene];
+      const showAndMore = geneAlterations.length > maxElementsToDisplay;
+
+      const displayAlterations = showAndMore
+        ? geneAlterations.slice(0, maxElementsToDisplay).join(', ') +
+          ', and ' +
+          (geneAlterations.length - maxElementsToDisplay).toString() +
+          ' other alterations'
+        : geneAlterations.join(', ');
+
+      const separator = index < genesToDisplay - 1 ? ', ' : '';
+
+      return (
+        <span key={index}>
+          {gene !== 'Other Biomarkers' ? (
+            <>
+              {gene} ({displayAlterations})
+            </>
+          ) : (
+            <>{displayAlterations}</>
+          )}
+          {separator}
+          {totalGenes > maxElementsToDisplay && index === genesToDisplay - 1
+            ? ', and more'
+            : ''}
+        </span>
+      );
+    });
+  };
+
+  return (
+    <>
+      <div>
+        <Highlighter
+          searchWords={[props.search]}
+          textToHighlight={props.data.tumorTypesName}
+        />
+      </div>
+      {props.data.alterationsByLevel !== null ? (
+        <div>
+          {Object.entries(props.data.alterationsByLevel).map(
+            ([level, alterations]) => (
+              <div className={styles.subTitle}>
+                <LevelString
+                  // removing the "LEVEL_" so it only shows level number
+                  highestSensitiveLevel={
+                    level.startsWith('LEVEL_R') ? undefined : level.substring(6)
+                  }
+                  highestResistanceLevel={
+                    level.startsWith('LEVEL_R')
+                      ? level.substring(6) + ' '
+                      : undefined
+                  }
+                />
+                : {renderAlterations(groupAlterationsByGene(alterations))}
+              </div>
+            )
+          )}
+        </div>
+      ) : (
+        <div>No evidence found.</div>
+      )}
+    </>
+  );
+};
+
 export const SearchOption: React.FunctionComponent<SearchOptionProps> = props => {
   const searchKeyword = props.search ? props.search : '';
   return (
@@ -227,10 +323,20 @@ export const SearchOption: React.FunctionComponent<SearchOptionProps> = props =>
                       />
                     </Then>
                     <Else>
-                      <If condition={props.type === SearchOptionType.TEXT}>
+                      <If condition={props.type === SearchOptionType.CANCER_TYPE}>
                         <Then>
-                          <span>{props.data.annotation}</span>
+                          <CancerTypeSearchOption
+                            search={searchKeyword}
+                            data={props.data}
+                          />
                         </Then>
+                        <Else>
+                          <If condition={props.type === SearchOptionType.TEXT}>
+                            <Then>
+                              <span>{props.data.annotation}</span>
+                            </Then>
+                          </If>
+                        </Else>
                       </If>
                     </Else>
                   </If>
