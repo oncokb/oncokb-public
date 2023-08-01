@@ -10,7 +10,7 @@ export interface ISearchInfoIcon {
   onSelectQuery: (query: string) => void
 }
 
-export default class SearchInfoIcon extends React.Component<ISearchInfoIcon> {
+export default class SearchInfoIcon extends React.Component<ISearchInfoIcon, any> {
 
   constructor(props: Readonly<ISearchInfoIcon>) {
     super(props);
@@ -45,6 +45,12 @@ export default class SearchInfoIcon extends React.Component<ISearchInfoIcon> {
               content: [{key: 'alteration-0', content: 'Alteration'}, {
                 key: 'alteration-1',
                 content: this.getQueryLink('BRAF V600E')
+              }]
+            }, {
+              key: 'cancerType',
+              content: [{key: 'cancerType-0', content: 'Cancer Type'}, {
+                key: 'cancerType-1',
+                content: this.getQueryLink('Melanoma')
               }]
             }, {
               key: 'drug',
