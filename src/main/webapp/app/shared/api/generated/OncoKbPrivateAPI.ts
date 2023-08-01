@@ -446,6 +446,8 @@ export type GenomeNexusAnnotatedVariantInfo = {
 export type TypeaheadSearchResp = {
     'annotation': string
 
+        'annotationByLevel': {}
+
         'drug': Drug
 
         'gene': Gene
@@ -458,7 +460,7 @@ export type TypeaheadSearchResp = {
 
         'oncogenicity': string
 
-        'queryType': "GENE" | "VARIANT" | "DRUG" | "TEXT"
+        'queryType': "GENE" | "VARIANT" | "DRUG" | "TEXT" | "GENOMIC" | "CANCER_TYPE"
 
         'tumorTypes': Array < TumorType >
 
@@ -1169,7 +1171,7 @@ export default class OncoKbPrivateAPI {
      * Find matches based on blur query.
      * @method
      * @name OncoKbPrivateAPI#searchTypeAheadGetUsingGET
-     * @param {string} query - The search query, it could be hugoSymbol, entrezGeneId or variant. At least two characters. Maximum two keywords are supported, separated by space
+     * @param {string} query - The search query, it could be hugoSymbol, entrezGeneId, variant, or cancer type. At least two characters. Maximum two keywords are supported, separated by space
      * @param {integer} limit - The limit of returned result.
      */
     searchTypeAheadGetUsingGETWithHttpInfo(parameters: {
@@ -1219,7 +1221,7 @@ export default class OncoKbPrivateAPI {
      * Find matches based on blur query.
      * @method
      * @name OncoKbPrivateAPI#searchTypeAheadGetUsingGET
-     * @param {string} query - The search query, it could be hugoSymbol, entrezGeneId or variant. At least two characters. Maximum two keywords are supported, separated by space
+     * @param {string} query - The search query, it could be hugoSymbol, entrezGeneId, variant, or cancer type. At least two characters. Maximum two keywords are supported, separated by space
      * @param {integer} limit - The limit of returned result.
      */
     searchTypeAheadGetUsingGET(parameters: {

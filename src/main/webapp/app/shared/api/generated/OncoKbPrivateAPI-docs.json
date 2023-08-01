@@ -326,7 +326,7 @@
           {
             "name": "query",
             "in": "query",
-            "description": "The search query, it could be hugoSymbol, entrezGeneId or variant. At least two characters. Maximum two keywords are supported, separated by space",
+            "description": "The search query, it could be hugoSymbol, entrezGeneId, variant, or cancer type. At least two characters. Maximum two keywords are supported, separated by space",
             "required": true,
             "type": "string"
           },
@@ -2949,6 +2949,12 @@
         "annotation": {
           "type": "string"
         },
+        "annotationByLevel": {
+          "type": "object",
+          "additionalProperties": {
+            "type": "string"
+          }
+        },
         "drug": {
           "$ref": "#/definitions/Drug"
         },
@@ -2973,7 +2979,9 @@
             "GENE",
             "VARIANT",
             "DRUG",
-            "TEXT"
+            "TEXT",
+            "GENOMIC",
+            "CANCER_TYPE"
           ]
         },
         "tumorTypes": {

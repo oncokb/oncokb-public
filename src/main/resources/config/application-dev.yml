@@ -37,7 +37,8 @@ spring:
       indent-output: true
   datasource:
     type: com.zaxxer.hikari.HikariDataSource
-    url: jdbc:mysql://localhost:3306/oncokb_public?useUnicode=true&characterEncoding=utf8&useSSL=false&useLegacyDatetimeCode=false&serverTimezone=UTC&createDatabaseIfNotExist=true
+    # changed database name
+    url: jdbc:mysql://localhost:3306/oncokb-public?useUnicode=true&characterEncoding=utf8&useSSL=false&useLegacyDatetimeCode=false&serverTimezone=UTC&createDatabaseIfNotExist=true
     username: root
     password: root
     hikari:
@@ -150,7 +151,8 @@ application:
     user-registration-channel-id:
   redis:
     # Add the following if you want to opt in to using Redis
-    # enabled: true
+    # Not using Redis
+    enabled: false
     type: 'single'
     password: 'oncokb-public-redis-password'
     address: 'redis://localhost:6379'
