@@ -130,8 +130,8 @@ export default class UserUsageDetailsTable extends React.Component<
             {
               ...getUsageTableColumnDefinition(UsageTableColumnKey.RESOURCES),
               Header: filterDependentResourceHeader(this.timeTypeToggleValue),
-              onFilter: (data: UsageRecord, keyword) =>
-                filterByKeyword(data.resource, keyword),
+              onFilter: (row: UsageRecord, keyword) =>
+                filterByKeyword(row.resource, keyword),
             },
             {
               ...getUsageTableColumnDefinition(UsageTableColumnKey.USAGE),
@@ -142,8 +142,8 @@ export default class UserUsageDetailsTable extends React.Component<
             {
               ...getUsageTableColumnDefinition(UsageTableColumnKey.TIME),
               Header: filterDependentTimeHeader(this.timeTypeToggleValue),
-              onFilter: (data: UsageRecord, keyword) =>
-                filterByKeyword(data.time, keyword),
+              onFilter: (row: UsageRecord, keyword) =>
+                filterByKeyword(row.time, keyword),
             },
           ]}
           loading={!this.props.loadedData}

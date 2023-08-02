@@ -345,17 +345,21 @@ export type UserMailsDTO = {
 export type UserOverviewUsage = {
     'endpoint': string
 
-        'maxUsage': number
-
         'noPrivateEndpoint': string
 
-        'noPrivateMaxUsage': number
+        'maxUsageProportion': number
+
+        'noPrivateMaxUsageProportion': number
 
         'totalUsage': number
 
         'userEmail': string
 
         'userId': string
+
+        'dayUsage': {}
+
+        'monthUsage': {}
 
 };
 export type UserUsage = {

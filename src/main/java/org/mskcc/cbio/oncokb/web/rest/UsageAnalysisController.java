@@ -140,11 +140,22 @@ public class UsageAnalysisController {
         HttpStatus status = HttpStatus.OK;
 
         int year = TimeUtil.getCurrentNYTime().getYear();
-        JSONObject jsonObject = requestData(YEAR_USERS_USAGE_SUMMARY_FILE_PREFIX + year + FileExtension.JSON_FILE.getExtension());
+        JSONObject yearSummary = requestData(YEAR_USERS_USAGE_SUMMARY_FILE_PREFIX + year + FileExtension.JSON_FILE.getExtension());
+        Map<String, JSONObject> monthSummaries = new HashMap<>();
+        int monthsBack = 0;
+        JSONObject monthSummary;
+        do {
+            String month = TimeUtil.getCurrentNYTime().minus(monthsBack, ChronoUnit.MONTHS).format(DateTimeFormatter.ofPattern("yyyy-MM"));
+            monthSummary = requestData(MONTH_USERS_USAGE_SUMMARY_FILE_PREFIX + month + FileExtension.JSON_FILE.getExtension());
+            if (monthSummary != null) {
+                monthSummaries.put(month, monthSummary);
+            }
+            monthsBack++;
+        } while (monthsBack < 12);
 
         List<UserOverviewUsage> result = new ArrayList<>();
-        if (jsonObject != null) {
-            Set<Object> emailSet = jsonObject.keySet();
+        if (yearSummary != null) {
+            Set<Object> emailSet = yearSummary.keySet();
             if (companyId != null) {
                 emailSet = emailSet.stream().filter(item -> {
                     Optional<User> user = userService.getUserWithAuthoritiesByEmailIgnoreCase((String) item);
@@ -159,7 +170,7 @@ public class UsageAnalysisController {
             }
             for (Object item : emailSet) {
                 String email = (String) item;
-                JSONObject usageObject = (JSONObject) jsonObject.get(email);
+                JSONObject usageObject = (JSONObject) yearSummary.get(email);
                 Gson gson = new Gson();
                 UsageSummary usageSummary = gson.fromJson(usageObject.toString(), UsageSummary.class);
                 UserOverviewUsage cur = new UserOverviewUsage();
@@ -188,9 +199,34 @@ public class UsageAnalysisController {
                 }
                 cur.setTotalUsage(totalUsage);
                 cur.setEndpoint(endpoint);
-                cur.setMaxUsage(maxUsage);
+                cur.setMaxUsageProportion((int) (1000 * ((float) maxUsage / totalUsage)) / 10f);
                 cur.setNoPrivateEndpoint(noPrivateEndpoint);
-                cur.setNoPrivateMaxUsage(noPrivateMaxUsage);
+                cur.setNoPrivateMaxUsageProportion((int) (1000 * ((float) noPrivateMaxUsage / totalUsage)) / 10f);
+
+                Map<String, Long> dayUsage = new HashMap<>();
+                Map<String, Long> monthUsage = new HashMap<>();
+                if (!monthSummaries.isEmpty()) {
+                    for (Map.Entry<String, JSONObject> entry : monthSummaries.entrySet()) {
+                        if (entry.getValue().containsKey(email)) {
+                            JSONObject monthUsageObject = (JSONObject) entry.getValue().get(email);
+                            long monthCount = 0;
+                            JSONObject dayUsageObject = (JSONObject) monthUsageObject.get("day");
+                            for (Object dayKey : dayUsageObject.keySet()) {
+                                String day = dayKey.toString();
+                                JSONObject curDayUsage = (JSONObject) dayUsageObject.get(day);
+                                long dayCount = 0;
+                                for (Object resource : curDayUsage.keySet()) {
+                                    dayCount += (long) curDayUsage.get(resource);
+                                    monthCount += (long) curDayUsage.get(resource);
+                                }
+                                dayUsage.put(day, dayCount);
+                            }
+                            monthUsage.put(entry.getKey(), monthCount);
+                        }
+                    }
+                }
+                cur.setDayUsage(dayUsage);
+                cur.setMonthUsage(monthUsage);
 
                 result.add(cur);
             }

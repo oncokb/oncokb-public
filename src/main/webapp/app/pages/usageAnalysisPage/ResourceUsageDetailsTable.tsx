@@ -1,7 +1,6 @@
 import OncoKBTable from 'app/components/oncokbTable/OncoKBTable';
 import { filterByKeyword } from 'app/shared/utils/Utils';
 import autobind from 'autobind-decorator';
-import _ from 'lodash';
 import { action, observable } from 'mobx';
 import { observer } from 'mobx-react';
 import React from 'react';
@@ -55,8 +54,8 @@ export default class ResourceUsageDetailsTable extends React.Component<
             {
               ...getUsageTableColumnDefinition(UsageTableColumnKey.RESOURCES),
               Header: emailHeader,
-              onFilter: (data: UsageRecord, keyword) =>
-                filterByKeyword(data.resource, keyword),
+              onFilter: (row: UsageRecord, keyword) =>
+                filterByKeyword(row.resource, keyword),
             },
             {
               ...getUsageTableColumnDefinition(UsageTableColumnKey.USAGE),
@@ -67,8 +66,8 @@ export default class ResourceUsageDetailsTable extends React.Component<
             {
               ...getUsageTableColumnDefinition(UsageTableColumnKey.TIME),
               Header: filterDependentTimeHeader(this.timeTypeToggleValue),
-              onFilter: (data: UsageRecord, keyword) =>
-                filterByKeyword(data.time, keyword),
+              onFilter: (row: UsageRecord, keyword) =>
+                filterByKeyword(row.time, keyword),
             },
           ]}
           loading={this.props.loadedData ? false : true}
