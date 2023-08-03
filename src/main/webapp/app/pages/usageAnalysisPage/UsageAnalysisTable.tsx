@@ -61,6 +61,12 @@ export default class UsageAnalysisTable extends React.Component<
     this.timeTypeToggleValue = value;
   }
 
+  @autobind
+  @action
+  handleFilterToggledChange(value: boolean) {
+    this.filterToggled = value;
+  }
+
   @computed get calculateData(): UserOverviewUsage[] | UsageRecord[] {
     if (this.timeTypeToggleValue === ToggleValue.RESULTS_IN_TOTAL) {
       return this.props.data;
@@ -74,7 +80,9 @@ export default class UsageAnalysisTable extends React.Component<
             data.push({
               resource: userOverviewUsage.userEmail,
               usage: userOverviewUsage.monthUsage[curMonth],
-              time: curMonth})
+              time: curMonth,
+              userId: userOverviewUsage.userId,
+            })
           }
         }
       });
@@ -85,7 +93,8 @@ export default class UsageAnalysisTable extends React.Component<
             data.push({
               resource: userOverviewUsage.userEmail,
               usage: userOverviewUsage.dayUsage[curDay],
-              time: curDay
+              time: curDay,
+              userId: userOverviewUsage.userId,
             })
           }
         }
@@ -120,53 +129,45 @@ export default class UsageAnalysisTable extends React.Component<
   }
 
   @computed get resetDefaultSort(): SortingRule[] {
+    const sortingRules: SortingRule[] = [];
+    if (this.filterToggled) {
+      sortingRules.push({
+        id: UsageTableColumnKey.TIME,
+        desc: false,
+      });
+    } else {
+      sortingRules.push({
+        id: UsageTableColumnKey.TIME,
+        desc: true,
+      });
+    }
+
     if (this.timeTypeToggleValue === ToggleValue.RESULTS_IN_TOTAL) {
-      return [{
+      sortingRules.push({
         id: 'totalUsage',
         desc: true,
-      }];
+      });
     } else if (this.timeTypeToggleValue === ToggleValue.RESULTS_BY_MONTH) {
-      return [{
-        id: UsageTableColumnKey.TIME,
-        desc: true,
-      },
-      {
-        id: UsageTableColumnKey.USAGE,
-        desc: true,
-      },
-      {
-        id: 'monthResetPlaceholder',
-        desc: true,
-      }];
-    } else if (this.timeTypeToggleValue === ToggleValue.RESULTS_BY_DAY) {
-      return [{
-        id: UsageTableColumnKey.TIME,
-        desc: true,
-      },
-      {
-        id: UsageTableColumnKey.USAGE,
-        desc: true,
-      },
-        {
-          id: 'dayResetPlaceholder',
-          desc: true,
-        }];
-    } else if (this.filterToggled) {
-      return [{
-        id: UsageTableColumnKey.TIME,
-        desc: true,
-      },
-        {
+      sortingRules.push({
           id: UsageTableColumnKey.USAGE,
           desc: true,
         },
         {
-          id: 'calendarResetPlaceholder',
+          id: 'monthResetPlaceholder',
           desc: true,
-        }];
-    } else {
-      return [];
+      });
+    } else if (this.timeTypeToggleValue === ToggleValue.RESULTS_BY_DAY) {
+      sortingRules.push({
+          id: UsageTableColumnKey.USAGE,
+          desc: true,
+        },
+        {
+          id: 'dayResetPlaceholder',
+          desc: true,
+        });
     }
+
+    return sortingRules;
   }
 
   render() {
@@ -253,7 +254,7 @@ export default class UsageAnalysisTable extends React.Component<
                   ),
                   sortable: false,
                   className: 'd-flex justify-content-center',
-                  Cell(props: { original: UserOverviewUsage }) {
+                  Cell(props: { original: UsageRecord }) {
                     return (
                       props.original.userId ? (
                         <Link
@@ -305,9 +306,7 @@ export default class UsageAnalysisTable extends React.Component<
                   toDate={(newDate: string) => {
                     this.toDate = newDate;
                   }}
-                  filterToggled={(filterActive: boolean) => {
-                    this.filterToggled = filterActive;
-                  }}
+                  filterToggled={this.handleFilterToggledChange}
                 />
               </Row>
             );

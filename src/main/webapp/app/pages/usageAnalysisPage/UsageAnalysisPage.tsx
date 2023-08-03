@@ -44,6 +44,7 @@ export type UsageRecord = {
   resource: string;
   usage: number;
   time: string;
+  userId?: string;
 };
 
 enum UsageType {
