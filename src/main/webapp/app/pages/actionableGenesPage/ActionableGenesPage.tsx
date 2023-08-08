@@ -368,12 +368,14 @@ export default class ActionableGenesPage extends React.Component<
   @computed
   get allFdaTreatments() {
     const treatments: Treatment[] = [];
-    this.allOncokbTreatments.map(treatment => {
-      treatments.push({
-        ...treatment,
-        level: treatment.fdaLevel,
-      } as Treatment);
-    });
+    this.allOncokbTreatments
+      .filter(treatment => treatment.fdaLevel)
+      .map(treatment => {
+        treatments.push({
+          ...treatment,
+          level: treatment.fdaLevel,
+        } as Treatment);
+      });
     return treatments;
   }
 
@@ -561,6 +563,11 @@ export default class ActionableGenesPage extends React.Component<
   @computed
   get fdaSectionIsOpen() {
     return !!this.collapseStatus[LEVEL_TYPES.FDA];
+  }
+
+  @computed
+  get oncokbTableKey() {
+    return this.fdaSectionIsOpen ? 'paginated' : 'non-paginated';
   }
 
   @autobind
@@ -847,7 +854,7 @@ export default class ActionableGenesPage extends React.Component<
   getTable() {
     // We need to render two tables, one with fixed header, one with pagination.
     // Once page size is specified in the fixed header table, it cannot be overwritten by the defaultPageSize
-    return <OncoKBTable {...this.oncokbTableProps} />;
+    return <OncoKBTable key={this.oncokbTableKey} {...this.oncokbTableProps} />;
   }
 
   @computed
