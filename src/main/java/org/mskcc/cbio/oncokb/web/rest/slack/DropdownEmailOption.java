@@ -14,7 +14,9 @@ import java.util.Optional;
  * options in the Slack dropdown menu that the team can select.
  * Approval is not included as the logic is complex and unique.
  *
- * To add a new email option, add the following fields:
+ * To add a new email option, add the following fields (you will
+ * need to create some of these in their respective classes as
+ * well, namely ActionId, BlockId, and MailType):
  *
  * REQUIRED:
  * - Block blockId (the corresponding BlockId enum constant

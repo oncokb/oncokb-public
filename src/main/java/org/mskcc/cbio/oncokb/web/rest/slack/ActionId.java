@@ -65,6 +65,17 @@ public enum ActionId {
         return false;
     }
 
+    public static boolean isConfirmEmailAction(ActionId actionId) {
+        if (actionId == null) {
+            return false;
+        }
+        for (DropdownEmailOption mailOption : DropdownEmailOption.values()) {
+            if (actionId.equals(mailOption.getConfirmActionId().orElse(null)))
+                return true;
+        }
+        return false;
+    }
+
     public static boolean isDropdownAction(ActionId actionId) {
         if (actionId == null) {
             return false;

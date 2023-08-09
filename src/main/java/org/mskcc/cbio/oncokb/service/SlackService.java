@@ -64,7 +64,10 @@ public class SlackService {
 
     private final Logger log = LoggerFactory.getLogger(SlackService.class);
 
-    private final String VALUE_SEPARATOR = "-";
+    public final static String VALUE_SEPARATOR = "-";
+    public final static String APPROVE_USER_EXPANDED_NOTE = "The user has been approved and notified.";
+    public final static String CONVERT_TO_REGULAR_ACCOUNT_EXPANDED_NOTE = "The trial account has been converted to a regular account.";
+
     private final ApplicationProperties applicationProperties;
     private final MailService mailService;
     private final EmailService emailService;
@@ -380,7 +383,7 @@ public class SlackService {
         return SectionBlock.builder().fields(userInfo).blockId(ACCOUNT_STATUS.getId()).build();
     }
 
-    private String getOptionValue(String argument, String login) {
+    public String getOptionValue(String argument, String login) {
         return String.join(VALUE_SEPARATOR, argument, login);
     }
 
@@ -520,9 +523,9 @@ public class SlackService {
         }
         if (userDTO.isActivated() && !trialAccountActivated) {
             if (!withNote(DropdownEmailOption.GIVE_TRIAL_ACCESS, userDTO, actionId)) {
-                layoutBlocks.add(buildPlainTextBlock("The user has been approved and notified.", APPROVED_NOTE));
+                layoutBlocks.add(buildPlainTextBlock(APPROVE_USER_EXPANDED_NOTE, APPROVED_NOTE));
             } else {
-                layoutBlocks.add(buildPlainTextBlock("The trial account has been converted to a regular account.", CONVERT_TO_REGULAR_ACCOUNT_NOTE));
+                layoutBlocks.add(buildPlainTextBlock(CONVERT_TO_REGULAR_ACCOUNT_EXPANDED_NOTE, CONVERT_TO_REGULAR_ACCOUNT_NOTE));
             }
         } else if (withNote(DropdownEmailOption.GIVE_TRIAL_ACCESS, userDTO, actionId)) {
             layoutBlocks.add(buildPlainTextBlock(DropdownEmailOption.GIVE_TRIAL_ACCESS.getExpandedNote(), TRIAL_ACCOUNT_NOTE));
@@ -738,7 +741,7 @@ public class SlackService {
         return null;
     }
 
-    private String getStringFromResourceTemplateMailTextFile(String fileName) {
+    public String getStringFromResourceTemplateMailTextFile(String fileName) {
         StringBuilder sb = new StringBuilder();
 
         URL targetFileUrl = getClass().getClassLoader().getResource("templates/mail/" + fileName);

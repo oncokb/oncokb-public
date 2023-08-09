@@ -1,5 +1,7 @@
 package org.mskcc.cbio.oncokb.domain.enumeration;
 
+import org.mskcc.cbio.oncokb.web.rest.slack.DropdownEmailOption;
+
 import java.util.Optional;
 
 /**
@@ -86,7 +88,8 @@ public enum MailType {
     , ACTIVATE_FREE_TRIAL(new MailTypeBuilder()
         .templateName("activateFreeTrial")
         .description("OncoKB Trial Activation Link")
-        .titleKey("email.active.free.trial.title"))
+        .titleKey("email.active.free.trial.title")
+        .stringTemplateName("activateFreeTrialString.txt"))
     , TRIAL_ACCOUNT_IS_ABOUT_TO_EXPIRE(new MailTypeBuilder()
         .templateName("trialAccountIsAboutToExpire")
         .description("Trail account is about to expire"))
@@ -180,5 +183,16 @@ public enum MailType {
 
     public Optional<String> getAttachmentFileNames() {
         return attachmentFileNames;
+    }
+
+    public static boolean isDropdownEmail(MailType mailType) {
+        if (mailType == null) {
+            return false;
+        }
+        for (DropdownEmailOption mailOption : DropdownEmailOption.values()) {
+            if (mailType.equals(mailOption.getMailType()))
+                return true;
+        }
+        return false;
     }
 }

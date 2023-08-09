@@ -3,13 +3,22 @@ package org.mskcc.cbio.oncokb.web.rest;
 import com.google.gson.Gson;
 import com.slack.api.Slack;
 import com.slack.api.app_backend.interactive_components.payload.BlockActionPayload;
+import com.slack.api.app_backend.views.payload.ViewSubmissionPayload;
+import com.slack.api.methods.MethodsClient;
+import com.slack.api.methods.SlackApiException;
+import com.slack.api.methods.request.views.ViewsOpenRequest;
+import com.slack.api.model.block.InputBlock;
 import com.slack.api.model.block.LayoutBlock;
 import com.slack.api.model.block.SectionBlock;
 import com.slack.api.model.block.composition.TextObject;
+import com.slack.api.model.block.element.PlainTextInputElement;
+import com.slack.api.model.view.View;
+import com.slack.api.model.view.ViewState;
 import com.slack.api.util.json.GsonFactory;
 import com.slack.api.webhook.Payload;
 import io.github.jhipster.config.JHipsterProperties;
 import io.github.jhipster.security.RandomUtil;
+import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.mockito.ArgumentCaptor;
@@ -28,10 +37,13 @@ import org.mskcc.cbio.oncokb.domain.enumeration.MailType;
 import org.mskcc.cbio.oncokb.repository.UserDetailsRepository;
 import org.mskcc.cbio.oncokb.repository.UserRepository;
 import org.mskcc.cbio.oncokb.service.*;
+import org.mskcc.cbio.oncokb.service.dto.UserDTO;
+import org.mskcc.cbio.oncokb.service.dto.useradditionalinfo.TrialAccount;
 import org.mskcc.cbio.oncokb.service.impl.TokenServiceImpl;
 import org.mskcc.cbio.oncokb.service.mapper.UserMapper;
 import org.mskcc.cbio.oncokb.web.rest.slack.ActionId;
 import org.mskcc.cbio.oncokb.web.rest.slack.BlockId;
+import org.mskcc.cbio.oncokb.web.rest.slack.DropdownEmailOption;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.context.MessageSource;
@@ -49,11 +61,12 @@ import java.nio.file.Files;
 import java.nio.file.Paths;
 import java.time.Instant;
 import java.util.*;
+import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
 import static org.assertj.core.api.Assertions.assertThat;
-import static org.mockito.Mockito.doNothing;
-import static org.mockito.Mockito.doReturn;
+import static org.assertj.core.api.Assertions.in;
+import static org.mockito.Mockito.*;
 import static org.mskcc.cbio.oncokb.config.Constants.DEFAULT_TOKEN_EXPIRATION_IN_SECONDS;
 
 @SpringBootTest(classes = OncokbPublicApp.class)
@@ -66,6 +79,18 @@ public class SlackControllerIT {
     private static final String CONTACT_ADDR = "contact@example.com";
     private static final String TECH_DEV_ADDR = "dev@example.com";
     private static final String DEFAULT_ADDR = "default@example.com";
+
+    // Mock fields for test user
+    private static final String DEFAULT_USER_EMAIL = "john.doe@example.com";
+    private static final String DEFAULT_LANG_KEY = "en";
+    private static final String DEFAULT_COMPANY_NAME = "company name";
+    private static final LicenseType DEFAULT_LICENSE_TYPE = LicenseType.COMMERCIAL;
+    private static final LicenseType OTHER_LICENSE_TYPE = LicenseType.ACADEMIC;
+
+    // Mock fields for Slack payload
+    private static final String DEFAULT_PAYLOAD_TOKEN = "token";
+    private static final String DEFAULT_OAUTH_TOKEN = "oauth_token";
+    private static final String DEFAULT_TRIGGER_ID = "trigger_id";
 
     @Autowired
     private ApplicationProperties applicationProperties;
@@ -96,11 +121,17 @@ public class SlackControllerIT {
     @Spy
     private Slack slack;
 
+    @Spy
+    private MethodsClient methodsClient;
+
     @Captor
     private ArgumentCaptor<String> urlCaptor;
 
     @Captor
     private ArgumentCaptor<Payload> payloadCaptor;
+
+    @Captor
+    private ArgumentCaptor<ViewsOpenRequest> requestCaptor;
 
     @Spy
     private JavaMailSenderImpl javaMailSender;
@@ -120,16 +151,18 @@ public class SlackControllerIT {
     private SlackController slackController;
 
     @BeforeEach
-    void setUp() throws IOException {
-        MockitoAnnotations.initMocks(this);
-        doReturn(null).when(slack).send(urlCaptor.capture(), payloadCaptor.capture());
-        doNothing().when(javaMailSender).send(messageCaptor.capture());
+    void setUp() throws IOException, SlackApiException {
+
+        /******************************
+         * Set up app properties
+         ******************************/
 
         // Specify webhook address for testing
         applicationProperties.setSlack(new SlackProperties());
         applicationProperties.getSlack().setUserRegistrationWebhook(USER_REGISTRATION_WEBHOOK);
+        applicationProperties.getSlack().setSlackBotOauthToken(DEFAULT_OAUTH_TOKEN);
 
-        // specify application emails for testing
+        // Specify application emails for testing
         applicationProperties.setEmailAddresses(new EmailAddresses());
         applicationProperties.getEmailAddresses().setLicenseAddress(LICENSE_ADDR);
         applicationProperties.getEmailAddresses().setContactAddress(CONTACT_ADDR);
@@ -137,61 +170,405 @@ public class SlackControllerIT {
         applicationProperties.getEmailAddresses().setTechDevAddress(TECH_DEV_ADDR);
         jHipsterProperties.getMail().setFrom(DEFAULT_ADDR);
 
+        /******************************
+         * Mock dependencies
+         ******************************/
+
+        // Set up mock dependencies
+        MockitoAnnotations.initMocks(this);
+        doReturn(null).when(slack).send(urlCaptor.capture(), payloadCaptor.capture());
+        when(slack.methods()).thenReturn(methodsClient);
+        doReturn(null).when(methodsClient).viewsOpen(requestCaptor.capture());
+        doNothing().when(javaMailSender).send(messageCaptor.capture());
+
+        // Inject mock dependencies
         mailService = new MailService(jHipsterProperties, javaMailSender, messageSource, templateEngine, userMailsService, applicationProperties);
         slackService = new SlackService(applicationProperties, mailService, emailService, userMailsService, userMapper, slack);
         slackController = new SlackController(userService, userRepository, mailService, slackService, userMapper);
-    }
 
-    @Test
-    void testApproveUser() throws IOException, MessagingException {
+        /******************************
+         * Create mock test user
+         ******************************/
+
         // Create mock user
         User mockUser = new User();
-        mockUser.setLogin("john.doe@example.com");
-        mockUser.setEmail("john.doe@example.com");
+        mockUser.setLogin(DEFAULT_USER_EMAIL);
+        mockUser.setEmail(DEFAULT_USER_EMAIL);
         mockUser.setPassword(passwordEncoder.encode(RandomUtil.generatePassword()));
-        mockUser.setLangKey("en");
+        mockUser.setLangKey(DEFAULT_LANG_KEY);
         mockUser.setActivated(false);
         userRepository.save(mockUser);
 
         // Add mock user details
         UserDetails mockUserDetails = new UserDetails().user(mockUser);
-        mockUserDetails.setCompanyName("company name");
-        mockUserDetails.setLicenseType(LicenseType.COMMERCIAL);
+        mockUserDetails.setCompanyName(DEFAULT_COMPANY_NAME);
+        mockUserDetails.setLicenseType(DEFAULT_LICENSE_TYPE);
         userDetailsRepository.save(mockUserDetails);
+    }
 
-        // Mock payload
-        BlockActionPayload actionJSON = new BlockActionPayload();
-        List<BlockActionPayload.Action> actions = new ArrayList<>();
-        BlockActionPayload.Action approveAction = new BlockActionPayload.Action();
-        approveAction.setActionId(ActionId.APPROVE_USER.getId());
-        approveAction.setValue("john.doe@example.com");
-        actions.add(approveAction);
-        actionJSON.setActions(actions);
-        actionJSON.setResponseUrl(USER_REGISTRATION_WEBHOOK);
-        actionJSON.setToken("token");
+    @AfterEach
+    void tearDown() {
+        userService.deleteUser(DEFAULT_USER_EMAIL);
+    }
 
-        // Mock approve user
+    @Test
+    void testApproveUser() throws IOException, MessagingException {
+
+        /*******************************
+         * Mock user approval
+         *******************************/
+
+        BlockActionPayload actionJSON = getBlockActionPayload(ActionId.APPROVE_USER);
         Gson snakeCase = GsonFactory.createSnakeCase();
         slackController.approveUser(snakeCase.toJson(actionJSON));
         MimeMessage message = messageCaptor.getValue();
         String url = urlCaptor.getValue();
         Payload payload = payloadCaptor.getValue();
 
+        /*******************************
+         * Run checks
+         *******************************/
+
         // Check mail integration
-        assertThat(message.getSubject()).isEqualTo(messageSource.getMessage(MailType.APPROVAL.getTitleKey(), new Object[]{}, Locale.forLanguageTag(mockUser.getLangKey())));
-        assertThat(message.getAllRecipients()[0].toString()).isEqualTo("john.doe@example.com");
-        assertThat(message.getFrom()[0].toString()).isEqualTo(jHipsterProperties.getMail().getFrom());
-        assertThat(message.getContent()).isInstanceOf(String.class);
-        assertThat(message.getContent().toString()).contains(getStringFromResourceTemplateMailTextFile(MailType.APPROVAL.getStringTemplateName().get()).trim());
+        checkEmail(message, MailType.APPROVAL);
 
         // Check Slack integration
+        checkSlackBlock(url, payload, ActionId.APPROVE_USER, true);
+
+        // Check user approval
+        User mockUser = userRepository.findOneWithAuthoritiesByLogin(DEFAULT_USER_EMAIL).orElse(null);
+        assertThat(mockUser).isNotNull();
+        assertThat(mockUser.getActivated()).isTrue();
+
+        // Check user token
+        List<Token> mockTokens = tokenService.findByUser(mockUser);
+        assertThat(mockTokens).isNotEmpty();
+        Token mockToken = mockTokens.get(0);
+        assertThat(mockToken.getExpiration()).isBefore(Instant.now().plusSeconds(DEFAULT_TOKEN_EXPIRATION_IN_SECONDS + 1));
+        assertThat(mockToken.isRenewable()).isTrue();
+
+        // Check user mails
+        assertThat(userMailsService.findUserMailsByUserAndMailTypeAndSentDateAfter(mockUser, MailType.APPROVAL, null)).isNotEmpty();
+
+        /*******************************
+         * Test expanding block
+         *******************************/
+
+        BlockActionPayload expandJSON = getBlockActionPayload(ActionId.EXPAND);
+        slackController.approveUser(snakeCase.toJson(expandJSON));
+        String expandUrl = urlCaptor.getValue();
+        Payload expandPayload = payloadCaptor.getValue();
+        checkSlackBlock(expandUrl, expandPayload, ActionId.APPROVE_USER, false);
+    }
+
+    @Test
+    void testGiveTrialAccess() throws IOException, MessagingException {
+
+        /*******************************
+         * Mock giving trial access
+         *******************************/
+
+        BlockActionPayload actionJSON = getBlockActionPayload(ActionId.GIVE_TRIAL_ACCESS);
+        Gson snakeCase = GsonFactory.createSnakeCase();
+        slackController.approveUser(snakeCase.toJson(actionJSON));
+        MimeMessage message = messageCaptor.getValue();
+        String url = urlCaptor.getValue();
+        Payload payload = payloadCaptor.getValue();
+
+        /*******************************
+         * Run Checks
+         *******************************/
+
+        // Check mail integration
+        checkEmail(message, MailType.ACTIVATE_FREE_TRIAL);
+
+        // Check Slack integration
+        checkSlackBlock(url, payload, ActionId.GIVE_TRIAL_ACCESS, true);
+
+        // Check user properties
+        User mockUser = userRepository.findOneWithAuthoritiesByLogin(DEFAULT_USER_EMAIL).orElse(null);
+        assertThat(mockUser).isNotNull();
+        assertThat(mockUser.getActivated()).isFalse();
+
+        // Check trial account properties
+        UserDTO mockUserDTO = userMapper.userToUserDTO(mockUser);
+        TrialAccount mockTrialAccount = mockUserDTO.getAdditionalInfo().getTrialAccount();
+        assertThat(mockTrialAccount).isNotNull();
+        assertThat(mockTrialAccount.getActivation().getInitiationDate()).isBefore(Instant.now().plusSeconds(1));
+        assertThat(mockTrialAccount.getActivation().getKey().length()).isGreaterThan(0);
+
+        // Check that no user token was created
+        List<Token> mockTokens = tokenService.findByUser(mockUser);
+        assertThat(mockTokens).isEmpty();
+
+        // Check user mails
+        assertThat(userMailsService.findUserMailsByUserAndMailTypeAndSentDateAfter(mockUser, MailType.ACTIVATE_FREE_TRIAL, null)).isNotEmpty();
+
+        /*******************************
+         * Test expanding block
+         *******************************/
+
+        BlockActionPayload expandJSON = getBlockActionPayload(ActionId.EXPAND);
+        slackController.approveUser(snakeCase.toJson(expandJSON));
+        String expandUrl = urlCaptor.getValue();
+        Payload expandPayload = payloadCaptor.getValue();
+        checkSlackBlock(expandUrl, expandPayload, ActionId.GIVE_TRIAL_ACCESS, false);
+
+        /*******************************
+         * Test converting to regular
+         *******************************/
+        userService.finishTrialAccountActivation(mockTrialAccount.getActivation().getKey());
+        testConvertToRegularAccount();
+    }
+
+    void testConvertToRegularAccount() throws IOException {
+
+        /*******************************
+         * Mock converting to regular
+         *******************************/
+
+        BlockActionPayload actionJSON = getBlockActionPayload(ActionId.CONVERT_TO_REGULAR_ACCOUNT);
+        Gson snakeCase = GsonFactory.createSnakeCase();
+        slackController.approveUser(snakeCase.toJson(actionJSON));
+        String url = urlCaptor.getValue();
+        Payload payload = payloadCaptor.getValue();
+
+        /*******************************
+         * Run checks
+         *******************************/
+
+        // Check Slack integration
+        checkSlackBlock(url, payload, ActionId.CONVERT_TO_REGULAR_ACCOUNT, true);
+
+        // Check user approval
+        User mockUser = userRepository.findOneWithAuthoritiesByLogin(DEFAULT_USER_EMAIL).orElse(null);
+        assertThat(mockUser).isNotNull();
+        assertThat(mockUser.getActivated()).isTrue();
+
+        // Check user token
+        List<Token> mockTokens = tokenService.findByUser(mockUser);
+        assertThat(mockTokens).isNotEmpty();
+        Token mockToken = mockTokens.get(0);
+        assertThat(mockToken.getExpiration()).isBefore(Instant.now().plusSeconds(DEFAULT_TOKEN_EXPIRATION_IN_SECONDS + 1));
+        assertThat(mockToken.isRenewable()).isTrue();
+
+        /*******************************
+         * Test expanding block
+         *******************************/
+
+        BlockActionPayload expandJSON = getBlockActionPayload(ActionId.EXPAND);
+        slackController.approveUser(snakeCase.toJson(expandJSON));
+        String expandUrl = urlCaptor.getValue();
+        Payload expandPayload = payloadCaptor.getValue();
+        checkSlackBlock(expandUrl, expandPayload, ActionId.CONVERT_TO_REGULAR_ACCOUNT, false);
+    }
+
+    @Test
+    void testChangeLicenseType() throws IOException {
+
+        /*******************************
+         * Mock giving trial access
+         *******************************/
+
+        BlockActionPayload actionJSON = getBlockActionPayload(ActionId.CHANGE_LICENSE_TYPE);
+        Gson snakeCase = GsonFactory.createSnakeCase();
+        slackController.approveUser(snakeCase.toJson(actionJSON));
+        String url = urlCaptor.getValue();
+        Payload payload = payloadCaptor.getValue();
+
+        /*******************************
+         * Run Checks
+         *******************************/
+
+        // Check Slack integration
+        checkSlackBlock(url, payload, ActionId.CHANGE_LICENSE_TYPE, false);
+
+        // Check user properties
+        User mockUser = userRepository.findOneWithAuthoritiesByLogin(DEFAULT_USER_EMAIL).orElse(null);
+        assertThat(mockUser).isNotNull();
+        assertThat(mockUser.getActivated()).isFalse();
+        assertThat(userMapper.userToUserDTO(mockUser).getLicenseType()).isEqualTo(OTHER_LICENSE_TYPE);
+
+        /*******************************
+         * Test collapsing block
+         *******************************/
+
+        BlockActionPayload expandJSON = getBlockActionPayload(ActionId.COLLAPSE);
+        slackController.approveUser(snakeCase.toJson(expandJSON));
+        String collapseUrl = urlCaptor.getValue();
+        Payload collapsePayload = payloadCaptor.getValue();
+        checkSlackBlock(collapseUrl, collapsePayload, ActionId.CHANGE_LICENSE_TYPE, true);
+    }
+
+    @Test
+    void testDropdownEmailOptions() throws IOException {
+        for (DropdownEmailOption option : Arrays.stream(DropdownEmailOption.values()).filter(option -> !option.isNotModalEmail()).collect(Collectors.toList())) {
+
+            /*******************************
+             * Mock converting to regular
+             *******************************/
+
+            BlockActionPayload actionJSON = getBlockActionPayload(option.getActionId());
+            Gson snakeCase = GsonFactory.createSnakeCase();
+            slackController.approveUser(snakeCase.toJson(actionJSON));
+            ViewsOpenRequest request = requestCaptor.getValue();
+
+            /*******************************
+             * Run checks
+             *******************************/
+
+            // Check Slack integration
+            checkSlackModal(request, option);
+        }
+    }
+
+    @Test
+    void testSendInputModalEmails() throws IOException, MessagingException, NullPointerException {
+        for (DropdownEmailOption option : Arrays.stream(DropdownEmailOption.values()).filter(option -> !option.isNotModalEmail()).collect(Collectors.toList())) {
+
+            /*******************************
+             * Mock sending input modals
+             *******************************/
+
+            ViewSubmissionPayload viewJSON = getViewSubmissionPayload(option);
+            Gson snakeCase = GsonFactory.createSnakeCase();
+            slackController.approveUser(snakeCase.toJson(viewJSON));
+            MimeMessage message = messageCaptor.getValue();
+            String url = urlCaptor.getValue();
+            Payload payload = payloadCaptor.getValue();
+
+            /*******************************
+             * Run checks
+             *******************************/
+
+            // Check mail integration
+            checkEmail(message, option.getMailType());
+
+            // Check Slack integration
+            checkSlackBlock(url, payload, option.getConfirmActionId().orElseThrow(NullPointerException::new), true);
+
+            // Check user mails
+            User mockUser = userRepository.findOneWithAuthoritiesByLogin(DEFAULT_USER_EMAIL).orElse(null);
+            assertThat(userMailsService.findUserMailsByUserAndMailTypeAndSentDateAfter(mockUser, option.getMailType(), null)).isNotEmpty();
+
+            /*******************************
+             * Test expanding block
+             *******************************/
+
+            BlockActionPayload expandJSON = getBlockActionPayload(ActionId.EXPAND);
+            slackController.approveUser(snakeCase.toJson(expandJSON));
+            String expandUrl = urlCaptor.getValue();
+            Payload expandPayload = payloadCaptor.getValue();
+            checkSlackBlock(expandUrl, expandPayload, option.getConfirmActionId().orElseThrow(NullPointerException::new), false);
+        }
+
+    }
+
+    private BlockActionPayload getBlockActionPayload(ActionId actionId) {
+        BlockActionPayload actionJSON = new BlockActionPayload();
+
+        // Set specific action
+        List<BlockActionPayload.Action> actions = new ArrayList<>();
+        BlockActionPayload.Action action = new BlockActionPayload.Action();
+        if (ActionId.isDropdownAction(actionId)) {
+            action.setActionId(ActionId.MORE_ACTIONS.getId());
+        } else {
+            action.setActionId(actionId.getId());
+        }
+        BlockActionPayload.Action.SelectedOption option = new BlockActionPayload.Action.SelectedOption();
+        if (actionId == ActionId.CHANGE_LICENSE_TYPE) {
+            option.setValue(slackService.getOptionValue(OTHER_LICENSE_TYPE.toString(), DEFAULT_USER_EMAIL));
+        } else {
+            option.setValue(slackService.getOptionValue(actionId.toString(), DEFAULT_USER_EMAIL));
+        }
+        action.setSelectedOption(option);
+        action.setValue(DEFAULT_USER_EMAIL);
+        actions.add(action);
+        if (ActionId.isModalEmailAction(actionId)) {
+            actionJSON.setTriggerId(DEFAULT_TRIGGER_ID);
+        }
+        actionJSON.setActions(actions);
+
+        // Set webhook url
+        actionJSON.setResponseUrl(USER_REGISTRATION_WEBHOOK);
+
+        // Set payload token
+        actionJSON.setToken(DEFAULT_PAYLOAD_TOKEN);
+
+        return actionJSON;
+    }
+
+    private ViewSubmissionPayload getViewSubmissionPayload(DropdownEmailOption option) throws NullPointerException{
+        ViewSubmissionPayload viewJSON = new ViewSubmissionPayload();
+
+        viewJSON.setToken(DEFAULT_PAYLOAD_TOKEN);
+
+        List<ViewSubmissionPayload.ResponseUrl> responseUrls = new ArrayList<>();
+        ViewSubmissionPayload.ResponseUrl responseUrl = new ViewSubmissionPayload.ResponseUrl();
+        responseUrl.setResponseUrl(USER_REGISTRATION_WEBHOOK);
+        viewJSON.setResponseUrls(responseUrls);
+
+        ViewSubmissionPayload.User user = new ViewSubmissionPayload.User();
+        user.setName(DEFAULT_ADDR);
+        viewJSON.setUser(user);
+
+        View view = new View();
+        view.setPrivateMetadata(slackService.getOptionValue(USER_REGISTRATION_WEBHOOK, DEFAULT_USER_EMAIL));
+        view.setCallbackId(option.getConfirmActionId().orElseThrow(NullPointerException::new).getId());
+        ViewState viewState = new ViewState();
+        Map<String, Map<String, ViewState.Value>> values = new HashMap<>();
+        Map<String, ViewState.Value> subjectMap = new HashMap<>();
+        ViewState.Value subjectValue = new ViewState.Value();
+        subjectValue.setValue(messageSource.getMessage(option.getMailType().getTitleKey(), new Object[]{}, Locale.forLanguageTag(DEFAULT_LANG_KEY)));
+        subjectMap.put(ActionId.INPUT_SUBJECT.getId(), subjectValue);
+        Map<String, ViewState.Value> bodyMap = new HashMap<>();
+        ViewState.Value bodyValue = new ViewState.Value();
+        bodyValue.setValue(slackService.getStringFromResourceTemplateMailTextFile(option.getMailType().getStringTemplateName().orElseThrow(NullPointerException::new)));
+        bodyMap.put(ActionId.INPUT_BODY.getId(), bodyValue);
+        values.put(BlockId.SUBJECT_INPUT.getId(), subjectMap);
+        values.put(BlockId.BODY_INPUT.getId(), bodyMap);
+        viewState.setValues(values);
+        view.setState(viewState);
+        viewJSON.setView(view);
+
+        return viewJSON;
+    }
+
+    private void checkSlackBlock(String url, Payload payload, ActionId actionId, boolean collapsed) {
         assertThat(url).isEqualTo(USER_REGISTRATION_WEBHOOK);
+
+        // Add required values
         Set<String> expectedValues = new HashSet<>();
-        expectedValues.add(LicenseType.COMMERCIAL.getName());
-        expectedValues.add("john.doe@example.com");
-        expectedValues.add("company name");
-        expectedValues.add(LicenseType.COMMERCIAL.getName());
-        expectedValues.add(BlockId.COLLAPSED.getId());
+        expectedValues.add(DEFAULT_USER_EMAIL);
+        expectedValues.add(DEFAULT_COMPANY_NAME);
+        if (collapsed) {
+            expectedValues.add(BlockId.COLLAPSED.getId());
+            expectedValues.add(actionId == ActionId.CHANGE_LICENSE_TYPE ? OTHER_LICENSE_TYPE.getShortName() : DEFAULT_LICENSE_TYPE.getShortName());
+            if (actionId == ActionId.GIVE_TRIAL_ACCESS) {
+                expectedValues.add("TRIAL");
+            } else if (ActionId.isConfirmEmailAction(actionId)) {
+                for (DropdownEmailOption option : DropdownEmailOption.values()) {
+                    if (option.getActionId() == actionId && option.getCollapsedNote().isPresent()) {
+                        expectedValues.add(option.getCollapsedNote().get());
+                    }
+                }
+            }
+        } else {
+            expectedValues.add(actionId == ActionId.CHANGE_LICENSE_TYPE ? OTHER_LICENSE_TYPE.getName() : DEFAULT_LICENSE_TYPE.getName());
+            if (ActionId.isConfirmEmailAction(actionId)) {
+                for (DropdownEmailOption option : DropdownEmailOption.values()) {
+                    if (option.getConfirmActionId() == Optional.of(actionId)) {
+                        expectedValues.add(option.getExpandedNote());
+                    }
+                }
+            } else if (actionId == ActionId.APPROVE_USER) {
+                expectedValues.add(SlackService.APPROVE_USER_EXPANDED_NOTE);
+            } else if (actionId == ActionId.CONVERT_TO_REGULAR_ACCOUNT) {
+                expectedValues.add(SlackService.CONVERT_TO_REGULAR_ACCOUNT_EXPANDED_NOTE);
+            }
+        }
+
+        // Search for required values
         for (LayoutBlock block : payload.getBlocks()) {
             if (block instanceof SectionBlock) {
                 SectionBlock sectionBlock = (SectionBlock) block;
@@ -208,38 +585,51 @@ public class SlackControllerIT {
                 }
             }
         }
+
         assertThat(expectedValues).isEmpty();
-
-        // Check user approval
-        mockUser = userRepository.findOneWithAuthoritiesByLogin("john.doe@example.com").orElse(null);
-        assertThat(mockUser).isNotNull();
-        assertThat(mockUser.getActivated()).isTrue();
-        List<Token> mockTokens = tokenService.findByUser(mockUser);
-        assertThat(mockTokens).isNotEmpty();
-        Token mockToken = mockTokens.get(0);
-        assertThat(mockToken.getExpiration()).isBefore(Instant.now().plusSeconds(DEFAULT_TOKEN_EXPIRATION_IN_SECONDS + 1));
-        assertThat(mockToken.isRenewable()).isTrue();
-        assertThat(userMailsService.findUserMailsByUserAndMailTypeAndSentDateAfter(mockUser, MailType.APPROVAL, null)).isNotEmpty();
     }
 
-    @Test
-    void testGiveTrialAccess() throws IOException {
+    private void checkSlackModal(ViewsOpenRequest request, DropdownEmailOption option) {
+        assertThat(request.getToken()).isEqualTo(DEFAULT_OAUTH_TOKEN);
+        assertThat(request.getTriggerId()).isEqualTo(DEFAULT_TRIGGER_ID);
 
+        View view = request.getView();
+        assertThat(view.getCallbackId()).isEqualTo(option.getConfirmActionId().orElseThrow(NullPointerException::new).getId());
+        assertThat(view.getType()).isEqualTo("modal");
+        assertThat(view.getPrivateMetadata()).isEqualTo(slackService.getOptionValue(USER_REGISTRATION_WEBHOOK, DEFAULT_USER_EMAIL));
+        assertThat(view.getTitle().getText()).isEqualTo(option.getModalTitle().orElse(""));
+
+        String expectedBody = slackService.getStringFromResourceTemplateMailTextFile(option.getMailType().getStringTemplateName().orElseThrow(NullPointerException::new));
+        boolean foundExpectedBody = false;
+        for (LayoutBlock block : view.getBlocks()) {
+            if (block instanceof InputBlock) {
+                InputBlock inputBlock = (InputBlock) block;
+                if (inputBlock.getElement() != null && inputBlock.getElement() instanceof PlainTextInputElement) {
+                    PlainTextInputElement inputElement = (PlainTextInputElement) inputBlock.getElement();
+                    if (inputElement.getInitialValue().contains(expectedBody)) {
+                        foundExpectedBody = true;
+                    }
+                }
+            }
+        }
+        assertThat(foundExpectedBody).isTrue();
     }
 
-    @Test
-    void testChangeLicenseType() throws IOException {
+    private void checkEmail(MimeMessage message, MailType mailType) throws IOException, MessagingException {
+        assertThat(message.getSubject()).isEqualTo(messageSource.getMessage(mailType.getTitleKey(), new Object[]{}, Locale.forLanguageTag(DEFAULT_LANG_KEY)));
+        assertThat(message.getAllRecipients()[0].toString()).isEqualTo(DEFAULT_USER_EMAIL);
+        if (mailType == MailType.LICENSE_OPTIONS) {
+            assertThat(message.getFrom()[0].toString()).isEqualTo(LICENSE_ADDR);
+        } else if (mailType == MailType.ACTIVATE_FREE_TRIAL) {
+            assertThat(message.getFrom()[0].toString()).isEqualTo(DEFAULT_ADDR);
+        } else if (MailType.isDropdownEmail(mailType)) {
+            assertThat(message.getFrom()[0].toString()).isEqualTo(REGISTRATION_ADDR);
+        } else {
+            assertThat(message.getFrom()[0].toString()).isEqualTo(DEFAULT_ADDR);
+        }
 
-    }
-
-    @Test
-    void testConvertToRegularAccount() throws IOException {
-
-    }
-
-    @Test
-    void testDropdownEmailOptions() throws IOException {
-
+        assertThat(message.getContent()).isInstanceOf(String.class);
+        assertThat(message.getContent().toString()).contains(getStringFromResourceTemplateMailTextFile(mailType.getStringTemplateName().get()).trim());
     }
 
     private String getStringFromResourceTemplateMailTextFile(String fileName) throws IOException {
