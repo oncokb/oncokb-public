@@ -64,6 +64,7 @@ class SlackServiceIT {
 
     @BeforeEach
     public void setup() throws IOException {
+        // Set up mock Slack instance to catch payload
         MockitoAnnotations.initMocks(this);
         doReturn(null).when(slack).send(any(String.class), any(Payload.class));
 

@@ -24,6 +24,7 @@ import org.mskcc.cbio.oncokb.config.application.ApplicationProperties;
 import org.mskcc.cbio.oncokb.domain.Company;
 import org.mskcc.cbio.oncokb.domain.UserIdMessagePair;
 import org.mskcc.cbio.oncokb.domain.enumeration.*;
+import org.mskcc.cbio.oncokb.domain.enumeration.slack.*;
 import org.mskcc.cbio.oncokb.service.dto.UserDTO;
 import org.mskcc.cbio.oncokb.service.dto.useradditionalinfo.AdditionalInfoDTO;
 import org.mskcc.cbio.oncokb.service.mapper.UserMapper;
@@ -517,7 +518,7 @@ public class SlackService {
     private List<LayoutBlock> buildAdditionalInfoBlocks(UserDTO userDTO, boolean trialAccountActivated, ActionId actionId) {
         List<LayoutBlock> layoutBlocks = new ArrayList<>();
 
-        for (DropdownEmailOption inquiryOption : Arrays.stream(DropdownEmailOption.values()).filter(mo -> mo.getCategory() == EmailCategory.CLARIFY || mo.getCategory() == EmailCategory.LICENSE).collect(Collectors.toList())) {
+        for (DropdownEmailOption inquiryOption : Arrays.stream(DropdownEmailOption.values()).filter(mo -> mo.getCategory() == DropdownEmailCategory.CLARIFY || mo.getCategory() == DropdownEmailCategory.LICENSE).collect(Collectors.toList())) {
             if (withNote(inquiryOption, userDTO, actionId))
                 layoutBlocks.add(buildPlainTextBlock(inquiryOption.getExpandedNote(), inquiryOption.getBlockId()));
         }
@@ -530,7 +531,7 @@ public class SlackService {
         } else if (withNote(DropdownEmailOption.GIVE_TRIAL_ACCESS, userDTO, actionId)) {
             layoutBlocks.add(buildPlainTextBlock(DropdownEmailOption.GIVE_TRIAL_ACCESS.getExpandedNote(), TRIAL_ACCOUNT_NOTE));
         } else {
-            for (DropdownEmailOption rejectOption : Arrays.stream(DropdownEmailOption.values()).filter(mo -> mo.getCategory() == EmailCategory.DENY).collect(Collectors.toList())) {
+            for (DropdownEmailOption rejectOption : Arrays.stream(DropdownEmailOption.values()).filter(mo -> mo.getCategory() == DropdownEmailCategory.DENY).collect(Collectors.toList())) {
                 if (withNote(rejectOption, userDTO, actionId))
                     layoutBlocks.add(buildPlainTextBlock(rejectOption.getExpandedNote(), rejectOption.getBlockId()));
             }
@@ -592,7 +593,7 @@ public class SlackService {
 
         // Add other option groups
         if (!user.isActivated()) {
-            for (EmailCategory emailCategory : Arrays.stream(EmailCategory.values()).filter(ec -> !ec.equals(EmailCategory.TRIAL)).collect(Collectors.toList())) {
+            for (DropdownEmailCategory emailCategory : Arrays.stream(DropdownEmailCategory.values()).filter(ec -> !ec.equals(DropdownEmailCategory.TRIAL)).collect(Collectors.toList())) {
                 List<OptionObject> optionGroup = new ArrayList<>();
                 for (DropdownEmailOption emailOption : Arrays.stream(DropdownEmailOption.values()).filter(eo -> eo.getCategory().equals(emailCategory)).collect(Collectors.toList())) {
                     if (emailOption.getSpecificLicenses().isEmpty() || emailOption.getSpecificLicenses().contains(user.getLicenseType()))
@@ -706,7 +707,7 @@ public class SlackService {
             try {
                 title.setText(mailOption.get().getModalTitle().orElse(""));
                 callbackId = mailOption.get().getConfirmActionId().isPresent() ? mailOption.get().getConfirmActionId().get().getId() : "";
-                subject = mailOption.get().getModalSubject().get().equals(EmailSubject.DEFAULT) ? DEFAULT_SUBJECT : COMPANY_LICENSE_SUBJECT;
+                subject = mailOption.get().getModalSubject().get().equals(ModalEmailSubject.DEFAULT) ? DEFAULT_SUBJECT : COMPANY_LICENSE_SUBJECT;
                 bodySb.append(getStringFromResourceTemplateMailTextFile(mailOption.get().getMailType().getStringTemplateName().orElse("")));
             } catch (Exception e) {
                 log.warn("Unable to find email template file");
@@ -741,7 +742,7 @@ public class SlackService {
         return null;
     }
 
-    public String getStringFromResourceTemplateMailTextFile(String fileName) {
+    private String getStringFromResourceTemplateMailTextFile(String fileName) {
         StringBuilder sb = new StringBuilder();
 
         URL targetFileUrl = getClass().getClassLoader().getResource("templates/mail/" + fileName);

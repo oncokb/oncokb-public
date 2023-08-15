@@ -1,9 +1,9 @@
 package org.mskcc.cbio.oncokb.web.rest.slack;
 
-import org.mskcc.cbio.oncokb.domain.enumeration.EmailCategory;
-import org.mskcc.cbio.oncokb.domain.enumeration.EmailSubject;
 import org.mskcc.cbio.oncokb.domain.enumeration.LicenseType;
 import org.mskcc.cbio.oncokb.domain.enumeration.MailType;
+import org.mskcc.cbio.oncokb.domain.enumeration.slack.DropdownEmailCategory;
+import org.mskcc.cbio.oncokb.domain.enumeration.slack.ModalEmailSubject;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -25,7 +25,7 @@ import java.util.Optional;
  * associated with the initial selection from the menu)
  * - MailType mailType (the corresponding MailType associated
  * with the dropdown option)
- * - EmailCategory category (the EmailCategory enum constant,
+ * - DropdownEmailCategory category (the EmailCategory enum constant,
  * which is the group the option goes in)
  * - String dropdownKey (the name of the option in the menu)
  * - String expandedNote (the string that appears in the
@@ -41,9 +41,9 @@ import java.util.Optional;
  * - boolean notModalEmail (if the email option doesn't prompt an
  * input modal. Is 'false' by default.)
  * - Optional<String> modalTitle (the title of the input modal
- * when option is selected. This property is encouraged if the
+ * when option is selected. This property is REQUIRED if the
  * email option uses an input modal.)
- * - Optional<EmailSubject> modalSubject (the default subject of
+ * - Optional<ModalEmailSubject> modalSubject (the default subject of
  * the input modal. Defaults to EmailSubject.DEFAULT if not defined.)
  * - Optional<String> collapsedNote (the string that appears in the
  * collapsed block after email sent. This property is REQUIRED if the
@@ -75,7 +75,7 @@ public enum DropdownEmailOption {
         .blockId(BlockId.TRIAL_ACCOUNT_NOTE)
         .actionId(ActionId.GIVE_TRIAL_ACCESS)
         .mailType(MailType.ACTIVATE_FREE_TRIAL)
-        .category(EmailCategory.TRIAL)
+        .category(DropdownEmailCategory.TRIAL)
         .dropdownKey("Give Trial Access")
         .isNotModalEmail()
         .expandedNote("The trial account has been initialized and notified."))
@@ -84,11 +84,11 @@ public enum DropdownEmailOption {
         .actionId(ActionId.SEND_ACADEMIC_FOR_PROFIT_EMAIL)
         .confirmActionId(ActionId.CONFIRM_SEND_ACADEMIC_FOR_PROFIT_EMAIL)
         .mailType(MailType.CLARIFY_ACADEMIC_FOR_PROFIT)
-        .category(EmailCategory.CLARIFY)
+        .category(DropdownEmailCategory.CLARIFY)
         .specificLicense(LicenseType.ACADEMIC)
         .dropdownKey("Send Academic For Profit Email")
         .modalTitle("For Profit Clarification")
-        .modalSubject(EmailSubject.DEFAULT)
+        .modalSubject(ModalEmailSubject.DEFAULT)
         .collapsedNote("Clarified with user on for-profit affiliation")
         .expandedNote("We have sent a clarification email to the user asking why they are applying for the academic license while affiliated with a for-profit company."))
     , CLARIFY_ACADEMIC_NON_INSTITUTE_EMAIL(new DropdownEmailOptionBuilder()
@@ -96,11 +96,11 @@ public enum DropdownEmailOption {
         .actionId(ActionId.SEND_ACADEMIC_CLARIFICATION_EMAIL)
         .confirmActionId(ActionId.CONFIRM_SEND_ACADEMIC_CLARIFICATION_EMAIL)
         .mailType(MailType.CLARIFY_ACADEMIC_NON_INSTITUTE_EMAIL)
-        .category(EmailCategory.CLARIFY)
+        .category(DropdownEmailCategory.CLARIFY)
         .specificLicense(LicenseType.ACADEMIC)
         .dropdownKey("Send Academic Domain Clarification Email")
         .modalTitle("Domain Clarification")
-        .modalSubject(EmailSubject.DEFAULT)
+        .modalSubject(ModalEmailSubject.DEFAULT)
         .collapsedNote("Clarified with user on noninstitutional email")
         .expandedNote("We have sent a clarification email to the user asking why they could not use an institution email to register."))
     , CLARIFY_USE_CASE(new DropdownEmailOptionBuilder()
@@ -108,10 +108,10 @@ public enum DropdownEmailOption {
         .actionId(ActionId.SEND_USE_CASE_CLARIFICATION_EMAIL)
         .confirmActionId(ActionId.CONFIRM_SEND_USE_CASE_CLARIFICATION_EMAIL)
         .mailType(MailType.CLARIFY_USE_CASE)
-        .category(EmailCategory.CLARIFY)
+        .category(DropdownEmailCategory.CLARIFY)
         .dropdownKey("Send Use Case Clarification Email")
         .modalTitle("Use Case Clarification")
-        .modalSubject(EmailSubject.DEFAULT)
+        .modalSubject(ModalEmailSubject.DEFAULT)
         .collapsedNote("Sent use case clarification")
         .expandedNote("We have sent a clarification email to the user asking to further explain their use case."))
     , CLARIFY_DUPLICATE_USER(new DropdownEmailOptionBuilder()
@@ -119,10 +119,10 @@ public enum DropdownEmailOption {
         .actionId(ActionId.SEND_DUPLICATE_USER_CLARIFICATION_EMAIL)
         .confirmActionId(ActionId.CONFIRM_SEND_DUPLICATE_USER_CLARIFICATION_EMAIL)
         .mailType(MailType.CLARIFY_DUPLICATE_USER)
-        .category(EmailCategory.CLARIFY)
+        .category(DropdownEmailCategory.CLARIFY)
         .dropdownKey("Send Duplicate User Email")
         .modalTitle("Clarify Duplicate User")
-        .modalSubject(EmailSubject.DEFAULT)
+        .modalSubject(ModalEmailSubject.DEFAULT)
         .collapsedNote("Clarified with user on multiple account requests")
         .expandedNote("We have sent a clarification email to the user asking why they registered multiple accounts."))
     , CLARIFY_REGISTRATION_INFO(new DropdownEmailOptionBuilder()
@@ -130,10 +130,10 @@ public enum DropdownEmailOption {
         .actionId(ActionId.SEND_REGISTRATION_INFO_CLARIFICATION_EMAIL)
         .confirmActionId(ActionId.CONFIRM_SEND_REGISTRATION_INFO_CLARIFICATION_EMAIL)
         .mailType(MailType.CLARIFY_REGISTRATION_INFO)
-        .category(EmailCategory.CLARIFY)
+        .category(DropdownEmailCategory.CLARIFY)
         .dropdownKey("Send Registration Info Clarification Email")
         .modalTitle("Clarify Registry Info")
-        .modalSubject(EmailSubject.DEFAULT)
+        .modalSubject(ModalEmailSubject.DEFAULT)
         .collapsedNote("Clarified with user on registration info")
         .expandedNote("We have sent a clarification email to the user asking to provide more detailed registration info."))
     , LICENSE_OPTIONS(new DropdownEmailOptionBuilder()
@@ -141,13 +141,13 @@ public enum DropdownEmailOption {
         .actionId(ActionId.SEND_LICENSE_OPTIONS_EMAIL)
         .confirmActionId(ActionId.CONFIRM_SEND_LICENSE_OPTIONS_EMAIL)
         .mailType(MailType.LICENSE_OPTIONS)
-        .category(EmailCategory.LICENSE)
+        .category(DropdownEmailCategory.LICENSE)
         .specificLicense(LicenseType.COMMERCIAL)
         .specificLicense(LicenseType.HOSPITAL)
         .specificLicense(LicenseType.RESEARCH_IN_COMMERCIAL)
         .dropdownKey("Send License Options Email")
         .modalTitle("Send License Options")
-        .modalSubject(EmailSubject.COMPANY)
+        .modalSubject(ModalEmailSubject.COMPANY)
         .collapsedNote("Sent license options email")
         .expandedNote("We have sent an email to the user with license options for their affiliated company."))
     , REJECT(new DropdownEmailOptionBuilder()
@@ -155,10 +155,10 @@ public enum DropdownEmailOption {
         .actionId(ActionId.SEND_REJECTION_EMAIL)
         .confirmActionId(ActionId.CONFIRM_SEND_REJECTION_EMAIL)
         .mailType(MailType.REJECTION)
-        .category(EmailCategory.DENY)
+        .category(DropdownEmailCategory.DENY)
         .dropdownKey("Send Rejection Email")
         .modalTitle("Rejection Email")
-        .modalSubject(EmailSubject.DEFAULT)
+        .modalSubject(ModalEmailSubject.DEFAULT)
         .collapsedNote("Sent rejection email")
         .expandedNote("The user has been rejected and notified."))
     , REJECT_ALUMNI_ADDRESS(new DropdownEmailOptionBuilder()
@@ -166,10 +166,10 @@ public enum DropdownEmailOption {
         .actionId(ActionId.SEND_REJECT_ALUMNI_ADDRESS_EMAIL)
         .confirmActionId(ActionId.CONFIRM_SEND_REJECT_ALUMNI_ADDRESS_EMAIL)
         .mailType(MailType.REJECT_ALUMNI_ADDRESS)
-        .category(EmailCategory.DENY)
+        .category(DropdownEmailCategory.DENY)
         .dropdownKey("Send Alumni Rejection Email")
         .modalTitle("Reject Alumni Address")
-        .modalSubject(EmailSubject.DEFAULT)
+        .modalSubject(ModalEmailSubject.DEFAULT)
         .collapsedNote("Rejected user due to alumni email address")
         .expandedNote("The user has been rejected due to alumni email address."))
     ;
@@ -181,13 +181,13 @@ public enum DropdownEmailOption {
     // Email
     private MailType mailType;
     // Dropdown menu
-    private EmailCategory category;
+    private DropdownEmailCategory category;
     private List<LicenseType> specificLicenses;
     private String dropdownKey;
     // View modal
     private boolean notModalEmail;
     private Optional<String> modalTitle;
-    private Optional<EmailSubject> modalSubject;
+    private Optional<ModalEmailSubject> modalSubject;
     // Additional info block
     private Optional<String> collapsedNote;
     private String expandedNote;
@@ -223,7 +223,7 @@ public enum DropdownEmailOption {
         return mailType;
     }
 
-    public EmailCategory getCategory() { return category; }
+    public DropdownEmailCategory getCategory() { return category; }
 
     public List<LicenseType> getSpecificLicenses() { return specificLicenses; }
 
@@ -237,7 +237,7 @@ public enum DropdownEmailOption {
         return modalTitle;
     }
 
-    public Optional<EmailSubject> getModalSubject() {
+    public Optional<ModalEmailSubject> getModalSubject() {
         return modalSubject;
     }
 
@@ -256,13 +256,13 @@ public enum DropdownEmailOption {
         // Email
         private MailType mailType;
         // Dropdown menu
-        private EmailCategory category;
+        private DropdownEmailCategory category;
         private List<LicenseType> specificLicenses = new ArrayList<>();
         private String dropdownKey;
         // View modal
         private boolean notModalEmail = false;
         private Optional<String> modalTitle = Optional.empty();
-        private Optional<EmailSubject> modalSubject = Optional.of(EmailSubject.DEFAULT);
+        private Optional<ModalEmailSubject> modalSubject = Optional.of(ModalEmailSubject.DEFAULT);
         // Additional info block
         private Optional<String> collapsedNote = Optional.empty();
         private String expandedNote;
@@ -297,7 +297,7 @@ public enum DropdownEmailOption {
             return this;
         }
 
-        public DropdownEmailOptionBuilder category(EmailCategory category) {
+        public DropdownEmailOptionBuilder category(DropdownEmailCategory category) {
             this.category = category;
             return this;
         }
@@ -312,7 +312,7 @@ public enum DropdownEmailOption {
             return this;
         }
 
-        public DropdownEmailOptionBuilder modalSubject(EmailSubject modalSubject) {
+        public DropdownEmailOptionBuilder modalSubject(ModalEmailSubject modalSubject) {
             this.modalSubject = Optional.ofNullable(modalSubject);
             return this;
         }

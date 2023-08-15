@@ -1,4 +1,4 @@
-package org.mskcc.cbio.oncokb.domain.enumeration;
+package org.mskcc.cbio.oncokb.domain.enumeration.slack;
 
 /**
  * The EmailCategory enumeration.
@@ -12,7 +12,7 @@ package org.mskcc.cbio.oncokb.domain.enumeration;
  *  we would likely send them to the user (i.e. clarify before
  *  deny, etc.).
  */
-public enum EmailCategory {
+public enum DropdownEmailCategory {
     TRIAL("Trial"),
     CLARIFY("Clarify"),
     LICENSE("License"),
@@ -20,7 +20,7 @@ public enum EmailCategory {
 
     String label;
 
-    EmailCategory(String label) {
+    DropdownEmailCategory(String label) {
         this.label = label;
     }
 

@@ -1,4 +1,4 @@
-package org.mskcc.cbio.oncokb.domain.enumeration;
+package org.mskcc.cbio.oncokb.domain.enumeration.slack;
 
 /**
  * The EmailSubject enumeration.
@@ -11,7 +11,7 @@ package org.mskcc.cbio.oncokb.domain.enumeration;
  *
  * for more details.
  */
-public enum EmailSubject {
+public enum ModalEmailSubject {
     DEFAULT // "License for " + userDTO.getLicenseType().getName() + " of OncoKB"
     , COMPANY // "OncoKB - " + userDTO.getCompanyName() + " license options"
 }

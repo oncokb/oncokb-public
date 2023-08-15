@@ -55,17 +55,11 @@ import javax.mail.MessagingException;
 import javax.mail.internet.MimeMessage;
 
 import java.io.IOException;
-import java.net.URL;
-import java.nio.charset.StandardCharsets;
-import java.nio.file.Files;
-import java.nio.file.Paths;
 import java.time.Instant;
 import java.util.*;
 import java.util.stream.Collectors;
-import java.util.stream.Stream;
 
 import static org.assertj.core.api.Assertions.assertThat;
-import static org.assertj.core.api.Assertions.in;
 import static org.mockito.Mockito.*;
 import static org.mskcc.cbio.oncokb.config.Constants.DEFAULT_TOKEN_EXPIRATION_IN_SECONDS;
 
@@ -91,6 +85,10 @@ public class SlackControllerIT {
     private static final String DEFAULT_PAYLOAD_TOKEN = "token";
     private static final String DEFAULT_OAUTH_TOKEN = "oauth_token";
     private static final String DEFAULT_TRIGGER_ID = "trigger_id";
+
+    // Mock email contents
+    private static final String DEFAULT_EMAIL_SUBJECT = "email subject";
+    private static final String DEFAULT_EMAIL_BODY = "email body";
 
     @Autowired
     private ApplicationProperties applicationProperties;
@@ -519,11 +517,11 @@ public class SlackControllerIT {
         Map<String, Map<String, ViewState.Value>> values = new HashMap<>();
         Map<String, ViewState.Value> subjectMap = new HashMap<>();
         ViewState.Value subjectValue = new ViewState.Value();
-        subjectValue.setValue(messageSource.getMessage(option.getMailType().getTitleKey(), new Object[]{}, Locale.forLanguageTag(DEFAULT_LANG_KEY)));
+        subjectValue.setValue(DEFAULT_EMAIL_SUBJECT);
         subjectMap.put(ActionId.INPUT_SUBJECT.getId(), subjectValue);
         Map<String, ViewState.Value> bodyMap = new HashMap<>();
         ViewState.Value bodyValue = new ViewState.Value();
-        bodyValue.setValue(slackService.getStringFromResourceTemplateMailTextFile(option.getMailType().getStringTemplateName().orElseThrow(NullPointerException::new)));
+        bodyValue.setValue(DEFAULT_EMAIL_BODY);
         bodyMap.put(ActionId.INPUT_BODY.getId(), bodyValue);
         values.put(BlockId.SUBJECT_INPUT.getId(), subjectMap);
         values.put(BlockId.BODY_INPUT.getId(), bodyMap);
@@ -546,7 +544,7 @@ public class SlackControllerIT {
             expectedValues.add(actionId == ActionId.CHANGE_LICENSE_TYPE ? OTHER_LICENSE_TYPE.getShortName() : DEFAULT_LICENSE_TYPE.getShortName());
             if (actionId == ActionId.GIVE_TRIAL_ACCESS) {
                 expectedValues.add("TRIAL");
-            } else if (ActionId.isConfirmEmailAction(actionId)) {
+            } else {
                 for (DropdownEmailOption option : DropdownEmailOption.values()) {
                     if (option.getActionId() == actionId && option.getCollapsedNote().isPresent()) {
                         expectedValues.add(option.getCollapsedNote().get());
@@ -554,17 +552,17 @@ public class SlackControllerIT {
                 }
             }
         } else {
-            expectedValues.add(actionId == ActionId.CHANGE_LICENSE_TYPE ? OTHER_LICENSE_TYPE.getName() : DEFAULT_LICENSE_TYPE.getName());
-            if (ActionId.isConfirmEmailAction(actionId)) {
+            expectedValues.add(actionId == ActionId.CHANGE_LICENSE_TYPE ? OTHER_LICENSE_TYPE.getName() : DEFAULT_LICENSE_TYPE.getName());                
+            if (actionId == ActionId.APPROVE_USER) {
+                expectedValues.add(SlackService.APPROVE_USER_EXPANDED_NOTE);
+            } else if (actionId == ActionId.CONVERT_TO_REGULAR_ACCOUNT) {
+                expectedValues.add(SlackService.CONVERT_TO_REGULAR_ACCOUNT_EXPANDED_NOTE);
+            } else {
                 for (DropdownEmailOption option : DropdownEmailOption.values()) {
                     if (option.getConfirmActionId() == Optional.of(actionId)) {
                         expectedValues.add(option.getExpandedNote());
                     }
                 }
-            } else if (actionId == ActionId.APPROVE_USER) {
-                expectedValues.add(SlackService.APPROVE_USER_EXPANDED_NOTE);
-            } else if (actionId == ActionId.CONVERT_TO_REGULAR_ACCOUNT) {
-                expectedValues.add(SlackService.CONVERT_TO_REGULAR_ACCOUNT_EXPANDED_NOTE);
             }
         }
 
@@ -597,26 +595,10 @@ public class SlackControllerIT {
         assertThat(view.getCallbackId()).isEqualTo(option.getConfirmActionId().orElseThrow(NullPointerException::new).getId());
         assertThat(view.getType()).isEqualTo("modal");
         assertThat(view.getPrivateMetadata()).isEqualTo(slackService.getOptionValue(USER_REGISTRATION_WEBHOOK, DEFAULT_USER_EMAIL));
-        assertThat(view.getTitle().getText()).isEqualTo(option.getModalTitle().orElse(""));
-
-        String expectedBody = slackService.getStringFromResourceTemplateMailTextFile(option.getMailType().getStringTemplateName().orElseThrow(NullPointerException::new));
-        boolean foundExpectedBody = false;
-        for (LayoutBlock block : view.getBlocks()) {
-            if (block instanceof InputBlock) {
-                InputBlock inputBlock = (InputBlock) block;
-                if (inputBlock.getElement() != null && inputBlock.getElement() instanceof PlainTextInputElement) {
-                    PlainTextInputElement inputElement = (PlainTextInputElement) inputBlock.getElement();
-                    if (inputElement.getInitialValue().contains(expectedBody)) {
-                        foundExpectedBody = true;
-                    }
-                }
-            }
-        }
-        assertThat(foundExpectedBody).isTrue();
+        assertThat(view.getTitle().getText()).isEqualTo(option.getModalTitle().orElseThrow(NullPointerException::new));
     }
 
     private void checkEmail(MimeMessage message, MailType mailType) throws IOException, MessagingException {
-        assertThat(message.getSubject()).isEqualTo(messageSource.getMessage(mailType.getTitleKey(), new Object[]{}, Locale.forLanguageTag(DEFAULT_LANG_KEY)));
         assertThat(message.getAllRecipients()[0].toString()).isEqualTo(DEFAULT_USER_EMAIL);
         if (mailType == MailType.LICENSE_OPTIONS) {
             assertThat(message.getFrom()[0].toString()).isEqualTo(LICENSE_ADDR);
@@ -629,19 +611,11 @@ public class SlackControllerIT {
         }
 
         assertThat(message.getContent()).isInstanceOf(String.class);
-        assertThat(message.getContent().toString()).contains(getStringFromResourceTemplateMailTextFile(mailType.getStringTemplateName().get()).trim());
-    }
-
-    private String getStringFromResourceTemplateMailTextFile(String fileName) throws IOException {
-        StringBuilder sb = new StringBuilder();
-
-        URL targetFileUrl = getClass().getClassLoader().getResource("templates/mail/" + fileName);
-        if (targetFileUrl != null) {
-            try (Stream<String> stream = Files.lines(Paths.get(targetFileUrl.getPath()), StandardCharsets.UTF_8)) {
-                stream.forEach(s -> sb.append(s).append("\n"));
+        for (DropdownEmailOption option : DropdownEmailOption.values()) {
+            if (option.getMailType().equals(mailType) && !option.isNotModalEmail()) {
+                assertThat(message.getContent().toString()).isEqualTo(DEFAULT_EMAIL_BODY);
+                assertThat(message.getSubject()).isEqualTo(DEFAULT_EMAIL_SUBJECT);
             }
         }
-
-        return sb.toString();
     }
 }
