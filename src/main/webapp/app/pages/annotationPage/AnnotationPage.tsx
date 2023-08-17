@@ -498,7 +498,7 @@ export default class AnnotationPage extends React.Component<
     return (
       <>
         <div className={'d-flex justify-content-between flex-wrap'}>
-          <div>
+          <div style={{ flex: '1 1 300px' }}>
             <h2
               className={'d-flex align-items-baseline flex-wrap'}
               style={{ marginBottom: 0 }}
