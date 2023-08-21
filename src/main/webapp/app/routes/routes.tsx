@@ -33,6 +33,7 @@ import { AboutPageNavTab } from 'app/pages/aboutGroup/AboutPageNavTab';
 import { ApiAccessPageNavTab } from 'app/pages/apiAccessGroup/ApiAccessPageNavTab';
 import FAQPage from 'app/pages/FAQPage';
 import ReadOnlyMode from 'app/shared/readonly/ReadOnlyMode';
+import AnnotationInputPage from 'app/pages/annotationToolPage/AnnotationInputPage';
 import * as QueryString from 'query-string';
 
 const getOldLevelsRedirectRoute = (hash: string) => {
@@ -139,6 +140,13 @@ const AppRouts = (props: {
             appStore={props.appStore}
             path={PAGE_ROUTE.GENE}
             component={GenePage}
+          />
+          <RecaptchaBoundaryRoute
+            exact
+            isUserAuthenticated={props.authenticationStore.isUserAuthenticated}
+            appStore={props.appStore}
+            path={PAGE_ROUTE.ANNOTATION_INPUT}
+            component={AnnotationInputPage}
           />
           <RecaptchaBoundaryRoute
             exact

@@ -517,6 +517,8 @@ export enum PAGE_ROUTE {
   FAQ_ACCESS = '/faq',
   CANCER_GENES = '/cancerGenes',
   ACTIONABLE_GENE = '/actionableGenes',
+  ANNOTATION_INPUT = '/annotationInput',
+  ANNOTATION_RESULT = '/annotationResult',
   GENE_HEADER = '/gene',
   GENE = '/gene/:hugoSymbol',
   ALTERATION = '/gene/:hugoSymbol/:alteration',
