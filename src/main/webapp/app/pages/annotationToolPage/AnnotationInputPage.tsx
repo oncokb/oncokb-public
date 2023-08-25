@@ -1,64 +1,55 @@
-import React, { useState, useEffect } from 'react';
-import { Alert, Modal, Button, Form } from 'react-bootstrap';
-import classnames from 'classnames';
+import React, { useState } from 'react';
+import { observer } from 'mobx-react';
+import inputFileStore from './InputFileStore';
+import { Alert } from 'react-bootstrap';
+import { Tab, Tabs, TabPanel } from 'react-responsive-tabs';
+import { AvField, AvForm } from 'availity-reactstrap-validation';
+import 'react-responsive-tabs/styles.css';
 
 interface FileUploadBoxProps {
   fileType: string;
+  fileIndex: number;
 }
 
-interface ColumnInfoModalProps {
-  fileType: string;
-  show: boolean;
-  onHide: () => void;
-  // Add props for required and optional columns if needed
-}
-
-const ColumnInfoModal: React.FC<ColumnInfoModalProps> = ({
+const FileUploadBox: React.FC<FileUploadBoxProps> = ({
   fileType,
-  show,
-  onHide,
+  fileIndex,
 }) => {
-  const [requiredCols, setRequiredCols] = useState('');
-  const [optionalCols, setOptionalCols] = useState('');
-
-  useEffect(() => {
-    if (fileType === 'Single Nucleotide Mutation') {
-      setRequiredCols('SNM');
-      setOptionalCols('SNM');
-    } else {
-      setRequiredCols('');
-      setOptionalCols('');
-    }
-  }, [fileType]);
-
-  return (
-    <Modal show={show} onHide={onHide}>
-      <Modal.Header closeButton>
-        <Modal.Title>Required and Optional Columns for {fileType}</Modal.Title>
-      </Modal.Header>
-      <Modal.Body>
-        Required: {requiredCols}
-        <br />
-        Optional: {optionalCols}
-      </Modal.Body>
-      <Modal.Footer>
-        <Button variant="secondary" onClick={onHide}>
-          Close
-        </Button>
-      </Modal.Footer>
-    </Modal>
-  );
-};
-
-const FileUploadBox: React.FC<FileUploadBoxProps> = ({ fileType }) => {
   const [isUploaded, setIsUploaded] = useState(false);
   const [showColumnInfoModal, setShowColumnInfoModal] = useState(false);
   const [iconClassName, setIconClassName] = useState('fa fa-upload');
 
   const handleIconClick = () => {
     if (!isUploaded) {
-      setIsUploaded(true);
-      setIconClassName('fa fa-trash');
+      // Trigger file input click programmatically
+      const fileInput = document.createElement('input');
+      fileInput.type = 'file';
+      fileInput.accept = '.txt'; // Add accepted file types here
+      fileInput.onchange = event => {
+        const selectedFile = (event.target as HTMLInputElement).files?.[0];
+        if (selectedFile) {
+          setIsUploaded(true);
+          setIconClassName('fa fa-trash');
+
+          // Read file content using FileReader
+          const reader = new FileReader();
+          reader.onload = () => {
+            const fileContent = reader.result as string;
+
+            // Store the file content in the InputFileStore
+            inputFileStore.setFileContent(fileIndex, fileContent);
+
+            // implement check to validate file first
+            inputFileStore.incrementValidFileCount();
+          };
+          reader.readAsText(selectedFile);
+        }
+      };
+      fileInput.click();
+    } else {
+      // implement delete the file from store
+      setIsUploaded(false);
+      setIconClassName('fa fa-upload');
     }
   };
 
@@ -115,47 +106,27 @@ const FileUploadBox: React.FC<FileUploadBoxProps> = ({ fileType }) => {
         style={iconStyle}
         onClick={handleIconClick}
       ></i>
-      <ColumnInfoModal
+      {/* <ColumnInfoModal
         fileType={fileType}
         show={showColumnInfoModal}
         onHide={toggleColumnInfoModal}
-      />
+      /> */}
     </div>
   );
 };
 
-const SeeData: React.FC<FileUploadBoxProps> = ({ fileType }) => {
-  const [exampleData, setExampleData] = useState('');
-
-  // const handleExampleDataChange = (event: React.FormEvent<HTMLFormElement>) => {
-  //   setExampleData(event.target.value);
-  // };
-
-  const handleAnnotateSubmit = (event: React.FormEvent<HTMLFormElement>) => {
-    event.preventDefault();
-    // Perform the annotation logic here with the exampleData
-  };
-
-  return (
-    <Form onSubmit={handleAnnotateSubmit}>
-      <Form.Group controlId="exampleDataTextarea">
-        <Form.Control
-          as="textarea"
-          rows={10}
-          value={exampleData}
-          // onChange={handleExampleDataChange}
-        />
-      </Form.Group>
-      <Button type="submit">Annotate</Button>
-    </Form>
-  );
-};
-
 const AnnotationInputPage: React.FC = () => {
-  const [selectedTab, setSelectedTab] = useState('SNM'); // Set initial selected tab
+  // have a store
+  // page maintains class --> maintain the store --> manage the functional components
+  // method processing file changes the state for the annotate button
+  // bootstrap -error warning, etc
+  // string constants to enumerations
+  // file type and tab type can use enumerations
 
-  const handleTabChange = (newTab: string) => {
-    setSelectedTab(newTab); // Update the selected tab when a tab is clicked
+  const [selectedTab, setSelectedTab] = useState(0); // Set initial selected tab
+
+  const handleTabChange = (newTabIndex: number) => {
+    setSelectedTab(newTabIndex); // Update the selected tab when a tab is clicked
   };
 
   return (
@@ -172,11 +143,12 @@ const AnnotationInputPage: React.FC = () => {
           justifyContent: 'space-between', // Spacing between boxes will be even
         }}
       >
-        <FileUploadBox fileType="Single Nucleotide Mutation" />
-        <FileUploadBox fileType="Copy Number Alterations" />
-        <FileUploadBox fileType="Structural Variant" />
-        <FileUploadBox fileType="Clinical Data" />
+        <FileUploadBox fileType="Single Nucleotide Mutation" fileIndex={0} />
+        <FileUploadBox fileType="Copy Number Alterations" fileIndex={1} />
+        <FileUploadBox fileType="Structural Variant" fileIndex={2} />
+        <FileUploadBox fileType="Clinical Data" fileIndex={3} />
       </div>
+
       <br />
       <div style={{ fontSize: '10px' }}>
         <span>
@@ -189,11 +161,9 @@ const AnnotationInputPage: React.FC = () => {
           perspective columns in other files.
         </span>
       </div>
-      {/* <AnnotationTabComponent
-      selectedTab={selectedTab}
-      onTabChange={handleTabChange}
-      />
-      <SeeData fileType="Single Nucleotide Mutation" /> */}
+
+      {/* <Tabs
+      /> */}
     </div>
   );
 };
