@@ -168,15 +168,8 @@ export default class APIAccessPage extends React.Component<{
                     <h5 className="title">Annotating Your Files</h5>
                     <div>
                       You can annotate your data files (mutations, copy number
-                      alterations, fusions, and clinical data) with{' '}
-                      <a
-                        href="https://github.com/oncokb/oncokb-annotator"
-                        target="_blank"
-                        rel="noopener noreferrer"
-                      >
-                        {ONCOKB_TM} Annotator
-                      </a>
-                      .
+                      alterations, fusions, and clinical data) with our online{' '}
+                      <a href="/annotationInput">{ONCOKB_TM} Annotator</a>.
                     </div>
                   </div>
                   <div className={'mb-3'}>
