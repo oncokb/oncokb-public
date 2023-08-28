@@ -4,7 +4,13 @@ entity Token {
     expiration Instant,
     usageLimit Integer,
     currentUsage Integer required,
-    renewable Boolean required
+    renewable Boolean required,
+    checksum String required minlength(8) maxlength(8) pattern(/^[a-zA-Z0-9]*$/),
+    type TokenType required
+}
+
+enum TokenType {
+	PERSONAL,SERVICE,WEB
 }
 
 entity TokenStats {
