@@ -32,6 +32,7 @@ import static org.hamcrest.Matchers.hasItem;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
 
+import org.mskcc.cbio.oncokb.domain.enumeration.TokenType;
 /**
  * Integration tests for the {@link TokenResource} REST controller.
  */
@@ -58,6 +59,12 @@ public class TokenResourceIT {
 
     private static final Boolean DEFAULT_RENEWABLE = false;
     private static final Boolean UPDATED_RENEWABLE = true;
+
+    private static final String DEFAULT_CHECKSUM = "AAAAAAAA";
+    private static final String UPDATED_CHECKSUM = "BBBBBBBB";
+
+    private static final TokenType DEFAULT_TYPE = TokenType.PERSONAL;
+    private static final TokenType UPDATED_TYPE = TokenType.SERVICE;
 
     @Autowired
     private TokenRepository tokenRepository;
@@ -91,7 +98,9 @@ public class TokenResourceIT {
             .expiration(DEFAULT_EXPIRATION)
             .usageLimit(DEFAULT_USAGE_LIMIT)
             .currentUsage(DEFAULT_CURRENT_USAGE)
-            .renewable(DEFAULT_RENEWABLE);
+            .renewable(DEFAULT_RENEWABLE)
+            .checksum(DEFAULT_CHECKSUM)
+            .type(DEFAULT_TYPE);
         return token;
     }
 
@@ -120,7 +129,9 @@ public class TokenResourceIT {
             .expiration(UPDATED_EXPIRATION)
             .usageLimit(UPDATED_USAGE_LIMIT)
             .currentUsage(UPDATED_CURRENT_USAGE)
-            .renewable(UPDATED_RENEWABLE);
+            .renewable(UPDATED_RENEWABLE)
+            .checksum(UPDATED_CHECKSUM)
+            .type(UPDATED_TYPE);
         return token;
     }
 
@@ -152,6 +163,8 @@ public class TokenResourceIT {
         assertThat(testToken.getUsageLimit()).isEqualTo(DEFAULT_USAGE_LIMIT);
         assertThat(testToken.getCurrentUsage()).isEqualTo(DEFAULT_CURRENT_USAGE);
         assertThat(testToken.isRenewable()).isEqualTo(DEFAULT_RENEWABLE);
+        assertThat(testToken.getChecksum()).isEqualTo(DEFAULT_CHECKSUM);
+        assertThat(testToken.getType()).isEqualTo(DEFAULT_TYPE);
     }
 
     @Test
@@ -235,7 +248,9 @@ public class TokenResourceIT {
             .andExpect(jsonPath("$.[*].expiration").value(hasItem(DEFAULT_EXPIRATION.toString())))
             .andExpect(jsonPath("$.[*].usageLimit").value(hasItem(DEFAULT_USAGE_LIMIT)))
             .andExpect(jsonPath("$.[*].currentUsage").value(hasItem(DEFAULT_CURRENT_USAGE)))
-            .andExpect(jsonPath("$.[*].renewable").value(hasItem(DEFAULT_RENEWABLE.booleanValue())));
+            .andExpect(jsonPath("$.[*].renewable").value(hasItem(DEFAULT_RENEWABLE.booleanValue())))
+            .andExpect(jsonPath("$.[*].checksum").value(hasItem(DEFAULT_CHECKSUM)))
+            .andExpect(jsonPath("$.[*].type").value(hasItem(DEFAULT_TYPE.toString())));
     }
 
     @Test
@@ -254,7 +269,9 @@ public class TokenResourceIT {
             .andExpect(jsonPath("$.expiration").value(DEFAULT_EXPIRATION.toString()))
             .andExpect(jsonPath("$.usageLimit").value(DEFAULT_USAGE_LIMIT))
             .andExpect(jsonPath("$.currentUsage").value(DEFAULT_CURRENT_USAGE))
-            .andExpect(jsonPath("$.renewable").value(DEFAULT_RENEWABLE.booleanValue()));
+            .andExpect(jsonPath("$.renewable").value(DEFAULT_RENEWABLE.booleanValue()))
+            .andExpect(jsonPath("$.checksum").value(DEFAULT_CHECKSUM))
+            .andExpect(jsonPath("$.type").value(DEFAULT_TYPE.toString()));
     }
     @Test
     @Transactional
@@ -284,7 +301,9 @@ public class TokenResourceIT {
             .expiration(UPDATED_EXPIRATION)
             .usageLimit(UPDATED_USAGE_LIMIT)
             .currentUsage(UPDATED_CURRENT_USAGE)
-            .renewable(UPDATED_RENEWABLE);
+            .renewable(UPDATED_RENEWABLE)
+            .checksum(UPDATED_CHECKSUM)
+            .type(UPDATED_TYPE);
 
         restTokenMockMvc.perform(put("/api/tokens")
             .contentType(MediaType.APPLICATION_JSON)
@@ -301,6 +320,8 @@ public class TokenResourceIT {
         assertThat(testToken.getUsageLimit()).isEqualTo(UPDATED_USAGE_LIMIT);
         assertThat(testToken.getCurrentUsage()).isEqualTo(UPDATED_CURRENT_USAGE);
         assertThat(testToken.isRenewable()).isEqualTo(UPDATED_RENEWABLE);
+        assertThat(testToken.getChecksum()).isEqualTo(UPDATED_CHECKSUM);
+        assertThat(testToken.getType()).isEqualTo(UPDATED_TYPE);
     }
 
     @Test
@@ -318,5 +339,5 @@ public class TokenResourceIT {
         List<Token> tokenList = tokenRepository.findAll();
         assertThat(tokenList).hasSize(databaseSizeBeforeUpdate);
     }
-    
+
 }

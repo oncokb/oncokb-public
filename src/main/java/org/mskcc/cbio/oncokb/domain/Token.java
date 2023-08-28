@@ -10,6 +10,8 @@ import java.io.Serializable;
 import java.time.Instant;
 import java.util.UUID;
 
+import org.mskcc.cbio.oncokb.domain.enumeration.TokenType;
+
 /**
  * A Token.
  */
@@ -43,6 +45,17 @@ public class Token implements Serializable {
     @NotNull
     @Column(name = "renewable", nullable = false)
     private Boolean renewable = true;
+
+    @NotNull
+    @Size(min = 8, max = 8)
+    @Pattern(regexp = "^[a-zA-Z0-9]*$")
+    @Column(name = "checksum", length = 8, nullable = false)
+    private String checksum;
+
+    @NotNull
+    @Enumerated(EnumType.STRING)
+    @Column(name = "type", nullable = false)
+    private TokenType type;
 
     @ManyToOne
     @JsonIgnoreProperties(value = "tokens", allowSetters = true)
@@ -135,6 +148,32 @@ public class Token implements Serializable {
         this.renewable = renewable;
     }
 
+    public String getChecksum() {
+        return checksum;
+    }
+
+    public Token checksum(String checksum) {
+        this.checksum = checksum;
+        return this;
+    }
+
+    public void setChecksum(String checksum) {
+        this.checksum = checksum;
+    }
+
+    public TokenType getType() {
+        return type;
+    }
+
+    public Token type(TokenType type) {
+        this.type = type;
+        return this;
+    }
+
+    public void setType(TokenType type) {
+        this.type = type;
+    }
+
     public User getUser() {
         return user;
     }
@@ -176,6 +215,8 @@ public class Token implements Serializable {
             ", usageLimit=" + getUsageLimit() +
             ", currentUsage=" + getCurrentUsage() +
             ", renewable='" + isRenewable() + "'" +
+            ", checksum='" + getChecksum() + "'" +
+            ", type='" + getType() + "'" +
             "}";
     }
 }

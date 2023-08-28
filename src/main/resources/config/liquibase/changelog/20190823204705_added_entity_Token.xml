@@ -34,6 +34,12 @@
             <column name="renewable" type="boolean">
                 <constraints nullable="false" />
             </column>
+            <column name="checksum" type="varchar(8)">
+                <constraints nullable="false" />
+            </column>
+            <column name="type" type="varchar(255)">
+                <constraints nullable="false" />
+            </column>
             <column name="user_id" type="bigint">
                 <constraints nullable="true" />
             </column>
@@ -68,6 +74,8 @@
             <column name="usage_limit" type="numeric"/>
             <column name="current_usage" type="numeric"/>
             <column name="renewable" type="boolean"/>
+            <column name="checksum" type="string"/>
+            <column name="type" type="string"/>
             <column name="user_id" type="numeric"/>
             <!-- jhipster-needle-liquibase-add-loadcolumn - JHipster (and/or extensions) can add load columns here -->
         </loadData>
