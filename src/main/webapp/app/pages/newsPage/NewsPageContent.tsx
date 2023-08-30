@@ -199,6 +199,46 @@ const EVIDENCE_COLUMN_SEPARATOR = '; ';
 // https://stackoverflow.com/questions/41947168/is-it-possible-to-use-keyof-operator-on-literals-instead-of-interfaces
 
 export const NEWS_BY_DATE: { [date: string]: NewsData } = {
+  '09012023': {
+    newlyAddedGenes: [
+      'ACVR1B',
+      'ARHGEF12',
+      'BCL7A',
+      'CD19',
+      'CHD2',
+      'COL2A1',
+      'DNM2',
+      'DPYD',
+      'EBF1',
+      'EIF3E',
+      'FANCM',
+      'FHIT',
+      'FOXO3',
+      'GATA6',
+      'GRM3',
+      'HDAC2',
+      'HNF1B',
+      'IFNAR1',
+      'ING1',
+      'ITPKB',
+      'KDM5D',
+      'KLHL6',
+      'LEF1',
+      'MAP3K7',
+      'MLH3',
+      'MS4A1',
+      'NHERF1',
+      'PHLPP1',
+      'PTPN13',
+      'PTPN14',
+      'RPL5',
+      'SLIT2',
+      'SZT2',
+      'TONSL',
+      'XPC',
+      'ZMYM3',
+    ],
+  },
   '07282023': {
     changedAnnotations: [
       {
