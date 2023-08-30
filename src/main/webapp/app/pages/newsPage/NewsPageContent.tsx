@@ -227,7 +227,7 @@ export const NEWS_BY_DATE: { [date: string]: NewsData } = {
       'MAP3K7',
       'MLH3',
       'MS4A1',
-      'NHERF1',
+      'SLC9A3R1',
       'PHLPP1',
       'PTPN13',
       'PTPN14',
