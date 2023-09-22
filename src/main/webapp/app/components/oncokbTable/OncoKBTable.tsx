@@ -17,6 +17,7 @@ interface ITableWithSearchBox<T> extends Partial<TableProps<T>> {
   columns: SearchColumn<T>[];
   loading?: boolean;
   filters?: React.FunctionComponent;
+  className?: string;
 }
 
 @observer
@@ -84,11 +85,11 @@ export default class OncoKBTable<T> extends React.Component<
         )}
         <div className="mt-2">
           <ReactTable
+            {...this.props}
             showPagination={this.props.showPagination}
             className={`-striped -highlight oncokbReactTable ${
               this.props.fixedHeight ? 'fixedHeight' : ''
-            }`}
-            {...this.props}
+            } ${this.props.className}`}
             data={this.filteredData}
           />
         </div>
