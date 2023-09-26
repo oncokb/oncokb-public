@@ -29,6 +29,23 @@ export type ITeamMember = {
   showCOI?: boolean;
   title?: TITLE[];
 };
+
+export enum MEMBER_TYPE {
+  CORE = 'core',
+  CURATOR = 'curator',
+  CGAC = 'cgac',
+  EAB = 'eab',
+}
+
+export type IPastMember = { type: MEMBER_TYPE } & {
+  lastName: string;
+  middleName?: string;
+  firstName: string;
+  institution?: string;
+  faculty?: boolean;
+  showCOI?: boolean;
+  title?: TITLE[];
+};
 export const TeamMember: React.FunctionComponent<ITeamMember> = props => {
   let name = `${props.firstName} ${
     props.middleName ? `${props.middleName[0].toUpperCase()}. ` : ''
