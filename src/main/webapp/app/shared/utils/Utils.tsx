@@ -125,6 +125,15 @@ export function levelOfEvidence2Level(
   return level as LEVELS;
 }
 
+export function toggleStrList(element: string, list: string[]) {
+  if (list.includes(element)) {
+    list.splice(list.indexOf(element), 1);
+  } else {
+    list.push(element);
+  }
+  return list;
+}
+
 export function level2LevelOfEvidence(level: LEVELS) {
   switch (level) {
     case LEVELS.Tx3:

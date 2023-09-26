@@ -34,7 +34,7 @@ import { ApiAccessPageNavTab } from 'app/pages/apiAccessGroup/ApiAccessPageNavTa
 import FAQPage from 'app/pages/FAQPage';
 import ReadOnlyMode from 'app/shared/readonly/ReadOnlyMode';
 import * as QueryString from 'query-string';
-import PrecisionOncologyTxPage from 'app/pages/precisionOncologyTxPage/PrecisionOncologyTxPage';
+import PrecisionOncologyTherapiesPage from 'app/pages/precisionOncologyTherapiesPage/precisionOncologyTherapiesPage';
 
 const getOldLevelsRedirectRoute = (hash: string) => {
   const queryStrings = QueryString.parse(hash) as {
@@ -74,6 +74,26 @@ const AppRouts = (props: {
       <Route exact path={PAGE_ROUTE.HOME} component={HomePage} />
       <Redirect exact from={'/updates'} to={PAGE_ROUTE.NEWS} />
       <Redirect exact from={'/genes'} to={PAGE_ROUTE.CANCER_GENES} />
+      <Redirect
+        exact
+        from={PAGE_ROUTE.LEGACY_ACTIONABLE_GENE}
+        to={PAGE_ROUTE.ACTIONABLE_GENE}
+      />
+      <Redirect
+        exact
+        from={PAGE_ROUTE.LEGACY_API_ACCESS}
+        to={PAGE_ROUTE.API_ACCESS}
+      />
+      <Redirect
+        exact
+        from={PAGE_ROUTE.LEGACY_CANCER_GENES}
+        to={PAGE_ROUTE.CANCER_GENES}
+      />
+      <Redirect
+        exact
+        from={PAGE_ROUTE.LEGACY_DATA_ACCESS}
+        to={PAGE_ROUTE.DATA_ACCESS}
+      />
       <Redirect
         exact
         from={PAGE_ROUTE.DATA_ACCESS}
@@ -139,7 +159,7 @@ const AppRouts = (props: {
             isUserAuthenticated={props.authenticationStore.isUserAuthenticated}
             appStore={props.appStore}
             path={PAGE_ROUTE.PO_TX}
-            component={PrecisionOncologyTxPage}
+            component={PrecisionOncologyTherapiesPage}
           />
           <RecaptchaBoundaryRoute
             exact
