@@ -10,7 +10,7 @@
   "dependencies": {
     "@hot-loader/react-dom": "^16.13.0",
     "@mskcc/core": "^10.2.0",
-    "@sentry/react": "^6.17.2",
+    "@sentry/react": "^7.72.0",
     "@types/jest": "^24.0.11",
     "@types/jquery": "^3.3.29",
     "@types/lodash": "^4.14.123",
