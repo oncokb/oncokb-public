@@ -9,9 +9,10 @@ const MutationEffectDescription: React.FunctionComponent<{
 }> = props => {
   // Add link to alteration page when the allele is unknown but multiple alternative alleles at the same position have mutation effects
   const description = props.description || '';
-  const addlMeSeparator = 'however, we have mutation effect descriptions for';
-  if (description.includes(addlMeSeparator)) {
-    const segments = description.split(addlMeSeparator);
+  const additionalMutationEffectSeparator =
+    'however, we have mutation effect descriptions for';
+  if (description.includes(additionalMutationEffectSeparator)) {
+    const segments = description.split(additionalMutationEffectSeparator);
     if (segments.length === 2) {
       // supposedly the last word is the alteration
       const varSegs = segments[1].split(' ');
@@ -38,7 +39,7 @@ const MutationEffectDescription: React.FunctionComponent<{
               });
             return (
               <span>
-                {segments[0]} {addlMeSeparator}
+                {segments[0]} {additionalMutationEffectSeparator}
                 {varSegs.join(' ')}{' '}
                 <WithSeparator separator={'/'}>{alleleLines}</WithSeparator>.
               </span>
