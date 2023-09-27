@@ -38,6 +38,7 @@ enum DRUG_CLASSIFICATION {
   MECHANISTICALLY_DISTINCT = 'Mechanistically-distinct',
   FOLLOW_ON = 'Follow-on',
   RESISTANCE = 'Resistance',
+  NA = 'NA',
 }
 
 const sortAndUniqByValue = (
@@ -220,18 +221,6 @@ const PrecisionOncologyTherapiesPage: React.FunctionComponent<{}> = props => {
           <DefinitionTooltip footnoteKey={'b'} />
         </span>
       ),
-      Cell(tableProps: { original: PrecisionOncologyTherapy }) {
-        if (tableProps.original.biomarker === 'pMMR') {
-          return (
-            <span>
-              pMMR
-              <DefinitionTooltip footnoteKey={'e'} />
-            </span>
-          );
-        } else {
-          return tableProps.original.biomarker;
-        }
-      },
       onFilter: (data: PrecisionOncologyTherapy, keyword) =>
         filterByKeyword(data.biomarker, keyword),
     },
@@ -264,9 +253,17 @@ const PrecisionOncologyTherapiesPage: React.FunctionComponent<{}> = props => {
       <Row>
         <Col>
           <h2 className={'mb-3'}>FDA-approved Precision Oncology Therapies</h2>
-          <p>
-            [BRIEF INTRO]
+          <div>
+            Precision oncology therapies (refer to definition below) approved by
+            the US Food and Drug Administration (FDA) beginning with the 1998
+            approval of trastuzumab. Also listed is the year each drug was first
+            FDA approved, the FDA-recognized biomarker(s), the method of
+            biomarker detection, and classification of each drug as
+            first-in-class, mechanistically-distinct, follow-on, or resistance
+            (refer to definitions below). For additional information, please
+            refer to XXX [will cite publication here]
             <ShowHideText
+              className={'my-2'}
               show={showDefinition}
               title={'definitions'}
               content={
@@ -292,20 +289,21 @@ const PrecisionOncologyTherapiesPage: React.FunctionComponent<{}> = props => {
                   <li>
                     <b>Follow-on precision oncology therapy</b>: A precision
                     oncology therapy with a mechanism of action largely similar
-                    to a previously FDA-approved drug
+                    to a previously FDA-approved first-in-class drug
                   </li>
                   <li>
                     <b>Resistance precision oncology therapy</b>: A precision
                     oncology therapy with a mechanism of action largely similar
-                    to a previously FDA-approved drug, but specifically designed
-                    to target a molecularly acquired resistance mechanism that
-                    emerged during previous drug treatment
+                    to an FDA-approved first-in-class precision oncology drug,
+                    but with an expanded mutation profile that targets mutations
+                    that arise in the context of resistance to the
+                    first-in-class drug
                   </li>
                 </ol>
               }
               onClick={() => setShowDefinition(!showDefinition)}
             />
-          </p>
+          </div>
         </Col>
       </Row>
       <Row
@@ -343,7 +341,7 @@ const PrecisionOncologyTherapiesPage: React.FunctionComponent<{}> = props => {
       <Row>
         <Col className={'d-flex justify-content-between'}>
           <div>
-            <span>Drug Classifications:</span>
+            Option 1: <span className={'mr-2'}>Drug Classifications:</span>
             {[
               DRUG_CLASSIFICATION.FIRST_IN_CLASS,
               DRUG_CLASSIFICATION.MECHANISTICALLY_DISTINCT,
@@ -351,12 +349,13 @@ const PrecisionOncologyTherapiesPage: React.FunctionComponent<{}> = props => {
               DRUG_CLASSIFICATION.RESISTANCE,
             ].map(classification => (
               <Button
+                key={classification}
                 variant={'outline-secondary'}
                 onClick={() =>
                   onToggleDrugClassificationSelection(classification)
                 }
                 active={selectedDrugClassifications.includes(classification)}
-                className={'ml-2'}
+                className={'mr-2 mb-1'}
                 style={{ borderColor: COLOR_LIGHT_GREY }}
               >
                 {classification}
@@ -389,9 +388,50 @@ const PrecisionOncologyTherapiesPage: React.FunctionComponent<{}> = props => {
               </Button>
             ) : undefined}
           </div>
-          <DownloadButton className={'ml-2'} href={poTxsExcel}>
-            Download Table
-          </DownloadButton>
+          <div>
+            <DownloadButton className={'ml-2'} href={poTxsExcel}>
+              Download Table
+            </DownloadButton>
+          </div>
+        </Col>
+      </Row>
+      <br />
+      <Row>
+        <Col className={'d-flex align-items-center'}>
+          Option 2:{' '}
+          <div style={{ width: 300 }} className={'ml-2'}>
+            <Select
+              placeholder={'Select Drug Classification'}
+              options={sortAndUniqByValue(poTxs, 'drugClassification')}
+              isClearable={true}
+              isMulti
+            />
+          </div>
+          <div className={'ml-2'}>
+            <b>Showing {_.uniq(filteredPoTxs.map(tx => tx.tx)).length} drugs</b>
+            : (
+            <WithSeparator separator={', '}>
+              {[
+                DRUG_CLASSIFICATION.FIRST_IN_CLASS,
+                DRUG_CLASSIFICATION.MECHANISTICALLY_DISTINCT,
+                DRUG_CLASSIFICATION.FOLLOW_ON,
+                DRUG_CLASSIFICATION.RESISTANCE,
+                DRUG_CLASSIFICATION.NA,
+              ].map(classification => (
+                <span>
+                  {drugClassificationStats[classification]
+                    ? _.uniq(
+                        drugClassificationStats[classification].map(
+                          row => row.tx
+                        )
+                      ).length
+                    : 0}{' '}
+                  {classification}
+                </span>
+              ))}
+            </WithSeparator>
+            )
+          </div>
         </Col>
       </Row>
       <Row>
