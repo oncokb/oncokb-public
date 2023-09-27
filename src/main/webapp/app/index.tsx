@@ -118,9 +118,10 @@ if (AppConfig.serverConfig?.sentryProjectId) {
     // Adjust tracesSampleRate for production.
     // For more information, please see https://docs.sentry.io/platforms/javascript/guides/react/configuration/options/#tracing-options
     dsn: AppConfig.serverConfig.sentryProjectId,
-    blacklistUrls: [new RegExp('.*localhost.*')],
+    integrations: [new Sentry.Replay()],
     environment: 'production',
     tracesSampleRate: 0.5,
+    replaysOnErrorSampleRate: 1.0,
     ignoreErrors: [
       // the following errors are for this project only
       'ResizeObserver loop limit exceeded',
@@ -157,6 +158,7 @@ if (AppConfig.serverConfig?.sentryProjectId) {
     ],
     // Skip the common browser extension ad 3rd party script. List from https://gist.github.com/Chocksy/e9b2cdd4afc2aadc7989762c4b8b495a
     denyUrls: [
+      new RegExp('.*localhost.*'),
       // Google Adsense
       /pagead\/js/i,
       // Facebook flakiness
