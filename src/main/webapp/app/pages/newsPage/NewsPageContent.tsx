@@ -34,6 +34,7 @@ import {
   AbstractLink,
   FdaApprovalLink,
   FdaBreakthroughLink,
+  FdaWithdrawalLink,
   NccnLink,
 } from 'app/pages/newsPage/Links';
 import WithSeparator from 'react-with-separator';
@@ -76,8 +77,8 @@ export const CURRENT_DRUG = 'Current Drug';
 export const UPDATE = 'Update';
 export const CURRENT_LEVEL_OF_EVIDENCE = 'Current Level of Evidence';
 export const PREVIOUS_LEVEL_OF_EVIDENCE = 'Previous Level of Evidence';
-export const NEWLY_ADDED_DRUGS = 'Newly Added Drug(s)';
-export const DRUGS_ALREADY_IN_ONCOKB = 'Drug(s) Already in OncoKB™';
+export const DRUGS_ADDED_TO_ONCOKB = 'Drug(s) added to OncoKB™';
+export const DRUGS_CURRENTLY_IN_ONCOKB = 'Drug(s) currently in OncoKB™';
 export const PREVIOUS_BIOMARKER_ASSOCIATION = 'Previous Biomarker Association';
 export const CURRENT_BIOMARKER_ASSOCIATION = 'Current Biomarker Association';
 
@@ -127,8 +128,8 @@ export const CHANGED_ANNOTATION_ADDITIONAL_DRUG_SAME_LEVEL_COLUMNS = [
   { name: MUTATION },
   { name: CANCER_TYPE },
   { name: CURRENT_LEVEL_OF_EVIDENCE },
-  { name: DRUGS_ALREADY_IN_ONCOKB },
-  { name: NEWLY_ADDED_DRUGS },
+  { name: DRUGS_CURRENTLY_IN_ONCOKB },
+  { name: DRUGS_ADDED_TO_ONCOKB },
   { name: EVIDENCE },
 ];
 
@@ -138,8 +139,8 @@ export const CHANGED_ANNOTATION_ADDITIONAL_DRUG_DIFF_LEVEL_COLUMNS = [
   { name: CANCER_TYPE },
   { name: PREVIOUS_LEVEL_OF_EVIDENCE },
   { name: CURRENT_LEVEL_OF_EVIDENCE },
-  { name: DRUGS_ALREADY_IN_ONCOKB },
-  { name: NEWLY_ADDED_DRUGS },
+  { name: DRUGS_CURRENTLY_IN_ONCOKB },
+  { name: DRUGS_ADDED_TO_ONCOKB },
   { name: EVIDENCE },
 ];
 
@@ -199,6 +200,71 @@ const EVIDENCE_COLUMN_SEPARATOR = '; ';
 // https://stackoverflow.com/questions/41947168/is-it-possible-to-use-keyof-operator-on-literals-instead-of-interfaces
 
 export const NEWS_BY_DATE: { [date: string]: NewsData } = {
+  '10022023': {
+    changedAnnotations: [
+      {
+        columnHeaderType: AnnotationColumnHeaderType.LEVEL,
+        title: 'Updated therapeutic implications - Changed level of evidence',
+        content: [
+          [
+            'RET',
+            'Oncogenic Mutations',
+            'Medullary Thyroid Cancer (MTC)',
+            'Pralsetinib',
+            '1',
+            '3A',
+            <FdaWithdrawalLink linkText="Withdrawal of FDA approval for Pralsetinib for RET-mutant MTC" />,
+          ],
+          [
+            'ALK',
+            'Oncogenic Mutations',
+            'Non-Small Cell Lung Cancer',
+            'Lorlatinib',
+            '1',
+            'No level',
+            <Linkout link="https://www.accessdata.fda.gov/drugsatfda_docs/label/2021/210868s004lbl.pdf">
+              Adherence to FDA drug label and CDx for Lorlatinib
+            </Linkout>,
+          ],
+        ],
+      },
+      {
+        columnHeaderType: AnnotationColumnHeaderType.ADDITIONAL_SAME_LEVEL_DRUG,
+        content: [
+          [
+            'Other Biomarkers',
+            'MSI-H',
+            'Endometrial Cancer',
+            '1',
+            'Pembrolizumab (All Solid Tumors)',
+            'Dostarlimab + Carboplatin + Paclitaxel (Level 1, Endometrial Cancer)',
+            <WithSeparator separator={EVIDENCE_COLUMN_SEPARATOR}>
+              <FdaApprovalLink
+                approval={'Dostarlimab for MSI-H endometrial cancer'}
+                link={
+                  'https://www.fda.gov/drugs/drug-approvals-and-databases/fda-approves-quizartinib-newly-diagnosed-acute-myeloid-leukemia'
+                }
+              />
+              <PMIDLink pmids={'36972026'} />
+            </WithSeparator>,
+          ],
+        ],
+      },
+    ],
+    newlyAddedGenes: [
+      'ELF4',
+      'ELK4',
+      'ELL',
+      'ELN',
+      'ERC1',
+      'FOXN4',
+      'HIRA',
+      'ONECUT2',
+      'POU3F2',
+      'SF3B2',
+      'ZBTB7A',
+    ],
+  },
   '09012023': {
     newlyAddedGenes: [
       'ACVR1B',
