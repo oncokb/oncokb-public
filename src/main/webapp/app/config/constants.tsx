@@ -534,7 +534,6 @@ export enum PAGE_ROUTE {
   LOGIN = '/login',
   LOGOUT = '/logout',
   LEGACY_DATA_ACCESS = '/dataAccess',
-  DATA_ACCESS = '/data-access',
   LEGACY_API_ACCESS = '/apiAccess',
   API_ACCESS = '/api-access',
   FAQ_ACCESS = '/faq',
