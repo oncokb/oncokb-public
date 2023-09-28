@@ -75,9 +75,12 @@ const AppRouts = (props: {
       <Redirect exact from={'/updates'} to={PAGE_ROUTE.NEWS} />
       <Redirect exact from={'/genes'} to={PAGE_ROUTE.CANCER_GENES} />
       <Redirect
-        exact
         from={PAGE_ROUTE.LEGACY_ACTIONABLE_GENE}
-        to={PAGE_ROUTE.ACTIONABLE_GENE}
+        to={{
+          pathname: PAGE_ROUTE.ACTIONABLE_GENE,
+          search: props.routing.location.search,
+          hash: props.routing.location.hash,
+        }}
       />
       <Redirect
         exact
@@ -86,18 +89,13 @@ const AppRouts = (props: {
       />
       <Redirect
         exact
+        from={PAGE_ROUTE.LEGACY_DATA_ACCESS}
+        to={PAGE_ROUTE.API_ACCESS}
+      />
+      <Redirect
+        exact
         from={PAGE_ROUTE.LEGACY_CANCER_GENES}
         to={PAGE_ROUTE.CANCER_GENES}
-      />
-      <Redirect
-        exact
-        from={PAGE_ROUTE.LEGACY_DATA_ACCESS}
-        to={PAGE_ROUTE.DATA_ACCESS}
-      />
-      <Redirect
-        exact
-        from={PAGE_ROUTE.DATA_ACCESS}
-        to={PAGE_ROUTE.API_ACCESS}
       />
       <Redirect
         exact
