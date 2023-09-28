@@ -130,7 +130,10 @@ export default class OncoKBSearch extends React.Component<IOncoKBSearch, {}> {
               placeholder(styles) {
                 return {
                   ...styles,
-                  width: '100%',
+                  width: '90%',
+                  overflow: 'hidden',
+                  whiteSpace: 'nowrap',
+                  textOverflow: 'ellipsis',
                   lineHeight: '30px',
                   textAlign: 'center',
                 };

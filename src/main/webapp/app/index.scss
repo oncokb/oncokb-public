@@ -65,8 +65,8 @@ b {
     .navbar-nav {
       & > .nav-item {
         color: white;
-        line-height: 2.75rem;
-        border-bottom: 0.3rem solid $nav-bg-color;
+        line-height: 1rem;
+        border-bottom: 0.5rem solid $nav-bg-color;
 
         &.active {
           border-bottom-color: $oncokb-darker-blue;
@@ -75,6 +75,10 @@ b {
         &:hover {
           text-decoration: none;
         }
+      }
+
+      & > .nav-item:first-line {
+        line-height: 2.75rem;
       }
 
       & .nav-link {
