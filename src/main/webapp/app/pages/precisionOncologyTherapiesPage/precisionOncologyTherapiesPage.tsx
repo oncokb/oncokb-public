@@ -306,6 +306,7 @@ const PrecisionOncologyTherapiesPage: React.FunctionComponent<{}> = props => {
           </div>
         </Col>
       </Row>
+      <h5>Option 1</h5>
       <Row
         style={{ paddingLeft: '0.5rem', paddingRight: '0.5rem' }}
         className={'mb-2'}
@@ -339,9 +340,9 @@ const PrecisionOncologyTherapiesPage: React.FunctionComponent<{}> = props => {
         </Col>
       </Row>
       <Row>
-        <Col className={'d-flex justify-content-between'}>
+        <Col className={'d-flex justify-content-between align-items-center'}>
           <div>
-            Option 1: <span className={'mr-2'}>Drug Classifications:</span>
+            <span className={'mr-2'}>Drug Classifications:</span>
             {[
               DRUG_CLASSIFICATION.FIRST_IN_CLASS,
               DRUG_CLASSIFICATION.MECHANISTICALLY_DISTINCT,
@@ -355,7 +356,7 @@ const PrecisionOncologyTherapiesPage: React.FunctionComponent<{}> = props => {
                   onToggleDrugClassificationSelection(classification)
                 }
                 active={selectedDrugClassifications.includes(classification)}
-                className={'mr-2 mb-1'}
+                className={'mr-2'}
                 style={{ borderColor: COLOR_LIGHT_GREY }}
               >
                 {classification}
@@ -379,35 +380,76 @@ const PrecisionOncologyTherapiesPage: React.FunctionComponent<{}> = props => {
             ))}
             {hasFilter ? (
               <Button
-                variant="link"
-                size={'sm'}
+                variant="outline-primary"
+                className={'ml-2'}
                 style={{ whiteSpace: 'nowrap' }}
                 onClick={clearFilters}
               >
+                <span className={'fa fa-times mr-1'}></span>
                 Reset filters
               </Button>
             ) : undefined}
           </div>
-          <div>
-            <DownloadButton className={'ml-2'} href={poTxsExcel}>
-              Download Table
-            </DownloadButton>
-          </div>
+          <DownloadButton className={'ml-2'} href={poTxsExcel}>
+            Download Table
+          </DownloadButton>
         </Col>
       </Row>
       <br />
+      <h5>Option 2</h5>
+      <Row
+        style={{ paddingLeft: '0.5rem', paddingRight: '0.5rem' }}
+        className={'mb-2'}
+      >
+        <Col className={classnames(...COMPONENT_PADDING)} lg={2} md={6} xs={12}>
+          <Input
+            placeholder={'Search Therapy'}
+            value={therapySearch}
+            onChange={event => setTherapySearch(event.target.value)}
+          />
+        </Col>
+        <Col className={classnames(...COMPONENT_PADDING)} lg={2} md={6} xs={12}>
+          <Input
+            placeholder={'Search Biomarker'}
+            value={biomarkerSearch}
+            onChange={event => setBiomarkerSearch(event.target.value)}
+          />
+        </Col>
+        <Col className={classnames(...COMPONENT_PADDING)} lg={4} md={6} xs={12}>
+          <Select
+            placeholder={'Select Detection Method'}
+            options={sortAndUniqByValue(poTxs, 'biomarkerDetection')}
+            isClearable={true}
+            value={selectedDetectionMethod}
+            onChange={(selectedOption: any) =>
+              setSelectedDetectionMethod(selectedOption)
+            }
+          />
+        </Col>
+        <Col className={classnames(...COMPONENT_PADDING)} lg={4} md={6} xs={12}>
+          <Select
+            placeholder={'Select Drug Classification'}
+            options={sortAndUniqByValue(poTxs, 'drugClassification')}
+            isClearable={true}
+            isMulti
+            closeMenuOnSelect={false}
+            value={sortAndUniqByValue(
+              poTxs,
+              'drugClassification'
+            ).filter(option =>
+              selectedDrugClassifications.includes(option.value as string)
+            )}
+            onChange={(selectedOptions: any[]) => {
+              setSelectedDrugClassifications([
+                ...selectedOptions.map(option => option.value),
+              ]);
+            }}
+          />
+        </Col>
+      </Row>
       <Row>
-        <Col className={'d-flex align-items-center'}>
-          Option 2:{' '}
-          <div style={{ width: 300 }} className={'ml-2'}>
-            <Select
-              placeholder={'Select Drug Classification'}
-              options={sortAndUniqByValue(poTxs, 'drugClassification')}
-              isClearable={true}
-              isMulti
-            />
-          </div>
-          <div className={'ml-2'}>
+        <Col className={'d-flex justify-content-between align-items-center'}>
+          <div>
             <b>Showing {_.uniq(filteredPoTxs.map(tx => tx.tx)).length} drugs</b>
             : (
             <WithSeparator separator={', '}>
@@ -431,7 +473,21 @@ const PrecisionOncologyTherapiesPage: React.FunctionComponent<{}> = props => {
               ))}
             </WithSeparator>
             )
+            {hasFilter ? (
+              <Button
+                variant="outline-primary"
+                className={'ml-2'}
+                style={{ whiteSpace: 'nowrap' }}
+                onClick={clearFilters}
+              >
+                <span className={'fa fa-times mr-1'}></span>
+                Reset filters
+              </Button>
+            ) : undefined}
           </div>
+          <DownloadButton className={'ml-2'} href={poTxsExcel}>
+            Download Table
+          </DownloadButton>
         </Col>
       </Row>
       <Row>
