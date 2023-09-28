@@ -450,7 +450,9 @@ const PrecisionOncologyTherapiesPage: React.FunctionComponent<{}> = props => {
       <Row>
         <Col className={'d-flex justify-content-between align-items-center'}>
           <div>
-            <b>Showing {_.uniq(filteredPoTxs.map(tx => tx.tx)).length} drugs</b>
+            <b>
+              Showing {_.uniq(filteredPoTxs.map(tx => tx.tx)).length} therapies
+            </b>
             : (
             <WithSeparator separator={', '}>
               {[
