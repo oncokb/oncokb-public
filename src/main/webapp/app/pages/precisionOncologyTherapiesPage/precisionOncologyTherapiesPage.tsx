@@ -5,20 +5,16 @@ import OncoKBTable, {
 import poTxs from 'content/files/precisionOncologyTx/presitionOncologyTx.json';
 import poTxsExcel from 'content/files/precisionOncologyTx/Classification_of_FDA-approved_precision_oncology_therapies.xlsx';
 import { COMPONENT_PADDING, LG_TABLE_FIXED_HEIGHT } from 'app/config/constants';
-import { filterByKeyword, toggleStrList } from 'app/shared/utils/Utils';
-import { Accordion, Button, Col, OverlayTrigger, Row } from 'react-bootstrap';
+import { filterByKeyword } from 'app/shared/utils/Utils';
+import { Button, Col, Row } from 'react-bootstrap';
 import classnames from 'classnames';
 import Select from 'react-select';
 import _ from 'lodash';
 import { Input } from 'reactstrap';
 import { DownloadButton } from 'app/components/downloadButton/DownloadButton';
-import './styles.scss';
-import Tooltip from 'rc-tooltip';
 import WithSeparator from 'react-with-separator';
 import InfoIcon from 'app/shared/icons/InfoIcon';
-import { COLOR_GREY, COLOR_LIGHT_GREY } from 'app/config/theme';
 import ShowHideText from 'app/shared/texts/ShowHideText';
-import { CitationLink } from 'app/shared/utils/UrlUtils';
 
 type PrecisionOncologyTherapy = {
   id: number;
@@ -70,10 +66,6 @@ const footnotes = {
     'Pembrolizumab in combination with lenvatinib is FDA-approved approved for endometrial cancer that is pMMR',
   '*':
     'The exact year of the drug’s first FDA-approval could not be determined due to absent or ambiguous data on FDA.gov website',
-  addl1:
-    'NGS, Next-generation sequencing; ER, Estrogen Receptor; HR, Hormone Receptor; MSI-H, Microsatellite instability-high; HRR, Homologous Recombination Repair; TMB-H, Tumor mutational burden-high; dMMR, mismatch repair deficient; pMMR, mismatch repair proficient; PMSA, prostate-specific membrane antigen',
-  addl2:
-    'First-in class = 33; Mechanistically-distinct = 7; Follow-on = 19; Resistance = 10',
 };
 
 const DefinitionTooltip: React.FunctionComponent<{
@@ -161,12 +153,6 @@ const PrecisionOncologyTherapiesPage: React.FunctionComponent<{}> = props => {
     );
   }, [filteredPoTxs]);
 
-  const onToggleDrugClassificationSelection = (classification: string) => {
-    setSelectedDrugClassifications([
-      ...toggleStrList(classification, selectedDrugClassifications),
-    ]);
-  };
-
   const clearFilters = () => {
     setBiomarkerSearch('');
     setTherapySearch('');
@@ -175,6 +161,45 @@ const PrecisionOncologyTherapiesPage: React.FunctionComponent<{}> = props => {
   };
 
   const columns: SearchColumn<PrecisionOncologyTherapy>[] = [
+    {
+      accessor: 'drugClassification',
+      Header: (
+        <span>
+          Drug classification
+          <DefinitionTooltip footnoteKey={'d'} />
+        </span>
+      ),
+      onFilter: (data: PrecisionOncologyTherapy, keyword) =>
+        filterByKeyword(data.drugClassification, keyword),
+    },
+    {
+      accessor: 'tx',
+      Header: <span>Precision oncology therapy</span>,
+      onFilter: (data: PrecisionOncologyTherapy, keyword) =>
+        filterByKeyword(data.tx, keyword),
+    },
+    {
+      accessor: 'biomarker',
+      Header: (
+        <span>
+          FDA-recognized biomarker(s)
+          <DefinitionTooltip footnoteKey={'b'} />
+        </span>
+      ),
+      onFilter: (data: PrecisionOncologyTherapy, keyword) =>
+        filterByKeyword(data.biomarker, keyword),
+    },
+    {
+      accessor: 'biomarkerDetection',
+      Header: (
+        <span>
+          Method of biomarker detection
+          <DefinitionTooltip footnoteKey={'c'} />
+        </span>
+      ),
+      onFilter: (data: PrecisionOncologyTherapy, keyword) =>
+        filterByKeyword(data.biomarkerDetection, keyword),
+    },
     {
       accessor: 'year',
       Header: (
@@ -207,45 +232,6 @@ const PrecisionOncologyTherapiesPage: React.FunctionComponent<{}> = props => {
       onFilter: (data: PrecisionOncologyTherapy, keyword) =>
         filterByKeyword(data.year, keyword),
     },
-    {
-      accessor: 'tx',
-      Header: <span>Precision oncology therapy</span>,
-      onFilter: (data: PrecisionOncologyTherapy, keyword) =>
-        filterByKeyword(data.tx, keyword),
-    },
-    {
-      accessor: 'biomarker',
-      Header: (
-        <span>
-          FDA-recognized biomarker(s)
-          <DefinitionTooltip footnoteKey={'b'} />
-        </span>
-      ),
-      onFilter: (data: PrecisionOncologyTherapy, keyword) =>
-        filterByKeyword(data.biomarker, keyword),
-    },
-    {
-      accessor: 'biomarkerDetection',
-      Header: (
-        <span>
-          Method of biomarker detection
-          <DefinitionTooltip footnoteKey={'c'} />
-        </span>
-      ),
-      onFilter: (data: PrecisionOncologyTherapy, keyword) =>
-        filterByKeyword(data.biomarkerDetection, keyword),
-    },
-    {
-      accessor: 'drugClassification',
-      Header: (
-        <span>
-          Drug classification
-          <DefinitionTooltip footnoteKey={'d'} />
-        </span>
-      ),
-      onFilter: (data: PrecisionOncologyTherapy, keyword) =>
-        filterByKeyword(data.drugClassification, keyword),
-    },
   ];
 
   return (
@@ -254,14 +240,12 @@ const PrecisionOncologyTherapiesPage: React.FunctionComponent<{}> = props => {
         <Col>
           <h2 className={'mb-3'}>FDA-approved Precision Oncology Therapies</h2>
           <div>
-            Precision oncology therapies (refer to definition below) approved by
-            the US Food and Drug Administration (FDA) beginning with the 1998
-            approval of trastuzumab. Also listed is the year each drug was first
-            FDA approved, the FDA-recognized biomarker(s), the method of
-            biomarker detection, and classification of each drug as
-            first-in-class, mechanistically-distinct, follow-on, or resistance
-            (refer to definitions below). For additional information, please
-            refer to XXX [will cite publication here]
+            The following US Food and Drug Administration (FDA) approved
+            therapies are considered precision oncology therapies by OncoKBTM
+            and are further classified as either first-in-class,
+            mechanistically-distinct, follow-on, or resistance based on
+            Suehnholz et al., Cancer Discovery 2023 (refer to definitions
+            below).
             <ShowHideText
               className={'my-2'}
               show={showDefinition}
@@ -306,22 +290,21 @@ const PrecisionOncologyTherapiesPage: React.FunctionComponent<{}> = props => {
           </div>
         </Col>
       </Row>
-      <h5>Option 1</h5>
       <Row
         style={{ paddingLeft: '0.5rem', paddingRight: '0.5rem' }}
         className={'mb-2'}
       >
-        <Col className={classnames(...COMPONENT_PADDING)} lg={4} md={6} xs={12}>
+        <Col className={classnames(...COMPONENT_PADDING)} lg={2} md={6} xs={12}>
           <Input
-            style={{ height: '100%' }}
+            style={{ height: 38 }}
             placeholder={'Search Therapy'}
             value={therapySearch}
             onChange={event => setTherapySearch(event.target.value)}
           />
         </Col>
-        <Col className={classnames(...COMPONENT_PADDING)} lg={4} md={6} xs={12}>
+        <Col className={classnames(...COMPONENT_PADDING)} lg={2} md={6} xs={12}>
           <Input
-            style={{ height: '100%' }}
+            style={{ height: 38 }}
             placeholder={'Search Biomarker'}
             value={biomarkerSearch}
             onChange={event => setBiomarkerSearch(event.target.value)}
@@ -330,95 +313,7 @@ const PrecisionOncologyTherapiesPage: React.FunctionComponent<{}> = props => {
         <Col className={classnames(...COMPONENT_PADDING)} lg={4} md={6} xs={12}>
           <Select
             placeholder={'Select Detection Method'}
-            options={sortAndUniqByValue(poTxs, 'biomarkerDetection')}
-            isClearable={true}
-            value={selectedDetectionMethod}
-            onChange={(selectedOption: any) =>
-              setSelectedDetectionMethod(selectedOption)
-            }
-          />
-        </Col>
-      </Row>
-      <Row>
-        <Col className={'d-flex justify-content-between align-items-center'}>
-          <div>
-            <span className={'mr-2'}>Drug Classifications:</span>
-            {[
-              DRUG_CLASSIFICATION.FIRST_IN_CLASS,
-              DRUG_CLASSIFICATION.MECHANISTICALLY_DISTINCT,
-              DRUG_CLASSIFICATION.FOLLOW_ON,
-              DRUG_CLASSIFICATION.RESISTANCE,
-            ].map(classification => (
-              <Button
-                key={classification}
-                variant={'outline-secondary'}
-                onClick={() =>
-                  onToggleDrugClassificationSelection(classification)
-                }
-                active={selectedDrugClassifications.includes(classification)}
-                className={'mr-2'}
-                style={{ borderColor: COLOR_LIGHT_GREY }}
-              >
-                {classification}
-                <span
-                  className={'ml-2 py-1 px-2'}
-                  style={{
-                    backgroundColor: 'grey',
-                    borderRadius: '1rem',
-                    color: 'white',
-                  }}
-                >
-                  {drugClassificationStats[classification]
-                    ? _.uniq(
-                        drugClassificationStats[classification].map(
-                          row => row.tx
-                        )
-                      ).length
-                    : 0}
-                </span>
-              </Button>
-            ))}
-            {hasFilter ? (
-              <Button
-                variant="outline-primary"
-                className={'ml-2'}
-                style={{ whiteSpace: 'nowrap' }}
-                onClick={clearFilters}
-              >
-                <span className={'fa fa-times mr-1'}></span>
-                Reset filters
-              </Button>
-            ) : undefined}
-          </div>
-          <DownloadButton className={'ml-2'} href={poTxsExcel}>
-            Download Table
-          </DownloadButton>
-        </Col>
-      </Row>
-      <br />
-      <h5>Option 2</h5>
-      <Row
-        style={{ paddingLeft: '0.5rem', paddingRight: '0.5rem' }}
-        className={'mb-2'}
-      >
-        <Col className={classnames(...COMPONENT_PADDING)} lg={2} md={6} xs={12}>
-          <Input
-            placeholder={'Search Therapy'}
-            value={therapySearch}
-            onChange={event => setTherapySearch(event.target.value)}
-          />
-        </Col>
-        <Col className={classnames(...COMPONENT_PADDING)} lg={2} md={6} xs={12}>
-          <Input
-            placeholder={'Search Biomarker'}
-            value={biomarkerSearch}
-            onChange={event => setBiomarkerSearch(event.target.value)}
-          />
-        </Col>
-        <Col className={classnames(...COMPONENT_PADDING)} lg={4} md={6} xs={12}>
-          <Select
-            placeholder={'Select Detection Method'}
-            options={sortAndUniqByValue(poTxs, 'biomarkerDetection')}
+            options={sortAndUniqByValue(filteredPoTxs, 'biomarkerDetection')}
             isClearable={true}
             value={selectedDetectionMethod}
             onChange={(selectedOption: any) =>
@@ -429,7 +324,7 @@ const PrecisionOncologyTherapiesPage: React.FunctionComponent<{}> = props => {
         <Col className={classnames(...COMPONENT_PADDING)} lg={4} md={6} xs={12}>
           <Select
             placeholder={'Select Drug Classification'}
-            options={sortAndUniqByValue(poTxs, 'drugClassification')}
+            options={sortAndUniqByValue(filteredPoTxs, 'drugClassification')}
             isClearable={true}
             isMulti
             closeMenuOnSelect={false}
@@ -481,13 +376,14 @@ const PrecisionOncologyTherapiesPage: React.FunctionComponent<{}> = props => {
                 className={'ml-2'}
                 style={{ whiteSpace: 'nowrap' }}
                 onClick={clearFilters}
+                size={'sm'}
               >
                 <span className={'fa fa-times mr-1'}></span>
                 Reset filters
               </Button>
             ) : undefined}
           </div>
-          <DownloadButton className={'ml-2'} href={poTxsExcel}>
+          <DownloadButton className={'ml-2'} href={poTxsExcel} size={'sm'}>
             Download Table
           </DownloadButton>
         </Col>
