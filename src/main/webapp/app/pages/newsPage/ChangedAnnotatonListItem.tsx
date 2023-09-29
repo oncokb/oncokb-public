@@ -48,7 +48,7 @@ export const ChangedAnnotationListItem = (props: {
       annotationColumnHeader = CHANGED_ANNOTATION_ADDITIONAL_DRUG_SAME_LEVEL_COLUMNS;
       useOneLineRowClass = false;
       defaultTitle =
-        'Updated therapeutic implications - addition of therapies for variants with a level of evidence';
+        'Updated therapeutic implications - Addition of therapies for variants with a level of evidence';
       break;
     case AnnotationColumnHeaderType.ADDITIONAL_DIFF_LEVEL_DRUG:
       annotationColumnHeader = CHANGED_ANNOTATION_ADDITIONAL_DRUG_DIFF_LEVEL_COLUMNS;

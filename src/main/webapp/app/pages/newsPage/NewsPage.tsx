@@ -1,7 +1,11 @@
 import * as React from 'react';
 import { CitationText } from 'app/components/CitationText';
 import NewsList, { getNews, getNewsTitle } from 'app/pages/newsPage/NewsList';
-import { NEWS_BY_DATE } from 'app/pages/newsPage/NewsPageContent';
+import {
+  DRUGS_ADDED_TO_ONCOKB,
+  DRUGS_CURRENTLY_IN_ONCOKB,
+  NEWS_BY_DATE,
+} from 'app/pages/newsPage/NewsPageContent';
 import {
   FAQ_LINK,
   IMG_MAX_WIDTH,
@@ -85,6 +89,7 @@ export default class NewsPage extends React.Component<{
             <CitationText />
           </div>
           <div className="mt-2">
+            <NewsList date={'10022023'} />
             <NewsList date={'09012023'} />
             <NewsList date={'07282023'} />
             <NewsList date={'07122023'} />
@@ -171,8 +176,8 @@ export default class NewsPage extends React.Component<{
                                 <th>Mutation</th>
                                 <th>Cancer Type</th>
                                 <th>Current Level of Evidence</th>
-                                <th>Drug(s) Already in {ONCOKB_TM}</th>
-                                <th>Newly Added Drug(s)</th>
+                                <th>{DRUGS_CURRENTLY_IN_ONCOKB}</th>
+                                <th>{DRUGS_ADDED_TO_ONCOKB}</th>
                                 <th>Evidence</th>
                               </tr>
                             </thead>
