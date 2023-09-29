@@ -565,9 +565,20 @@ describe('Tests without login', () => {
       customSnapshotIdentifier: 'LoE Page V1 without Login',
     });
   });
+  it('Precision Oncology Therapies Page', async () => {
+    await page.goto(`${CLIENT_URL}precision-oncology-therapies`);
+    await page.setViewport(VIEW_PORT_1080);
+    await page.waitFor(WAITING_TIME);
+    let image = await page.screenshot(
+      getScreenshotConfig('Precision Oncology Therapies Page without Login')
+    );
+    expect(image).toMatchImageSnapshot({
+      customSnapshotIdentifier: 'Precision Oncology Therapies Page without Login',
+    });
+  });
 
   it('Actionable Genes Page', async () => {
-    await page.goto(`${CLIENT_URL}actionableGenes`);
+    await page.goto(`${CLIENT_URL}actionable-genes`);
     await page.setViewport(VIEW_PORT_1080);
     await page.waitFor(WAITING_TIME);
     let image = await page.screenshot(
@@ -579,7 +590,7 @@ describe('Tests without login', () => {
   });
 
   it('Actionable Genes Page #levels=1,Dx1,Px1', async () => {
-    await page.goto(`${CLIENT_URL}actionableGenes#levels=1,Dx1,Px1`);
+    await page.goto(`${CLIENT_URL}actionable-genes#levels=1,Dx1,Px1`);
     await page.setViewport(VIEW_PORT_1080);
     await page.waitFor(WAITING_TIME);
     let image = await page.screenshot(
@@ -592,7 +603,7 @@ describe('Tests without login', () => {
   });
 
   it('Cancer Genes Page', async () => {
-    await page.goto(`${CLIENT_URL}cancerGenes`);
+    await page.goto(`${CLIENT_URL}cancer-genes`);
     await page.setViewport(VIEW_PORT_1080);
     await page.waitFor(WAITING_TIME);
     let image = await page.screenshot(
