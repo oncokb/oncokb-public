@@ -4,7 +4,11 @@ import OncoKBTable, {
 } from 'app/components/oncokbTable/OncoKBTable';
 import poTxs from 'content/files/precisionOncologyTx/presitionOncologyTx.json';
 import poTxsExcel from 'content/files/precisionOncologyTx/Classification_of_FDA-approved_precision_oncology_therapies.xlsx';
-import { COMPONENT_PADDING, LG_TABLE_FIXED_HEIGHT } from 'app/config/constants';
+import {
+  COMPONENT_PADDING,
+  LG_TABLE_FIXED_HEIGHT,
+  ONCOKB_TM,
+} from 'app/config/constants';
 import { filterByKeyword } from 'app/shared/utils/Utils';
 import { Button, Col, Row } from 'react-bootstrap';
 import classnames from 'classnames';
@@ -240,11 +244,11 @@ const PrecisionOncologyTherapiesPage: React.FunctionComponent<{}> = props => {
         <Col>
           <h2 className={'mb-3'}>FDA-approved Precision Oncology Therapies</h2>
           <div>
-            The following US Food and Drug Administration (FDA) approved
-            therapies are considered precision oncology therapies by OncoKBTM
+            The following US Food and Drug Administration (FDA)-approved
+            therapies are considered precision oncology therapies by {ONCOKB_TM}{' '}
             and are further classified as either first-in-class,
             mechanistically-distinct, follow-on, or resistance based on
-            Suehnholz et al., Cancer Discovery 2023 (refer to definitions
+            Suehnholz et al., Cancer Discovery 2023 (also refer to definitions
             below).
             <ShowHideText
               className={'my-2'}
