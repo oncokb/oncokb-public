@@ -77,8 +77,8 @@ export const CURRENT_DRUG = 'Current Drug';
 export const UPDATE = 'Update';
 export const CURRENT_LEVEL_OF_EVIDENCE = 'Current Level of Evidence';
 export const PREVIOUS_LEVEL_OF_EVIDENCE = 'Previous Level of Evidence';
-export const DRUGS_ADDED_TO_ONCOKB = 'Drug(s) added to OncoKB™';
-export const DRUGS_CURRENTLY_IN_ONCOKB = 'Drug(s) currently in OncoKB™';
+export const DRUGS_ADDED_TO_ONCOKB = `Drug(s) added to ${ONCOKB_TM}`;
+export const DRUGS_CURRENTLY_IN_ONCOKB = `Drug(s) currently in ${ONCOKB_TM}`;
 export const PREVIOUS_BIOMARKER_ASSOCIATION = 'Previous Biomarker Association';
 export const CURRENT_BIOMARKER_ASSOCIATION = 'Current Biomarker Association';
 
