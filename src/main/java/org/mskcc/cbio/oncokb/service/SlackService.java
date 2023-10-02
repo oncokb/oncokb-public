@@ -24,20 +24,20 @@ import org.mskcc.cbio.oncokb.config.application.ApplicationProperties;
 import org.mskcc.cbio.oncokb.domain.Company;
 import org.mskcc.cbio.oncokb.domain.UserIdMessagePair;
 import org.mskcc.cbio.oncokb.domain.enumeration.*;
+import org.mskcc.cbio.oncokb.domain.enumeration.slack.*;
 import org.mskcc.cbio.oncokb.service.dto.UserDTO;
 import org.mskcc.cbio.oncokb.service.dto.useradditionalinfo.AdditionalInfoDTO;
 import org.mskcc.cbio.oncokb.service.mapper.UserMapper;
 import org.mskcc.cbio.oncokb.util.ObjectUtil;
 import org.mskcc.cbio.oncokb.web.rest.slack.ActionId;
 import org.mskcc.cbio.oncokb.web.rest.slack.BlockId;
+import org.mskcc.cbio.oncokb.web.rest.slack.DropdownEmailOption;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.scheduling.annotation.Async;
 import org.springframework.stereotype.Service;
 import org.thymeleaf.context.Context;
 
-import java.io.File;
 import java.io.IOException;
 import java.net.URL;
 import java.nio.charset.StandardCharsets;
@@ -65,25 +65,29 @@ public class SlackService {
 
     private final Logger log = LoggerFactory.getLogger(SlackService.class);
 
-    private final String VALUE_SEPARATOR = "-";
+    public final static String VALUE_SEPARATOR = "-";
+    public final static String APPROVE_USER_EXPANDED_NOTE = "The user has been approved and notified.";
+    public final static String CONVERT_TO_REGULAR_ACCOUNT_EXPANDED_NOTE = "The trial account has been converted to a regular account.";
+
     private final ApplicationProperties applicationProperties;
     private final MailService mailService;
     private final EmailService emailService;
     private final UserMailsService userMailsService;
+    private final UserMapper userMapper;
+    private final Slack slack;
 
-    @Autowired
-    private UserMapper userMapper;
-
-    public SlackService(ApplicationProperties applicationProperties, MailService mailService, EmailService emailService, UserMailsService userMailsService) {
+    public SlackService(ApplicationProperties applicationProperties, MailService mailService, EmailService emailService, UserMailsService userMailsService, UserMapper userMapper, Slack slack) {
         this.applicationProperties = applicationProperties;
         this.mailService = mailService;
         this.emailService = emailService;
         this.userMailsService = userMailsService;
+        this.userMapper = userMapper;
+        this.slack = slack;
     }
 
     @Async
     public void sendUserRegistrationToChannel(UserDTO user, boolean trialAccountActivated, Company company) {
-        boolean withNote = withAcademicClarificationNote(user, null);
+        boolean withNote = withNote(DropdownEmailOption.CLARIFY_ACADEMIC_NON_INSTITUTE_EMAIL, user, null);
         if (withNote) {
             mailService.sendAcademicClarificationEmail(user);
         }
@@ -99,7 +103,7 @@ public class SlackService {
 
     @Async
     public void sendLatestBlocks(String url, UserDTO userDTO, boolean trialAccountActivated, ActionId actionId, String triggerId) {
-        if (ActionId.isEmailAction(actionId)) {
+        if (ActionId.isModalEmailAction(actionId)) {
             this.sendModal(triggerId, this.buildModalView(userDTO, actionId, url));
         } else {
             this.sendBlocks(url, this.buildBlocks(userDTO, trialAccountActivated, actionId, null));
@@ -119,7 +123,6 @@ public class SlackService {
             .text(text)
             .build();
 
-        Slack slack = Slack.getInstance();
         try {
             // This is an automatic message when user from whitelist is registered.
             WebhookResponse response = slack.send(this.applicationProperties.getSlack().getUserRegistrationWebhook(), payload);
@@ -135,7 +138,6 @@ public class SlackService {
             .text(userDTO.getEmail() + " has read and agreed to the trial license agreement. The account has been activated, the trial period ends on " + expirationDate)
             .build();
 
-        Slack slack = Slack.getInstance();
         try {
             WebhookResponse response = slack.send(this.applicationProperties.getSlack().getUserRegistrationWebhook(), payload);
 
@@ -158,7 +160,6 @@ public class SlackService {
 
     public List<UserIdMessagePair> getAllUnapprovedUserRequestsSentAfter(int daysAgo) {
         List<UserIdMessagePair> userList = new ArrayList<>();
-        Slack slack = Slack.getInstance();
         final String REQUEST_MESSAGE_TEXT = "This content can't be displayed.";
 
         try {
@@ -172,7 +173,7 @@ public class SlackService {
             Collections.reverse(conversationsHistory.getMessages());
             for (Message message : conversationsHistory.getMessages()) {
                 if (Objects.nonNull(message.getText()) && message.getText().equals(REQUEST_MESSAGE_TEXT) && Objects.nonNull(message.getBlocks())) {
-                    if (!(getBlockWithId(message.getBlocks(), COLLAPSED).isPresent() || getBlockWithId(message.getBlocks(), SUMMARY_NOTE).isPresent())
+                    if (!(getBlockWithId(message.getBlocks(), COLLAPSED).isPresent())
                     ) {
                         if (getBlockWithId(message.getBlocks(), USER_ID).isPresent()) {
                             ContextBlock userIdBlock = (ContextBlock) getBlockWithId(message.getBlocks(), USER_ID).get();
@@ -228,7 +229,6 @@ public class SlackService {
             .blocks(layoutBlocks)
             .build();
 
-        Slack slack = Slack.getInstance();
         try {
             WebhookResponse response = slack.send(url, payload);
             log.info("Send the latest user blocks to slack with response code " + response.getCode());
@@ -249,7 +249,7 @@ public class SlackService {
 
         if (buildCollapsed) {
             // Add collapsed blocks
-            blocks.add(buildCollapsedBlock(userDTO, actionId));
+            blocks.add(buildCollapsedBlock(userDTO, trialAccountActivated, actionId));
         } else {
             // Add expanded blocks
             blocks.addAll(buildExpandedBlocks(userDTO, trialAccountActivated, actionId, company));
@@ -261,26 +261,25 @@ public class SlackService {
         return blocks;
     }
 
-    private LayoutBlock buildCollapsedBlock(UserDTO userDTO, ActionId actionId) {
+    private LayoutBlock buildCollapsedBlock(UserDTO userDTO, boolean trialAccountActivated, ActionId actionId) {
         StringBuilder sb = new StringBuilder();
-        sb.append(userDTO.getEmail() + "\n" + userDTO.getCompanyName() + " (" + userDTO.getLicenseType().getShortName() + (withTrialAccountNote(userDTO, actionId) ? ", *TRIAL*)" : userDTO.isActivated() ? ")" : ")\n*NOT ACTIVATED*: "));
-        if (!userDTO.isActivated() && !withTrialAccountNote(userDTO, actionId)) {
-            if (withRejectionNote(userDTO, actionId)) {
-                sb.append("Sent rejection email");
-            } else if (withRejectAlumniAddressNote(userDTO, actionId)) {
-                sb.append("Rejected user due to alumni email address");
-            } else if (withUseCaseClarificationNote(userDTO, actionId)) {
-                sb.append("Sent use case clarification");
-            } else if (withForProfitClarificationNote(userDTO, actionId)) {
-                sb.append("Clarified with user on for-profit affiliation");
-            } else if (withAcademicClarificationNote(userDTO, actionId)) {
-                sb.append("Clarified with user on noninstitutional email");
-            } else if (withDuplicateUserClarificationNote(userDTO, actionId)) {
-                sb.append("Clarified with user on multiple account request");
-            } else if (withRegistrationInfoClarificationNote(userDTO, actionId)) {
-                sb.append("Clarified with user on registration info");
-            } else if (withLicenseOptionsNote(userDTO, actionId)) {
-                sb.append("Sent license options email");
+        sb.append(userDTO.getEmail() + "\n" + userDTO.getCompanyName() + " (" + userDTO.getLicenseType().getShortName()
+            + ((withNote(DropdownEmailOption.GIVE_TRIAL_ACCESS, userDTO, actionId) && !(userDTO.isActivated() && !trialAccountActivated)) ? ", *TRIAL*)" :
+            (userDTO.isActivated() ? ")" : ")\n*NOT ACTIVATED*: ")));
+        if (!userDTO.isActivated() && !withNote(DropdownEmailOption.GIVE_TRIAL_ACCESS, userDTO, actionId)) {
+            List<DropdownEmailOption> sentMails = new ArrayList<>();
+            for (DropdownEmailOption mailOption : DropdownEmailOption.values()) {
+                if (withNote(mailOption, userDTO, actionId))
+                    sentMails.add(mailOption);
+            }
+            if (!sentMails.isEmpty()) {
+                sentMails = sentMails.stream().sorted(Comparator.comparing(DropdownEmailOption::getCategory)).collect(Collectors.toList());
+                sb.append(sentMails.get(0).getCollapsedNote().orElse(""));
+                sentMails.remove(0);
+                for (DropdownEmailOption otherSentMail : sentMails) {
+                    if (otherSentMail.getCollapsedNote().isPresent())
+                        sb.append(", ").append(otherSentMail.getCollapsedNote().get());
+                }
             } else {
                 sb.append("Collapsed");
             }
@@ -306,7 +305,7 @@ public class SlackService {
         blocks.add(buildCurrentLicense(userDTO));
 
         // Add account status
-        blocks.add(buildAccountStatusBlock(userDTO, withTrialAccountNote(userDTO, actionId)));
+        blocks.add(buildAccountStatusBlock(userDTO, withNote(DropdownEmailOption.GIVE_TRIAL_ACCESS, userDTO, actionId), trialAccountActivated));
 
         // Add user info section
         blocks.addAll(buildUserInfoBlocks(userDTO));
@@ -368,13 +367,13 @@ public class SlackService {
         return SectionBlock.builder().text(MarkdownTextObject.builder().text(sb.toString()).build()).accessory(getLicenseTypeElement(userDTO)).blockId(LICENSE_TYPE.getId()).build();
     }
 
-    private LayoutBlock buildAccountStatusBlock(UserDTO userDTO, boolean isTrialAccountInitiated) {
+    private LayoutBlock buildAccountStatusBlock(UserDTO userDTO, boolean isTrialAccountInitiated, boolean trialAccountActivated) {
         List<TextObject> userInfo = new ArrayList<>();
 
         // Add account information
         userInfo.add(getTextObject("Account Status", userDTO.isActivated() ? "Activated" : (StringUtils.isNotEmpty(userDTO.getActivationKey()) ? "Email not validated" : "Not Activated")));
-        userInfo.add(getTextObject("Account Type", isTrialAccountInitiated ? "TRIAL" : "REGULAR"));
-        if (isTrialAccountInitiated) {
+        userInfo.add(getTextObject("Account Type", isTrialAccountInitiated && !(userDTO.isActivated() && !trialAccountActivated) ? "TRIAL" : "REGULAR"));
+        if (isTrialAccountInitiated && !(userDTO.isActivated() && !trialAccountActivated)) {
             // There is a period of time when the user has been approved but did not activate their trial yet.
             // In this case, the activationDate is null, so we need to omit this text.
             Instant activationDate = userDTO.getAdditionalInfo().getTrialAccount().getActivation().getActivationDate();
@@ -385,7 +384,7 @@ public class SlackService {
         return SectionBlock.builder().fields(userInfo).blockId(ACCOUNT_STATUS.getId()).build();
     }
 
-    private String getOptionValue(String argument, String login) {
+    public String getOptionValue(String argument, String login) {
         return String.join(VALUE_SEPARATOR, argument, login);
     }
 
@@ -399,85 +398,51 @@ public class SlackService {
         return values[0];
     }
 
-    public boolean withTrialAccountNote(UserDTO userDTO, ActionId actionId) {
-        if (
-            ObjectUtil.isObjectEmpty(userDTO.getAdditionalInfo())
-                || userDTO.getAdditionalInfo().getTrialAccount() == null
-                || userDTO.getAdditionalInfo().getTrialAccount().getActivation() == null
-        ) {
-            return false;
-        }
-        return StringUtils.isNotEmpty(userDTO.getAdditionalInfo().getTrialAccount().getActivation().getKey()) || userDTO.getAdditionalInfo().getTrialAccount().getActivation().getActivationDate() != null
-            || actionId == GIVE_TRIAL_ACCESS;
-    }
-
-    private boolean withForProfitClarificationNote(UserDTO userDTO, ActionId actionId) {
-        return !userMailsService.findUserMailsByUserAndMailTypeAndSentDateAfter(userMapper.userDTOToUser(userDTO), MailType.CLARIFY_ACADEMIC_FOR_PROFIT, null).isEmpty()
-            || actionId == CONFIRM_SEND_ACADEMIC_FOR_PROFIT_EMAIL;
-    }
-
-    public boolean withAcademicClarificationNote(UserDTO userDTO, ActionId actionId) {
-        boolean withAcademicClarificationNote = false;
-        if (LicenseType.ACADEMIC.equals(userDTO.getLicenseType())) {
-            if (!this.applicationProperties.getAcademicEmailClarifyDomains().isEmpty()) {
-                List<String> matchedExclusionDomains = this.applicationProperties.getAcademicEmailClarifyDomains().stream().filter(domain -> domain.startsWith("!") && userDTO.getEmail().endsWith(domain.substring(1))).map(domain -> domain.substring(1)).collect(Collectors.toList());
-                if (matchedExclusionDomains.size() > 0) {
-                    withAcademicClarificationNote = false;
-                } else {
-                    List<String> matchedDomains = this.applicationProperties.getAcademicEmailClarifyDomains().stream().filter(domain -> userDTO.getEmail().endsWith(domain)).collect(Collectors.toList());
-                    if (matchedDomains.size() > 0) {
+    public boolean withNote(DropdownEmailOption mailOption, UserDTO userDTO, ActionId actionId) {
+        switch (mailOption) {
+            case GIVE_TRIAL_ACCESS:
+                if (
+                    ObjectUtil.isObjectEmpty(userDTO.getAdditionalInfo())
+                        || userDTO.getAdditionalInfo().getTrialAccount() == null
+                        || userDTO.getAdditionalInfo().getTrialAccount().getActivation() == null
+                ) {
+                    return false;
+                }
+                return StringUtils.isNotEmpty(userDTO.getAdditionalInfo().getTrialAccount().getActivation().getKey()) || userDTO.getAdditionalInfo().getTrialAccount().getActivation().getActivationDate() != null
+                    || actionId == GIVE_TRIAL_ACCESS;
+            case CLARIFY_ACADEMIC_NON_INSTITUTE_EMAIL:
+                boolean withAcademicClarificationNote = false;
+                if (LicenseType.ACADEMIC.equals(userDTO.getLicenseType())) {
+                    if (!this.applicationProperties.getAcademicEmailClarifyDomains().isEmpty()) {
+                        List<String> matchedExclusionDomains = this.applicationProperties.getAcademicEmailClarifyDomains().stream().filter(domain -> domain.startsWith("!") && userDTO.getEmail().endsWith(domain.substring(1))).map(domain -> domain.substring(1)).collect(Collectors.toList());
+                        if (matchedExclusionDomains.size() > 0) {
+                            withAcademicClarificationNote = false;
+                        } else {
+                            List<String> matchedDomains = this.applicationProperties.getAcademicEmailClarifyDomains().stream().filter(domain -> userDTO.getEmail().endsWith(domain)).collect(Collectors.toList());
+                            if (matchedDomains.size() > 0) {
+                                withAcademicClarificationNote = true;
+                            }
+                        }
+                    } else if (!userMailsService.findUserMailsByUserAndMailTypeAndSentDateAfter(userMapper.userDTOToUser(userDTO), MailType.CLARIFY_ACADEMIC_NON_INSTITUTE_EMAIL, null).isEmpty()) {
                         withAcademicClarificationNote = true;
                     }
                 }
-            } else if (!userMailsService.findUserMailsByUserAndMailTypeAndSentDateAfter(userMapper.userDTOToUser(userDTO), MailType.CLARIFY_ACADEMIC_NON_INSTITUTE_EMAIL, null).isEmpty()) {
-                withAcademicClarificationNote = true;
-            }
+                return withAcademicClarificationNote
+                    || CONFIRM_SEND_ACADEMIC_CLARIFICATION_EMAIL.equals(actionId);
+            default:
+                return !userMailsService.findUserMailsByUserAndMailTypeAndSentDateAfter(userMapper.userDTOToUser(userDTO), mailOption.getMailType(), null).isEmpty()
+                    || actionId == mailOption.getConfirmActionId().orElse(null);
         }
-        return withAcademicClarificationNote
-            || CONFIRM_SEND_ACADEMIC_CLARIFICATION_EMAIL.equals(actionId);
-    }
-
-    private boolean withUseCaseClarificationNote(UserDTO userDTO, ActionId actionId) {
-        return !userMailsService.findUserMailsByUserAndMailTypeAndSentDateAfter(userMapper.userDTOToUser(userDTO), MailType.CLARIFY_USE_CASE, null).isEmpty()
-            || actionId == CONFIRM_SEND_USE_CASE_CLARIFICATION_EMAIL;
-    }
-
-    private boolean withDuplicateUserClarificationNote(UserDTO userDTO, ActionId actionId) {
-        return !userMailsService.findUserMailsByUserAndMailTypeAndSentDateAfter(userMapper.userDTOToUser(userDTO), MailType.CLARIFY_DUPLICATE_USER, null).isEmpty()
-            || actionId == CONFIRM_SEND_DUPLICATE_USER_CLARIFICATION_EMAIL;
-    }
-
-    private boolean withRegistrationInfoClarificationNote(UserDTO userDTO, ActionId actionId) {
-        return !userMailsService.findUserMailsByUserAndMailTypeAndSentDateAfter(userMapper.userDTOToUser(userDTO), MailType.CLARIFY_REGISTRATION_INFO, null).isEmpty()
-            || actionId == CONFIRM_SEND_REGISTRATION_INFO_CLARIFICATION_EMAIL;
-    }
-
-    private boolean withLicenseOptionsNote(UserDTO userDTO, ActionId actionId) {
-        return !userMailsService.findUserMailsByUserAndMailTypeAndSentDateAfter(userMapper.userDTOToUser(userDTO), MailType.LICENSE_OPTIONS, null).isEmpty()
-            || actionId == CONFIRM_SEND_LICENSE_OPTIONS_EMAIL;
-    }
-
-    private boolean withRejectionNote(UserDTO userDTO, ActionId actionId) {
-        return !userMailsService.findUserMailsByUserAndMailTypeAndSentDateAfter(userMapper.userDTOToUser(userDTO), MailType.REJECTION, null).isEmpty()
-            || actionId == CONFIRM_SEND_REJECTION_EMAIL;
-    }
-
-    private boolean withRejectAlumniAddressNote(UserDTO userDTO, ActionId actionId) {
-        return !userMailsService.findUserMailsByUserAndMailTypeAndSentDateAfter(userMapper.userDTOToUser(userDTO), MailType.REJECT_ALUMNI_ADDRESS, null).isEmpty()
-            || actionId == CONFIRM_SEND_REJECT_ALUMNI_ADDRESS_EMAIL;
     }
 
     private boolean isReviewed(UserDTO userDTO, ActionId actionId) {
-        return userDTO.isActivated()
-            || withTrialAccountNote(userDTO, actionId)
-            || withForProfitClarificationNote(userDTO, actionId)
-            || withAcademicClarificationNote(userDTO, actionId)
-            || withUseCaseClarificationNote(userDTO, actionId)
-            || withDuplicateUserClarificationNote(userDTO, actionId)
-            || withLicenseOptionsNote(userDTO, actionId)
-            || withRegistrationInfoClarificationNote(userDTO, actionId)
-            || withRejectionNote(userDTO, actionId)
-            || withRejectAlumniAddressNote(userDTO, actionId);
+        if (userDTO.isActivated())
+            return true;
+        for (DropdownEmailOption mailOption : DropdownEmailOption.values()) {
+            if (withNote(mailOption, userDTO, actionId))
+                return true;
+        }
+        return false;
     }
 
     private StaticSelectElement getLicenseTypeElement(UserDTO userDTO) {
@@ -553,36 +518,23 @@ public class SlackService {
     private List<LayoutBlock> buildAdditionalInfoBlocks(UserDTO userDTO, boolean trialAccountActivated, ActionId actionId) {
         List<LayoutBlock> layoutBlocks = new ArrayList<>();
 
-        if (withForProfitClarificationNote(userDTO, actionId)) {
-            layoutBlocks.add(buildPlainTextBlock("We have sent a clarification email to the user asking why they are applying for the academic license while affiliated with a for-profit company.", FOR_PROFIT_CLARIFICATION_NOTE));
-        }
-        if (withAcademicClarificationNote(userDTO, actionId)) {
-            layoutBlocks.add(buildPlainTextBlock("We have sent a clarification email to the user asking why they could not use an institution email to register.", ACADEMIC_CLARIFICATION_NOTE));
-        }
-        if (withUseCaseClarificationNote(userDTO, actionId)) {
-            layoutBlocks.add(buildPlainTextBlock("We have sent a clarification email to the user asking to further explain their use case.", USE_CASE_CLARIFICATION_NOTE));
-        }
-        if (withDuplicateUserClarificationNote(userDTO, actionId)) {
-            layoutBlocks.add(buildPlainTextBlock("We have sent a clarification email to the user asking why they registered multiple accounts.", DUPLICATE_USER_CLARIFICATION_NOTE));
-        }
-        if (withRegistrationInfoClarificationNote(userDTO, actionId)) {
-            layoutBlocks.add(buildPlainTextBlock("We have sent a clarification email to the user asking to provide detailed registration info.", REGISTRATION_INFO_CLARIFICATION_NOTE));
-        }
-        if (withLicenseOptionsNote(userDTO, actionId)) {
-            layoutBlocks.add(buildPlainTextBlock("We have sent an email to the user with license options for their affiliated company.", LICENSE_OPTIONS_NOTE));
+        for (DropdownEmailOption inquiryOption : Arrays.stream(DropdownEmailOption.values()).filter(mo -> mo.getCategory() == DropdownEmailCategory.CLARIFY || mo.getCategory() == DropdownEmailCategory.LICENSE).collect(Collectors.toList())) {
+            if (withNote(inquiryOption, userDTO, actionId))
+                layoutBlocks.add(buildPlainTextBlock(inquiryOption.getExpandedNote(), inquiryOption.getBlockId()));
         }
         if (userDTO.isActivated() && !trialAccountActivated) {
-            if (!withTrialAccountNote(userDTO, actionId)) {
-                layoutBlocks.add(buildPlainTextBlock("The user has been approved and notified.", APPROVED_NOTE));
+            if (!withNote(DropdownEmailOption.GIVE_TRIAL_ACCESS, userDTO, actionId)) {
+                layoutBlocks.add(buildPlainTextBlock(APPROVE_USER_EXPANDED_NOTE, APPROVED_NOTE));
             } else {
-                layoutBlocks.add(buildPlainTextBlock("The trial account has been converted to a regular account.", CONVERT_TO_REGULAR_ACCOUNT_NOTE));
+                layoutBlocks.add(buildPlainTextBlock(CONVERT_TO_REGULAR_ACCOUNT_EXPANDED_NOTE, CONVERT_TO_REGULAR_ACCOUNT_NOTE));
             }
-        } else if (withTrialAccountNote(userDTO, actionId)) {
-            layoutBlocks.add(buildPlainTextBlock("The trial account has been initialized and notified.", TRIAL_ACCOUNT_NOTE));
-        } else if (withRejectionNote(userDTO, actionId)) {
-            layoutBlocks.add(buildPlainTextBlock("The user has been rejected and notified.", REJECTION_NOTE));
-        } else if (withRejectAlumniAddressNote(userDTO, actionId)) {
-            layoutBlocks.add(buildPlainTextBlock("The user has been rejected due to alumni email address", REJECT_ALUMNI_ADDRESS_NOTE));
+        } else if (withNote(DropdownEmailOption.GIVE_TRIAL_ACCESS, userDTO, actionId)) {
+            layoutBlocks.add(buildPlainTextBlock(DropdownEmailOption.GIVE_TRIAL_ACCESS.getExpandedNote(), TRIAL_ACCOUNT_NOTE));
+        } else {
+            for (DropdownEmailOption rejectOption : Arrays.stream(DropdownEmailOption.values()).filter(mo -> mo.getCategory() == DropdownEmailCategory.DENY).collect(Collectors.toList())) {
+                if (withNote(rejectOption, userDTO, actionId))
+                    layoutBlocks.add(buildPlainTextBlock(rejectOption.getExpandedNote(), rejectOption.getBlockId()));
+            }
         }
 
         return layoutBlocks;
@@ -623,50 +575,34 @@ public class SlackService {
     private StaticSelectElement buildMoreActionsDropdown(UserDTO user, boolean trialAccountActivated, ActionId actionId) {
         List<OptionGroupObject> optionGroups = new ArrayList<>();
 
+        // Add option group - Trial
         if (user.getLicenseType() != LicenseType.ACADEMIC) {
-            // Add option group - Trial
             List<OptionObject> trialGroup = new ArrayList<>();
             // Add option - Give Trial Access
-            if (!withTrialAccountNote(user, actionId) && !user.isActivated()) {
-                trialGroup.add(buildGiveTrialAccessOption(user));
+            if (!withNote(DropdownEmailOption.GIVE_TRIAL_ACCESS, user, actionId) && !user.isActivated()) {
+                trialGroup.add(buildEmailOption(DropdownEmailOption.GIVE_TRIAL_ACCESS, user));
             }
             // Add option - Convert to regular
-            if (trialAccountActivated) {
+            if (user.isActivated() && trialAccountActivated) {
                 trialGroup.add(buildConvertToRegularAccountOption(user));
             }
             if (!trialGroup.isEmpty()) {
                 optionGroups.add(OptionGroupObject.builder().label(PlainTextObject.builder().text("Trial").build()).options(trialGroup).build());
             }
-
-            // Add option group - License
-            List<OptionObject> licenseGroup = new ArrayList<>();
-            // Add option - Send License Options Email
-            licenseGroup.add(buildLicenseOptionsOption(user));
-            optionGroups.add(OptionGroupObject.builder().label(PlainTextObject.builder().text("License").build()).options(licenseGroup).build());
         }
 
+        // Add other option groups
         if (!user.isActivated()) {
-            // Add option group - Clarify
-            List<OptionObject> clarifyGroup = new ArrayList<>();
-            // Add option - Send Academic For Profit Clarification Email
-            clarifyGroup.add(buildForProfitClarificationOption(user));
-            // Add option - Send Academic Clarification Email
-            clarifyGroup.add(buildAcademicClarificationOption(user));
-            // Add option - Send Use Case Clarification Email
-            clarifyGroup.add(buildUseCaseClarificationOption(user));
-            // Add option - Send Registration Info Clarification Email
-            clarifyGroup.add(buildRegistrationInfoClarificationOption(user));
-            // Add option - Send Duplicate User Clarification Email
-            clarifyGroup.add(buildDuplicateUserClarificationOption(user));
-            optionGroups.add(OptionGroupObject.builder().label(PlainTextObject.builder().text("Clarify").build()).options(clarifyGroup).build());
-
-            // Add option group - Deny
-            List<OptionObject> denyGroup = new ArrayList<>();
-            // Add option - Send Rejection Email
-            denyGroup.add(buildRejectionOption(user));
-            // Add option - Send Reject Alumni Address Email
-            denyGroup.add(buildRejectAlumniAddressOption(user));
-            optionGroups.add(OptionGroupObject.builder().label(PlainTextObject.builder().text("Deny").build()).options(denyGroup).build());
+            for (DropdownEmailCategory emailCategory : Arrays.stream(DropdownEmailCategory.values()).filter(ec -> !ec.equals(DropdownEmailCategory.TRIAL)).collect(Collectors.toList())) {
+                List<OptionObject> optionGroup = new ArrayList<>();
+                for (DropdownEmailOption emailOption : Arrays.stream(DropdownEmailOption.values()).filter(eo -> eo.getCategory().equals(emailCategory)).collect(Collectors.toList())) {
+                    if (emailOption.getSpecificLicenses().isEmpty() || emailOption.getSpecificLicenses().contains(user.getLicenseType()))
+                        optionGroup.add(buildEmailOption(emailOption, user));
+                }
+                if (!optionGroup.isEmpty()) {
+                    optionGroups.add(OptionGroupObject.builder().label(PlainTextObject.builder().text(emailCategory.getLabel()).build()).options(optionGroup).build());
+                }
+            }
         }
 
         // Add option group - Other
@@ -682,44 +618,12 @@ public class SlackService {
         return dropdown;
     }
 
-    private OptionObject buildGiveTrialAccessOption(UserDTO user) {
-        return OptionObject.builder().value(getOptionValue(GIVE_TRIAL_ACCESS.toString(), user.getLogin())).text(PlainTextObject.builder().text("Give Trial Access").build()).build();
+    private OptionObject buildEmailOption(DropdownEmailOption mailOption, UserDTO user) {
+        return OptionObject.builder().value(getOptionValue(mailOption.getActionId().toString(), user.getLogin())).text(PlainTextObject.builder().text(mailOption.getDropdownKey()).build()).build();
     }
 
     private OptionObject buildConvertToRegularAccountOption(UserDTO user) {
         return OptionObject.builder().value(getOptionValue(CONVERT_TO_REGULAR_ACCOUNT.toString(), user.getLogin())).text(PlainTextObject.builder().text("Convert To Regular Account").build()).build();
-    }
-
-    private OptionObject buildForProfitClarificationOption(UserDTO user) {
-        return OptionObject.builder().value(getOptionValue(SEND_ACADEMIC_FOR_PROFIT_EMAIL.toString(), user.getLogin())).text(PlainTextObject.builder().text("Send Academic For Profit Email").build()).build();
-    }
-
-    private OptionObject buildAcademicClarificationOption(UserDTO user) {
-        return OptionObject.builder().value(getOptionValue(SEND_ACADEMIC_CLARIFICATION_EMAIL.toString(), user.getLogin())).text(PlainTextObject.builder().text("Send Academic Domain Clarification Email").build()).build();
-    }
-
-    private OptionObject buildUseCaseClarificationOption(UserDTO user) {
-        return OptionObject.builder().value(getOptionValue(SEND_USE_CASE_CLARIFICATION_EMAIL.toString(), user.getLogin())).text(PlainTextObject.builder().text("Send Use Case Clarification Email").build()).build();
-    }
-
-    private OptionObject buildDuplicateUserClarificationOption(UserDTO user) {
-        return OptionObject.builder().value(getOptionValue(SEND_DUPLICATE_USER_CLARIFICATION_EMAIL.toString(), user.getLogin())).text(PlainTextObject.builder().text("Send Duplicate User Email").build()).build();
-    }
-
-    private OptionObject buildRegistrationInfoClarificationOption(UserDTO user) {
-        return OptionObject.builder().value(getOptionValue(SEND_REGISTRATION_INFO_CLARIFICATION_EMAIL.toString(), user.getLogin())).text(PlainTextObject.builder().text("Send Registration Info Clarification Email").build()).build();
-    }
-
-    private OptionObject buildLicenseOptionsOption(UserDTO user) {
-        return OptionObject.builder().value(getOptionValue(SEND_LICENSE_OPTIONS_EMAIL.toString(), user.getLogin())).text(PlainTextObject.builder().text("Send License Options Email").build()).build();
-    }
-
-    private OptionObject buildRejectionOption(UserDTO user) {
-        return OptionObject.builder().value(getOptionValue(SEND_REJECTION_EMAIL.toString(), user.getLogin())).text(PlainTextObject.builder().text("Send Rejection Email").build()).build();
-    }
-
-    private OptionObject buildRejectAlumniAddressOption(UserDTO user) {
-        return OptionObject.builder().value(getOptionValue(SEND_REJECT_ALUMNI_ADDRESS_EMAIL.toString(), user.getLogin())).text(PlainTextObject.builder().text("Send Alumni Rejection Email").build()).build();
     }
 
     private OptionObject buildCollapseOption(UserDTO user) {
@@ -773,7 +677,6 @@ public class SlackService {
             .view(view)
             .build();
 
-        Slack slack = Slack.getInstance();
         try {
             ViewsOpenResponse response = slack.methods().viewsOpen(request);
             if (!response.isOk()) {
@@ -787,6 +690,8 @@ public class SlackService {
     }
 
     private View buildModalView(UserDTO userDTO, ActionId actionId, String responseUrl) {
+        Optional<DropdownEmailOption> mailOption = Arrays.stream(DropdownEmailOption.values()).filter(mo -> mo.getActionId() == actionId).findAny();
+
         final String DEFAULT_SUBJECT = "License for " + userDTO.getLicenseType().getName() + " of OncoKB";
         final String COMPANY_LICENSE_SUBJECT = "OncoKB - " + userDTO.getCompanyName() + " license options";
         final String GREETING = "Dear " + userDTO.getFirstName() + ' ' + userDTO.getLastName() + ",\n\n" +
@@ -796,54 +701,17 @@ public class SlackService {
         List<LayoutBlock> layoutBlocks = new ArrayList<>();
         ViewTitle title = ViewTitle.builder().type(PlainTextObject.TYPE).build(); // Max 24 characters
         String callbackId = null;
-        String subject = DEFAULT_SUBJECT;
+        String subject = null;
         StringBuilder bodySb = new StringBuilder().append(GREETING);
-        try {
-            switch (actionId) {
-                case SEND_ACADEMIC_FOR_PROFIT_EMAIL:
-                    title.setText("For Profit Clarification");
-                    callbackId = CONFIRM_SEND_ACADEMIC_FOR_PROFIT_EMAIL.getId();
-                    bodySb.append(getStringFromResourceTemplateMailTextFile("clarifyLicenseInForProfileCompanyString.txt"));
-                    break;
-                case SEND_ACADEMIC_CLARIFICATION_EMAIL:
-                    title.setText("Domain Clarification");
-                    callbackId = CONFIRM_SEND_ACADEMIC_CLARIFICATION_EMAIL.getId();
-                    bodySb.append(getStringFromResourceTemplateMailTextFile("clarifyAcademicUseWithoutInstituteEmailString.txt"));
-                    break;
-                case SEND_USE_CASE_CLARIFICATION_EMAIL:
-                    title.setText("Use Case Clarification");
-                    callbackId = CONFIRM_SEND_USE_CASE_CLARIFICATION_EMAIL.getId();
-                    bodySb.append(getStringFromResourceTemplateMailTextFile("clarifyUseCaseString.txt"));
-                    break;
-                case SEND_DUPLICATE_USER_CLARIFICATION_EMAIL:
-                    title.setText("Clarify duplicate user");
-                    callbackId = CONFIRM_SEND_DUPLICATE_USER_CLARIFICATION_EMAIL.getId();
-                    bodySb.append(getStringFromResourceTemplateMailTextFile("clarifyDuplicateUserString.txt"));
-                    break;
-                case SEND_REGISTRATION_INFO_CLARIFICATION_EMAIL:
-                    title.setText("Clarify registry info");
-                    callbackId = CONFIRM_SEND_REGISTRATION_INFO_CLARIFICATION_EMAIL.getId();
-                    bodySb.append(getStringFromResourceTemplateMailTextFile("clarifyRegistrationInfoString.txt"));
-                    break;
-                case SEND_LICENSE_OPTIONS_EMAIL:
-                    title.setText("Send license options");
-                    callbackId = CONFIRM_SEND_LICENSE_OPTIONS_EMAIL.getId();
-                    subject = COMPANY_LICENSE_SUBJECT;
-                    bodySb.append(getStringFromResourceTemplateMailTextFile("licenseOptions.txt"));
-                    break;
-                case SEND_REJECTION_EMAIL:
-                    title.setText("Rejection Email");
-                    callbackId = CONFIRM_SEND_REJECTION_EMAIL.getId();
-                    bodySb.append(getStringFromResourceTemplateMailTextFile("rejectionEmailString.txt"));
-                    break;
-                case SEND_REJECT_ALUMNI_ADDRESS_EMAIL:
-                    title.setText("Reject Alumni Address");
-                    callbackId = CONFIRM_SEND_REJECT_ALUMNI_ADDRESS_EMAIL.getId();
-                    bodySb.append(getStringFromResourceTemplateMailTextFile("alumniEmailAddressString.txt"));
-                    break;
+        if (mailOption.isPresent()) {
+            try {
+                title.setText(mailOption.get().getModalTitle().orElse(""));
+                callbackId = mailOption.get().getConfirmActionId().isPresent() ? mailOption.get().getConfirmActionId().get().getId() : "";
+                subject = mailOption.get().getModalSubject().get().equals(ModalEmailSubject.DEFAULT) ? DEFAULT_SUBJECT : COMPANY_LICENSE_SUBJECT;
+                bodySb.append(getStringFromResourceTemplateMailTextFile(mailOption.get().getMailType().getStringTemplateName().orElse("")));
+            } catch (Exception e) {
+                log.warn("Unable to find email template file");
             }
-        } catch (Exception e) {
-            log.warn("Unable to find email template file");
         }
         bodySb.append(CLOSING);
 
@@ -868,7 +736,10 @@ public class SlackService {
     }
 
     private LayoutBlock buildPlainTextBlock(String text, BlockId blockId) {
-        return SectionBlock.builder().text(PlainTextObject.builder().text(text).build()).blockId(blockId.getId()).build();
+        if (text != null && blockId != null) {
+            return SectionBlock.builder().text(PlainTextObject.builder().text(text).build()).blockId(blockId.getId()).build();
+        }
+        return null;
     }
 
     private String getStringFromResourceTemplateMailTextFile(String fileName) {
@@ -891,7 +762,7 @@ public class SlackService {
             if (block.getClass().getName().equals("com.slack.api.model.block.SectionBlock")) {
                 SectionBlock sectionBlock = (SectionBlock) block;
                 if (Objects.nonNull(sectionBlock.getBlockId())) {
-                    if((blockId == SUMMARY_NOTE && BlockId.isSummaryNote(BlockId.getById(sectionBlock.getBlockId())))
+                    if((BlockId.isSummaryNote(BlockId.getById(sectionBlock.getBlockId())))
                         || sectionBlock.getBlockId().equals(blockId.getId())) {
                         return Optional.of(block);
                     }
@@ -899,7 +770,7 @@ public class SlackService {
             } else if (block.getClass().getName().equals("com.slack.api.model.block.ContextBlock")) {
                 ContextBlock contextBlock = (ContextBlock) block;
                 if (Objects.nonNull(contextBlock.getBlockId())) {
-                    if ((blockId == SUMMARY_NOTE && BlockId.isSummaryNote(BlockId.getById(contextBlock.getBlockId())))
+                    if ((BlockId.isSummaryNote(BlockId.getById(contextBlock.getBlockId())))
                         || contextBlock.getBlockId().equals(blockId.getId())) {
                         return Optional.of(block);
                     }

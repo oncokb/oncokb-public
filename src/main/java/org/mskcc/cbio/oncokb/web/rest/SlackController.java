@@ -1,17 +1,14 @@
 package org.mskcc.cbio.oncokb.web.rest;
 
 import com.google.gson.Gson;
-import com.google.gson.JsonSyntaxException;
 import com.slack.api.app_backend.interactive_components.payload.BlockActionPayload;
 import com.slack.api.app_backend.views.payload.ViewSubmissionPayload;
 import com.slack.api.util.json.GsonFactory;
 import org.apache.commons.lang3.StringUtils;
-import org.json.simple.JSONObject;
 import org.mskcc.cbio.oncokb.domain.CompanyCandidate;
 import org.mskcc.cbio.oncokb.domain.UnknownPayload;
 import org.mskcc.cbio.oncokb.domain.User;
 import org.mskcc.cbio.oncokb.domain.enumeration.LicenseType;
-import org.mskcc.cbio.oncokb.domain.enumeration.MailType;
 import org.mskcc.cbio.oncokb.repository.UserRepository;
 import org.mskcc.cbio.oncokb.service.MailService;
 import org.mskcc.cbio.oncokb.service.SlackService;
@@ -20,9 +17,9 @@ import org.mskcc.cbio.oncokb.service.dto.UserDTO;
 import org.mskcc.cbio.oncokb.service.mapper.UserMapper;
 import org.mskcc.cbio.oncokb.web.rest.slack.ActionId;
 import org.mskcc.cbio.oncokb.web.rest.slack.BlockId;
+import org.mskcc.cbio.oncokb.web.rest.slack.DropdownEmailOption;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -42,18 +39,18 @@ public class SlackController {
 
     private final UserService userService;
 
-    @Autowired
-    private UserMapper userMapper;
+    private final UserMapper userMapper;
 
     private final UserRepository userRepository;
 
     private final MailService mailService;
 
-    public SlackController(UserService userService, UserRepository userRepository, MailService mailService, SlackService slackService) {
+    public SlackController(UserService userService, UserRepository userRepository, MailService mailService, SlackService slackService, UserMapper userMapper) {
         this.userService = userService;
         this.userRepository = userRepository;
         this.mailService = mailService;
         this.slackService = slackService;
+        this.userMapper = userMapper;
     }
 
     // We do not put any auth protection for the slack call
@@ -135,37 +132,15 @@ public class SlackController {
             if (user.isPresent()) {
                 UserDTO userDTO = userMapper.userToUserDTO(user.get());
                 ActionId actionId = this.slackService.getActionId(viewSubmissionPayload);
-                MailType mailType = null;
-                switch (actionId) {
-                    case CONFIRM_SEND_ACADEMIC_FOR_PROFIT_EMAIL:
-                        mailType = MailType.CLARIFY_ACADEMIC_FOR_PROFIT;
-                        break;
-                    case CONFIRM_SEND_ACADEMIC_CLARIFICATION_EMAIL:
-                        mailType = MailType.CLARIFY_ACADEMIC_NON_INSTITUTE_EMAIL;
-                        break;
-                    case CONFIRM_SEND_USE_CASE_CLARIFICATION_EMAIL:
-                        mailType = MailType.CLARIFY_USE_CASE;
-                        break;
-                    case CONFIRM_SEND_DUPLICATE_USER_CLARIFICATION_EMAIL:
-                        mailType = MailType.CLARIFY_DUPLICATE_USER;
-                        break;
-                    case CONFIRM_SEND_REGISTRATION_INFO_CLARIFICATION_EMAIL:
-                        mailType = MailType.CLARIFY_REGISTRATION_INFO;
-                        break;
-                    case CONFIRM_SEND_LICENSE_OPTIONS_EMAIL:
-                        mailType = MailType.LICENSE_OPTIONS;
-                        break;
-                    case CONFIRM_SEND_REJECTION_EMAIL:
-                        mailType = MailType.REJECTION;
-                        break;
-                    case CONFIRM_SEND_REJECT_ALUMNI_ADDRESS_EMAIL:
-                        mailType = MailType.REJECT_ALUMNI_ADDRESS;
-                        break;
+                DropdownEmailOption mailOption = null;
+                for (DropdownEmailOption curMailOption : DropdownEmailOption.values()) {
+                    if (actionId == (curMailOption.getConfirmActionId().orElse(null)))
+                        mailOption = curMailOption;
                 }
                 mailService.sendEmailFromSlack(userDTO,
                     viewSubmissionPayload.getView().getState().getValues().get(BlockId.SUBJECT_INPUT.getId()).get(ActionId.INPUT_SUBJECT.getId()).getValue(),
                     viewSubmissionPayload.getView().getState().getValues().get(BlockId.BODY_INPUT.getId()).get(ActionId.INPUT_BODY.getId()).getValue(),
-                    mailType, viewSubmissionPayload.getUser().getName());
+                    mailOption.getMailType(), viewSubmissionPayload.getUser().getName());
                 this.slackService.sendLatestBlocks(
                     viewSubmissionPayload.getResponseUrls().get(0).getResponseUrl(),
                     userDTO,
