@@ -2,8 +2,8 @@ import React, { useEffect, useState } from 'react';
 import OncoKBTable, {
   SearchColumn,
 } from 'app/components/oncokbTable/OncoKBTable';
-import poTxs from 'content/files/precisionOncologyTx/presitionOncologyTx.json';
-import poTxsExcel from 'content/files/precisionOncologyTx/Classification_of_FDA-approved_precision_oncology_therapies.xlsx';
+import poTxs from 'content/files/precisionOncologyTherapies/precision_oncology_therapies.json';
+import poTxsExcel from 'content/files/precisionOncologyTherapies/precision_oncology_therapies.xlsx';
 import {
   COMPONENT_PADDING,
   LG_TABLE_FIXED_HEIGHT,
