@@ -52,7 +52,7 @@
     "year": "1998 – 2001*",
     "tx": "Imatinib",
     "biomarker": "PDGFRA/B Fusions",
-    "biomarkerDetection": "DNA/NGS-based detection or FISH",
+    "biomarkerDetection": "DNA/NGS-based detection or FISH",
     "drugClassification": "First-in-class"
   },
   {
@@ -124,7 +124,7 @@
     "year": "2006",
     "tx": "Dasatinib",
     "biomarker": "BCR-ABL1 Fusion",
-    "biomarkerDetection": "DNA/NGS-based detection ",
+    "biomarkerDetection": "DNA/NGS-based detection",
     "drugClassification": "Resistance"
   },
   {
@@ -163,7 +163,7 @@
     "id": 21,
     "year": "2009",
     "tx": "Everolimus",
-    "biomarker": "TSC1/2  Oncogenic Mutations",
+    "biomarker": "TSC1/2 Oncogenic Mutations",
     "biomarkerDetection": "DNA/NGS-based detection",
     "drugClassification": "First-in-class"
   },
@@ -227,7 +227,7 @@
     "id": 29,
     "year": "2012",
     "tx": "Ponatinib",
-    "biomarker": "ABL1 T315I",
+    "biomarker": "ABL1 T315I",
     "biomarkerDetection": "DNA/NGS-based detection",
     "drugClassification": "Mechanistically-distinct"
   },
@@ -387,7 +387,7 @@
     "id": 49,
     "year": "2015",
     "tx": "Ipilimumab + Nivolumab",
-    "biomarker": "MSI-H ",
+    "biomarker": "MSI-H",
     "biomarkerDetection": "DNA/NGS-based detection",
     "drugClassification": "First-in-class"
   },

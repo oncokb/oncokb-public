@@ -59,13 +59,13 @@ const sortAndUniqByValue = (
 };
 const footnotes = {
   a:
-    'The first year the drug received FDA-approval in any indication, irrespective of biomarker',
+    'The first year the drug received FDA-approval in any indication, irrespective of whether the biomarker was included in the FDA-drug at that time',
   b:
     'Includes pathognomonic and indication-specific biomarkers, that while not specifically listed in the Indications and Usage section of the FDA drug label, are targeted by the precision oncology drug (ex KIT D816 in systemic mastocytosis [avapritinib] and SMARCB1 deletion in epithelioid sarcoma [tazemetostat])',
   c:
-    'If there is a corresponding FDA-approved companion diagnostic test for biomarker identification, this detection method is listed; if a DNA NGS-based detection method can be used to identify the biomarker, this is noted',
+    'If there is a corresponding FDA-cleared or -approved companion diagnostic device for biomarker identification, the detection method associated with this device is listed; if the biomarker can be detected by a DNA/NGS-based detection method this is listed first',
   d:
-    'Only drugs with an FDA-specified biomarker that can be detected by an NGS-based (DNA) assay are classified',
+    'Only drugs with an FDA-specified biomarker that can be detected by a DNA/NGS-based detection method are classified',
   e:
     'Pembrolizumab in combination with lenvatinib is FDA-approved approved for endometrial cancer that is pMMR',
   '*':
@@ -242,7 +242,7 @@ const PrecisionOncologyTherapiesPage: React.FunctionComponent<{}> = props => {
     <>
       <Row>
         <Col>
-          <h2 className={'mb-3'}>FDA-approved Precision Oncology Therapies</h2>
+          <h2 className={'mb-3'}>FDA-Approved Precision Oncology Therapies</h2>
           <div>
             The following US Food and Drug Administration (FDA)-approved
             therapies are considered precision oncology therapies by {ONCOKB_TM}{' '}
@@ -277,7 +277,8 @@ const PrecisionOncologyTherapiesPage: React.FunctionComponent<{}> = props => {
                   <li>
                     <b>Follow-on precision oncology therapy</b>: A precision
                     oncology therapy with a mechanism of action largely similar
-                    to a previously FDA-approved first-in-class drug
+                    to a previously FDA-approved first-in-class precision
+                    oncology drug
                   </li>
                   <li>
                     <b>Resistance precision oncology therapy</b>: A precision
@@ -328,20 +329,16 @@ const PrecisionOncologyTherapiesPage: React.FunctionComponent<{}> = props => {
         <Col className={classnames(...COMPONENT_PADDING)} lg={4} md={6} xs={12}>
           <Select
             placeholder={'Select Drug Classification'}
-            options={sortAndUniqByValue(filteredPoTxs, 'drugClassification')}
+            options={sortAndUniqByValue(poTxs, 'drugClassification')}
             isClearable={true}
             isMulti
             closeMenuOnSelect={false}
-            value={sortAndUniqByValue(
-              poTxs,
-              'drugClassification'
-            ).filter(option =>
-              selectedDrugClassifications.includes(option.value as string)
-            )}
             onChange={(selectedOptions: any[]) => {
-              setSelectedDrugClassifications([
-                ...selectedOptions.map(option => option.value),
-              ]);
+              setSelectedDrugClassifications(
+                (selectedOptions || []).length === 0
+                  ? []
+                  : [...selectedOptions.map(option => option.value)]
+              );
             }}
           />
         </Col>
@@ -361,7 +358,7 @@ const PrecisionOncologyTherapiesPage: React.FunctionComponent<{}> = props => {
                 DRUG_CLASSIFICATION.RESISTANCE,
                 DRUG_CLASSIFICATION.NA,
               ].map(classification => (
-                <span>
+                <span key={classification}>
                   {drugClassificationStats[classification]
                     ? _.uniq(
                         drugClassificationStats[classification].map(
