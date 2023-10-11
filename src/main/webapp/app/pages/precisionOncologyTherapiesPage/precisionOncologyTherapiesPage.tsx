@@ -43,16 +43,26 @@ enum DRUG_CLASSIFICATION {
 
 const sortAndUniqByValue = (
   txs: PrecisionOncologyTherapy[],
-  key: keyof PrecisionOncologyTherapy
+  key: keyof PrecisionOncologyTherapy,
+  separators?: string[]
 ) => {
-  return _.chain(
-    txs.map((tx: PrecisionOncologyTherapy) => {
-      return {
-        value: tx[key],
-        label: tx[key],
-      };
-    })
-  )
+  return _.chain(txs)
+    .reduce((acc, tx: PrecisionOncologyTherapy) => {
+      const methods =
+        (separators || []).length > 0
+          ? (tx[key] as string)
+              .split(new RegExp(`${separators?.join('|')}`))
+              .map(method => method.trim())
+          : [tx[key]];
+      const options = methods.map((method: string) => {
+        return {
+          value: method,
+          label: method,
+        };
+      });
+      acc.push(...options);
+      return acc;
+    }, [] as SelectOption[])
     .uniqBy('value')
     .sortBy('value')
     .value();
@@ -87,14 +97,13 @@ const PrecisionOncologyTherapiesPage: React.FunctionComponent<{}> = props => {
   const [hasFilter, setHasFilter] = useState(false);
   const [biomarkerSearch, setBiomarkerSearch] = useState('');
   const [therapySearch, setTherapySearch] = useState('');
-  const [
-    selectedDetectionMethod,
-    setSelectedDetectionMethod,
-  ] = useState<SelectOption | null>(null);
+  const [selectedDetectionMethods, setSelectedDetectionMethods] = useState<
+    SelectOption[]
+  >([]);
   const [
     selectedDrugClassifications,
     setSelectedDrugClassifications,
-  ] = useState<string[]>([]);
+  ] = useState<SelectOption[]>([]);
   const [filteredPoTxs, setFilteredPoTxs] = useState<
     PrecisionOncologyTherapy[]
   >(poTxs);
@@ -106,7 +115,7 @@ const PrecisionOncologyTherapiesPage: React.FunctionComponent<{}> = props => {
     if (
       biomarkerSearch ||
       therapySearch ||
-      selectedDetectionMethod ||
+      selectedDetectionMethods.length > 0 ||
       selectedDrugClassifications.length > 0
     ) {
       setHasFilter(true);
@@ -116,14 +125,18 @@ const PrecisionOncologyTherapiesPage: React.FunctionComponent<{}> = props => {
     setFilteredPoTxs([
       ...poTxs.filter((tx: PrecisionOncologyTherapy) => {
         if (
-          selectedDetectionMethod &&
-          selectedDetectionMethod.value !== tx.biomarkerDetection
+          selectedDetectionMethods.length > 0 &&
+          selectedDetectionMethods.filter(selectedDetectionMethod =>
+            tx.biomarkerDetection.includes(selectedDetectionMethod.value)
+          ).length === 0
         ) {
           return false;
         }
         if (
           selectedDrugClassifications.length > 0 &&
-          !selectedDrugClassifications.includes(tx.drugClassification)
+          !selectedDrugClassifications
+            .map(dc => dc.value)
+            .includes(tx.drugClassification)
         ) {
           return false;
         }
@@ -147,7 +160,7 @@ const PrecisionOncologyTherapiesPage: React.FunctionComponent<{}> = props => {
   }, [
     biomarkerSearch,
     therapySearch,
-    selectedDetectionMethod,
+    selectedDetectionMethods.length,
     selectedDrugClassifications.length,
   ]);
 
@@ -160,22 +173,11 @@ const PrecisionOncologyTherapiesPage: React.FunctionComponent<{}> = props => {
   const clearFilters = () => {
     setBiomarkerSearch('');
     setTherapySearch('');
-    setSelectedDetectionMethod(null);
+    setSelectedDetectionMethods([]);
     setSelectedDrugClassifications([]);
   };
 
   const columns: SearchColumn<PrecisionOncologyTherapy>[] = [
-    {
-      accessor: 'drugClassification',
-      Header: (
-        <span>
-          Drug classification
-          <DefinitionTooltip footnoteKey={'d'} />
-        </span>
-      ),
-      onFilter: (data: PrecisionOncologyTherapy, keyword) =>
-        filterByKeyword(data.drugClassification, keyword),
-    },
     {
       accessor: 'tx',
       Header: <span>Precision oncology therapy</span>,
@@ -203,6 +205,17 @@ const PrecisionOncologyTherapiesPage: React.FunctionComponent<{}> = props => {
       ),
       onFilter: (data: PrecisionOncologyTherapy, keyword) =>
         filterByKeyword(data.biomarkerDetection, keyword),
+    },
+    {
+      accessor: 'drugClassification',
+      Header: (
+        <span>
+          Drug classification
+          <DefinitionTooltip footnoteKey={'d'} />
+        </span>
+      ),
+      onFilter: (data: PrecisionOncologyTherapy, keyword) =>
+        filterByKeyword(data.drugClassification, keyword),
     },
     {
       accessor: 'year',
@@ -318,12 +331,17 @@ const PrecisionOncologyTherapiesPage: React.FunctionComponent<{}> = props => {
         <Col className={classnames(...COMPONENT_PADDING)} lg={4} md={6} xs={12}>
           <Select
             placeholder={'Select Detection Method'}
-            options={sortAndUniqByValue(filteredPoTxs, 'biomarkerDetection')}
+            options={sortAndUniqByValue(poTxs, 'biomarkerDetection', [
+              'or',
+              ',',
+            ])}
             isClearable={true}
-            value={selectedDetectionMethod}
-            onChange={(selectedOption: any) =>
-              setSelectedDetectionMethod(selectedOption)
-            }
+            value={selectedDetectionMethods}
+            isMulti
+            closeMenuOnSelect={false}
+            onChange={(selectedOptions: any[]) => {
+              setSelectedDetectionMethods(selectedOptions || []);
+            }}
           />
         </Col>
         <Col className={classnames(...COMPONENT_PADDING)} lg={4} md={6} xs={12}>
@@ -331,14 +349,11 @@ const PrecisionOncologyTherapiesPage: React.FunctionComponent<{}> = props => {
             placeholder={'Select Drug Classification'}
             options={sortAndUniqByValue(poTxs, 'drugClassification')}
             isClearable={true}
+            value={selectedDrugClassifications}
             isMulti
             closeMenuOnSelect={false}
             onChange={(selectedOptions: any[]) => {
-              setSelectedDrugClassifications(
-                (selectedOptions || []).length === 0
-                  ? []
-                  : [...selectedOptions.map(option => option.value)]
-              );
+              setSelectedDrugClassifications(selectedOptions || []);
             }}
           />
         </Col>
@@ -400,7 +415,7 @@ const PrecisionOncologyTherapiesPage: React.FunctionComponent<{}> = props => {
             defaultSorted={[
               {
                 id: 'year',
-                desc: false,
+                desc: true,
               },
             ]}
             style={{
