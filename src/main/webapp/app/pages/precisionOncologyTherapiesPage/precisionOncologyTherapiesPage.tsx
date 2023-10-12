@@ -21,7 +21,6 @@ import InfoIcon from 'app/shared/icons/InfoIcon';
 import ShowHideText from 'app/shared/texts/ShowHideText';
 
 type PrecisionOncologyTherapy = {
-  id: number;
   year: string;
   tx: string;
   biomarker: string;
@@ -50,7 +49,7 @@ const sortAndUniqByValue = (
     .reduce((acc, tx: PrecisionOncologyTherapy) => {
       const methods =
         (separators || []).length > 0
-          ? (tx[key] as string)
+          ? tx[key]
               .split(new RegExp(`${separators?.join('|')}`))
               .map(method => method.trim())
           : [tx[key]];
@@ -80,6 +79,8 @@ const footnotes = {
     'Pembrolizumab in combination with lenvatinib is FDA-approved approved for endometrial cancer that is pMMR',
   '*':
     'The exact year of the drug’s first FDA-approval could not be determined due to absent or ambiguous data on FDA.gov website',
+  naDetectionMethod:
+    'Only precision oncology drugs in which the biomarker can be identified by a DNA/NGS detection method are further classified as first-in-class, mechanically distinct, follow-on, or resistance drugs.',
 };
 
 const DefinitionTooltip: React.FunctionComponent<{
@@ -214,6 +215,16 @@ const PrecisionOncologyTherapiesPage: React.FunctionComponent<{}> = props => {
           <DefinitionTooltip footnoteKey={'d'} />
         </span>
       ),
+      Cell(tableProps: { original: PrecisionOncologyTherapy }): JSX.Element {
+        return (
+          <span>
+            {tableProps.original.drugClassification}
+            {'NA' === tableProps.original.drugClassification && (
+              <DefinitionTooltip footnoteKey={'naDetectionMethod'} />
+            )}
+          </span>
+        );
+      },
       onFilter: (data: PrecisionOncologyTherapy, keyword) =>
         filterByKeyword(data.drugClassification, keyword),
     },
@@ -239,12 +250,6 @@ const PrecisionOncologyTherapiesPage: React.FunctionComponent<{}> = props => {
         } else {
           return tableProps.original.year;
         }
-      },
-      sortMethod(
-        a: PrecisionOncologyTherapy,
-        b: PrecisionOncologyTherapy
-      ): number {
-        return a.id - b.id;
       },
       onFilter: (data: PrecisionOncologyTherapy, keyword) =>
         filterByKeyword(data.year, keyword),
