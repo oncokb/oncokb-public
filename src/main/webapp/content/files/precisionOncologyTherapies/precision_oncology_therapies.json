@@ -282,7 +282,7 @@
   {
     "year": "2014",
     "tx": "Olaparib",
-    "biomarker": "HRR Gene Oncogenic Mutations",
+    "biomarker": "ATM, BARD1, BRCA1/2, BRIP1, CDK12, CHEK1/2, FANCL, PALB2, RAD51B, RAD51C, RAD51D, and RAD54 Oncogenic Mutations",
     "biomarkerDetection": "DNA/NGS-based detection",
     "drugClassification": "First-in-class"
   },
@@ -499,7 +499,7 @@
   {
     "year": "2018",
     "tx": "Talazoparib",
-    "biomarker": "ATM, ATR, BRCA1/2, CDK12, CHEK2, FANCA, MLH1, MRE11, NBN, PALB2, RAD51C Oncogenic Mutations",
+    "biomarker": "ATM, ATR, BRCA1/2, CDK12, CHEK2, FANCA, MLH1, MRE11, NBN, PALB2, and RAD51C Oncogenic Mutations",
     "biomarkerDetection": "DNA/NGS-based detection",
     "drugClassification": "Follow-on"
   },
@@ -611,7 +611,7 @@
   {
     "year": "2020",
     "tx": "Pemigatinib",
-    "biomarker": "FGFR1Fusions",
+    "biomarker": "FGFR1 Fusions",
     "biomarkerDetection": "DNA/NGS-based detection",
     "drugClassification": "Follow-on"
   },
