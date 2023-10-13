@@ -27,6 +27,8 @@ public enum ActionId {
     , CONFIRM_SEND_LICENSE_OPTIONS_EMAIL("confirm-send-license-options-email")
     , SEND_REJECTION_EMAIL("send-rejection-email")
     , CONFIRM_SEND_REJECTION_EMAIL("confirm-send-rejection-email")
+    , SEND_REJECTION_US_SANCTION_EMAIL("send-rejection-us-sanction-email")
+    , CONFIRM_SEND_REJECTION_US_SANCTION_EMAIL("confirm-send-rejection-us-sanction-email")
     , SEND_REJECT_ALUMNI_ADDRESS_EMAIL("send-reject-alumni-address-email")
     , CONFIRM_SEND_REJECT_ALUMNI_ADDRESS_EMAIL("confirm-send-reject-alumni-address-email")
     , COLLAPSE("collapse")

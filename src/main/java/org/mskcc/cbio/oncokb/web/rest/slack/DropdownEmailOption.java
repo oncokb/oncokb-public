@@ -161,6 +161,17 @@ public enum DropdownEmailOption {
         .modalSubject(ModalEmailSubject.DEFAULT)
         .collapsedNote("Sent rejection email")
         .expandedNote("The user has been rejected and notified."))
+    , REJECT_US_SANCTION(new DropdownEmailOptionBuilder()
+        .blockId(BlockId.REJECTION_US_SANCTION_NOTE)
+        .actionId(ActionId.SEND_REJECTION_US_SANCTION_EMAIL)
+        .confirmActionId(ActionId.CONFIRM_SEND_REJECTION_US_SANCTION_EMAIL)
+        .mailType(MailType.REJECTION_US_SANCTION)
+        .category(DropdownEmailCategory.DENY)
+        .dropdownKey("Send US Sanction Rejection Email")
+        .modalTitle("US Sanction Rejection")
+        .modalSubject(ModalEmailSubject.DEFAULT)
+        .collapsedNote("Sent rejection email")
+        .expandedNote("The user has been rejected and notified."))
     , REJECT_ALUMNI_ADDRESS(new DropdownEmailOptionBuilder()
         .blockId(BlockId.REJECT_ALUMNI_ADDRESS_NOTE)
         .actionId(ActionId.SEND_REJECT_ALUMNI_ADDRESS_EMAIL)
@@ -292,6 +303,11 @@ public enum DropdownEmailOption {
             return this;
         }
 
+        /**
+         *
+         * @param modalTitle Title showing in the slack modal. It cannot be longer than 15 characters.
+         * @return
+         */
         public DropdownEmailOptionBuilder modalTitle(String modalTitle) {
             this.modalTitle = Optional.ofNullable(modalTitle);
             return this;
