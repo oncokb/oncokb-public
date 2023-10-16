@@ -79,7 +79,7 @@
   {
     "year": "2003",
     "tx": "Gefitinib",
-    "biomarker": "EGFR L858R and Exon 19 Deletions",
+    "biomarker": "EGFR L858R, Exon 19 Deletions",
     "biomarkerDetection": "DNA/NGS-based detection",
     "drugClassification": "Follow-on"
   },
@@ -93,14 +93,14 @@
   {
     "year": "2004",
     "tx": "Cetuximab",
-    "biomarker": "KRAS wildtype, EGFR-expressing",
+    "biomarker": "KRAS Wildtype and EGFR-expressing",
     "biomarkerDetection": "DNA/NGS-based detection, IHC",
     "drugClassification": "First-in-class"
   },
   {
     "year": "2004",
     "tx": "Erlotinib",
-    "biomarker": "EGFR L858R and Exon 19 Deletions",
+    "biomarker": "EGFR L858R, Exon 19 Deletions",
     "biomarkerDetection": "DNA/NGS-based detection",
     "drugClassification": "First-in-class"
   },
@@ -282,7 +282,7 @@
   {
     "year": "2014",
     "tx": "Olaparib",
-    "biomarker": "ATM, BARD1, BRCA1/2, BRIP1, CDK12, CHEK1/2, FANCL, PALB2, RAD51B, RAD51C, RAD51D, and RAD54 Oncogenic Mutations",
+    "biomarker": "ATM, BARD1, BRCA1/2, BRIP1, CDK12, CHEK1/2, FANCL, PALB2, RAD51B, RAD51C, RAD51D, RAD54 Oncogenic Mutations",
     "biomarkerDetection": "DNA/NGS-based detection",
     "drugClassification": "First-in-class"
   },
@@ -499,7 +499,7 @@
   {
     "year": "2018",
     "tx": "Talazoparib",
-    "biomarker": "ATM, ATR, BRCA1/2, CDK12, CHEK2, FANCA, MLH1, MRE11, NBN, PALB2, and RAD51C Oncogenic Mutations",
+    "biomarker": "ATM, ATR, BRCA1/2, CDK12, CHEK2, FANCA, MLH1, MRE11, NBN, PALB2, RAD51C Oncogenic Mutations",
     "biomarkerDetection": "DNA/NGS-based detection",
     "drugClassification": "Follow-on"
   },
@@ -667,7 +667,7 @@
   {
     "year": "2020",
     "tx": "Tucatinib + Trastuzumab",
-    "biomarker": "KRAS and NRAS WT, HER2+",
+    "biomarker": "KRAS and NRAS Wildtype and HER2+",
     "biomarkerDetection": "DNA/NGS-based detection, DNA/NGS-based detection or IHC or ISH",
     "drugClassification": "Follow-on"
   },
@@ -688,14 +688,7 @@
   {
     "year": "2021",
     "tx": "Asciminib",
-    "biomarker": "BCR-ABL1 Fusion",
-    "biomarkerDetection": "DNA/NGS-based detection",
-    "drugClassification": "Resistance"
-  },
-  {
-    "year": "2021",
-    "tx": "Asciminib",
-    "biomarker": "ABL1 T315I",
+    "biomarker": "BCR-ABL1 Fusion and ABL1 T315I",
     "biomarkerDetection": "DNA/NGS-based detection",
     "drugClassification": "Resistance"
   },
@@ -800,7 +793,7 @@
   {
     "year": "2023",
     "tx": "Elacestrant",
-    "biomarker": "ESR1 Ligand-binding domain missense mutations, ER+/HER2-",
+    "biomarker": "ESR1 Ligand-binding domain missense mutations and ER+/HER2-",
     "biomarkerDetection": "DNA/NGS-based detection, IHC",
     "drugClassification": "First-in-class"
   }
