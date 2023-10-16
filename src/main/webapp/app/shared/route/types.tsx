@@ -23,6 +23,7 @@ export type ActionableGenesPageHashQueries = {
   levels?: string[];
   hugoSymbol?: string;
   tumorType?: string;
+  cancerType?: string;
   drug?: string;
   refGenome?: REFERENCE_GENOME;
 };

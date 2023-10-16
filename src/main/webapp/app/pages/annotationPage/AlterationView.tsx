@@ -140,7 +140,7 @@ export default class AlterationView extends React.Component<
                     }),
                     menu: base => ({ ...base, zIndex: 10 }),
                   }}
-                  tumorType={this.props.tumorType}
+                  cancerType={this.props.tumorType}
                   onChange={(selectedOption: any) =>
                     this.updateTumorTypeQuery(selectedOption)
                   }
