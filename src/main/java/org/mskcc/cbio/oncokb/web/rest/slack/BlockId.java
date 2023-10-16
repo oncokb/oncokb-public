@@ -16,6 +16,7 @@ public enum BlockId {
     , REGISTRATION_INFO_CLARIFICATION_NOTE("registration-info-clarification-note")
     , LICENSE_OPTIONS_NOTE("license-options-clarification-note")
     , REJECTION_NOTE("rejection-note")
+    , REJECTION_US_SANCTION_NOTE("rejection-us-sanction-note")
     , REJECT_ALUMNI_ADDRESS_NOTE("reject-alumni-address-note")
     , APPROVED_NOTE("approved-note")
     , TRIAL_ACCOUNT_NOTE("trial-account-note")
