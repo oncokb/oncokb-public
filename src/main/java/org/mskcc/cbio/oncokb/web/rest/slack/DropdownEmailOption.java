@@ -305,7 +305,7 @@ public enum DropdownEmailOption {
 
         /**
          *
-         * @param modalTitle Title showing in the slack modal. It cannot be longer than 15 characters.
+         * @param modalTitle Title showing in the slack modal. It cannot be longer than 25 characters.
          * @return
          */
         public DropdownEmailOptionBuilder modalTitle(String modalTitle) {
