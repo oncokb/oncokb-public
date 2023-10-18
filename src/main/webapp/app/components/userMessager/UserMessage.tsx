@@ -69,7 +69,7 @@ if (
             to={PAGE_ROUTE.PO_TX}
             style={{ color: 'white', textDecoration: 'underline' }}
           >
-            precision oncology therapies drug page!
+            precision oncology therapies page!
           </Link>
         </div>
       ),
