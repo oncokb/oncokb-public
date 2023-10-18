@@ -19,6 +19,7 @@ import { DownloadButton } from 'app/components/downloadButton/DownloadButton';
 import WithSeparator from 'react-with-separator';
 import InfoIcon from 'app/shared/icons/InfoIcon';
 import ShowHideText from 'app/shared/texts/ShowHideText';
+import {Linkout} from "app/shared/links/Linkout";
 
 type PrecisionOncologyTherapy = {
   year: string;
@@ -265,8 +266,7 @@ const PrecisionOncologyTherapiesPage: React.FunctionComponent<{}> = props => {
             The following US Food and Drug Administration (FDA)-approved
             therapies are considered precision oncology therapies by {ONCOKB_TM}{' '}
             and are further classified as either first-in-class,
-            mechanistically-distinct, follow-on, or resistance based on
-            Suehnholz et al., Cancer Discovery 2023 (also refer to definitions
+            mechanistically-distinct, follow-on, or resistance based on <Linkout link='https://aacrjournals.org/cancerdiscovery/article/doi/10.1158/2159-8290.CD-23-0467/729589/Quantifying-the-Expanding-Landscape-of-Clinical'>Suehnholz et al., Cancer Discovery 2023</Linkout> (also refer to definitions (also refer to definitions
             below).
             <ShowHideText
               className={'my-2'}
