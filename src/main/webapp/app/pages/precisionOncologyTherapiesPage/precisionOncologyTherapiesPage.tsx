@@ -21,7 +21,6 @@ import InfoIcon from 'app/shared/icons/InfoIcon';
 import ShowHideText from 'app/shared/texts/ShowHideText';
 
 type PrecisionOncologyTherapy = {
-  id: number;
   year: string;
   tx: string;
   biomarker: string;
@@ -43,33 +42,45 @@ enum DRUG_CLASSIFICATION {
 
 const sortAndUniqByValue = (
   txs: PrecisionOncologyTherapy[],
-  key: keyof PrecisionOncologyTherapy
+  key: keyof PrecisionOncologyTherapy,
+  separators?: string[]
 ) => {
-  return _.chain(
-    txs.map((tx: PrecisionOncologyTherapy) => {
-      return {
-        value: tx[key],
-        label: tx[key],
-      };
-    })
-  )
+  return _.chain(txs)
+    .reduce((acc, tx: PrecisionOncologyTherapy) => {
+      const methods =
+        (separators || []).length > 0
+          ? tx[key]
+              .split(new RegExp(`${separators?.join('|')}`))
+              .map(method => method.trim())
+          : [tx[key]];
+      const options = methods.map((method: string) => {
+        return {
+          value: method,
+          label: method,
+        };
+      });
+      acc.push(...options);
+      return acc;
+    }, [] as SelectOption[])
     .uniqBy('value')
     .sortBy('value')
     .value();
 };
 const footnotes = {
   a:
-    'The first year the drug received FDA-approval in any indication, irrespective of biomarker',
+    'The first year the drug received FDA-approval in any indication, irrespective of whether the biomarker was included in the FDA-drug at that time',
   b:
     'Includes pathognomonic and indication-specific biomarkers, that while not specifically listed in the Indications and Usage section of the FDA drug label, are targeted by the precision oncology drug (ex KIT D816 in systemic mastocytosis [avapritinib] and SMARCB1 deletion in epithelioid sarcoma [tazemetostat])',
   c:
-    'If there is a corresponding FDA-approved companion diagnostic test for biomarker identification, this detection method is listed; if a DNA NGS-based detection method can be used to identify the biomarker, this is noted',
+    'If there is a corresponding FDA-cleared or -approved companion diagnostic device for biomarker identification, the detection method associated with this device is listed; if the biomarker can be detected by a DNA/NGS-based detection method this is listed first',
   d:
-    'Only drugs with an FDA-specified biomarker that can be detected by an NGS-based (DNA) assay are classified',
+    'Only drugs with an FDA-specified biomarker that can be detected by a DNA/NGS-based detection method are classified',
   e:
     'Pembrolizumab in combination with lenvatinib is FDA-approved approved for endometrial cancer that is pMMR',
   '*':
     'The exact year of the drug’s first FDA-approval could not be determined due to absent or ambiguous data on FDA.gov website',
+  naDetectionMethod:
+    'Only precision oncology drugs in which the biomarker can be identified by a DNA/NGS detection method are further classified as first-in-class, mechanically distinct, follow-on, or resistance drugs.',
 };
 
 const DefinitionTooltip: React.FunctionComponent<{
@@ -87,14 +98,13 @@ const PrecisionOncologyTherapiesPage: React.FunctionComponent<{}> = props => {
   const [hasFilter, setHasFilter] = useState(false);
   const [biomarkerSearch, setBiomarkerSearch] = useState('');
   const [therapySearch, setTherapySearch] = useState('');
-  const [
-    selectedDetectionMethod,
-    setSelectedDetectionMethod,
-  ] = useState<SelectOption | null>(null);
+  const [selectedDetectionMethods, setSelectedDetectionMethods] = useState<
+    SelectOption[]
+  >([]);
   const [
     selectedDrugClassifications,
     setSelectedDrugClassifications,
-  ] = useState<string[]>([]);
+  ] = useState<SelectOption[]>([]);
   const [filteredPoTxs, setFilteredPoTxs] = useState<
     PrecisionOncologyTherapy[]
   >(poTxs);
@@ -106,7 +116,7 @@ const PrecisionOncologyTherapiesPage: React.FunctionComponent<{}> = props => {
     if (
       biomarkerSearch ||
       therapySearch ||
-      selectedDetectionMethod ||
+      selectedDetectionMethods.length > 0 ||
       selectedDrugClassifications.length > 0
     ) {
       setHasFilter(true);
@@ -116,14 +126,18 @@ const PrecisionOncologyTherapiesPage: React.FunctionComponent<{}> = props => {
     setFilteredPoTxs([
       ...poTxs.filter((tx: PrecisionOncologyTherapy) => {
         if (
-          selectedDetectionMethod &&
-          selectedDetectionMethod.value !== tx.biomarkerDetection
+          selectedDetectionMethods.length > 0 &&
+          selectedDetectionMethods.filter(selectedDetectionMethod =>
+            tx.biomarkerDetection.includes(selectedDetectionMethod.value)
+          ).length === 0
         ) {
           return false;
         }
         if (
           selectedDrugClassifications.length > 0 &&
-          !selectedDrugClassifications.includes(tx.drugClassification)
+          !selectedDrugClassifications
+            .map(dc => dc.value)
+            .includes(tx.drugClassification)
         ) {
           return false;
         }
@@ -147,7 +161,7 @@ const PrecisionOncologyTherapiesPage: React.FunctionComponent<{}> = props => {
   }, [
     biomarkerSearch,
     therapySearch,
-    selectedDetectionMethod,
+    selectedDetectionMethods.length,
     selectedDrugClassifications.length,
   ]);
 
@@ -160,22 +174,11 @@ const PrecisionOncologyTherapiesPage: React.FunctionComponent<{}> = props => {
   const clearFilters = () => {
     setBiomarkerSearch('');
     setTherapySearch('');
-    setSelectedDetectionMethod(null);
+    setSelectedDetectionMethods([]);
     setSelectedDrugClassifications([]);
   };
 
   const columns: SearchColumn<PrecisionOncologyTherapy>[] = [
-    {
-      accessor: 'drugClassification',
-      Header: (
-        <span>
-          Drug classification
-          <DefinitionTooltip footnoteKey={'d'} />
-        </span>
-      ),
-      onFilter: (data: PrecisionOncologyTherapy, keyword) =>
-        filterByKeyword(data.drugClassification, keyword),
-    },
     {
       accessor: 'tx',
       Header: <span>Precision oncology therapy</span>,
@@ -205,6 +208,27 @@ const PrecisionOncologyTherapiesPage: React.FunctionComponent<{}> = props => {
         filterByKeyword(data.biomarkerDetection, keyword),
     },
     {
+      accessor: 'drugClassification',
+      Header: (
+        <span>
+          Drug classification
+          <DefinitionTooltip footnoteKey={'d'} />
+        </span>
+      ),
+      Cell(tableProps: { original: PrecisionOncologyTherapy }): JSX.Element {
+        return (
+          <span>
+            {tableProps.original.drugClassification}
+            {'NA' === tableProps.original.drugClassification && (
+              <DefinitionTooltip footnoteKey={'naDetectionMethod'} />
+            )}
+          </span>
+        );
+      },
+      onFilter: (data: PrecisionOncologyTherapy, keyword) =>
+        filterByKeyword(data.drugClassification, keyword),
+    },
+    {
       accessor: 'year',
       Header: (
         <span>
@@ -227,12 +251,6 @@ const PrecisionOncologyTherapiesPage: React.FunctionComponent<{}> = props => {
           return tableProps.original.year;
         }
       },
-      sortMethod(
-        a: PrecisionOncologyTherapy,
-        b: PrecisionOncologyTherapy
-      ): number {
-        return a.id - b.id;
-      },
       onFilter: (data: PrecisionOncologyTherapy, keyword) =>
         filterByKeyword(data.year, keyword),
     },
@@ -242,7 +260,7 @@ const PrecisionOncologyTherapiesPage: React.FunctionComponent<{}> = props => {
     <>
       <Row>
         <Col>
-          <h2 className={'mb-3'}>FDA-approved Precision Oncology Therapies</h2>
+          <h2 className={'mb-3'}>FDA-Approved Precision Oncology Therapies</h2>
           <div>
             The following US Food and Drug Administration (FDA)-approved
             therapies are considered precision oncology therapies by {ONCOKB_TM}{' '}
@@ -277,7 +295,8 @@ const PrecisionOncologyTherapiesPage: React.FunctionComponent<{}> = props => {
                   <li>
                     <b>Follow-on precision oncology therapy</b>: A precision
                     oncology therapy with a mechanism of action largely similar
-                    to a previously FDA-approved first-in-class drug
+                    to a previously FDA-approved first-in-class precision
+                    oncology drug
                   </li>
                   <li>
                     <b>Resistance precision oncology therapy</b>: A precision
@@ -317,31 +336,29 @@ const PrecisionOncologyTherapiesPage: React.FunctionComponent<{}> = props => {
         <Col className={classnames(...COMPONENT_PADDING)} lg={4} md={6} xs={12}>
           <Select
             placeholder={'Select Detection Method'}
-            options={sortAndUniqByValue(filteredPoTxs, 'biomarkerDetection')}
+            options={sortAndUniqByValue(poTxs, 'biomarkerDetection', [
+              'or',
+              ',',
+            ])}
             isClearable={true}
-            value={selectedDetectionMethod}
-            onChange={(selectedOption: any) =>
-              setSelectedDetectionMethod(selectedOption)
-            }
+            value={selectedDetectionMethods}
+            isMulti
+            closeMenuOnSelect={false}
+            onChange={(selectedOptions: any[]) => {
+              setSelectedDetectionMethods(selectedOptions || []);
+            }}
           />
         </Col>
         <Col className={classnames(...COMPONENT_PADDING)} lg={4} md={6} xs={12}>
           <Select
             placeholder={'Select Drug Classification'}
-            options={sortAndUniqByValue(filteredPoTxs, 'drugClassification')}
+            options={sortAndUniqByValue(poTxs, 'drugClassification')}
             isClearable={true}
+            value={selectedDrugClassifications}
             isMulti
             closeMenuOnSelect={false}
-            value={sortAndUniqByValue(
-              poTxs,
-              'drugClassification'
-            ).filter(option =>
-              selectedDrugClassifications.includes(option.value as string)
-            )}
             onChange={(selectedOptions: any[]) => {
-              setSelectedDrugClassifications([
-                ...selectedOptions.map(option => option.value),
-              ]);
+              setSelectedDrugClassifications(selectedOptions || []);
             }}
           />
         </Col>
@@ -361,7 +378,7 @@ const PrecisionOncologyTherapiesPage: React.FunctionComponent<{}> = props => {
                 DRUG_CLASSIFICATION.RESISTANCE,
                 DRUG_CLASSIFICATION.NA,
               ].map(classification => (
-                <span>
+                <span key={classification}>
                   {drugClassificationStats[classification]
                     ? _.uniq(
                         drugClassificationStats[classification].map(
@@ -403,7 +420,7 @@ const PrecisionOncologyTherapiesPage: React.FunctionComponent<{}> = props => {
             defaultSorted={[
               {
                 id: 'year',
-                desc: false,
+                desc: true,
               },
             ]}
             style={{

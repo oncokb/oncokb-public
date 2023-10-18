@@ -1,6 +1,5 @@
 ﻿[
   {
-    "id": 1,
     "year": "1998 – 2001*",
     "tx": "Arsenic trioxide",
     "biomarker": "PML-RARɑ Fusion",
@@ -8,7 +7,6 @@
     "drugClassification": "Follow-on"
   },
   {
-    "id": 2,
     "year": "1998 – 2001*",
     "tx": "Denileukin diftitox",
     "biomarker": "CD25+",
@@ -16,7 +14,6 @@
     "drugClassification": "NA"
   },
   {
-    "id": 3,
     "year": "1998 – 2001*",
     "tx": "Exemestane",
     "biomarker": "ER+",
@@ -24,7 +21,6 @@
     "drugClassification": "NA"
   },
   {
-    "id": 4,
     "year": "1998 – 2001*",
     "tx": "Gemtuzumab ozogamicin",
     "biomarker": "CD33+",
@@ -32,7 +28,6 @@
     "drugClassification": "NA"
   },
   {
-    "id": 5,
     "year": "1998 – 2001*",
     "tx": "Imatinib",
     "biomarker": "BCR-ABL1 Fusion (Ph+)",
@@ -40,7 +35,6 @@
     "drugClassification": "First-in-class"
   },
   {
-    "id": 6,
     "year": "1998 – 2001*",
     "tx": "Imatinib",
     "biomarker": "KIT+",
@@ -48,15 +42,13 @@
     "drugClassification": "First-in-class"
   },
   {
-    "id": 7,
     "year": "1998 – 2001*",
     "tx": "Imatinib",
     "biomarker": "PDGFRA/B Fusions",
-    "biomarkerDetection": "DNA/NGS-based detection or FISH",
+    "biomarkerDetection": "DNA/NGS-based detection or FISH",
     "drugClassification": "First-in-class"
   },
   {
-    "id": 8,
     "year": "1998 – 2001*",
     "tx": "Imatinib",
     "biomarker": "PDGFB Fusions",
@@ -64,7 +56,6 @@
     "drugClassification": "First-in-class"
   },
   {
-    "id": 9,
     "year": "1998 – 2001*",
     "tx": "Imatinib",
     "biomarker": "FIP1L1-PDGFRA Fusion",
@@ -72,7 +63,6 @@
     "drugClassification": "First-in-class"
   },
   {
-    "id": 10,
     "year": "1998 – 2001*",
     "tx": "Trastuzumab",
     "biomarker": "HER2+",
@@ -80,7 +70,6 @@
     "drugClassification": "First-in-class"
   },
   {
-    "id": 11,
     "year": "2002",
     "tx": "Fulvestrant",
     "biomarker": "HR+/ HER2-",
@@ -88,15 +77,13 @@
     "drugClassification": "NA"
   },
   {
-    "id": 12,
     "year": "2003",
     "tx": "Gefitinib",
-    "biomarker": "EGFR L858R and Exon 19 Deletions",
+    "biomarker": "EGFR L858R, Exon 19 Deletions",
     "biomarkerDetection": "DNA/NGS-based detection",
     "drugClassification": "Follow-on"
   },
   {
-    "id": 13,
     "year": "2003",
     "tx": "Tositumomab and Iodine I 131 Tositumomab",
     "biomarker": "CD20+",
@@ -104,31 +91,27 @@
     "drugClassification": "NA"
   },
   {
-    "id": 14,
     "year": "2004",
     "tx": "Cetuximab",
-    "biomarker": "KRAS wildtype, EGFR-expressing",
+    "biomarker": "KRAS Wildtype and EGFR-expressing",
     "biomarkerDetection": "DNA/NGS-based detection, IHC",
     "drugClassification": "First-in-class"
   },
   {
-    "id": 15,
     "year": "2004",
     "tx": "Erlotinib",
-    "biomarker": "EGFR L858R and Exon 19 Deletions",
+    "biomarker": "EGFR L858R, Exon 19 Deletions",
     "biomarkerDetection": "DNA/NGS-based detection",
     "drugClassification": "First-in-class"
   },
   {
-    "id": 16,
     "year": "2006",
     "tx": "Dasatinib",
     "biomarker": "BCR-ABL1 Fusion",
-    "biomarkerDetection": "DNA/NGS-based detection ",
+    "biomarkerDetection": "DNA/NGS-based detection",
     "drugClassification": "Resistance"
   },
   {
-    "id": 17,
     "year": "2006",
     "tx": "Panitumumab",
     "biomarker": "KRAS and NRAS Wildtype, EGFR-expressing",
@@ -136,7 +119,6 @@
     "drugClassification": "Follow-on"
   },
   {
-    "id": 18,
     "year": "2006",
     "tx": "Sunitinib",
     "biomarker": "KIT+",
@@ -144,7 +126,6 @@
     "drugClassification": "Resistance"
   },
   {
-    "id": 19,
     "year": "2007",
     "tx": "Lapatinib",
     "biomarker": "HER2 Overexpression",
@@ -152,7 +133,6 @@
     "drugClassification": "Mechanistically-distinct"
   },
   {
-    "id": 20,
     "year": "2007",
     "tx": "Nilotinib",
     "biomarker": "BCR-ABL1 Fusion (Ph+)",
@@ -160,15 +140,13 @@
     "drugClassification": "Resistance"
   },
   {
-    "id": 21,
     "year": "2009",
     "tx": "Everolimus",
-    "biomarker": "TSC1/2  Oncogenic Mutations",
+    "biomarker": "TSC1/2 Oncogenic Mutations",
     "biomarkerDetection": "DNA/NGS-based detection",
     "drugClassification": "First-in-class"
   },
   {
-    "id": 22,
     "year": "2011",
     "tx": "Brentuximab",
     "biomarker": "CD30+",
@@ -176,7 +154,6 @@
     "drugClassification": "NA"
   },
   {
-    "id": 23,
     "year": "2011",
     "tx": "Crizotinib",
     "biomarker": "ALK+ (ALK Fusions)",
@@ -184,7 +161,6 @@
     "drugClassification": "First-in-class"
   },
   {
-    "id": 24,
     "year": "2011",
     "tx": "Crizotinib",
     "biomarker": "ROS1+ (ROS1 Fusions)",
@@ -192,7 +168,6 @@
     "drugClassification": "First-in-class"
   },
   {
-    "id": 25,
     "year": "2011",
     "tx": "Vemurafenib",
     "biomarker": "BRAF V600",
@@ -200,7 +175,6 @@
     "drugClassification": "First-in-class"
   },
   {
-    "id": 26,
     "year": "2012",
     "tx": "Bosutinib",
     "biomarker": "BCR-ABL1 Fusion (Ph+)",
@@ -208,7 +182,6 @@
     "drugClassification": "Resistance"
   },
   {
-    "id": 27,
     "year": "2012",
     "tx": "Pertuzumab + Trastuzumab",
     "biomarker": "HER2+",
@@ -216,7 +189,6 @@
     "drugClassification": "Mechanistically-distinct"
   },
   {
-    "id": 28,
     "year": "2012",
     "tx": "Ponatinib",
     "biomarker": "BCR-ABL1 Fusion (Ph+)",
@@ -224,15 +196,13 @@
     "drugClassification": "Mechanistically-distinct"
   },
   {
-    "id": 29,
     "year": "2012",
     "tx": "Ponatinib",
-    "biomarker": "ABL1 T315I",
+    "biomarker": "ABL1 T315I",
     "biomarkerDetection": "DNA/NGS-based detection",
     "drugClassification": "Mechanistically-distinct"
   },
   {
-    "id": 30,
     "year": "2012",
     "tx": "Regorafenib",
     "biomarker": "KIT+",
@@ -240,7 +210,6 @@
     "drugClassification": "Resistance"
   },
   {
-    "id": 31,
     "year": "2013",
     "tx": "Ado-trastuzumab emtansine",
     "biomarker": "HER2+",
@@ -248,7 +217,6 @@
     "drugClassification": "Follow-on"
   },
   {
-    "id": 32,
     "year": "2013",
     "tx": "Afatinib",
     "biomarker": "EGFR L858R, G719X, L861Q, S768I, Exon 19 Deletions",
@@ -256,7 +224,6 @@
     "drugClassification": "Mechanistically-distinct"
   },
   {
-    "id": 33,
     "year": "2013",
     "tx": "Dabrafenib",
     "biomarker": "BRAF V600E/K",
@@ -264,7 +231,6 @@
     "drugClassification": "Follow-on"
   },
   {
-    "id": 34,
     "year": "2013",
     "tx": "Ibrutinib",
     "biomarker": "17p del",
@@ -272,7 +238,6 @@
     "drugClassification": "NA"
   },
   {
-    "id": 35,
     "year": "2013",
     "tx": "Trametinib",
     "biomarker": "BRAF V600E/K",
@@ -280,7 +245,6 @@
     "drugClassification": "First-in-class"
   },
   {
-    "id": 36,
     "year": "2014",
     "tx": "Blinatumomab",
     "biomarker": "CD19+",
@@ -288,7 +252,6 @@
     "drugClassification": "NA"
   },
   {
-    "id": 37,
     "year": "2014",
     "tx": "Ceritinib",
     "biomarker": "ALK+ (ALK Fusions)",
@@ -296,7 +259,6 @@
     "drugClassification": "Resistance"
   },
   {
-    "id": 38,
     "year": "2014",
     "tx": "Dabrafenib + Trametinib",
     "biomarker": "BRAF V600E/K",
@@ -304,7 +266,6 @@
     "drugClassification": "First-in-class"
   },
   {
-    "id": 39,
     "year": "2014",
     "tx": "Nivolumab",
     "biomarker": "MSI-H",
@@ -312,7 +273,6 @@
     "drugClassification": "Follow-on"
   },
   {
-    "id": 40,
     "year": "2014",
     "tx": "Olaparib",
     "biomarker": "BRCA1/2 Oncogenic Mutations",
@@ -320,15 +280,13 @@
     "drugClassification": "First-in-class"
   },
   {
-    "id": 41,
     "year": "2014",
     "tx": "Olaparib",
-    "biomarker": "HRR Gene Oncogenic Mutations",
+    "biomarker": "ATM, BARD1, BRCA1/2, BRIP1, CDK12, CHEK1/2, FANCL, PALB2, RAD51B, RAD51C, RAD51D, RAD54 Oncogenic Mutations",
     "biomarkerDetection": "DNA/NGS-based detection",
     "drugClassification": "First-in-class"
   },
   {
-    "id": 42,
     "year": "2014",
     "tx": "Pembrolizumab",
     "biomarker": "MSI-H",
@@ -336,7 +294,6 @@
     "drugClassification": "First-in-class"
   },
   {
-    "id": 43,
     "year": "2014",
     "tx": "Pembrolizumab",
     "biomarker": "TMB-H",
@@ -344,7 +301,6 @@
     "drugClassification": "First-in-class"
   },
   {
-    "id": 44,
     "year": "2014",
     "tx": "Pembrolizumab",
     "biomarker": "PD-L1 Expression",
@@ -352,7 +308,6 @@
     "drugClassification": "First-in-class"
   },
   {
-    "id": 45,
     "year": "2014",
     "tx": "Pembrolizumab",
     "biomarker": "dMMR",
@@ -360,7 +315,6 @@
     "drugClassification": "First-in-class"
   },
   {
-    "id": 46,
     "year": "2014",
     "tx": "Pembrolizumab",
     "biomarker": "pMMRe",
@@ -368,7 +322,6 @@
     "drugClassification": "First-in-class"
   },
   {
-    "id": 47,
     "year": "2015",
     "tx": "Alectinib",
     "biomarker": "ALK+ (ALK Fusions)",
@@ -376,7 +329,6 @@
     "drugClassification": "Resistance"
   },
   {
-    "id": 48,
     "year": "2015",
     "tx": "Cobimetinib + Vemurafenib",
     "biomarker": "BRAF V600E/K",
@@ -384,15 +336,13 @@
     "drugClassification": "Follow-on"
   },
   {
-    "id": 49,
     "year": "2015",
     "tx": "Ipilimumab + Nivolumab",
-    "biomarker": "MSI-H ",
+    "biomarker": "MSI-H",
     "biomarkerDetection": "DNA/NGS-based detection",
     "drugClassification": "First-in-class"
   },
   {
-    "id": 50,
     "year": "2015",
     "tx": "Ipilimumab + Nivolumab",
     "biomarker": "dMMR",
@@ -400,7 +350,6 @@
     "drugClassification": "First-in-class"
   },
   {
-    "id": 51,
     "year": "2015",
     "tx": "Ipilimumab + Nivolumab",
     "biomarker": "PD-L1 Expressing",
@@ -408,7 +357,6 @@
     "drugClassification": "First-in-class"
   },
   {
-    "id": 52,
     "year": "2015",
     "tx": "Osimertinib",
     "biomarker": "EGFR T790M, L858R and Exon 19 Deletions",
@@ -416,7 +364,6 @@
     "drugClassification": "Mechanistically-distinct"
   },
   {
-    "id": 53,
     "year": "2015",
     "tx": "Palbociclib",
     "biomarker": "HR+/ HER2-",
@@ -424,7 +371,6 @@
     "drugClassification": "NA"
   },
   {
-    "id": 54,
     "year": "2016",
     "tx": "Atezolizumab",
     "biomarker": "PD-L1 Expressing",
@@ -432,7 +378,6 @@
     "drugClassification": "NA"
   },
   {
-    "id": 55,
     "year": "2016",
     "tx": "Rucaparib",
     "biomarker": "BRCA1/2 Oncogenic Mutations",
@@ -440,7 +385,6 @@
     "drugClassification": "Follow-on"
   },
   {
-    "id": 56,
     "year": "2017",
     "tx": "Abemaciclib",
     "biomarker": "HR+/ HER2-",
@@ -448,7 +392,6 @@
     "drugClassification": "NA"
   },
   {
-    "id": 57,
     "year": "2017",
     "tx": "Brigatinib",
     "biomarker": "ALK+ (ALK Fusions)",
@@ -456,7 +399,6 @@
     "drugClassification": "Resistance"
   },
   {
-    "id": 58,
     "year": "2017",
     "tx": "Enasidenib",
     "biomarker": "IDH2 R140, R172",
@@ -464,7 +406,6 @@
     "drugClassification": "First-in-class"
   },
   {
-    "id": 59,
     "year": "2017",
     "tx": "Midostaurin",
     "biomarker": "FLT3 I836, 572_630ins, D835",
@@ -472,7 +413,6 @@
     "drugClassification": "First-in-class"
   },
   {
-    "id": 60,
     "year": "2017",
     "tx": "Neratinib",
     "biomarker": "HER2+",
@@ -480,7 +420,6 @@
     "drugClassification": "Mechanistically-distinct"
   },
   {
-    "id": 61,
     "year": "2017",
     "tx": "Niraparib",
     "biomarker": "BRCA1/2 Oncogenic Mutations",
@@ -488,7 +427,6 @@
     "drugClassification": "Follow-on"
   },
   {
-    "id": 62,
     "year": "2017",
     "tx": "Ribociclib",
     "biomarker": "HR+/ HER2-",
@@ -496,7 +434,6 @@
     "drugClassification": "NA"
   },
   {
-    "id": 63,
     "year": "2018",
     "tx": "Binimetinib + Encorafenib",
     "biomarker": "BRAF V600E/K",
@@ -504,7 +441,6 @@
     "drugClassification": "Follow-on"
   },
   {
-    "id": 64,
     "year": "2018",
     "tx": "Cemiplimab",
     "biomarker": "PD-L1 Expression",
@@ -512,7 +448,6 @@
     "drugClassification": "NA"
   },
   {
-    "id": 65,
     "year": "2018",
     "tx": "Dacomitinib",
     "biomarker": "EGFR L858R and Exon 19 Deletions",
@@ -520,7 +455,6 @@
     "drugClassification": "Follow-on"
   },
   {
-    "id": 66,
     "year": "2018",
     "tx": "Gilteritinib",
     "biomarker": "FLT3 I836, 572_630ins, D835",
@@ -528,7 +462,6 @@
     "drugClassification": "Follow-on"
   },
   {
-    "id": 67,
     "year": "2018",
     "tx": "Ivosidenib",
     "biomarker": "IDH1 R132",
@@ -536,7 +469,6 @@
     "drugClassification": "First-in-class"
   },
   {
-    "id": 68,
     "year": "2018",
     "tx": "Larotrectinib",
     "biomarker": "NTRK1/2/3 Fusions",
@@ -544,7 +476,6 @@
     "drugClassification": "First-in-class"
   },
   {
-    "id": 69,
     "year": "2018",
     "tx": "Lorlatinib",
     "biomarker": "ALK+ (ALK Fusions)",
@@ -552,7 +483,6 @@
     "drugClassification": "Resistance"
   },
   {
-    "id": 70,
     "year": "2018",
     "tx": "Lutetium Lu 177 dotatate",
     "biomarker": "Somatostatin Receptor",
@@ -560,7 +490,6 @@
     "drugClassification": "NA"
   },
   {
-    "id": 71,
     "year": "2018",
     "tx": "Talazoparib",
     "biomarker": "BRCA1/2 Oncogenic Mutations",
@@ -568,7 +497,13 @@
     "drugClassification": "Follow-on"
   },
   {
-    "id": 72,
+    "year": "2018",
+    "tx": "Talazoparib",
+    "biomarker": "ATM, ATR, BRCA1/2, CDK12, CHEK2, FANCA, MLH1, MRE11, NBN, PALB2, RAD51C Oncogenic Mutations",
+    "biomarkerDetection": "DNA/NGS-based detection",
+    "drugClassification": "Follow-on"
+  },
+  {
     "year": "2019",
     "tx": "Alpelisib + Fulvestrant",
     "biomarker": "PIK3CA E545G, Q546E, E545A, H1047R, C420R, H1047Y, Q546R, H1047L, E542K, E545D, E545K",
@@ -576,7 +511,6 @@
     "drugClassification": "First-in-class"
   },
   {
-    "id": 73,
     "year": "2019",
     "tx": "Entrectinib",
     "biomarker": "NTRK1/2/3 Fusions",
@@ -584,7 +518,6 @@
     "drugClassification": "Follow-on"
   },
   {
-    "id": 74,
     "year": "2019",
     "tx": "Entrectinib",
     "biomarker": "ROS1 Fusions",
@@ -592,7 +525,6 @@
     "drugClassification": "Follow-on"
   },
   {
-    "id": 75,
     "year": "2019",
     "tx": "Erdafitinib",
     "biomarker": "FGFR2 Fusions",
@@ -600,7 +532,6 @@
     "drugClassification": "First-in-class"
   },
   {
-    "id": 76,
     "year": "2019",
     "tx": "Erdafitinib",
     "biomarker": "FGFR3 Fusions, S249C, R248C, G370C, Y373C",
@@ -608,7 +539,6 @@
     "drugClassification": "First-in-class"
   },
   {
-    "id": 77,
     "year": "2019",
     "tx": "Trastuzumab Deruxtecan",
     "biomarker": "HER2+",
@@ -616,7 +546,6 @@
     "drugClassification": "First-in-class"
   },
   {
-    "id": 78,
     "year": "2019",
     "tx": "Trastuzumab Deruxtecan",
     "biomarker": "HER2-low",
@@ -624,7 +553,6 @@
     "drugClassification": "First-in-class"
   },
   {
-    "id": 79,
     "year": "2019",
     "tx": "Trastuzumab Deruxtecan",
     "biomarker": "ERBB2 Oncogenic Mutations",
@@ -632,7 +560,6 @@
     "drugClassification": "First-in-class"
   },
   {
-    "id": 80,
     "year": "2020",
     "tx": "Atezolizumab + Vemurafenib + Cobimetinib",
     "biomarker": "BRAF V600",
@@ -640,7 +567,6 @@
     "drugClassification": "First-in-class"
   },
   {
-    "id": 81,
     "year": "2020",
     "tx": "Avapritinib",
     "biomarker": "PDGFRA Exon 18 Mutations",
@@ -648,7 +574,6 @@
     "drugClassification": "First-in-class"
   },
   {
-    "id": 82,
     "year": "2020",
     "tx": "Avapritinib",
     "biomarker": "KIT D816",
@@ -656,7 +581,6 @@
     "drugClassification": "First-in-class"
   },
   {
-    "id": 83,
     "year": "2020",
     "tx": "Capmatinib",
     "biomarker": "MET Exon 14 Skipping Mutations",
@@ -664,7 +588,6 @@
     "drugClassification": "First-in-class"
   },
   {
-    "id": 84,
     "year": "2020",
     "tx": "Encorafenib + Cetuximab",
     "biomarker": "BRAF V600E",
@@ -672,7 +595,6 @@
     "drugClassification": "First-in-class"
   },
   {
-    "id": 85,
     "year": "2020",
     "tx": "Margetuximab",
     "biomarker": "HER2+",
@@ -680,7 +602,6 @@
     "drugClassification": "Follow-on"
   },
   {
-    "id": 86,
     "year": "2020",
     "tx": "Pemigatinib",
     "biomarker": "FGFR2 Fusions",
@@ -688,15 +609,13 @@
     "drugClassification": "Follow-on"
   },
   {
-    "id": 87,
     "year": "2020",
     "tx": "Pemigatinib",
-    "biomarker": "FGFR1Fusions",
+    "biomarker": "FGFR1 Fusions",
     "biomarkerDetection": "DNA/NGS-based detection",
     "drugClassification": "Follow-on"
   },
   {
-    "id": 88,
     "year": "2020",
     "tx": "Pralsetinib",
     "biomarker": "RET Fusions and Oncogenic Mutations",
@@ -704,7 +623,6 @@
     "drugClassification": "First-in-class"
   },
   {
-    "id": 89,
     "year": "2020",
     "tx": "Ripretinib",
     "biomarker": "KIT+",
@@ -712,7 +630,6 @@
     "drugClassification": "Mechanistically-distinct"
   },
   {
-    "id": 90,
     "year": "2020",
     "tx": "Selpercatinib",
     "biomarker": "RET Fusions and Oncogenic Mutations",
@@ -720,7 +637,6 @@
     "drugClassification": "First-in-class"
   },
   {
-    "id": 91,
     "year": "2020",
     "tx": "Selumetinib",
     "biomarker": "NF1 Oncogenic Mutations",
@@ -728,7 +644,6 @@
     "drugClassification": "First-in-class"
   },
   {
-    "id": 92,
     "year": "2020",
     "tx": "Tazemetostat",
     "biomarker": "EZH2 Y646F, A692V, Y646C, Y646S, Y646N, Y646H, A682G",
@@ -736,7 +651,6 @@
     "drugClassification": "First-in-class"
   },
   {
-    "id": 93,
     "year": "2020",
     "tx": "Tazemetostat",
     "biomarker": "SMARCB1 Deletion",
@@ -744,7 +658,6 @@
     "drugClassification": "First-in-class"
   },
   {
-    "id": 94,
     "year": "2020",
     "tx": "Tucatinib + Trastuzumab",
     "biomarker": "HER2+",
@@ -752,7 +665,20 @@
     "drugClassification": "Follow-on"
   },
   {
-    "id": 95,
+    "year": "2020",
+    "tx": "Tucatinib + Trastuzumab",
+    "biomarker": "KRAS and NRAS Wildtype and HER2+",
+    "biomarkerDetection": "DNA/NGS-based detection, DNA/NGS-based detection or IHC or ISH",
+    "drugClassification": "Follow-on"
+  },
+  {
+    "year": "2020",
+    "tx": "Sacituzumab govitecan",
+    "biomarker": "HR+/HER2-",
+    "biomarkerDetection": "IHC or IHC + ISH",
+    "drugClassification": "NA"
+  },
+  {
     "year": "2021",
     "tx": "Amivantamab",
     "biomarker": "EGFR Exon 20 Insertions",
@@ -760,23 +686,13 @@
     "drugClassification": "First-in-class"
   },
   {
-    "id": 96,
     "year": "2021",
     "tx": "Asciminib",
-    "biomarker": "BCR-ABL1 Fusion",
+    "biomarker": "BCR-ABL1 Fusion and ABL1 T315I",
     "biomarkerDetection": "DNA/NGS-based detection",
     "drugClassification": "Resistance"
   },
   {
-    "id": 97,
-    "year": "2021",
-    "tx": "Asciminib",
-    "biomarker": "ABL1 T315I",
-    "biomarkerDetection": "DNA/NGS-based detection",
-    "drugClassification": "Resistance"
-  },
-  {
-    "id": 98,
     "year": "2021",
     "tx": "Belzutifan",
     "biomarker": "VHL Oncogenic Mutations",
@@ -784,15 +700,20 @@
     "drugClassification": "First-in-class"
   },
   {
-    "id": 99,
     "year": "2021",
     "tx": "Dostarlimab",
     "biomarker": "dMMR",
     "biomarkerDetection": "IHC",
-    "drugClassification": "NA"
+    "drugClassification": "Follow-on"
   },
   {
-    "id": 100,
+    "year": "2021",
+    "tx": "Dostarlimab",
+    "biomarker": "MSI-H",
+    "biomarkerDetection": "DNA/NGS-based detection",
+    "drugClassification": "Follow-on"
+  },
+  {
     "year": "2021",
     "tx": "Infigratinib",
     "biomarker": "FGFR2 Fusions",
@@ -800,7 +721,6 @@
     "drugClassification": "Follow-on"
   },
   {
-    "id": 101,
     "year": "2021",
     "tx": "Mobocertinib",
     "biomarker": "EGFR Exon 20 Insertions",
@@ -808,7 +728,6 @@
     "drugClassification": "First-in-class"
   },
   {
-    "id": 102,
     "year": "2021",
     "tx": "Sotorasib",
     "biomarker": "KRAS G12C",
@@ -816,7 +735,6 @@
     "drugClassification": "First-in-class"
   },
   {
-    "id": 103,
     "year": "2021",
     "tx": "Tepotinib",
     "biomarker": "MET Exon 14 Skipping Mutations",
@@ -824,7 +742,6 @@
     "drugClassification": "First-in-class"
   },
   {
-    "id": 104,
     "year": "2021",
     "tx": "Trastuzumab + Pembrolizumab",
     "biomarker": "HER2+",
@@ -832,7 +749,6 @@
     "drugClassification": "First-in-class"
   },
   {
-    "id": 105,
     "year": "2022",
     "tx": "Futibatinib",
     "biomarker": "FGFR2 Fusions",
@@ -840,7 +756,6 @@
     "drugClassification": "Follow-on"
   },
   {
-    "id": 106,
     "year": "2022",
     "tx": "Pluvicto",
     "biomarker": "PSMA+",
@@ -848,11 +763,38 @@
     "drugClassification": "NA"
   },
   {
-    "id": 107,
     "year": "2022",
     "tx": "Tebentafusp",
     "biomarker": "HLA-A*02:01-positivity",
     "biomarkerDetection": "DNA/HLA-typing",
     "drugClassification": "NA"
+  },
+  {
+    "year": "2022",
+    "tx": "Olutasidenib",
+    "biomarker": "IDH1 R132C/G/H/L/S",
+    "biomarkerDetection": "DNA/NGS-based detection",
+    "drugClassification": "Mechanistically-distinct"
+  },
+  {
+    "year": "2022",
+    "tx": "Mirvetuximab soravtansine",
+    "biomarker": "FRɑ",
+    "biomarkerDetection": "IHC",
+    "drugClassification": "NA"
+  },
+  {
+    "year": "2023",
+    "tx": "Quizartinib",
+    "biomarker": "FLT3 ITD",
+    "biomarkerDetection": "DNA/NGS-based detection",
+    "drugClassification": "Mechanistically-distinct"
+  },
+  {
+    "year": "2023",
+    "tx": "Elacestrant",
+    "biomarker": "ESR1 Ligand-binding domain missense mutations and ER+/HER2-",
+    "biomarkerDetection": "DNA/NGS-based detection, IHC",
+    "drugClassification": "First-in-class"
   }
 ]
