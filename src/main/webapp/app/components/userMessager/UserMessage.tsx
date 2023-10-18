@@ -51,6 +51,31 @@ if (
     // UNIQUE ID IS IMPORTANT B/C WE REMEMBER A MESSAGE HAS BEEN SHOWN
     // BASED ON USERS LOCALSTORAGE
     {
+      dateEnd: 100000000000000,
+      content: (
+        <div>
+          <span>Check out our latest publication (</span>
+          <Linkout
+            link={
+              'https://aacrjournals.org/cancerdiscovery/article/doi/10.1158/2159-8290.CD-23-0467/729589/Quantifying-the-Expanding-Landscape-of-Clinical'
+            }
+            style={{ color: 'white', textDecoration: 'underline' }}
+          >
+            Quantifying the Expanding Landscape of Clinical Actionability for
+            Patients with Cancer
+          </Linkout>
+          <span>) in Cancer Discovery, and visit our new </span>
+          <Link
+            to={PAGE_ROUTE.PO_TX}
+            style={{ color: 'white', textDecoration: 'underline' }}
+          >
+            precision oncology drug page.
+          </Link>
+        </div>
+      ),
+      id: '2023-precision-oncology-therapies',
+    },
+    {
       dateEnd: 1,
       content: (
         <div>
