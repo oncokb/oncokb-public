@@ -210,7 +210,20 @@ export const NEWS_BY_DATE: { [date: string]: NewsData } = {
             'KRAS',
             'G12C',
             'Colorectal Cancer',
-            'Adagrasib + Cetuximab (Level 3A); Adagrasib + Panitumumab (No level); Sotorasib + Cetuximab (No level); Sotorasib + Panitumumab (No Level)',
+            <div>
+              <div style={{ fontStyle: 'italic' }}>
+                {DRUGS_CURRENTLY_IN_ONCOKB}:
+              </div>
+              <div>Adagrasib + Cetuximab (Level 3A)</div>
+              <br></br>
+              <div style={{ fontStyle: 'italic' }}>
+                {DRUGS_ADDED_TO_ONCOKB}:
+              </div>
+              <div>
+                Adagrasib + Panitumumab; Sotorasib + Cetuximab; Sotorasib +
+                Panitumumab
+              </div>
+            </div>,
             '3A',
             '2',
             <WithSeparator separator={EVIDENCE_COLUMN_SEPARATOR}>
@@ -247,27 +260,6 @@ export const NEWS_BY_DATE: { [date: string]: NewsData } = {
                 }
               />
               <PMIDLink pmids={'37270692'} />
-            </WithSeparator>,
-          ],
-          [
-            'KRAS',
-            'G12C',
-            'Colorectal Cancer',
-            '3A',
-            'Adagrasib + Cetuximab (Level 3A)',
-            'Adagrasib + Panitumumab, Sotorasib + Cetuximab, Sotorasib + Panitumumab (Level 2)',
-            <WithSeparator separator={EVIDENCE_COLUMN_SEPARATOR}>
-              <span>
-                Inclusion in Colon Cancer NCCN guidelines v3.2023 and in Rectal
-                Cancer NCCN guidelines v5.2023
-              </span>
-              <PMIDLink pmids={'36546659'} />
-              <AbstractLink
-                link={
-                  'https://www.annalsofoncology.org/article/S0923-7534(22)04268-5/fulltext'
-                }
-                abstract="Kuboki et al. Abstract# 45MO, ESMO 2022."
-              />
             </WithSeparator>,
           ],
         ],
