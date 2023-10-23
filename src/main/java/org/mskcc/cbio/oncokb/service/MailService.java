@@ -94,7 +94,7 @@ public class MailService {
         MimeMessage mimeMessage = javaMailSender.createMimeMessage();
         MimeMessageHelper message = new MimeMessageHelper(mimeMessage, isMultipart, StandardCharsets.UTF_8.name());
         message.setTo(to);
-        if (cc != null) {
+        if (StringUtils.isNotEmpty(cc)) {
             message.setCc(cc);
         }
         message.setFrom(from);
