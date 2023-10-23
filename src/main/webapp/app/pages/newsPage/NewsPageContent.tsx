@@ -256,7 +256,7 @@ export const NEWS_BY_DATE: { [date: string]: NewsData } = {
               <FdaApprovalLink
                 approval={'Encorafenib + Binimetinib for BRAF V600E NSCLC'}
                 link={
-                  'https://www.fda.gov/drugs/drug-approvals-and-databases/fda-approves-quizartinib-newly-diagnosed-acute-myeloid-leukemia'
+                  'https://www.fda.gov/drugs/resources-information-approved-drugs/fda-approves-encorafenib-binimetinib-metastatic-non-small-cell-lung-cancer-braf-v600e-mutation'
                 }
               />
               <PMIDLink pmids={'37270692'} />
