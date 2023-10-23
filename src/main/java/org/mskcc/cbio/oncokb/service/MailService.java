@@ -94,7 +94,7 @@ public class MailService {
         MimeMessage mimeMessage = javaMailSender.createMimeMessage();
         MimeMessageHelper message = new MimeMessageHelper(mimeMessage, isMultipart, StandardCharsets.UTF_8.name());
         message.setTo(to);
-        if (cc != null) {
+        if (StringUtils.isNotEmpty(cc)) {
             message.setCc(cc);
         }
         message.setFrom(from);
@@ -190,7 +190,7 @@ public class MailService {
                 ccAddress = defaultEmailSendFrom;
             }
             sendEmail(user.getEmail(), defaultEmailSendFrom, ccAddress, subject, body, null, false, false);
-            addUserMailsRecord(user, mailType, defaultEmailSendFrom, sendBy != null ? sendBy : "Through slack, unknown sender");
+            addUserMailsRecord(user, mailType, defaultEmailSendFrom, StringUtils.isNotEmpty(sendBy) ? sendBy : "Through slack, unknown sender");
             log.info("Sent email to User '{}'", user.getEmail());
         } catch (MailException | MessagingException e) {
             log.warn("Email could not be sent to user '{}'", user.getEmail(), e);

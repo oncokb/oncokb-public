@@ -33,7 +33,7 @@ public enum MailType {
         .templateName("rejectionUsSanctionEmail")
         .description("User Rejection - US Sanction")
         .titleKey("email.reject.title")
-        .stringTemplateName("rejectionUsSanctionEmail.txt"))
+        .stringTemplateName("rejectionUsSanctionEmailString.txt"))
     , REJECT_ALUMNI_ADDRESS(new MailTypeBuilder()
         .templateName("alumniEmailAddress")
         .description("Reject - Registered under alumni email address")
