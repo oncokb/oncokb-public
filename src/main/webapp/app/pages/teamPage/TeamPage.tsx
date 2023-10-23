@@ -78,7 +78,7 @@ export const TeamPage = () => {
       lastName: 'Preiser',
       title: [TITLE.BSC],
       faculty: false,
-      showCOI: true,
+      showCOI: false,
     },
     {
       firstName: 'Benjamin',
