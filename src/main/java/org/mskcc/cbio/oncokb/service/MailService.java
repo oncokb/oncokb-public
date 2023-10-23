@@ -190,7 +190,7 @@ public class MailService {
                 ccAddress = defaultEmailSendFrom;
             }
             sendEmail(user.getEmail(), defaultEmailSendFrom, ccAddress, subject, body, null, false, false);
-            addUserMailsRecord(user, mailType, defaultEmailSendFrom, sendBy != null ? sendBy : "Through slack, unknown sender");
+            addUserMailsRecord(user, mailType, defaultEmailSendFrom, StringUtils.isNotEmpty(sendBy) ? sendBy : "Through slack, unknown sender");
             log.info("Sent email to User '{}'", user.getEmail());
         } catch (MailException | MessagingException e) {
             log.warn("Email could not be sent to user '{}'", user.getEmail(), e);
