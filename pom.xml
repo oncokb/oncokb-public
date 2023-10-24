@@ -117,7 +117,6 @@
     </dependencyManagement>
 
     <dependencies>
-
         <dependency>
             <groupId>com.google.cloud</groupId>
             <artifactId>google-cloud-recaptchaenterprise</artifactId>
@@ -398,7 +397,11 @@
           <artifactId>bucket4j-core</artifactId>
           <version>${bucket4j.version}</version>
         </dependency>
-
+        <dependency>
+            <groupId>org.apache.commons</groupId>
+            <artifactId>commons-text</artifactId>
+            <version>1.10.0</version>
+        </dependency>
     </dependencies>
 
     <build>

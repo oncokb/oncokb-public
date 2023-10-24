@@ -25,9 +25,13 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.transaction.annotation.Transactional;
 
+import com.mysql.cj.conf.ConnectionUrlParser.Pair;
+
 import java.time.Instant;
 import java.time.temporal.ChronoUnit;
 import java.time.LocalDateTime;
+import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 import java.util.Optional;
 import java.util.UUID;
@@ -374,4 +378,57 @@ public class UserServiceIT {
         assertThat(tokenService.findByUser(savedUser).get(0).isRenewable()).isTrue();
     }
 
+    //UNIT TESTS
+    @Test
+    public void assertThatDuplicateUsersAreCaught() {
+        long id = -1;
+
+        UserDTO user = new UserDTO();
+        user.setFirstName("Jon");
+        user.setLastName("Doe");
+        user.setId(id);
+
+        List<Pair<String, String>> similarNames = Arrays.asList(
+            new Pair<>("Jon", "Doh"),
+            new Pair<>("Joon", "Doe"),
+            new Pair<>("Jonny", "Doe"),
+            new Pair<>("Jonathon", "Doe"),
+            new Pair<>("Jon", "Doel"),
+            new Pair<>("Jonny", "Dole")
+        );
+        List<Pair<String, String>> dissimilarNames = Arrays.asList(
+            new Pair<>("Mark", "Thompson"),
+            new Pair<>("Emily", "Davis"),
+            new Pair<>("William", "Brown"),
+            new Pair<>("Jessica", "White"),
+            new Pair<>("Christopher", "Lee")
+        );
+        
+        List<UserDTO> allUsers = new ArrayList<>();
+
+        List<UserDTO> similarUsers = new ArrayList<>();
+        for (Pair<String, String> similarName : similarNames) {
+            UserDTO newUser = new UserDTO();
+            newUser.setFirstName(similarName.left);
+            newUser.setLastName(similarName.right);
+            newUser.setId(++id);
+            similarUsers.add(newUser);
+
+            allUsers.add(newUser);
+        }
+
+        List<UserDTO> dissimilarUsers = new ArrayList<>();
+        for (Pair<String, String> dissimilarName : dissimilarNames) {
+            UserDTO newUser = new UserDTO();
+            newUser.setFirstName(dissimilarName.left);
+            newUser.setLastName(dissimilarName.right);
+            newUser.setId(++id);
+            dissimilarUsers.add(newUser);
+
+            allUsers.add(newUser);
+        }
+        
+        List<UserDTO> duplicateUsers = userService.searchAccountsForPotentialDuplicateUser(user, allUsers);
+        assertThat(duplicateUsers).containsExactlyInAnyOrder(similarUsers.toArray(new UserDTO[similarUsers.size()]));
+    }
 }

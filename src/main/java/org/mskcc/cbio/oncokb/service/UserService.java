@@ -3,6 +3,7 @@ package org.mskcc.cbio.oncokb.service;
 import com.google.gson.Gson;
 import io.github.jhipster.config.JHipsterProperties;
 import org.apache.commons.lang3.StringUtils;
+import org.apache.commons.text.similarity.JaroWinklerSimilarity;
 import org.mskcc.cbio.oncokb.config.Constants;
 import org.mskcc.cbio.oncokb.config.cache.CacheNameResolver;
 import org.mskcc.cbio.oncokb.domain.*;
@@ -665,6 +666,23 @@ public class UserService {
 
     public boolean userHasAuthority(User user, String authority) {
         return user.getAuthorities().stream().filter(userAuth -> userAuth.getName().equalsIgnoreCase(authority)).count() > 0;
+    }
+
+    public List<UserDTO> getPotentialDuplicateAccountsByUser(UserDTO user) {
+        return searchAccountsForPotentialDuplicateUser(user, getAllManagedUsers());
+    }
+
+    public List<UserDTO> searchAccountsForPotentialDuplicateUser(UserDTO user, List<UserDTO> allUsers) {
+        String userFullName = user.getFirstName() + " " + user.getLastName();
+        JaroWinklerSimilarity jw = new JaroWinklerSimilarity();
+        List<UserDTO> potentialDuplicateUsers = new ArrayList<>();
+        for (UserDTO potentialDuplicate : allUsers) {
+            String potentialDuplicateFullName = potentialDuplicate.getFirstName() + " " + potentialDuplicate.getLastName();
+            if (user.getId() != potentialDuplicate.getId() && jw.apply(userFullName, potentialDuplicateFullName) > .7) {
+                potentialDuplicateUsers.add(potentialDuplicate);
+            }
+        }
+        return potentialDuplicateUsers;
     }
 
     /**
