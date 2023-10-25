@@ -200,6 +200,73 @@ const EVIDENCE_COLUMN_SEPARATOR = '; ';
 // https://stackoverflow.com/questions/41947168/is-it-possible-to-use-keyof-operator-on-literals-instead-of-interfaces
 
 export const NEWS_BY_DATE: { [date: string]: NewsData } = {
+  '10242023': {
+    changedAnnotations: [
+      {
+        columnHeaderType: AnnotationColumnHeaderType.LEVEL,
+        title: 'Updated therapeutic implications - Changed level of evidence',
+        content: [
+          [
+            'KRAS',
+            'G12C',
+            'Colorectal Cancer',
+            <div>
+              <div style={{ fontStyle: 'italic' }}>
+                {DRUGS_CURRENTLY_IN_ONCOKB}:
+              </div>
+              <div>Adagrasib + Cetuximab (Level 3A)</div>
+              <br></br>
+              <div style={{ fontStyle: 'italic' }}>
+                {DRUGS_ADDED_TO_ONCOKB}:
+              </div>
+              <div>
+                Adagrasib + Panitumumab; Sotorasib + Cetuximab; Sotorasib +
+                Panitumumab
+              </div>
+            </div>,
+            '3A',
+            '2',
+            <WithSeparator separator={EVIDENCE_COLUMN_SEPARATOR}>
+              <span>
+                Inclusion in Colon Cancer NCCN guidelines v3.2023 and in Rectal
+                Cancer NCCN guidelines v5.2023
+              </span>
+              <PMIDLink pmids={'36546659'} />
+              <AbstractLink
+                link={
+                  'https://www.annalsofoncology.org/article/S0923-7534(22)04268-5/fulltext'
+                }
+                abstract="Kuboki et al. Abstract# 45MO, ESMO 2022."
+              />
+            </WithSeparator>,
+          ],
+        ],
+      },
+      {
+        columnHeaderType: AnnotationColumnHeaderType.ADDITIONAL_SAME_LEVEL_DRUG,
+        content: [
+          [
+            'BRAF',
+            'V600E',
+            'Non-Small Cell Lung Cancer',
+            '1',
+            'Dabrafenib + Trametinib (Level 1)',
+            'Encorafenib + Binimetinib (Level 1)',
+            <WithSeparator separator={EVIDENCE_COLUMN_SEPARATOR}>
+              <FdaApprovalLink
+                approval={'Encorafenib + Binimetinib for BRAF V600E NSCLC'}
+                link={
+                  'https://www.fda.gov/drugs/resources-information-approved-drugs/fda-approves-encorafenib-binimetinib-metastatic-non-small-cell-lung-cancer-braf-v600e-mutation'
+                }
+              />
+              <PMIDLink pmids={'37270692'} />
+            </WithSeparator>,
+          ],
+        ],
+      },
+    ],
+    newlyAddedGenes: ['EPHB4', 'ETS1', 'FANCE', 'FANCF', 'FANCG', 'MYB'],
+  },
   '10022023': {
     changedAnnotations: [
       {

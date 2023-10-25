@@ -75,6 +75,13 @@ export const TeamPage = () => {
     },
     {
       firstName: 'Benjamin',
+      lastName: 'Preiser',
+      title: [TITLE.BSC],
+      faculty: false,
+      showCOI: false,
+    },
+    {
+      firstName: 'Benjamin',
       lastName: 'Xu',
     },
     {
