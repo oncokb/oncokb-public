@@ -23,17 +23,21 @@ import org.apache.commons.lang3.StringUtils;
 import org.mskcc.cbio.oncokb.config.application.ApplicationProperties;
 import org.mskcc.cbio.oncokb.domain.Company;
 import org.mskcc.cbio.oncokb.domain.UserIdMessagePair;
+import org.mskcc.cbio.oncokb.domain.UserMails;
 import org.mskcc.cbio.oncokb.domain.enumeration.*;
 import org.mskcc.cbio.oncokb.domain.enumeration.slack.*;
 import org.mskcc.cbio.oncokb.service.dto.UserDTO;
+import org.mskcc.cbio.oncokb.service.dto.UserMailsDTO;
 import org.mskcc.cbio.oncokb.service.dto.useradditionalinfo.AdditionalInfoDTO;
 import org.mskcc.cbio.oncokb.service.mapper.UserMapper;
 import org.mskcc.cbio.oncokb.util.ObjectUtil;
+import org.mskcc.cbio.oncokb.util.StringUtil;
 import org.mskcc.cbio.oncokb.web.rest.slack.ActionId;
 import org.mskcc.cbio.oncokb.web.rest.slack.BlockId;
 import org.mskcc.cbio.oncokb.web.rest.slack.DropdownEmailOption;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.context.annotation.Lazy;
 import org.springframework.scheduling.annotation.Async;
 import org.springframework.stereotype.Service;
 import org.thymeleaf.context.Context;
@@ -45,7 +49,6 @@ import java.nio.file.Files;
 import java.nio.file.Paths;
 import java.time.Instant;
 import java.util.*;
-import java.util.List;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
@@ -72,14 +75,16 @@ public class SlackService {
     private final ApplicationProperties applicationProperties;
     private final MailService mailService;
     private final EmailService emailService;
+    private final UserService userService;
     private final UserMailsService userMailsService;
     private final UserMapper userMapper;
     private final Slack slack;
 
-    public SlackService(ApplicationProperties applicationProperties, MailService mailService, EmailService emailService, UserMailsService userMailsService, UserMapper userMapper, Slack slack) {
+    public SlackService(ApplicationProperties applicationProperties, MailService mailService, EmailService emailService, @Lazy UserService userService, UserMailsService userMailsService, UserMapper userMapper, Slack slack) {
         this.applicationProperties = applicationProperties;
         this.mailService = mailService;
         this.emailService = emailService;
+        this.userService = userService;
         this.userMailsService = userMailsService;
         this.userMapper = userMapper;
         this.slack = slack;
@@ -537,6 +542,25 @@ public class SlackService {
             }
         }
 
+        List<UserDTO> potentialDuplicateUsers = userService.getPotentialDuplicateAccountsByUser(userDTO);
+        if (!potentialDuplicateUsers.isEmpty()) {
+            StringBuilder sb = new StringBuilder(":warning: *This user may have already registered. A list of previously registered users:*");
+            for (UserDTO user : potentialDuplicateUsers) {
+                List<MailType> rejectionMailTypes = new ArrayList<>(Arrays.asList(MailType.REJECTION_US_SANCTION, MailType.REJECT_ALUMNI_ADDRESS, MailType.REJECTION));
+                List<UserMailsDTO> rejectionUserMails = userMailsService.findUserMailsByUserAndMailTypeIn(userMapper.userDTOToUser(user), rejectionMailTypes);
+                
+                sb.append("\n\u2022 ");
+                sb.append(StringUtil.getFullName(user.getFirstName(), user.getLastName()));
+                sb.append(", <https://www.oncokb.org/users/" + user.getEmail() + "/|" + user.getEmail() + ">");
+                sb.append(", " + user.getCompanyName());
+                sb.append(", " + user.getCity());
+                sb.append(", " + user.getCountry());
+                if (!rejectionUserMails.isEmpty()) {
+                    sb.append(", *REJECTED*");
+                }
+            } 
+            layoutBlocks.add(buildMarkdownBlock(sb.toString(), DUPLICATE_USER_CLARIFICATION_NOTE));
+        }
         return layoutBlocks;
     }
 
@@ -738,6 +762,13 @@ public class SlackService {
     private LayoutBlock buildPlainTextBlock(String text, BlockId blockId) {
         if (text != null && blockId != null) {
             return SectionBlock.builder().text(PlainTextObject.builder().text(text).build()).blockId(blockId.getId()).build();
+        }
+        return null;
+    }
+
+    private LayoutBlock buildMarkdownBlock(String text, BlockId blockId) {
+        if (text != null && blockId != null) {
+            return SectionBlock.builder().text(MarkdownTextObject.builder().text(text).build()).blockId(blockId.getId()).build();
         }
         return null;
     }
