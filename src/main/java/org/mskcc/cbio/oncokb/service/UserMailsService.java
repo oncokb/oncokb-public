@@ -88,6 +88,15 @@ public class UserMailsService {
             .collect(Collectors.toCollection(LinkedList::new));
     }
 
+    @Transactional(readOnly = true)
+    public List<UserMailsDTO> findUserMailsByUserAndMailTypeIn(User user, List<MailType> mailTypes) {
+        log.debug("Request to get all UserMails in a list of mail types for a particular user");
+
+        return userMailsRepository.findUserMailByUserAndMailTypeIn(user, mailTypes).stream()
+            .map(userMailsMapper::toDto)
+            .collect(Collectors.toCollection(LinkedList::new));
+    }
+
     /**
      * Get one userMails by id.
      *

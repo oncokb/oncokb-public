@@ -23,9 +23,11 @@ import org.apache.commons.lang3.StringUtils;
 import org.mskcc.cbio.oncokb.config.application.ApplicationProperties;
 import org.mskcc.cbio.oncokb.domain.Company;
 import org.mskcc.cbio.oncokb.domain.UserIdMessagePair;
+import org.mskcc.cbio.oncokb.domain.UserMails;
 import org.mskcc.cbio.oncokb.domain.enumeration.*;
 import org.mskcc.cbio.oncokb.domain.enumeration.slack.*;
 import org.mskcc.cbio.oncokb.service.dto.UserDTO;
+import org.mskcc.cbio.oncokb.service.dto.UserMailsDTO;
 import org.mskcc.cbio.oncokb.service.dto.useradditionalinfo.AdditionalInfoDTO;
 import org.mskcc.cbio.oncokb.service.mapper.UserMapper;
 import org.mskcc.cbio.oncokb.util.ObjectUtil;
@@ -543,12 +545,18 @@ public class SlackService {
         if (!potentialDuplicateUsers.isEmpty()) {
             StringBuilder sb = new StringBuilder(":warning: *This user may have already registered. A list of previously registered users:*");
             for (UserDTO user : potentialDuplicateUsers) {
+                List<MailType> rejectionMailTypes = new ArrayList<>(Arrays.asList(MailType.REJECTION_US_SANCTION, MailType.REJECT_ALUMNI_ADDRESS, MailType.REJECTION));
+                List<UserMailsDTO> rejectionUserMails = userMailsService.findUserMailsByUserAndMailTypeIn(userMapper.userDTOToUser(user), rejectionMailTypes);
+                
                 sb.append("\n\u2022 ");
                 sb.append(user.getFirstName() + " " + user.getLastName());
                 sb.append(", <https://www.oncokb.org/users/" + user.getEmail() + "/|" + user.getEmail() + ">");
                 sb.append(", " + user.getCompanyName());
                 sb.append(", " + user.getCity());
                 sb.append(", " + user.getCountry());
+                if (!rejectionUserMails.isEmpty()) {
+                    sb.append(", *REJECTED*");
+                }
             } 
             layoutBlocks.add(buildMarkdownBlock(sb.toString(), DUPLICATE_USER_CLARIFICATION_NOTE));
         }
