@@ -31,6 +31,7 @@ import org.mskcc.cbio.oncokb.service.dto.UserMailsDTO;
 import org.mskcc.cbio.oncokb.service.dto.useradditionalinfo.AdditionalInfoDTO;
 import org.mskcc.cbio.oncokb.service.mapper.UserMapper;
 import org.mskcc.cbio.oncokb.util.ObjectUtil;
+import org.mskcc.cbio.oncokb.util.StringUtil;
 import org.mskcc.cbio.oncokb.web.rest.slack.ActionId;
 import org.mskcc.cbio.oncokb.web.rest.slack.BlockId;
 import org.mskcc.cbio.oncokb.web.rest.slack.DropdownEmailOption;
@@ -549,7 +550,7 @@ public class SlackService {
                 List<UserMailsDTO> rejectionUserMails = userMailsService.findUserMailsByUserAndMailTypeIn(userMapper.userDTOToUser(user), rejectionMailTypes);
                 
                 sb.append("\n\u2022 ");
-                sb.append(user.getFirstName() + " " + user.getLastName());
+                sb.append(StringUtil.getFullName(user.getFirstName(), user.getLastName()));
                 sb.append(", <https://www.oncokb.org/users/" + user.getEmail() + "/|" + user.getEmail() + ">");
                 sb.append(", " + user.getCompanyName());
                 sb.append(", " + user.getCity());
