@@ -23,6 +23,8 @@ public class ManagedUserVM extends UserDTO {
 
     private Boolean needsMskRocReview = true;
 
+    private Boolean requestApiAccess;
+
     public ManagedUserVM() {
         // Empty constructor needed for Jackson.
     }
@@ -65,6 +67,14 @@ public class ManagedUserVM extends UserDTO {
 
     public void setNeedsMskRocReview(Boolean needsMskRocReview) {
         this.needsMskRocReview = needsMskRocReview;
+    }
+
+    public Boolean getRequestApiAccess() {
+        return requestApiAccess;
+    }
+
+    public void setRequestApiAccess(Boolean requestApiAccess) {
+        this.requestApiAccess = requestApiAccess;
     }
 
     // prettier-ignore

@@ -70,6 +70,7 @@ enum FormKey {
   COMPANY_SIZE = 'companySize',
   BUS_CONTACT_EMAIL = 'businessContactEmail',
   BUS_CONTACT_PHONE = 'businessContactPhone',
+  REQUEST_API_ACCESS = 'requestApiAccess',
 }
 
 type CompanySelectOptionType = {
@@ -107,6 +108,8 @@ export class NewAccountForm extends React.Component<INewAccountForm> {
   @autobind
   @action
   handleValidSubmit(event: any, values: any) {
+    /* eslint-disable no-console */
+    console.log(values.requestApiAccess[0] || false);
     const newUser: Partial<ManagedUserVM> = {
       login: values.email,
       password: this.password,
@@ -122,6 +125,7 @@ export class NewAccountForm extends React.Component<INewAccountForm> {
         : values.company,
       city: values.city,
       country: values.country,
+      requestApiAccess: values.requestApiAccess[0] || false,
     };
     const additionalInfo = this.constructAdditionalInfo(values);
     if (_.keys(additionalInfo).length > 0) {
@@ -762,6 +766,20 @@ export class NewAccountForm extends React.Component<INewAccountForm> {
                 </Col>
               </Row>
             ) : null}
+            <Row className={getSectionClassName()}>
+              <Col md="3">
+                <h5>API Access</h5>
+              </Col>
+              <Col md="9">
+                <AvCheckboxGroup
+                  name={FormKey.REQUEST_API_ACCESS}
+                  key={FormKey.REQUEST_API_ACCESS}
+                  errorMessage={'You have to accept the term'}
+                >
+                  <AvCheckbox label={'Request API Access'} value={true} />
+                </AvCheckboxGroup>
+              </Col>
+            </Row>
             <Row>
               <Col md={9} className={'ml-auto'}>
                 <Button id="register-submit" variant="primary" type="submit">
