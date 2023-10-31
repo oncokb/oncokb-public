@@ -5,15 +5,9 @@ import {
   ONCOKB_TM,
   PAGE_ROUTE,
   REFERENCE_GENOME,
-  REGEXP,
-  REGEXP_LINK,
   SOP_LINK,
   YOUTUBE_VIDEO_IDS,
 } from 'app/config/constants';
-import _ from 'lodash';
-import { PMIDLink } from 'app/shared/links/PMIDLink';
-import reactStringReplace from 'react-string-replace';
-import { ReactNodeArray } from 'prop-types';
 import {
   encodeSlash,
   getAlterationName,
@@ -193,42 +187,6 @@ export const MSILink: React.FunctionComponent<{}> = () => {
       microsatellite instability high (MSI-H)
     </AlterationPageLink>
   );
-};
-
-export const CitationLink: React.FunctionComponent<{
-  content: string;
-}> = props => {
-  const regexps = [REGEXP.PMID, REGEXP.NCTID];
-  let contentWithLink: ReactNodeArray = [props.content];
-  _.forEach(regexps, regexp => {
-    contentWithLink = reactStringReplace(
-      contentWithLink,
-      new RegExp(regexp, 'ig'),
-      (match, i) => {
-        switch (regexp) {
-          case REGEXP.PMID: {
-            return <PMIDLink pmids={match} />;
-            break;
-          }
-          case REGEXP.NCTID:
-            return (
-              <a
-                href={`${REGEXP_LINK[regexp]}${match}`}
-                target="_blank"
-                rel="noopener noreferrer"
-              >
-                ${match}
-              </a>
-            );
-            break;
-          default:
-            return match;
-            break;
-        }
-      }
-    );
-  });
-  return <div>{contentWithLink}</div>;
 };
 
 export const OncoTreeLink: React.FunctionComponent<{}> = props => {

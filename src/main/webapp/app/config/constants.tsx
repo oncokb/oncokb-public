@@ -886,16 +886,6 @@ export const NOT_CHANGEABLE_AUTHORITIES = [
   USER_AUTHORITY.ROLE_PUBLIC_WEBSITE,
 ];
 
-export enum REGEXP {
-  PMID = 'PMID:\\s*([0-9]+,*\\s*)+',
-  NCTID = 'NCT[0-9]+',
-}
-
-export const REGEXP_LINK: { [key: string]: string } = {
-  [REGEXP.PMID]: 'https://www.ncbi.nlm.nih.gov/pubmed/',
-  [REGEXP.NCTID]: 'http://clinicaltrials.gov/show/',
-};
-
 export enum REFERENCE_GENOME {
   GRCh37 = 'GRCh37',
   GRCh38 = 'GRCh38',
