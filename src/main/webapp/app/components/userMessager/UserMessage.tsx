@@ -59,18 +59,12 @@ if (
             link={
               'https://aacrjournals.org/cancerdiscovery/article/doi/10.1158/2159-8290.CD-23-0467/729589/Quantifying-the-Expanding-Landscape-of-Clinical'
             }
-            style={{ color: 'white', textDecoration: 'underline' }}
           >
             Quantifying the Expanding Landscape of Clinical Actionability for
             Patients with Cancer
           </Linkout>
           <span>, and visit our new </span>
-          <Link
-            to={PAGE_ROUTE.PO_TX}
-            style={{ color: 'white', textDecoration: 'underline' }}
-          >
-            Precision Oncology Therapies page!
-          </Link>
+          <Link to={PAGE_ROUTE.PO_TX}>Precision Oncology Therapies page!</Link>
         </div>
       ),
       id: '2023-precision-oncology-therapies',
@@ -101,42 +95,36 @@ if (
         <span>
           Part of {ONCOKB_TM}’s content is now FDA-recognized. For more details,
           please see our{' '}
-          <Link
-            to={PAGE_ROUTE.FDA_RECOGNITION}
-            style={{ color: 'white', textDecoration: 'underline' }}
-          >
-            FDA Recognition
-          </Link>{' '}
-          page.
+          <Link to={PAGE_ROUTE.FDA_RECOGNITION}>FDA Recognition</Link> page.
         </span>
       ),
       id: '2021-fda-recognition',
     },
     {
-      dateEnd: 1686196800000,
+      dateEnd: 1700373600000,
       content: (
         <div>
-          Join us at ASCO 2023! Visit our booth (
+          Join us at AMP 2023! Visit our booth (
           <Linkout
             link={
-              'https://events.jspargo.com/asco23/Public/EventMap.aspx?ver=html&EventID=729&MapID=906&MapItBoothID=887434&MapItBooth=28161'
+              'https://www.conferenceharvester.com/floorplan/v2/index.asp?EventKey=ZQTAJJYL'
             }
-            style={{ color: 'white', textDecoration: 'underline' }}
           >
-            #28161
+            #928
           </Linkout>
-          ) and our{' '}
+          ) and join{' '}
           <Linkout
-            link={'https://meetings.asco.org/abstracts-presentations/219452'}
-            style={{ color: 'white', textDecoration: 'underline' }}
+            link={
+              'https://amp23.eventscribe.net/ajaxcalls/PresentationInfo.asp?PresentationID=1303633'
+            }
           >
-            poster
+            Dr. Chakravarty's presentation on OncoKB™
           </Linkout>{' '}
-          (Mon 06/05, 1pm, Hall A, Poster Bd #171) to meet our team and explore
-          the latest developments from OncoKB™. See you there!
+          during the plenary session "Clinical Grade Knowledge Bases for Genomic
+          Actionability" (Thur 11/16, 1:15pm MST). See you there!
         </div>
       ),
-      id: '2023_asco',
+      id: '2023_amp',
     },
     {
       dateEnd: 1686456000000,
