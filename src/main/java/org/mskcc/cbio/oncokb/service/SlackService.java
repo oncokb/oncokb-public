@@ -237,8 +237,11 @@ public class SlackService {
         try {
             WebhookResponse response = slack.send(url, payload);
             log.info("Send the latest user blocks to slack with response code " + response.getCode());
+            if (!Integer.valueOf(200).equals(response.getCode())) {
+                log.warn("Getting a response code other than 200, {}", response);
+            }
         } catch (Exception e) {
-            log.warn("Failed to send message to slack");
+            log.error("Failed to send message to slack {}", e);
         }
     }
 
@@ -548,7 +551,7 @@ public class SlackService {
             for (UserDTO user : potentialDuplicateUsers) {
                 List<MailType> rejectionMailTypes = new ArrayList<>(Arrays.asList(MailType.REJECTION_US_SANCTION, MailType.REJECT_ALUMNI_ADDRESS, MailType.REJECTION));
                 List<UserMailsDTO> rejectionUserMails = userMailsService.findUserMailsByUserAndMailTypeIn(userMapper.userDTOToUser(user), rejectionMailTypes);
-                
+
                 sb.append("\n\u2022 ");
                 sb.append(StringUtil.getFullName(user.getFirstName(), user.getLastName()));
                 sb.append(", <https://www.oncokb.org/users/" + user.getEmail() + "/|" + user.getEmail() + ">");
@@ -558,7 +561,7 @@ public class SlackService {
                 if (!rejectionUserMails.isEmpty()) {
                     sb.append(", *REJECTED*");
                 }
-            } 
+            }
             layoutBlocks.add(buildMarkdownBlock(sb.toString(), DUPLICATE_USER_CLARIFICATION_NOTE));
         }
         return layoutBlocks;
