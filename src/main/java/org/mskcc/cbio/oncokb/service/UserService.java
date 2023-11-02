@@ -678,7 +678,7 @@ public class UserService {
         List<UserDTO> potentialDuplicateUsers = new ArrayList<>();
         for (UserDTO potentialDuplicate : allUsers) {
             String potentialDuplicateFullName = StringUtil.getFullName(potentialDuplicate.getFirstName(), potentialDuplicate.getLastName());
-            if (user.getId() != potentialDuplicate.getId() && jw.apply(userFullName, potentialDuplicateFullName) > .7) {
+            if (!user.getId().equals(potentialDuplicate.getId()) && jw.apply(userFullName, potentialDuplicateFullName) > .85) {
                 potentialDuplicateUsers.add(potentialDuplicate);
             }
         }

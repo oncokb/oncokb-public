@@ -12,7 +12,6 @@ import org.mskcc.cbio.oncokb.service.dto.useradditionalinfo.TrialAccount;
 import org.mskcc.cbio.oncokb.service.mapper.UserMapper;
 
 import io.github.jhipster.security.RandomUtil;
-
 import org.apache.commons.lang3.RandomStringUtils;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -381,7 +380,7 @@ public class UserServiceIT {
     //UNIT TESTS
     @Test
     public void assertThatDuplicateUsersAreCaught() {
-        long id = -1;
+        Long id = 6000L;
 
         UserDTO user = new UserDTO();
         user.setFirstName("Jon");
@@ -427,6 +426,12 @@ public class UserServiceIT {
 
             allUsers.add(newUser);
         }
+
+        UserDTO testSameIdUser = new UserDTO(); //need this to ensure comparison of IDs is done correctly, Longs are compared by reference
+        testSameIdUser.setFirstName(user.getFirstName());
+        testSameIdUser.setLastName(user.getLastName());
+        testSameIdUser.setId(new Long(user.getId()));
+        allUsers.add(testSameIdUser);
         
         List<UserDTO> duplicateUsers = userService.searchAccountsForPotentialDuplicateUser(user, allUsers);
         assertThat(duplicateUsers).containsExactlyInAnyOrder(similarUsers.toArray(new UserDTO[similarUsers.size()]));
