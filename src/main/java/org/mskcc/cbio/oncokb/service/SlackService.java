@@ -237,7 +237,7 @@ public class SlackService {
         try {
             WebhookResponse response = slack.send(url, payload);
             log.info("Send the latest user blocks to slack with response code " + response.getCode());
-            if (response.getCode() > 200) {
+            if (!Integer.valueOf(200).equals(response.getCode())) {
                 log.warn("Getting a response code other than 200, {}", response);
             }
         } catch (Exception e) {
