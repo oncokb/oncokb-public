@@ -24,6 +24,7 @@ import { notifyError, notifySuccess } from 'app/shared/utils/NotificationUtils';
 import InfoIcon from 'app/shared/icons/InfoIcon';
 import TokenInputGroups from 'app/components/tokenInputGroups/TokenInputGroups';
 import client from 'app/shared/api/clientInstance';
+import { SimpleConfirmModal } from 'app/shared/modal/SimpleConfirmModal';
 
 export type IRegisterProps = {
   authenticationStore: AuthenticationStore;
@@ -54,6 +55,7 @@ export const InfoRow: React.FunctionComponent<{
 @observer
 export class AccountPage extends React.Component<IRegisterProps> {
   @observable copiedIdToken = false;
+  @observable showConfirmModal = false;
 
   constructor(props: Readonly<IRegisterProps>) {
     super(props);
@@ -212,37 +214,54 @@ export class AccountPage extends React.Component<IRegisterProps> {
                 className={'ml-2'}
               />
             </div>
-            <InfoRow
-              title={
-                <div className={'d-flex align-items-center'}>
-                  <span>
-                    {getAccountInfoTitle(
-                      ACCOUNT_TITLES.API_TOKEN,
-                      this.account.licenseType as LicenseType
-                    )}
-                  </span>
-                  {this.generateTokenEnabled ? (
-                    <DefaultTooltip
-                      placement={'top'}
-                      overlay={'Get a new token.'}
-                    >
-                      <i
-                        className={classnames('ml-2 fa fa-plus')}
-                        onClick={this.addNewToken}
-                      />
-                    </DefaultTooltip>
-                  ) : null}
-                </div>
-              }
-            >
-              <TokenInputGroups
-                changeTokenExpirationDate={false}
-                tokens={this.tokens}
-                onDeleteToken={this.deleteToken}
-              />
-            </InfoRow>
+            {this.tokens.length ? (
+              <InfoRow
+                title={
+                  <div className={'d-flex align-items-center'}>
+                    <span>
+                      {getAccountInfoTitle(
+                        ACCOUNT_TITLES.API_TOKEN,
+                        this.account.licenseType as LicenseType
+                      )}
+                    </span>
+                    {this.generateTokenEnabled ? (
+                      <DefaultTooltip
+                        placement={'top'}
+                        overlay={'Get a new token.'}
+                      >
+                        <i
+                          className={classnames('ml-2 fa fa-plus')}
+                          onClick={this.addNewToken}
+                        />
+                      </DefaultTooltip>
+                    ) : null}
+                  </div>
+                }
+              >
+                <TokenInputGroups
+                  changeTokenExpirationDate={false}
+                  tokens={this.tokens}
+                  onDeleteToken={this.deleteToken}
+                />
+              </InfoRow>
+            ) : (
+              <span>
+                You do not have API access. Click{' '}
+                <span onClick={() => (this.showConfirmModal = true)}>HERE</span>{' '}
+                to request API access.
+              </span>
+            )}
           </Col>
         </Row>
+        <SimpleConfirmModal
+          onCancel={() => (this.showConfirmModal = false)}
+          onConfirm={() => {
+            //do some stuff notify success on success and notify error on error
+            notifySuccess('API access is requested');
+            this.showConfirmModal = false;
+          }}
+          show={this.showConfirmModal}
+        />
       </SmallPageContainer>
     );
   }

@@ -264,7 +264,7 @@ public class UserService {
         return trialAccount;
     }
 
-    public User registerUser(UserDTO userDTO, String password) {
+    public User registerUser(UserDTO userDTO, String password, boolean requestApiAccess) {
         userRepository.findOneWithAuthoritiesByEmailIgnoreCase(userDTO.getEmail()).ifPresent(existingUser -> {
             throw new EmailAlreadyUsedException();
         });
@@ -293,6 +293,10 @@ public class UserService {
         newUser.setActivationKey(RandomUtil.generateActivationKey());
         Set<Authority> authorities = new HashSet<>();
         authorityRepository.findById(AuthoritiesConstants.USER).ifPresent(authorities::add);
+        if (requestApiAccess) {
+            authorityRepository.findById(AuthoritiesConstants.API).ifPresent(authorities::add);
+        }
+
         newUser.setAuthorities(authorities);
         userRepository.save(newUser);
 
@@ -568,7 +572,7 @@ public class UserService {
             userDTO.setActivated(true);
         }
         Optional<UserDTO> updatedUserDTO = updateUser(userDTO);
-        if (updatedUserDTO.isPresent()) {
+        if (updatedUserDTO.isPresent() && updatedUserDTO.get().getAuthorities().contains(AuthoritiesConstants.API)) {
             List<Token> tokens =
                 generateTokenForUserIfNotExist(
                     updatedUserDTO.get(),

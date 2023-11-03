@@ -26,6 +26,7 @@ import org.mskcc.cbio.oncokb.domain.UserIdMessagePair;
 import org.mskcc.cbio.oncokb.domain.UserMails;
 import org.mskcc.cbio.oncokb.domain.enumeration.*;
 import org.mskcc.cbio.oncokb.domain.enumeration.slack.*;
+import org.mskcc.cbio.oncokb.security.AuthoritiesConstants;
 import org.mskcc.cbio.oncokb.service.dto.UserDTO;
 import org.mskcc.cbio.oncokb.service.dto.UserMailsDTO;
 import org.mskcc.cbio.oncokb.service.dto.useradditionalinfo.AdditionalInfoDTO;
@@ -364,7 +365,11 @@ public class SlackService {
 
     private LayoutBlock buildCurrentLicense(UserDTO userDTO) {
         StringBuilder sb = new StringBuilder();
-        sb.append("*" + userDTO.getLicenseType().getName() + "*" + (userDTO.getLicenseType().equals(LicenseType.ACADEMIC) ? "" : " :clap:") +"\n");
+        sb.append("*" + userDTO.getLicenseType().getName() + "*" + (userDTO.getLicenseType().equals(LicenseType.ACADEMIC) ? "" : " :clap:"));
+        if (userDTO.getAuthorities().contains(AuthoritiesConstants.API)) {
+            sb.append(" API ACCESS");
+        }
+        sb.append("\n");
         if (StringUtils.isNotEmpty(userDTO.getCompanyName())) {
             sb.append("*" + userDTO.getCompanyName() + "*");
         }

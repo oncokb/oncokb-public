@@ -227,6 +227,9 @@ public class UserResource {
         return userService.getAuthorities();
     }
 
+    //TODO: add /users/login/request-authority
+    //Could be Get or Post
+
     /**
      * Get emails of users that are not part of a company
      *

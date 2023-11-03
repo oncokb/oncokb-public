@@ -129,7 +129,7 @@ public class AccountResource {
             if (!checkPasswordLength(managedUserVM.getPassword())) {
                 throw new InvalidPasswordException();
             }
-            User user = userService.registerUser(managedUserVM, managedUserVM.getPassword());
+            User user = userService.registerUser(managedUserVM, managedUserVM.getPassword(), managedUserVM.getRequestApiAccess());
             mailService.sendActivationEmail(userMapper.userToUserDTO(user));
         // }
     }
