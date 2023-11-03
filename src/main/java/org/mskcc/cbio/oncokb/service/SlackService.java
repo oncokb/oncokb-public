@@ -107,6 +107,28 @@ public class SlackService {
     }
 
     @Async
+    public void sendUserApiAccessRequestToChannel(UserDTO user) {
+        log.debug("Sending notification to admin group that a user has requested API access");
+        if (StringUtils.isEmpty(this.applicationProperties.getSlack().getUserRegistrationWebhook())) {
+            log.debug("\tSkipped, the webhook is not configured");
+        } else {
+            List<LayoutBlock> layoutBlocks = new ArrayList<>();
+
+            String userPageLink = "(<" + applicationProperties.getBaseUrl() + "/users/" + user.getEmail() + "/|" + user.getEmail() + ">)";
+            LayoutBlock apiRequestBlock = buildMarkdownBlock("*API Access Request* " + userPageLink + "\n" + user.getAdditionalInfo().getApiAccessRequest().getJustification(), API_ACCESS);
+            
+            ButtonElement approveButton = buildApiAccessApproveButton(user);
+            List<BlockElement> blockElements = new ArrayList<>();
+            blockElements.add(approveButton);
+            
+            layoutBlocks.add(apiRequestBlock);
+            layoutBlocks.add(ActionsBlock.builder().elements(blockElements).build());
+
+            this.sendBlocks(this.applicationProperties.getSlack().getUserRegistrationWebhook(), layoutBlocks);
+        }
+    }
+
+    @Async
     public void sendLatestBlocks(String url, UserDTO userDTO, boolean trialAccountActivated, ActionId actionId, String triggerId) {
         if (ActionId.isModalEmailAction(actionId)) {
             this.sendModal(triggerId, this.buildModalView(userDTO, actionId, url));
@@ -367,7 +389,13 @@ public class SlackService {
 
     private LayoutBlock buildCurrentLicense(UserDTO userDTO) {
         StringBuilder sb = new StringBuilder();
-        sb.append("*" + userDTO.getLicenseType().getName() + "*" + (userDTO.getLicenseType().equals(LicenseType.ACADEMIC) ? "" : " :clap:") +"\n");
+        boolean isAcademicLicense = userDTO.getLicenseType().equals(LicenseType.ACADEMIC);
+        sb.append("*" + userDTO.getLicenseType().getName() + "*" + (isAcademicLicense ? "" : " :clap:") +"\n");
+
+        boolean apiAccessRequested = userDTO.getAdditionalInfo() != null && userDTO.getAdditionalInfo().getApiAccessRequest() != null && userDTO.getAdditionalInfo().getApiAccessRequest().isRequested();
+        if (isAcademicLicense && apiAccessRequested) {
+            sb.append(":information_source: API Access\n");
+        }
         if (StringUtils.isNotEmpty(userDTO.getCompanyName())) {
             sb.append("*" + userDTO.getCompanyName() + "*");
         }
@@ -508,8 +536,15 @@ public class SlackService {
                     userInfo.add(MarkdownTextObject.builder().text("Business Contact Phone:\n" + additionalInfoDTO.getUserCompany().getBusinessContact().getPhone()).build());
                 }
             }
+
+            String apiAccessJustification = "";
+            boolean apiAccessRequested = additionalInfoDTO.getApiAccessRequest() != null && additionalInfoDTO.getApiAccessRequest().isRequested();
+            if (apiAccessRequested) {
+                apiAccessJustification = additionalInfoDTO.getApiAccessRequest().getJustification();
+            }
+
             if (StringUtils.isNotEmpty(additionalInfoDTO.getUserCompany().getUseCase())) {
-                userInfo.add(getTextObject("Use Case", additionalInfoDTO.getUserCompany().getUseCase()));
+                userInfo.add(getTextObject("Use Case", additionalInfoDTO.getUserCompany().getUseCase() + " " + apiAccessJustification));
             }
             if (StringUtils.isNotEmpty(additionalInfoDTO.getUserCompany().getAnticipatedReports())) {
                 userInfo.add(getTextObject("Anticipated Reports", additionalInfoDTO.getUserCompany().getAnticipatedReports()));
@@ -596,6 +631,12 @@ public class SlackService {
         if (user.getLicenseType() != LicenseType.ACADEMIC) {
             button.setConfirm(buildConfirmationDialogObject("You are going to approve a commercial account."));
         }
+        return button;
+    }
+
+    private ButtonElement buildApiAccessApproveButton(UserDTO user) {
+        ButtonElement button = buildPrimaryButton("Approve", user.getLogin(), APPROVE_USER_FOR_API_ACCESS);
+        button.setConfirm(buildConfirmationDialogObject("You are going to approve an account for API access."));
         return button;
     }
 

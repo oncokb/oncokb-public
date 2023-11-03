@@ -254,6 +254,12 @@ public class MailService {
         sendEmailFromTemplate(user, MailType.APPROVAL);
     }
 
+    @Async
+    public void sendApiAccessApprovalEmail(UserDTO user) {
+        log.debug("Sending approval email to '{}'", user.getEmail());
+        sendEmailFromTemplate(user, MailType.API_ACCESS_APPROVAL);
+    }
+
     // This method should be used when we want to explain to the user that their
     // company has a different license type and they've been approved to use that.
     @Async
