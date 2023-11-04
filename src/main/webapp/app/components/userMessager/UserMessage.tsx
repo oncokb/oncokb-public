@@ -121,7 +121,7 @@ if (
             Dr. Chakravarty's presentation on OncoKB™
           </Linkout>{' '}
           during the plenary session "Clinical Grade Knowledge Bases for Genomic
-          Actionability" (Thur 11/16, 1:15pm MST). See you there!
+          Actionability" (Thu 11/16, 1:15pm MST).
         </div>
       ),
       id: '2023_amp',
