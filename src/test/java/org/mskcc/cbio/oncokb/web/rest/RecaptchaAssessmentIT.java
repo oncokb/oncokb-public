@@ -3,7 +3,7 @@ package org.mskcc.cbio.oncokb.web.rest;
 import org.junit.jupiter.api.*;
 import org.mskcc.cbio.oncokb.OncokbPublicApp;
 import org.mskcc.cbio.oncokb.config.application.ApplicationProperties;
-import org.mskcc.cbio.oncokb.config.application.RecaptchaProperties;
+import org.mskcc.cbio.oncokb.config.application.FrontendProperties;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.http.ResponseEntity;
@@ -30,19 +30,19 @@ public class RecaptchaAssessmentIT {
     private static final Logger LOGGER = LoggerFactory.getLogger(RecaptchaAssessmentIT.class);
 
     ApplicationProperties appProps;
-    RecaptchaProperties recaptchaProp;
+    FrontendProperties frontendProps;
     RecaptchaEnterpriseServiceClient client;
     private static String RECAPTCHA_TESTING_TOKEN = "faketoken";
 
     @BeforeEach
     public void setUp() throws IOException {
         appProps = new ApplicationProperties();
-        recaptchaProp = new RecaptchaProperties();
+        frontendProps = new FrontendProperties();
     }
 
     @Test
     public void testGetRecaptchaTokenWithToken() throws Exception {
-        appProps.setRecaptcha(recaptchaProp);
+        appProps.setFrontend(frontendProps);
         CreateAssessment createAssess = new CreateAssessment(appProps);
 
         MockHttpServletRequest request = new MockHttpServletRequest();
@@ -55,7 +55,7 @@ public class RecaptchaAssessmentIT {
 
     @Test
     public void testGetRecaptchaTokenWithoutToken() throws Exception {
-        appProps.setRecaptcha(recaptchaProp);
+        appProps.setFrontend(frontendProps);
         CreateAssessment createAssess = new CreateAssessment(appProps);
 
         MockHttpServletRequest request = new MockHttpServletRequest();
@@ -68,7 +68,7 @@ public class RecaptchaAssessmentIT {
 
     @Test
     public void testGetRecaptchaWithoutConfiguration() throws Exception {
-        appProps.setRecaptcha(recaptchaProp);
+        appProps.setFrontend(frontendProps);
         CreateAssessment createAssess = new CreateAssessment(appProps);
 
         Exception e = assertThrows(ConfigurationException.class, () -> {

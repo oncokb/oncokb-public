@@ -11,6 +11,7 @@ declare global {
 
 const loadReCaptcha = (siteKey: string) => {
   const script = document.createElement('script');
+  script.setAttribute('id', 'recaptcha');
   script.src = `https://www.google.com/recaptcha/enterprise.js?render=${siteKey}`;
   document.body.appendChild(script);
 };
