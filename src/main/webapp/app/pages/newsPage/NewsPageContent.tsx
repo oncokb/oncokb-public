@@ -200,6 +200,95 @@ const EVIDENCE_COLUMN_SEPARATOR = '; ';
 // https://stackoverflow.com/questions/41947168/is-it-possible-to-use-keyof-operator-on-literals-instead-of-interfaces
 
 export const NEWS_BY_DATE: { [date: string]: NewsData } = {
+  '11132023': {
+    news: [
+      <span>
+        Updated therapeutic implications - Addition of therapies for variants
+        with a level of evidence
+        <Row className={'overflow-auto'}>
+          <table className="table">
+            <thead>
+              <tr>
+                <th>{GENE}</th>
+                <th>{MUTATION}</th>
+                <th>{CANCER_TYPE}</th>
+                <th>{CURRENT_LEVEL_OF_EVIDENCE}</th>
+                <th>{DRUGS_CURRENTLY_IN_ONCOKB}</th>
+                <th>{DRUGS_ADDED_TO_ONCOKB}</th>
+                <th>{EVIDENCE}</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td>
+                  <GenePageLink hugoSymbol="BRCA1" />
+                </td>
+                <td rowSpan={2} style={{ verticalAlign: 'middle' }}>
+                  Oncogenic Mutations
+                </td>
+                <td rowSpan={2} style={{ verticalAlign: 'middle' }}>
+                  Prostate Cancer
+                </td>
+                <td rowSpan={2} style={{ verticalAlign: 'middle' }}>
+                  1
+                </td>
+                <td rowSpan={2} style={{ verticalAlign: 'middle' }}>
+                  Olaparib, Rucaparib, Olaparib + Abiraterone + Prednisone,
+                  Talazoparib + Enzalutamide (Level 1)
+                </td>
+                <td rowSpan={2} style={{ verticalAlign: 'middle' }}>
+                  Niraparib + Abiraterone Acetate + Prednisone (Level 1)
+                </td>
+                <td rowSpan={2} style={{ verticalAlign: 'middle' }}>
+                  <WithSeparator separator={EVIDENCE_COLUMN_SEPARATOR}>
+                    <FdaApprovalLink
+                      approval={'Niraparib + Abiraterone Acetate + Prednisone'}
+                      link={
+                        'https://www.fda.gov/drugs/resources-information-approved-drugs/fda-approves-niraparib-and-abiraterone-acetate-plus-prednisone-brca-mutated-metastatic-castration'
+                      }
+                    />
+                    <PMIDLink pmids={'36952634'} />
+                  </WithSeparator>
+                </td>
+              </tr>
+              <tr>
+                <td>
+                  <GenePageLink hugoSymbol="BRCA2" />
+                </td>
+              </tr>
+            </tbody>
+          </table>
+        </Row>
+      </span>,
+    ],
+    changedAnnotations: [
+      {
+        columnHeaderType: AnnotationColumnHeaderType.LEVEL,
+        title: 'Updated therapeutic implications - Changed level of evidence',
+        content: [
+          [
+            'IDH1',
+            'R132',
+            'Myelodysplastic Syndromes',
+            'Ivosidenib',
+            '3B',
+            '1',
+            <WithSeparator separator={EVIDENCE_COLUMN_SEPARATOR}>
+              <FdaApprovalLink
+                approval="Ivosidenib for patients with IDH1-mutant myelodysplastic syndrome"
+                link="https://www.fda.gov/drugs/resources-information-approved-drugs/fda-approves-ivosidenib-myelodysplastic-syndromes"
+              />
+              <AbstractLink
+                abstract="DiNardo et al. Abstract# MDS-457, SOHO 2023"
+                link="https://www.sciencedirect.com/science/article/pii/S2152265023011898"
+              />
+            </WithSeparator>,
+          ],
+        ],
+      },
+    ],
+    newlyAddedGenes: ['CTNNA1', 'FGF10', 'FGF14', 'HSP90AA1'],
+  },
   '10242023': {
     changedAnnotations: [
       {
