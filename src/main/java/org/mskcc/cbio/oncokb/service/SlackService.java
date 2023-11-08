@@ -554,7 +554,7 @@ public class SlackService {
 
                 sb.append("\n\u2022 ");
                 sb.append(StringUtil.getFullName(user.getFirstName(), user.getLastName()));
-                sb.append(", <https://www.oncokb.org/users/" + user.getEmail() + "/|" + user.getEmail() + ">");
+                sb.append(", <" + applicationProperties.getBaseUrl() + "/users/" + user.getEmail() + "/|" + user.getEmail() + ">");
                 sb.append(", " + user.getCompanyName());
                 sb.append(", " + user.getCity());
                 sb.append(", " + user.getCountry());

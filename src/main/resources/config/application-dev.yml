@@ -135,6 +135,7 @@ sentry:
 application:
   name: local
   profile: dev
+  base-url:
   # This is the proxy link to oncokb-core
   api-proxy-url: 'http://localhost:8080/oncokb'
   sitemap-enabled: false
