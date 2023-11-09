@@ -13,3 +13,7 @@ target/
 build/
 node/
 postcss.config.js
+
+screenshot-test/
+jest.conf.js
+jest-puppeteer.config.js

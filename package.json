@@ -195,6 +195,8 @@
     "updateOncoKbAPI": "yarn run fetchOncoKbAPI && yarn run buildOncoKbAPI",
     "fetchOncoKbAPI": "curl http://localhost:8080/oncokb-public/api/v1/v2/api-docs?group=Private%20APIs | json | grep -v basePath | grep -v termsOfService | grep -v host > src/main/webapp/app/shared/api/generated/OncoKbAPI-docs.json && curl http://localhost:8080/oncokb-public/api/private/v2/api-docs | json | grep -v basePath | grep -v termsOfService | grep -v host > src/main/webapp/app/shared/api/generated/OncoKbPrivateAPI-docs.json",
     "buildOncoKbAPI": "node scripts/generate-api.js src/main/webapp/app/shared/api/generated OncoKbAPI OncoKbPrivateAPI",
+    "test": "yarn run jest --",
+    "jest": "jest --coverage --logHeapUsage --maxWorkers=2 --config jest.conf.js",
     "webpack:dev": "yarn run webpack-dev-server -- --config webpack/webpack.dev.js --inline --port=9060 --env.stats=minimal",
     "webpack:dev-verbose": "yarn run webpack-dev-server -- --config webpack/webpack.dev.js --inline --port=9060 --profile --progress --env.stats=normal",
     "webpack:build:main": "yarn run webpack -- --config webpack/webpack.dev.js --env.stats=minimal",
