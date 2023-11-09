@@ -1,5 +1,6 @@
 import * as React from 'react';
 import RefComponent from './RefComponent';
+import { REF_CAPTURE } from 'app/config/constants/regex';
 
 type SummaryWithRefsProps = {
   content: string | undefined;
@@ -16,19 +17,12 @@ export default class SummaryWithRefs extends React.Component<
 
     const content: Array<JSX.Element> = [];
 
-    // example delimiters:
-    //     (PMID: 11900253)
-    //     (PMID: 11753428, 16007150, 21467160)
-    //     (cBioPortal, MSKCC, May 2015, PMID: 24718888)
-    //     (NCT1234567)
-    const regex = /(\(.*?[PMID|NCT|Abstract].*?\))/i;
-
     // split the string with delimiters included
-    const parts = this.props.content.split(regex);
+    const parts = this.props.content.split(REF_CAPTURE);
 
     parts.forEach((part: string) => {
       // if delimiter convert to a JSX component
-      if (part.match(regex)) {
+      if (part.match(REF_CAPTURE)) {
         content.push(
           <RefComponent
             componentType={this.props.type}
