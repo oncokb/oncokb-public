@@ -461,7 +461,10 @@ export default class GenePage extends React.Component<GenePageProps, any> {
                             />
                             {this.store.geneSummary.result && (
                               <div className="mt-2">
-                                {this.store.geneSummary.result}
+                                <SummaryWithRefs
+                                  content={this.store.geneSummary.result}
+                                  type="linkout"
+                                />
                               </div>
                             )}
                             {this.store.geneBackground.result && (
