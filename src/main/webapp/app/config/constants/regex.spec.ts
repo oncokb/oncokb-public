@@ -4,6 +4,7 @@ describe('Regex constants test', () => {
   describe('Reference capture regex', () => {
     it('Regex should capture PMID', () => {
       expect(REF_CAPTURE.test('test')).toBeFalsy();
+      expect(REF_CAPTURE.test('test (PMID123)')).toBeTruthy();
       expect(REF_CAPTURE.test('test (PMID:123)')).toBeTruthy();
       expect(REF_CAPTURE.test('test (PMID:123,123)')).toBeTruthy();
       expect(REF_CAPTURE.test('test ( PMID:123)')).toBeTruthy();
@@ -11,6 +12,15 @@ describe('Regex constants test', () => {
       expect(REF_CAPTURE.test('test (PMID:123 )')).toBeTruthy();
       expect(REF_CAPTURE.test('test (PMID:123 ')).toBeFalsy();
       expect(REF_CAPTURE.test('test ( test PMID:123 )')).toBeFalsy();
+    });
+    it('Regex should capture NCT', () => {
+      const nctContent = 'NCT03088176';
+      expect(REF_CAPTURE.test('test')).toBeFalsy();
+      expect(REF_CAPTURE.test(`test (${nctContent})`)).toBeTruthy();
+      expect(REF_CAPTURE.test(`test (${nctContent} )`)).toBeTruthy();
+      expect(REF_CAPTURE.test(`test ( ${nctContent})`)).toBeTruthy();
+      expect(REF_CAPTURE.test(`test ( ${nctContent} )`)).toBeTruthy();
+      expect(REF_CAPTURE.test(`test ( ${nctContent}`)).toBeFalsy();
     });
     it('Regex should capture Abstract', () => {
       const abstractContent =
