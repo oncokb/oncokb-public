@@ -20,6 +20,7 @@ import java.util.stream.Collectors;
 @ConfigurationProperties(prefix = "application", ignoreUnknownFields = false)
 public class ApplicationProperties {
     private String name;
+    private String baseUrl = "";
     private String apiProxyUrl;
     private SlackProperties slack;
     private ProjectProfile profile;
@@ -44,6 +45,14 @@ public class ApplicationProperties {
 
     public void setName(String name) {
         this.name = name;
+    }
+
+    public String getBaseUrl() {
+        return baseUrl;
+    }
+
+    public void setBaseUrl(String baseUrl) {
+        this.baseUrl = baseUrl;
     }
 
     public String getApiProxyUrl() {
