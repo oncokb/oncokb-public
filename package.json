@@ -28,7 +28,7 @@
     "@types/superagent": "^4.1.1",
     "autobind-decorator": "^2.1.0",
     "availity-reactstrap-validation": "2.6.1",
-    "axios": "0.21.2",
+    "axios": "1.6.0",
     "bootstrap": "4.4.1",
     "cbioportal-frontend-commons": "0.2.11",
     "cbioportal-utils": "^0.1.1",
