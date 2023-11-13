@@ -673,12 +673,15 @@ public class UserService {
     }
 
     public List<UserDTO> searchAccountsForPotentialDuplicateUser(UserDTO user, List<UserDTO> allUsers) {
-        String userFullName = StringUtil.getFullName(user.getFirstName(), user.getLastName());
         JaroWinklerSimilarity jw = new JaroWinklerSimilarity();
         List<UserDTO> potentialDuplicateUsers = new ArrayList<>();
         for (UserDTO potentialDuplicate : allUsers) {
-            String potentialDuplicateFullName = StringUtil.getFullName(potentialDuplicate.getFirstName(), potentialDuplicate.getLastName());
-            if (!user.getId().equals(potentialDuplicate.getId()) && jw.apply(userFullName, potentialDuplicateFullName) > .85) {
+            if (user.getId().equals(potentialDuplicate.getId())) {
+                continue;
+            }
+
+            Double similarity = jw.apply(user.getFirstName(), potentialDuplicate.getFirstName()) * .3 + jw.apply(user.getLastName(), potentialDuplicate.getLastName()) * .7;
+            if (similarity > .87) {
                 potentialDuplicateUsers.add(potentialDuplicate);
             }
         }

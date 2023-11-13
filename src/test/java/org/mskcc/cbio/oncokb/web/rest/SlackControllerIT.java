@@ -75,6 +75,8 @@ public class SlackControllerIT {
     private static final String DEFAULT_ADDR = "default@example.com";
 
     // Mock fields for test user
+    private static final String DEFAULT_USER_FIRST_NAME = "Jon";
+    private static final String DEFAULT_USER_LAST_NAME = "Doe";
     private static final String DEFAULT_USER_EMAIL = "john.doe@example.com";
     private static final String DEFAULT_LANG_KEY = "en";
     private static final String DEFAULT_COMPANY_NAME = "company name";
@@ -190,6 +192,8 @@ public class SlackControllerIT {
 
         // Create mock user
         User mockUser = new User();
+        mockUser.setFirstName(DEFAULT_USER_FIRST_NAME);
+        mockUser.setLastName(DEFAULT_USER_LAST_NAME);
         mockUser.setLogin(DEFAULT_USER_EMAIL);
         mockUser.setEmail(DEFAULT_USER_EMAIL);
         mockUser.setPassword(passwordEncoder.encode(RandomUtil.generatePassword()));
