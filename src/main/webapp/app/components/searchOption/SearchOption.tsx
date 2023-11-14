@@ -11,10 +11,13 @@ import classnames from 'classnames';
 import AppStore from 'app/store/AppStore';
 import { FeedbackIcon } from 'app/components/feedback/FeedbackIcon';
 import { FeedbackType } from 'app/components/feedback/types';
-import {LEVEL_PRIORITY_BY_TYPE, ONCOKB_TM} from 'app/config/constants';
+import { LEVEL_PRIORITY_BY_TYPE, ONCOKB_TM } from 'app/config/constants';
 import { Alteration } from 'app/shared/api/generated/OncoKbPrivateAPI';
-import {sortByLevel, sortByLevelWithLevels} from "app/shared/utils/ReactTableUtils";
-import WithSeparator from "react-with-separator";
+import {
+  sortByLevel,
+  sortByLevelWithLevels,
+} from 'app/shared/utils/ReactTableUtils';
+import WithSeparator from 'react-with-separator';
 
 export enum SearchOptionType {
   GENE = 'GENE',
@@ -33,14 +36,10 @@ type SearchOptionProps = {
 const LevelString: React.FunctionComponent<{
   level: string;
 }> = props => {
-  const level = levelOfEvidence2Level(props.level)
+  const level = levelOfEvidence2Level(props.level);
   return (
     <>
-      <span
-        className={`oncokb level-${level} text-nowrap`}
-      >
-          Level {level}
-        </span>
+      <span className={`oncokb level-${level} text-nowrap`}>Level {level}</span>
     </>
   );
 };
@@ -61,14 +60,10 @@ const GeneSearchOption: React.FunctionComponent<{
             <span className={'mr-2'}>Highest level of evidence:</span>
             <WithSeparator separator={' '}>
               {props.data.highestSensitiveLevel && (
-                <LevelString
-                  level={props.data.highestSensitiveLevel}
-                />
+                <LevelString level={props.data.highestSensitiveLevel} />
               )}
               {props.data.highestResistanceLevel && (
-                <LevelString
-                  level={props.data.highestResistanceLevel}
-                />
+                <LevelString level={props.data.highestResistanceLevel} />
               )}
             </WithSeparator>
           </span>
@@ -177,16 +172,12 @@ const DrugSearchOption: React.FunctionComponent<{
       </div>
       <div className={styles.subTitle}>
         {props.data.highestSensitiveLevel && (
-          <LevelString
-            level={props.data.highestSensitiveLevel}
-          />
+          <LevelString level={props.data.highestSensitiveLevel} />
         )}
         {props.data.highestResistanceLevel && (
-          <LevelString
-            level={props.data.highestResistanceLevel}
-          />
-        )} :{' '}
-        {` ${props.data.gene.hugoSymbol} `}
+          <LevelString level={props.data.highestResistanceLevel} />
+        )}{' '}
+        : {` ${props.data.gene.hugoSymbol} `}
         {props.data.variants.length > 1
           ? `(${props.data.alterationsName})`
           : ''}
@@ -267,19 +258,17 @@ const CancerTypeSearchOption: React.FunctionComponent<{
         <div>
           {Object.keys(props.data.annotationByLevel)
             .sort((a, b) => sortByLevelWithLevels(a, b, LEVEL_PRIORITY_BY_TYPE))
-            .map(
-              (level) => {
-                const annotation = props.data.annotationByLevel[level]
-                return (
-                  <div className={styles.subTitle} key={`${props.data.tumorTypesName}-${level}`}>
-                    <LevelString
-                      level={level}
-                    />
-                    : {annotation}
-                  </div>
-                )
-              }
-            )}
+            .map(level => {
+              const annotation = props.data.annotationByLevel[level];
+              return (
+                <div
+                  className={styles.subTitle}
+                  key={`${props.data.tumorTypesName}-${level}`}
+                >
+                  <LevelString level={level} />: {annotation}
+                </div>
+              );
+            })}
         </div>
       ) : (
         <div>No evidence found.</div>
@@ -320,7 +309,9 @@ export const SearchOption: React.FunctionComponent<SearchOptionProps> = props =>
                       />
                     </Then>
                     <Else>
-                      <If condition={props.type === SearchOptionType.CANCER_TYPE}>
+                      <If
+                        condition={props.type === SearchOptionType.CANCER_TYPE}
+                      >
                         <Then>
                           <CancerTypeSearchOption
                             search={searchKeyword}
