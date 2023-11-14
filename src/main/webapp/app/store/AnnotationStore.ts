@@ -562,15 +562,21 @@ export class AnnotationStore {
   }
 
   // need to pass all observables from @computed, so they can be monitored by mobx
-  computeAlterationName(annotationType: AnnotationType, alteration: any, alterationQuery: string, annotationData: any, showDiff: boolean) {
+  computeAlterationName(
+    annotationType: AnnotationType,
+    alteration: any,
+    alterationQuery: string,
+    annotationData: any,
+    showDiff: boolean
+  ) {
     if (annotationType === AnnotationType.PROTEIN_CHANGE) {
       return getAlterationName(
         alteration.result === undefined
           ? alterationQuery
           : {
-            alteration: alteration.result.alteration,
-            name: alteration.result.name,
-          },
+              alteration: alteration.result.alteration,
+              name: alteration.result.name,
+            },
         showDiff
       );
     } else {
@@ -581,13 +587,23 @@ export class AnnotationStore {
   @computed
   get alterationName() {
     return this.computeAlterationName(
-      this.annotationType, this.alteration, this.alterationQuery, this.annotationData, false);
+      this.annotationType,
+      this.alteration,
+      this.alterationQuery,
+      this.annotationData,
+      false
+    );
   }
 
   @computed
   get alterationNameWithDiff() {
     return this.computeAlterationName(
-      this.annotationType, this.alteration, this.alterationQuery, this.annotationData, true);
+      this.annotationType,
+      this.alteration,
+      this.alterationQuery,
+      this.annotationData,
+      true
+    );
   }
 
   @computed
