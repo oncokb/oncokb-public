@@ -79,6 +79,7 @@ class Header extends React.Component<IHeaderProps> {
     },
     { title: 'Actionable Genes', link: PAGE_ROUTE.ACTIONABLE_GENE },
     { title: 'Oncology Therapies', link: PAGE_ROUTE.ONCOLOGY_TX },
+    { title: 'CDx', link: PAGE_ROUTE.CDX },
     { title: 'Cancer Genes', link: PAGE_ROUTE.CANCER_GENES },
     {
       title: 'API / License',

@@ -6,7 +6,11 @@ import {
 } from 'app/config/constants';
 import _ from 'lodash';
 import { Alteration, Citations } from '../api/generated/OncoKbAPI';
-import { levelOfEvidence2Level } from 'app/shared/utils/Utils';
+import {
+  getAllTumorTypesName,
+  levelOfEvidence2Level,
+} from 'app/shared/utils/Utils';
+import { TumorType } from '../api/generated/OncoKbPrivateAPI';
 
 export function sortByArrayIndexAsc(aIndex: number, bIndex: number) {
   if (aIndex === bIndex) {
@@ -18,6 +22,10 @@ export function sortByArrayIndexAsc(aIndex: number, bIndex: number) {
   } else {
     return aIndex - bIndex;
   }
+}
+
+export function sortByStringArray(a: string[], b: string[]) {
+  return a.join(', ').localeCompare(b.join(', '));
 }
 
 export function sortByLevelWithLevels(a: string, b: string, levels: LEVELS[]) {
@@ -151,4 +159,8 @@ export function mutationEffectSortMethod(
     mutationEffectOrder.indexOf(a),
     mutationEffectOrder.indexOf(b)
   );
+}
+
+export function tumorTypeSortMethod(a: TumorType[], b: TumorType[]) {
+  return getAllTumorTypesName(a).localeCompare(getAllTumorTypesName(b));
 }
