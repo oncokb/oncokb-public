@@ -2,6 +2,7 @@ import React from 'react';
 import ReactTable, { Column, TableProps } from 'react-table';
 import { observer } from 'mobx-react';
 import { observable, computed } from 'mobx';
+import classNames from 'classnames';
 
 export type SearchColumn<T> = Column<T> & {
   onFilter?: (data: T, keyword: string) => boolean;
@@ -87,9 +88,12 @@ export default class OncoKBTable<T> extends React.Component<
           <ReactTable
             {...this.props}
             showPagination={this.props.showPagination}
-            className={`-striped -highlight oncokbReactTable ${
-              this.props.fixedHeight ? 'fixedHeight' : ''
-            } ${this.props.className}`}
+            className={classNames(
+              `-striped -highlight oncokbReactTable ${
+                this.props.fixedHeight ? 'fixedHeight' : ''
+              }`,
+              this.props.className
+            )}
             data={this.filteredData}
           />
         </div>

@@ -928,3 +928,12 @@ export const convertObjectArrayToDelimitedString = (
   }
   return rows.join('\n');
 };
+
+export const getFdaSubmissionNumber = (
+  primaryNumber: string,
+  supplementNumber?: string
+) => {
+  return supplementNumber
+    ? `${primaryNumber}/${supplementNumber}`
+    : primaryNumber;
+};
