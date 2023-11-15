@@ -127,12 +127,13 @@ if (
       id: '2023_amp',
     },
     {
-      dateEnd: 1686456000000,
+      dateStart: 1700352000000,
+      dateEnd: 1701043200000,
       content: (
         <div>
           <b>Attention</b>: We want to inform you of an upcoming infrastructure
-          update that may lead to a temporary service disruption over the
-          weekend, planned <b>June 10th, 10am-12pm EDT</b>.
+          update that may lead to a temporary service disruption, planned{' '}
+          <b>Nov 25th, 8am-12pm EDT</b>.
           <br />
           During this period, you may experience intermittent service
           interruptions, brief outages, or slower response times while accessing
@@ -142,7 +143,7 @@ if (
       ),
       backgroundColor: COLOR_WARNING,
       color: COLOR_BLACK,
-      id: 'warning_msg_06102023',
+      id: 'warning_msg_11192023',
     },
   ];
 }
@@ -185,8 +186,11 @@ export default class UserMessage extends React.Component<UserMessageProps> {
     }
     return _.filter(MESSAGE_DATA, message => {
       const notYetShown = !localStorage.getItem(makeMessageKey(message.id));
+      const toBeShown = message.dateStart
+        ? Date.now() >= message.dateStart
+        : true;
       const expired = Date.now() > message.dateEnd;
-      return notYetShown && !expired;
+      return notYetShown && toBeShown && !expired;
     }).sort((a, b) => a.dateEnd - b.dateEnd);
   }
 
