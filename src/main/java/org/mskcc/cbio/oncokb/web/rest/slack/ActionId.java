@@ -8,6 +8,7 @@ import java.util.stream.Collectors;
  */
 public enum ActionId {
     APPROVE_USER("approve-user")
+    , APPROVE_USER_FOR_API_ACCESS("approve-user-for-api-access")
     , CHANGE_LICENSE_TYPE("change-license-type")
     , GIVE_TRIAL_ACCESS("give-trial-access")
     , CONVERT_TO_REGULAR_ACCOUNT("convert-to-regular-account")

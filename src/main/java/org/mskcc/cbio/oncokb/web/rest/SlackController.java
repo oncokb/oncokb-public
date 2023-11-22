@@ -10,10 +10,12 @@ import org.mskcc.cbio.oncokb.domain.UnknownPayload;
 import org.mskcc.cbio.oncokb.domain.User;
 import org.mskcc.cbio.oncokb.domain.enumeration.LicenseType;
 import org.mskcc.cbio.oncokb.repository.UserRepository;
+import org.mskcc.cbio.oncokb.security.AuthoritiesConstants;
 import org.mskcc.cbio.oncokb.service.MailService;
 import org.mskcc.cbio.oncokb.service.SlackService;
 import org.mskcc.cbio.oncokb.service.UserService;
 import org.mskcc.cbio.oncokb.service.dto.UserDTO;
+import org.mskcc.cbio.oncokb.service.dto.useradditionalinfo.ApiAccessRequest;
 import org.mskcc.cbio.oncokb.service.mapper.UserMapper;
 import org.mskcc.cbio.oncokb.web.rest.slack.ActionId;
 import org.mskcc.cbio.oncokb.web.rest.slack.BlockId;
@@ -27,6 +29,7 @@ import springfox.documentation.annotations.ApiIgnore;
 
 import java.io.IOException;
 import java.util.Optional;
+import java.util.Set;
 
 @RestController
 @ApiIgnore
@@ -51,6 +54,18 @@ public class SlackController {
         this.mailService = mailService;
         this.slackService = slackService;
         this.userMapper = userMapper;
+    }
+
+    private void updateUserWithRoleApiIfRequested(UserDTO userDTO) {
+        boolean apiAccessRequested = userDTO.getAdditionalInfo() != null && userDTO.getAdditionalInfo().getApiAccessRequest() != null && userDTO.getAdditionalInfo().getApiAccessRequest().isRequested();
+        if (!userDTO.getLicenseType().equals(LicenseType.ACADEMIC) || apiAccessRequested) {
+            Set<String> userDTOAuthorities = userDTO.getAuthorities();
+            userDTOAuthorities.add(AuthoritiesConstants.API);
+
+            if (userDTO.getLicenseType().equals(LicenseType.ACADEMIC)) {
+                userDTO.getAdditionalInfo().getApiAccessRequest().setRequested(false);;
+            }
+        }
     }
 
     // We do not put any auth protection for the slack call
@@ -92,10 +107,23 @@ public class SlackController {
                                     userDTO = updatedUserDTO.get();
                                 }
                             }
+                        
+                            updateUserWithRoleApiIfRequested(userDTO);
+
                             Optional<UserDTO> updatedUser = userService.approveUser(userDTO, false);
                             if (updatedUser.isPresent() && updatedUser.get().isActivated()) {
                                 mailService.sendApprovalEmail(userDTO);
                             }
+                        }
+                        break;
+                    case APPROVE_USER_FOR_API_ACCESS:
+                        boolean userAlreadyHasRoleApi = userDTO.getAuthorities().contains(AuthoritiesConstants.API);
+
+                        updateUserWithRoleApiIfRequested(userDTO);
+
+                        Optional<UserDTO> updatedUser = userService.updateUser(userDTO);
+                        if (updatedUser.isPresent() && updatedUser.get().isActivated() && !userAlreadyHasRoleApi) {
+                            mailService.sendApiAccessApprovalEmail(userDTO);
                         }
                         break;
                     case GIVE_TRIAL_ACCESS:

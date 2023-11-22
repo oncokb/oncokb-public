@@ -23,6 +23,8 @@ const browserConfig = {
 
 // Shared API response data
 const apiAccount = fs.readFileSync(`${DATA_DIR}api-account.json`).toString();
+const apiAccountNoRoleApiAndRequested = fs.readFileSync(`${DATA_DIR}api-account-no-role-api-and-requested.json`).toString();
+const apiAccountNoRoleApiAndNotRequested = fs.readFileSync(`${DATA_DIR}api-account-no-role-api-and-not-requested.json`).toString();
 const apiV1Info = fs.readFileSync(`${DATA_DIR}api-v1-info.json`).toString();
 const numbersLevels = fs
   .readFileSync(`${DATA_DIR}private-utils-numbers-levels.json`)
@@ -294,6 +296,136 @@ function getMockResponse(url) {
   }
   return res;
 }
+
+function getMockResponseNoRoleApiAndRequested(url) {
+  let res = undefined;
+  switch (url) {
+    case `${SERVER_URL}api/account`:
+      res = {
+        status: 200,
+        contentType: 'application/json',
+        body: apiAccountNoRoleApiAndRequested,
+      };
+      break;
+    case `${SERVER_URL}api/v1/info`:
+      res = {
+        status: 200,
+        contentType: 'application/json',
+        body: apiV1Info,
+      };
+      break;
+    default:
+      res = undefined;
+  }
+  return res;
+}
+
+function getMockResponseNoRoleApiAndNotRequested(url) {
+  let res = undefined;
+  switch (url) {
+    case `${SERVER_URL}api/account`:
+      res = {
+        status: 200,
+        contentType: 'application/json',
+        body: apiAccountNoRoleApiAndNotRequested,
+      };
+      break;
+    case `${SERVER_URL}api/v1/info`:
+      res = {
+        status: 200,
+        contentType: 'application/json',
+        body: apiV1Info,
+      };
+      break;
+    default:
+      res = undefined;
+  }
+  return res;
+}
+
+describe('Tests without ROLE_API and requested', () => {
+  let browser;
+  let page;
+
+  beforeAll(async () => {
+    browser = await puppeteer.launch(browserConfig);
+    page = await browser.newPage();
+    await page.setRequestInterception(true); // Handle UnhandledPromiseRejectionWarning: Error: Request Interception is not enabled!
+    page.on('request', request => {
+      let url = request.url();
+      if (getMockResponseNoRoleApiAndRequested(url) !== undefined) {
+        request.respond(getMockResponseNoRoleApiAndRequested(url));
+      } else request.continue();
+    });
+    await page.goto(`${CLIENT_URL}`);
+    await page.evaluate(() => {
+      localStorage.setItem('localdev', 'true');
+      localStorage.setItem('disablebanner', 'true');
+      localStorage.setItem(
+        'oncokb-user-token',
+        'oncokb-public-demo-admin-token'
+      );
+    });
+  });
+
+  it('Account Settings Page', async () => {
+    await page.goto(`${CLIENT_URL}account/settings`);
+    await page.setViewport(VIEW_PORT_1080);
+    await page.waitFor(WAITING_TIME);
+    let image = await page.screenshot(
+      getScreenshotConfig('Account Settings Page without ROLE_API and requested')
+    );
+    expect(image).toMatchImageSnapshot({
+      customSnapshotIdentifier: 'Account Settings Page without ROLE_API and requested',
+    });
+  });
+
+  afterAll(async () => {
+    await browser.close();
+  });
+});
+
+describe('Tests without ROLE_API and not requested', () => {
+  let browser;
+  let page;
+
+  beforeAll(async () => {
+    browser = await puppeteer.launch(browserConfig);
+    page = await browser.newPage();
+    await page.setRequestInterception(true); // Handle UnhandledPromiseRejectionWarning: Error: Request Interception is not enabled!
+    page.on('request', request => {
+      let url = request.url();
+      if (getMockResponseNoRoleApiAndNotRequested(url) !== undefined) {
+        request.respond(getMockResponseNoRoleApiAndNotRequested(url));
+      } else request.continue();
+    });
+    await page.goto(`${CLIENT_URL}`);
+    await page.evaluate(() => {
+      localStorage.setItem('localdev', 'true');
+      localStorage.setItem('disablebanner', 'true');
+      localStorage.setItem(
+        'oncokb-user-token',
+        'oncokb-public-demo-admin-token'
+      );
+    });
+  });
+
+  it('Account Settings Page', async () => {
+    await page.goto(`${CLIENT_URL}account/settings`);
+    await page.setViewport(VIEW_PORT_1080);
+    await page.waitFor(WAITING_TIME);
+    let image = await page.screenshot(
+      getScreenshotConfig('Account Settings Page without ROLE_API and not requested')
+    );
+    expect(image).toMatchImageSnapshot({
+      customSnapshotIdentifier: 'Account Settings Page without ROLE_API and not requested',
+    });
+  });
+
+  afterAll(async () => {
+    await browser.close();
+  });
+});
 
 describe('Tests with login', () => {
   let browser;

@@ -1,11 +1,11 @@
 import React from 'react';
 import { inject, observer } from 'mobx-react';
 import { action, computed, observable } from 'mobx';
-import autobind from 'autobind-decorator';
 import { Redirect } from 'react-router-dom';
 import AuthenticationStore from 'app/store/AuthenticationStore';
 import {
   ACCOUNT_TITLES,
+  AUTHORITIES,
   H5_FONT_SIZE,
   LicenseType,
   PAGE_ROUTE,
@@ -24,6 +24,7 @@ import { notifyError, notifySuccess } from 'app/shared/utils/NotificationUtils';
 import InfoIcon from 'app/shared/icons/InfoIcon';
 import TokenInputGroups from 'app/components/tokenInputGroups/TokenInputGroups';
 import client from 'app/shared/api/clientInstance';
+import { SimpleConfirmModal } from 'app/shared/modal/SimpleConfirmModal';
 
 export type IRegisterProps = {
   authenticationStore: AuthenticationStore;
@@ -54,6 +55,10 @@ export const InfoRow: React.FunctionComponent<{
 @observer
 export class AccountPage extends React.Component<IRegisterProps> {
   @observable copiedIdToken = false;
+  @observable showConfirmModal = false;
+  @observable apiAccessJustification = '';
+  @observable apiAccessRequested =
+    this.account?.additionalInfo?.apiAccessRequest?.requested || false;
 
   constructor(props: Readonly<IRegisterProps>) {
     super(props);
@@ -134,6 +139,54 @@ export class AccountPage extends React.Component<IRegisterProps> {
     if (this.account === undefined) {
       return <Redirect to={PAGE_ROUTE.LOGIN} />;
     }
+
+    const apiAccess = (
+      <InfoRow
+        title={
+          <div className={'d-flex align-items-center'}>
+            <span>
+              {getAccountInfoTitle(
+                ACCOUNT_TITLES.API_TOKEN,
+                this.account.licenseType as LicenseType
+              )}
+            </span>
+            {this.generateTokenEnabled ? (
+              <DefaultTooltip placement={'top'} overlay={'Get a new token.'}>
+                <i
+                  className={classnames('ml-2 fa fa-plus')}
+                  onClick={this.addNewToken}
+                />
+              </DefaultTooltip>
+            ) : null}
+          </div>
+        }
+      >
+        <TokenInputGroups
+          changeTokenExpirationDate={false}
+          tokens={this.tokens}
+          onDeleteToken={this.deleteToken}
+        />
+      </InfoRow>
+    );
+    const noApiAccess = (
+      <span>
+        You do not have API access. Click{' '}
+        <span
+          style={{ cursor: 'pointer' }}
+          onClick={() => (this.showConfirmModal = true)}
+        >
+          HERE
+        </span>{' '}
+        to request API access.
+      </span>
+    );
+    const awaitingApiAccess = (
+      <span>
+        We are reviewing your API access request. If you haven't heard back from
+        us after 1-2 business days, please feel free to contact us.
+      </span>
+    );
+
     return (
       <SmallPageContainer size={'lg'}>
         <Row className={getSectionClassName(true)}>
@@ -212,37 +265,46 @@ export class AccountPage extends React.Component<IRegisterProps> {
                 className={'ml-2'}
               />
             </div>
-            <InfoRow
-              title={
-                <div className={'d-flex align-items-center'}>
-                  <span>
-                    {getAccountInfoTitle(
-                      ACCOUNT_TITLES.API_TOKEN,
-                      this.account.licenseType as LicenseType
-                    )}
-                  </span>
-                  {this.generateTokenEnabled ? (
-                    <DefaultTooltip
-                      placement={'top'}
-                      overlay={'Get a new token.'}
-                    >
-                      <i
-                        className={classnames('ml-2 fa fa-plus')}
-                        onClick={this.addNewToken}
-                      />
-                    </DefaultTooltip>
-                  ) : null}
-                </div>
-              }
-            >
-              <TokenInputGroups
-                changeTokenExpirationDate={false}
-                tokens={this.tokens}
-                onDeleteToken={this.deleteToken}
-              />
-            </InfoRow>
+            {this.account.authorities.includes(AUTHORITIES.API)
+              ? apiAccess
+              : this.apiAccessRequested
+              ? awaitingApiAccess
+              : noApiAccess}
           </Col>
         </Row>
+        <SimpleConfirmModal
+          title="Request API Access"
+          body={
+            <>
+              <p>Please provide a justification for your API access request.</p>
+              <textarea
+                className="form-control"
+                value={this.apiAccessJustification}
+                onChange={event =>
+                  (this.apiAccessJustification = event.target.value)
+                }
+              />
+            </>
+          }
+          confirmDisabled={this.apiAccessJustification.length === 0}
+          onCancel={() => (this.showConfirmModal = false)}
+          onConfirm={async () => {
+            try {
+              await client.requestApiAccessUsingPOST({
+                apiAccessRequest: {
+                  requested: true,
+                  justification: this.apiAccessJustification,
+                },
+              });
+              this.apiAccessRequested = true;
+              notifySuccess('API access is requested.');
+            } catch (error) {
+              notifyError(error);
+            }
+            this.showConfirmModal = false;
+          }}
+          show={this.showConfirmModal}
+        />
       </SmallPageContainer>
     );
   }

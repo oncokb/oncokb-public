@@ -13,6 +13,8 @@ import org.mskcc.cbio.oncokb.service.*;
 import org.mskcc.cbio.oncokb.service.dto.PasswordChangeDTO;
 import org.mskcc.cbio.oncokb.service.dto.UserDTO;
 import org.mskcc.cbio.oncokb.service.dto.UserDetailsDTO;
+import org.mskcc.cbio.oncokb.service.dto.useradditionalinfo.AdditionalInfoDTO;
+import org.mskcc.cbio.oncokb.service.dto.useradditionalinfo.ApiAccessRequest;
 import org.mskcc.cbio.oncokb.service.mapper.UserMapper;
 import org.mskcc.cbio.oncokb.web.rest.errors.*;
 import org.mskcc.cbio.oncokb.web.rest.errors.EmailAlreadyUsedException;
@@ -272,6 +274,29 @@ public class AccountResource {
             throw new InvalidPasswordException();
         }
         userService.changePassword(passwordChangeDto.getCurrentPassword(), passwordChangeDto.getNewPassword());
+    }
+
+    /**
+     * {@code POST  /account/request-api-access} : requests ROLE_API for current user.
+     *
+     * @param apiAccessRequest isRequested boolean and justification (reason for request).
+     */
+    @PostMapping(path = "/account/request-api-access")
+    public void requestApiAccess(@Valid @RequestBody ApiAccessRequest apiAccessRequest) {
+        Optional<String> userLogin = SecurityUtils.getCurrentUserLogin();
+        if (userLogin.isPresent()) {
+            Optional<User> user = userService.getUserWithAuthoritiesByLogin(userLogin.get());
+            if (user.isPresent()) {
+                Optional<UserDetailsDTO> userDetailsDTO = userDetailsService.findOneByUser(user.get());
+                if (userDetailsDTO.isPresent()) {
+                    UserDetailsDTO updatedUserDetailsDTO = userDetailsDTO.get();
+                    updatedUserDetailsDTO.getAdditionalInfo().setApiAccessRequest(apiAccessRequest);
+                   
+                    userDetailsService.save(updatedUserDetailsDTO);
+                    slackService.sendUserApiAccessRequestToChannel(userMapper.userToUserDTO(user.get()));
+                }
+            }
+        }
     }
 
     /**

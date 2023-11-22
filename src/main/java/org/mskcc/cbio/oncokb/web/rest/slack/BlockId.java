@@ -24,6 +24,7 @@ public enum BlockId {
     , COLLAPSED("collapsed")
     , SUBJECT_INPUT("subject-input")
     , BODY_INPUT("body-input")
+    , API_ACCESS("api-access")
     ;
 
     String id;

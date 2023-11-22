@@ -12,6 +12,8 @@ public class AdditionalInfoDTO implements Serializable{
 
     UserCompany userCompany;
 
+    ApiAccessRequest apiAccessRequest;
+
     public AdditionalInfoDTO() {
 
     }
@@ -30,5 +32,13 @@ public class AdditionalInfoDTO implements Serializable{
 
     public void setUserCompany(UserCompany userCompany) {
         this.userCompany = userCompany;
+    }
+
+    public ApiAccessRequest getApiAccessRequest() {
+        return apiAccessRequest;
+    }
+
+    public void setApiAccessRequest(ApiAccessRequest apiAccessRequest) {
+        this.apiAccessRequest = apiAccessRequest;
     }
 }

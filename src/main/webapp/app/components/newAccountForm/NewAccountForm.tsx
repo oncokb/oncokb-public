@@ -70,6 +70,8 @@ enum FormKey {
   COMPANY_SIZE = 'companySize',
   BUS_CONTACT_EMAIL = 'businessContactEmail',
   BUS_CONTACT_PHONE = 'businessContactPhone',
+  REQUEST_API_ACCESS = 'requestApiAccess',
+  API_ACCESS_JUSTIFICATION = 'apiAccessJustification',
 }
 
 type CompanySelectOptionType = {
@@ -86,6 +88,7 @@ export class NewAccountForm extends React.Component<INewAccountForm> {
   @observable selectedAccountType = ACCOUNT_TYPE_DEFAULT;
   @observable companyOptions: CompanySelectOptionType[] = [];
   @observable selectedCompanyOption: CompanySelectOptionType | undefined;
+  @observable apiAccessRequested = false;
 
   private defaultFormValue = {
     accountType: ACCOUNT_TYPE_DEFAULT,
@@ -138,7 +141,6 @@ export class NewAccountForm extends React.Component<INewAccountForm> {
     const additionalInfo = {
       userCompany: {},
     } as AdditionalInfoDTO;
-
     if (values[FormKey.COMPANY_SIZE]) {
       additionalInfo.userCompany.size = values[FormKey.COMPANY_SIZE];
     }
@@ -165,6 +167,13 @@ export class NewAccountForm extends React.Component<INewAccountForm> {
           values[FormKey.BUS_CONTACT_PHONE];
       }
     }
+    if (!this.isCommercialLicense) {
+      additionalInfo.apiAccessRequest = {
+        requested: this.apiAccessRequested,
+        justification: values[FormKey.API_ACCESS_JUSTIFICATION],
+      };
+    }
+
     if (_.keys(additionalInfo.userCompany).length === 0) {
       delete additionalInfo.userCompany;
     }
@@ -682,6 +691,69 @@ export class NewAccountForm extends React.Component<INewAccountForm> {
                           type={'input'}
                         />
                       )}
+                    </div>
+                  )}
+                </Col>
+              </Row>
+            )}
+            {!this.isCommercialLicense && (
+              <Row className={getSectionClassName()}>
+                <Col md="3">
+                  <h5>API Access</h5>
+                </Col>
+                <Col md="9">
+                  <p>
+                    Would you like programmatic access to the {ONCOKB_TM}{' '}
+                    database via our API? API access allows a user to
+                    simultaneously annotate multiple tumor mutations with{' '}
+                    {ONCOKB_TM} data and provides a text file output.{' '}
+                    {ONCOKB_TM} API access may also enable the user to leverage{' '}
+                    {ONCOKB_TM} alongside other platform APIs.
+                  </p>
+                  <p>
+                    Should you request API access, you must provide a detailed
+                    description on how you plan to use {ONCOKB_TM} APIs.
+                    Additional time for user screening will be required to grant
+                    access.
+                  </p>
+                  <p>
+                    The following use cases do <b>not</b> require API access:
+                  </p>
+                  <ul style={{ listStyleType: 'circle' }}>
+                    <li>Browse {ONCOKB_TM} content on our website</li>
+                    <li>
+                      Download data from our website (Actionable Genes,
+                      Precision Oncology Therapies, Cancer Genes etc.)
+                    </li>
+                    <li>
+                      View therapeutic implication descriptions (treatment
+                      descriptions)
+                    </li>
+                  </ul>
+                  <AvCheckboxGroup
+                    name={FormKey.REQUEST_API_ACCESS}
+                    key={FormKey.REQUEST_API_ACCESS}
+                    errorMessage={'You have to accept the term'}
+                  >
+                    <AvCheckbox
+                      label={'Request API Access'}
+                      value={this.apiAccessRequested}
+                      onChange={() =>
+                        (this.apiAccessRequested = !this.apiAccessRequested)
+                      }
+                    />
+                  </AvCheckboxGroup>
+                  {this.apiAccessRequested && (
+                    <div className="mt-2">
+                      <AvField
+                        name={FormKey.API_ACCESS_JUSTIFICATION}
+                        placeholder={
+                          'Provide a justification for your API access request'
+                        }
+                        rows={6}
+                        type={'textarea'}
+                        required={this.apiAccessRequested}
+                      />
                     </div>
                   )}
                 </Col>

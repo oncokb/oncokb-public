@@ -20,5 +20,5 @@
     "createdDate" : null,
     "lastModifiedBy" : "admin",
     "lastModifiedDate" : "2019-11-14T11:30:46Z",
-    "authorities" : [ "ROLE_USER", "ROLE_PREMIUM_USER", "ROLE_ADMIN", "ROLE_API" ]
+    "authorities" : [ "ROLE_USER", "ROLE_PREMIUM_USER", "ROLE_ADMIN" ]
   }

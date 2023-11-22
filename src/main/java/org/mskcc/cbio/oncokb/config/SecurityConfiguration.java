@@ -95,7 +95,7 @@ public class SecurityConfiguration extends WebSecurityConfigurerAdapter {
             .antMatchers("/api/v1/v2/api-docs").permitAll()
             .antMatchers("/api/private/utils/data/**").hasAnyAuthority(AuthoritiesConstants.DATA_DOWNLOAD)
 
-            .antMatchers("/api/v1/annotate/**").hasAnyAuthority(AuthoritiesConstants.USER)
+            .antMatchers("/api/v1/annotate/**").hasAnyAuthority(AuthoritiesConstants.API)
 
             .antMatchers("/api/v1/genes/lookup").hasAnyAuthority(AuthoritiesConstants.PUBLIC_WEBSITE, AuthoritiesConstants.USER, AuthoritiesConstants.ADMIN)
             .antMatchers("/api/v1/variants/lookup").hasAnyAuthority(AuthoritiesConstants.PUBLIC_WEBSITE, AuthoritiesConstants.USER, AuthoritiesConstants.ADMIN)
