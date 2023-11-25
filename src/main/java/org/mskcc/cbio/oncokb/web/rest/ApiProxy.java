@@ -157,6 +157,9 @@ public class ApiProxy {
 
     @Async
     public void updateTokenStats(HttpServletRequest request, int usageCount) {
+        if (applicationProperties.getDbReadOnly()) {
+            return;
+        }
         Optional<String> userOptional = SecurityUtils.getCurrentUserLogin();
         if (userOptional.isPresent()) {
             List<String> tokenUsageCheckWhitelist = Arrays.stream(applicationProperties.getTokenUsageCheckWhitelist().split(",")).map(api -> api.trim()).filter(api -> !api.isEmpty()).collect(Collectors.toList());
