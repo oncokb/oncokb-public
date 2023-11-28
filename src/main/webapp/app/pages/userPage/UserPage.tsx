@@ -16,6 +16,7 @@ import {
 } from 'availity-reactstrap-validation';
 import {
   ACCOUNT_TITLES,
+  AUTHORITIES,
   LicenseType,
   NOT_CHANGEABLE_AUTHORITIES,
   PAGE_ROUTE,
@@ -406,6 +407,13 @@ export default class UserPage extends React.Component<IUserPage> {
         ...this.user.additionalInfo,
         userCompany: updatedUserCompany,
       };
+      if (!values.authorities.includes(AUTHORITIES.API)) {
+        updatedAdditionalInfo.apiAccessRequest = {
+          requested: false,
+          justification: '',
+        };
+      }
+
       const updatedUser: UserDTO = {
         ...this.user,
         firstName: values.firstName,

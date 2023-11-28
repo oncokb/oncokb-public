@@ -544,7 +544,7 @@ public class SlackService {
             }
 
             if (StringUtils.isNotEmpty(additionalInfoDTO.getUserCompany().getUseCase())) {
-                userInfo.add(getTextObject("Use Case", additionalInfoDTO.getUserCompany().getUseCase() + " " + apiAccessJustification));
+                userInfo.add(getTextObject("Use Case", additionalInfoDTO.getUserCompany().getUseCase() + " | API Request Justification: " + apiAccessJustification));
             }
             if (StringUtils.isNotEmpty(additionalInfoDTO.getUserCompany().getAnticipatedReports())) {
                 userInfo.add(getTextObject("Anticipated Reports", additionalInfoDTO.getUserCompany().getAnticipatedReports()));

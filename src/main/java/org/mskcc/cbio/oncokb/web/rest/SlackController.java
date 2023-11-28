@@ -61,10 +61,6 @@ public class SlackController {
         if (!userDTO.getLicenseType().equals(LicenseType.ACADEMIC) || apiAccessRequested) {
             Set<String> userDTOAuthorities = userDTO.getAuthorities();
             userDTOAuthorities.add(AuthoritiesConstants.API);
-
-            if (userDTO.getLicenseType().equals(LicenseType.ACADEMIC)) {
-                userDTO.getAdditionalInfo().getApiAccessRequest().setRequested(false);;
-            }
         }
     }
 
