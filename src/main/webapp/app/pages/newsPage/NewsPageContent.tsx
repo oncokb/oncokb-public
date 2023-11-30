@@ -200,6 +200,131 @@ const EVIDENCE_COLUMN_SEPARATOR = '; ';
 // https://stackoverflow.com/questions/41947168/is-it-possible-to-use-keyof-operator-on-literals-instead-of-interfaces
 
 export const NEWS_BY_DATE: { [date: string]: NewsData } = {
+  '12042023': {
+    changedAnnotations: [
+      {
+        columnHeaderType: AnnotationColumnHeaderType.ADDITIONAL_SAME_LEVEL_DRUG,
+        content: [
+          [
+            'ROS1',
+            'Fusions',
+            'Non-Small Cell Lung Cancer',
+            '1',
+            'Crizotinib, Entrectinib',
+            'Repotrectinib (Level 1)',
+            <WithSeparator separator={EVIDENCE_COLUMN_SEPARATOR}>
+              <FdaApprovalLink
+                approval={'Repotrectinib for ROS1+ NSCLC'}
+                link={
+                  'https://www.fda.gov/drugs/resources-information-approved-drugs/fda-approves-repotrectinib-ros1-positive-non-small-cell-lung-cancer'
+                }
+              />
+              <AbstractLink
+                abstract="Cho et al. Abstract# OA03.06, J. of Thoracic Oncol. Nov. 2023"
+                link="https://www.jto.org/article/S1556-0864(23)00837-7/fulltext"
+              />
+            </WithSeparator>,
+          ],
+          [
+            'PIK3CA',
+            'Oncogenic Mutations',
+            'Breast Cancer',
+            '1',
+            'Alpelisib + Fulvestrant; (select PIK3CA mts only)',
+            'Capivasertib + Fulvestrant (Level 1)',
+            <WithSeparator separator={EVIDENCE_COLUMN_SEPARATOR}>
+              <FdaApprovalLink
+                approval={'Capivasertib + Fulvestrant'}
+                link={
+                  'https://www.fda.gov/drugs/resources-information-approved-drugs/fda-approves-capivasertib-fulvestrant-breast-cancer'
+                }
+              />
+              <PMIDLink pmids={'37256976'} />
+            </WithSeparator>,
+          ],
+        ],
+      },
+      {
+        columnHeaderType: AnnotationColumnHeaderType.LEVEL,
+        title: 'Updated therapeutic implications - Changed level of evidence',
+        content: [
+          [
+            'PTEN',
+            'Oncogenic Mutations',
+            'Breast Cancer',
+            <div>
+              <div style={{ fontStyle: 'italic' }}>
+                {DRUGS_CURRENTLY_IN_ONCOKB}:
+              </div>
+              <div>GSK2636771, AZD8186 (Currently Level 4)</div>
+              <br></br>
+              <div style={{ fontStyle: 'italic' }}>
+                {DRUGS_ADDED_TO_ONCOKB}:
+              </div>
+              <div>Capivasertib + Fulvestrant (Level 1)</div>
+            </div>,
+            '4',
+            '1',
+            <WithSeparator separator={EVIDENCE_COLUMN_SEPARATOR}>
+              <FdaApprovalLink
+                approval="Capivasertib + Fulvestrant"
+                link="https://www.fda.gov/drugs/resources-information-approved-drugs/fda-approves-capivasertib-fulvestrant-breast-cancer"
+              />
+              <PMIDLink pmids={'37256976'} />
+            </WithSeparator>,
+          ],
+          [
+            'AKT1',
+            'Oncogenic Mutations',
+            'Breast Cancer',
+            <div>
+              <div style={{ fontStyle: 'italic' }}>
+                {DRUGS_CURRENTLY_IN_ONCOKB}:
+              </div>
+              <div>Capivasertib (AKT1 E17K only; Level 3A)</div>
+              <br></br>
+              <div style={{ fontStyle: 'italic' }}>
+                {DRUGS_ADDED_TO_ONCOKB}:
+              </div>
+              <div>Capivasertib + Fulvestrant (Level 1)</div>
+            </div>,
+            '3A',
+            '1',
+            <WithSeparator separator={EVIDENCE_COLUMN_SEPARATOR}>
+              <FdaApprovalLink
+                approval="Capivasertib + Fulvestrant"
+                link="https://www.fda.gov/drugs/resources-information-approved-drugs/fda-approves-capivasertib-fulvestrant-breast-cancer"
+              />
+              <PMIDLink pmids={'37256976'} />
+            </WithSeparator>,
+          ],
+        ],
+      },
+    ],
+    updatedImplicationTitle:
+      'Updated therapeutic implications - New alterations with a level of evidence',
+    updatedImplication: [
+      [
+        '3A',
+        'EGFR',
+        'Amplification',
+        'Gastroesophageal Adenocarcinoma',
+        'Cetuximab, Cetuximab + Chemotherapy, Panitumumab, Panitumumab + Chemotherapy',
+        <WithSeparator separator={EVIDENCE_COLUMN_SEPARATOR}>
+          <PMIDLink pmids={'35349370'} />
+        </WithSeparator>,
+      ],
+    ],
+    newlyAddedGenes: [
+      'FGF6',
+      'HSD3B1',
+      'IRF2',
+      'PAX3',
+      'PAX7',
+      'PDK1',
+      'ZNF217',
+    ],
+  },
   '11132023': {
     news: [
       <span>
