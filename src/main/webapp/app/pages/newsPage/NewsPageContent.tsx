@@ -206,12 +206,29 @@ export const NEWS_BY_DATE: { [date: string]: NewsData } = {
         columnHeaderType: AnnotationColumnHeaderType.ADDITIONAL_SAME_LEVEL_DRUG,
         content: [
           [
+            'PIK3CA',
+            'Oncogenic Mutations',
+            'Breast Cancer',
+            '1',
+            'Alpelisib + Fulvestrant; (Level 1; select PIK3CA mts only), RLY-2608 + Fulvestrant (Level 4)',
+            'Capivasertib + Fulvestrant (Level 1)',
+            <WithSeparator separator={EVIDENCE_COLUMN_SEPARATOR}>
+              <FdaApprovalLink
+                approval={'Capivasertib + Fulvestrant'}
+                link={
+                  'https://www.fda.gov/drugs/resources-information-approved-drugs/fda-approves-capivasertib-fulvestrant-breast-cancer'
+                }
+              />
+              <PMIDLink pmids={'37256976'} />
+            </WithSeparator>,
+          ],
+          [
             'ROS1',
             'Fusions',
             'Non-Small Cell Lung Cancer',
             '1',
-            'Crizotinib, Entrectinib',
-            'Repotrectinib (Level 1)',
+            'Crizotinib, Entrectinib (Level 1), Ceritinib, Lorlatinib (Level 2),  Repotrectinib (Level 3A)',
+            'Repotrectinib (Promoted to Level 1)',
             <WithSeparator separator={EVIDENCE_COLUMN_SEPARATOR}>
               <FdaApprovalLink
                 approval={'Repotrectinib for ROS1+ NSCLC'}
@@ -225,29 +242,27 @@ export const NEWS_BY_DATE: { [date: string]: NewsData } = {
               />
             </WithSeparator>,
           ],
-          [
-            'PIK3CA',
-            'Oncogenic Mutations',
-            'Breast Cancer',
-            '1',
-            'Alpelisib + Fulvestrant; (select PIK3CA mts only)',
-            'Capivasertib + Fulvestrant (Level 1)',
-            <WithSeparator separator={EVIDENCE_COLUMN_SEPARATOR}>
-              <FdaApprovalLink
-                approval={'Capivasertib + Fulvestrant'}
-                link={
-                  'https://www.fda.gov/drugs/resources-information-approved-drugs/fda-approves-capivasertib-fulvestrant-breast-cancer'
-                }
-              />
-              <PMIDLink pmids={'37256976'} />
-            </WithSeparator>,
-          ],
         ],
       },
       {
         columnHeaderType: AnnotationColumnHeaderType.LEVEL,
         title: 'Updated therapeutic implications - Changed level of evidence',
         content: [
+          [
+            'AKT1',
+            'Oncogenic Mutations',
+            'Breast Cancer',
+            'Capivasertib + Fulvestrant',
+            '3A (Capivasertib monotherapy for AKT1 E17K only)',
+            '1',
+            <WithSeparator separator={EVIDENCE_COLUMN_SEPARATOR}>
+              <FdaApprovalLink
+                approval="Capivasertib + Fulvestrant"
+                link="https://www.fda.gov/drugs/resources-information-approved-drugs/fda-approves-capivasertib-fulvestrant-breast-cancer"
+              />
+              <PMIDLink pmids={'37256976'} />
+            </WithSeparator>,
+          ],
           [
             'PTEN',
             'Oncogenic Mutations',
@@ -264,31 +279,6 @@ export const NEWS_BY_DATE: { [date: string]: NewsData } = {
               <div>Capivasertib + Fulvestrant (Level 1)</div>
             </div>,
             '4',
-            '1',
-            <WithSeparator separator={EVIDENCE_COLUMN_SEPARATOR}>
-              <FdaApprovalLink
-                approval="Capivasertib + Fulvestrant"
-                link="https://www.fda.gov/drugs/resources-information-approved-drugs/fda-approves-capivasertib-fulvestrant-breast-cancer"
-              />
-              <PMIDLink pmids={'37256976'} />
-            </WithSeparator>,
-          ],
-          [
-            'AKT1',
-            'Oncogenic Mutations',
-            'Breast Cancer',
-            <div>
-              <div style={{ fontStyle: 'italic' }}>
-                {DRUGS_CURRENTLY_IN_ONCOKB}:
-              </div>
-              <div>Capivasertib (AKT1 E17K only; Level 3A)</div>
-              <br></br>
-              <div style={{ fontStyle: 'italic' }}>
-                {DRUGS_ADDED_TO_ONCOKB}:
-              </div>
-              <div>Capivasertib + Fulvestrant (Level 1)</div>
-            </div>,
-            '3A',
             '1',
             <WithSeparator separator={EVIDENCE_COLUMN_SEPARATOR}>
               <FdaApprovalLink
