@@ -288,6 +288,18 @@ export const NEWS_BY_DATE: { [date: string]: NewsData } = {
               <PMIDLink pmids={'37256976'} />
             </WithSeparator>,
           ],
+          [
+            'KRAS',
+            'G12A/D/R/S/V',
+            'Pancreatic Adenocarcinoma, Non-Small Cell Lung Cancer',
+            'RMC-6236',
+            '4',
+            '3A',
+            <AbstractLink
+              abstract="Arbour, KC. et al. Abstract# 6520, Annals of Oncol. 2023"
+              link="https://oncologypro.esmo.org/meeting-resources/esmo-congress/preliminary-clinical-activity-of-rmc-6236-a-first-in-class-ras-selective-tri-complex-ras-multi-on-inhibitor-in-patients-with-kras-mutant-pancre"
+            />,
+          ],
         ],
       },
     ],
