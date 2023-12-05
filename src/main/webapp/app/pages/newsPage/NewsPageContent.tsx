@@ -210,7 +210,7 @@ export const NEWS_BY_DATE: { [date: string]: NewsData } = {
             'Oncogenic Mutations',
             'Breast Cancer',
             '1',
-            'Alpelisib + Fulvestrant; (Level 1; select PIK3CA mts only), RLY-2608 + Fulvestrant (Level 4)',
+            'Alpelisib + Fulvestrant (Level 1; select PIK3CA mts only), RLY-2608 + Fulvestrant (Level 4)',
             'Capivasertib + Fulvestrant (Level 1)',
             <WithSeparator separator={EVIDENCE_COLUMN_SEPARATOR}>
               <FdaApprovalLink
