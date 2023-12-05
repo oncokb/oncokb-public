@@ -840,8 +840,7 @@ export const getCategoricalAlterationDescription = (
       content = (
         <span>
           Defined as deletion or chromosomal translocation events arising within{' '}
-          {geneLink} that result in a functional fusion event which preserves an
-          intact {hugoSymbol} kinase domain.
+          {geneLink} that result in a functional fusion event.
         </span>
       );
       break;
@@ -849,7 +848,8 @@ export const getCategoricalAlterationDescription = (
       content = (
         <span>
           Defined as nonsense, frameshift, or splice-site mutations within{' '}
-          {geneLink} that are predicted to shorten the coding sequence of gene.
+          {geneLink} that are predicted to shorten the coding sequence of the
+          gene.
         </span>
       );
       break;
