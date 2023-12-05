@@ -9,7 +9,6 @@ import org.mskcc.cbio.oncokb.domain.User;
 import org.mskcc.cbio.oncokb.repository.UserRepository;
 import org.mskcc.cbio.oncokb.security.AuthoritiesConstants;
 import org.mskcc.cbio.oncokb.service.MailService;
-import org.mskcc.cbio.oncokb.service.SmartsheetService;
 import org.mskcc.cbio.oncokb.service.TokenService;
 import org.springframework.data.domain.Sort;
 
@@ -35,6 +34,7 @@ import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 
+import javax.mail.MessagingException;
 import javax.validation.Valid;
 import javax.validation.constraints.NotNull;
 import java.net.URI;
@@ -86,20 +86,16 @@ public class UserResource {
 
     private final TokenService tokenService;
 
-    private final SmartsheetService smartsheetService;
-
     public UserResource(
         UserService userService,
         UserRepository userRepository,
         MailService mailService,
-        TokenService tokenService,
-        SmartsheetService smartsheetService
+        TokenService tokenService
     ) {
         this.userService = userService;
         this.userRepository = userRepository;
         this.mailService = mailService;
         this.tokenService = tokenService;
-        this.smartsheetService = smartsheetService;
     }
 
     /**
@@ -116,7 +112,7 @@ public class UserResource {
      */
     @PostMapping("/users")
     @PreAuthorize("hasAuthority(\"" + AuthoritiesConstants.ADMIN + "\")")
-    public ResponseEntity<User> createUser(@Valid @RequestBody ManagedUserVM managedUserVM) throws URISyntaxException {
+    public ResponseEntity<User> createUser(@Valid @RequestBody ManagedUserVM managedUserVM) throws URISyntaxException, MessagingException {
         log.debug("REST request to save User : {}", managedUserVM);
 
         if (managedUserVM.getId() != null) {
@@ -135,7 +131,7 @@ public class UserResource {
             User newUser = userService.createUser(managedUserVM, Optional.ofNullable(managedUserVM.getTokenValidDays()), Optional.ofNullable(managedUserVM.getTokenIsRenewable()));
             UserDTO newUserDTO = userMapper.userToUserDTO(newUser);
             if (managedUserVM.getNeedsMskRocReview()) {
-                this.smartsheetService.addUserToSheetIfShould(newUserDTO);
+                this.userService.sendUserToRocReview(newUserDTO);
             }
             if (managedUserVM.getNotifyUserOnTrialCreation()) {
                 userService.initiateTrialAccountActivation(newUser.getLogin());

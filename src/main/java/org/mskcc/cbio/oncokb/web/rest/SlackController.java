@@ -4,6 +4,7 @@ import com.google.gson.Gson;
 import com.slack.api.app_backend.interactive_components.payload.BlockActionPayload;
 import com.slack.api.app_backend.views.payload.ViewSubmissionPayload;
 import com.slack.api.util.json.GsonFactory;
+import liquibase.pro.packaged.A;
 import org.apache.commons.lang3.StringUtils;
 import org.mskcc.cbio.oncokb.domain.CompanyCandidate;
 import org.mskcc.cbio.oncokb.domain.UnknownPayload;
@@ -13,9 +14,10 @@ import org.mskcc.cbio.oncokb.repository.UserRepository;
 import org.mskcc.cbio.oncokb.security.AuthoritiesConstants;
 import org.mskcc.cbio.oncokb.service.MailService;
 import org.mskcc.cbio.oncokb.service.SlackService;
+import org.mskcc.cbio.oncokb.service.SmartsheetService;
 import org.mskcc.cbio.oncokb.service.UserService;
 import org.mskcc.cbio.oncokb.service.dto.UserDTO;
-import org.mskcc.cbio.oncokb.service.dto.useradditionalinfo.ApiAccessRequest;
+import org.mskcc.cbio.oncokb.service.dto.useradditionalinfo.AdditionalInfoDTO;
 import org.mskcc.cbio.oncokb.service.mapper.UserMapper;
 import org.mskcc.cbio.oncokb.web.rest.slack.ActionId;
 import org.mskcc.cbio.oncokb.web.rest.slack.BlockId;
@@ -27,6 +29,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import springfox.documentation.annotations.ApiIgnore;
 
+import javax.mail.MessagingException;
 import java.io.IOException;
 import java.util.Optional;
 import java.util.Set;
@@ -69,7 +72,7 @@ public class SlackController {
     // It's overall not recommend to include sensitive data in the payload.
     // Considering faking a actionJSON with correct user email is difficult. Ignore the auth for now.
     @RequestMapping(method = RequestMethod.POST, value = "/slack", headers = {"content-type=application/x-www-form-urlencoded"})
-    public ResponseEntity<String> approveUser(@RequestParam("payload") String actionJSON) throws IOException {
+    public ResponseEntity<String> approveUser(@RequestParam("payload") String actionJSON) throws IOException, MessagingException {
         Gson snakeCase = GsonFactory.createSnakeCase();
         UnknownPayload pl = snakeCase.fromJson(actionJSON, UnknownPayload.class);
         if (pl.getType().equals(BlockActionPayload.TYPE)) {
@@ -103,7 +106,7 @@ public class SlackController {
                                     userDTO = updatedUserDTO.get();
                                 }
                             }
-                        
+
                             updateUserWithRoleApiIfRequested(userDTO);
 
                             Optional<UserDTO> updatedUser = userService.approveUser(userDTO, false);
@@ -135,6 +138,9 @@ public class SlackController {
                         break;
                     case CONVERT_TO_REGULAR_ACCOUNT:
                         userService.convertUserToRegular(userDTO);
+                        break;
+                    case SEND_ROC_REVIEW:
+                        userService.sendUserToRocReview(userDTO);
                         break;
                     default:
                         break;

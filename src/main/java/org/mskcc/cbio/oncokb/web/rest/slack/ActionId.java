@@ -36,6 +36,7 @@ public enum ActionId {
     , UPDATE_USER("update-user")
     , INPUT_SUBJECT("input-subject")
     , INPUT_BODY("input-body")
+    , SEND_ROC_REVIEW("send-roc-review")
     ;
 
     String id;
@@ -80,7 +81,7 @@ public enum ActionId {
         }
 
         // non mail actions
-        if (actionId == CONVERT_TO_REGULAR_ACCOUNT || actionId == UPDATE_USER || actionId == COLLAPSE)
+        if (actionId == CONVERT_TO_REGULAR_ACCOUNT || actionId == COLLAPSE)
             return true;
 
         return false;

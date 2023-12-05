@@ -42,6 +42,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.cache.annotation.Cacheable;
 
+import javax.mail.MessagingException;
 import javax.validation.constraints.NotNull;
 import java.time.Instant;
 import java.time.temporal.ChronoUnit;
@@ -96,6 +97,8 @@ public class UserService {
 
     private final AuditEventService auditEventService;
 
+    private final SmartsheetService smartsheetService;
+
     @Autowired
     private UserMapper userMapper;
 
@@ -119,8 +122,8 @@ public class UserService {
         UserMailsService userMailsService,
         AuditEventService auditEventService,
         CompanyDomainRepository companyDomainRepository,
-        CompanyRepository companyRepository
-    ) {
+        CompanyRepository companyRepository,
+        SmartsheetService smartsheetService) {
         this.userRepository = userRepository;
         this.userDetailsRepository = userDetailsRepository;
         this.passwordEncoder = passwordEncoder;
@@ -138,6 +141,7 @@ public class UserService {
         this.auditEventService = auditEventService;
         this.companyDomainRepository = companyDomainRepository;
         this.companyRepository = companyRepository;
+        this.smartsheetService = smartsheetService;
     }
 
     public Optional<User> activateRegistration(String key) {
@@ -877,5 +881,14 @@ public class UserService {
             Objects.requireNonNull(cacheManager.getCache(this.cacheNameResolver.getCacheName(USERS_BY_EMAIL_CACHE))).evict(user.getEmail());
         }
         Objects.requireNonNull(cacheManager.getCache(this.cacheNameResolver.getCacheName(ALL_USERS_CACHE))).evict("getAllManagedUsers");;
+    }
+
+    public void sendUserToRocReview(UserDTO userDTO) throws MessagingException {
+        smartsheetService.addUserToSheet(userDTO);
+        if (userDTO.getAdditionalInfo() == null) {
+            userDTO.setAdditionalInfo(new AdditionalInfoDTO());
+        }
+        userDTO.getAdditionalInfo().setSentToRocReview(true);
+        updateUser(userDTO);
     }
 }

@@ -7,11 +7,9 @@ import com.slack.api.app_backend.views.payload.ViewSubmissionPayload;
 import com.slack.api.methods.MethodsClient;
 import com.slack.api.methods.SlackApiException;
 import com.slack.api.methods.request.views.ViewsOpenRequest;
-import com.slack.api.model.block.InputBlock;
 import com.slack.api.model.block.LayoutBlock;
 import com.slack.api.model.block.SectionBlock;
 import com.slack.api.model.block.composition.TextObject;
-import com.slack.api.model.block.element.PlainTextInputElement;
 import com.slack.api.model.view.View;
 import com.slack.api.model.view.ViewState;
 import com.slack.api.util.json.GsonFactory;
@@ -110,6 +108,8 @@ public class SlackControllerIT {
     private SpringTemplateEngine templateEngine;
     @Autowired
     private UserMailsService userMailsService;
+    @Autowired
+    private SmartsheetService smartsheetService;
 
     private SlackService slackService;
     @Autowired
@@ -183,7 +183,7 @@ public class SlackControllerIT {
 
         // Inject mock dependencies
         mailService = new MailService(jHipsterProperties, javaMailSender, messageSource, templateEngine, userMailsService, applicationProperties);
-        slackService = new SlackService(applicationProperties, mailService, emailService, userService, userMailsService, userMapper, slack);
+        slackService = new SlackService(applicationProperties, mailService, emailService, userService, userMailsService, smartsheetService, userMapper, slack);
         slackController = new SlackController(userService, userRepository, mailService, slackService, userMapper);
 
         /******************************
@@ -556,7 +556,7 @@ public class SlackControllerIT {
                 }
             }
         } else {
-            expectedValues.add(actionId == ActionId.CHANGE_LICENSE_TYPE ? OTHER_LICENSE_TYPE.getName() : DEFAULT_LICENSE_TYPE.getName());                
+            expectedValues.add(actionId == ActionId.CHANGE_LICENSE_TYPE ? OTHER_LICENSE_TYPE.getName() : DEFAULT_LICENSE_TYPE.getName());
             if (actionId == ActionId.APPROVE_USER) {
                 expectedValues.add(SlackService.APPROVE_USER_EXPANDED_NOTE);
             } else if (actionId == ActionId.CONVERT_TO_REGULAR_ACCOUNT) {

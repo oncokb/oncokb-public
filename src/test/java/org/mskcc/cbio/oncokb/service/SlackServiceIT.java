@@ -52,6 +52,9 @@ class SlackServiceIT {
     private UserMailsService userMailsService;
 
     @Autowired
+    private SmartsheetService smartsheetService;
+
+    @Autowired
     private UserMapper userMapper;
 
     @Spy
@@ -75,7 +78,7 @@ class SlackServiceIT {
         applicationProperties.setSlack(new SlackProperties());
         applicationProperties.getSlack().setUserRegistrationWebhook(USER_REGISTRATION_WEBHOOK);
 
-        slackService = new SlackService(applicationProperties, mailService, emailService, userService, userMailsService, userMapper, slack);
+        slackService = new SlackService(applicationProperties, mailService, emailService, userService, userMailsService, smartsheetService, userMapper, slack);
     }
 
     @Test
