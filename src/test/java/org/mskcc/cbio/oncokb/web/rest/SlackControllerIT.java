@@ -323,7 +323,7 @@ public class SlackControllerIT {
         testConvertToRegularAccount();
     }
 
-    void testConvertToRegularAccount() throws IOException {
+    void testConvertToRegularAccount() throws IOException, MessagingException {
 
         /*******************************
          * Mock converting to regular
@@ -366,7 +366,7 @@ public class SlackControllerIT {
     }
 
     @Test
-    void testChangeLicenseType() throws IOException {
+    void testChangeLicenseType() throws IOException, MessagingException {
 
         /*******************************
          * Mock giving trial access
@@ -403,7 +403,7 @@ public class SlackControllerIT {
     }
 
     @Test
-    void testDropdownEmailOptions() throws IOException {
+    void testDropdownEmailOptions() throws IOException, MessagingException {
         for (DropdownEmailOption option : Arrays.stream(DropdownEmailOption.values()).filter(option -> !option.isNotModalEmail()).collect(Collectors.toList())) {
 
             /*******************************
