@@ -435,6 +435,10 @@ public class SlackService {
         return values[0];
     }
 
+    private String getEmailMarkdownWithUserPageLinkout(String email) {
+        return "<" + applicationProperties.getBaseUrl() + "/users/" + email + "/|" + email + ">";
+    }
+
     public boolean withNote(DropdownEmailOption mailOption, UserDTO userDTO, ActionId actionId) {
         switch (mailOption) {
             case GIVE_TRIAL_ACCESS:
@@ -514,7 +518,7 @@ public class SlackService {
 
         // Add account information
         List<TextObject> userInfo = new ArrayList<>();
-        userInfo.add(MarkdownTextObject.builder().text("Email:\n" + user.getEmail()).build());
+        userInfo.add(MarkdownTextObject.builder().text("Email:\n" + getEmailMarkdownWithUserPageLinkout(user.getEmail())).build());
         userInfo.add(getTextObject("Name", user.getFirstName() + " " + user.getLastName()));
         userInfo.add(getTextObject("Job Title", user.getJobTitle()));
         userInfo.add(getTextObject(companyName, user.getCompanyName()));
@@ -593,7 +597,7 @@ public class SlackService {
 
                 sb.append("\n\u2022 ");
                 sb.append(StringUtil.getFullName(user.getFirstName(), user.getLastName()));
-                sb.append(", <" + applicationProperties.getBaseUrl() + "/users/" + user.getEmail() + "/|" + user.getEmail() + ">");
+                sb.append(", " + getEmailMarkdownWithUserPageLinkout(user.getEmail()));
                 sb.append(", " + user.getCompanyName());
                 sb.append(", " + user.getCity());
                 sb.append(", " + user.getCountry());
