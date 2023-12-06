@@ -203,48 +203,6 @@ export const NEWS_BY_DATE: { [date: string]: NewsData } = {
   '12062023': {
     changedAnnotations: [
       {
-        columnHeaderType: AnnotationColumnHeaderType.ADDITIONAL_SAME_LEVEL_DRUG,
-        content: [
-          [
-            'PIK3CA',
-            'Oncogenic Mutations',
-            'Breast Cancer',
-            '1',
-            'Alpelisib + Fulvestrant (Level 1; select PIK3CA mts only), RLY-2608 + Fulvestrant (Level 4)',
-            'Capivasertib + Fulvestrant (Level 1)',
-            <WithSeparator separator={EVIDENCE_COLUMN_SEPARATOR}>
-              <FdaApprovalLink
-                approval={'Capivasertib + Fulvestrant'}
-                link={
-                  'https://www.fda.gov/drugs/resources-information-approved-drugs/fda-approves-capivasertib-fulvestrant-breast-cancer'
-                }
-              />
-              <PMIDLink pmids={'37256976'} />
-            </WithSeparator>,
-          ],
-          [
-            'ROS1',
-            'Fusions',
-            'Non-Small Cell Lung Cancer',
-            '1',
-            'Crizotinib, Entrectinib (Level 1), Ceritinib, Lorlatinib (Level 2),  Repotrectinib (Level 3A)',
-            'Repotrectinib (Promoted to Level 1)',
-            <WithSeparator separator={EVIDENCE_COLUMN_SEPARATOR}>
-              <FdaApprovalLink
-                approval={'Repotrectinib for ROS1+ NSCLC'}
-                link={
-                  'https://www.fda.gov/drugs/resources-information-approved-drugs/fda-approves-repotrectinib-ros1-positive-non-small-cell-lung-cancer'
-                }
-              />
-              <AbstractLink
-                abstract="Cho et al. Abstract# OA03.06, J. of Thoracic Oncol. Nov. 2023"
-                link="https://www.jto.org/article/S1556-0864(23)00837-7/fulltext"
-              />
-            </WithSeparator>,
-          ],
-        ],
-      },
-      {
         columnHeaderType: AnnotationColumnHeaderType.LEVEL,
         title: 'Updated therapeutic implications - Changed level of evidence',
         content: [
@@ -302,20 +260,90 @@ export const NEWS_BY_DATE: { [date: string]: NewsData } = {
           ],
         ],
       },
+      {
+        columnHeaderType: AnnotationColumnHeaderType.ADDITIONAL_SAME_LEVEL_DRUG,
+        content: [
+          [
+            'PIK3CA',
+            'Oncogenic Mutations',
+            'Breast Cancer',
+            '1',
+            'Alpelisib + Fulvestrant (Level 1; select PIK3CA mts only), RLY-2608 + Fulvestrant (Level 4)',
+            'Capivasertib + Fulvestrant (Level 1)',
+            <WithSeparator separator={EVIDENCE_COLUMN_SEPARATOR}>
+              <FdaApprovalLink
+                approval={'Capivasertib + Fulvestrant'}
+                link={
+                  'https://www.fda.gov/drugs/resources-information-approved-drugs/fda-approves-capivasertib-fulvestrant-breast-cancer'
+                }
+              />
+              <PMIDLink pmids={'37256976'} />
+            </WithSeparator>,
+          ],
+          [
+            'ROS1',
+            'Fusions',
+            'Non-Small Cell Lung Cancer',
+            '1',
+            'Crizotinib, Entrectinib (Level 1), Ceritinib, Lorlatinib (Level 2),  Repotrectinib (Level 3A)',
+            'Repotrectinib (Promoted to Level 1)',
+            <WithSeparator separator={EVIDENCE_COLUMN_SEPARATOR}>
+              <FdaApprovalLink
+                approval={'Repotrectinib for ROS1+ NSCLC'}
+                link={
+                  'https://www.fda.gov/drugs/resources-information-approved-drugs/fda-approves-repotrectinib-ros1-positive-non-small-cell-lung-cancer'
+                }
+              />
+              <AbstractLink
+                abstract="Cho et al. Abstract# OA03.06, J. of Thoracic Oncol. Nov. 2023"
+                link="https://www.jto.org/article/S1556-0864(23)00837-7/fulltext"
+              />
+            </WithSeparator>,
+          ],
+        ],
+      },
     ],
-    updatedImplicationTitle:
-      'Updated therapeutic implications - New alterations with a level of evidence',
-    updatedImplication: [
-      [
-        '3A',
-        'EGFR',
-        'Amplification',
-        'Gastroesophageal Adenocarcinoma',
-        'Cetuximab, Cetuximab + Chemotherapy, Panitumumab, Panitumumab + Chemotherapy',
-        <WithSeparator separator={EVIDENCE_COLUMN_SEPARATOR}>
-          <PMIDLink pmids={'35349370'} />
-        </WithSeparator>,
-      ],
+    news: [
+      <span>
+        Updated therapeutic implications - New alterations with a level of
+        evidence
+        <Row className={'overflow-auto'}>
+          <table className="table">
+            <thead>
+              <tr>
+                <th>{LEVEL}</th>
+                <th>{GENE}</th>
+                <th>{MUTATION}</th>
+                <th>{CANCER_TYPE}</th>
+                <th>{DRUGS}</th>
+                <th>{EVIDENCE}</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td>3A</td>
+                <td>
+                  <GenePageLink hugoSymbol="EGFR" />
+                </td>
+                <td>
+                  <AlterationPageLink
+                    alteration="Amplification"
+                    hugoSymbol="EGFR"
+                  />
+                </td>
+                <td>Gastroesophageal Adenocarcinoma</td>
+                <td>
+                  Cetuximab, Cetuximab + Chemotherapy, Panitumumab, Panitumumab
+                  + Chemotherapy
+                </td>
+                <td>
+                  <PMIDLink pmids={'35349370'} />
+                </td>
+              </tr>
+            </tbody>
+          </table>
+        </Row>
+      </span>,
     ],
     newlyAddedGenes: [
       'FGF6',
