@@ -23,7 +23,6 @@ import org.apache.commons.lang3.StringUtils;
 import org.mskcc.cbio.oncokb.config.application.ApplicationProperties;
 import org.mskcc.cbio.oncokb.domain.Company;
 import org.mskcc.cbio.oncokb.domain.UserIdMessagePair;
-import org.mskcc.cbio.oncokb.domain.UserMails;
 import org.mskcc.cbio.oncokb.domain.enumeration.*;
 import org.mskcc.cbio.oncokb.domain.enumeration.slack.*;
 import org.mskcc.cbio.oncokb.service.dto.UserDTO;
@@ -77,15 +76,17 @@ public class SlackService {
     private final EmailService emailService;
     private final UserService userService;
     private final UserMailsService userMailsService;
+    private final SmartsheetService smartsheetService;
     private final UserMapper userMapper;
     private final Slack slack;
 
-    public SlackService(ApplicationProperties applicationProperties, MailService mailService, EmailService emailService, @Lazy UserService userService, UserMailsService userMailsService, UserMapper userMapper, Slack slack) {
+    public SlackService(ApplicationProperties applicationProperties, MailService mailService, EmailService emailService, @Lazy UserService userService, UserMailsService userMailsService, SmartsheetService smartsheetService, UserMapper userMapper, Slack slack) {
         this.applicationProperties = applicationProperties;
         this.mailService = mailService;
         this.emailService = emailService;
         this.userService = userService;
         this.userMailsService = userMailsService;
+        this.smartsheetService = smartsheetService;
         this.userMapper = userMapper;
         this.slack = slack;
     }
@@ -116,11 +117,11 @@ public class SlackService {
 
             String userPageLink = "(<" + applicationProperties.getBaseUrl() + "/users/" + user.getEmail() + "/|" + user.getEmail() + ">)";
             LayoutBlock apiRequestBlock = buildMarkdownBlock("*API Access Request* " + userPageLink + "\n" + user.getAdditionalInfo().getApiAccessRequest().getJustification(), API_ACCESS);
-            
+
             ButtonElement approveButton = buildApiAccessApproveButton(user);
             List<BlockElement> blockElements = new ArrayList<>();
             blockElements.add(approveButton);
-            
+
             layoutBlocks.add(apiRequestBlock);
             layoutBlocks.add(ActionsBlock.builder().elements(blockElements).build());
 
@@ -260,7 +261,7 @@ public class SlackService {
             WebhookResponse response = slack.send(url, payload);
             log.info("Send the latest user blocks to slack with response code " + response.getCode());
             if (!Integer.valueOf(200).equals(response.getCode())) {
-                log.warn("Getting a response code other than 200, {}", response);
+                log.error("Getting a response code other than 200, {}", response);
             }
         } catch (Exception e) {
             log.error("Failed to send message to slack {}", e);
@@ -434,6 +435,10 @@ public class SlackService {
         return values[0];
     }
 
+    private String getEmailMarkdownWithUserPageLinkout(String email) {
+        return "<" + applicationProperties.getBaseUrl() + "/users/" + email + "/|" + email + ">";
+    }
+
     public boolean withNote(DropdownEmailOption mailOption, UserDTO userDTO, ActionId actionId) {
         switch (mailOption) {
             case GIVE_TRIAL_ACCESS:
@@ -513,7 +518,7 @@ public class SlackService {
 
         // Add account information
         List<TextObject> userInfo = new ArrayList<>();
-        userInfo.add(MarkdownTextObject.builder().text("Email:\n" + user.getEmail()).build());
+        userInfo.add(MarkdownTextObject.builder().text("Email:\n" + getEmailMarkdownWithUserPageLinkout(user.getEmail())).build());
         userInfo.add(getTextObject("Name", user.getFirstName() + " " + user.getLastName()));
         userInfo.add(getTextObject("Job Title", user.getJobTitle()));
         userInfo.add(getTextObject(companyName, user.getCompanyName()));
@@ -543,9 +548,12 @@ public class SlackService {
                 apiAccessJustification = additionalInfoDTO.getApiAccessRequest().getJustification();
             }
 
-            if (StringUtils.isNotEmpty(additionalInfoDTO.getUserCompany().getUseCase())) {
-                userInfo.add(getTextObject("Use Case", additionalInfoDTO.getUserCompany().getUseCase() + " | API Request Justification: " + apiAccessJustification));
+            String useCase = StringUtils.isNotEmpty(additionalInfoDTO.getUserCompany().getUseCase()) ? additionalInfoDTO.getUserCompany().getUseCase() : "Use case not provided";
+            if (StringUtils.isNotEmpty(apiAccessJustification)) {
+                useCase += " | API Request Justification: " + apiAccessJustification;
             }
+            userInfo.add(getTextObject("Use Case", useCase));
+
             if (StringUtils.isNotEmpty(additionalInfoDTO.getUserCompany().getAnticipatedReports())) {
                 userInfo.add(getTextObject("Anticipated Reports", additionalInfoDTO.getUserCompany().getAnticipatedReports()));
             }
@@ -589,7 +597,7 @@ public class SlackService {
 
                 sb.append("\n\u2022 ");
                 sb.append(StringUtil.getFullName(user.getFirstName(), user.getLastName()));
-                sb.append(", <" + applicationProperties.getBaseUrl() + "/users/" + user.getEmail() + "/|" + user.getEmail() + ">");
+                sb.append(", " + getEmailMarkdownWithUserPageLinkout(user.getEmail()));
                 sb.append(", " + user.getCompanyName());
                 sb.append(", " + user.getCity());
                 sb.append(", " + user.getCountry());
@@ -598,6 +606,11 @@ public class SlackService {
                 }
             }
             layoutBlocks.add(buildMarkdownBlock(sb.toString(), DUPLICATE_USER_CLARIFICATION_NOTE));
+        }
+
+        // Add ROC review info block
+        if (smartsheetService.sentToRocReview(userDTO)) {
+            layoutBlocks.add(buildPlainTextBlock("User info has been sent to ROC for review", SENT_TO_ROC_REVIEW_NOTE));
         }
         return layoutBlocks;
     }
@@ -610,6 +623,14 @@ public class SlackService {
             actionElements.add(buildApproveButton(userDTO));
         }
 
+        // Add button - Send ROC Review
+        if (smartsheetService.shouldAddUser(userDTO)) {
+            actionElements.add(buildRocReviewButton(userDTO));
+        }
+
+        // Add button - Update Above Info
+        actionElements.add(buildUpdateUserButton(userDTO));
+
         // Add select element - More Actions
         actionElements.add(buildMoreActionsDropdown(userDTO, trialAccountActivated, actionId));
 
@@ -617,9 +638,10 @@ public class SlackService {
     }
 
     private ConfirmationDialogObject buildConfirmationDialogObject(String bodyText) {
+        int BODY_TEXT_LIMIT = 300;
         ConfirmationDialogObject confirmationDialogObject = ConfirmationDialogObject.builder()
             .title(PlainTextObject.builder().text("Are you sure?").build())
-            .text(PlainTextObject.builder().text(bodyText).build())
+            .text(PlainTextObject.builder().text(bodyText.length() > BODY_TEXT_LIMIT ? bodyText.substring(0, 300) : bodyText).build())
             .confirm(PlainTextObject.builder().text("Yes").build())
             .deny(PlainTextObject.builder().text("No").build())
             .build();
@@ -631,6 +653,12 @@ public class SlackService {
         if (user.getLicenseType() != LicenseType.ACADEMIC) {
             button.setConfirm(buildConfirmationDialogObject("You are going to approve a commercial account."));
         }
+        return button;
+    }
+
+    private ButtonElement buildRocReviewButton(UserDTO user) {
+        ButtonElement button = buildButton("Send ROC Review", user.getLogin(), SEND_ROC_REVIEW);
+        button.setConfirm(buildConfirmationDialogObject(smartsheetService.getSendReviewalCriteria()));
         return button;
     }
 
@@ -677,8 +705,6 @@ public class SlackService {
         List<OptionObject> otherGroup = new ArrayList<>();
         // Add option - Collapse
         otherGroup.add(buildCollapseOption(user));
-        // Add option - Update Info
-        otherGroup.add(buildUpdateUserOption(user));
         optionGroups.add(OptionGroupObject.builder().label(PlainTextObject.builder().text("Other").build()).options(otherGroup).build());
 
         StaticSelectElement dropdown = StaticSelectElement.builder().actionId(MORE_ACTIONS.getId()).placeholder(PlainTextObject.builder().text("More Actions").build()).optionGroups(optionGroups).build();
@@ -698,8 +724,8 @@ public class SlackService {
         return OptionObject.builder().value(getOptionValue(COLLAPSE.toString(), user.getLogin())).text(PlainTextObject.builder().text("Collapse").build()).build();
     }
 
-    private OptionObject buildUpdateUserOption(UserDTO user) {
-        return OptionObject.builder().value(getOptionValue(UPDATE_USER.toString(), user.getLogin())).text(PlainTextObject.builder().text("Update Info Above").build()).build();
+    private ButtonElement buildUpdateUserButton(UserDTO user) {
+        return buildButton("Update Info Above", user.getLogin(), UPDATE_USER);
     }
 
     public ActionId getActionIdFromMoreActions(BlockActionPayload blockActionPayload) {
@@ -727,8 +753,9 @@ public class SlackService {
     }
 
     private ButtonElement buildButton(String text, String value, ActionId actionId, ButtonStyle buttonStyle) {
+        int BUTTON_TEXT_LIMIT = 75;
         ButtonElement button = ButtonElement.builder()
-            .text(PlainTextObject.builder().emoji(true).text(text).build())
+            .text(PlainTextObject.builder().emoji(true).text(text.length() > BUTTON_TEXT_LIMIT ? text.substring(0, BUTTON_TEXT_LIMIT) : text).build())
             .actionId(actionId.getId())
             .value(value)
             .build();

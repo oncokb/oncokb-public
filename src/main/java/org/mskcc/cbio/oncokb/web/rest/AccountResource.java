@@ -210,9 +210,6 @@ public class AccountResource {
             }
         }
 
-        // Add the new user to the ROC smartsheet
-        this.smartsheetService.addUserToSheetIfShould(userDTO);
-
         return userIsActivated;
     }
 

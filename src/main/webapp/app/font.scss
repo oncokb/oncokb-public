@@ -138,3 +138,6 @@ $font-source-path: '~@mskcc/core/fonts' !default;
 .font-black {
   @include font-gotham('black');
 }
+.font-weight-bold {
+  @include font-gotham('bold');
+}
