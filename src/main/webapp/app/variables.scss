@@ -22,6 +22,10 @@ $breadcrumb-padding-y: 0;
 $breadcrumb-margin-bottom: 0.5rem;
 
 $navbar-padding-x: 0;
+
+$navbar-item-border-bottom: 0.5rem;
+$navbar-padding-top: $navbar-item-border-bottom;
+
 $grid-breakpoints: (
   xs: 0,
   sm: 576px,

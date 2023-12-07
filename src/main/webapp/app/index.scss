@@ -54,19 +54,14 @@ b {
 
   .navbar {
     background-color: $nav-bg-color;
-    padding-top: 0;
+    // add padding to align with nav item border bottom
+    padding-top: $navbar-padding-top;
     padding-bottom: 0;
-
-    .nav-link {
-      padding-left: 0;
-      padding-right: 0;
-    }
 
     .navbar-nav {
       & > .nav-item {
         color: white;
-        line-height: 1rem;
-        border-bottom: 0.5rem solid $nav-bg-color;
+        border-bottom: $navbar-item-border-bottom solid $nav-bg-color;
 
         &.active {
           border-bottom-color: $oncokb-darker-blue;
@@ -82,8 +77,8 @@ b {
       }
 
       & .nav-link {
-        padding-left: $navbar-nav-link-padding-x;
-        padding-right: $navbar-nav-link-padding-x;
+        padding-left: 0;
+        padding-right: 0;
       }
     }
   }
