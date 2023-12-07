@@ -35,6 +35,9 @@
     margin-bottom: 0.3rem;
     padding: 1rem 0;
   }
+  .navbar {
+    padding-top: 0;
+  }
 
   .navbar-nav > .nav-item {
     line-height: 1.5rem;
@@ -69,6 +72,10 @@
 @include media-breakpoint-up(lg) {
   $footer-height: 12rem;
   @include sticky-footer($footer-height);
+  .navbar {
+    // add padding to align with nav item border bottom
+    padding-top: $navbar-padding-top;
+  }
 
   .navbar-nav > .nav-item {
     line-height: 2rem;
