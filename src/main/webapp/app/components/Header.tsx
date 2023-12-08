@@ -125,7 +125,7 @@ class Header extends React.Component<IHeaderProps> {
       <NavLink
         to={page.link}
         key={page.title}
-        className={'mr-auto nav-item'}
+        className={'mr-auto nav-item d-flex align-items-center'}
         isActive={(match, location) => {
           if (
             match ||
@@ -217,7 +217,6 @@ class Header extends React.Component<IHeaderProps> {
                       )}
                       {!this.searchBarIsHovered && (
                         <Nav.Item
-                          style={{ paddingRight: 0 }}
                           onMouseEnter={this.enterSearchBar}
                           onMouseLeave={this.leaveSearchBar}
                           onBlur={this.leaveSearchBar}
