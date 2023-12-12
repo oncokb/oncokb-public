@@ -22,6 +22,14 @@
   font-size: $bigger-default-font-size;
 }
 
+:global(.btn).actionButton {
+  border: 1px solid $light-grey;
+  background-color: white;
+  border-radius: 0.5rem;
+  width: 100%;
+  font-size: 1.2rem;
+}
+
 // Overwrite react-responsive-tabs
 // unassigned the z-index. The z-index makes the tab header higher than the menu in the alteration page
 :global(.RRT__tab) {

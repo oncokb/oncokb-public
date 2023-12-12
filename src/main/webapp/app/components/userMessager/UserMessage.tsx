@@ -64,7 +64,7 @@ if (
             Patients with Cancer
           </Linkout>
           <span>, and visit our new </span>
-          <Link to={PAGE_ROUTE.PO_TX}>Precision Oncology Therapies page!</Link>
+          <Link to={PAGE_ROUTE.ONCOLOGY_TX}>Oncology Therapies page!</Link>
         </div>
       ),
       id: '2023-precision-oncology-therapies',

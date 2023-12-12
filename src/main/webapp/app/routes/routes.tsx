@@ -34,7 +34,7 @@ import { ApiAccessPageNavTab } from 'app/pages/apiAccessGroup/ApiAccessPageNavTa
 import FAQPage from 'app/pages/FAQPage';
 import ReadOnlyMode from 'app/shared/readonly/ReadOnlyMode';
 import * as QueryString from 'query-string';
-import PrecisionOncologyTherapiesPage from 'app/pages/precisionOncologyTherapiesPage/precisionOncologyTherapiesPage';
+import OncologyTherapiesPage from 'app/pages/oncologyTherapiesPage/oncologyTherapiesPage';
 
 const getOldLevelsRedirectRoute = (hash: string) => {
   const queryStrings = QueryString.parse(hash) as {
@@ -107,6 +107,7 @@ const AppRouts = (props: {
         from={'/gene/:hugoSymbol/variant/:alteration'}
         to={PAGE_ROUTE.ALTERATION}
       />
+      <Redirect exact from={PAGE_ROUTE.PO_TX} to={PAGE_ROUTE.ONCOLOGY_TX} />
       <PageContainer>
         <Switch>
           <RecaptchaBoundaryRoute
@@ -156,8 +157,8 @@ const AppRouts = (props: {
             exact
             isUserAuthenticated={props.authenticationStore.isUserAuthenticated}
             appStore={props.appStore}
-            path={PAGE_ROUTE.PO_TX}
-            component={PrecisionOncologyTherapiesPage}
+            path={PAGE_ROUTE.ONCOLOGY_TX}
+            component={OncologyTherapiesPage}
           />
           <RecaptchaBoundaryRoute
             exact

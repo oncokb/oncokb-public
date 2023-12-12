@@ -543,6 +543,7 @@ export enum PAGE_ROUTE {
   LEGACY_ACTIONABLE_GENE = '/actionableGenes',
   ACTIONABLE_GENE = '/actionable-genes',
   PO_TX = '/precision-oncology-therapies',
+  ONCOLOGY_TX = '/oncology-therapies',
   GENE_HEADER = '/gene',
   GENE = '/gene/:hugoSymbol',
   ALTERATION = '/gene/:hugoSymbol/:alteration',
