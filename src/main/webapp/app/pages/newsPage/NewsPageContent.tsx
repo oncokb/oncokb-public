@@ -205,7 +205,7 @@ export const NEWS_BY_DATE: { [date: string]: NewsData } = {
       <span>
         Release of{' '}
         <a
-          href="http://sop.oncokb.org/"
+          href="https://sop.oncokb.org/?version=v3.1"
           target="_blank"
           rel="noopener noreferrer"
         >
@@ -213,10 +213,12 @@ export const NEWS_BY_DATE: { [date: string]: NewsData } = {
         </a>
       </span>,
       <span>
-        We have updated the{' '}
-        <Link to={PAGE_ROUTE.PO_TX}>Precision Oncology Therapies page</Link> to
-        include documentation and classification of all novel FDA-approved
-        oncology drugs
+        We have replaced the "Precision Oncology Therapies" page with{' '}
+        <Link to={PAGE_ROUTE.ONCOLOGY_TX}>
+          "FDA-Approved Oncology Therapies"
+        </Link>{' '}
+        which includes classification of which oncology therapies are considered
+        "precision oncology therapies"
       </span>,
     ],
     updatedImplicationTitle:

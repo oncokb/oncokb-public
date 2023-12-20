@@ -1,10 +1,12 @@
 import React from 'react';
 import styles from './DownloadButton.module.scss';
+import classNames from 'classnames';
 
 interface IDownloadButton {
   href: string;
   className?: string;
   size?: 'sm' | 'lg';
+  outline?: boolean;
   download?: string | boolean; // We can override the default filename by providing a string
 }
 
@@ -17,7 +19,13 @@ export const DownloadButton: React.FunctionComponent<IDownloadButton> = props =>
     <a
       href={href}
       download={download || true}
-      className={`btn btn-primary ${buttonSizeClassName} ${className} ${styles.aTag}`}
+      className={classNames(
+        'btn',
+        `btn-${props.outline ? 'outline-' : ''}primary`,
+        buttonSizeClassName,
+        className,
+        styles.aTag
+      )}
     >
       <i className={'fa fa-cloud-download mr-1'} />
       {props.children}
