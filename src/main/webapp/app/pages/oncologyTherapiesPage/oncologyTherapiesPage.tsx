@@ -274,6 +274,7 @@ const OncologyTherapiesPage: React.FunctionComponent<{}> = props => {
     },
     {
       show: poOnly,
+      sortable: false,
       Header: (
         <span>
           FDA drug label listed biomarker(s)
