@@ -200,6 +200,63 @@ const EVIDENCE_COLUMN_SEPARATOR = '; ';
 // https://stackoverflow.com/questions/41947168/is-it-possible-to-use-keyof-operator-on-literals-instead-of-interfaces
 
 export const NEWS_BY_DATE: { [date: string]: NewsData } = {
+  '12212023': {
+    priorityNews: [
+      <span>
+        Release of{' '}
+        <a
+          href="http://sop.oncokb.org/"
+          target="_blank"
+          rel="noopener noreferrer"
+        >
+          {ONCOKB_TM} SOP v3.1
+        </a>
+      </span>,
+      <span>
+        We have updated the{' '}
+        <Link to={PAGE_ROUTE.PO_TX}>Precision Oncology Therapies page</Link> to
+        include documentation and classification of all novel FDA-approved
+        oncology drugs
+      </span>,
+    ],
+    updatedImplicationTitle:
+      'Updated therapeutic implications - New alterations with a level of evidence',
+    updatedImplication: [
+      [
+        'R2',
+        'EGFR',
+        <WithSeparator separator={', '}>
+          {['S464L', 'G465E', 'G465R', 'V441D', 'V441G', 'S492R'].map(
+            alteration => (
+              <AlterationPageLink
+                hugoSymbol="EGFR"
+                alteration={alteration}
+                key={alteration}
+              />
+            )
+          )}
+        </WithSeparator>,
+        'Colorectal Cancer',
+        'Cetuximab, Panitumumab',
+        <PMIDLink pmids={'29423521, 29196463'} />,
+      ],
+    ],
+    newlyAddedGenes: [
+      'EMSY',
+      'FGF23',
+      'FRS2',
+      'GABRA6',
+      'GATA4',
+      'KEL',
+      'PIK3C2B',
+      'PRKDC',
+      'QKI',
+      'RANBP2',
+      'SOX10',
+      'STAT4',
+      'TAF1',
+    ],
+  },
   '12062023': {
     changedAnnotations: [
       {
