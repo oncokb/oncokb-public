@@ -21,7 +21,7 @@ import {
 import { Link } from 'react-router-dom';
 import AppStore from 'app/store/AppStore';
 import { Linkout } from 'app/shared/links/Linkout';
-import { COLOR_BLACK, COLOR_WARNING } from 'app/config/theme';
+import { COLOR_BLACK, COLOR_DARK_BLUE, COLOR_WARNING } from 'app/config/theme';
 
 export interface IUserMessage {
   dateStart?: number;
@@ -50,6 +50,23 @@ if (
     // ADD MESSAGE IN FOLLOWING FORMAT
     // UNIQUE ID IS IMPORTANT B/C WE REMEMBER A MESSAGE HAS BEEN SHOWN
     // BASED ON USERS LOCALSTORAGE
+    {
+      dateEnd: 1705276800000,
+      content: (
+        <div>
+          <div>
+            <span>
+              Happy Holidays to you and your loved ones from the OncoKB Team. We
+              had a very productive year, and we look forward to further
+              improving OncoKB in 2024. 🎄🌟🎄🌟
+            </span>
+          </div>
+        </div>
+      ),
+      backgroundColor: '#C3E2FF',
+      color: COLOR_DARK_BLUE,
+      id: '2023-holiday-message',
+    },
     {
       dateEnd: 100000000000000,
       content: (
