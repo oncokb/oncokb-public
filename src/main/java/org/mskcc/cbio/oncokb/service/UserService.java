@@ -891,4 +891,9 @@ public class UserService {
         userDTO.getAdditionalInfo().setSentToRocReview(true);
         updateUser(userDTO);
     }
+
+    public boolean isAdmin(String userLogin) {
+        Optional<User> user = getUserByLogin(userLogin);
+        return user.isPresent() && user.get().getAuthorities().stream().filter(authority -> authority.getName().equalsIgnoreCase(AuthoritiesConstants.ADMIN)).count() > 0;
+    }
 }

@@ -7,6 +7,7 @@ import org.mskcc.cbio.oncokb.domain.Token;
 import org.mskcc.cbio.oncokb.domain.User;
 import org.mskcc.cbio.oncokb.domain.enumeration.LicenseStatus;
 import org.mskcc.cbio.oncokb.repository.UserRepository;
+import org.mskcc.cbio.oncokb.security.AuthoritiesConstants;
 import org.mskcc.cbio.oncokb.security.SecurityUtils;
 import org.mskcc.cbio.oncokb.security.uuid.TokenProvider;
 import org.mskcc.cbio.oncokb.service.*;
@@ -361,7 +362,7 @@ public class AccountResource {
     public void deleteToken(@RequestBody Token token) throws AuthenticationException {
         Optional<String> userLogin = SecurityUtils.getCurrentUserLogin();
         if (userLogin.isPresent() && token.getUser() != null) {
-            if (token.getUser().getLogin().equalsIgnoreCase(userLogin.get())) {
+            if (userService.isAdmin(userLogin.get()) || token.getUser().getLogin().equalsIgnoreCase(userLogin.get())) {
                 tokenService.delete(token.getId());
             } else {
                 throw new AuthenticationException("User does not have the permission to update the token requested");
