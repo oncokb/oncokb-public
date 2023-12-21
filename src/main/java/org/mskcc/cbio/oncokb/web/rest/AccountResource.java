@@ -492,6 +492,9 @@ public class AccountResource {
         // if (rs.getStatusCode() == HttpStatus.OK) {
         Optional<User> userOptional = userService.getUserWithAuthoritiesByLogin(loginVM.getUsername());
         if (userOptional.isPresent() && passwordEncoder.matches(loginVM.getPassword(), userOptional.get().getPassword())) {
+            if (StringUtils.isEmpty(userOptional.get().getActivationKey())) {
+                userService.generateNewActivationKey(userOptional.get());
+            }
             mailService.sendActivationEmail(userMapper.userToUserDTO(userOptional.get()));
         }
         // }
