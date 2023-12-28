@@ -8,6 +8,7 @@ import java.time.temporal.ChronoUnit;
 import java.util.*;
 import java.util.stream.Collectors;
 
+import com.amazonaws.services.s3.AmazonS3;
 import com.amazonaws.services.s3.model.S3Object;
 import com.amazonaws.services.s3.model.S3ObjectInputStream;
 import com.google.gson.Gson;
@@ -21,6 +22,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.mskcc.cbio.oncokb.service.S3Service;
 import org.mskcc.cbio.oncokb.service.UserService;
+import org.mskcc.cbio.oncokb.web.rest.vm.AwsCredentials;
 import org.mskcc.cbio.oncokb.web.rest.vm.usageAnalysis.UsageSummary;
 import org.mskcc.cbio.oncokb.web.rest.vm.usageAnalysis.UserOverviewUsage;
 import org.mskcc.cbio.oncokb.web.rest.vm.usageAnalysis.UserUsage;
@@ -31,6 +33,8 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 
@@ -50,9 +54,9 @@ public class UsageAnalysisController {
     @Autowired
     private UserMapper userMapper;
 
-    private JSONObject requestData(String file)
+    private JSONObject requestData(AmazonS3 s3Client, String file)
             throws UnsupportedEncodingException, IOException, ParseException {
-        Optional<S3Object> s3object = s3Service.getObject("oncokb", file);
+        Optional<S3Object> s3object = s3Service.getObject(s3Client, "oncokb", file);
         if (s3object.isPresent()){
             S3ObjectInputStream inputStream = s3object.get().getObjectContent();
             JSONParser jsonParser = new JSONParser();
@@ -68,21 +72,22 @@ public class UsageAnalysisController {
      * @throws IOException
      * @throws ParseException
      */
-    @GetMapping("/usage/users/{userId}")
-    public ResponseEntity<UserUsage> userUsageGet(@PathVariable @NotNull Long userId)
+    @PostMapping("/usage/users/{userId}")
+    public ResponseEntity<UserUsage> userUsageGet(@PathVariable @NotNull Long userId, @RequestBody AwsCredentials awsCredentials)
         throws IOException, ParseException {
 
         HttpStatus status = HttpStatus.OK;
 
         if (userId != null) {
+            AmazonS3 s3Client = S3Service.buildS3Client(awsCredentials);
             int year = TimeUtil.getCurrentNYTime().getYear();
-            JSONObject yearSummary = requestData(YEAR_USERS_USAGE_SUMMARY_FILE_PREFIX + year + FileExtension.JSON_FILE.getExtension());
+            JSONObject yearSummary = requestData(s3Client, YEAR_USERS_USAGE_SUMMARY_FILE_PREFIX + year + FileExtension.JSON_FILE.getExtension());
             List<JSONObject> monthSummaries = new LinkedList<>();
             int monthsBack = 0;
             JSONObject monthSummary;
             do {
                 String month = TimeUtil.getCurrentNYTime().minus(monthsBack, ChronoUnit.MONTHS).format(DateTimeFormatter.ofPattern("yyyy-MM"));
-                monthSummary = requestData(MONTH_USERS_USAGE_SUMMARY_FILE_PREFIX + month + FileExtension.JSON_FILE.getExtension());
+                monthSummary = requestData(s3Client, MONTH_USERS_USAGE_SUMMARY_FILE_PREFIX + month + FileExtension.JSON_FILE.getExtension());
                 if (monthSummary != null) {
                     monthSummaries.add(monthSummary);
                 }
@@ -133,13 +138,14 @@ public class UsageAnalysisController {
      * @throws IOException
      * @throws ParseException
      */
-    @GetMapping("/usage/summary/users")
-    public ResponseEntity<List<UserOverviewUsage>> userOverviewUsageGet(@RequestParam(required = false) Long companyId)
+    @PostMapping("/usage/summary/users")
+    public ResponseEntity<List<UserOverviewUsage>> userOverviewUsageGet(@RequestParam(required = false) Long companyId, @RequestBody AwsCredentials awsCredentials)
         throws IOException, ParseException {
         HttpStatus status = HttpStatus.OK;
+        AmazonS3 s3Client = S3Service.buildS3Client(awsCredentials);
 
         int year = TimeUtil.getCurrentNYTime().getYear();
-        JSONObject jsonObject = requestData(YEAR_USERS_USAGE_SUMMARY_FILE_PREFIX + year + FileExtension.JSON_FILE.getExtension());
+        JSONObject jsonObject = requestData(s3Client, YEAR_USERS_USAGE_SUMMARY_FILE_PREFIX + year + FileExtension.JSON_FILE.getExtension());
 
         List<UserOverviewUsage> result = new ArrayList<>();
         if (jsonObject != null) {
@@ -205,13 +211,14 @@ public class UsageAnalysisController {
      * @throws IOException
      * @throws ParseException
      */
-    @GetMapping("/usage/summary/resources")
-    public ResponseEntity<UsageSummary> resourceUsageGet()
+    @PostMapping("/usage/summary/resources")
+    public ResponseEntity<UsageSummary> resourceUsageGet(@RequestBody AwsCredentials awsCredentials)
         throws IOException, ParseException {
         HttpStatus status = HttpStatus.OK;
+        AmazonS3 s3Client = S3Service.buildS3Client(awsCredentials);
 
         int year = TimeUtil.getCurrentNYTime().getYear();
-        JSONObject jsonObject = requestData(YEAR_RESOURCES_USAGE_SUMMARY_FILE_PREFIX + year + FileExtension.JSON_FILE.getExtension());
+        JSONObject jsonObject = requestData(s3Client, YEAR_RESOURCES_USAGE_SUMMARY_FILE_PREFIX + year + FileExtension.JSON_FILE.getExtension());
 
         Gson gson = new Gson();
         UsageSummary summary = new UsageSummary();
@@ -230,13 +237,14 @@ public class UsageAnalysisController {
      * @throws ParseException
      */
     @GetMapping("/usage/resources")
-    public ResponseEntity<UsageSummary> resourceDetailGet(@RequestParam String endpoint)
+    public ResponseEntity<UsageSummary> resourceDetailGet(@RequestParam String endpoint, @RequestBody AwsCredentials awsCredentials)
             throws UnsupportedEncodingException, IOException, ParseException {
         HttpStatus status = HttpStatus.OK;
+        AmazonS3 s3Client = S3Service.buildS3Client(awsCredentials);
 
         int year = TimeUtil.getCurrentNYTime().getYear();
-        JSONObject resourceSummary = requestData(YEAR_RESOURCES_USAGE_SUMMARY_FILE_PREFIX + year + FileExtension.JSON_FILE.getExtension());
-        JSONObject userSummary = requestData(YEAR_USERS_USAGE_SUMMARY_FILE_PREFIX + year + FileExtension.JSON_FILE.getExtension());
+        JSONObject resourceSummary = requestData(s3Client, YEAR_RESOURCES_USAGE_SUMMARY_FILE_PREFIX + year + FileExtension.JSON_FILE.getExtension());
+        JSONObject userSummary = requestData(s3Client, YEAR_USERS_USAGE_SUMMARY_FILE_PREFIX + year + FileExtension.JSON_FILE.getExtension());
         if (resourceSummary != null && userSummary != null ){
             Gson gson = new Gson();
             UsageSummary resourceUsageSummary = gson.fromJson(resourceSummary.toString(), UsageSummary.class);

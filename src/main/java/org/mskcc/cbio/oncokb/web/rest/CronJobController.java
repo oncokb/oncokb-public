@@ -12,6 +12,7 @@ import org.mskcc.cbio.oncokb.security.uuid.TokenProvider;
 import org.mskcc.cbio.oncokb.service.*;
 import org.mskcc.cbio.oncokb.service.dto.UserDTO;
 import org.mskcc.cbio.oncokb.service.mapper.UserMapper;
+import org.mskcc.cbio.oncokb.web.rest.vm.AwsCredentials;
 import org.mskcc.cbio.oncokb.web.rest.vm.ExposedToken;
 import org.mskcc.cbio.oncokb.web.rest.vm.usageAnalysis.ResourceModel;
 import org.mskcc.cbio.oncokb.web.rest.vm.usageAnalysis.UsageSummary;
@@ -29,6 +30,7 @@ import java.time.temporal.ChronoUnit;
 import java.util.*;
 import java.util.stream.Collectors;
 
+import com.amazonaws.services.s3.AmazonS3;
 import com.fasterxml.jackson.databind.ObjectMapper;
 
 import java.io.*;
@@ -158,27 +160,28 @@ public class CronJobController {
     }
 
     /**
-     * {@code GET /wrap-token-stats}: Wrap token stats
+     * {@code POST /wrap-token-stats}: Wrap token stats
      *
      * @throws IOException
      */
-    @GetMapping(path="move-token-stats-to-s3")
-    public void moveTokenStatsToS3() throws IOException {
+    @PostMapping(path="move-token-stats-to-s3")
+    public void moveTokenStatsToS3(@RequestBody AwsCredentials awsCredentials) throws IOException {
         log.info("Started the cronjob to move token stats to s3.");
 
         Instant tokenUsageDateBefore = Instant.now().truncatedTo(ChronoUnit.DAYS);
 
         try {
+            AmazonS3 s3Client = S3Service.buildS3Client(awsCredentials);
             SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd");
             String dateWrapped = dateFormat.format(dateFormat.parse(tokenUsageDateBefore.minus(1, ChronoUnit.DAYS).toString()));
             String datedFile = TOKEN_STATS_STORAGE_FILE_PREFIX + dateWrapped + FileExtension.ZIPPED_FILE.getExtension();
-            if (s3Service.getObject("oncokb", datedFile).isPresent()) {
+            if (s3Service.getObject(s3Client, "oncokb", datedFile).isPresent()) {
                 log.info("Token stats have already been wrapped today. Skipping this request.");
             } else {
                 // Update tokenStats in database
                 updateTokenUsage(tokenUsageDateBefore);
                 // Send tokenStats to s3
-                s3Service.saveObject("oncokb", datedFile, createWrappedFile(tokenUsageDateBefore, dateWrapped + FileExtension.TEXT_FILE.getExtension()));
+                s3Service.saveObject(s3Client, "oncokb", datedFile, createWrappedFile(tokenUsageDateBefore, dateWrapped + FileExtension.TEXT_FILE.getExtension()));
                 // Delete old tokenStats
                 tokenStatsService.clearTokenStats(tokenUsageDateBefore);
             }

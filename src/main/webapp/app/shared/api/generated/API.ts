@@ -14,6 +14,8 @@ export type Activation = {
 export type AdditionalInfoDTO = {
     'apiAccessRequest': ApiAccessRequest
 
+        'sentToRocReview': boolean
+
         'trialAccount': TrialAccount
 
         'userCompany': UserCompany
@@ -23,6 +25,14 @@ export type ApiAccessRequest = {
     'justification': string
 
         'requested': boolean
+
+};
+export type AwsCredentials = {
+    'accessKey': string
+
+        'region': string
+
+        'secretKey': string
 
 };
 export type CompanyDTO = {
@@ -119,7 +129,7 @@ export type LoginVM = {
 export type MailTypeInfo = {
     'description': string
 
-        'mailType': "ACTIVATION" | "CREATION" | "APPROVAL" | "APPROVAL_ALIGN_LICENSE_WITH_COMPANY" | "REJECTION" | "REJECTION_US_SANCTION" | "REJECT_ALUMNI_ADDRESS" | "PASSWORD_RESET" | "LICENSE_REVIEW_COMMERCIAL" | "LICENSE_REVIEW_RESEARCH_COMMERCIAL" | "LICENSE_REVIEW_HOSPITAL" | "CLARIFY_ACADEMIC_FOR_PROFIT" | "CLARIFY_ACADEMIC_NON_INSTITUTE_EMAIL" | "CLARIFY_USE_CASE" | "CLARIFY_DUPLICATE_USER" | "CLARIFY_REGISTRATION_INFO" | "LICENSE_OPTIONS" | "VERIFY_EMAIL_BEFORE_ACCOUNT_EXPIRES" | "ACTIVATE_FREE_TRIAL" | "TRIAL_ACCOUNT_IS_ABOUT_TO_EXPIRE" | "TRIAL_ACCOUNT_IS_ACTIVATED" | "DATA_USAGE_EXCEEDS_THRESHOLD" | "TOKEN_HAS_BEEN_EXPOSED" | "TOKEN_HAS_BEEN_EXPOSED_USER" | "SEARCHING_RESPONSE_STRUCTURE_HAS_CHANGED" | "LIST_OF_UNAPPROVED_USERS" | "TEST"
+        'mailType': "ACTIVATION" | "CREATION" | "APPROVAL" | "API_ACCESS_APPROVAL" | "APPROVAL_ALIGN_LICENSE_WITH_COMPANY" | "REJECTION" | "REJECTION_US_SANCTION" | "REJECT_ALUMNI_ADDRESS" | "PASSWORD_RESET" | "LICENSE_REVIEW_COMMERCIAL" | "LICENSE_REVIEW_RESEARCH_COMMERCIAL" | "LICENSE_REVIEW_HOSPITAL" | "CLARIFY_ACADEMIC_FOR_PROFIT" | "CLARIFY_ACADEMIC_NON_INSTITUTE_EMAIL" | "CLARIFY_USE_CASE" | "CLARIFY_DUPLICATE_USER" | "CLARIFY_REGISTRATION_INFO" | "LICENSE_OPTIONS" | "VERIFY_EMAIL_BEFORE_ACCOUNT_EXPIRES" | "ACTIVATE_FREE_TRIAL" | "TRIAL_ACCOUNT_IS_ABOUT_TO_EXPIRE" | "TRIAL_ACCOUNT_IS_ACTIVATED" | "DATA_USAGE_EXCEEDS_THRESHOLD" | "TOKEN_HAS_BEEN_EXPOSED" | "TOKEN_HAS_BEEN_EXPOSED_USER" | "SEARCHING_RESPONSE_STRUCTURE_HAS_CHANGED" | "LIST_OF_UNAPPROVED_USERS" | "TEST"
 
 };
 export type ManagedUserVM = {
@@ -327,7 +337,7 @@ export type UserDetailsDTO = {
 export type UserMailsDTO = {
     'id': number
 
-        'mailType': "ACTIVATION" | "CREATION" | "APPROVAL" | "APPROVAL_ALIGN_LICENSE_WITH_COMPANY" | "REJECTION" | "REJECTION_US_SANCTION" | "REJECT_ALUMNI_ADDRESS" | "PASSWORD_RESET" | "LICENSE_REVIEW_COMMERCIAL" | "LICENSE_REVIEW_RESEARCH_COMMERCIAL" | "LICENSE_REVIEW_HOSPITAL" | "CLARIFY_ACADEMIC_FOR_PROFIT" | "CLARIFY_ACADEMIC_NON_INSTITUTE_EMAIL" | "CLARIFY_USE_CASE" | "CLARIFY_DUPLICATE_USER" | "CLARIFY_REGISTRATION_INFO" | "LICENSE_OPTIONS" | "VERIFY_EMAIL_BEFORE_ACCOUNT_EXPIRES" | "ACTIVATE_FREE_TRIAL" | "TRIAL_ACCOUNT_IS_ABOUT_TO_EXPIRE" | "TRIAL_ACCOUNT_IS_ACTIVATED" | "DATA_USAGE_EXCEEDS_THRESHOLD" | "TOKEN_HAS_BEEN_EXPOSED" | "TOKEN_HAS_BEEN_EXPOSED_USER" | "SEARCHING_RESPONSE_STRUCTURE_HAS_CHANGED" | "LIST_OF_UNAPPROVED_USERS" | "TEST"
+        'mailType': "ACTIVATION" | "CREATION" | "APPROVAL" | "API_ACCESS_APPROVAL" | "APPROVAL_ALIGN_LICENSE_WITH_COMPANY" | "REJECTION" | "REJECTION_US_SANCTION" | "REJECT_ALUMNI_ADDRESS" | "PASSWORD_RESET" | "LICENSE_REVIEW_COMMERCIAL" | "LICENSE_REVIEW_RESEARCH_COMMERCIAL" | "LICENSE_REVIEW_HOSPITAL" | "CLARIFY_ACADEMIC_FOR_PROFIT" | "CLARIFY_ACADEMIC_NON_INSTITUTE_EMAIL" | "CLARIFY_USE_CASE" | "CLARIFY_DUPLICATE_USER" | "CLARIFY_REGISTRATION_INFO" | "LICENSE_OPTIONS" | "VERIFY_EMAIL_BEFORE_ACCOUNT_EXPIRES" | "ACTIVATE_FREE_TRIAL" | "TRIAL_ACCOUNT_IS_ABOUT_TO_EXPIRE" | "TRIAL_ACCOUNT_IS_ACTIVATED" | "DATA_USAGE_EXCEEDS_THRESHOLD" | "TOKEN_HAS_BEEN_EXPOSED" | "TOKEN_HAS_BEEN_EXPOSED_USER" | "SEARCHING_RESPONSE_STRUCTURE_HAS_CHANGED" | "LIST_OF_UNAPPROVED_USERS" | "TEST"
 
         'sentBy': string
 
@@ -2904,7 +2914,8 @@ export default class API {
             return response.body;
         });
     };
-    moveTokenStatsToS3UsingGETURL(parameters: {
+    moveTokenStatsToS3UsingPOSTURL(parameters: {
+        'awsCredentials': AwsCredentials,
         $queryParameters ? : any
     }): string {
         let queryParameters: any = {};
@@ -2923,11 +2934,13 @@ export default class API {
     /**
      * moveTokenStatsToS3
      * @method
-     * @name API#moveTokenStatsToS3UsingGET
+     * @name API#moveTokenStatsToS3UsingPOST
+     * @param {} awsCredentials - awsCredentials
      */
-    moveTokenStatsToS3UsingGETWithHttpInfo(parameters: {
+    moveTokenStatsToS3UsingPOSTWithHttpInfo(parameters: {
+        'awsCredentials': AwsCredentials,
         $queryParameters ? : any,
-            $domain ? : string
+        $domain ? : string
     }): Promise < request.Response > {
         const domain = parameters.$domain ? parameters.$domain : this.domain;
         const errorHandlers = this.errorHandlers;
@@ -2939,6 +2952,16 @@ export default class API {
         let form: any = {};
         return new Promise(function(resolve, reject) {
             headers['Accept'] = '*/*';
+            headers['Content-Type'] = 'application/json';
+
+            if (parameters['awsCredentials'] !== undefined) {
+                body = parameters['awsCredentials'];
+            }
+
+            if (parameters['awsCredentials'] === undefined) {
+                reject(new Error('Missing required  parameter: awsCredentials'));
+                return;
+            }
 
             if (parameters.$queryParameters) {
                 Object.keys(parameters.$queryParameters).forEach(function(parameterName) {
@@ -2947,7 +2970,7 @@ export default class API {
                 });
             }
 
-            request('GET', domain + path, body, headers, queryParameters, form, reject, resolve, errorHandlers);
+            request('POST', domain + path, body, headers, queryParameters, form, reject, resolve, errorHandlers);
 
         });
     };
@@ -2955,13 +2978,15 @@ export default class API {
     /**
      * moveTokenStatsToS3
      * @method
-     * @name API#moveTokenStatsToS3UsingGET
+     * @name API#moveTokenStatsToS3UsingPOST
+     * @param {} awsCredentials - awsCredentials
      */
-    moveTokenStatsToS3UsingGET(parameters: {
+    moveTokenStatsToS3UsingPOST(parameters: {
+        'awsCredentials': AwsCredentials,
         $queryParameters ? : any,
-            $domain ? : string
+        $domain ? : string
     }): Promise < any > {
-        return this.moveTokenStatsToS3UsingGETWithHttpInfo(parameters).then(function(response: request.Response) {
+        return this.moveTokenStatsToS3UsingPOSTWithHttpInfo(parameters).then(function(response: request.Response) {
             return response.body;
         });
     };
@@ -3409,7 +3434,7 @@ export default class API {
         'by': string,
         'cc' ? : string,
         'from': string,
-        'mailType': "ACTIVATION" | "CREATION" | "APPROVAL" | "APPROVAL_ALIGN_LICENSE_WITH_COMPANY" | "REJECTION" | "REJECTION_US_SANCTION" | "REJECT_ALUMNI_ADDRESS" | "PASSWORD_RESET" | "LICENSE_REVIEW_COMMERCIAL" | "LICENSE_REVIEW_RESEARCH_COMMERCIAL" | "LICENSE_REVIEW_HOSPITAL" | "CLARIFY_ACADEMIC_FOR_PROFIT" | "CLARIFY_ACADEMIC_NON_INSTITUTE_EMAIL" | "CLARIFY_USE_CASE" | "CLARIFY_DUPLICATE_USER" | "CLARIFY_REGISTRATION_INFO" | "LICENSE_OPTIONS" | "VERIFY_EMAIL_BEFORE_ACCOUNT_EXPIRES" | "ACTIVATE_FREE_TRIAL" | "TRIAL_ACCOUNT_IS_ABOUT_TO_EXPIRE" | "TRIAL_ACCOUNT_IS_ACTIVATED" | "DATA_USAGE_EXCEEDS_THRESHOLD" | "TOKEN_HAS_BEEN_EXPOSED" | "TOKEN_HAS_BEEN_EXPOSED_USER" | "SEARCHING_RESPONSE_STRUCTURE_HAS_CHANGED" | "LIST_OF_UNAPPROVED_USERS" | "TEST",
+        'mailType': "ACTIVATION" | "CREATION" | "APPROVAL" | "API_ACCESS_APPROVAL" | "APPROVAL_ALIGN_LICENSE_WITH_COMPANY" | "REJECTION" | "REJECTION_US_SANCTION" | "REJECT_ALUMNI_ADDRESS" | "PASSWORD_RESET" | "LICENSE_REVIEW_COMMERCIAL" | "LICENSE_REVIEW_RESEARCH_COMMERCIAL" | "LICENSE_REVIEW_HOSPITAL" | "CLARIFY_ACADEMIC_FOR_PROFIT" | "CLARIFY_ACADEMIC_NON_INSTITUTE_EMAIL" | "CLARIFY_USE_CASE" | "CLARIFY_DUPLICATE_USER" | "CLARIFY_REGISTRATION_INFO" | "LICENSE_OPTIONS" | "VERIFY_EMAIL_BEFORE_ACCOUNT_EXPIRES" | "ACTIVATE_FREE_TRIAL" | "TRIAL_ACCOUNT_IS_ABOUT_TO_EXPIRE" | "TRIAL_ACCOUNT_IS_ACTIVATED" | "DATA_USAGE_EXCEEDS_THRESHOLD" | "TOKEN_HAS_BEEN_EXPOSED" | "TOKEN_HAS_BEEN_EXPOSED_USER" | "SEARCHING_RESPONSE_STRUCTURE_HAS_CHANGED" | "LIST_OF_UNAPPROVED_USERS" | "TEST",
         'to': string,
         $queryParameters ? : any
     }): string {
@@ -3459,7 +3484,7 @@ export default class API {
         'by': string,
         'cc' ? : string,
         'from': string,
-        'mailType': "ACTIVATION" | "CREATION" | "APPROVAL" | "APPROVAL_ALIGN_LICENSE_WITH_COMPANY" | "REJECTION" | "REJECTION_US_SANCTION" | "REJECT_ALUMNI_ADDRESS" | "PASSWORD_RESET" | "LICENSE_REVIEW_COMMERCIAL" | "LICENSE_REVIEW_RESEARCH_COMMERCIAL" | "LICENSE_REVIEW_HOSPITAL" | "CLARIFY_ACADEMIC_FOR_PROFIT" | "CLARIFY_ACADEMIC_NON_INSTITUTE_EMAIL" | "CLARIFY_USE_CASE" | "CLARIFY_DUPLICATE_USER" | "CLARIFY_REGISTRATION_INFO" | "LICENSE_OPTIONS" | "VERIFY_EMAIL_BEFORE_ACCOUNT_EXPIRES" | "ACTIVATE_FREE_TRIAL" | "TRIAL_ACCOUNT_IS_ABOUT_TO_EXPIRE" | "TRIAL_ACCOUNT_IS_ACTIVATED" | "DATA_USAGE_EXCEEDS_THRESHOLD" | "TOKEN_HAS_BEEN_EXPOSED" | "TOKEN_HAS_BEEN_EXPOSED_USER" | "SEARCHING_RESPONSE_STRUCTURE_HAS_CHANGED" | "LIST_OF_UNAPPROVED_USERS" | "TEST",
+        'mailType': "ACTIVATION" | "CREATION" | "APPROVAL" | "API_ACCESS_APPROVAL" | "APPROVAL_ALIGN_LICENSE_WITH_COMPANY" | "REJECTION" | "REJECTION_US_SANCTION" | "REJECT_ALUMNI_ADDRESS" | "PASSWORD_RESET" | "LICENSE_REVIEW_COMMERCIAL" | "LICENSE_REVIEW_RESEARCH_COMMERCIAL" | "LICENSE_REVIEW_HOSPITAL" | "CLARIFY_ACADEMIC_FOR_PROFIT" | "CLARIFY_ACADEMIC_NON_INSTITUTE_EMAIL" | "CLARIFY_USE_CASE" | "CLARIFY_DUPLICATE_USER" | "CLARIFY_REGISTRATION_INFO" | "LICENSE_OPTIONS" | "VERIFY_EMAIL_BEFORE_ACCOUNT_EXPIRES" | "ACTIVATE_FREE_TRIAL" | "TRIAL_ACCOUNT_IS_ABOUT_TO_EXPIRE" | "TRIAL_ACCOUNT_IS_ACTIVATED" | "DATA_USAGE_EXCEEDS_THRESHOLD" | "TOKEN_HAS_BEEN_EXPOSED" | "TOKEN_HAS_BEEN_EXPOSED_USER" | "SEARCHING_RESPONSE_STRUCTURE_HAS_CHANGED" | "LIST_OF_UNAPPROVED_USERS" | "TEST",
         'to': string,
         $queryParameters ? : any,
         $domain ? : string
@@ -3542,7 +3567,7 @@ export default class API {
         'by': string,
         'cc' ? : string,
         'from': string,
-        'mailType': "ACTIVATION" | "CREATION" | "APPROVAL" | "APPROVAL_ALIGN_LICENSE_WITH_COMPANY" | "REJECTION" | "REJECTION_US_SANCTION" | "REJECT_ALUMNI_ADDRESS" | "PASSWORD_RESET" | "LICENSE_REVIEW_COMMERCIAL" | "LICENSE_REVIEW_RESEARCH_COMMERCIAL" | "LICENSE_REVIEW_HOSPITAL" | "CLARIFY_ACADEMIC_FOR_PROFIT" | "CLARIFY_ACADEMIC_NON_INSTITUTE_EMAIL" | "CLARIFY_USE_CASE" | "CLARIFY_DUPLICATE_USER" | "CLARIFY_REGISTRATION_INFO" | "LICENSE_OPTIONS" | "VERIFY_EMAIL_BEFORE_ACCOUNT_EXPIRES" | "ACTIVATE_FREE_TRIAL" | "TRIAL_ACCOUNT_IS_ABOUT_TO_EXPIRE" | "TRIAL_ACCOUNT_IS_ACTIVATED" | "DATA_USAGE_EXCEEDS_THRESHOLD" | "TOKEN_HAS_BEEN_EXPOSED" | "TOKEN_HAS_BEEN_EXPOSED_USER" | "SEARCHING_RESPONSE_STRUCTURE_HAS_CHANGED" | "LIST_OF_UNAPPROVED_USERS" | "TEST",
+        'mailType': "ACTIVATION" | "CREATION" | "APPROVAL" | "API_ACCESS_APPROVAL" | "APPROVAL_ALIGN_LICENSE_WITH_COMPANY" | "REJECTION" | "REJECTION_US_SANCTION" | "REJECT_ALUMNI_ADDRESS" | "PASSWORD_RESET" | "LICENSE_REVIEW_COMMERCIAL" | "LICENSE_REVIEW_RESEARCH_COMMERCIAL" | "LICENSE_REVIEW_HOSPITAL" | "CLARIFY_ACADEMIC_FOR_PROFIT" | "CLARIFY_ACADEMIC_NON_INSTITUTE_EMAIL" | "CLARIFY_USE_CASE" | "CLARIFY_DUPLICATE_USER" | "CLARIFY_REGISTRATION_INFO" | "LICENSE_OPTIONS" | "VERIFY_EMAIL_BEFORE_ACCOUNT_EXPIRES" | "ACTIVATE_FREE_TRIAL" | "TRIAL_ACCOUNT_IS_ABOUT_TO_EXPIRE" | "TRIAL_ACCOUNT_IS_ACTIVATED" | "DATA_USAGE_EXCEEDS_THRESHOLD" | "TOKEN_HAS_BEEN_EXPOSED" | "TOKEN_HAS_BEEN_EXPOSED_USER" | "SEARCHING_RESPONSE_STRUCTURE_HAS_CHANGED" | "LIST_OF_UNAPPROVED_USERS" | "TEST",
         'to': string,
         $queryParameters ? : any,
         $domain ? : string
@@ -3917,11 +3942,13 @@ export default class API {
         });
     };
     resourceDetailGetUsingGETURL(parameters: {
+        'awsCredentials': AwsCredentials,
         'endpoint': string,
         $queryParameters ? : any
     }): string {
         let queryParameters: any = {};
         let path = '/api/usage/resources';
+
         if (parameters['endpoint'] !== undefined) {
             queryParameters['endpoint'] = parameters['endpoint'];
         }
@@ -3940,9 +3967,11 @@ export default class API {
      * resourceDetailGet
      * @method
      * @name API#resourceDetailGetUsingGET
+     * @param {} awsCredentials - awsCredentials
      * @param {string} endpoint - endpoint
      */
     resourceDetailGetUsingGETWithHttpInfo(parameters: {
+        'awsCredentials': AwsCredentials,
         'endpoint': string,
         $queryParameters ? : any,
         $domain ? : string
@@ -3957,6 +3986,15 @@ export default class API {
         let form: any = {};
         return new Promise(function(resolve, reject) {
             headers['Accept'] = '*/*';
+
+            if (parameters['awsCredentials'] !== undefined) {
+                body = parameters['awsCredentials'];
+            }
+
+            if (parameters['awsCredentials'] === undefined) {
+                reject(new Error('Missing required  parameter: awsCredentials'));
+                return;
+            }
 
             if (parameters['endpoint'] !== undefined) {
                 queryParameters['endpoint'] = parameters['endpoint'];
@@ -3983,9 +4021,11 @@ export default class API {
      * resourceDetailGet
      * @method
      * @name API#resourceDetailGetUsingGET
+     * @param {} awsCredentials - awsCredentials
      * @param {string} endpoint - endpoint
      */
     resourceDetailGetUsingGET(parameters: {
+        'awsCredentials': AwsCredentials,
         'endpoint': string,
         $queryParameters ? : any,
         $domain ? : string
@@ -3994,7 +4034,8 @@ export default class API {
             return response.body;
         });
     };
-    resourceUsageGetUsingGETURL(parameters: {
+    resourceUsageGetUsingPOSTURL(parameters: {
+        'awsCredentials': AwsCredentials,
         $queryParameters ? : any
     }): string {
         let queryParameters: any = {};
@@ -4013,11 +4054,13 @@ export default class API {
     /**
      * resourceUsageGet
      * @method
-     * @name API#resourceUsageGetUsingGET
+     * @name API#resourceUsageGetUsingPOST
+     * @param {} awsCredentials - awsCredentials
      */
-    resourceUsageGetUsingGETWithHttpInfo(parameters: {
+    resourceUsageGetUsingPOSTWithHttpInfo(parameters: {
+        'awsCredentials': AwsCredentials,
         $queryParameters ? : any,
-            $domain ? : string
+        $domain ? : string
     }): Promise < request.Response > {
         const domain = parameters.$domain ? parameters.$domain : this.domain;
         const errorHandlers = this.errorHandlers;
@@ -4029,6 +4072,16 @@ export default class API {
         let form: any = {};
         return new Promise(function(resolve, reject) {
             headers['Accept'] = '*/*';
+            headers['Content-Type'] = 'application/json';
+
+            if (parameters['awsCredentials'] !== undefined) {
+                body = parameters['awsCredentials'];
+            }
+
+            if (parameters['awsCredentials'] === undefined) {
+                reject(new Error('Missing required  parameter: awsCredentials'));
+                return;
+            }
 
             if (parameters.$queryParameters) {
                 Object.keys(parameters.$queryParameters).forEach(function(parameterName) {
@@ -4037,7 +4090,7 @@ export default class API {
                 });
             }
 
-            request('GET', domain + path, body, headers, queryParameters, form, reject, resolve, errorHandlers);
+            request('POST', domain + path, body, headers, queryParameters, form, reject, resolve, errorHandlers);
 
         });
     };
@@ -4045,22 +4098,26 @@ export default class API {
     /**
      * resourceUsageGet
      * @method
-     * @name API#resourceUsageGetUsingGET
+     * @name API#resourceUsageGetUsingPOST
+     * @param {} awsCredentials - awsCredentials
      */
-    resourceUsageGetUsingGET(parameters: {
+    resourceUsageGetUsingPOST(parameters: {
+        'awsCredentials': AwsCredentials,
         $queryParameters ? : any,
-            $domain ? : string
+        $domain ? : string
     }): Promise < UsageSummary > {
-        return this.resourceUsageGetUsingGETWithHttpInfo(parameters).then(function(response: request.Response) {
+        return this.resourceUsageGetUsingPOSTWithHttpInfo(parameters).then(function(response: request.Response) {
             return response.body;
         });
     };
-    userOverviewUsageGetUsingGETURL(parameters: {
+    userOverviewUsageGetUsingPOSTURL(parameters: {
+        'awsCredentials': AwsCredentials,
         'companyId' ? : number,
         $queryParameters ? : any
     }): string {
         let queryParameters: any = {};
         let path = '/api/usage/summary/users';
+
         if (parameters['companyId'] !== undefined) {
             queryParameters['companyId'] = parameters['companyId'];
         }
@@ -4078,13 +4135,15 @@ export default class API {
     /**
      * userOverviewUsageGet
      * @method
-     * @name API#userOverviewUsageGetUsingGET
+     * @name API#userOverviewUsageGetUsingPOST
+     * @param {} awsCredentials - awsCredentials
      * @param {integer} companyId - companyId
      */
-    userOverviewUsageGetUsingGETWithHttpInfo(parameters: {
+    userOverviewUsageGetUsingPOSTWithHttpInfo(parameters: {
+        'awsCredentials': AwsCredentials,
         'companyId' ? : number,
         $queryParameters ? : any,
-            $domain ? : string
+        $domain ? : string
     }): Promise < request.Response > {
         const domain = parameters.$domain ? parameters.$domain : this.domain;
         const errorHandlers = this.errorHandlers;
@@ -4096,6 +4155,16 @@ export default class API {
         let form: any = {};
         return new Promise(function(resolve, reject) {
             headers['Accept'] = '*/*';
+            headers['Content-Type'] = 'application/json';
+
+            if (parameters['awsCredentials'] !== undefined) {
+                body = parameters['awsCredentials'];
+            }
+
+            if (parameters['awsCredentials'] === undefined) {
+                reject(new Error('Missing required  parameter: awsCredentials'));
+                return;
+            }
 
             if (parameters['companyId'] !== undefined) {
                 queryParameters['companyId'] = parameters['companyId'];
@@ -4108,7 +4177,7 @@ export default class API {
                 });
             }
 
-            request('GET', domain + path, body, headers, queryParameters, form, reject, resolve, errorHandlers);
+            request('POST', domain + path, body, headers, queryParameters, form, reject, resolve, errorHandlers);
 
         });
     };
@@ -4116,20 +4185,23 @@ export default class API {
     /**
      * userOverviewUsageGet
      * @method
-     * @name API#userOverviewUsageGetUsingGET
+     * @name API#userOverviewUsageGetUsingPOST
+     * @param {} awsCredentials - awsCredentials
      * @param {integer} companyId - companyId
      */
-    userOverviewUsageGetUsingGET(parameters: {
+    userOverviewUsageGetUsingPOST(parameters: {
+            'awsCredentials': AwsCredentials,
             'companyId' ? : number,
             $queryParameters ? : any,
-                $domain ? : string
+            $domain ? : string
         }): Promise < Array < UserOverviewUsage >
         > {
-            return this.userOverviewUsageGetUsingGETWithHttpInfo(parameters).then(function(response: request.Response) {
+            return this.userOverviewUsageGetUsingPOSTWithHttpInfo(parameters).then(function(response: request.Response) {
                 return response.body;
             });
         };
-    userUsageGetUsingGETURL(parameters: {
+    userUsageGetUsingPOSTURL(parameters: {
+        'awsCredentials': AwsCredentials,
         'userId': number,
         $queryParameters ? : any
     }): string {
@@ -4151,10 +4223,12 @@ export default class API {
     /**
      * userUsageGet
      * @method
-     * @name API#userUsageGetUsingGET
+     * @name API#userUsageGetUsingPOST
+     * @param {} awsCredentials - awsCredentials
      * @param {integer} userId - userId
      */
-    userUsageGetUsingGETWithHttpInfo(parameters: {
+    userUsageGetUsingPOSTWithHttpInfo(parameters: {
+        'awsCredentials': AwsCredentials,
         'userId': number,
         $queryParameters ? : any,
         $domain ? : string
@@ -4169,6 +4243,16 @@ export default class API {
         let form: any = {};
         return new Promise(function(resolve, reject) {
             headers['Accept'] = '*/*';
+            headers['Content-Type'] = 'application/json';
+
+            if (parameters['awsCredentials'] !== undefined) {
+                body = parameters['awsCredentials'];
+            }
+
+            if (parameters['awsCredentials'] === undefined) {
+                reject(new Error('Missing required  parameter: awsCredentials'));
+                return;
+            }
 
             path = path.replace('{userId}', parameters['userId'] + '');
 
@@ -4184,7 +4268,7 @@ export default class API {
                 });
             }
 
-            request('GET', domain + path, body, headers, queryParameters, form, reject, resolve, errorHandlers);
+            request('POST', domain + path, body, headers, queryParameters, form, reject, resolve, errorHandlers);
 
         });
     };
@@ -4192,15 +4276,17 @@ export default class API {
     /**
      * userUsageGet
      * @method
-     * @name API#userUsageGetUsingGET
+     * @name API#userUsageGetUsingPOST
+     * @param {} awsCredentials - awsCredentials
      * @param {integer} userId - userId
      */
-    userUsageGetUsingGET(parameters: {
+    userUsageGetUsingPOST(parameters: {
+        'awsCredentials': AwsCredentials,
         'userId': number,
         $queryParameters ? : any,
         $domain ? : string
     }): Promise < UserUsage > {
-        return this.userUsageGetUsingGETWithHttpInfo(parameters).then(function(response: request.Response) {
+        return this.userUsageGetUsingPOSTWithHttpInfo(parameters).then(function(response: request.Response) {
             return response.body;
         });
     };

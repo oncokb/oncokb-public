@@ -10,28 +10,22 @@ import com.amazonaws.services.s3.AmazonS3;
 import com.amazonaws.services.s3.AmazonS3ClientBuilder;
 import com.amazonaws.services.s3.model.S3Object;
 
-import org.mskcc.cbio.oncokb.config.application.ApplicationProperties;
+import org.mskcc.cbio.oncokb.web.rest.vm.AwsCredentials;
 import org.springframework.stereotype.Service;
 
 @Service
 public class S3Service {
 
-    private final ApplicationProperties applicationProperties;
+    public S3Service() {
+    }
 
-    private AWSCredentials credentials;
-    private AmazonS3 s3client;
-
-    public S3Service(ApplicationProperties applicationProperties){
-        this.applicationProperties = applicationProperties;
-
-        if (applicationProperties.getAws() != null) {
-            String s3AccessKey = applicationProperties.getAws().getS3AccessKey();
-            String s3SecretKey = applicationProperties.getAws().getS3SecretKey();
-            String s3Region = applicationProperties.getAws().getS3Region();
-            credentials = new BasicAWSCredentials(s3AccessKey, s3SecretKey);
-            s3client = AmazonS3ClientBuilder.standard()
+    public static AmazonS3 buildS3Client(AwsCredentials awsCredentials) {
+            String s3AccessKey = awsCredentials.getAccessKey();
+            String s3SecretKey = awsCredentials.getSecretKey();
+            String s3Region = awsCredentials.getRegion();
+            AWSCredentials credentials = new BasicAWSCredentials(s3AccessKey, s3SecretKey);
+            return AmazonS3ClientBuilder.standard()
                 .withCredentials(new AWSStaticCredentialsProvider(credentials)).withRegion(s3Region).build();
-        }
     }
 
     /**
@@ -40,8 +34,8 @@ public class S3Service {
      * @param objectPath the path where the object will be saved
      * @param file the object
      */
-    public void saveObject(String bucket, String objectPath, File file){
-        s3client.putObject(bucket, objectPath, file);
+    public void saveObject(AmazonS3 client, String bucket, String objectPath, File file){
+        client.putObject(bucket, objectPath, file);
     }
 
     /**
@@ -50,9 +44,9 @@ public class S3Service {
      * @param objectPath the path of the object
      * @return a S3 object
      */
-    public Optional<S3Object> getObject(String bucket, String objectPath){
+    public Optional<S3Object> getObject(AmazonS3 client, String bucket, String objectPath){
         try {
-            S3Object s3object = s3client.getObject(bucket, objectPath);
+            S3Object s3object = client.getObject(bucket, objectPath);
             return Optional.of(s3object);
         } catch (Exception e) {
             return Optional.empty();

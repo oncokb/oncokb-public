@@ -1418,18 +1418,35 @@
       }
     },
     "/api/cronjob/move-token-stats-to-s3": {
-      "get": {
+      "post": {
         "tags": [
           "cron-job-controller"
         ],
         "summary": "moveTokenStatsToS3",
-        "operationId": "moveTokenStatsToS3UsingGET",
+        "operationId": "moveTokenStatsToS3UsingPOST",
+        "consumes": [
+          "application/json"
+        ],
         "produces": [
           "*/*"
+        ],
+        "parameters": [
+          {
+            "in": "body",
+            "name": "awsCredentials",
+            "description": "awsCredentials",
+            "required": true,
+            "schema": {
+              "$ref": "#/definitions/AwsCredentials"
+            }
+          }
         ],
         "responses": {
           "200": {
             "description": "OK"
+          },
+          "201": {
+            "description": "Created"
           },
           "401": {
             "description": "Unauthorized"
@@ -1699,6 +1716,7 @@
               "ACTIVATION",
               "CREATION",
               "APPROVAL",
+              "API_ACCESS_APPROVAL",
               "APPROVAL_ALIGN_LICENSE_WITH_COMPANY",
               "REJECTION",
               "REJECTION_US_SANCTION",
@@ -1971,6 +1989,15 @@
         ],
         "parameters": [
           {
+            "in": "body",
+            "name": "awsCredentials",
+            "description": "awsCredentials",
+            "required": true,
+            "schema": {
+              "$ref": "#/definitions/AwsCredentials"
+            }
+          },
+          {
             "name": "endpoint",
             "in": "query",
             "description": "endpoint",
@@ -1999,14 +2026,28 @@
       }
     },
     "/api/usage/summary/resources": {
-      "get": {
+      "post": {
         "tags": [
           "usage-analysis-controller"
         ],
         "summary": "resourceUsageGet",
-        "operationId": "resourceUsageGetUsingGET",
+        "operationId": "resourceUsageGetUsingPOST",
+        "consumes": [
+          "application/json"
+        ],
         "produces": [
           "*/*"
+        ],
+        "parameters": [
+          {
+            "in": "body",
+            "name": "awsCredentials",
+            "description": "awsCredentials",
+            "required": true,
+            "schema": {
+              "$ref": "#/definitions/AwsCredentials"
+            }
+          }
         ],
         "responses": {
           "200": {
@@ -2014,6 +2055,9 @@
             "schema": {
               "$ref": "#/definitions/UsageSummary"
             }
+          },
+          "201": {
+            "description": "Created"
           },
           "401": {
             "description": "Unauthorized"
@@ -2029,16 +2073,28 @@
       }
     },
     "/api/usage/summary/users": {
-      "get": {
+      "post": {
         "tags": [
           "usage-analysis-controller"
         ],
         "summary": "userOverviewUsageGet",
-        "operationId": "userOverviewUsageGetUsingGET",
+        "operationId": "userOverviewUsageGetUsingPOST",
+        "consumes": [
+          "application/json"
+        ],
         "produces": [
           "*/*"
         ],
         "parameters": [
+          {
+            "in": "body",
+            "name": "awsCredentials",
+            "description": "awsCredentials",
+            "required": true,
+            "schema": {
+              "$ref": "#/definitions/AwsCredentials"
+            }
+          },
           {
             "name": "companyId",
             "in": "query",
@@ -2058,6 +2114,9 @@
               }
             }
           },
+          "201": {
+            "description": "Created"
+          },
           "401": {
             "description": "Unauthorized"
           },
@@ -2072,16 +2131,28 @@
       }
     },
     "/api/usage/users/{userId}": {
-      "get": {
+      "post": {
         "tags": [
           "usage-analysis-controller"
         ],
         "summary": "userUsageGet",
-        "operationId": "userUsageGetUsingGET",
+        "operationId": "userUsageGetUsingPOST",
+        "consumes": [
+          "application/json"
+        ],
         "produces": [
           "*/*"
         ],
         "parameters": [
+          {
+            "in": "body",
+            "name": "awsCredentials",
+            "description": "awsCredentials",
+            "required": true,
+            "schema": {
+              "$ref": "#/definitions/AwsCredentials"
+            }
+          },
           {
             "name": "userId",
             "in": "path",
@@ -2097,6 +2168,9 @@
             "schema": {
               "$ref": "#/definitions/UserUsage"
             }
+          },
+          "201": {
+            "description": "Created"
           },
           "401": {
             "description": "Unauthorized"
@@ -2927,6 +3001,9 @@
         "apiAccessRequest": {
           "$ref": "#/definitions/ApiAccessRequest"
         },
+        "sentToRocReview": {
+          "type": "boolean"
+        },
         "trialAccount": {
           "$ref": "#/definitions/TrialAccount"
         },
@@ -2947,6 +3024,21 @@
         }
       },
       "title": "ApiAccessRequest"
+    },
+    "AwsCredentials": {
+      "type": "object",
+      "properties": {
+        "accessKey": {
+          "type": "string"
+        },
+        "region": {
+          "type": "string"
+        },
+        "secretKey": {
+          "type": "string"
+        }
+      },
+      "title": "AwsCredentials"
     },
     "CompanyDTO": {
       "type": "object",
@@ -3210,6 +3302,7 @@
             "ACTIVATION",
             "CREATION",
             "APPROVAL",
+            "API_ACCESS_APPROVAL",
             "APPROVAL_ALIGN_LICENSE_WITH_COMPANY",
             "REJECTION",
             "REJECTION_US_SANCTION",
@@ -3708,6 +3801,7 @@
             "ACTIVATION",
             "CREATION",
             "APPROVAL",
+            "API_ACCESS_APPROVAL",
             "APPROVAL_ALIGN_LICENSE_WITH_COMPANY",
             "REJECTION",
             "REJECTION_US_SANCTION",
