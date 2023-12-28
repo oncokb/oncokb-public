@@ -41,6 +41,8 @@ public final class Constants {
     public static final String ONCOKB_TM = "OncoKB™";
 
     public static final String TESTING_TOKEN = "faketoken";
+
+    public static final String ONCOKB_S3_BUCKET = "oncokb-v2";
     
     private Constants() {
     }

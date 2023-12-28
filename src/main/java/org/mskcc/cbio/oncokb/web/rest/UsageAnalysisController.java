@@ -13,6 +13,7 @@ import com.amazonaws.services.s3.model.S3Object;
 import com.amazonaws.services.s3.model.S3ObjectInputStream;
 import com.google.gson.Gson;
 
+import org.mskcc.cbio.oncokb.config.Constants;
 import org.mskcc.cbio.oncokb.domain.User;
 import org.mskcc.cbio.oncokb.domain.enumeration.FileExtension;
 import org.mskcc.cbio.oncokb.service.dto.UserDTO;
@@ -56,7 +57,7 @@ public class UsageAnalysisController {
 
     private JSONObject requestData(AmazonS3 s3Client, String file)
             throws UnsupportedEncodingException, IOException, ParseException {
-        Optional<S3Object> s3object = s3Service.getObject(s3Client, "oncokb", file);
+        Optional<S3Object> s3object = s3Service.getObject(s3Client, Constants.ONCOKB_S3_BUCKET, file);
         if (s3object.isPresent()){
             S3ObjectInputStream inputStream = s3object.get().getObjectContent();
             JSONParser jsonParser = new JSONParser();
