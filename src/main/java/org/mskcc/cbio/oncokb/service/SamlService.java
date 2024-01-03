@@ -37,26 +37,28 @@ public class SamlService {
 
     @PostConstruct
     private void initSecurityTokenServiceProvider() {
-    AssumeRoleWithSamlRequest samlRequest = AssumeRoleWithSamlRequest
-        .builder()
-        .principalArn(applicationProperties.getSamlAws().getPrincipalArn())
-        .roleArn(applicationProperties.getSamlAws().getRoleArn())
-        .durationSeconds(28800)
-        .build();
+        if (applicationProperties.getSamlAws() != null) {
+            AssumeRoleWithSamlRequest samlRequest = AssumeRoleWithSamlRequest
+                .builder()
+                .principalArn(applicationProperties.getSamlAws().getPrincipalArn())
+                .roleArn(applicationProperties.getSamlAws().getRoleArn())
+                .durationSeconds(28800)
+                .build();
 
-    Supplier<AssumeRoleWithSamlRequest> supplier = () ->
-        samlRequest.toBuilder().samlAssertion(getSamlResponse()).build();
+            Supplier<AssumeRoleWithSamlRequest> supplier = () ->
+                samlRequest.toBuilder().samlAssertion(getSamlResponse()).build();
 
-    StsAssumeRoleWithSamlCredentialsProvider stsProvider = StsAssumeRoleWithSamlCredentialsProvider
-        .builder()
-        .stsClient(StsClient.builder().credentialsProvider(AnonymousCredentialsProvider.create()).region(Region.US_EAST_1).build())
-        .refreshRequest(supplier)
-        .build();
-    credentialsProvider = stsProvider;
+            StsAssumeRoleWithSamlCredentialsProvider stsProvider = StsAssumeRoleWithSamlCredentialsProvider
+                .builder()
+                .stsClient(StsClient.builder().credentialsProvider(AnonymousCredentialsProvider.create()).region(Region.US_EAST_1).build())
+                .refreshRequest(supplier)
+                .build();
+            credentialsProvider = stsProvider;
+        }
     }
 
     public AwsCredentials getAwsCredentials() {
-    return this.credentialsProvider.resolveCredentials();
+        return this.credentialsProvider.resolveCredentials();
     }
 
     public StsAssumeRoleWithSamlCredentialsProvider getCredentialsProvider() {
