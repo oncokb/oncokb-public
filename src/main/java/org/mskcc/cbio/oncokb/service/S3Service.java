@@ -1,31 +1,42 @@
 package org.mskcc.cbio.oncokb.service;
 
 import java.io.File;
+import java.nio.file.Paths;
 import java.util.Optional;
 
-import com.amazonaws.auth.AWSCredentials;
-import com.amazonaws.auth.AWSStaticCredentialsProvider;
-import com.amazonaws.auth.BasicAWSCredentials;
-import com.amazonaws.services.s3.AmazonS3;
-import com.amazonaws.services.s3.AmazonS3ClientBuilder;
-import com.amazonaws.services.s3.model.S3Object;
-
-import org.mskcc.cbio.oncokb.web.rest.vm.AwsCredentials;
+import org.mskcc.cbio.oncokb.config.application.ApplicationProperties;
+import org.mskcc.cbio.oncokb.config.application.SamlAwsProperties;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;
+import software.amazon.awssdk.core.ResponseInputStream;
+import software.amazon.awssdk.core.sync.ResponseTransformer;
+import software.amazon.awssdk.regions.Region;
+import software.amazon.awssdk.services.s3.S3Client;
+import software.amazon.awssdk.services.s3.model.GetObjectRequest;
+import software.amazon.awssdk.services.s3.model.GetObjectResponse;
+import software.amazon.awssdk.services.s3.model.PutObjectRequest;
 
 @Service
 public class S3Service {
 
-    public S3Service() {
-    }
+    private final Logger log = LoggerFactory.getLogger(S3Service.class);
 
-    public static AmazonS3 buildS3Client(AwsCredentials awsCredentials) {
-            String s3AccessKey = awsCredentials.getAccessKey();
-            String s3SecretKey = awsCredentials.getSecretKey();
-            String s3Region = awsCredentials.getRegion();
-            AWSCredentials credentials = new BasicAWSCredentials(s3AccessKey, s3SecretKey);
-            return AmazonS3ClientBuilder.standard()
-                .withCredentials(new AWSStaticCredentialsProvider(credentials)).withRegion(s3Region).build();
+    private final SamlService samlService;
+    
+    private final ApplicationProperties applicationProperties;
+
+    private S3Client s3Client;
+
+    public S3Service(SamlService samlService, ApplicationProperties applicationProperties) {
+        this.samlService = samlService;
+        this.applicationProperties = applicationProperties;
+        SamlAwsProperties samlAwsProperties = applicationProperties.getSamlAws();
+        if (samlAwsProperties != null) {
+            s3Client = S3Client.builder().credentialsProvider(samlService.getCredentialsProvider()).region(Region.US_EAST_1).build();
+        } else {
+            log.error("Saml AWS properties not configured");
+        }
     }
 
     /**
@@ -34,8 +45,13 @@ public class S3Service {
      * @param objectPath the path where the object will be saved
      * @param file the object
      */
-    public void saveObject(AmazonS3 client, String bucket, String objectPath, File file){
-        client.putObject(bucket, objectPath, file);
+    public void saveObject(String bucket, String objectPath, File file){
+        PutObjectRequest putObjectRequest = PutObjectRequest
+            .builder()
+            .bucket(bucket)
+            .key(objectPath)
+            .build();
+        s3Client.putObject(putObjectRequest, Paths.get(file.getPath()));
     }
 
     /**
@@ -44,9 +60,12 @@ public class S3Service {
      * @param objectPath the path of the object
      * @return a S3 object
      */
-    public Optional<S3Object> getObject(AmazonS3 client, String bucket, String objectPath){
+    public Optional<ResponseInputStream<GetObjectResponse>> getObject(String bucket, String objectPath){
         try {
-            S3Object s3object = client.getObject(bucket, objectPath);
+            ResponseInputStream<GetObjectResponse> s3object = s3Client.getObject(GetObjectRequest.builder()
+                .bucket(bucket)
+                .key(objectPath)
+                .build(), ResponseTransformer.toInputStream());
             return Optional.of(s3object);
         } catch (Exception e) {
             return Optional.empty();

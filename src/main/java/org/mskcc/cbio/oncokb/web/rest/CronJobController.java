@@ -6,18 +6,14 @@ import org.mskcc.cbio.oncokb.config.application.ApplicationProperties;
 import org.mskcc.cbio.oncokb.domain.*;
 import org.mskcc.cbio.oncokb.domain.enumeration.FileExtension;
 import org.mskcc.cbio.oncokb.querydomain.UserTokenUsage;
-import org.mskcc.cbio.oncokb.querydomain.UserTokenUsageWithInfo;
 import org.mskcc.cbio.oncokb.repository.UserDetailsRepository;
 import org.mskcc.cbio.oncokb.security.AuthoritiesConstants;
 import org.mskcc.cbio.oncokb.security.uuid.TokenProvider;
 import org.mskcc.cbio.oncokb.service.*;
 import org.mskcc.cbio.oncokb.service.dto.UserDTO;
 import org.mskcc.cbio.oncokb.service.mapper.UserMapper;
-import org.mskcc.cbio.oncokb.web.rest.vm.AwsCredentials;
 import org.mskcc.cbio.oncokb.web.rest.vm.ExposedToken;
-import org.mskcc.cbio.oncokb.web.rest.vm.usageAnalysis.ResourceModel;
 import org.mskcc.cbio.oncokb.web.rest.vm.usageAnalysis.UsageSummary;
-import org.mskcc.cbio.oncokb.web.rest.vm.usageAnalysis.UserUsage;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -31,8 +27,7 @@ import java.time.temporal.ChronoUnit;
 import java.util.*;
 import java.util.stream.Collectors;
 
-import com.amazonaws.services.s3.AmazonS3;
-import com.fasterxml.jackson.databind.ObjectMapper;
+import software.amazon.awssdk.services.s3.S3Client;
 
 import java.io.*;
 import java.util.zip.ZipEntry;
@@ -161,18 +156,18 @@ public class CronJobController {
     }
 
     /**
-     * {@code POST /wrap-token-stats}: Wrap token stats
+     * {@code GET /wrap-token-stats}: Wrap token stats
      *
      * @throws IOException
      */
-    @PostMapping(path="move-token-stats-to-s3")
-    public void moveTokenStatsToS3(@RequestBody AwsCredentials awsCredentials) throws IOException {
+    @GetMapping(path="move-token-stats-to-s3")
+    public void moveTokenStatsToS3() throws IOException {
         log.info("Started the cronjob to move token stats to s3.");
 
         Instant tokenUsageDateBefore = Instant.now().truncatedTo(ChronoUnit.DAYS);
 
         try {
-            AmazonS3 s3Client = S3Service.buildS3Client(awsCredentials);
+            S3Client s3Client = s3Service.buildS3Client();
             SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd");
             String dateWrapped = dateFormat.format(dateFormat.parse(tokenUsageDateBefore.minus(1, ChronoUnit.DAYS).toString()));
             String datedFile = TOKEN_STATS_STORAGE_FILE_PREFIX + dateWrapped + FileExtension.ZIPPED_FILE.getExtension();

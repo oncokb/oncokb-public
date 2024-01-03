@@ -1418,35 +1418,18 @@
       }
     },
     "/api/cronjob/move-token-stats-to-s3": {
-      "post": {
+      "get": {
         "tags": [
           "cron-job-controller"
         ],
         "summary": "moveTokenStatsToS3",
-        "operationId": "moveTokenStatsToS3UsingPOST",
-        "consumes": [
-          "application/json"
-        ],
+        "operationId": "moveTokenStatsToS3UsingGET",
         "produces": [
           "*/*"
-        ],
-        "parameters": [
-          {
-            "in": "body",
-            "name": "awsCredentials",
-            "description": "awsCredentials",
-            "required": true,
-            "schema": {
-              "$ref": "#/definitions/AwsCredentials"
-            }
-          }
         ],
         "responses": {
           "200": {
             "description": "OK"
-          },
-          "201": {
-            "description": "Created"
           },
           "401": {
             "description": "Unauthorized"
@@ -1989,15 +1972,6 @@
         ],
         "parameters": [
           {
-            "in": "body",
-            "name": "awsCredentials",
-            "description": "awsCredentials",
-            "required": true,
-            "schema": {
-              "$ref": "#/definitions/AwsCredentials"
-            }
-          },
-          {
             "name": "endpoint",
             "in": "query",
             "description": "endpoint",
@@ -2026,28 +2000,14 @@
       }
     },
     "/api/usage/summary/resources": {
-      "post": {
+      "get": {
         "tags": [
           "usage-analysis-controller"
         ],
         "summary": "resourceUsageGet",
-        "operationId": "resourceUsageGetUsingPOST",
-        "consumes": [
-          "application/json"
-        ],
+        "operationId": "resourceUsageGetUsingGET",
         "produces": [
           "*/*"
-        ],
-        "parameters": [
-          {
-            "in": "body",
-            "name": "awsCredentials",
-            "description": "awsCredentials",
-            "required": true,
-            "schema": {
-              "$ref": "#/definitions/AwsCredentials"
-            }
-          }
         ],
         "responses": {
           "200": {
@@ -2055,9 +2015,6 @@
             "schema": {
               "$ref": "#/definitions/UsageSummary"
             }
-          },
-          "201": {
-            "description": "Created"
           },
           "401": {
             "description": "Unauthorized"
@@ -2073,28 +2030,16 @@
       }
     },
     "/api/usage/summary/users": {
-      "post": {
+      "get": {
         "tags": [
           "usage-analysis-controller"
         ],
         "summary": "userOverviewUsageGet",
-        "operationId": "userOverviewUsageGetUsingPOST",
-        "consumes": [
-          "application/json"
-        ],
+        "operationId": "userOverviewUsageGetUsingGET",
         "produces": [
           "*/*"
         ],
         "parameters": [
-          {
-            "in": "body",
-            "name": "awsCredentials",
-            "description": "awsCredentials",
-            "required": true,
-            "schema": {
-              "$ref": "#/definitions/AwsCredentials"
-            }
-          },
           {
             "name": "companyId",
             "in": "query",
@@ -2114,9 +2059,6 @@
               }
             }
           },
-          "201": {
-            "description": "Created"
-          },
           "401": {
             "description": "Unauthorized"
           },
@@ -2131,28 +2073,16 @@
       }
     },
     "/api/usage/users/{userId}": {
-      "post": {
+      "get": {
         "tags": [
           "usage-analysis-controller"
         ],
         "summary": "userUsageGet",
-        "operationId": "userUsageGetUsingPOST",
-        "consumes": [
-          "application/json"
-        ],
+        "operationId": "userUsageGetUsingGET",
         "produces": [
           "*/*"
         ],
         "parameters": [
-          {
-            "in": "body",
-            "name": "awsCredentials",
-            "description": "awsCredentials",
-            "required": true,
-            "schema": {
-              "$ref": "#/definitions/AwsCredentials"
-            }
-          },
           {
             "name": "userId",
             "in": "path",
@@ -2168,9 +2098,6 @@
             "schema": {
               "$ref": "#/definitions/UserUsage"
             }
-          },
-          "201": {
-            "description": "Created"
           },
           "401": {
             "description": "Unauthorized"
@@ -3024,21 +2951,6 @@
         }
       },
       "title": "ApiAccessRequest"
-    },
-    "AwsCredentials": {
-      "type": "object",
-      "properties": {
-        "accessKey": {
-          "type": "string"
-        },
-        "region": {
-          "type": "string"
-        },
-        "secretKey": {
-          "type": "string"
-        }
-      },
-      "title": "AwsCredentials"
     },
     "CompanyDTO": {
       "type": "object",

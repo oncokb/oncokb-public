@@ -27,14 +27,6 @@ export type ApiAccessRequest = {
         'requested': boolean
 
 };
-export type AwsCredentials = {
-    'accessKey': string
-
-        'region': string
-
-        'secretKey': string
-
-};
 export type CompanyDTO = {
     'businessContact': string
 
@@ -2914,8 +2906,7 @@ export default class API {
             return response.body;
         });
     };
-    moveTokenStatsToS3UsingPOSTURL(parameters: {
-        'awsCredentials': AwsCredentials,
+    moveTokenStatsToS3UsingGETURL(parameters: {
         $queryParameters ? : any
     }): string {
         let queryParameters: any = {};
@@ -2934,13 +2925,11 @@ export default class API {
     /**
      * moveTokenStatsToS3
      * @method
-     * @name API#moveTokenStatsToS3UsingPOST
-     * @param {} awsCredentials - awsCredentials
+     * @name API#moveTokenStatsToS3UsingGET
      */
-    moveTokenStatsToS3UsingPOSTWithHttpInfo(parameters: {
-        'awsCredentials': AwsCredentials,
+    moveTokenStatsToS3UsingGETWithHttpInfo(parameters: {
         $queryParameters ? : any,
-        $domain ? : string
+            $domain ? : string
     }): Promise < request.Response > {
         const domain = parameters.$domain ? parameters.$domain : this.domain;
         const errorHandlers = this.errorHandlers;
@@ -2952,16 +2941,6 @@ export default class API {
         let form: any = {};
         return new Promise(function(resolve, reject) {
             headers['Accept'] = '*/*';
-            headers['Content-Type'] = 'application/json';
-
-            if (parameters['awsCredentials'] !== undefined) {
-                body = parameters['awsCredentials'];
-            }
-
-            if (parameters['awsCredentials'] === undefined) {
-                reject(new Error('Missing required  parameter: awsCredentials'));
-                return;
-            }
 
             if (parameters.$queryParameters) {
                 Object.keys(parameters.$queryParameters).forEach(function(parameterName) {
@@ -2970,7 +2949,7 @@ export default class API {
                 });
             }
 
-            request('POST', domain + path, body, headers, queryParameters, form, reject, resolve, errorHandlers);
+            request('GET', domain + path, body, headers, queryParameters, form, reject, resolve, errorHandlers);
 
         });
     };
@@ -2978,15 +2957,13 @@ export default class API {
     /**
      * moveTokenStatsToS3
      * @method
-     * @name API#moveTokenStatsToS3UsingPOST
-     * @param {} awsCredentials - awsCredentials
+     * @name API#moveTokenStatsToS3UsingGET
      */
-    moveTokenStatsToS3UsingPOST(parameters: {
-        'awsCredentials': AwsCredentials,
+    moveTokenStatsToS3UsingGET(parameters: {
         $queryParameters ? : any,
-        $domain ? : string
+            $domain ? : string
     }): Promise < any > {
-        return this.moveTokenStatsToS3UsingPOSTWithHttpInfo(parameters).then(function(response: request.Response) {
+        return this.moveTokenStatsToS3UsingGETWithHttpInfo(parameters).then(function(response: request.Response) {
             return response.body;
         });
     };
@@ -3942,13 +3919,11 @@ export default class API {
         });
     };
     resourceDetailGetUsingGETURL(parameters: {
-        'awsCredentials': AwsCredentials,
         'endpoint': string,
         $queryParameters ? : any
     }): string {
         let queryParameters: any = {};
         let path = '/api/usage/resources';
-
         if (parameters['endpoint'] !== undefined) {
             queryParameters['endpoint'] = parameters['endpoint'];
         }
@@ -3967,11 +3942,9 @@ export default class API {
      * resourceDetailGet
      * @method
      * @name API#resourceDetailGetUsingGET
-     * @param {} awsCredentials - awsCredentials
      * @param {string} endpoint - endpoint
      */
     resourceDetailGetUsingGETWithHttpInfo(parameters: {
-        'awsCredentials': AwsCredentials,
         'endpoint': string,
         $queryParameters ? : any,
         $domain ? : string
@@ -3986,15 +3959,6 @@ export default class API {
         let form: any = {};
         return new Promise(function(resolve, reject) {
             headers['Accept'] = '*/*';
-
-            if (parameters['awsCredentials'] !== undefined) {
-                body = parameters['awsCredentials'];
-            }
-
-            if (parameters['awsCredentials'] === undefined) {
-                reject(new Error('Missing required  parameter: awsCredentials'));
-                return;
-            }
 
             if (parameters['endpoint'] !== undefined) {
                 queryParameters['endpoint'] = parameters['endpoint'];
@@ -4021,11 +3985,9 @@ export default class API {
      * resourceDetailGet
      * @method
      * @name API#resourceDetailGetUsingGET
-     * @param {} awsCredentials - awsCredentials
      * @param {string} endpoint - endpoint
      */
     resourceDetailGetUsingGET(parameters: {
-        'awsCredentials': AwsCredentials,
         'endpoint': string,
         $queryParameters ? : any,
         $domain ? : string
@@ -4034,8 +3996,7 @@ export default class API {
             return response.body;
         });
     };
-    resourceUsageGetUsingPOSTURL(parameters: {
-        'awsCredentials': AwsCredentials,
+    resourceUsageGetUsingGETURL(parameters: {
         $queryParameters ? : any
     }): string {
         let queryParameters: any = {};
@@ -4054,13 +4015,11 @@ export default class API {
     /**
      * resourceUsageGet
      * @method
-     * @name API#resourceUsageGetUsingPOST
-     * @param {} awsCredentials - awsCredentials
+     * @name API#resourceUsageGetUsingGET
      */
-    resourceUsageGetUsingPOSTWithHttpInfo(parameters: {
-        'awsCredentials': AwsCredentials,
+    resourceUsageGetUsingGETWithHttpInfo(parameters: {
         $queryParameters ? : any,
-        $domain ? : string
+            $domain ? : string
     }): Promise < request.Response > {
         const domain = parameters.$domain ? parameters.$domain : this.domain;
         const errorHandlers = this.errorHandlers;
@@ -4072,16 +4031,6 @@ export default class API {
         let form: any = {};
         return new Promise(function(resolve, reject) {
             headers['Accept'] = '*/*';
-            headers['Content-Type'] = 'application/json';
-
-            if (parameters['awsCredentials'] !== undefined) {
-                body = parameters['awsCredentials'];
-            }
-
-            if (parameters['awsCredentials'] === undefined) {
-                reject(new Error('Missing required  parameter: awsCredentials'));
-                return;
-            }
 
             if (parameters.$queryParameters) {
                 Object.keys(parameters.$queryParameters).forEach(function(parameterName) {
@@ -4090,7 +4039,7 @@ export default class API {
                 });
             }
 
-            request('POST', domain + path, body, headers, queryParameters, form, reject, resolve, errorHandlers);
+            request('GET', domain + path, body, headers, queryParameters, form, reject, resolve, errorHandlers);
 
         });
     };
@@ -4098,26 +4047,22 @@ export default class API {
     /**
      * resourceUsageGet
      * @method
-     * @name API#resourceUsageGetUsingPOST
-     * @param {} awsCredentials - awsCredentials
+     * @name API#resourceUsageGetUsingGET
      */
-    resourceUsageGetUsingPOST(parameters: {
-        'awsCredentials': AwsCredentials,
+    resourceUsageGetUsingGET(parameters: {
         $queryParameters ? : any,
-        $domain ? : string
+            $domain ? : string
     }): Promise < UsageSummary > {
-        return this.resourceUsageGetUsingPOSTWithHttpInfo(parameters).then(function(response: request.Response) {
+        return this.resourceUsageGetUsingGETWithHttpInfo(parameters).then(function(response: request.Response) {
             return response.body;
         });
     };
-    userOverviewUsageGetUsingPOSTURL(parameters: {
-        'awsCredentials': AwsCredentials,
+    userOverviewUsageGetUsingGETURL(parameters: {
         'companyId' ? : number,
         $queryParameters ? : any
     }): string {
         let queryParameters: any = {};
         let path = '/api/usage/summary/users';
-
         if (parameters['companyId'] !== undefined) {
             queryParameters['companyId'] = parameters['companyId'];
         }
@@ -4135,15 +4080,13 @@ export default class API {
     /**
      * userOverviewUsageGet
      * @method
-     * @name API#userOverviewUsageGetUsingPOST
-     * @param {} awsCredentials - awsCredentials
+     * @name API#userOverviewUsageGetUsingGET
      * @param {integer} companyId - companyId
      */
-    userOverviewUsageGetUsingPOSTWithHttpInfo(parameters: {
-        'awsCredentials': AwsCredentials,
+    userOverviewUsageGetUsingGETWithHttpInfo(parameters: {
         'companyId' ? : number,
         $queryParameters ? : any,
-        $domain ? : string
+            $domain ? : string
     }): Promise < request.Response > {
         const domain = parameters.$domain ? parameters.$domain : this.domain;
         const errorHandlers = this.errorHandlers;
@@ -4155,16 +4098,6 @@ export default class API {
         let form: any = {};
         return new Promise(function(resolve, reject) {
             headers['Accept'] = '*/*';
-            headers['Content-Type'] = 'application/json';
-
-            if (parameters['awsCredentials'] !== undefined) {
-                body = parameters['awsCredentials'];
-            }
-
-            if (parameters['awsCredentials'] === undefined) {
-                reject(new Error('Missing required  parameter: awsCredentials'));
-                return;
-            }
 
             if (parameters['companyId'] !== undefined) {
                 queryParameters['companyId'] = parameters['companyId'];
@@ -4177,7 +4110,7 @@ export default class API {
                 });
             }
 
-            request('POST', domain + path, body, headers, queryParameters, form, reject, resolve, errorHandlers);
+            request('GET', domain + path, body, headers, queryParameters, form, reject, resolve, errorHandlers);
 
         });
     };
@@ -4185,23 +4118,20 @@ export default class API {
     /**
      * userOverviewUsageGet
      * @method
-     * @name API#userOverviewUsageGetUsingPOST
-     * @param {} awsCredentials - awsCredentials
+     * @name API#userOverviewUsageGetUsingGET
      * @param {integer} companyId - companyId
      */
-    userOverviewUsageGetUsingPOST(parameters: {
-            'awsCredentials': AwsCredentials,
+    userOverviewUsageGetUsingGET(parameters: {
             'companyId' ? : number,
             $queryParameters ? : any,
-            $domain ? : string
+                $domain ? : string
         }): Promise < Array < UserOverviewUsage >
         > {
-            return this.userOverviewUsageGetUsingPOSTWithHttpInfo(parameters).then(function(response: request.Response) {
+            return this.userOverviewUsageGetUsingGETWithHttpInfo(parameters).then(function(response: request.Response) {
                 return response.body;
             });
         };
-    userUsageGetUsingPOSTURL(parameters: {
-        'awsCredentials': AwsCredentials,
+    userUsageGetUsingGETURL(parameters: {
         'userId': number,
         $queryParameters ? : any
     }): string {
@@ -4223,12 +4153,10 @@ export default class API {
     /**
      * userUsageGet
      * @method
-     * @name API#userUsageGetUsingPOST
-     * @param {} awsCredentials - awsCredentials
+     * @name API#userUsageGetUsingGET
      * @param {integer} userId - userId
      */
-    userUsageGetUsingPOSTWithHttpInfo(parameters: {
-        'awsCredentials': AwsCredentials,
+    userUsageGetUsingGETWithHttpInfo(parameters: {
         'userId': number,
         $queryParameters ? : any,
         $domain ? : string
@@ -4243,16 +4171,6 @@ export default class API {
         let form: any = {};
         return new Promise(function(resolve, reject) {
             headers['Accept'] = '*/*';
-            headers['Content-Type'] = 'application/json';
-
-            if (parameters['awsCredentials'] !== undefined) {
-                body = parameters['awsCredentials'];
-            }
-
-            if (parameters['awsCredentials'] === undefined) {
-                reject(new Error('Missing required  parameter: awsCredentials'));
-                return;
-            }
 
             path = path.replace('{userId}', parameters['userId'] + '');
 
@@ -4268,7 +4186,7 @@ export default class API {
                 });
             }
 
-            request('POST', domain + path, body, headers, queryParameters, form, reject, resolve, errorHandlers);
+            request('GET', domain + path, body, headers, queryParameters, form, reject, resolve, errorHandlers);
 
         });
     };
@@ -4276,17 +4194,15 @@ export default class API {
     /**
      * userUsageGet
      * @method
-     * @name API#userUsageGetUsingPOST
-     * @param {} awsCredentials - awsCredentials
+     * @name API#userUsageGetUsingGET
      * @param {integer} userId - userId
      */
-    userUsageGetUsingPOST(parameters: {
-        'awsCredentials': AwsCredentials,
+    userUsageGetUsingGET(parameters: {
         'userId': number,
         $queryParameters ? : any,
         $domain ? : string
     }): Promise < UserUsage > {
-        return this.userUsageGetUsingPOSTWithHttpInfo(parameters).then(function(response: request.Response) {
+        return this.userUsageGetUsingGETWithHttpInfo(parameters).then(function(response: request.Response) {
             return response.body;
         });
     };
