@@ -167,17 +167,16 @@ public class CronJobController {
         Instant tokenUsageDateBefore = Instant.now().truncatedTo(ChronoUnit.DAYS);
 
         try {
-            S3Client s3Client = s3Service.buildS3Client();
             SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd");
             String dateWrapped = dateFormat.format(dateFormat.parse(tokenUsageDateBefore.minus(1, ChronoUnit.DAYS).toString()));
             String datedFile = TOKEN_STATS_STORAGE_FILE_PREFIX + dateWrapped + FileExtension.ZIPPED_FILE.getExtension();
-            if (s3Service.getObject(s3Client, Constants.ONCOKB_S3_BUCKET, datedFile).isPresent()) {
+            if (s3Service.getObject(Constants.ONCOKB_S3_BUCKET, datedFile).isPresent()) {
                 log.info("Token stats have already been wrapped today. Skipping this request.");
             } else {
                 // Update tokenStats in database
                 updateTokenUsage(tokenUsageDateBefore);
                 // Send tokenStats to s3
-                s3Service.saveObject(s3Client, Constants.ONCOKB_S3_BUCKET, datedFile, createWrappedFile(tokenUsageDateBefore, dateWrapped + FileExtension.TEXT_FILE.getExtension()));
+                s3Service.saveObject(Constants.ONCOKB_S3_BUCKET, datedFile, createWrappedFile(tokenUsageDateBefore, dateWrapped + FileExtension.TEXT_FILE.getExtension()));
                 // Delete old tokenStats
                 tokenStatsService.clearTokenStats(tokenUsageDateBefore);
             }
