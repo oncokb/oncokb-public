@@ -11,7 +11,6 @@ import java.util.stream.Collectors;
 import com.google.gson.Gson;
 
 import software.amazon.awssdk.core.ResponseInputStream;
-import software.amazon.awssdk.services.s3.S3Client;
 import software.amazon.awssdk.services.s3.model.GetObjectResponse;
 
 import org.mskcc.cbio.oncokb.config.Constants;

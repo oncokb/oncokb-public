@@ -33,7 +33,8 @@ public class S3Service {
         this.applicationProperties = applicationProperties;
         SamlAwsProperties samlAwsProperties = applicationProperties.getSamlAws();
         if (samlAwsProperties != null) {
-            s3Client = S3Client.builder().credentialsProvider(samlService.getCredentialsProvider()).region(Region.US_EAST_1).build();
+            String region = samlAwsProperties.getRegion();
+            s3Client = S3Client.builder().credentialsProvider(samlService.getCredentialsProvider()).region(Region.of(region)).build();
         } else {
             log.error("Saml AWS properties not configured");
         }
@@ -68,6 +69,7 @@ public class S3Service {
                 .build(), ResponseTransformer.toInputStream());
             return Optional.of(s3object);
         } catch (Exception e) {
+            log.error(e.getMessage(), e);
             return Optional.empty();
         }
     }
