@@ -83,14 +83,16 @@ export class AccountPage extends React.Component<IRegisterProps> {
 
   @action.bound
   extendExpirationDate(token: Token, newDate: string) {
-    this.props.authenticationStore.extendExpirationDate(token, newDate).then(
-      () => {
-        notifySuccess('Updated Token');
-      },
-      (error: Error) => {
-        notifyError(error);
-      }
-    );
+    this.props.authenticationStore
+      .extendTokenExpirationDate(token, newDate)
+      .then(
+        () => {
+          notifySuccess('Updated Token');
+        },
+        (error: Error) => {
+          notifyError(error);
+        }
+      );
   }
 
   @action.bound

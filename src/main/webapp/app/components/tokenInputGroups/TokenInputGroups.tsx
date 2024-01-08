@@ -65,41 +65,6 @@ export default class TokenInputGroups extends React.Component<
                     Expires in {this.getDuration(expirationDay, expirationHour)}
                   </InputGroup.Text>
                 </InputGroup.Append>
-                {this.props.changeTokenExpirationDate && (
-                  <CalendarButton
-                    currentDate={token.expiration}
-                    afterChangeDate={(newDate: string) => {
-                      if (this.props.extendExpirationDate)
-                        this.props.extendExpirationDate(token, newDate);
-                    }}
-                  />
-                )}
-                <InputGroup.Append>
-                  <CopyButton text={token.token} />
-                </InputGroup.Append>
-                <DefaultTooltip
-                  placement={'top'}
-                  overlay={
-                    this.deleteTokenAllowed
-                      ? 'Delete the token'
-                      : 'You need to have one valid token'
-                  }
-                >
-                  <InputGroup.Append>
-                    <Button
-                      variant={'primary'}
-                      onClick={() => this.props.onDeleteToken(token)}
-                      disabled={!this.deleteTokenAllowed}
-                      style={
-                        !this.deleteTokenAllowed
-                          ? { pointerEvents: 'none' }
-                          : {}
-                      }
-                    >
-                      <i className={classnames('fa fa-trash')}></i>
-                    </Button>
-                  </InputGroup.Append>
-                </DefaultTooltip>
                 <DefaultTooltip
                   placement={'top'}
                   overlay={
@@ -134,6 +99,41 @@ export default class TokenInputGroups extends React.Component<
                       style={!token.renewable ? { pointerEvents: 'none' } : {}}
                     >
                       <i className={classnames('fa fa-refresh')}></i>
+                    </Button>
+                  </InputGroup.Append>
+                </DefaultTooltip>
+                {this.props.changeTokenExpirationDate && (
+                  <CalendarButton
+                    currentDate={token.expiration}
+                    afterChangeDate={(newDate: string) => {
+                      if (this.props.extendExpirationDate)
+                        this.props.extendExpirationDate(token, newDate);
+                    }}
+                  />
+                )}
+                <InputGroup.Append>
+                  <CopyButton text={token.token} />
+                </InputGroup.Append>
+                <DefaultTooltip
+                  placement={'top'}
+                  overlay={
+                    this.deleteTokenAllowed
+                      ? 'Delete the token'
+                      : 'You need to have one valid token'
+                  }
+                >
+                  <InputGroup.Append>
+                    <Button
+                      variant={'primary'}
+                      onClick={() => this.props.onDeleteToken(token)}
+                      disabled={!this.deleteTokenAllowed}
+                      style={
+                        !this.deleteTokenAllowed
+                          ? { pointerEvents: 'none' }
+                          : {}
+                      }
+                    >
+                      <i className={classnames('fa fa-trash')}></i>
                     </Button>
                   </InputGroup.Append>
                 </DefaultTooltip>

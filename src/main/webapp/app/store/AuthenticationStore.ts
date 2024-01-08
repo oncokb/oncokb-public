@@ -157,7 +157,7 @@ class AuthenticationStore {
   }
 
   @action
-  extendExpirationDate(token: Token, newDate: string) {
+  extendTokenExpirationDate(token: Token, newDate: string) {
     return new Promise((resolve, reject) => {
       client
         .updateTokenUsingPUT({
