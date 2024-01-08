@@ -104,7 +104,11 @@ export default class TokenInputGroups extends React.Component<
                   placement={'top'}
                   overlay={
                     token.renewable
-                      ? 'Renew the token'
+                      ? token.expiration ===
+                        this.sortedTokens[this.sortedTokens.length - 1]
+                          .expiration
+                        ? 'Token is up-to-date'
+                        : 'Renew the token'
                       : 'Token is not renewable'
                   }
                 >
@@ -121,7 +125,11 @@ export default class TokenInputGroups extends React.Component<
                         }
                       }}
                       disabled={
-                        !this.props.extendExpirationDate || !token.renewable
+                        !this.props.extendExpirationDate ||
+                        !token.renewable ||
+                        token.expiration ===
+                          this.sortedTokens[this.sortedTokens.length - 1]
+                            .expiration
                       }
                       style={!token.renewable ? { pointerEvents: 'none' } : {}}
                     >
