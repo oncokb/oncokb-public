@@ -156,6 +156,31 @@ class AuthenticationStore {
     });
   }
 
+  @action
+  extendExpirationDate(token: Token, newDate: string) {
+    return new Promise((resolve, reject) => {
+      client
+        .updateTokenUsingPUT({
+          token: {
+            ...token,
+            expiration: newDate,
+          },
+        })
+        .then((updatedToken: Token) => {
+          this.getAccountTokens()
+            .then(() => {
+              resolve(updatedToken);
+            })
+            .catch(error => {
+              reject(error);
+            });
+        })
+        .catch((error: Error) => {
+          reject(error);
+        });
+    });
+  }
+
   @computed
   get isAuthenticated() {
     return !!this.idToken;

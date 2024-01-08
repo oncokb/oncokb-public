@@ -100,6 +100,35 @@ export default class TokenInputGroups extends React.Component<
                     </Button>
                   </InputGroup.Append>
                 </DefaultTooltip>
+                <DefaultTooltip
+                  placement={'top'}
+                  overlay={
+                    token.renewable
+                      ? 'Renew the token'
+                      : 'Token is not renewable'
+                  }
+                >
+                  <InputGroup.Append>
+                    <Button
+                      variant={'primary'}
+                      onClick={() => {
+                        if (this.props.extendExpirationDate) {
+                          this.props.extendExpirationDate(
+                            token,
+                            this.sortedTokens[this.sortedTokens.length - 1]
+                              .expiration
+                          );
+                        }
+                      }}
+                      disabled={
+                        !this.props.extendExpirationDate || !token.renewable
+                      }
+                      style={!token.renewable ? { pointerEvents: 'none' } : {}}
+                    >
+                      <i className={classnames('fa fa-refresh')}></i>
+                    </Button>
+                  </InputGroup.Append>
+                </DefaultTooltip>
               </InputGroup>
             </div>
           );

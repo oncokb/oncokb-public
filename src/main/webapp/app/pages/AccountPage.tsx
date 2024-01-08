@@ -81,23 +81,16 @@ export class AccountPage extends React.Component<IRegisterProps> {
       });
   }
 
-  @action
+  @action.bound
   extendExpirationDate(token: Token, newDate: string) {
-    client
-      .updateTokenUsingPUT({
-        token: {
-          ...token,
-          expiration: newDate,
-        },
-      })
-      .then(
-        () => {
-          notifySuccess('Updated Token');
-        },
-        (error: Error) => {
-          notifyError(error);
-        }
-      );
+    this.props.authenticationStore.extendExpirationDate(token, newDate).then(
+      () => {
+        notifySuccess('Updated Token');
+      },
+      (error: Error) => {
+        notifyError(error);
+      }
+    );
   }
 
   @action.bound
@@ -165,6 +158,7 @@ export class AccountPage extends React.Component<IRegisterProps> {
           changeTokenExpirationDate={false}
           tokens={this.tokens}
           onDeleteToken={this.deleteToken}
+          extendExpirationDate={this.extendExpirationDate}
         />
       </InfoRow>
     );
