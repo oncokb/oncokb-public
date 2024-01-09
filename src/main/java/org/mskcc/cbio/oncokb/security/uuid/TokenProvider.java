@@ -47,7 +47,7 @@ public class TokenProvider implements InitializingBean {
     }
 
     public List<Token> getUserTokens(User userLogin) {
-        return tokenService.findValidByUser(userLogin);
+        return tokenService.findByUser(userLogin);
     }
 
     private Token getNewToken(Set<Authority> authorities, Optional<Instant> definedExpirationTime) {

@@ -65,6 +65,43 @@ export default class TokenInputGroups extends React.Component<
                     Expires in {this.getDuration(expirationDay, expirationHour)}
                   </InputGroup.Text>
                 </InputGroup.Append>
+                <DefaultTooltip
+                  placement={'top'}
+                  overlay={
+                    token.renewable
+                      ? token.expiration ===
+                        this.sortedTokens[this.sortedTokens.length - 1]
+                          .expiration
+                        ? 'Token is up-to-date'
+                        : 'Renew the token'
+                      : 'Token is not renewable'
+                  }
+                >
+                  <InputGroup.Append>
+                    <Button
+                      variant={'primary'}
+                      onClick={() => {
+                        if (this.props.extendExpirationDate) {
+                          this.props.extendExpirationDate(
+                            token,
+                            this.sortedTokens[this.sortedTokens.length - 1]
+                              .expiration
+                          );
+                        }
+                      }}
+                      disabled={
+                        !this.props.extendExpirationDate ||
+                        !token.renewable ||
+                        token.expiration ===
+                          this.sortedTokens[this.sortedTokens.length - 1]
+                            .expiration
+                      }
+                      style={!token.renewable ? { pointerEvents: 'none' } : {}}
+                    >
+                      <i className={classnames('fa fa-refresh')}></i>
+                    </Button>
+                  </InputGroup.Append>
+                </DefaultTooltip>
                 {this.props.changeTokenExpirationDate && (
                   <CalendarButton
                     currentDate={token.expiration}
