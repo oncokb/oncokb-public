@@ -53,9 +53,11 @@ public class SamlService {
             Supplier<AssumeRoleWithSamlRequest> supplier = () -> 
                 samlRequest.toBuilder().samlAssertion(getSamlResponse()).build();
 
+            String region = applicationProperties.getSamlAws().getRegion();
+
             StsAssumeRoleWithSamlCredentialsProvider stsProvider = StsAssumeRoleWithSamlCredentialsProvider
                 .builder()
-                .stsClient(StsClient.builder().credentialsProvider(AnonymousCredentialsProvider.create()).region(Region.US_EAST_1).build())
+                .stsClient(StsClient.builder().credentialsProvider(AnonymousCredentialsProvider.create()).region(Region.of(region)).build())
                 .refreshRequest(supplier)
                 .build();
             credentialsProvider = stsProvider;
