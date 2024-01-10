@@ -3,8 +3,8 @@ package org.mskcc.cbio.oncokb.config.application;
 import org.apache.commons.lang3.StringUtils;
 import org.mskcc.cbio.oncokb.domain.enumeration.ProjectProfile;
 import org.springframework.boot.context.properties.ConfigurationProperties;
-import org.mskcc.oncokb.meta.model.application.RedisProperties;
 import org.mskcc.oncokb.meta.model.application.AWSProperties;
+import org.mskcc.oncokb.meta.model.application.RedisProperties;
 
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -33,7 +33,7 @@ public class ApplicationProperties {
     private String tokenUsageCheckWhitelist;
     private int publicWebsiteApiThreshold;
     private FrontendProperties frontend;
-    private AWSProperties aws;
+    private SamlAwsProperties samlAws;
     private String githubToken;
     private Boolean dbReadOnly;
     private SmartsheetProperties smartsheet;
@@ -158,12 +158,12 @@ public class ApplicationProperties {
         return Arrays.stream(listStr.split(",")).map(element -> element.trim()).filter(element -> !StringUtils.isEmpty(element)).collect(Collectors.toList());
     }
 
-    public AWSProperties getAws() {
-        return aws;
+    public SamlAwsProperties getSamlAws() {
+        return this.samlAws;
     }
 
-    public void setAws(AWSProperties aws) {
-        this.aws = aws;
+    public void setSamlAws(SamlAwsProperties samlAws) {
+        this.samlAws = samlAws;
     }
 
     public String getGithubToken() {

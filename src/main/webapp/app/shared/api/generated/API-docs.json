@@ -1699,6 +1699,7 @@
               "ACTIVATION",
               "CREATION",
               "APPROVAL",
+              "API_ACCESS_APPROVAL",
               "APPROVAL_ALIGN_LICENSE_WITH_COMPANY",
               "REJECTION",
               "REJECTION_US_SANCTION",
@@ -2927,6 +2928,9 @@
         "apiAccessRequest": {
           "$ref": "#/definitions/ApiAccessRequest"
         },
+        "sentToRocReview": {
+          "type": "boolean"
+        },
         "trialAccount": {
           "$ref": "#/definitions/TrialAccount"
         },
@@ -3210,6 +3214,7 @@
             "ACTIVATION",
             "CREATION",
             "APPROVAL",
+            "API_ACCESS_APPROVAL",
             "APPROVAL_ALIGN_LICENSE_WITH_COMPANY",
             "REJECTION",
             "REJECTION_US_SANCTION",
@@ -3708,6 +3713,7 @@
             "ACTIVATION",
             "CREATION",
             "APPROVAL",
+            "API_ACCESS_APPROVAL",
             "APPROVAL_ALIGN_LICENSE_WITH_COMPANY",
             "REJECTION",
             "REJECTION_US_SANCTION",

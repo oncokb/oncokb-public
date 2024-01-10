@@ -8,10 +8,12 @@ import java.time.temporal.ChronoUnit;
 import java.util.*;
 import java.util.stream.Collectors;
 
-import com.amazonaws.services.s3.model.S3Object;
-import com.amazonaws.services.s3.model.S3ObjectInputStream;
 import com.google.gson.Gson;
 
+import software.amazon.awssdk.core.ResponseInputStream;
+import software.amazon.awssdk.services.s3.model.GetObjectResponse;
+
+import org.mskcc.cbio.oncokb.config.Constants;
 import org.mskcc.cbio.oncokb.domain.User;
 import org.mskcc.cbio.oncokb.domain.enumeration.FileExtension;
 import org.mskcc.cbio.oncokb.service.dto.UserDTO;
@@ -52,9 +54,9 @@ public class UsageAnalysisController {
 
     private JSONObject requestData(String file)
             throws UnsupportedEncodingException, IOException, ParseException {
-        Optional<S3Object> s3object = s3Service.getObject("oncokb", file);
+        Optional<ResponseInputStream<GetObjectResponse>> s3object = s3Service.getObject(Constants.ONCOKB_S3_BUCKET, file);
         if (s3object.isPresent()){
-            S3ObjectInputStream inputStream = s3object.get().getObjectContent();
+            ResponseInputStream<GetObjectResponse> inputStream = s3object.get();
             JSONParser jsonParser = new JSONParser();
             return (JSONObject) jsonParser.parse(new InputStreamReader(inputStream, "UTF-8"));
         }
@@ -71,7 +73,6 @@ public class UsageAnalysisController {
     @GetMapping("/usage/users/{userId}")
     public ResponseEntity<UserUsage> userUsageGet(@PathVariable @NotNull Long userId)
         throws IOException, ParseException {
-
         HttpStatus status = HttpStatus.OK;
 
         if (userId != null) {

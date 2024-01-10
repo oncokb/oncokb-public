@@ -171,10 +171,11 @@ application:
     recaptcha-project-id:
     recaptcha-site-key:
     recaptcha-threshold: 0.1
-  aws:
-    s3-access-key:
-    s3-secret-key:
-    s3-region:
+  saml-aws:
+    service-account-username:
+    service-account-password:
+    principal-arn: # "arn:aws:iam::[account number]:saml-provider/PingFed"
+    role-arn: # "arn:aws:iam::[account number]:role/mskAutomationUser"
   github-token:
   db-read-only: false # Certain endpoints will be disabled when readonly is set to true
   recaptcha:
