@@ -46,7 +46,7 @@ export default class NewsPage extends React.Component<{
         const id = this.props.routing.location.hash.slice(1);
         const element = document.getElementById(id);
         scrollWidthOffset(element);
-      }, 500);
+      }, 200);
     }
   }
 
@@ -89,6 +89,7 @@ export default class NewsPage extends React.Component<{
             <CitationText />
           </div>
           <div className="mt-2">
+            <NewsList date={'01152024'} />
             <NewsList date={'12212023'} />
             <NewsList date={'12062023'} />
             <NewsList date={'11132023'} />
