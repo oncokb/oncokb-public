@@ -152,7 +152,9 @@ export class NewsPageNavTab extends React.Component<NewsPageNavTabProps> {
                     );
                     return (
                       <Nav.Item key={key}>
-                        <Nav.Link eventKey={key}>{year}</Nav.Link>
+                        <Nav.Link eventKey={key} className={'ml-3'}>
+                          {year}
+                        </Nav.Link>
                       </Nav.Item>
                     );
                   })}
