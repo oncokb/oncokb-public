@@ -6,7 +6,7 @@ import {
 import { Col, Row } from 'react-bootstrap';
 import React from 'react';
 import styles from './main.module.scss';
-import { LEVEL_PRIORITY, LEVELS } from 'app/config/constants';
+import { LEVEL_PRIORITY, LEVELS, ONCOKB_TM } from 'app/config/constants';
 import OncoKBTable from 'app/components/oncokbTable/OncoKBTable';
 
 const INCLUSION_COLUMNS = [
@@ -14,11 +14,11 @@ const INCLUSION_COLUMNS = [
   { name: 'Cancer Type' },
   { name: 'Drug' },
   {
-    name: 'Significance (Reason for inclusion in OncoKB)',
+    name: `Significance (Reason for inclusion in ${ONCOKB_TM})`,
     content: (
       <div style={{ minWidth: 300 }}>
         <div>Significance</div>
-        <div>(Reason for inclusion in OncoKB)</div>
+        <div>(Reason for inclusion in {ONCOKB_TM})</div>
       </div>
     ),
   },
@@ -29,10 +29,10 @@ const REMOVAL_COLUMNS = [
   { name: 'Discontinued Drug' },
   { name: 'Previous Level of Evidence' },
   {
-    name: 'Reason for removal from OncoKB',
+    name: `Reason for removal from ${ONCOKB_TM}`,
     content: (
       <div style={{ minWidth: 300 }}>
-        <div>Reason for removal from OncoKB</div>
+        <div>Reason for removal from {ONCOKB_TM}</div>
       </div>
     ),
   },

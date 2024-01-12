@@ -47,6 +47,8 @@ export default class NewsPage extends React.Component<{
         const element = document.getElementById(id);
         scrollWidthOffset(element);
       }, 200);
+    } else {
+      window.scrollTo({ top: 0, behavior: 'auto' });
     }
   }
 

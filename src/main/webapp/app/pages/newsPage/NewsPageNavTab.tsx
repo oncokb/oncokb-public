@@ -41,19 +41,12 @@ export class NewsPageNavTab extends React.Component<NewsPageNavTabProps> {
       () => [props.routing.location.pathname],
       ([pathName]) => {
         const lowerCasePathName = pathName.toLowerCase();
-        if (props.routing.location.hash) {
-          let tabKey;
-          if (lowerCasePathName.startsWith(PAGE_ROUTE.NEWS)) {
-            tabKey = TabKey.NEWS;
-          } else if (
-            lowerCasePathName.startsWith(PAGE_ROUTE.YEAR_END_SUMMARY)
-          ) {
-            tabKey = TabKey.YEAR_END_SUMMARY;
-          }
-          if (tabKey) {
-            const hash = props.routing.location.hash.slice(1);
-            this.selectedTab = this.getTabEventKey(tabKey, hash);
-          }
+        if (
+          props.routing.location.hash &&
+          lowerCasePathName.startsWith(PAGE_ROUTE.YEAR_END_SUMMARY)
+        ) {
+          const hash = props.routing.location.hash.slice(1);
+          this.selectedTab = this.getTabEventKey(TabKey.YEAR_END_SUMMARY, hash);
         } else if (Object.keys(TabKey).includes(lowerCasePathName)) {
           this.selectedTab = lowerCasePathName;
         }
