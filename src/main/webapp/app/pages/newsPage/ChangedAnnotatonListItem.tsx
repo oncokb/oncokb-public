@@ -78,6 +78,7 @@ export const ChangedAnnotationListItem = (props: {
         if (linkableMutationName(geneInput, mutationInput)) {
           row.content[mutationColumnIndex].content = (
             <AlterationPageLink
+              key={`${geneInput}-${mutationInput}`}
               hugoSymbol={geneInput}
               alteration={mutationInput}
             />

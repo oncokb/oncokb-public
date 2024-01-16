@@ -627,7 +627,7 @@ export function decodeSlash(content: string | undefined) {
 export const scrollWidthOffset = (el?: any) => {
   const yCoordinate =
     el === undefined ? 0 : el.getBoundingClientRect().top + window.pageYOffset;
-  const yOffset = -80;
+  const yOffset = -90;
   window.scrollTo({ top: yCoordinate + yOffset, behavior: 'smooth' });
 };
 

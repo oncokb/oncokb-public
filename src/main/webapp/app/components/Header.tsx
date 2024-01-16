@@ -97,10 +97,13 @@ class Header extends React.Component<IHeaderProps> {
         PAGE_ROUTE.TEAM,
         PAGE_ROUTE.FDA_RECOGNITION,
         PAGE_ROUTE.SOP,
-        PAGE_ROUTE.YEAR_END_SUMMARY,
       ],
     },
-    { title: 'News', link: PAGE_ROUTE.NEWS },
+    {
+      title: 'News',
+      link: PAGE_ROUTE.NEWS,
+      matchedPaths: [PAGE_ROUTE.NEWS, PAGE_ROUTE.YEAR_END_SUMMARY],
+    },
     { title: 'FAQ', link: PAGE_ROUTE.FAQ_ACCESS },
   ];
 

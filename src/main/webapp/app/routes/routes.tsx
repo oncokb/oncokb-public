@@ -35,6 +35,7 @@ import FAQPage from 'app/pages/FAQPage';
 import ReadOnlyMode from 'app/shared/readonly/ReadOnlyMode';
 import * as QueryString from 'query-string';
 import OncologyTherapiesPage from 'app/pages/oncologyTherapiesPage/oncologyTherapiesPage';
+import { NewsPageNavTab } from 'app/pages/newsPage/NewsPageNavTab';
 
 const getOldLevelsRedirectRoute = (hash: string) => {
   const queryStrings = QueryString.parse(hash) as {
@@ -201,9 +202,9 @@ const AppRouts = (props: {
           <Route
             exact
             path={PAGE_ROUTE.YEAR_END_SUMMARY}
-            component={AboutPageNavTab}
+            component={NewsPageNavTab}
           />
-          <Route exact path={PAGE_ROUTE.NEWS} component={NewsPage} />
+          <Route exact path={PAGE_ROUTE.NEWS} component={NewsPageNavTab} />
           <Route
             exact
             path={PAGE_ROUTE.FDA_RECOGNITION}
