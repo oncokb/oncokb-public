@@ -200,12 +200,22 @@ const EVIDENCE_COLUMN_SEPARATOR = '; ';
 // https://stackoverflow.com/questions/41947168/is-it-possible-to-use-keyof-operator-on-literals-instead-of-interfaces
 
 export const NEWS_BY_DATE: { [date: string]: NewsData } = {
-  '01152024': {
+  '01172024': {
     priorityNews: [
       <span>
-        Happy New Year! The landscape of precision oncology continued to evolve
-        throughout 2023. The OncoKB 2023 year-in-review can be found{' '}
-        <YearEndReviewPageLink year={'2023'}>HERE</YearEndReviewPageLink>.
+        Happy New Year! As of December 31, 2023, 11 level 1, 7 level 2, 4 level
+        3 and 3 level 4 treatments for unique biomarker-selected indications
+        were added to OncoKB. A table summarizing these changes can be found{' '}
+        <YearEndReviewPageLink year={'2023'}>here</YearEndReviewPageLink>. The
+        Precision Oncology: 2023 in review article can be found{' '}
+        <Linkout
+          link={
+            'https://aacrjournals.org/cancerdiscovery/article/13/12/2525/731600/Precision-Oncology-2023-in-Review'
+          }
+        >
+          here
+        </Linkout>
+        .
       </span>,
     ],
   },
