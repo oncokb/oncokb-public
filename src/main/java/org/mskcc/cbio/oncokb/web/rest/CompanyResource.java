@@ -1,6 +1,7 @@
 package org.mskcc.cbio.oncokb.web.rest;
 
 import org.mskcc.cbio.oncokb.domain.Company;
+import org.mskcc.cbio.oncokb.domain.enumeration.LicenseType;
 import org.mskcc.cbio.oncokb.repository.CompanyRepository;
 import org.mskcc.cbio.oncokb.security.AuthoritiesConstants;
 import org.mskcc.cbio.oncokb.service.CompanyService;
@@ -104,15 +105,17 @@ public class CompanyResource {
         }
 
         CompanyDTO result = companyService.updateCompany(companyVM);
-        List<UserDTO> usersInCompany = userService.getCompanyUsers(result.getId());
-        for (UserDTO user : usersInCompany) {
-            Set<String> userAuthorities = user.getAuthorities();
-            if (!userAuthorities.contains(AuthoritiesConstants.API)) {
-                userAuthorities.add(AuthoritiesConstants.API);
-                userService.updateUser(user);
+
+        if (!result.getLicenseType().equals(LicenseType.ACADEMIC)) {
+            List<UserDTO> usersInCompany = userService.getCompanyUsers(result.getId());
+            for (UserDTO user : usersInCompany) {
+                Set<String> userAuthorities = user.getAuthorities();
+                if (!userAuthorities.contains(AuthoritiesConstants.API)) {
+                    userAuthorities.add(AuthoritiesConstants.API);
+                    userService.updateUser(user);
+                }
             }
         }
-
 
         return ResponseEntity.ok()
             .body(result);
