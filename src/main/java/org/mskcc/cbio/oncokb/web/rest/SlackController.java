@@ -115,7 +115,7 @@ public class SlackController {
                             }
                         }
                         break;
-                    case APPROVE_USER_FOR_API_ACCESS:
+                    case APPROVE_USER_FOR_API_ACCESS: {
                         boolean userAlreadyHasRoleApi = userDTO.getAuthorities().contains(AuthoritiesConstants.API);
 
                         updateUserWithRoleApiIfRequested(userDTO);
@@ -125,11 +125,21 @@ public class SlackController {
                             mailService.sendApiAccessApprovalEmail(userDTO);
                         }
                         break;
-                    case GIVE_TRIAL_ACCESS:
+                    }
+                    case GIVE_TRIAL_ACCESS: {
                         user = userService.initiateTrialAccountActivation(login);
                         userDTO = userMapper.userToUserDTO(user.get());
+
+                        updateUserWithRoleApiIfRequested(userDTO);
+                        
+                        Optional<UserDTO> updatedUser = userService.updateUserBeforeTrialAccountActivation(userDTO);
+                        if (updatedUser.isPresent()) {
+                            userDTO = updatedUser.get();
+                        }
+
                         mailService.sendActiveTrialMail(userDTO, false);
                         break;
+                    }
                     case CHANGE_LICENSE_TYPE:
                         String value = action.getSelectedOption().getValue();
                         LicenseType newLicenseType = LicenseType.valueOf(this.slackService.getOptionValueArgument(value));
