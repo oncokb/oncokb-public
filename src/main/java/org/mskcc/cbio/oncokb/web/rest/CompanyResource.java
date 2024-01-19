@@ -1,7 +1,9 @@
 package org.mskcc.cbio.oncokb.web.rest;
 
 import org.mskcc.cbio.oncokb.domain.Company;
+import org.mskcc.cbio.oncokb.domain.enumeration.LicenseType;
 import org.mskcc.cbio.oncokb.repository.CompanyRepository;
+import org.mskcc.cbio.oncokb.security.AuthoritiesConstants;
 import org.mskcc.cbio.oncokb.service.CompanyService;
 import org.mskcc.cbio.oncokb.service.UserService;
 import org.mskcc.cbio.oncokb.web.rest.errors.BadRequestAlertException;
@@ -23,6 +25,7 @@ import java.net.URI;
 import java.net.URISyntaxException;
 import java.util.List;
 import java.util.Optional;
+import java.util.Set;
 
 /**
  * REST controller for managing {@link org.mskcc.cbio.oncokb.domain.Company}.
@@ -102,6 +105,18 @@ public class CompanyResource {
         }
 
         CompanyDTO result = companyService.updateCompany(companyVM);
+
+        if (!result.getLicenseType().equals(LicenseType.ACADEMIC)) {
+            List<UserDTO> usersInCompany = userService.getCompanyUsers(result.getId());
+            for (UserDTO user : usersInCompany) {
+                Set<String> userAuthorities = user.getAuthorities();
+                if (!userAuthorities.contains(AuthoritiesConstants.API)) {
+                    userAuthorities.add(AuthoritiesConstants.API);
+                    userService.updateUser(user);
+                }
+            }
+        }
+
         return ResponseEntity.ok()
             .body(result);
     }

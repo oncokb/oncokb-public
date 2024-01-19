@@ -125,9 +125,17 @@ public class SlackController {
                             mailService.sendApiAccessApprovalEmail(userDTO);
                         }
                         break;
-                    case GIVE_TRIAL_ACCESS:
+                    case GIVE_TRIAL_ACCESS: 
                         user = userService.initiateTrialAccountActivation(login);
                         userDTO = userMapper.userToUserDTO(user.get());
+
+                        updateUserWithRoleApiIfRequested(userDTO);
+                        
+                        Optional<UserDTO> updatedTrialUser = userService.updateUserBeforeTrialAccountActivation(userDTO);
+                        if (updatedTrialUser.isPresent()) {
+                            userDTO = updatedTrialUser.get();
+                        }
+
                         mailService.sendActiveTrialMail(userDTO, false);
                         break;
                     case CHANGE_LICENSE_TYPE:

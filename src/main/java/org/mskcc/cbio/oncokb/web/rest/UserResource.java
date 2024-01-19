@@ -6,6 +6,7 @@ import io.github.jhipster.web.util.ResponseUtil;
 import org.mskcc.cbio.oncokb.config.Constants;
 import org.mskcc.cbio.oncokb.domain.Token;
 import org.mskcc.cbio.oncokb.domain.User;
+import org.mskcc.cbio.oncokb.domain.enumeration.LicenseType;
 import org.mskcc.cbio.oncokb.repository.UserRepository;
 import org.mskcc.cbio.oncokb.security.AuthoritiesConstants;
 import org.mskcc.cbio.oncokb.service.MailService;
@@ -126,7 +127,12 @@ public class UserResource {
             // Assign ROLE_USER to all new accounts
             // All other authorities can be updated in the user management page
             if (managedUserVM.getAuthorities() == null || managedUserVM.getAuthorities().isEmpty()) {
-                managedUserVM.setAuthorities(Collections.singleton(AuthoritiesConstants.USER));
+                Set<String> authorities = new LinkedHashSet<>();
+                authorities.add(AuthoritiesConstants.USER);
+                if (!managedUserVM.getLicenseType().equals(LicenseType.ACADEMIC)) {
+                    authorities.add(AuthoritiesConstants.API);
+                }
+                managedUserVM.setAuthorities(Collections.unmodifiableSet(authorities));
             }
             User newUser = userService.createUser(managedUserVM, Optional.ofNullable(managedUserVM.getTokenValidDays()), Optional.ofNullable(managedUserVM.getTokenIsRenewable()));
             UserDTO newUserDTO = userMapper.userToUserDTO(newUser);

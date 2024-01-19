@@ -376,6 +376,47 @@ public class UserService {
         return user;
     }
 
+    private Optional<UserDTO> updateUserFromUserDTO(UserDTO userDTO) {
+        Optional<UserDTO> updatedUserDTO = Optional.of(userRepository
+        .findById(userDTO.getId()))
+        .filter(Optional::isPresent)
+        .map(Optional::get)
+        .map(user -> {
+            this.clearUserCaches(user);
+            user.setLogin(userDTO.getLogin().toLowerCase());
+            user.setFirstName(userDTO.getFirstName());
+            user.setLastName(userDTO.getLastName());
+            if (userDTO.getEmail() != null) {
+                user.setEmail(userDTO.getEmail().toLowerCase());
+            }
+            user.setImageUrl(userDTO.getImageUrl());
+            user.setActivationKey(userDTO.getActivationKey());
+            user.setResetKey(userDTO.getResetKey());
+            user.setResetDate(userDTO.getResetDate());
+            if (userDTO.isActivated() != user.getActivated()) {
+                user.setActivated(userDTO.isActivated());
+                user.setActivationKey(null);
+                user.setResetKey(null);
+                user.setResetDate(null);
+            }
+            user.setLangKey(userDTO.getLangKey());
+            Set<Authority> managedAuthorities = user.getAuthorities();
+            managedAuthorities.clear();
+            userDTO.getAuthorities().stream()
+                .map(authorityRepository::findById)
+                .filter(Optional::isPresent)
+                .map(Optional::get)
+                .forEach(managedAuthorities::add);
+            this.clearUserCaches(user);
+            log.debug("Changed Information for User: {}", user);
+            UserDTO newUserDTO =  new UserDTO(user, getUpdatedUserDetails(
+                user, userDTO.getLicenseType(), userDTO.getJobTitle(), userDTO.getCompanyName(), userDTO.getCompany(), new Gson().toJson(userDTO.getAdditionalInfo()), userDTO.getCity(), userDTO.getCountry()));
+            newUserDTO.setCompany(userDTO.getCompany());
+            return newUserDTO;
+        });
+        return updatedUserDTO;
+    }
+
     /**
      * Update all information for a specific user, and return the modified user.
      *
@@ -383,44 +424,7 @@ public class UserService {
      * @return updated user.
      */
     public Optional<UserDTO> updateUser(UserDTO userDTO) {
-        Optional<UserDTO> updatedUserDTO = Optional.of(userRepository
-            .findById(userDTO.getId()))
-            .filter(Optional::isPresent)
-            .map(Optional::get)
-            .map(user -> {
-                this.clearUserCaches(user);
-                user.setLogin(userDTO.getLogin().toLowerCase());
-                user.setFirstName(userDTO.getFirstName());
-                user.setLastName(userDTO.getLastName());
-                if (userDTO.getEmail() != null) {
-                    user.setEmail(userDTO.getEmail().toLowerCase());
-                }
-                user.setImageUrl(userDTO.getImageUrl());
-                user.setActivationKey(userDTO.getActivationKey());
-                user.setResetKey(userDTO.getResetKey());
-                user.setResetDate(userDTO.getResetDate());
-                if (userDTO.isActivated() != user.getActivated()) {
-                    user.setActivated(userDTO.isActivated());
-                    user.setActivationKey(null);
-                    user.setResetKey(null);
-                    user.setResetDate(null);
-                }
-                user.setLangKey(userDTO.getLangKey());
-                Set<Authority> managedAuthorities = user.getAuthorities();
-                managedAuthorities.clear();
-                userDTO.getAuthorities().stream()
-                    .map(authorityRepository::findById)
-                    .filter(Optional::isPresent)
-                    .map(Optional::get)
-                    .forEach(managedAuthorities::add);
-                this.clearUserCaches(user);
-                log.debug("Changed Information for User: {}", user);
-                UserDTO newUserDTO =  new UserDTO(user, getUpdatedUserDetails(
-                    user, userDTO.getLicenseType(), userDTO.getJobTitle(), userDTO.getCompanyName(), userDTO.getCompany(), new Gson().toJson(userDTO.getAdditionalInfo()), userDTO.getCity(), userDTO.getCountry()));
-                newUserDTO.setCompany(userDTO.getCompany());
-                return newUserDTO;
-            });
-
+        Optional<UserDTO> updatedUserDTO = updateUserFromUserDTO(userDTO);
 
         if (updatedUserDTO.isPresent()) {
             if (updatedUserDTO.get().isActivated()) {
@@ -436,6 +440,10 @@ public class UserService {
             }
         }
         return updatedUserDTO;
+    }
+
+    public Optional<UserDTO> updateUserBeforeTrialAccountActivation(UserDTO userDTO) {
+        return updateUserFromUserDTO(userDTO);
     }
 
     private UserDetails getUpdatedUserDetails(User user, LicenseType licenseType, String jobTitle, String companyName, CompanyDTO companyDTO, String additionalInfo, String city, String country) {
