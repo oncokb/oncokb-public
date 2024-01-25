@@ -7,6 +7,8 @@ import com.smartsheet.api.models.Cell;
 import com.smartsheet.api.models.Row;
 import com.smartsheet.api.models.SearchResult;
 import com.smartsheet.api.models.Sheet;
+import io.sentry.SentryLevel;
+import io.sentry.protocol.User;
 import org.apache.commons.lang3.StringUtils;
 import org.mskcc.cbio.oncokb.config.application.ApplicationProperties;
 import org.mskcc.cbio.oncokb.config.application.SmartsheetProperties;
@@ -34,13 +36,13 @@ public class SmartsheetService {
 
     private final int MIN_NUM_COLUMN = 8;
 
-    private final MailService mailService;
     private final SmartsheetProperties smartsheetProperties;
+    private final SentryService sentryService;
     private Smartsheet smartsheet;
 
-    public SmartsheetService(MailService mailService, ApplicationProperties applicationProperties) {
+    public SmartsheetService(ApplicationProperties applicationProperties, SentryService sentryService) {
         this.smartsheetProperties = applicationProperties.getSmartsheet();
-        this.mailService = mailService;
+        this.sentryService = sentryService;
         if (this.smartsheetProperties != null && StringUtils.isNotEmpty(this.smartsheetProperties.getAccessToken())) {
             this.smartsheet = SmartsheetFactory.createDefaultClient(this.smartsheetProperties.getAccessToken());
         } else {
@@ -61,8 +63,9 @@ public class SmartsheetService {
         if (this.smartsheet != null
             && this.smartsheetProperties.getSheetId() != null
         ) {
+            Sheet sheet = null;
             try {
-                Sheet sheet = smartsheet.sheetResources().getSheet(
+                sheet = smartsheet.sheetResources().getSheet(
                     this.smartsheetProperties.getSheetId(),
                     null,
                     null,
@@ -72,54 +75,54 @@ public class SmartsheetService {
                     null,
                     null
                 );
-                if (sheet.getColumns().size() < MIN_NUM_COLUMN) {
-                    mailService.sendEmailToDevTeam(
-                        "ROC Smartsheet number of columns is not expected, expect no less than " + MIN_NUM_COLUMN + " columns",
-                        "Please take a look at the sheet, it's supposed to have at least six columns",
-                        null,
-                        false,
-                        false
-                    );
-                } else {
-                    // Search user email to see whether email has been added. If the email exists, skip adding record
-                    // Enclose double quote for exact match. This is necessary, otherwise the fuzzy search is not so accurate.
-                    SearchResult searchResult = this.smartsheet.searchResources().search("\"" + userEmail + "\"");
+            } catch (SmartsheetException e) {
+                sentryService.throwEvent(SentryLevel.ERROR, e, "Failed to get smart sheet using smartsheet.sheetResources().getSheet");
+                return;
+            }
+            if (sheet.getColumns().size() < MIN_NUM_COLUMN) {
+                User user = new User();
+                user.setUsername(userName);
+                sentryService.throwMessage(SentryLevel.ERROR, "ROC Smartsheet number of columns is not expected, expect no less than " + MIN_NUM_COLUMN + " columns", user);
+            } else {
+                // Search user email to see whether email has been added. If the email exists, skip adding record
+                // Enclose double quote for exact match. This is necessary, otherwise the fuzzy search is not so accurate.
+                SearchResult searchResult = null;
+                try {
+                    searchResult = this.smartsheet.searchResources().search("\"" + userEmail + "\"");
                     if (searchResult.getTotalCount() > 0) {
                         log.info("The user " + userEmail + " already exists in the ROC smartsheet");
                         return;
                     }
-
-                    // Specify cell values for first row
-                    List<Cell> rowACells = Arrays.asList(
-                        new Cell(this.smartsheetProperties.getColumnIds().get(0)).setValue(this.smartsheetProperties.getEditor()),
-                        new Cell(this.smartsheetProperties.getColumnIds().get(1)).setValue(userName),
-                        new Cell(this.smartsheetProperties.getColumnIds().get(2)).setValue(userEmail),
-                        new Cell(this.smartsheetProperties.getColumnIds().get(3)).setValue(userCompany),
-                        new Cell(this.smartsheetProperties.getColumnIds().get(4)).setValue(userCity),
-                        new Cell(this.smartsheetProperties.getColumnIds().get(5)).setValue(userCountry),
-                        new Cell(this.smartsheetProperties.getColumnIds().get(6)).setValue(licenseType),
-                        new Cell(this.smartsheetProperties.getColumnIds().get(7)).setValue(useCase)
-                    );
-
-                    // Specify contents of first row
-                    Row newRow = new Row();
-                    newRow.setCells(rowACells)
-                        .setToBottom(true);
-
-                    // Add rows to sheet
-                    List<Row> createdRows = smartsheet.sheetResources().rowResources().addRows(
-                        this.smartsheetProperties.getSheetId(),
-                        Collections.singletonList(newRow)
-                    );
+                } catch (SmartsheetException e) {
+                    sentryService.throwEvent(SentryLevel.WARNING, e, "Failed to search sheet with query " + userEmail + ". But we are going to try to insert the record anyway");
                 }
-            } catch (SmartsheetException e) {
-                mailService.sendEmailToDevTeam(
-                    "Critical: Operation to ROC smartsheet failed",
-                    "Please verify the ROC smartsheet is setup properly. The error: " + e.getMessage(),
-                    null,
-                    false,
-                    false
+            }
+
+            // Specify cell values for first row
+            List<Cell> rowACells = Arrays.asList(
+                new Cell(this.smartsheetProperties.getColumnIds().get(0)).setValue(this.smartsheetProperties.getEditor()),
+                new Cell(this.smartsheetProperties.getColumnIds().get(1)).setValue(userName),
+                new Cell(this.smartsheetProperties.getColumnIds().get(2)).setValue(userEmail),
+                new Cell(this.smartsheetProperties.getColumnIds().get(3)).setValue(userCompany),
+                new Cell(this.smartsheetProperties.getColumnIds().get(4)).setValue(userCity),
+                new Cell(this.smartsheetProperties.getColumnIds().get(5)).setValue(userCountry),
+                new Cell(this.smartsheetProperties.getColumnIds().get(6)).setValue(licenseType),
+                new Cell(this.smartsheetProperties.getColumnIds().get(7)).setValue(useCase)
+            );
+
+            // Specify contents of first row
+            Row newRow = new Row();
+            newRow.setCells(rowACells)
+                .setToBottom(true);
+
+            // Add rows to sheet
+            try {
+                List<Row> createdRows = smartsheet.sheetResources().rowResources().addRows(
+                    this.smartsheetProperties.getSheetId(),
+                    Collections.singletonList(newRow)
                 );
+            } catch (SmartsheetException e) {
+                sentryService.throwEvent(SentryLevel.ERROR, e, "Failed to add row to smartsheet, " + newRow);
             }
         } else {
             log.warn("No user record is added since smartsheet is not initiated properly");
@@ -154,9 +157,10 @@ public class SmartsheetService {
         return Arrays.asList(usaCountryNames).stream().filter(str -> str.equalsIgnoreCase(ct)).findAny().isPresent();
     }
 
-    public boolean sentToRocReview(UserDTO userDTO){
+    public boolean sentToRocReview(UserDTO userDTO) {
         return userDTO.getAdditionalInfo() != null && Boolean.TRUE.equals(userDTO.getAdditionalInfo().getSentToRocReview());
     }
+
     public boolean shouldAddUser(UserDTO userDTO) {
         if (sentToRocReview(userDTO)) {
             return false;
