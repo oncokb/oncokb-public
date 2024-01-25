@@ -30,7 +30,7 @@ public class SentryService {
      *
      * @param sentryLevel Sentry event level. Warning, Error and more
      * @param exception   Any throwable exception which will be displayed in the Sentry issue
-     * @param message     he custom message which will be displayed in the Sentry issue
+     * @param message     The custom message which will be displayed in the Sentry issue
      */
     public void throwEvent(SentryLevel sentryLevel, Throwable exception, String message) {
         SentryEvent event = new SentryEvent();
