@@ -126,7 +126,8 @@ export class NewsPageNavTab extends React.Component<NewsPageNavTabProps> {
                 className={classnames(
                   'flex-column',
                   'sticky-top',
-                  'sticky-panel-relevant-to-header'
+                  'sticky-panel-relevant-to-header',
+                  'mb-3'
                 )}
               >
                 <Nav.Item>
