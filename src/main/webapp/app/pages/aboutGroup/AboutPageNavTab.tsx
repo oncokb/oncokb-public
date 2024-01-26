@@ -87,7 +87,8 @@ export class AboutPageNavTab extends React.Component<AboutPageNavTabProps> {
                 className={classnames(
                   'flex-column',
                   'sticky-top',
-                  'sticky-panel-relevant-to-header'
+                  'sticky-panel-relevant-to-header',
+                  'mb-3'
                 )}
               >
                 <Nav.Item>
