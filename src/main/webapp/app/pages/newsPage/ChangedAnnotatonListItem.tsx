@@ -5,6 +5,7 @@ import {
   CHANGED_ANNOTATION_ADDITIONAL_DRUG_DIFF_LEVEL_COLUMNS,
   GENE,
   MUTATION,
+  CHANGED_ANNOTATION_DRUG_REMOVAL_COLUMNS,
 } from 'app/pages/newsPage/NewsPageContent';
 import { SimpleTable, SimpleTableRow } from 'app/components/SimpleTable';
 import { Row } from 'react-bootstrap';
@@ -24,6 +25,7 @@ export enum AnnotationColumnHeaderType {
   DRUG,
   ADDITIONAL_SAME_LEVEL_DRUG,
   ADDITIONAL_DIFF_LEVEL_DRUG,
+  DRUG_REMOVAL,
 }
 
 export const ChangedAnnotationListItem = (props: {
@@ -54,6 +56,12 @@ export const ChangedAnnotationListItem = (props: {
       annotationColumnHeader = CHANGED_ANNOTATION_ADDITIONAL_DRUG_DIFF_LEVEL_COLUMNS;
       useOneLineRowClass = false;
       defaultTitle = 'Changed Annotation';
+      break;
+    case AnnotationColumnHeaderType.DRUG_REMOVAL:
+      annotationColumnHeader = CHANGED_ANNOTATION_DRUG_REMOVAL_COLUMNS;
+      useOneLineRowClass = false;
+      defaultTitle =
+        'Updated therapeutic implications - Removal of therapies for variants with a level of evidence';
       break;
     case AnnotationColumnHeaderType.LEVEL:
     default:
