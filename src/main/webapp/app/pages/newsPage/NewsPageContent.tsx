@@ -149,6 +149,7 @@ export const CHANGED_ANNOTATION_DRUG_REMOVAL_COLUMNS = [
   { name: GENE },
   { name: MUTATION },
   { name: CANCER_TYPE },
+  { name: PREVIOUS_LEVEL },
   { name: CURRENT_LEVEL_OF_EVIDENCE },
   { name: DRUGS_CURRENTLY_IN_ONCOKB },
   { name: DRUGS_REMOVED_FROM_ONCOKB },
@@ -211,10 +212,11 @@ const EVIDENCE_COLUMN_SEPARATOR = '; ';
 // https://stackoverflow.com/questions/41947168/is-it-possible-to-use-keyof-operator-on-literals-instead-of-interfaces
 
 export const NEWS_BY_DATE: { [date: string]: NewsData } = {
-  '02062024': {
+  '02072024': {
     news: [
       <span>
-        Updated therapeutic implications - Changed level of evidence
+        Updated therapeutic implications - Demotion of tumor-type-specific level
+        of evidence for alteration
         <Row className={'overflow-auto'}>
           <table className="table">
             <thead>
@@ -239,11 +241,11 @@ export const NEWS_BY_DATE: { [date: string]: NewsData } = {
                     Fusion which remain Level 1)
                   </span>
                 </td>
-                <td rowSpan={3}>Bladder Cancer</td>
-                <td rowSpan={3}>Erdafitinib</td>
+                <td>Bladder Cancer</td>
+                <td>Erdafitinib</td>
                 <td>1</td>
                 <td>2</td>
-                <td rowSpan={3}>
+                <td>
                   <WithSeparator separator={EVIDENCE_COLUMN_SEPARATOR}>
                     <Linkout link="https://www.accessdata.fda.gov/drugsatfda_docs/label/2020/212018s001lbl.pdf">
                       Adherence to FDA-drug label and CDx for Erdafitinib
@@ -251,10 +253,31 @@ export const NEWS_BY_DATE: { [date: string]: NewsData } = {
                     <span>
                       Inclusion in NCCN Bladder Cancer Guidelines V3.2023
                     </span>
-                    <PMIDLink pmids={'37870920'} />
+                    <PMIDLink pmids="37870920" />
                   </WithSeparator>
                 </td>
               </tr>
+            </tbody>
+          </table>
+        </Row>
+      </span>,
+      <span>
+        Updated therapeutic implications - Promotion of tumor-type-specific
+        level of evidence for alteration
+        <Row className={'overflow-auto'}>
+          <table className="table">
+            <thead>
+              <tr>
+                <th>{GENE}</th>
+                <th>{MUTATION}</th>
+                <th>{CANCER_TYPE}</th>
+                <th>{DRUGS}</th>
+                <th>{PREVIOUS_LEVEL}</th>
+                <th>{CURRENT_LEVEL}</th>
+                <th>{REASON}</th>
+              </tr>
+            </thead>
+            <tbody>
               <tr>
                 <td>
                   <GenePageLink hugoSymbol="FGFR3" />
@@ -271,8 +294,22 @@ export const NEWS_BY_DATE: { [date: string]: NewsData } = {
                     </WithSeparator>
                   </span>
                 </td>
+                <td rowSpan={2}>Bladder Cancer</td>
+                <td rowSpan={2}>Erdafitinib</td>
                 <td>3A</td>
                 <td>2</td>
+                <td rowSpan={2}>
+                  {' '}
+                  <WithSeparator separator={EVIDENCE_COLUMN_SEPARATOR}>
+                    <Linkout link="https://www.accessdata.fda.gov/drugsatfda_docs/label/2020/212018s001lbl.pdf">
+                      Adherence to FDA-drug label and CDx for Erdafitinib
+                    </Linkout>
+                    <span>
+                      Inclusion in NCCN Bladder Cancer Guidelines V3.2023
+                    </span>
+                    <PMIDLink pmids="37870920" />
+                  </WithSeparator>
+                </td>
               </tr>
               <tr>
                 <td>
@@ -307,12 +344,12 @@ export const NEWS_BY_DATE: { [date: string]: NewsData } = {
                     <div style={{ fontStyle: 'italic' }}>
                       {DRUGS_CURRENTLY_IN_ONCOKB}:
                     </div>
-                    <div>Milademetan</div>
+                    <div>Milademetan (Level 4)</div>
                     <br></br>
                     <div style={{ fontStyle: 'italic' }}>
                       {DRUGS_ADDED_TO_ONCOKB}:
                     </div>
-                    <div>Brigimadlin</div>
+                    <div>Brigimadlin (Level 3A)</div>
                   </div>
                 </td>
                 <td>4</td>
@@ -334,13 +371,18 @@ export const NEWS_BY_DATE: { [date: string]: NewsData } = {
             'FGFR2',
             'Fusions',
             'Bladder Cancer',
+            'Level 1',
             'No Level',
-            'Erdafitinib (Level 1)',
-            'Erdafitinib (Level 1)',
+            'Erdafitinib (Level 1); AZD4547 (Level 4)',
+            'Erdafitinib (Level 1); AZD4547 (Level 4)',
             <WithSeparator separator={EVIDENCE_COLUMN_SEPARATOR}>
               <Linkout link="https://www.accessdata.fda.gov/drugsatfda_docs/label/2020/212018s001lbl.pdf">
                 Amendment to the FDA-drug label for Erdafitinib
               </Linkout>
+              <span>
+                Lack of clinical response of FGFR2-fusion+ bladder cancer to
+                FGFR-inhibitors
+              </span>
               <PMIDLink pmids="31340094" />
             </WithSeparator>,
           ],
@@ -348,13 +390,13 @@ export const NEWS_BY_DATE: { [date: string]: NewsData } = {
       },
     ],
     updatedImplicationTitle:
-      'Updated therapeutic implications - New alterations with a level of evidence',
+      'Updated therapeutic implications - New alterations with a tumor-type-specific level of evidence',
     updatedImplication: [
       [
         '3A',
         'MDM2',
         'Amplification',
-        'Initial Sarcoma',
+        'Intimal Sarcoma',
         'Milademetan',
         <PMIDLink pmids={'37369013'} />,
       ],
