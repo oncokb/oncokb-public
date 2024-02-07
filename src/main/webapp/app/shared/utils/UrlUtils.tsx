@@ -11,6 +11,7 @@ import {
 import {
   encodeSlash,
   getAlterationName,
+  getCategoricalAlteration,
   getYouTubeLink,
   IAlteration,
 } from 'app/shared/utils/Utils';
@@ -73,17 +74,19 @@ export const getAlterationPageLink = (props: {
   searchQueries?: AlterationPageSearchQueries;
   hashQueries?: AlterationPageHashQueries;
 }): string => {
-  let pageLink = `${PAGE_ROUTE.GENE_HEADER}/${props.hugoSymbol}/${
+  const linkoutAltName = getCategoricalAlteration(
     typeof props.alteration === 'string'
       ? props.alteration
       : props.alteration.name
-  }`;
+  );
+
+  let pageLink = `${PAGE_ROUTE.GENE_HEADER}/${props.hugoSymbol}/${linkoutAltName}`;
   if (props.cancerType) {
     pageLink = `${pageLink}/${encodeSlash(props.cancerType)}`;
   }
   const sq = props.searchQueries || {};
 
-  // Prop alterationRefGenomes is just a convinient way to process reference genomes when it's a list.
+  // Prop alterationRefGenomes is just a convenient way to process reference genomes when it's a list.
   if (!sq.refGenome && props.alterationRefGenomes) {
     if (!props.alterationRefGenomes.includes(DEFAULT_REFERENCE_GENOME)) {
       sq.refGenome = props.alterationRefGenomes[0];
