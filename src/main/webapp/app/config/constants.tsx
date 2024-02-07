@@ -616,6 +616,14 @@ export const GAIN_OF_FUNCTION_MUTATIONS = 'Gain-of-function Mutations';
 export const LOSS_OF_FUNCTION_MUTATIONS = 'Loss-of-function Mutations';
 export const SWITCH_OF_FUNCTION_MUTATIONS = 'Switch-of-function Mutations';
 
+export const CATEGORICAL_ALTERATIONS = [
+  ONCOGENIC_MUTATIONS,
+  FUSIONS,
+  TRUNCATING_MUTATIONS,
+  GAIN_OF_FUNCTION_MUTATIONS,
+  LOSS_OF_FUNCTION_MUTATIONS,
+  SWITCH_OF_FUNCTION_MUTATIONS,
+];
 export enum SEARCH_QUERY_KEY {
   REFERENCE_GENOME = 'refGenome',
 }
