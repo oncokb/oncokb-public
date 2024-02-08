@@ -79,6 +79,7 @@ export const CURRENT_LEVEL_OF_EVIDENCE = 'Current Level of Evidence';
 export const PREVIOUS_LEVEL_OF_EVIDENCE = 'Previous Level of Evidence';
 export const DRUGS_ADDED_TO_ONCOKB = `Drug(s) added to ${ONCOKB_TM}`;
 export const DRUGS_CURRENTLY_IN_ONCOKB = `Drug(s) currently in ${ONCOKB_TM}`;
+export const DRUGS_REMOVED_FROM_ONCOKB = `Drug(s) removed from ${ONCOKB_TM}`;
 export const PREVIOUS_BIOMARKER_ASSOCIATION = 'Previous Biomarker Association';
 export const CURRENT_BIOMARKER_ASSOCIATION = 'Current Biomarker Association';
 
@@ -144,6 +145,17 @@ export const CHANGED_ANNOTATION_ADDITIONAL_DRUG_DIFF_LEVEL_COLUMNS = [
   { name: EVIDENCE },
 ];
 
+export const CHANGED_ANNOTATION_DRUG_REMOVAL_COLUMNS = [
+  { name: GENE },
+  { name: MUTATION },
+  { name: CANCER_TYPE },
+  { name: PREVIOUS_LEVEL },
+  { name: CURRENT_LEVEL_OF_EVIDENCE },
+  { name: DRUGS_CURRENTLY_IN_ONCOKB },
+  { name: DRUGS_REMOVED_FROM_ONCOKB },
+  { name: EVIDENCE },
+];
+
 export const CDX_COLUMNS = [
   { name: LEVEL },
   { name: GENE },
@@ -200,6 +212,215 @@ const EVIDENCE_COLUMN_SEPARATOR = '; ';
 // https://stackoverflow.com/questions/41947168/is-it-possible-to-use-keyof-operator-on-literals-instead-of-interfaces
 
 export const NEWS_BY_DATE: { [date: string]: NewsData } = {
+  '02082024': {
+    news: [
+      <span>
+        Updated therapeutic implications - Demotion of tumor type-specific level
+        of evidence for an alteration(s)
+        <Row className={'overflow-auto'}>
+          <table className="table">
+            <thead>
+              <tr>
+                <th>{GENE}</th>
+                <th>{MUTATION}</th>
+                <th>{CANCER_TYPE}</th>
+                <th>{DRUGS}</th>
+                <th>{PREVIOUS_LEVEL}</th>
+                <th>{CURRENT_LEVEL}</th>
+                <th>{REASON}</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td>
+                  <GenePageLink hugoSymbol="FGFR3" />
+                </td>
+                <td>
+                  <span>
+                    Fusions (excluding FGFR3-TACC3 Fusion and FGFR3-BAIAP2L1
+                    Fusion which remain Level 1)
+                  </span>
+                </td>
+                <td>Bladder Cancer</td>
+                <td>Erdafitinib</td>
+                <td>1</td>
+                <td>2</td>
+                <td>
+                  <WithSeparator separator={EVIDENCE_COLUMN_SEPARATOR}>
+                    <Linkout link="https://www.accessdata.fda.gov/drugsatfda_docs/label/2020/212018s001lbl.pdf">
+                      Adherence to FDA-drug label and CDx for Erdafitinib
+                    </Linkout>
+                    <span>
+                      Inclusion in NCCN Bladder Cancer Guidelines V3.2023
+                    </span>
+                    <PMIDLink pmids="37870920" />
+                  </WithSeparator>
+                </td>
+              </tr>
+            </tbody>
+          </table>
+        </Row>
+      </span>,
+      <span>
+        Updated therapeutic implications - Promotion of tumor type-specific
+        level of evidence for an alteration(s)
+        <Row className={'overflow-auto'}>
+          <table className="table">
+            <thead>
+              <tr>
+                <th>{GENE}</th>
+                <th>{MUTATION}</th>
+                <th>{CANCER_TYPE}</th>
+                <th>{DRUGS}</th>
+                <th>{PREVIOUS_LEVEL}</th>
+                <th>{CURRENT_LEVEL}</th>
+                <th>{REASON}</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td>
+                  <GenePageLink hugoSymbol="FGFR3" />
+                </td>
+                <td>
+                  <span>
+                    <WithSeparator separator={', '}>
+                      {['S371C', 'G380R', 'K650'].map(alt => (
+                        <AlterationPageLink
+                          hugoSymbol="FGFR3"
+                          alteration={alt}
+                        />
+                      ))}
+                    </WithSeparator>
+                  </span>
+                </td>
+                <td rowSpan={2}>Bladder Cancer</td>
+                <td rowSpan={2}>Erdafitinib</td>
+                <td>3A</td>
+                <td>2</td>
+                <td rowSpan={2}>
+                  {' '}
+                  <WithSeparator separator={EVIDENCE_COLUMN_SEPARATOR}>
+                    <Linkout link="https://www.accessdata.fda.gov/drugsatfda_docs/label/2020/212018s001lbl.pdf">
+                      Adherence to FDA-drug label and CDx for Erdafitinib
+                    </Linkout>
+                    <span>
+                      Inclusion in NCCN Bladder Cancer Guidelines V3.2023
+                    </span>
+                    <PMIDLink pmids="37870920" />
+                  </WithSeparator>
+                </td>
+              </tr>
+              <tr>
+                <td>
+                  <GenePageLink hugoSymbol="FGFR3" />
+                </td>
+                <td>
+                  <span>
+                    Oncogenic Mutations (excluding G370C, R248C, S249C, Y373C
+                    which remain Level 1)
+                  </span>
+                </td>
+                <td>4</td>
+                <td>2</td>
+              </tr>
+              <tr>
+                <td>
+                  <GenePageLink hugoSymbol="MDM2" />
+                </td>
+                <td>
+                  <span>
+                    <AlterationPageLink
+                      hugoSymbol="MDM2"
+                      alteration="Amplification"
+                    />
+                  </span>
+                </td>
+                <td>
+                  Dedifferentiated Liposarcoma, Well-Differentiated Liposarcoma
+                </td>
+                <td>
+                  <div>
+                    <div style={{ fontStyle: 'italic' }}>
+                      {DRUGS_CURRENTLY_IN_ONCOKB}:
+                    </div>
+                    <div>Milademetan (Level 4)</div>
+                    <br></br>
+                    <div style={{ fontStyle: 'italic' }}>
+                      {DRUGS_ADDED_TO_ONCOKB}:
+                    </div>
+                    <div>Brigimadlin (Level 3A)</div>
+                  </div>
+                </td>
+                <td>4</td>
+                <td>3A</td>
+                <td>
+                  <PMIDLink pmids="37269344" />
+                </td>
+              </tr>
+            </tbody>
+          </table>
+        </Row>
+      </span>,
+    ],
+    changedAnnotations: [
+      {
+        columnHeaderType: AnnotationColumnHeaderType.DRUG_REMOVAL,
+        content: [
+          [
+            'FGFR2',
+            'Fusions',
+            'Bladder Cancer',
+            'Level 1',
+            'No Level',
+            <div>
+              <div>Erdafitinib (Level 1)</div>
+              <div>AZD4547 (Level 4)</div>
+            </div>,
+            'Erdafitinib, AZD4547',
+            <WithSeparator separator={EVIDENCE_COLUMN_SEPARATOR}>
+              <Linkout link="https://www.accessdata.fda.gov/drugsatfda_docs/label/2020/212018s001lbl.pdf">
+                Amendment to the FDA-drug label for Erdafitinib
+              </Linkout>
+              <span>
+                4/25 (16%) response rate for FGFR2/3 fusion+ bladder cancer, 0/6
+                (0%) response for FGFR2 fusion+ bladder cancer
+              </span>
+              <PMIDLink pmids="31340094" />
+            </WithSeparator>,
+          ],
+        ],
+      },
+    ],
+    updatedImplicationTitle:
+      'Updated therapeutic implications - New alteration(s) with a tumor type-specific level of evidence',
+    updatedImplication: [
+      [
+        '3A',
+        'MDM2',
+        'Amplification',
+        'Intimal Sarcoma',
+        'Milademetan',
+        <PMIDLink pmids={'37369013'} />,
+      ],
+    ],
+    newlyAddedGenes: [
+      'ANKRD26',
+      'ARHGAP26',
+      'ATIC',
+      'CD70',
+      'ERCC1',
+      'FGF1',
+      'FGF2',
+      'FGF5',
+      'HFE',
+      'HOXA11',
+      'MN1',
+      'PML',
+      'SRP72',
+      'TNFRSF17',
+    ],
+  },
   '01172024': {
     priorityNews: [
       <span>

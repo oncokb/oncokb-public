@@ -474,14 +474,15 @@ const OncologyTherapiesPage: React.FunctionComponent<{}> = props => {
                 'https://www.fda.gov/drugs/resources-information-approved-drugs/oncology-cancer-hematologic-malignancies-approval-notifications'
               }
             >
-              Content current as of 12/15/2023
+              Content current as of 1/19/2024
             </Linkout>
           </div>
           <div>
             The following US Food and Drug Administration (FDA)-approved
-            oncology drugs are categorized by drug class and mechanism of
-            action. Each drug is further classified as to whether it qualifies
-            as a targeted therapy or precision oncology therapy based on{' '}
+            oncology drugs post June 1998 are categorized by drug class and
+            mechanism of action. Each drug is further classified as to whether
+            it qualifies as a targeted therapy or precision oncology therapy
+            based on{' '}
             <Linkout link="https://aacrjournals.org/cancerdiscovery/article/doi/10.1158/2159-8290.CD-23-0467/729589/Quantifying-the-Expanding-Landscape-of-Clinical">
               Suehnholz et al., Cancer Discovery 2023
             </Linkout>{' '}

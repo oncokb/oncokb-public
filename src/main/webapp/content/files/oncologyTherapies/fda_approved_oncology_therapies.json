@@ -1462,7 +1462,7 @@
   {
     "year": "2019",
     "tx": "Erdafitinib",
-    "biomarker": "FGFR2 Fusions, FGFR3 Fusions, S249C, R248C, G370C, Y373C",
+    "biomarker": "FGFR3-TACC3 Fusion, FGFR3-BAIAP2L1 Fusion, FGFR3 S249C, R248C, G370C, Y373C",
     "agentClass": "Small molecule kinase inhibitor",
     "drugTarget": "Multi-targeted kinase inhibitor (targets include FGFR1/2/3/4 among others)",
     "targetedTx": "Y",
