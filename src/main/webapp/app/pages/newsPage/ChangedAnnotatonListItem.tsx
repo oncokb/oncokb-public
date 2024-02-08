@@ -61,7 +61,7 @@ export const ChangedAnnotationListItem = (props: {
       annotationColumnHeader = CHANGED_ANNOTATION_DRUG_REMOVAL_COLUMNS;
       useOneLineRowClass = false;
       defaultTitle =
-        'Updated therapeutic implications - Removal of therapie(s) and changed tumor-type-specific level of evidence for an alteration';
+        'Updated therapeutic implications - Removal of therapie(s) and changed tumor type-specific level of evidence for an alteration(s)';
       break;
     case AnnotationColumnHeaderType.LEVEL:
     default:

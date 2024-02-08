@@ -212,11 +212,11 @@ const EVIDENCE_COLUMN_SEPARATOR = '; ';
 // https://stackoverflow.com/questions/41947168/is-it-possible-to-use-keyof-operator-on-literals-instead-of-interfaces
 
 export const NEWS_BY_DATE: { [date: string]: NewsData } = {
-  '02072024': {
+  '02082024': {
     news: [
       <span>
-        Updated therapeutic implications - Demotion of tumor-type-specific level
-        of evidence for alteration
+        Updated therapeutic implications - Demotion of tumor type-specific level
+        of evidence for an alteration(s)
         <Row className={'overflow-auto'}>
           <table className="table">
             <thead>
@@ -262,8 +262,8 @@ export const NEWS_BY_DATE: { [date: string]: NewsData } = {
         </Row>
       </span>,
       <span>
-        Updated therapeutic implications - Promotion of tumor-type-specific
-        level of evidence for alteration
+        Updated therapeutic implications - Promotion of tumor type-specific
+        level of evidence for an alteration(s)
         <Row className={'overflow-auto'}>
           <table className="table">
             <thead>
@@ -373,15 +373,18 @@ export const NEWS_BY_DATE: { [date: string]: NewsData } = {
             'Bladder Cancer',
             'Level 1',
             'No Level',
-            'Erdafitinib (Level 1); AZD4547 (Level 4)',
-            'Erdafitinib (Level 1); AZD4547 (Level 4)',
+            <div>
+              <div>Erdafitinib (Level 1)</div>
+              <div>AZD4547 (Level 4)</div>
+            </div>,
+            'Erdafitinib, AZD4547',
             <WithSeparator separator={EVIDENCE_COLUMN_SEPARATOR}>
               <Linkout link="https://www.accessdata.fda.gov/drugsatfda_docs/label/2020/212018s001lbl.pdf">
                 Amendment to the FDA-drug label for Erdafitinib
               </Linkout>
               <span>
-                Lack of clinical response of FGFR2-fusion+ bladder cancer to
-                FGFR-inhibitors
+                4/25 (16%) response rate for FGFR2/3 fusion+ bladder cancer, 0/6
+                (0%) response for FGFR2 fusion+ bladder cancer
               </span>
               <PMIDLink pmids="31340094" />
             </WithSeparator>,
@@ -390,7 +393,7 @@ export const NEWS_BY_DATE: { [date: string]: NewsData } = {
       },
     ],
     updatedImplicationTitle:
-      'Updated therapeutic implications - New alterations with a tumor-type-specific level of evidence',
+      'Updated therapeutic implications - New alteration(s) with a tumor type-specific level of evidence',
     updatedImplication: [
       [
         '3A',
