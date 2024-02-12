@@ -40,6 +40,7 @@ import client from 'app/shared/api/clientInstance';
 import { notifyError } from 'app/shared/utils/NotificationUtils';
 import {
   EMAIL_VAL,
+  LONG_TEXT_VAL,
   SHORT_TEXT_VAL,
   TEXT_VAL,
 } from 'app/shared/utils/FormValidationUtils';
@@ -663,7 +664,7 @@ export class NewAccountForm extends React.Component<INewAccountForm> {
                         placeholder={this.useCasePlaceholder}
                         rows={6}
                         validate={{
-                          ...TEXT_VAL,
+                          ...LONG_TEXT_VAL,
                           required: {
                             value: true,
                             errorMessage: 'Your use case is required.',
@@ -753,6 +754,13 @@ export class NewAccountForm extends React.Component<INewAccountForm> {
                         rows={6}
                         type={'textarea'}
                         required={this.apiAccessRequested}
+                        validate={{
+                          ...LONG_TEXT_VAL,
+                          required: {
+                            value: true,
+                            errorMessage: 'Your justification is required.',
+                          },
+                        }}
                       />
                     </div>
                   )}
