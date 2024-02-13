@@ -69,7 +69,11 @@ import { SimpleConfirmModal } from 'app/shared/modal/SimpleConfirmModal';
 import DocumentTitle from 'react-document-title';
 import { Link } from 'react-router-dom';
 import { RouterStore } from 'mobx-react-router';
-import { SHORT_TEXT_VAL, TEXT_VAL } from 'app/shared/utils/FormValidationUtils';
+import {
+  LONG_TEXT_VAL,
+  SHORT_TEXT_VAL,
+  TEXT_VAL,
+} from 'app/shared/utils/FormValidationUtils';
 import AuthenticationStore from 'app/store/AuthenticationStore';
 import ButtonWithTooltip from 'app/shared/button/ButtonWithTooltip';
 import {
@@ -401,7 +405,7 @@ export default class UserPage extends React.Component<IUserPage> {
     if (this.user) {
       const updatedUserCompany: UserCompany = {
         ...this.user.additionalInfo?.userCompany,
-        useCase: values.additionalInfoUserCase,
+        useCase: values.additionalInfoUseCase,
       };
       const updatedAdditionalInfo: AdditionalInfoDTO = {
         ...this.user.additionalInfo,
@@ -898,17 +902,19 @@ export default class UserPage extends React.Component<IUserPage> {
                             disabled={this.user.company != null}
                           />
                           <AvField
-                            name="additionalInfoUserCase"
+                            name="additionalInfoUseCase"
                             label={
                               <BoldAccountTitle
-                                title={ACCOUNT_TITLES.ADDITIONAL_INFO_USER_CASE}
+                                title={ACCOUNT_TITLES.ADDITIONAL_INFO_USE_CASE}
                                 licenseType={this.selectedLicense}
                               />
                             }
                             value={
                               this.user.additionalInfo?.userCompany?.useCase
                             }
-                            validate={TEXT_VAL}
+                            rows={3}
+                            type={'textarea'}
+                            validate={LONG_TEXT_VAL}
                           />
                           <AvField
                             name="city"
