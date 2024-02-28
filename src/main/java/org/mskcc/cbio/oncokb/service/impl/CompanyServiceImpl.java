@@ -4,8 +4,13 @@ import org.mskcc.cbio.oncokb.service.CompanyDomainService;
 import org.mskcc.cbio.oncokb.service.CompanyService;
 import org.mskcc.cbio.oncokb.config.cache.CacheNameResolver;
 import org.mskcc.cbio.oncokb.domain.Company;
+import org.mskcc.cbio.oncokb.domain.User;
+import org.mskcc.cbio.oncokb.domain.UserDetails;
 import org.mskcc.cbio.oncokb.domain.enumeration.LicenseStatus;
+import org.mskcc.cbio.oncokb.domain.enumeration.LicenseType;
 import org.mskcc.cbio.oncokb.repository.CompanyRepository;
+import org.mskcc.cbio.oncokb.repository.UserDetailsRepository;
+import org.mskcc.cbio.oncokb.repository.UserRepository;
 import org.mskcc.cbio.oncokb.service.dto.CompanyDTO;
 import org.mskcc.cbio.oncokb.service.dto.UserDTO;
 import org.mskcc.cbio.oncokb.service.mapper.CompanyDomainMapper;
@@ -16,6 +21,7 @@ import org.mskcc.cbio.oncokb.service.UserService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.cache.CacheManager;
+import org.springframework.dao.EmptyResultDataAccessException;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -49,6 +55,10 @@ public class CompanyServiceImpl implements CompanyService {
 
     private final CacheNameResolver cacheNameResolver;
 
+    private final UserRepository userRepository;
+
+    private final UserDetailsRepository userDetailsRepository;
+
     public CompanyServiceImpl(
         CompanyRepository companyRepository,
         CompanyMapper companyMapper,
@@ -57,7 +67,9 @@ public class CompanyServiceImpl implements CompanyService {
         UserService userService,
         UserMapper userMapper,
         CacheManager cacheManager,
-        CacheNameResolver cacheNameResolver
+        CacheNameResolver cacheNameResolver,
+        UserRepository userRepository,
+        UserDetailsRepository userDetailsRepository
     ) {
         this.companyRepository = companyRepository;
         this.companyMapper = companyMapper;
@@ -65,6 +77,8 @@ public class CompanyServiceImpl implements CompanyService {
         this.userService = userService;
         this.cacheManager = cacheManager;
         this.cacheNameResolver = cacheNameResolver;
+        this.userRepository = userRepository;
+        this.userDetailsRepository = userDetailsRepository;
     }
 
     @Override
@@ -168,8 +182,30 @@ public class CompanyServiceImpl implements CompanyService {
     }
 
     @Override
+    @Transactional()
     public void delete(Long id) {
         log.debug("Request to delete Company : {}", id);
+        Optional<CompanyDTO> maybeCompanyDTO = this.findOne(id);
+        if (!maybeCompanyDTO.isPresent()) {
+            throw new EmptyResultDataAccessException("No class org.mskcc.cbio.oncokb.domain.Company entity with id " + id + " exists!", 0);
+        }
+
+        CompanyDTO companyDTO = maybeCompanyDTO.get();
+        Boolean isCommercial = companyDTO.getLicenseType().equals(LicenseType.COMMERCIAL);
+        List<UserDetails> userDetails = userDetailsRepository.findByCompanyId(id);
+        for (UserDetails userDetail : userDetails) {
+            userDetail.setCompany(null);
+        }
+
+        if (isCommercial) {
+            List<User> users = userDetails.stream().map(UserDetails::getUser).collect(Collectors.toList());
+            for (User user : users) {
+                user.setActivated(false);
+            }
+            userRepository.saveAll(users);
+        }
+
+        userDetailsRepository.saveAll(userDetails);
         companyRepository.deleteById(id);
     }
 
