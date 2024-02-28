@@ -1,10 +1,15 @@
 package org.mskcc.cbio.oncokb.web.rest;
 
 import org.mskcc.cbio.oncokb.domain.Company;
+import org.mskcc.cbio.oncokb.domain.User;
+import org.mskcc.cbio.oncokb.domain.UserDetails;
 import org.mskcc.cbio.oncokb.domain.enumeration.LicenseType;
 import org.mskcc.cbio.oncokb.repository.CompanyRepository;
+import org.mskcc.cbio.oncokb.repository.UserDetailsRepository;
+import org.mskcc.cbio.oncokb.repository.UserRepository;
 import org.mskcc.cbio.oncokb.security.AuthoritiesConstants;
 import org.mskcc.cbio.oncokb.service.CompanyService;
+import org.mskcc.cbio.oncokb.service.UserDetailsService;
 import org.mskcc.cbio.oncokb.service.UserService;
 import org.mskcc.cbio.oncokb.web.rest.errors.BadRequestAlertException;
 import org.mskcc.cbio.oncokb.web.rest.vm.CompanyVM;
@@ -47,7 +52,10 @@ public class CompanyResource {
 
     private final CompanyRepository companyRepository;
 
-    public CompanyResource(CompanyService companyService, UserService userService, CompanyRepository companyRepository) {
+    public CompanyResource(
+            CompanyService companyService,
+            UserService userService,
+            CompanyRepository companyRepository) {
         this.companyService = companyService;
         this.userService = userService;
         this.companyRepository = companyRepository;
@@ -173,5 +181,18 @@ public class CompanyResource {
             }
         }
         return new ResponseEntity<>(isValid, HttpStatus.OK);
+    }
+
+    /**
+     * {@code DELETE  /companies/:id} : delete the "id" company.
+     *
+     * @param id the id of the companyDTO to delete.
+     * @return the {@link ResponseEntity} with status {@code 204 (NO_CONTENT)}.
+     */
+    @DeleteMapping("/companies/{id}")
+    public ResponseEntity<Void> deleteCompany(@PathVariable Long id) {
+        log.debug("REST request to delete Company : {}", id);
+        companyService.delete(id);
+        return ResponseEntity.ok().build();
     }
 }
