@@ -144,13 +144,13 @@ if (
       id: '2023_amp',
     },
     {
-      dateStart: 1700352000000,
-      dateEnd: 1701043200000,
+      dateStart: 1709337600000,
+      dateEnd: 1710028800000,
       content: (
         <div>
           <b>Attention</b>: We want to inform you of an upcoming infrastructure
           update that may lead to a temporary service disruption, planned{' '}
-          <b>Nov 25th to 26th</b>.
+          <b>March 9th, 9AM-12PM</b>.
           <br />
           During this period, you may experience intermittent service
           interruptions, brief outages, or slower response times while accessing
