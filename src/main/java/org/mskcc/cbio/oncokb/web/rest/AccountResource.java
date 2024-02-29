@@ -257,7 +257,7 @@ public class AccountResource {
         if (!user.isPresent()) {
             throw new CustomMessageRuntimeException("User could not be found");
         }
-        userService.updateUser(userDTO);
+        userService.updateUserAndTokens(userDTO);
     }
 
     /**

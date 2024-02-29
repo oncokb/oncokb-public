@@ -112,7 +112,7 @@ public class CompanyResource {
                 Set<String> userAuthorities = user.getAuthorities();
                 if (!userAuthorities.contains(AuthoritiesConstants.API)) {
                     userAuthorities.add(AuthoritiesConstants.API);
-                    userService.updateUser(user);
+                    userService.updateUserAndTokens(user);
                 }
             }
         }

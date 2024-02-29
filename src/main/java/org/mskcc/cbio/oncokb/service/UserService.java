@@ -376,7 +376,7 @@ public class UserService {
         return user;
     }
 
-    private Optional<UserDTO> updateUserFromUserDTO(UserDTO userDTO) {
+    public Optional<UserDTO> updateUserFromUserDTO(UserDTO userDTO) {
         Optional<UserDTO> updatedUserDTO = Optional.of(userRepository
         .findById(userDTO.getId()))
         .filter(Optional::isPresent)
@@ -423,7 +423,7 @@ public class UserService {
      * @param userDTO user to update.
      * @return updated user.
      */
-    public Optional<UserDTO> updateUser(UserDTO userDTO) {
+    public Optional<UserDTO> updateUserAndTokens(UserDTO userDTO) {
         Optional<UserDTO> updatedUserDTO = updateUserFromUserDTO(userDTO);
 
         if (updatedUserDTO.isPresent()) {
@@ -579,7 +579,7 @@ public class UserService {
         if (!userDTO.isActivated()) {
             userDTO.setActivated(true);
         }
-        Optional<UserDTO> updatedUserDTO = updateUser(userDTO);
+        Optional<UserDTO> updatedUserDTO = updateUserAndTokens(userDTO);
         if (updatedUserDTO.isPresent()) {
             List<Token> tokens =
                 generateTokenForUserIfNotExist(
@@ -616,7 +616,7 @@ public class UserService {
             userDTO.setActivated(true);
         }
 
-        Optional<UserDTO> updatedUserDTO = updateUser(userDTO);
+        Optional<UserDTO> updatedUserDTO = updateUserAndTokens(userDTO);
         if (!updatedUserDTO.isPresent()) {
             return;
         }
@@ -723,7 +723,7 @@ public class UserService {
         userDTO.setCompanyName(company.getName());
         userDTO.setCompany(companyMapper.toDto(company));
         userDTO.setLicenseType(company.getLicenseType());
-        Optional<UserDTO> updatedUserDTO = updateUser(userDTO);
+        Optional<UserDTO> updatedUserDTO = updateUserAndTokens(userDTO);
 
         if (updatedUserDTO.isPresent()) {
             // Update the user with the company's license
@@ -747,7 +747,7 @@ public class UserService {
                         if (!isAccountCreation) {
                             mailService.sendActiveTrialMail(userMapper.userToUserDTO(updatedUser.get()), false);
                         }
-                        updatedUserDTO = updateUser(userMapper.userToUserDTO(updatedUser.get()));
+                        updatedUserDTO = updateUserAndTokens(userMapper.userToUserDTO(updatedUser.get()));
                     }
                 }
             }else if (companyLicenseStatus.equals(LicenseStatus.TRIAL_EXPIRED) || companyLicenseStatus.equals(LicenseStatus.EXPIRED)) {
@@ -765,7 +765,7 @@ public class UserService {
     private void expireUserAccount(UserDTO userDTO) {
         if(userDTO.isActivated()) {
             userDTO.setActivated(false);
-            updateUser(userDTO);
+            updateUserAndTokens(userDTO);
         } else {
             if (userHasUnactivatedTrial(userDTO)) {
                 clearTrialAccountInformation(userDTO);
@@ -897,7 +897,7 @@ public class UserService {
             userDTO.setAdditionalInfo(new AdditionalInfoDTO());
         }
         userDTO.getAdditionalInfo().setSentToRocReview(true);
-        updateUser(userDTO);
+        updateUserAndTokens(userDTO);
     }
 
     public boolean isAdmin(String userLogin) {

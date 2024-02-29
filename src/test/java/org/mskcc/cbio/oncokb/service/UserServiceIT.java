@@ -133,7 +133,7 @@ public class UserServiceIT {
 
         UserDTO userDTO = userMapper.userToUserDTO(user);
         userDTO.setActivated(false);
-        Optional<UserDTO> updatedUserDto = userService.updateUser(userDTO);
+        Optional<UserDTO> updatedUserDto = userService.updateUserAndTokens(userDTO);
         assertThat(updatedUserDto).isPresent();
         assertThat(updatedUserDto.get().isActivated()).isFalse();
         assertThat(updatedUserDto.get().getActivationKey()).isNullOrEmpty();
@@ -149,7 +149,7 @@ public class UserServiceIT {
 
         UserDTO userDTO = userMapper.userToUserDTO(user);
         userDTO.setActivated(false);
-        Optional<UserDTO> updatedUserDto = userService.updateUser(userDTO);
+        Optional<UserDTO> updatedUserDto = userService.updateUserAndTokens(userDTO);
         assertThat(updatedUserDto).isPresent();
         assertThat(updatedUserDto.get().isActivated()).isFalse();
         assertThat(updatedUserDto.get().getResetKey()).isNullOrEmpty();
@@ -365,13 +365,13 @@ public class UserServiceIT {
         User savedUser = userService.createUser(userDTO, Optional.empty(), Optional.of(Boolean.TRUE));
         userDTO = userMapper.userToUserDTO(savedUser);
         userDTO.setActivated(false);
-        userDTO = userService.updateUser(userDTO).get();
+        userDTO = userService.updateUserAndTokens(userDTO).get();
 
         assertThat(tokenService.findByUser(savedUser).get(0).getExpiration()).isBefore(Instant.now());
         assertThat(tokenService.findByUser(savedUser).get(0).isRenewable()).isTrue();
 
         userDTO.setActivated(true);
-        userService.updateUser(userDTO);
+        userService.updateUserAndTokens(userDTO);
 
         assertThat(tokenService.findByUser(savedUser).get(0).getExpiration()).isAfter(Instant.now());
         assertThat(tokenService.findByUser(savedUser).get(0).isRenewable()).isTrue();

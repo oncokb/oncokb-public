@@ -95,7 +95,7 @@ public class CompanyServiceImpl implements CompanyService {
         if(isLicenseUpdateRequired){
             companyUsers.forEach(userDTO -> userService.updateUserWithCompanyLicense(userDTO, company, false, false));
         }else{
-            companyUsers.forEach(userDTO -> userService.updateUser(userDTO));
+            companyUsers.forEach(userDTO -> userService.updateUserAndTokens(userDTO));
         }
 
         // Update the licenses for new users being added to this company
