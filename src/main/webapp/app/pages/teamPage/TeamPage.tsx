@@ -81,6 +81,20 @@ export const TeamPage = () => {
       showCOI: false,
     },
     {
+      firstName: 'John',
+      lastName: 'Konecny',
+      title: [TITLE.BSC],
+      faculty: false,
+      showCOI: false,
+    },
+    {
+      firstName: 'Kelly',
+      lastName: 'Cavender',
+      title: [TITLE.BSC],
+      faculty: false,
+      showCOI: false,
+    },
+    {
       firstName: 'Benjamin',
       lastName: 'Xu',
     },
