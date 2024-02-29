@@ -120,7 +120,7 @@ public class SlackController {
 
                         updateUserWithRoleApiIfRequested(userDTO);
 
-                        Optional<UserDTO> updatedUser = userService.updateUser(userDTO);
+                        Optional<UserDTO> updatedUser = userService.updateUserAndTokens(userDTO);
                         if (updatedUser.isPresent() && updatedUser.get().isActivated() && !userAlreadyHasRoleApi) {
                             mailService.sendApiAccessApprovalEmail(userDTO);
                         }
@@ -142,7 +142,7 @@ public class SlackController {
                         String value = action.getSelectedOption().getValue();
                         LicenseType newLicenseType = LicenseType.valueOf(this.slackService.getOptionValueArgument(value));
                         userDTO.setLicenseType(newLicenseType);
-                        this.userService.updateUser(userDTO);
+                        this.userService.updateUserAndTokens(userDTO);
                         break;
                     case CONVERT_TO_REGULAR_ACCOUNT:
                         userService.convertUserToRegular(userDTO);

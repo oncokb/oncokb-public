@@ -180,7 +180,12 @@ public class UserResource {
             userDTO.setCompany(null);
         }
 
-        Optional<UserDTO> updatedUser = userService.updateUser(userDTO);
+        Optional<UserDTO> updatedUser;
+        if (existingUser.isPresent() && !existingUser.get().getActivated() && userDTO.isActivated()) {
+            updatedUser = userService.updateUserAndTokens(userDTO);
+        } else {
+            updatedUser = userService.updateUserFromUserDTO(userDTO);
+        }
 
         if(updatedUser.isPresent() && sendEmail && updatedUser.get().isActivated()) {
             mailService.sendApprovalEmail(updatedUser.get());
