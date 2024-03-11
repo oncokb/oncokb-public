@@ -25,6 +25,7 @@ import InfoIcon from 'app/shared/icons/InfoIcon';
 import TokenInputGroups from 'app/components/tokenInputGroups/TokenInputGroups';
 import client from 'app/shared/api/clientInstance';
 import { SimpleConfirmModal } from 'app/shared/modal/SimpleConfirmModal';
+import { NOT_USED_IN_AI_MODELS } from 'app/config/constants/terms';
 
 export type IRegisterProps = {
   authenticationStore: AuthenticationStore;
@@ -272,6 +273,9 @@ export class AccountPage extends React.Component<IRegisterProps> {
           title="Request API Access"
           body={
             <>
+              <span>{NOT_USED_IN_AI_MODELS}</span>
+              <br />
+              <br />
               <p>Please provide a justification for your API access request.</p>
               <textarea
                 className="form-control"
