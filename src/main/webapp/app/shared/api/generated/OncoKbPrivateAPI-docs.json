@@ -2296,6 +2296,9 @@
     "AnnotatedVariant": {
       "type": "object",
       "properties": {
+        "description": {
+          "type": "string"
+        },
         "entrezGeneId": {
           "type": "integer",
           "format": "int32"
@@ -3039,15 +3042,6 @@
           "type": "string"
         },
         "ncitCode": {
-          "type": "string"
-        },
-        "synonyms": {
-          "type": "array",
-          "items": {
-            "type": "string"
-          }
-        },
-        "uuid": {
           "type": "string"
         }
       }
