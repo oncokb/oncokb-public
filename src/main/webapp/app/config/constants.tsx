@@ -738,6 +738,7 @@ export enum TERM_DEFINITION {
   ONLY_ACADEMIC_USAGE = 'ONLY_ACADEMIC_USAGE',
   NO_COMPANY_USAGE = 'NO_COMPANY_USAGE',
   OK_WITH_TERMS_OF_USE = 'OK_WITH_TERMS_OF_USE',
+  NOT_USED_IN_AI_MODELS = 'NOT_USED_IN_AI_MODELS',
 }
 
 export const FDA_RECOGNITION_DISCLAIMER: React.FunctionComponent<{
@@ -771,6 +772,10 @@ export const ACADEMIC_TERMS = [
   {
     key: TERM_DEFINITION.ONLY_ACADEMIC_USAGE,
     description: `I agree that my use of ${ONCOKB_TM} is solely for research or educational purposes.`,
+  },
+  {
+    key: TERM_DEFINITION.NOT_USED_IN_AI_MODELS,
+    description: `I confirm that I will NOT use ${ONCOKB_TM} data for the purpose of creating and training AI models.`,
   },
   {
     key: TERM_DEFINITION.NO_COMPANY_USAGE,

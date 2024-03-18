@@ -44,6 +44,7 @@ import {
   SHORT_TEXT_VAL,
   TEXT_VAL,
 } from 'app/shared/utils/FormValidationUtils';
+import { NOT_USED_IN_AI_MODELS } from 'app/config/constants/terms';
 
 export enum FormSection {
   LICENSE = 'LICENSE',
@@ -746,6 +747,9 @@ export class NewAccountForm extends React.Component<INewAccountForm> {
                   </AvCheckboxGroup>
                   {this.apiAccessRequested && (
                     <div className="mt-2">
+                      <b style={{ fontSize: '0.8rem', lineHeight: '1' }}>
+                        {NOT_USED_IN_AI_MODELS}
+                      </b>
                       <AvField
                         name={FormKey.API_ACCESS_JUSTIFICATION}
                         placeholder={
