@@ -60,8 +60,8 @@ public class TokenResourceIT {
     private static final Boolean DEFAULT_RENEWABLE = false;
     private static final Boolean UPDATED_RENEWABLE = true;
 
-    private static final String DEFAULT_CHECKSUM = "AAAAAAAA";
-    private static final String UPDATED_CHECKSUM = "BBBBBBBB";
+    private static final String DEFAULT_CHECKSUM = "aaaaaaaa";
+    private static final String UPDATED_CHECKSUM = "bbbbbbbb";
 
     private static final TokenType DEFAULT_TYPE = TokenType.PERSONAL;
     private static final TokenType UPDATED_TYPE = TokenType.SERVICE;

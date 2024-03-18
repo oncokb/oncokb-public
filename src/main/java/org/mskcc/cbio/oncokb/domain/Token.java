@@ -48,7 +48,7 @@ public class Token implements Serializable {
 
     @NotNull
     @Size(min = 8, max = 8)
-    @Pattern(regexp = "^[a-zA-Z0-9]*$")
+    @Pattern(regexp = "^[a-z0-9]*$")
     @Column(name = "checksum", length = 8, nullable = false)
     private String checksum;
 
