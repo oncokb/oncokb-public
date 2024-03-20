@@ -135,7 +135,9 @@ export default class UserUsageDetailsTable extends React.Component<
               onFilter: (row: UsageRecord, keyword) =>
                 filterByKeyword(row.resource, keyword),
               Cell(props: { original: UsageRecord }) {
-                return (
+                return props.original.resource === 'ALL' ? (
+                  <div>ALL</div>
+                ) : (
                   <Link
                     to={`${
                       PAGE_ROUTE.ADMIN_RESOURCE_DETAILS_LINK
