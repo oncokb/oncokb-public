@@ -257,7 +257,7 @@ export const NEWS_BY_DATE: { [date: string]: NewsData } = {
             </thead>
             <tbody>
               <tr>
-                <td>Level 3A</td>
+                <td>3A</td>
                 <td rowSpan={2}>
                   <GenePageLink hugoSymbol="EGFR" />
                 </td>
@@ -271,7 +271,7 @@ export const NEWS_BY_DATE: { [date: string]: NewsData } = {
                 </td>
               </tr>
               <tr>
-                <td>Level R2</td>
+                <td>R2</td>
                 <td>Osimertinib</td>
                 <td>
                   <PMIDLink
@@ -281,7 +281,7 @@ export const NEWS_BY_DATE: { [date: string]: NewsData } = {
                 </td>
               </tr>
               <tr>
-                <td>Level R2</td>
+                <td>R2</td>
                 <td>
                   <GenePageLink hugoSymbol="EGFR" />
                 </td>
@@ -365,10 +365,15 @@ export const NEWS_BY_DATE: { [date: string]: NewsData } = {
             </div>,
             '1',
             '2',
-            <Linkout link="https://info.foundationmedicine.com/hubfs/FMI%20Labels/FoundationOne_CDx_Label_Technical_Info.pdf">
-              Level 1 assignment will be only for the PIK3CA alterations
-              detected by the FoundationOne Cdx test;
-            </Linkout>,
+            <WithSeparator separator={EVIDENCE_COLUMN_SEPARATOR}>
+              <Linkout link="https://info.foundationmedicine.com/hubfs/FMI%20Labels/FoundationOne_CDx_Label_Technical_Info.pdf">
+                Level 1 assignment will be only for the PIK3CA alterations
+                detected by the FoundationOne Cdx test;
+              </Linkout>
+              <span>
+                Inclusion in the NCCN Breast Cancer Guidelines V2.2024
+              </span>
+            </WithSeparator>,
           ],
           [
             'FGFR1',
@@ -423,7 +428,7 @@ export const NEWS_BY_DATE: { [date: string]: NewsData } = {
             '4',
             '3A',
             <WithSeparator separator={EVIDENCE_COLUMN_SEPARATOR}>
-              <Linkout link="https://www.sciencedirect.com/unsupported_browser#:~:text=We%20encountered%20a%20rare%20case,inevitably%20develop%20resistance%20to%20them.">
+              <Linkout link="https://www.sciencedirect.com/science/article/pii/S2666621923000133">
                 Ito, T., et al., Current Prob. in cancer, 2023
               </Linkout>
               <PMIDLink pmids="35365043, 31757379, 29571986" />
