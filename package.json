@@ -57,7 +57,7 @@
     "react-html-parser": "^2.0.2",
     "react-if": "^3.4.3",
     "react-iframe": "^1.8.0",
-    "react-jhipster": "0.11.0",
+    "react-jhipster": "0.25.3",
     "react-loadable": "5.5.0",
     "react-mutation-mapper": "^0.5.12",
     "react-portal": "latest",
