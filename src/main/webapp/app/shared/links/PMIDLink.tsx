@@ -1,10 +1,10 @@
 import React from 'react';
-import {
-  getShortenPmidsFromList,
-  getShortenTextFromList,
-} from 'app/shared/utils/Utils';
+import { getShortenPmidsFromList } from 'app/shared/utils/Utils';
 
-export const PMIDLink: React.FunctionComponent<{ pmids: string }> = props => {
+export const PMIDLink: React.FunctionComponent<{
+  pmids: string;
+  wrapText?: boolean;
+}> = props => {
   return (
     <span>
       PMID:{' '}
@@ -14,7 +14,7 @@ export const PMIDLink: React.FunctionComponent<{ pmids: string }> = props => {
           .join(' ')}`}
         target="_blank"
         rel="noopener noreferrer"
-        style={{ whiteSpace: 'nowrap' }}
+        style={{ whiteSpace: props.wrapText ? 'normal' : 'nowrap' }}
       >
         {props.pmids}
       </a>
