@@ -264,7 +264,7 @@ export const NEWS_BY_DATE: { [date: string]: NewsData } = {
                 <td rowSpan={2}>
                   <AlterationPageLink hugoSymbol="EGFR" alteration="L718Q" />
                 </td>
-                <td rowSpan={2}>Non-small Cell Lung Cancer</td>
+                <td rowSpan={2}>Non-Small Cell Lung Cancer</td>
                 <td>Afatinib</td>
                 <td>
                   <PMIDLink pmids="32146032, 32193290, 31315676" wrapText />
@@ -288,7 +288,7 @@ export const NEWS_BY_DATE: { [date: string]: NewsData } = {
                 <td>
                   <AlterationPageLink hugoSymbol="EGFR" alteration="L792F" />
                 </td>
-                <td>Non-small Cell Lung Cancer</td>
+                <td>Non-Small Cell Lung Cancer</td>
                 <td>Osimertinib</td>
                 <td>
                   <PMIDLink
@@ -310,7 +310,7 @@ export const NEWS_BY_DATE: { [date: string]: NewsData } = {
           [
             'EGFR',
             'G724S',
-            'Non-small Cell Lung Cancer',
+            'Non-Small Cell Lung Cancer',
             'Osimertinib (Level R2)',
             'Afatinib (Level 3A)',
             '3A',
@@ -327,6 +327,8 @@ export const NEWS_BY_DATE: { [date: string]: NewsData } = {
       {
         columnHeaderType:
           AnnotationColumnHeaderType.DEMOTION_TUMOR_TYPE_SPECIFIC_EVIDENCE,
+        title:
+          'Updated therapeutic implications - Demotion of tumor type-specific level of evidence for an alteration',
         content: [
           [
             'AKT1',
@@ -335,15 +337,20 @@ export const NEWS_BY_DATE: { [date: string]: NewsData } = {
             'Capivasertib + Fulvestrant',
             '1',
             '2',
-            <WithSeparator separator={EVIDENCE_COLUMN_SEPARATOR}>
+            <span>
+              To adhere to the{' '}
+              <Linkout link="https://www.accessdata.fda.gov/drugsatfda_docs/label/2023/218197s000lbl.pdf">
+                FDA-drug label
+              </Linkout>{' '}
+              and{' '}
               <Linkout link="https://info.foundationmedicine.com/hubfs/FMI%20Labels/FoundationOne_CDx_Label_Technical_Info.pdf">
-                Level 1 assignment will be only for the AKT E17K variant
-                detected by the FoundationOne Cdx test
-              </Linkout>
-              <span>
-                Inclusion in the NCCN Breast Cancer Guidelines V2.2024
-              </span>
-            </WithSeparator>,
+                CDx
+              </Linkout>{' '}
+              for Capivasertib, Level 1 assignment will be only for AKT1 E17K
+              detected by the FoundationOne CDx test. All other AKT1 oncogenic
+              mutations are Level 2 per their inclusion in the NCCN Breast
+              Cancer Guidelines V2.2024
+            </span>,
           ],
           [
             'PIK3CA',
@@ -365,15 +372,20 @@ export const NEWS_BY_DATE: { [date: string]: NewsData } = {
             </div>,
             '1',
             '2',
-            <WithSeparator separator={EVIDENCE_COLUMN_SEPARATOR}>
+            <span>
+              To adhere to the{' '}
+              <Linkout link="https://www.accessdata.fda.gov/drugsatfda_docs/label/2023/218197s000lbl.pdf">
+                FDA-drug label
+              </Linkout>{' '}
+              and{' '}
               <Linkout link="https://info.foundationmedicine.com/hubfs/FMI%20Labels/FoundationOne_CDx_Label_Technical_Info.pdf">
-                Level 1 assignment will be only for the PIK3CA alterations
-                detected by the FoundationOne Cdx test;
-              </Linkout>
-              <span>
-                Inclusion in the NCCN Breast Cancer Guidelines V2.2024
-              </span>
-            </WithSeparator>,
+                CDx
+              </Linkout>{' '}
+              for Capivasertib, Level 1 assignment will be only for the PIK3CA
+              alterations detected by the FoundationOne CDx test. All other
+              PIK3CA oncogenic mutations are Level 2 per their inclusion in the
+              NCCN Breast Cancer Guidelines V2.2024
+            </span>,
           ],
           [
             'FGFR1',
@@ -394,7 +406,9 @@ export const NEWS_BY_DATE: { [date: string]: NewsData } = {
       },
       {
         columnHeaderType:
-          AnnotationColumnHeaderType.DEMOTION_TUMOR_TYPE_SPECIFIC_EVIDENCE,
+          AnnotationColumnHeaderType.PROMOTION_TUMOR_TYPE_SPECIFIC_EVIDENCE,
+        title:
+          'Updated therapeutic implications - Promotion of tumor type-specific level of evidence for an alteration',
         content: [
           [
             'KRAS',
@@ -413,7 +427,7 @@ export const NEWS_BY_DATE: { [date: string]: NewsData } = {
           [
             'EGFR',
             'L718V',
-            'Non-small Cell Lung Cancer',
+            'Non-Small Cell Lung Cancer',
             <div>
               <div style={{ fontStyle: 'italic' }}>
                 {DRUGS_CURRENTLY_IN_ONCOKB}:
@@ -443,7 +457,7 @@ export const NEWS_BY_DATE: { [date: string]: NewsData } = {
           [
             'EGFR',
             'Exon 20 in-frame insertions',
-            'Non-small Cell Lung Cancer',
+            'Non-Small Cell Lung Cancer',
             '1',
             'Amivantamab, Mobocertinib (Level 1); Erlotinib, Afatinib, Gefitinib (Level R1)',
             'Amivantamab + Chemotherapy (Level 1)',
