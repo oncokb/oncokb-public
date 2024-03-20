@@ -23,3 +23,15 @@ export function getNCBIlink(
     ...params,
   });
 }
+
+export function getNCTlink(pathnameOrParams?: BuildUrlParams | string): string {
+  const params =
+    typeof pathnameOrParams === 'string'
+      ? { pathname: pathnameOrParams }
+      : pathnameOrParams;
+  return URL.format({
+    protocol: 'https',
+    host: 'www.clinicaltrials.gov',
+    ...params,
+  });
+}

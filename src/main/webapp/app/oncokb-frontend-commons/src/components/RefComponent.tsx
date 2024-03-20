@@ -1,5 +1,5 @@
 import Tooltip from 'rc-tooltip';
-import { getNCBIlink } from '../lib/urls';
+import { getNCBIlink, getNCTlink } from '../lib/urls';
 import * as React from 'react';
 
 import { ReferenceList } from './ReferenceList';
@@ -50,11 +50,6 @@ export default class RefComponent extends React.Component<{
 
       if (this.props.content.toLowerCase().includes('pmid')) {
         prefix = 'PMID: ';
-      } else if (this.props.content.toLowerCase().includes('nct')) {
-        prefix = 'NCT';
-      }
-
-      if (prefix) {
         link = (
           <a
             target="_blank"
@@ -64,6 +59,20 @@ export default class RefComponent extends React.Component<{
             {`${prefix}${ids.join(', ')}`}
           </a>
         );
+      } else if (this.props.content.toLowerCase().includes('nct')) {
+        if (ids[0]) {
+          prefix = 'NCT';
+          const studyId = `${prefix}${ids[0]}`;
+          link = (
+            <a
+              target="_blank"
+              rel="noopener noreferrer"
+              href={getNCTlink(`/study/${studyId}`)}
+            >
+              {studyId}
+            </a>
+          );
+        }
       }
     }
 
