@@ -78,14 +78,14 @@ public class UsageAnalysisController {
         if (userId != null) {
             int year = TimeUtil.getCurrentNYTime().getYear();
             JSONObject yearSummary = requestData(YEAR_USERS_USAGE_SUMMARY_FILE_PREFIX + year + FileExtension.JSON_FILE.getExtension());
-            List<JSONObject> monthSummaries = new LinkedList<>();
+            Map<String, JSONObject> monthSummaries = new HashMap<>();
             int monthsBack = 0;
             JSONObject monthSummary;
             do {
                 String month = TimeUtil.getCurrentNYTime().minus(monthsBack, ChronoUnit.MONTHS).format(DateTimeFormatter.ofPattern("yyyy-MM"));
                 monthSummary = requestData(MONTH_USERS_USAGE_SUMMARY_FILE_PREFIX + month + FileExtension.JSON_FILE.getExtension());
                 if (monthSummary != null) {
-                    monthSummaries.add(monthSummary);
+                    monthSummaries.put(month, monthSummary);
                 }
                 monthsBack++;
             } while (monthsBack < 12);
@@ -99,16 +99,20 @@ public class UsageAnalysisController {
                     JSONObject yearUsageObject = (JSONObject) yearSummary.get(email);
                     Gson gson = new Gson();
                     usageSummary = gson.fromJson(yearUsageObject.toString(), UsageSummary.class);
-                    Map<String, JSONObject> dayUsage = new HashMap<>();
                     if (!monthSummaries.isEmpty()) {
-                        for (JSONObject month : monthSummaries) {
-                            if (month.containsKey(email)) {
-                                JSONObject monthUsageObject = (JSONObject) month.get(email);
-                                JSONObject dayUsageObject = (JSONObject) monthUsageObject.get("day");
-                                dayUsageObject.forEach((key, value) -> dayUsage.put((String) key, (JSONObject) value));
+                        Map<String, JSONObject> dayUsage = new HashMap<>();
+                        Map<String, JSONObject> monthUsage = new HashMap<>();
+                        for (Map.Entry<String, JSONObject> entry : monthSummaries.entrySet()) {
+                            if (entry.getValue().containsKey(email)) {
+                                JSONObject userUsageObject = (JSONObject) entry.getValue().get(email);
+                                JSONObject dayUsageObject = (JSONObject) userUsageObject.get("day");
+                                dayUsageObject.forEach((day, summary) -> dayUsage.put((String) day, (JSONObject) summary));
+                                JSONObject monthUsageObject = (JSONObject) userUsageObject.get("month");
+                                monthUsage.put((String) entry.getKey(), monthUsageObject);
                             }
                         }
                         usageSummary.setDay(dayUsage);
+                        usageSummary.setMonth(monthUsage);
                     }
                 }
 

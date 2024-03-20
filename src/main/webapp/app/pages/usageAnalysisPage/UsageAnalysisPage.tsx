@@ -50,11 +50,10 @@ enum UsageType {
 }
 
 export enum ToggleValue {
-  ALL_USERS = 'All Users',
   ALL_RESOURCES = 'All Resources',
   PUBLIC_RESOURCES = 'Only Public Resources',
   CUMULATIVE_USAGE = 'Cumulative Usage',
-  RESULTS_IN_TOTAL = 'By Year',
+  RESULTS_IN_TOTAL = 'Year To Date',
   RESULTS_BY_MONTH = 'By Month',
   RESULTS_BY_DAY = 'By Day',
 }
@@ -119,7 +118,6 @@ export default class UsageAnalysisPage extends React.Component<{
   routing: RouterStore;
   match: match;
 }> {
-  @observable topUsersToggleValue: ToggleValue = ToggleValue.ALL_USERS;
   @observable userTabResourcesTypeToggleValue: ToggleValue =
     ToggleValue.PUBLIC_RESOURCES;
   @observable resourceTabResourcesTypeToggleValue: ToggleValue =
@@ -200,12 +198,6 @@ export default class UsageAnalysisPage extends React.Component<{
     },
     default: new Map(),
   });
-
-  @autobind
-  @action
-  handleTopUsersToggleChange(value: ToggleValue) {
-    this.topUsersToggleValue = value;
-  }
 
   @autobind
   @action
