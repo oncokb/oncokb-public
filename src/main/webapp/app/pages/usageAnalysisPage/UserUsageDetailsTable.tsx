@@ -13,6 +13,7 @@ import {
   UsageTableColumnKey,
 } from 'app/pages/usageAnalysisPage/UsageAnalysisPage';
 import {
+  PAGE_ROUTE,
   TABLE_DAY_FORMAT,
   TABLE_MONTH_FORMAT,
   USAGE_ALL_TIME_KEY,
@@ -27,6 +28,7 @@ import {
   filterDependentTimeHeader,
 } from 'app/components/oncokbTable/HeaderConstants';
 import UsageText from 'app/shared/texts/UsageText';
+import { Link } from 'react-router-dom';
 
 type IUserUsageDetailsTable = {
   data: Map<string, UsageRecord[]>;
@@ -132,6 +134,17 @@ export default class UserUsageDetailsTable extends React.Component<
               Header: filterDependentResourceHeader(this.timeTypeToggleValue),
               onFilter: (row: UsageRecord, keyword) =>
                 filterByKeyword(row.resource, keyword),
+              Cell(props: { original: UsageRecord }) {
+                return (
+                  <Link
+                    to={`${
+                      PAGE_ROUTE.ADMIN_RESOURCE_DETAILS_LINK
+                    }${props.original.resource.replace(/\//g, '!')}`}
+                  >
+                    {props.original.resource}
+                  </Link>
+                );
+              },
             },
             {
               ...getUsageTableColumnDefinition(UsageTableColumnKey.USAGE),

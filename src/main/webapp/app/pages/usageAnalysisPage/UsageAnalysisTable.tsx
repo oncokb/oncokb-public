@@ -122,58 +122,103 @@ export default class UsageAnalysisTable extends React.Component<
     }
   }
 
-  readonly allTimeColumns = [
-    {
-      id: 'userEmail',
-      Header: emailHeader,
-      accessor: 'userEmail',
-      onFilter: (row: UserOverviewUsage, keyword: string) =>
-        filterByKeyword(row.userEmail, keyword),
-    },
-    {
-      id: 'totalUsage',
-      Header: usageHeader,
-      accessor: 'totalUsage',
-      Cell(props: { original: UserOverviewUsage }) {
-        return <UsageText usage={props.original.totalUsage} />;
-      },
-    },
-    this.resourcesTypeToggleValue === ToggleValue.ALL_RESOURCES
-      ? {
-          id: 'endpoint',
-          Header: endpointHeader,
-          minWidth: 200,
-          accessor: (row: UserOverviewUsage) =>
-            `${row.endpoint} (${row.maxUsageProportion}%)`,
-          onFilter: (row: UserOverviewUsage, keyword: string) =>
-            filterByKeyword(row.endpoint, keyword),
-        }
-      : {
-          id: 'noPrivateEndpoint',
-          Header: noPrivateEndpointHeader,
-          minWidth: 200,
-          accessor: (row: UserOverviewUsage) =>
-            `${row.endpoint} (${row.noPrivateMaxUsageProportion}%)`,
-          onFilter: (row: UserOverviewUsage, keyword: string) =>
-            filterByKeyword(row.noPrivateEndpoint, keyword),
+  @computed get getAllTimeColumns() {
+    return [
+      {
+        id: 'userEmail',
+        Header: emailHeader,
+        accessor: 'userEmail',
+        onFilter: (row: UserOverviewUsage, keyword: string) =>
+          filterByKeyword(row.userEmail, keyword),
+        Cell(props: { original: UserOverviewUsage }) {
+          return props.original.userId ? (
+            <Link
+              to={`${PAGE_ROUTE.ADMIN_USER_USAGE_DETAILS_LINK}${props.original.userId}`}
+            >
+              {props.original.userEmail}
+            </Link>
+          ) : (
+            <div>{props.original.userEmail}</div>
+          );
         },
-    {
-      ...getUsageTableColumnDefinition(UsageTableColumnKey.OPERATION),
-      sortable: false,
-      className: 'd-flex justify-content-center',
-      Cell(props: { original: UserOverviewUsage }) {
-        return props.original.userId ? (
-          <Link
-            to={`${PAGE_ROUTE.ADMIN_USER_USAGE_DETAILS_LINK}${props.original.userId}`}
-          >
-            <i className="fa fa-info-circle" />
-          </Link>
-        ) : (
-          <i className="fa fa-info-circle" />
-        );
       },
-    },
-  ];
+      {
+        id: 'totalUsage',
+        Header: usageHeader,
+        accessor: 'totalUsage',
+        Cell(props: { original: UserOverviewUsage }) {
+          return <UsageText usage={props.original.totalUsage} />;
+        },
+      },
+      this.resourcesTypeToggleValue === ToggleValue.ALL_RESOURCES
+        ? {
+            id: 'endpoint',
+            Header: endpointHeader,
+            minWidth: 200,
+            accessor: (row: UserOverviewUsage) =>
+              `${row.endpoint} (${row.maxUsageProportion}%)`,
+            onFilter: (row: UserOverviewUsage, keyword: string) =>
+              filterByKeyword(row.endpoint, keyword),
+            Cell(props: { original: UserOverviewUsage }) {
+              return props.original.endpoint ? (
+                <div>
+                  <Link
+                    to={`${
+                      PAGE_ROUTE.ADMIN_RESOURCE_DETAILS_LINK
+                    }${props.original.endpoint.replace(/\//g, '!')}`}
+                  >
+                    {props.original.endpoint}
+                  </Link>{' '}
+                  ({props.original.maxUsageProportion}%)
+                </div>
+              ) : (
+                <div>N/A</div>
+              );
+            },
+          }
+        : {
+            id: 'noPrivateEndpoint',
+            Header: noPrivateEndpointHeader,
+            minWidth: 200,
+            accessor: (row: UserOverviewUsage) =>
+              `${row.endpoint} (${row.noPrivateMaxUsageProportion}%)`,
+            onFilter: (row: UserOverviewUsage, keyword: string) =>
+              filterByKeyword(row.noPrivateEndpoint, keyword),
+            Cell(props: { original: UserOverviewUsage }) {
+              return props.original.endpoint ? (
+                <div>
+                  <Link
+                    to={`${
+                      PAGE_ROUTE.ADMIN_RESOURCE_DETAILS_LINK
+                    }${props.original.endpoint.replace(/\//g, '!')}`}
+                  >
+                    {props.original.endpoint}
+                  </Link>{' '}
+                  ({props.original.maxUsageProportion}%)
+                </div>
+              ) : (
+                <div>N/A</div>
+              );
+            },
+          },
+      {
+        ...getUsageTableColumnDefinition(UsageTableColumnKey.OPERATION),
+        sortable: false,
+        className: 'd-flex justify-content-center',
+        Cell(props: { original: UserOverviewUsage }) {
+          return props.original.userId ? (
+            <Link
+              to={`${PAGE_ROUTE.ADMIN_USER_USAGE_DETAILS_LINK}${props.original.userId}`}
+            >
+              <i className="fa fa-info-circle" />
+            </Link>
+          ) : (
+            <i className="fa fa-info-circle" />
+          );
+        },
+      },
+    ];
+  }
 
   readonly dateGroupedColumns = [
     {
@@ -182,6 +227,17 @@ export default class UsageAnalysisTable extends React.Component<
       accessor: 'resource',
       onFilter: (row: UsageRecord, keyword: string) =>
         filterByKeyword(row.resource, keyword),
+      Cell(props: { original: UsageRecord }) {
+        return props.original.userId ? (
+          <Link
+            to={`${PAGE_ROUTE.ADMIN_USER_USAGE_DETAILS_LINK}${props.original.userId}`}
+          >
+            {props.original.resource}
+          </Link>
+        ) : (
+          <div>{props.original.resource}</div>
+        );
+      },
     },
     {
       ...getUsageTableColumnDefinition(UsageTableColumnKey.USAGE),
@@ -304,7 +360,7 @@ export default class UsageAnalysisTable extends React.Component<
         <OncoKBTable<UserOverviewUsage>
           key={this.timeTypeToggleValue}
           data={this.props.data}
-          columns={this.allTimeColumns}
+          columns={this.getAllTimeColumns}
           loading={!this.props.loadedData}
           defaultSorted={this.resetDefaultSort}
           showPagination={true}

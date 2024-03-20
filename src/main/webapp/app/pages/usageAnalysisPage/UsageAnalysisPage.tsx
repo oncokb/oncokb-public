@@ -22,10 +22,7 @@ import _ from 'lodash';
 import { Link } from 'react-router-dom';
 import autobind from 'autobind-decorator';
 import { Row, Dropdown, DropdownButton } from 'react-bootstrap';
-import {
-  PAGE_ROUTE,
-  USAGE_ALL_TIME_KEY,
-} from 'app/config/constants';
+import { PAGE_ROUTE, USAGE_ALL_TIME_KEY } from 'app/config/constants';
 import { remoteData } from 'cbioportal-frontend-commons';
 import * as QueryString from 'query-string';
 import { UsageToggleGroup } from './UsageToggleGroup';
@@ -38,10 +35,10 @@ import {
   filterDependentResourceHeader,
 } from 'app/components/oncokbTable/HeaderConstants';
 import UsageText from 'app/shared/texts/UsageText';
-import UsageAnalysisTable from "app/pages/usageAnalysisPage/UsageAnalysisTable";
+import UsageAnalysisTable from 'app/pages/usageAnalysisPage/UsageAnalysisTable';
 
 export type UsageRecord = {
-  resource: string;
+  resource: string; // used for email in dateGroupedColumns
   usage: number;
   time: string;
   userId?: string;
@@ -276,6 +273,19 @@ export default class UsageAnalysisPage extends React.Component<{
                     ),
                     onFilter: (row: UsageRecord, keyword) =>
                       filterByKeyword(row.resource, keyword),
+                    Cell(props: { original: UsageRecord }) {
+                      return props.original.resource ? (
+                        <Link
+                          to={`${
+                            PAGE_ROUTE.ADMIN_RESOURCE_DETAILS_LINK
+                          }${props.original.resource.replace(/\//g, '!')}`}
+                        >
+                          {props.original.resource}
+                        </Link>
+                      ) : (
+                        <div>{props.original.resource}</div>
+                      );
+                    },
                   },
                   {
                     ...getUsageTableColumnDefinition(UsageTableColumnKey.USAGE),
@@ -298,7 +308,7 @@ export default class UsageAnalysisPage extends React.Component<{
                             props.original.resource
                           )}`}
                         >
-                          <i className="fa fa-info-circle"/>
+                          <i className="fa fa-info-circle" />
                         </Link>
                       );
                     },
@@ -321,7 +331,9 @@ export default class UsageAnalysisPage extends React.Component<{
                       .reverse()
                       .forEach(key => {
                         monthDropdown.push(
-                          <Dropdown.Item eventKey={key}>{key}</Dropdown.Item>
+                          <Dropdown.Item key={key.toString()} eventKey={key}>
+                            {key}
+                          </Dropdown.Item>
                         );
                       });
                   }

@@ -14,6 +14,7 @@ import {
 import {
   USAGE_DETAIL_TIME_KEY,
   USAGE_ALL_TIME_KEY,
+  PAGE_ROUTE,
 } from 'app/config/constants';
 import { UsageToggleGroup } from './UsageToggleGroup';
 import {
@@ -21,6 +22,7 @@ import {
   filterDependentTimeHeader,
 } from 'app/components/oncokbTable/HeaderConstants';
 import UsageText from 'app/shared/texts/UsageText';
+import { Link } from 'react-router-dom';
 
 type IResourceUsageDetailsTable = {
   data: Map<string, UsageRecord[]>;
@@ -56,6 +58,17 @@ export default class ResourceUsageDetailsTable extends React.Component<
               Header: emailHeader,
               onFilter: (row: UsageRecord, keyword) =>
                 filterByKeyword(row.resource, keyword),
+              Cell(props: { original: UsageRecord }) {
+                return props.original.userId ? (
+                  <Link
+                    to={`${PAGE_ROUTE.ADMIN_USER_USAGE_DETAILS_LINK}${props.original.userId}`}
+                  >
+                    {props.original.resource}
+                  </Link>
+                ) : (
+                  <div>{props.original.resource}</div>
+                );
+              },
             },
             {
               ...getUsageTableColumnDefinition(UsageTableColumnKey.USAGE),
