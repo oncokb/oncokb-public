@@ -1,6 +1,6 @@
 [{
   "userId" : "1461",
-  "userEmail" : "screenshot-mock-user@email.com",
+  "userEmail" : "screenshot-mock-user1461@email.com",
   "endpoint" : "/api/v1/annotate/mutations/byProteinChange",
   "noPrivateEndpoint" : "/api/v1/annotate/mutations/byProteinChange",
   "maxUsageProportion" : 55.6,
@@ -17,7 +17,7 @@
   "monthUsage" : {}
 }, {
   "userId" : "1460",
-  "userEmail" : "screenshot-mock-user@email.com",
+  "userEmail" : "screenshot-mock-user1460@email.com",
   "endpoint" : "/api/v1/utils/allCuratedGenes",
   "noPrivateEndpoint" : "/api/v1/utils/allCuratedGenes",
   "maxUsageProportion" : 70.7,
@@ -34,7 +34,7 @@
   "monthUsage" : {}
 }, {
   "userId" : "1217",
-  "userEmail" : "screenshot-mock-user@email.com",
+  "userEmail" : "screenshot-mock-user1217@email.com",
   "endpoint" : "/api/v1/utils/allCuratedGenes",
   "noPrivateEndpoint" : "/api/v1/utils/allCuratedGenes",
   "maxUsageProportion" : 15.6,
@@ -51,7 +51,7 @@
   "monthUsage" : {}
 }, {
   "userId" : "1216",
-  "userEmail" : "screenshot-mock-user@email.com",
+  "userEmail" : "screenshot-mock-user1216@email.com",
   "endpoint" : "/api/v1/utils/allCuratedGenes",
   "noPrivateEndpoint" : "/api/v1/utils/allCuratedGenes",
   "maxUsageProportion" : 65.7,
@@ -61,7 +61,7 @@
   "monthUsage" : {}
 }, {
   "userId" : "1699",
-  "userEmail" : "screenshot-mock-user@email.com",
+  "userEmail" : "screenshot-mock-user1699@email.com",
   "endpoint" : "/api/private/search/typeahead",
   "noPrivateEndpoint" : "/api/v1/utils/allCuratedGenes",
   "maxUsageProportion" : 55.6,
@@ -73,7 +73,7 @@
   "monthUsage" : {}
 }, {
   "userId" : "1698",
-  "userEmail" : "screenshot-mock-user@email.com",
+  "userEmail" : "screenshot-mock-user1698@email.com",
   "endpoint" : "/api/private/search/typeahead",
   "noPrivateEndpoint" : "/api/v1/utils/allCuratedGenes",
   "maxUsageProportion" : 55.6,
@@ -83,7 +83,7 @@
   "monthUsage" : {}
 }, {
   "userId" : "1213",
-  "userEmail" : "screenshot-mock-user@email.com",
+  "userEmail" : "screenshot-mock-user1213@email.com",
   "endpoint" : "/api/private/utils/numbers/levels/",
   "noPrivateEndpoint" : "",
   "maxUsageProportion" : 55.6,
