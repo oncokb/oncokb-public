@@ -270,6 +270,20 @@ function getMockResponse(url) {
         body: usageUserDetail,
       };
       break;
+    case `${SERVER_URL}api/usage/users/3`:
+      res = {
+        status: 200,
+        contentType: 'application/json',
+        body: usageUserDetail,
+      };
+      break;
+    case `${SERVER_URL}api/usage/users/4`:
+      res = {
+        status: 200,
+        contentType: 'application/json',
+        body: usageUserDetail,
+      };
+      break;
     case `${SERVER_URL}api/usage/resources?endpoint=%2Fapi%2Fv1%2Fexample`:
       res = {
         status: 200,

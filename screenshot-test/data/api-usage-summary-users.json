@@ -1,209 +1,101 @@
-[ {
-    "userId" : "1461",
-    "userEmail" : "screenshot-mock-user@email.com",
-    "endpoint" : "/api/v1/annotate/mutations/byProteinChange",
-    "noPrivateEndpoint" : "/api/v1/annotate/mutations/byProteinChange",
-    "maxUsage" : 100,
-    "noPrivateMaxUsage" : 100,
-    "totalUsage" : 132
-  }, {
-    "userId" : "1460",
-    "userEmail" : "screenshot-mock-user@email.com",
-    "endpoint" : "/api/v1/utils/allCuratedGenes",
-    "noPrivateEndpoint" : "/api/v1/utils/allCuratedGenes",
-    "maxUsage" : 1,
-    "noPrivateMaxUsage" : 1,
-    "totalUsage" : 2
-  }, {
-    "userId" : "1217",
-    "userEmail" : "screenshot-mock-user@email.com",
-    "endpoint" : "/api/v1/utils/allCuratedGenes",
-    "noPrivateEndpoint" : "/api/v1/utils/allCuratedGenes",
-    "maxUsage" : 3,
-    "noPrivateMaxUsage" : 3,
-    "totalUsage" : 6
-  }, {
-    "userId" : "1216",
-    "userEmail" : "screenshot-mock-user@email.com",
-    "endpoint" : "/api/v1/utils/allCuratedGenes",
-    "noPrivateEndpoint" : "/api/v1/utils/allCuratedGenes",
-    "maxUsage" : 1,
-    "noPrivateMaxUsage" : 1,
-    "totalUsage" : 2
-  }, {
-    "userId" : "1699",
-    "userEmail" : "screenshot-mock-user@email.com",
-    "endpoint" : "/api/private/search/typeahead",
-    "noPrivateEndpoint" : "/api/v1/utils/allCuratedGenes",
-    "maxUsage" : 7,
-    "noPrivateMaxUsage" : 6,
-    "totalUsage" : 68
-  }, {
-    "userId" : "1698",
-    "userEmail" : "screenshot-mock-user@email.com",
-    "endpoint" : "/api/private/search/typeahead",
-    "noPrivateEndpoint" : "/api/v1/utils/allCuratedGenes",
-    "maxUsage" : 28,
-    "noPrivateMaxUsage" : 5,
-    "totalUsage" : 146
-  }, {
-    "userId" : "1213",
-    "userEmail" : "screenshot-mock-user@email.com",
-    "endpoint" : "/api/private/utils/numbers/levels/",
-    "noPrivateEndpoint" : "",
-    "maxUsage" : 1,
-    "noPrivateMaxUsage" : 0,
-    "totalUsage" : 2
-  }, {
-    "userId" : "1696",
-    "userEmail" : "screenshot-mock-user@email.com",
-    "endpoint" : "/api/v1/annotate/mutations/byProteinChange",
-    "noPrivateEndpoint" : "/api/v1/annotate/mutations/byProteinChange",
-    "maxUsage" : 30005,
-    "noPrivateMaxUsage" : 30005,
-    "totalUsage" : 30184
-  }, {
-    "userId" : "1210",
-    "userEmail" : "screenshot-mock-user@email.com",
-    "endpoint" : "/api/v1/annotate/mutations/byProteinChange",
-    "noPrivateEndpoint" : "/api/v1/annotate/mutations/byProteinChange",
-    "maxUsage" : 36744,
-    "noPrivateMaxUsage" : 36744,
-    "totalUsage" : 37040
-  }, {
-    "userId" : "1219",
-    "userEmail" : "screenshot-mock-user@email.com",
-    "endpoint" : "/api/v1/annotate/mutations/byProteinChange",
-    "noPrivateEndpoint" : "/api/v1/annotate/mutations/byProteinChange",
-    "maxUsage" : 1174895,
-    "noPrivateMaxUsage" : 1174895,
-    "totalUsage" : 1174895
-  }, {
-    "userId" : "1218",
-    "userEmail" : "screenshot-mock-user@email.com",
-    "endpoint" : "/api/v1/annotate/mutations/byProteinChange",
-    "noPrivateEndpoint" : "/api/v1/annotate/mutations/byProteinChange",
-    "maxUsage" : 3786,
-    "noPrivateMaxUsage" : 3786,
-    "totalUsage" : 4034
-  }, {
-    "userId" : "1473",
-    "userEmail" : "screenshot-mock-user@email.com",
-    "endpoint" : "/api/private/search/typeahead",
-    "noPrivateEndpoint" : "/api/v1/utils/allCuratedGenes",
-    "maxUsage" : 69,
-    "noPrivateMaxUsage" : 46,
-    "totalUsage" : 539
-  }, {
-    "userId" : "1230",
-    "userEmail" : "screenshot-mock-user@email.com",
-    "endpoint" : "/api/v1/annotate/mutations/byProteinChange",
-    "noPrivateEndpoint" : "/api/v1/annotate/mutations/byProteinChange",
-    "maxUsage" : 164191,
-    "noPrivateMaxUsage" : 164191,
-    "totalUsage" : 164677
-  }, {
-    "userId" : "1470",
-    "userEmail" : "screenshot-mock-user@email.com",
-    "endpoint" : "/api/v1/utils/allCuratedGenes",
-    "noPrivateEndpoint" : "/api/v1/utils/allCuratedGenes",
-    "maxUsage" : 3,
-    "noPrivateMaxUsage" : 3,
-    "totalUsage" : 6
-  }, {
-    "userId" : "1228",
-    "userEmail" : "screenshot-mock-user@email.com",
-    "endpoint" : "/api/private/search/variants/clinical",
-    "noPrivateEndpoint" : "/api/v1/utils/allCuratedGenes",
-    "maxUsage" : 11,
-    "noPrivateMaxUsage" : 4,
-    "totalUsage" : 100
-  }, {
-    "userId" : "1226",
-    "userEmail" : "screenshot-mock-user@email.com",
-    "endpoint" : "/api/v1/annotate/mutations/byProteinChange",
-    "noPrivateEndpoint" : "/api/v1/annotate/mutations/byProteinChange",
-    "maxUsage" : 1948,
-    "noPrivateMaxUsage" : 1948,
-    "totalUsage" : 1951
-  }, {
-    "userId" : "1468",
-    "userEmail" : "screenshot-mock-user@email.com",
-    "endpoint" : "/api/v1/annotate/mutations/byProteinChange",
-    "noPrivateEndpoint" : "/api/v1/annotate/mutations/byProteinChange",
-    "maxUsage" : 3839,
-    "noPrivateMaxUsage" : 3839,
-    "totalUsage" : 3935
-  }, {
-    "userId" : "1225",
-    "userEmail" : "screenshot-mock-user@email.com",
-    "endpoint" : "/api/v1/annotate/mutations/byProteinChange",
-    "noPrivateEndpoint" : "/api/v1/annotate/mutations/byProteinChange",
-    "maxUsage" : 1384,
-    "noPrivateMaxUsage" : 1384,
-    "totalUsage" : 1770
-  }, {
-    "userId" : "4",
-    "userEmail" : "screenshot-mock-user@email.com",
-    "endpoint" : "/api/v1/utils/allCuratedGenes",
-    "noPrivateEndpoint" : "/api/v1/utils/allCuratedGenes",
-    "maxUsage" : 3,
-    "noPrivateMaxUsage" : 3,
-    "totalUsage" : 6
-  }, {
-    "userId" : "1224",
-    "userEmail" : "screenshot-mock-user@email.com",
-    "endpoint" : "/api/v1/utils/allCuratedGenes",
-    "noPrivateEndpoint" : "/api/v1/utils/allCuratedGenes",
-    "maxUsage" : 1,
-    "noPrivateMaxUsage" : 1,
-    "totalUsage" : 2
-  }, {
-    "userId" : "1466",
-    "userEmail" : "screenshot-mock-user@email.com",
-    "endpoint" : "/api/v1/annotate/structuralVariants",
-    "noPrivateEndpoint" : "/api/v1/annotate/structuralVariants",
-    "maxUsage" : 1011,
-    "noPrivateMaxUsage" : 1011,
-    "totalUsage" : 1334
-  }, {
-    "userId" : "5",
-    "userEmail" : "screenshot-mock-user@email.com",
-    "endpoint" : "/api/private/search/typeahead",
-    "noPrivateEndpoint" : "/api/v1/utils/cancerGeneList",
-    "maxUsage" : 499410,
-    "noPrivateMaxUsage" : 39288,
-    "totalUsage" : 2917827
-  }, {
-    "userId" : "1465",
-    "userEmail" : "screenshot-mock-user@email.com",
-    "endpoint" : "/api/v1/utils/allCuratedGenes",
-    "noPrivateEndpoint" : "/api/v1/utils/allCuratedGenes",
-    "maxUsage" : 1,
-    "noPrivateMaxUsage" : 1,
-    "totalUsage" : 2
-  }, {
-    "userId" : "6",
-    "userEmail" : "screenshot-mock-user@email.com",
-    "endpoint" : "/api/v1/annotate/mutations/byProteinChange",
-    "noPrivateEndpoint" : "/api/v1/annotate/mutations/byProteinChange",
-    "maxUsage" : 286647,
-    "noPrivateMaxUsage" : 286647,
-    "totalUsage" : 298818
-  }, {
-    "userId" : "1222",
-    "userEmail" : "screenshot-mock-user@email.com",
-    "endpoint" : "/api/private/search/typeahead",
-    "noPrivateEndpoint" : "/api/v1/utils/allCuratedGenes",
-    "maxUsage" : 14,
-    "noPrivateMaxUsage" : 8,
-    "totalUsage" : 71
-  }, {
-    "userId" : "1464",
-    "userEmail" : "screenshot-mock-user@email.com",
-    "endpoint" : "/api/v1/utils/allCuratedGenes",
-    "noPrivateEndpoint" : "/api/v1/utils/allCuratedGenes",
-    "maxUsage" : 1,
-    "noPrivateMaxUsage" : 1,
-    "totalUsage" : 2
-  }]
+[{
+  "userId" : "1461",
+  "userEmail" : "screenshot-mock-user1461@email.com",
+  "endpoint" : "/api/v1/annotate/mutations/byProteinChange",
+  "noPrivateEndpoint" : "/api/v1/annotate/mutations/byProteinChange",
+  "maxUsageProportion" : 55.6,
+  "noPrivateMaxUsageProportion" : 100,
+  "totalUsage" : 2152142550,
+  "dayUsage" : {
+    "2020-12-01" : 123489012,
+    "2020-11-01" : 374810,
+    "2020-11-05" : 213,
+    "2020-11-06" : 51515,
+    "2020-11-11" : 532555,
+    "2020-11-21" : 65378
+  },
+  "monthUsage" : {}
+}, {
+  "userId" : "1460",
+  "userEmail" : "screenshot-mock-user1460@email.com",
+  "endpoint" : "/api/v1/utils/allCuratedGenes",
+  "noPrivateEndpoint" : "/api/v1/utils/allCuratedGenes",
+  "maxUsageProportion" : 70.7,
+  "noPrivateMaxUsageProportion" : 30.5,
+  "totalUsage" : 108421,
+  "dayUsage" : {
+    "2020-12-05" : 124,
+    "2021-11-05" : 4,
+    "2021-11-09" : 41,
+    "2022-11-06" : 421,
+    "2023-11-11" : 3412414414,
+    "2024-11-21" : 14444
+  },
+  "monthUsage" : {}
+}, {
+  "userId" : "1217",
+  "userEmail" : "screenshot-mock-user1217@email.com",
+  "endpoint" : "/api/v1/utils/allCuratedGenes",
+  "noPrivateEndpoint" : "/api/v1/utils/allCuratedGenes",
+  "maxUsageProportion" : 15.6,
+  "noPrivateMaxUsageProportion" : 59.5,
+  "totalUsage" : 1234,
+  "dayUsage" : {
+    "2019-04-01" : 1,
+    "2018-05-01" : 1,
+    "2018-11-05" : 1,
+    "2020-11-06" : 12,
+    "2020-11-11" : 14721847,
+    "2020-11-21" : 1
+  },
+  "monthUsage" : {}
+}, {
+  "userId" : "1216",
+  "userEmail" : "screenshot-mock-user1216@email.com",
+  "endpoint" : "/api/v1/utils/allCuratedGenes",
+  "noPrivateEndpoint" : "/api/v1/utils/allCuratedGenes",
+  "maxUsageProportion" : 65.7,
+  "noPrivateMaxUsageProportion" : 53.6,
+  "totalUsage" : 431241,
+  "dayUsage" : {},
+  "monthUsage" : {}
+}, {
+  "userId" : "1699",
+  "userEmail" : "screenshot-mock-user1699@email.com",
+  "endpoint" : "/api/private/search/typeahead",
+  "noPrivateEndpoint" : "/api/v1/utils/allCuratedGenes",
+  "maxUsageProportion" : 55.6,
+  "noPrivateMaxUsageProportion" : 55.6,
+  "totalUsage" : 134444412,
+  "dayUsage" : {
+    "2020-12-01" : 1124321313
+  },
+  "monthUsage" : {}
+}, {
+  "userId" : "1698",
+  "userEmail" : "screenshot-mock-user1698@email.com",
+  "endpoint" : "/api/private/search/typeahead",
+  "noPrivateEndpoint" : "/api/v1/utils/allCuratedGenes",
+  "maxUsageProportion" : 55.6,
+  "noPrivateMaxUsageProportion" : 55.6,
+  "totalUsage" : 132,
+  "dayUsage" : {},
+  "monthUsage" : {}
+}, {
+  "userId" : "1213",
+  "userEmail" : "screenshot-mock-user1213@email.com",
+  "endpoint" : "/api/private/utils/numbers/levels/",
+  "noPrivateEndpoint" : "",
+  "maxUsageProportion" : 55.6,
+  "noPrivateMaxUsageProportion" : 55.6,
+  "totalUsage" : 132,
+  "dayUsage" : {
+    "1999-05-29" : 1242141,
+    "2018-04-04" : 10838282,
+    "2019-04-04" : 10838282,
+    "2020-04-04" : 10838282,
+    "2021-04-04" : 10838282,
+    "2022-04-04" : 10838282
+  },
+  "monthUsage" : {}
+}]

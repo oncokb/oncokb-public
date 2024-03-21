@@ -22,19 +22,12 @@ import _ from 'lodash';
 import { Link } from 'react-router-dom';
 import autobind from 'autobind-decorator';
 import { Row, Dropdown, DropdownButton } from 'react-bootstrap';
-import {
-  PAGE_ROUTE,
-  USAGE_TOP_USERS_LIMIT,
-  USAGE_ALL_TIME_KEY,
-} from 'app/config/constants';
+import { PAGE_ROUTE, USAGE_ALL_TIME_KEY } from 'app/config/constants';
 import { remoteData } from 'cbioportal-frontend-commons';
 import * as QueryString from 'query-string';
 import { UsageToggleGroup } from './UsageToggleGroup';
 import { TableCellRenderer } from 'react-table';
 import {
-  emailHeader,
-  endpointHeader,
-  noPrivateEndpointHeader,
   operationHeader,
   resourceHeader,
   timeHeader,
@@ -42,11 +35,13 @@ import {
   filterDependentResourceHeader,
 } from 'app/components/oncokbTable/HeaderConstants';
 import UsageText from 'app/shared/texts/UsageText';
+import UsageAnalysisTable from 'app/pages/usageAnalysisPage/UsageAnalysisTable';
 
 export type UsageRecord = {
-  resource: string;
+  resource: string; // used for email in dateGroupedColumns
   usage: number;
   time: string;
+  userId?: string;
 };
 
 enum UsageType {
@@ -55,12 +50,10 @@ enum UsageType {
 }
 
 export enum ToggleValue {
-  ALL_USERS = 'All Users',
-  TOP_USERS = 'Top Users',
   ALL_RESOURCES = 'All Resources',
   PUBLIC_RESOURCES = 'Only Public Resources',
   CUMULATIVE_USAGE = 'Cumulative Usage',
-  RESULTS_IN_TOTAL = 'By Year',
+  RESULTS_IN_TOTAL = 'Year To Date',
   RESULTS_BY_MONTH = 'By Month',
   RESULTS_BY_DAY = 'By Day',
 }
@@ -125,7 +118,6 @@ export default class UsageAnalysisPage extends React.Component<{
   routing: RouterStore;
   match: match;
 }> {
-  @observable topUsersToggleValue: ToggleValue = ToggleValue.ALL_USERS;
   @observable userTabResourcesTypeToggleValue: ToggleValue =
     ToggleValue.PUBLIC_RESOURCES;
   @observable resourceTabResourcesTypeToggleValue: ToggleValue =
@@ -209,12 +201,6 @@ export default class UsageAnalysisPage extends React.Component<{
 
   @autobind
   @action
-  handleTopUsersToggleChange(value: ToggleValue) {
-    this.topUsersToggleValue = value;
-  }
-
-  @autobind
-  @action
   handleUserTabResourcesTypeToggleChange(value: ToggleValue) {
     this.userTabResourcesTypeToggleValue = value;
   }
@@ -257,102 +243,11 @@ export default class UsageAnalysisPage extends React.Component<{
         >
           <Tab eventKey={UsageType.USER} title="Users">
             <div className="mt-2">
-              <OncoKBTable
-                data={
-                  this.topUsersToggleValue === ToggleValue.ALL_USERS
-                    ? this.users.result
-                    : _.filter(this.users.result, function (user) {
-                        return user.totalUsage >= USAGE_TOP_USERS_LIMIT;
-                      })
-                }
-                columns={[
-                  {
-                    id: 'userEmail',
-                    Header: emailHeader,
-                    accessor: 'userEmail',
-                    minWidth: 200,
-                    onFilter: (data: UserOverviewUsage, keyword) =>
-                      filterByKeyword(data.userEmail, keyword),
-                  },
-                  {
-                    id: 'totalUsage',
-                    Header: usageHeader,
-                    minWidth: 100,
-                    accessor: 'totalUsage',
-                    Cell(props: { original: UserOverviewUsage }) {
-                      return <UsageText usage={props.original.totalUsage} />;
-                    },
-                  },
-                  this.userTabResourcesTypeToggleValue ===
-                  ToggleValue.ALL_RESOURCES
-                    ? {
-                        id: 'endpoint',
-                        Header: endpointHeader,
-                        minWidth: 200,
-                        accessor: 'endpoint',
-                        onFilter: (data: UserOverviewUsage, keyword) =>
-                          filterByKeyword(data.endpoint, keyword),
-                      }
-                    : {
-                        id: 'noPrivateEndpoint',
-                        Header: noPrivateEndpointHeader,
-                        minWidth: 200,
-                        accessor: 'noPrivateEndpoint',
-                        onFilter: (data: UserOverviewUsage, keyword) =>
-                          filterByKeyword(data.noPrivateEndpoint, keyword),
-                      },
-                  {
-                    ...getUsageTableColumnDefinition(
-                      UsageTableColumnKey.OPERATION
-                    ),
-                    sortable: false,
-                    className: 'd-flex justify-content-center',
-                    Cell(props: { original: UserOverviewUsage }) {
-                      return (
-                        props.original.userId && (
-                          <Link
-                            to={`${PAGE_ROUTE.ADMIN_USER_USAGE_DETAILS_LINK}${props.original.userId}`}
-                          >
-                            <i className="fa fa-info-circle"></i>
-                          </Link>
-                        )
-                      );
-                    },
-                  },
-                ]}
-                loading={this.users.isPending}
-                defaultSorted={[
-                  {
-                    id: 'totalUsage',
-                    desc: true,
-                  },
-                ]}
-                showPagination={true}
-                minRows={1}
-                filters={() => {
-                  return (
-                    <Row>
-                      <UsageToggleGroup
-                        defaultValue={this.topUsersToggleValue}
-                        toggleValues={[
-                          ToggleValue.ALL_USERS,
-                          ToggleValue.TOP_USERS,
-                        ]}
-                        handleToggle={this.handleTopUsersToggleChange}
-                      />
-                      <UsageToggleGroup
-                        defaultValue={this.userTabResourcesTypeToggleValue}
-                        toggleValues={[
-                          ToggleValue.ALL_RESOURCES,
-                          ToggleValue.PUBLIC_RESOURCES,
-                        ]}
-                        handleToggle={
-                          this.handleUserTabResourcesTypeToggleChange
-                        }
-                      />
-                    </Row>
-                  );
-                }}
+              <UsageAnalysisTable
+                data={this.users.result}
+                loadedData={this.users.isComplete}
+                defaultResourcesType={ToggleValue.PUBLIC_RESOURCES}
+                defaultTimeType={ToggleValue.RESULTS_BY_DAY}
               />
             </div>
           </Tab>
@@ -368,8 +263,21 @@ export default class UsageAnalysisPage extends React.Component<{
                     Header: filterDependentResourceHeader(
                       this.resourceTabResourcesTypeToggleValue
                     ),
-                    onFilter: (data: UsageRecord, keyword) =>
-                      filterByKeyword(data.resource, keyword),
+                    onFilter: (row: UsageRecord, keyword) =>
+                      filterByKeyword(row.resource, keyword),
+                    Cell(props: { original: UsageRecord }) {
+                      return props.original.resource ? (
+                        <Link
+                          to={`${
+                            PAGE_ROUTE.ADMIN_RESOURCE_DETAILS_LINK
+                          }${props.original.resource.replace(/\//g, '!')}`}
+                        >
+                          {props.original.resource}
+                        </Link>
+                      ) : (
+                        <div>{props.original.resource}</div>
+                      );
+                    },
                   },
                   {
                     ...getUsageTableColumnDefinition(UsageTableColumnKey.USAGE),
@@ -392,13 +300,13 @@ export default class UsageAnalysisPage extends React.Component<{
                             props.original.resource
                           )}`}
                         >
-                          <i className="fa fa-info-circle"></i>
+                          <i className="fa fa-info-circle" />
                         </Link>
                       );
                     },
                   },
                 ]}
-                loading={this.usageDetail.isComplete ? false : true}
+                loading={!this.usageDetail.isComplete}
                 defaultSorted={[
                   {
                     id: UsageTableColumnKey.USAGE,
@@ -415,7 +323,9 @@ export default class UsageAnalysisPage extends React.Component<{
                       .reverse()
                       .forEach(key => {
                         monthDropdown.push(
-                          <Dropdown.Item eventKey={key}>{key}</Dropdown.Item>
+                          <Dropdown.Item key={key.toString()} eventKey={key}>
+                            {key}
+                          </Dropdown.Item>
                         );
                       });
                   }

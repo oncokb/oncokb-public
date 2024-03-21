@@ -1,7 +1,6 @@
 import OncoKBTable from 'app/components/oncokbTable/OncoKBTable';
 import { filterByKeyword } from 'app/shared/utils/Utils';
 import autobind from 'autobind-decorator';
-import _ from 'lodash';
 import { action, observable } from 'mobx';
 import { observer } from 'mobx-react';
 import React from 'react';
@@ -15,6 +14,7 @@ import {
 import {
   USAGE_DETAIL_TIME_KEY,
   USAGE_ALL_TIME_KEY,
+  PAGE_ROUTE,
 } from 'app/config/constants';
 import { UsageToggleGroup } from './UsageToggleGroup';
 import {
@@ -22,6 +22,7 @@ import {
   filterDependentTimeHeader,
 } from 'app/components/oncokbTable/HeaderConstants';
 import UsageText from 'app/shared/texts/UsageText';
+import { Link } from 'react-router-dom';
 
 type IResourceUsageDetailsTable = {
   data: Map<string, UsageRecord[]>;
@@ -55,8 +56,19 @@ export default class ResourceUsageDetailsTable extends React.Component<
             {
               ...getUsageTableColumnDefinition(UsageTableColumnKey.RESOURCES),
               Header: emailHeader,
-              onFilter: (data: UsageRecord, keyword) =>
-                filterByKeyword(data.resource, keyword),
+              onFilter: (row: UsageRecord, keyword) =>
+                filterByKeyword(row.resource, keyword),
+              Cell(props: { original: UsageRecord }) {
+                return props.original.userId ? (
+                  <Link
+                    to={`${PAGE_ROUTE.ADMIN_USER_USAGE_DETAILS_LINK}${props.original.userId}`}
+                  >
+                    {props.original.resource}
+                  </Link>
+                ) : (
+                  <div>{props.original.resource}</div>
+                );
+              },
             },
             {
               ...getUsageTableColumnDefinition(UsageTableColumnKey.USAGE),
@@ -67,8 +79,8 @@ export default class ResourceUsageDetailsTable extends React.Component<
             {
               ...getUsageTableColumnDefinition(UsageTableColumnKey.TIME),
               Header: filterDependentTimeHeader(this.timeTypeToggleValue),
-              onFilter: (data: UsageRecord, keyword) =>
-                filterByKeyword(data.time, keyword),
+              onFilter: (row: UsageRecord, keyword) =>
+                filterByKeyword(row.time, keyword),
             },
           ]}
           loading={this.props.loadedData ? false : true}
