@@ -3,7 +3,8 @@ package org.mskcc.cbio.oncokb.config;
 import io.github.jhipster.config.JHipsterConstants;
 import io.github.jhipster.config.JHipsterProperties;
 import io.github.jhipster.web.filter.CachingHttpHeadersFilter;
-import org.mskcc.cbio.oncokb.security.uuid.TokenProvider;
+
+import org.mskcc.cbio.oncokb.security.token.TokenProvider;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.boot.web.server.MimeMappings;

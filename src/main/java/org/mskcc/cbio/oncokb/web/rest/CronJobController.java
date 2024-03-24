@@ -8,7 +8,7 @@ import org.mskcc.cbio.oncokb.domain.enumeration.FileExtension;
 import org.mskcc.cbio.oncokb.querydomain.UserTokenUsage;
 import org.mskcc.cbio.oncokb.repository.UserDetailsRepository;
 import org.mskcc.cbio.oncokb.security.AuthoritiesConstants;
-import org.mskcc.cbio.oncokb.security.uuid.TokenProvider;
+import org.mskcc.cbio.oncokb.security.token.TokenProvider;
 import org.mskcc.cbio.oncokb.service.*;
 import org.mskcc.cbio.oncokb.service.dto.UserDTO;
 import org.mskcc.cbio.oncokb.service.mapper.UserMapper;

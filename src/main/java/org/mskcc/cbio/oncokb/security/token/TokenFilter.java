@@ -1,4 +1,4 @@
-package org.mskcc.cbio.oncokb.security.uuid;
+package org.mskcc.cbio.oncokb.security.token;
 
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
@@ -17,13 +17,13 @@ import java.util.UUID;
  * Filters incoming requests and installs a Spring Security principal if a header corresponding to a valid user is
  * found.
  */
-public class UUIDFilter extends GenericFilterBean {
+public class TokenFilter extends GenericFilterBean {
 
     public static final String AUTHORIZATION_HEADER = "Authorization";
 
     private TokenProvider tokenProvider;
 
-    public UUIDFilter(TokenProvider tokenProvider) {
+    public TokenFilter(TokenProvider tokenProvider) {
         this.tokenProvider = tokenProvider;
     }
 
@@ -31,20 +31,20 @@ public class UUIDFilter extends GenericFilterBean {
     public void doFilter(ServletRequest servletRequest, ServletResponse servletResponse, FilterChain filterChain)
         throws IOException, ServletException {
         HttpServletRequest httpServletRequest = (HttpServletRequest) servletRequest;
-        UUID uuid = resolveToken(httpServletRequest);
-        if (uuid != null && this.tokenProvider.validateToken(uuid)) {
-            Authentication authentication = this.tokenProvider.getAuthentication(uuid);
+        String token = resolveToken(httpServletRequest);
+        if (token != null && this.tokenProvider.validateToken(token)) {
+            Authentication authentication = this.tokenProvider.getAuthentication(token);
             SecurityContextHolder.getContext().setAuthentication(authentication);
 //            this.tokenProvider.addAccessRecord(uuid, servletRequest.getRemoteAddr());
         }
         filterChain.doFilter(servletRequest, servletResponse);
     }
 
-    private UUID resolveToken(HttpServletRequest request) {
+    private String resolveToken(HttpServletRequest request) {
         String bearerToken = request.getHeader(AUTHORIZATION_HEADER);
         if (StringUtils.hasText(bearerToken) && bearerToken.startsWith("Bearer ")) {
             try {
-                return UUID.fromString(bearerToken.substring(7));
+                return bearerToken.substring(7);
             } catch (Exception e) {
                 logger.info("Invalid token.");
                 return null;

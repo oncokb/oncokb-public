@@ -1,8 +1,9 @@
-package org.mskcc.cbio.oncokb.security.uuid;
+package org.mskcc.cbio.oncokb.security.token;
 
 import org.mskcc.cbio.oncokb.domain.Authority;
 import org.mskcc.cbio.oncokb.domain.Token;
 import org.mskcc.cbio.oncokb.domain.User;
+import org.mskcc.cbio.oncokb.domain.enumeration.TokenType;
 import org.mskcc.cbio.oncokb.repository.UserRepository;
 import org.mskcc.cbio.oncokb.security.AuthoritiesConstants;
 import org.mskcc.cbio.oncokb.security.SecurityUtils;
@@ -101,7 +102,7 @@ public class TokenProvider implements InitializingBean {
     }
 
     // This method is used in the frontend thymeleaf parsing
-    public UUID getPubWebToken() {
+    public String getPubWebToken() {
         Optional<User> user = userRepository.findOneWithAuthoritiesByLogin(PUBLIC_WEBSITE_LOGIN);
         if (user.isPresent()) {
             Token userToken = new Token();
@@ -128,7 +129,7 @@ public class TokenProvider implements InitializingBean {
         return null;
     }
 
-    public Authentication getAuthentication(UUID token) {
+    public Authentication getAuthentication(String token) {
         Optional<Token> tokenOptional = tokenService.findByToken(token);
 
         Optional<User> user = userRepository.findOneWithAuthoritiesByLogin(tokenOptional.get().getUser().getLogin());
@@ -140,8 +141,24 @@ public class TokenProvider implements InitializingBean {
         return new UsernamePasswordAuthenticationToken(user.get().getLogin(), token, authorities);
     }
 
-    public boolean validateToken(UUID tokenValue) {
+    public boolean validateToken(String tokenValue) {
         try {
+            TokenType type = TokenType.getTokenTypeFromPrefix(tokenValue.substring(0, 4));
+            if (type == null) {
+                return false;
+            }
+            String uuidDashless = tokenValue.substring(5, 37);
+            UUID uuid = UUID.fromString(
+                String.format("%s-%s-%s-%s-%s",
+                    uuidDashless.substring(0, 8),
+                    uuidDashless.substring(8, 12),
+                    uuidDashless.substring(12, 16),
+                    uuidDashless.substring(16, 20),
+                    uuidDashless.substring(20)
+                )
+            );
+            String checksum = tokenValue.substring(37);
+
             Optional<Token> token = tokenService.findByToken(tokenValue);
             if (token.isPresent() && token.get().getExpiration().isAfter(Instant.now())) {
                 if(token.get().getUsageLimit() == null || token.get().getCurrentUsage() < token.get().getUsageLimit()) {

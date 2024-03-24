@@ -1,8 +1,8 @@
 package org.mskcc.cbio.oncokb.config;
 
 import org.mskcc.cbio.oncokb.security.AuthoritiesConstants;
-import org.mskcc.cbio.oncokb.security.uuid.TokenProvider;
-import org.mskcc.cbio.oncokb.security.uuid.UUIDConfigurer;
+import org.mskcc.cbio.oncokb.security.token.TokenConfigurer;
+import org.mskcc.cbio.oncokb.security.token.TokenProvider;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Import;
 import org.springframework.http.HttpMethod;
@@ -152,7 +152,7 @@ public class SecurityConfiguration extends WebSecurityConfigurerAdapter {
         // @formatter:on
     }
 
-    private UUIDConfigurer securityConfigurerAdapter() {
-        return new UUIDConfigurer(tokenProvider);
+    private TokenConfigurer securityConfigurerAdapter() {
+        return new TokenConfigurer(tokenProvider);
     }
 }
