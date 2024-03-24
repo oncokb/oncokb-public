@@ -8,7 +8,7 @@ import privateClient from 'app/shared/api/oncokbPrivateClientInstance';
 import { remoteData } from 'cbioportal-frontend-commons';
 
 interface ICancerTypeSelect extends SelectProps {
-  tumorType?: string;
+  cancerType?: string;
 }
 
 @observer
@@ -26,10 +26,10 @@ export default class CancerTypeSelect extends React.Component<
 
   @computed
   get tumorTypeSelectValue() {
-    if (this.props.tumorType) {
+    if (this.props.cancerType) {
       const matchedSubtype = _.find(
         this.allSubtypes,
-        tumorType => tumorType.code === this.props.tumorType
+        cancerType => cancerType.code === this.props.cancerType
       );
       if (matchedSubtype) {
         return {
@@ -38,8 +38,8 @@ export default class CancerTypeSelect extends React.Component<
         };
       } else {
         return {
-          label: this.props.tumorType,
-          value: this.props.tumorType,
+          label: this.props.cancerType,
+          value: this.props.cancerType,
         };
       }
     } else {
@@ -78,19 +78,19 @@ export default class CancerTypeSelect extends React.Component<
         label: 'Cancer Type',
         options: _.uniq(cancerTypesGroup)
           .sort()
-          .map(tumorType => {
+          .map(cancerType => {
             return {
-              value: tumorType,
-              label: tumorType,
+              value: cancerType,
+              label: cancerType,
             };
           }),
       },
       {
         label: 'Cancer Type Detailed',
-        options: _.sortBy(_.uniq(this.allSubtypes), 'name').map(tumorType => {
+        options: _.sortBy(_.uniq(this.allSubtypes), 'name').map(cancerType => {
           return {
-            value: tumorType.code,
-            label: `${tumorType.subtype} (${tumorType.code})`,
+            value: cancerType.code,
+            label: `${cancerType.subtype} (${cancerType.code})`,
           };
         }),
       },

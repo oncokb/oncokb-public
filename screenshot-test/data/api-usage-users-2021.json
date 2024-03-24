@@ -7,6 +7,26 @@
     "company" : "MSKCC",
     "summary" : {
       "day" : {
+        "2021-04-01" : {
+          "/api/example/endpoint10" : 1.0,
+          "/api/example/endpoint11" : 12340.0,
+          "/api/example/endpoint12" : 832461.0
+        },
+        "2021-03-01" : {
+          "/api/example/endpoint10" : 1.0,
+          "/api/example/endpoint11" : 123490.0,
+          "/api/example/endpoint12" : 8324461.0
+        },
+        "2021-02-01" : {
+          "/api/example/endpoint10" : 1.0,
+          "/api/example/endpoint11" : 123490.0,
+          "/api/example/endpoint12" : 8324461.0
+        },
+        "2021-01-01" : {
+          "/api/example/endpoint10" : 1.0,
+          "/api/example/endpoint11" : 123490.0,
+          "/api/example/endpoint12" : 8324461.0
+        },
         "2020-12-01" : {
           "/api/example/endpoint1" : 2.0,
           "/api/example/endpoint2" : 3.0,

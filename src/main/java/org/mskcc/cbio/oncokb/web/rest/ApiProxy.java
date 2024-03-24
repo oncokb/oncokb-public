@@ -8,7 +8,7 @@ import org.mskcc.cbio.oncokb.domain.TokenStats;
 import org.mskcc.cbio.oncokb.domain.User;
 import org.mskcc.cbio.oncokb.security.AuthoritiesConstants;
 import org.mskcc.cbio.oncokb.security.SecurityUtils;
-import org.mskcc.cbio.oncokb.security.uuid.TokenProvider;
+import org.mskcc.cbio.oncokb.security.token.TokenProvider;
 import org.mskcc.cbio.oncokb.service.*;
 import org.mskcc.cbio.oncokb.web.rest.errors.BadRequestAlertException;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -157,6 +157,9 @@ public class ApiProxy {
 
     @Async
     public void updateTokenStats(HttpServletRequest request, int usageCount) {
+        if (applicationProperties.getDbReadOnly()) {
+            return;
+        }
         Optional<String> userOptional = SecurityUtils.getCurrentUserLogin();
         if (userOptional.isPresent()) {
             List<String> tokenUsageCheckWhitelist = Arrays.stream(applicationProperties.getTokenUsageCheckWhitelist().split(",")).map(api -> api.trim()).filter(api -> !api.isEmpty()).collect(Collectors.toList());

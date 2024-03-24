@@ -6,6 +6,8 @@ import org.mskcc.cbio.oncokb.domain.enumeration.MailType;
 import org.springframework.data.jpa.repository.*;
 import org.springframework.stereotype.Repository;
 
+import io.github.jhipster.config.JHipsterProperties.Mail;
+
 import java.time.Instant;
 import java.util.List;
 
@@ -23,6 +25,8 @@ public interface UserMailsRepository extends JpaRepository<UserMails, Long> {
     List<UserMails> findByUser(String login);
 
     List<UserMails> findUserMailsByUserAndMailTypeAndSentDateAfter(User user, MailType mailType, Instant sentAfter);
+
+    List<UserMails> findUserMailByUserAndMailTypeIn(User user, List<MailType> mailTypes);
 
     void deleteAllByUser(User user);
 }

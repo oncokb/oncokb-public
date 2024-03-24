@@ -77,6 +77,8 @@ export const TEXT_VAL = textValidation(2, 255);
 
 export const SHORT_TEXT_VAL = textValidation(2, 50);
 
+export const LONG_TEXT_VAL = textValidation(2);
+
 export const EMAIL_VAL = {
   required: {
     value: true,

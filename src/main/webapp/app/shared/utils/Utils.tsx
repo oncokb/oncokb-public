@@ -10,6 +10,7 @@ import {
   APP_LOCAL_DATE_FORMAT,
   APP_LOCAL_DATETIME_FORMAT_Z,
   APP_TIMESTAMP_FORMAT,
+  CATEGORICAL_ALTERATIONS,
   DELETION,
   FUSIONS,
   GAIN_OF_FUNCTION_MUTATIONS,
@@ -123,6 +124,15 @@ export function levelOfEvidence2Level(
     level = trimLevelOfEvidenceSubversion(level);
   }
   return level as LEVELS;
+}
+
+export function toggleStrList(element: string, list: string[]) {
+  if (list.includes(element)) {
+    list.splice(list.indexOf(element), 1);
+  } else {
+    list.push(element);
+  }
+  return list;
 }
 
 export function level2LevelOfEvidence(level: LEVELS) {
@@ -618,7 +628,7 @@ export function decodeSlash(content: string | undefined) {
 export const scrollWidthOffset = (el?: any) => {
   const yCoordinate =
     el === undefined ? 0 : el.getBoundingClientRect().top + window.pageYOffset;
-  const yOffset = -80;
+  const yOffset = -90;
   window.scrollTo({ top: yCoordinate + yOffset, behavior: 'smooth' });
 };
 
@@ -747,20 +757,22 @@ export interface IAlteration {
 }
 
 export const isCategoricalAlteration = (alteration: string) => {
-  const categoricalAlterations = [
-    ONCOGENIC_MUTATIONS,
-    FUSIONS,
-    TRUNCATING_MUTATIONS,
-    GAIN_OF_FUNCTION_MUTATIONS,
-    LOSS_OF_FUNCTION_MUTATIONS,
-    SWITCH_OF_FUNCTION_MUTATIONS,
-  ];
   return (
     alteration &&
-    categoricalAlterations.filter(alt =>
+    CATEGORICAL_ALTERATIONS.filter(alt =>
       alteration.toLowerCase().startsWith(alt.toLowerCase())
     ).length > 0
   );
+};
+
+export const getCategoricalAlteration = (alteration: string) => {
+  if (isCategoricalAlteration(alteration)) {
+    const matched = CATEGORICAL_ALTERATIONS.filter(categoricalAlt => {
+      return alteration.toLowerCase().startsWith(categoricalAlt.toLowerCase());
+    });
+    return matched.pop();
+  }
+  return alteration;
 };
 
 /**
@@ -831,8 +843,7 @@ export const getCategoricalAlterationDescription = (
       content = (
         <span>
           Defined as deletion or chromosomal translocation events arising within{' '}
-          {geneLink} that result in a functional fusion event which preserves an
-          intact {hugoSymbol} kinase domain.
+          {geneLink} that result in a functional fusion event.
         </span>
       );
       break;
@@ -840,14 +851,15 @@ export const getCategoricalAlterationDescription = (
       content = (
         <span>
           Defined as nonsense, frameshift, or splice-site mutations within{' '}
-          {geneLink} that are predicted to shorten the coding sequence of gene.
+          {geneLink} that are predicted to shorten the coding sequence of the
+          gene.
         </span>
       );
       break;
     default:
       break;
   }
-  if (alteration.startsWith(ONCOGENIC_MUTATIONS)) {
+  if (ONCOGENIC_MUTATIONS.toLowerCase() === alteration.toLowerCase()) {
     let prefix =
       'Defined as point mutations, rearrangements/fusions or copy number alterations within';
     if (oncogene && !tsg) {
@@ -860,8 +872,8 @@ export const getCategoricalAlterationDescription = (
       <span>
         {prefix} {geneLink} considered "oncogenic", "likely oncogenic" or
         "resistance" as defined by{' '}
-        <SopPageLink version={2.2}>
-          {ONCOKB_TM} Curation Standard Operating Protocol v2.2, Chapter 2,
+        <SopPageLink>
+          {ONCOKB_TM} Curation Standard Operating Protocol, Chapter 1,
           Sub-Protocol 2.5
         </SopPageLink>
         .

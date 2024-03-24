@@ -7,4 +7,8 @@ public class StringUtil {
     public static String getEmailDomain(String email) {
         return email.substring(email.indexOf("@") + 1);
     }
+
+    public static String getFullName(String firstName, String lastName) {
+        return firstName + " " + lastName;
+    }
 }

@@ -2,8 +2,8 @@ package org.mskcc.cbio.oncokb.web.rest;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
 import org.mskcc.cbio.oncokb.domain.Token;
-import org.mskcc.cbio.oncokb.security.uuid.UUIDFilter;
-import org.mskcc.cbio.oncokb.security.uuid.TokenProvider;
+import org.mskcc.cbio.oncokb.security.token.TokenFilter;
+import org.mskcc.cbio.oncokb.security.token.TokenProvider;
 import org.mskcc.cbio.oncokb.service.TokenService;
 import org.mskcc.cbio.oncokb.service.UserDetailsService;
 import org.mskcc.cbio.oncokb.service.dto.UserDetailsDTO;
@@ -42,7 +42,7 @@ import java.util.stream.Collectors;
  */
 @RestController
 @RequestMapping("/api")
-public class UserUUIDController {
+public class UserTokenController {
 
     private final TokenProvider tokenProvider;
 
@@ -54,7 +54,7 @@ public class UserUUIDController {
 
     private final AuthenticationManagerBuilder authenticationManagerBuilder;
 
-    public UserUUIDController(TokenProvider tokenProvider, AuthenticationManagerBuilder authenticationManagerBuilder) {
+    public UserTokenController(TokenProvider tokenProvider, AuthenticationManagerBuilder authenticationManagerBuilder) {
         this.tokenProvider = tokenProvider;
         this.authenticationManagerBuilder = authenticationManagerBuilder;
     }
@@ -110,7 +110,7 @@ public class UserUUIDController {
         }
 
         HttpHeaders httpHeaders = new HttpHeaders();
-        httpHeaders.add(UUIDFilter.AUTHORIZATION_HEADER, "Bearer " + uuid);
+        httpHeaders.add(TokenFilter.AUTHORIZATION_HEADER, "Bearer " + uuid);
         return new ResponseEntity<>(uuid, httpHeaders, HttpStatus.OK);
     }
 }

@@ -1,4 +1,13 @@
-@mixin sticky-footer($footer-height) {
+$view-wrapper-default-p-y: 2rem !default;
+
+@mixin sticky-panel-under-header($header-height) {
+  .sticky-panel-relevant-to-header {
+    top: $header-height + 3;
+    z-index: $zindex-sticky - 10;
+  }
+}
+
+@mixin sticky-footer($view-wrapper-default-p-y, $footer-height) {
   .view-wrapper {
     margin: 0 auto (-$footer-height);
     padding: $view-wrapper-default-p-y 0
@@ -29,11 +38,20 @@
 
 @include media-breakpoint-up(xs) {
   $footer-height: 22rem;
-  @include sticky-footer($footer-height);
+  $header-height: 4.5rem;
+  @include sticky-footer(1rem, $footer-height);
+  @include sticky-panel-under-header($header-height);
   .navbar-brand {
     margin-right: 1rem;
     margin-bottom: 0.3rem;
     padding: 1rem 0;
+  }
+  .navbar {
+    padding-top: 0;
+  }
+
+  .navbar-nav > .nav-item {
+    line-height: 1.5rem;
   }
 
   .navbar-nav > .nav-item {
@@ -49,34 +67,40 @@
     padding-left: 1rem;
     padding-right: 1rem;
   }
-  .sticky-panel-relevant-to-header {
-    top: 0;
-  }
 }
 
 @include media-breakpoint-up(sm) {
   $footer-height: 17rem;
-  .sticky-panel-relevant-to-header {
-    top: 106px;
-  }
-  @include sticky-footer($footer-height);
+  @include sticky-footer($view-wrapper-default-p-y, $footer-height);
 }
 
 @include media-breakpoint-up(lg) {
   $footer-height: 12rem;
-  @include sticky-footer($footer-height);
+  @include sticky-footer($view-wrapper-default-p-y, $footer-height);
+  .navbar {
+    // add padding to align with nav item border bottom
+    padding-top: $navbar-padding-top;
+  }
+
+  .navbar-nav > .nav-item {
+    line-height: 2rem;
+  }
 
   .navbar-nav > .nav-item,
   #account-menu > a {
-    padding: 1rem 0.3rem;
+    // Force the text in header to two lines
+    padding: 1rem 0.6rem;
     margin: 0;
   }
 }
 
+@include media-breakpoint-up(md) {
+  $header-height: 4.5rem;
+  @include sticky-panel-under-header($header-height);
+}
+
 @include media-breakpoint-up(xl) {
-  .navbar-nav > .nav-item,
-  #account-menu > a {
-    padding: 1rem 0.6rem;
-    margin: 0;
+  .navbar-nav > .nav-item {
+    line-height: 2.5rem;
   }
 }

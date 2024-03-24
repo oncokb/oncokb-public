@@ -34,6 +34,8 @@ import { ApiAccessPageNavTab } from 'app/pages/apiAccessGroup/ApiAccessPageNavTa
 import FAQPage from 'app/pages/FAQPage';
 import ReadOnlyMode from 'app/shared/readonly/ReadOnlyMode';
 import * as QueryString from 'query-string';
+import OncologyTherapiesPage from 'app/pages/oncologyTherapiesPage/oncologyTherapiesPage';
+import { NewsPageNavTab } from 'app/pages/newsPage/NewsPageNavTab';
 
 const getOldLevelsRedirectRoute = (hash: string) => {
   const queryStrings = QueryString.parse(hash) as {
@@ -74,9 +76,27 @@ const AppRouts = (props: {
       <Redirect exact from={'/updates'} to={PAGE_ROUTE.NEWS} />
       <Redirect exact from={'/genes'} to={PAGE_ROUTE.CANCER_GENES} />
       <Redirect
+        from={PAGE_ROUTE.LEGACY_ACTIONABLE_GENE}
+        to={{
+          pathname: PAGE_ROUTE.ACTIONABLE_GENE,
+          search: props.routing.location.search,
+          hash: props.routing.location.hash,
+        }}
+      />
+      <Redirect
         exact
-        from={PAGE_ROUTE.DATA_ACCESS}
+        from={PAGE_ROUTE.LEGACY_API_ACCESS}
         to={PAGE_ROUTE.API_ACCESS}
+      />
+      <Redirect
+        exact
+        from={PAGE_ROUTE.LEGACY_DATA_ACCESS}
+        to={PAGE_ROUTE.API_ACCESS}
+      />
+      <Redirect
+        exact
+        from={PAGE_ROUTE.LEGACY_CANCER_GENES}
+        to={PAGE_ROUTE.CANCER_GENES}
       />
       <Redirect
         exact
@@ -88,6 +108,7 @@ const AppRouts = (props: {
         from={'/gene/:hugoSymbol/variant/:alteration'}
         to={PAGE_ROUTE.ALTERATION}
       />
+      <Redirect exact from={PAGE_ROUTE.PO_TX} to={PAGE_ROUTE.ONCOLOGY_TX} />
       <PageContainer>
         <Switch>
           <RecaptchaBoundaryRoute
@@ -137,6 +158,13 @@ const AppRouts = (props: {
             exact
             isUserAuthenticated={props.authenticationStore.isUserAuthenticated}
             appStore={props.appStore}
+            path={PAGE_ROUTE.ONCOLOGY_TX}
+            component={OncologyTherapiesPage}
+          />
+          <RecaptchaBoundaryRoute
+            exact
+            isUserAuthenticated={props.authenticationStore.isUserAuthenticated}
+            appStore={props.appStore}
             path={PAGE_ROUTE.GENE}
             component={GenePage}
           />
@@ -174,9 +202,9 @@ const AppRouts = (props: {
           <Route
             exact
             path={PAGE_ROUTE.YEAR_END_SUMMARY}
-            component={AboutPageNavTab}
+            component={NewsPageNavTab}
           />
-          <Route exact path={PAGE_ROUTE.NEWS} component={NewsPage} />
+          <Route exact path={PAGE_ROUTE.NEWS} component={NewsPageNavTab} />
           <Route
             exact
             path={PAGE_ROUTE.FDA_RECOGNITION}

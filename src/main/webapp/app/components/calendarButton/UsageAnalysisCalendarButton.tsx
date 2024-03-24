@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useEffect, useRef, useState } from 'react';
 import { InputGroup, Button, Dropdown, Container } from 'react-bootstrap';
 import classnames from 'classnames';
 import { getMomentInstance } from 'app/shared/utils/Utils';
@@ -23,6 +23,8 @@ const DATE_PLACEHOLDER = 'Select Date';
 
 export const UsageAnalysisCalendarButton: React.FunctionComponent<CalendarButtonProps> = props => {
   const [open, isOpen] = useState(props.currentMenuState);
+  const dropdownRef = useRef<HTMLDivElement>(null);
+
   const currentToggleState: boolean =
     props.currentFromDate !== undefined &&
     props.currentFromDate !== DATE_PLACEHOLDER &&
@@ -62,6 +64,20 @@ export const UsageAnalysisCalendarButton: React.FunctionComponent<CalendarButton
     props.menuState(!open);
   }
 
+  const handleOutsideClick = (event: { target: any }) => {
+    if (dropdownRef.current && !dropdownRef.current.contains(event.target)) {
+      isOpen(false); // Close the dropdown
+      props.menuState(false); // Update the parent component's state
+    }
+  };
+
+  useEffect(() => {
+    document.addEventListener('mousedown', handleOutsideClick);
+    return () => {
+      document.removeEventListener('mousedown', handleOutsideClick);
+    };
+  }, []);
+
   return (
     <DefaultTooltip placement={'top'} overlay={'View Specific Date Range'}>
       <Dropdown
@@ -69,6 +85,7 @@ export const UsageAnalysisCalendarButton: React.FunctionComponent<CalendarButton
         id="time-select-dropdown"
         className="ml-3 active"
         show={open}
+        ref={dropdownRef}
       >
         <Dropdown.Toggle
           className={currentToggleState ? 'active' : ''}

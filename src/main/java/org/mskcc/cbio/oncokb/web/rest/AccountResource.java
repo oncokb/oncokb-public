@@ -7,12 +7,15 @@ import org.mskcc.cbio.oncokb.domain.Token;
 import org.mskcc.cbio.oncokb.domain.User;
 import org.mskcc.cbio.oncokb.domain.enumeration.LicenseStatus;
 import org.mskcc.cbio.oncokb.repository.UserRepository;
+import org.mskcc.cbio.oncokb.security.AuthoritiesConstants;
 import org.mskcc.cbio.oncokb.security.SecurityUtils;
-import org.mskcc.cbio.oncokb.security.uuid.TokenProvider;
+import org.mskcc.cbio.oncokb.security.token.TokenProvider;
 import org.mskcc.cbio.oncokb.service.*;
 import org.mskcc.cbio.oncokb.service.dto.PasswordChangeDTO;
 import org.mskcc.cbio.oncokb.service.dto.UserDTO;
 import org.mskcc.cbio.oncokb.service.dto.UserDetailsDTO;
+import org.mskcc.cbio.oncokb.service.dto.useradditionalinfo.AdditionalInfoDTO;
+import org.mskcc.cbio.oncokb.service.dto.useradditionalinfo.ApiAccessRequest;
 import org.mskcc.cbio.oncokb.service.mapper.UserMapper;
 import org.mskcc.cbio.oncokb.web.rest.errors.*;
 import org.mskcc.cbio.oncokb.web.rest.errors.EmailAlreadyUsedException;
@@ -83,7 +86,7 @@ public class AccountResource {
                            AuthenticationManagerBuilder authenticationManagerBuilder,
                            PasswordEncoder passwordEncoder, UserDetailsService userDetailsService,
                            TokenService tokenService, ApplicationProperties applicationProperties
-                           ) {
+    ) {
 
         this.userRepository = userRepository;
         this.userDetailsService = userDetailsService;
@@ -110,27 +113,27 @@ public class AccountResource {
      */
     @PostMapping("/register")
     @ResponseStatus(HttpStatus.CREATED)
-    public void registerAccount(@Valid @RequestBody ManagedUserVM managedUserVM, 
-            HttpServletRequest request) throws Exception {
+    public void registerAccount(@Valid @RequestBody ManagedUserVM managedUserVM,
+                                HttpServletRequest request) throws Exception {
         try {
             RecaptchaEnterpriseServiceClient client = createAssess.createClient();
             String recaptchaToken = createAssess.getRecaptchaToken(request);
-            ResponseEntity<String> rs = createAssess.createAssessment(client,recaptchaToken);
+            ResponseEntity<String> rs = createAssess.createAssessment(client, recaptchaToken);
         } catch (ValidationException e) {
             e.printStackTrace();
             String errorMessage = e.getMessage();
             if (errorMessage.contains("Unable to retrieve recaptcha token.")) {
                 log.info(errorMessage);
-            } 
+            }
         } catch (ConfigurationException e) {
             log.warn(e.getMessage());
         }
         // if (rs.getStatusCode() == HttpStatus.OK) {
-            if (!checkPasswordLength(managedUserVM.getPassword())) {
-                throw new InvalidPasswordException();
-            }
-            User user = userService.registerUser(managedUserVM, managedUserVM.getPassword());
-            mailService.sendActivationEmail(userMapper.userToUserDTO(user));
+        if (!checkPasswordLength(managedUserVM.getPassword())) {
+            throw new InvalidPasswordException();
+        }
+        User user = userService.registerUser(managedUserVM, managedUserVM.getPassword());
+        mailService.sendActivationEmail(userMapper.userToUserDTO(user));
         // }
     }
 
@@ -146,7 +149,7 @@ public class AccountResource {
         if (!userOptional.isPresent() || (userOptional.get().getActivationKey() != null && !userOptional.get().getActivationKey().equals(key))) {
             throw new CustomMessageRuntimeException("Your user account could not be activated as no user was found associated with this activation key.");
         } else {
-            if(userOptional.get().getActivationKey() == null) {
+            if (userOptional.get().getActivationKey() == null) {
                 return userOptional.get().getActivated();
             }
 
@@ -154,9 +157,9 @@ public class AccountResource {
             userOptional = userService.activateRegistration(key);
 
             User user;
-            if(userOptional.isPresent()){
+            if (userOptional.isPresent()) {
                 user = userOptional.get();
-            }else{
+            } else {
                 throw new CustomMessageRuntimeException("User could not be found");
             }
 
@@ -208,9 +211,6 @@ public class AccountResource {
             }
         }
 
-        // Add the new user to the ROC smartsheet
-        this.smartsheetService.addUserToSheetIfShould(userDTO);
-
         return userIsActivated;
     }
 
@@ -257,7 +257,7 @@ public class AccountResource {
         if (!user.isPresent()) {
             throw new CustomMessageRuntimeException("User could not be found");
         }
-        userService.updateUser(userDTO);
+        userService.updateUserAndTokens(userDTO);
     }
 
     /**
@@ -272,6 +272,32 @@ public class AccountResource {
             throw new InvalidPasswordException();
         }
         userService.changePassword(passwordChangeDto.getCurrentPassword(), passwordChangeDto.getNewPassword());
+    }
+
+    /**
+     * {@code POST  /account/request-api-access} : requests ROLE_API for current user.
+     *
+     * @param apiAccessRequest isRequested boolean and justification (reason for request).
+     */
+    @PostMapping(path = "/account/request-api-access")
+    public void requestApiAccess(@Valid @RequestBody ApiAccessRequest apiAccessRequest) {
+        Optional<String> userLogin = SecurityUtils.getCurrentUserLogin();
+        if (userLogin.isPresent()) {
+            Optional<User> user = userService.getUserWithAuthoritiesByLogin(userLogin.get());
+            if (user.isPresent()) {
+                Optional<UserDetailsDTO> userDetailsDTO = userDetailsService.findOneByUser(user.get());
+                if (userDetailsDTO.isPresent()) {
+                    UserDetailsDTO updatedUserDetailsDTO = userDetailsDTO.get();
+                    if (updatedUserDetailsDTO.getAdditionalInfo() == null) {
+                        updatedUserDetailsDTO.setAdditionalInfo(new AdditionalInfoDTO());
+                    }
+                    updatedUserDetailsDTO.getAdditionalInfo().setApiAccessRequest(apiAccessRequest);
+
+                    userDetailsService.save(updatedUserDetailsDTO);
+                    slackService.sendUserApiAccessRequestToChannel(userMapper.userToUserDTO(user.get()));
+                }
+            }
+        }
     }
 
     /**
@@ -315,7 +341,7 @@ public class AccountResource {
                 if (tokens.size() > 0) {
                     Instant expiration = tokens.stream().max(Comparator.comparing(Token::getExpiration)).get().getExpiration();
                     Instant sevenDaysFromNow = Instant.now().plus(7, ChronoUnit.DAYS);
-                    for (Token token: tokens) {
+                    for (Token token : tokens) {
                         token.setExpiration(token.getExpiration().compareTo(sevenDaysFromNow) < 0 ? token.getExpiration() : sevenDaysFromNow);
                         tokenService.save(token);
                     }
@@ -336,7 +362,7 @@ public class AccountResource {
     public void deleteToken(@RequestBody Token token) throws AuthenticationException {
         Optional<String> userLogin = SecurityUtils.getCurrentUserLogin();
         if (userLogin.isPresent() && token.getUser() != null) {
-            if (token.getUser().getLogin().equalsIgnoreCase(userLogin.get())) {
+            if (userService.isAdmin(userLogin.get()) || token.getUser().getLogin().equalsIgnoreCase(userLogin.get())) {
                 tokenService.delete(token.getId());
             } else {
                 throw new AuthenticationException("User does not have the permission to update the token requested");
@@ -357,29 +383,29 @@ public class AccountResource {
         try {
             RecaptchaEnterpriseServiceClient client = createAssess.createClient();
             String recaptchaToken = createAssess.getRecaptchaToken(request);
-            ResponseEntity<String> rs = createAssess.createAssessment(client,recaptchaToken);
+            ResponseEntity<String> rs = createAssess.createAssessment(client, recaptchaToken);
         } catch (ValidationException e) {
             e.printStackTrace();
             String errorMessage = e.getMessage();
             if (errorMessage.contains("Unable to retrieve recaptcha token.")) {
                 log.info(errorMessage);
-            } 
+            }
         } catch (ConfigurationException e) {
             log.warn(e.getMessage());
         }
         // if (rs.getStatusCode() == HttpStatus.OK) {
-            Optional<User> user = userService.getUserWithAuthoritiesByEmailIgnoreCase(mail);
-            if (user.isPresent()) {
-                Optional<User> updatedUser = userService.requestPasswordReset(user.get().getLogin());
-                if (updatedUser.isPresent()) {
-                    mailService.sendPasswordResetMail(userMapper.userToUserDTO(updatedUser.get()));
-                }
-
-            } else {
-                // Pretend the request has been successful to prevent checking which emails really exist
-                // but log that an invalid attempt has been made
-                log.warn("Password reset requested for non existing mail");
+        Optional<User> user = userService.getUserWithAuthoritiesByEmailIgnoreCase(mail);
+        if (user.isPresent()) {
+            Optional<User> updatedUser = userService.requestPasswordReset(user.get().getLogin());
+            if (updatedUser.isPresent()) {
+                mailService.sendPasswordResetMail(userMapper.userToUserDTO(updatedUser.get()));
             }
+
+        } else {
+            // Pretend the request has been successful to prevent checking which emails really exist
+            // but log that an invalid attempt has been made
+            log.warn("Password reset requested for non existing mail");
+        }
         // }
     }
 
@@ -395,8 +421,7 @@ public class AccountResource {
         if (!checkPasswordLength(keyAndPassword.getNewPassword())) {
             throw new InvalidPasswordException();
         }
-        Optional<User> user =
-            userService.completePasswordReset(keyAndPassword.getNewPassword(), keyAndPassword.getKey());
+        Optional<User> user = userService.completePasswordReset(keyAndPassword.getNewPassword(), keyAndPassword.getKey());
 
         if (!user.isPresent()) {
             throw new CustomMessageRuntimeException("No user was found for this reset key");
@@ -455,28 +480,28 @@ public class AccountResource {
         try {
             RecaptchaEnterpriseServiceClient client = createAssess.createClient();
             String recaptchaToken = createAssess.getRecaptchaToken(request);
-            ResponseEntity<String> rs = createAssess.createAssessment(client,recaptchaToken);
+            ResponseEntity<String> rs = createAssess.createAssessment(client, recaptchaToken);
         } catch (ValidationException e) {
             e.printStackTrace();
             String errorMessage = e.getMessage();
             if (errorMessage.contains("Unable to retrieve recaptcha token.")) {
                 log.info(errorMessage);
-            } 
+            }
         } catch (ConfigurationException e) {
             log.warn(e.getMessage());
         }
         // if (rs.getStatusCode() == HttpStatus.OK) {
-            Optional<User> userOptional = userService.getUserWithAuthoritiesByLogin(loginVM.getUsername());
-            if (userOptional.isPresent()
-                    && passwordEncoder.matches(loginVM.getPassword(), userOptional.get().getPassword())) {
-                mailService.sendActivationEmail(userMapper.userToUserDTO(userOptional.get()));
+        Optional<User> userOptional = userService.getUserWithAuthoritiesByLogin(loginVM.getUsername());
+        if (userOptional.isPresent() && passwordEncoder.matches(loginVM.getPassword(), userOptional.get().getPassword())) {
+            if (StringUtils.isEmpty(userOptional.get().getActivationKey())) {
+                userService.generateNewActivationKey(userOptional.get());
             }
+            mailService.sendActivationEmail(userMapper.userToUserDTO(userOptional.get()));
+        }
         // }
     }
 
     private static boolean checkPasswordLength(String password) {
-        return !StringUtils.isEmpty(password) &&
-            password.length() >= ManagedUserVM.PASSWORD_MIN_LENGTH &&
-            password.length() <= ManagedUserVM.PASSWORD_MAX_LENGTH;
+        return !StringUtils.isEmpty(password) && password.length() >= ManagedUserVM.PASSWORD_MIN_LENGTH && password.length() <= ManagedUserVM.PASSWORD_MAX_LENGTH;
     }
 }

@@ -8,10 +8,12 @@ import java.time.temporal.ChronoUnit;
 import java.util.*;
 import java.util.stream.Collectors;
 
-import com.amazonaws.services.s3.model.S3Object;
-import com.amazonaws.services.s3.model.S3ObjectInputStream;
 import com.google.gson.Gson;
 
+import software.amazon.awssdk.core.ResponseInputStream;
+import software.amazon.awssdk.services.s3.model.GetObjectResponse;
+
+import org.mskcc.cbio.oncokb.config.Constants;
 import org.mskcc.cbio.oncokb.domain.User;
 import org.mskcc.cbio.oncokb.domain.enumeration.FileExtension;
 import org.mskcc.cbio.oncokb.service.dto.UserDTO;
@@ -52,9 +54,9 @@ public class UsageAnalysisController {
 
     private JSONObject requestData(String file)
             throws UnsupportedEncodingException, IOException, ParseException {
-        Optional<S3Object> s3object = s3Service.getObject("oncokb", file);
+        Optional<ResponseInputStream<GetObjectResponse>> s3object = s3Service.getObject(Constants.ONCOKB_S3_BUCKET, file);
         if (s3object.isPresent()){
-            S3ObjectInputStream inputStream = s3object.get().getObjectContent();
+            ResponseInputStream<GetObjectResponse> inputStream = s3object.get();
             JSONParser jsonParser = new JSONParser();
             return (JSONObject) jsonParser.parse(new InputStreamReader(inputStream, "UTF-8"));
         }
@@ -71,20 +73,19 @@ public class UsageAnalysisController {
     @GetMapping("/usage/users/{userId}")
     public ResponseEntity<UserUsage> userUsageGet(@PathVariable @NotNull Long userId)
         throws IOException, ParseException {
-
         HttpStatus status = HttpStatus.OK;
 
         if (userId != null) {
             int year = TimeUtil.getCurrentNYTime().getYear();
             JSONObject yearSummary = requestData(YEAR_USERS_USAGE_SUMMARY_FILE_PREFIX + year + FileExtension.JSON_FILE.getExtension());
-            List<JSONObject> monthSummaries = new LinkedList<>();
+            Map<String, JSONObject> monthSummaries = new HashMap<>();
             int monthsBack = 0;
             JSONObject monthSummary;
             do {
                 String month = TimeUtil.getCurrentNYTime().minus(monthsBack, ChronoUnit.MONTHS).format(DateTimeFormatter.ofPattern("yyyy-MM"));
                 monthSummary = requestData(MONTH_USERS_USAGE_SUMMARY_FILE_PREFIX + month + FileExtension.JSON_FILE.getExtension());
                 if (monthSummary != null) {
-                    monthSummaries.add(monthSummary);
+                    monthSummaries.put(month, monthSummary);
                 }
                 monthsBack++;
             } while (monthsBack < 12);
@@ -98,16 +99,20 @@ public class UsageAnalysisController {
                     JSONObject yearUsageObject = (JSONObject) yearSummary.get(email);
                     Gson gson = new Gson();
                     usageSummary = gson.fromJson(yearUsageObject.toString(), UsageSummary.class);
-                    Map<String, JSONObject> dayUsage = new HashMap<>();
                     if (!monthSummaries.isEmpty()) {
-                        for (JSONObject month : monthSummaries) {
-                            if (month.containsKey(email)) {
-                                JSONObject monthUsageObject = (JSONObject) month.get(email);
-                                JSONObject dayUsageObject = (JSONObject) monthUsageObject.get("day");
-                                dayUsageObject.forEach((key, value) -> dayUsage.put((String) key, (JSONObject) value));
+                        Map<String, JSONObject> dayUsage = new HashMap<>();
+                        Map<String, JSONObject> monthUsage = new HashMap<>();
+                        for (Map.Entry<String, JSONObject> entry : monthSummaries.entrySet()) {
+                            if (entry.getValue().containsKey(email)) {
+                                JSONObject userUsageObject = (JSONObject) entry.getValue().get(email);
+                                JSONObject dayUsageObject = (JSONObject) userUsageObject.get("day");
+                                dayUsageObject.forEach((day, summary) -> dayUsage.put((String) day, (JSONObject) summary));
+                                JSONObject monthUsageObject = (JSONObject) userUsageObject.get("month");
+                                monthUsage.put((String) entry.getKey(), monthUsageObject);
                             }
                         }
                         usageSummary.setDay(dayUsage);
+                        usageSummary.setMonth(monthUsage);
                     }
                 }
 
@@ -139,11 +144,22 @@ public class UsageAnalysisController {
         HttpStatus status = HttpStatus.OK;
 
         int year = TimeUtil.getCurrentNYTime().getYear();
-        JSONObject jsonObject = requestData(YEAR_USERS_USAGE_SUMMARY_FILE_PREFIX + year + FileExtension.JSON_FILE.getExtension());
+        JSONObject yearSummary = requestData(YEAR_USERS_USAGE_SUMMARY_FILE_PREFIX + year + FileExtension.JSON_FILE.getExtension());
+        Map<String, JSONObject> monthSummaries = new HashMap<>();
+        int monthsBack = 0;
+        JSONObject monthSummary;
+        do {
+            String month = TimeUtil.getCurrentNYTime().minus(monthsBack, ChronoUnit.MONTHS).format(DateTimeFormatter.ofPattern("yyyy-MM"));
+            monthSummary = requestData(MONTH_USERS_USAGE_SUMMARY_FILE_PREFIX + month + FileExtension.JSON_FILE.getExtension());
+            if (monthSummary != null) {
+                monthSummaries.put(month, monthSummary);
+            }
+            monthsBack++;
+        } while (monthsBack < 12);
 
         List<UserOverviewUsage> result = new ArrayList<>();
-        if (jsonObject != null) {
-            Set<Object> emailSet = jsonObject.keySet();
+        if (yearSummary != null) {
+            Set<Object> emailSet = yearSummary.keySet();
             if (companyId != null) {
                 emailSet = emailSet.stream().filter(item -> {
                     Optional<User> user = userService.getUserWithAuthoritiesByEmailIgnoreCase((String) item);
@@ -158,7 +174,7 @@ public class UsageAnalysisController {
             }
             for (Object item : emailSet) {
                 String email = (String) item;
-                JSONObject usageObject = (JSONObject) jsonObject.get(email);
+                JSONObject usageObject = (JSONObject) yearSummary.get(email);
                 Gson gson = new Gson();
                 UsageSummary usageSummary = gson.fromJson(usageObject.toString(), UsageSummary.class);
                 UserOverviewUsage cur = new UserOverviewUsage();
@@ -187,9 +203,34 @@ public class UsageAnalysisController {
                 }
                 cur.setTotalUsage(totalUsage);
                 cur.setEndpoint(endpoint);
-                cur.setMaxUsage(maxUsage);
+                cur.setMaxUsageProportion((int) (1000 * ((float) maxUsage / totalUsage)) / 10f);
                 cur.setNoPrivateEndpoint(noPrivateEndpoint);
-                cur.setNoPrivateMaxUsage(noPrivateMaxUsage);
+                cur.setNoPrivateMaxUsageProportion((int) (1000 * ((float) noPrivateMaxUsage / totalUsage)) / 10f);
+
+                Map<String, Long> dayUsage = new HashMap<>();
+                Map<String, Long> monthUsage = new HashMap<>();
+                if (!monthSummaries.isEmpty()) {
+                    for (Map.Entry<String, JSONObject> entry : monthSummaries.entrySet()) {
+                        if (entry.getValue().containsKey(email)) {
+                            JSONObject monthUsageObject = (JSONObject) entry.getValue().get(email);
+                            long monthCount = 0;
+                            JSONObject dayUsageObject = (JSONObject) monthUsageObject.get("day");
+                            for (Object dayKey : dayUsageObject.keySet()) {
+                                String day = dayKey.toString();
+                                JSONObject curDayUsage = (JSONObject) dayUsageObject.get(day);
+                                long dayCount = 0;
+                                for (Object resource : curDayUsage.keySet()) {
+                                    dayCount += (long) curDayUsage.get(resource);
+                                    monthCount += (long) curDayUsage.get(resource);
+                                }
+                                dayUsage.put(day, dayCount);
+                            }
+                            monthUsage.put(entry.getKey(), monthCount);
+                        }
+                    }
+                }
+                cur.setDayUsage(dayUsage);
+                cur.setMonthUsage(monthUsage);
 
                 result.add(cur);
             }

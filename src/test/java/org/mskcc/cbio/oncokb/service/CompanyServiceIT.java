@@ -416,7 +416,7 @@ public class CompanyServiceIT {
         User user = userService.createUser(userDTO, Optional.of(DEFAULT_TOKEN_EXPIRATION_IN_DAYS), Optional.of(Boolean.TRUE));
         userDTO = userMapper.userToUserDTO(user);
         userDTO.setActivated(false);
-        userService.updateUser(userDTO);
+        userService.updateUserAndTokens(userDTO);
         // The user expired at this moment
 
         // Create ta trial company

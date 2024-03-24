@@ -154,7 +154,8 @@ bower_components
 /app
 
 ######################
-# Jest screenshot
+# Jest tests
 ######################
 screenshot-test/__latest_snapshots__/
 screenshot-test/__diff_output__/
+test-report.xml

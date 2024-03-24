@@ -1,0 +1,25 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+    <head>
+        <title th:text="#{email.apiAccess.title}">OncoKB API access</title>
+        <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+        <link rel="shortcut icon" th:href="@{|${baseUrl}/favicon.ico|}" />
+    </head>
+    <body>
+        <p th:text="#{email.apiAccess.greeting(${user.login})}">
+            Dear
+        </p>
+        <p th:text="#{email.apiAccess.text1}">
+            Your OncoKB API access request has been approved. Please click on the URL below to log in:
+        </p>
+        <p>
+          <a th:with="url=(@{|${baseUrl}/login|})" th:href="${url}"
+               th:text="${url}">Login link</a>
+        </p>
+
+        <p>
+            <div th:text="#{email.closing}">Sincerely, </div>
+            <div th:text="#{email.signature}">The OncoKB Team</div>
+        </p>
+    </body>
+</html>

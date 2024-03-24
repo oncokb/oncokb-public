@@ -34,6 +34,7 @@ import {
   AbstractLink,
   FdaApprovalLink,
   FdaBreakthroughLink,
+  FdaWithdrawalLink,
   NccnLink,
 } from 'app/pages/newsPage/Links';
 import WithSeparator from 'react-with-separator';
@@ -66,6 +67,7 @@ export const MUTATION = 'Mutation';
 export const CANCER_TYPE = 'Cancer Type';
 export const DRUG = 'Drug';
 export const LEVEL = 'Level';
+export const LEVELS = 'Level(s)';
 export const DRUGS = 'Drug(s)';
 export const EVIDENCE = 'Evidence';
 export const PREVIOUS_LEVEL = 'Previous Level';
@@ -76,8 +78,13 @@ export const CURRENT_DRUG = 'Current Drug';
 export const UPDATE = 'Update';
 export const CURRENT_LEVEL_OF_EVIDENCE = 'Current Level of Evidence';
 export const PREVIOUS_LEVEL_OF_EVIDENCE = 'Previous Level of Evidence';
-export const NEWLY_ADDED_DRUGS = 'Newly Added Drug(s)';
-export const DRUGS_ALREADY_IN_ONCOKB = 'Drug(s) Already in OncoKB™';
+export const DRUGS_ADDED_TO_ONCOKB = `Drug(s) added to ${ONCOKB_TM}`;
+export const DRUGS_CURRENTLY_IN_ONCOKB = `Drug(s) currently in ${ONCOKB_TM}`;
+export const DRUGS_REMOVED_FROM_ONCOKB = `Drug(s) removed from ${ONCOKB_TM}`;
+export const DRUGS_DEMOTED_IN_ONCOKB = `Drug(s) demoted in ${ONCOKB_TM}`;
+export const DRUGS_PROMOTED_IN_ONCOKB = `Drug(s) promoted in ${ONCOKB_TM}`;
+export const CURRENT_SENSITIVITY_LEVEL = 'Current Sensitivity Level';
+export const CURRENT_RESISTANCE_LEVEL = 'Current Resistance Level';
 export const PREVIOUS_BIOMARKER_ASSOCIATION = 'Previous Biomarker Association';
 export const CURRENT_BIOMARKER_ASSOCIATION = 'Current Biomarker Association';
 
@@ -112,6 +119,16 @@ export const CHANGED_ANNOTATION_LEVEL_COLUMNS = [
   { name: REASON },
 ];
 
+export const CHANGED_ANNOTATION_LEVEL_WITH_EVIDENCE_COLUMNS = [
+  { name: GENE },
+  { name: MUTATION },
+  { name: CANCER_TYPE },
+  { name: DRUGS },
+  { name: PREVIOUS_LEVEL },
+  { name: CURRENT_LEVEL },
+  { name: EVIDENCE },
+];
+
 export const CHANGED_ANNOTATION_DRUG_COLUMNS = [
   { name: LEVEL },
   { name: GENE },
@@ -127,8 +144,8 @@ export const CHANGED_ANNOTATION_ADDITIONAL_DRUG_SAME_LEVEL_COLUMNS = [
   { name: MUTATION },
   { name: CANCER_TYPE },
   { name: CURRENT_LEVEL_OF_EVIDENCE },
-  { name: DRUGS_ALREADY_IN_ONCOKB },
-  { name: NEWLY_ADDED_DRUGS },
+  { name: DRUGS_CURRENTLY_IN_ONCOKB },
+  { name: DRUGS_ADDED_TO_ONCOKB },
   { name: EVIDENCE },
 ];
 
@@ -138,8 +155,30 @@ export const CHANGED_ANNOTATION_ADDITIONAL_DRUG_DIFF_LEVEL_COLUMNS = [
   { name: CANCER_TYPE },
   { name: PREVIOUS_LEVEL_OF_EVIDENCE },
   { name: CURRENT_LEVEL_OF_EVIDENCE },
-  { name: DRUGS_ALREADY_IN_ONCOKB },
-  { name: NEWLY_ADDED_DRUGS },
+  { name: DRUGS_CURRENTLY_IN_ONCOKB },
+  { name: DRUGS_ADDED_TO_ONCOKB },
+  { name: EVIDENCE },
+];
+
+export const CHANGED_ANNOTATION_DRUG_REMOVAL_COLUMNS = [
+  { name: GENE },
+  { name: MUTATION },
+  { name: CANCER_TYPE },
+  { name: PREVIOUS_LEVEL },
+  { name: CURRENT_LEVEL_OF_EVIDENCE },
+  { name: DRUGS_CURRENTLY_IN_ONCOKB },
+  { name: DRUGS_REMOVED_FROM_ONCOKB },
+  { name: EVIDENCE },
+];
+
+export const CHANGED_ANNOTATION_SENSITIVITY_LEVEL_COLUMNS = [
+  { name: GENE },
+  { name: MUTATION },
+  { name: CANCER_TYPE },
+  { name: DRUGS_CURRENTLY_IN_ONCOKB },
+  { name: DRUGS_ADDED_TO_ONCOKB },
+  { name: CURRENT_SENSITIVITY_LEVEL },
+  { name: CURRENT_RESISTANCE_LEVEL },
   { name: EVIDENCE },
 ];
 
@@ -199,6 +238,947 @@ const EVIDENCE_COLUMN_SEPARATOR = '; ';
 // https://stackoverflow.com/questions/41947168/is-it-possible-to-use-keyof-operator-on-literals-instead-of-interfaces
 
 export const NEWS_BY_DATE: { [date: string]: NewsData } = {
+  '03212024': {
+    priorityNews: [
+      <span>
+        Updated therapeutic implications - New alteration(s) with a tumor
+        type-specific level of evidence
+        <Row className={'overflow-auto'}>
+          <table className="table">
+            <thead>
+              <tr>
+                <th>{LEVELS}</th>
+                <th>{GENE}</th>
+                <th>{MUTATION}</th>
+                <th>{CANCER_TYPE}</th>
+                <th>{DRUGS}</th>
+                <th>{EVIDENCE}</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td>3A</td>
+                <td rowSpan={2}>
+                  <GenePageLink hugoSymbol="EGFR" />
+                </td>
+                <td rowSpan={2}>
+                  <AlterationPageLink hugoSymbol="EGFR" alteration="L718Q" />
+                </td>
+                <td rowSpan={2}>Non-Small Cell Lung Cancer</td>
+                <td>Afatinib</td>
+                <td>
+                  <PMIDLink pmids="32146032, 32193290, 31315676" wrapText />
+                </td>
+              </tr>
+              <tr>
+                <td>R2</td>
+                <td>Osimertinib</td>
+                <td>
+                  <PMIDLink
+                    pmids="27257132, 29506987, 33937055, 31205925, 34926262, 31315676, 32146032"
+                    wrapText
+                  />
+                </td>
+              </tr>
+              <tr>
+                <td>R2</td>
+                <td>
+                  <GenePageLink hugoSymbol="EGFR" />
+                </td>
+                <td>
+                  <AlterationPageLink hugoSymbol="EGFR" alteration="L792F" />
+                </td>
+                <td>Non-Small Cell Lung Cancer</td>
+                <td>Osimertinib</td>
+                <td>
+                  <PMIDLink
+                    pmids="35932642, 28093244, 29506987, 35422503"
+                    wrapText
+                  />
+                </td>
+              </tr>
+            </tbody>
+          </table>
+        </Row>
+      </span>,
+    ],
+    changedAnnotations: [
+      {
+        columnHeaderType:
+          AnnotationColumnHeaderType.ADDITIONAL_SENSITIVITY_LEVEL_DRUG,
+        content: [
+          [
+            'EGFR',
+            'G724S',
+            'Non-Small Cell Lung Cancer',
+            'Osimertinib (Level R2)',
+            'Afatinib (Level 3A)',
+            '3A',
+            'R2',
+            <WithSeparator separator={EVIDENCE_COLUMN_SEPARATOR}>
+              <PMIDLink
+                pmids="32093857, 35979997, 33209641, 34590038, 30405134"
+                wrapText
+              />
+            </WithSeparator>,
+          ],
+        ],
+      },
+      {
+        columnHeaderType:
+          AnnotationColumnHeaderType.DEMOTION_TUMOR_TYPE_SPECIFIC_EVIDENCE,
+        title:
+          'Updated therapeutic implications - Demotion of tumor type-specific level of evidence for an alteration',
+        content: [
+          [
+            'AKT1',
+            'Oncogenic Mutations (excluding E17K, which remains Level 1)',
+            'Breast Cancer',
+            'Capivasertib + Fulvestrant',
+            '1',
+            '2',
+            <span>
+              To adhere to the{' '}
+              <Linkout link="https://www.accessdata.fda.gov/drugsatfda_docs/label/2023/218197s000lbl.pdf">
+                FDA-drug label
+              </Linkout>{' '}
+              and{' '}
+              <Linkout link="https://info.foundationmedicine.com/hubfs/FMI%20Labels/FoundationOne_CDx_Label_Technical_Info.pdf">
+                CDx
+              </Linkout>{' '}
+              for Capivasertib, Level 1 assignment will be only for AKT1 E17K
+              detected by the FoundationOne CDx test. All other AKT1 oncogenic
+              mutations are Level 2 per their inclusion in the NCCN Breast
+              Cancer Guidelines V2.2024
+            </span>,
+          ],
+          [
+            'PIK3CA',
+            'Oncogenic Mutations (excluding R88Q, N345K, C420R, E542K, E545A, E545D, E545Q, E545K, E545G, Q546E, Q546K, Q546R, Q546P, M1043V, M1043I, H1047Y, H1047R, H1047L and G1049R, which remain Level 1)',
+            'Breast Cancer',
+            <div>
+              <div style={{ fontStyle: 'italic' }}>
+                {DRUGS_CURRENTLY_IN_ONCOKB}:
+              </div>
+              <div>
+                Capivasertib + Fulvestrant (Level 1), Alpelisib + Fulvestrant
+                (Level 2){' '}
+              </div>
+              <br></br>
+              <div style={{ fontStyle: 'italic' }}>
+                {DRUGS_DEMOTED_IN_ONCOKB}:
+              </div>
+              <div>Capivasertib + Fulvestrant (Level 2)</div>
+            </div>,
+            '1',
+            '2',
+            <span>
+              To adhere to the{' '}
+              <Linkout link="https://www.accessdata.fda.gov/drugsatfda_docs/label/2023/218197s000lbl.pdf">
+                FDA-drug label
+              </Linkout>{' '}
+              and{' '}
+              <Linkout link="https://info.foundationmedicine.com/hubfs/FMI%20Labels/FoundationOne_CDx_Label_Technical_Info.pdf">
+                CDx
+              </Linkout>{' '}
+              for Capivasertib, Level 1 assignment will be only for the PIK3CA
+              alterations detected by the FoundationOne CDx test. All other
+              PIK3CA oncogenic mutations are Level 2 per their inclusion in the
+              NCCN Breast Cancer Guidelines V2.2024
+            </span>,
+          ],
+          [
+            'FGFR1',
+            'Amplification',
+            'Lung Squamous Cell Carcinoma',
+            'Erdafitinib',
+            '3A',
+            'No Level',
+            <WithSeparator separator={EVIDENCE_COLUMN_SEPARATOR}>
+              <span>
+                Limited response rate to EGFR inhibitors for FGFR1-amplified
+                lung squamous cell carcinoma; Discontinuation of infigratinib
+              </span>
+              <PMIDLink pmids={'37909331, 37606995'} />
+            </WithSeparator>,
+          ],
+        ],
+      },
+      {
+        columnHeaderType:
+          AnnotationColumnHeaderType.PROMOTION_TUMOR_TYPE_SPECIFIC_EVIDENCE,
+        title:
+          'Updated therapeutic implications - Promotion of tumor type-specific level of evidence for an alteration',
+        content: [
+          [
+            'KRAS',
+            'G12C',
+            'Ampullary Cancer',
+            'Sotorasib, Adagrasib',
+            '3B',
+            '2',
+            <WithSeparator separator={EVIDENCE_COLUMN_SEPARATOR}>
+              <span>
+                Inclusion in NCCN Ampullary Adenocarcinoma Guidelines V1.2024
+              </span>
+              <PMIDLink pmids="32955176" />
+            </WithSeparator>,
+          ],
+          [
+            'EGFR',
+            'L718V',
+            'Non-Small Cell Lung Cancer',
+            <div>
+              <div style={{ fontStyle: 'italic' }}>
+                {DRUGS_CURRENTLY_IN_ONCOKB}:
+              </div>
+              <div>Osimertinib (Level R2), Afatinib (Level 4)</div>
+              <br></br>
+              <div style={{ fontStyle: 'italic' }}>
+                {DRUGS_PROMOTED_IN_ONCOKB}:
+              </div>
+              <div>Afatinib (Level 3A)</div>
+            </div>,
+            '4',
+            '3A',
+            <WithSeparator separator={EVIDENCE_COLUMN_SEPARATOR}>
+              <Linkout link="https://www.sciencedirect.com/science/article/pii/S2666621923000133">
+                Ito, T., et al., Current Prob. in cancer, 2023
+              </Linkout>
+              <PMIDLink pmids="35365043, 31757379, 29571986" />
+            </WithSeparator>,
+          ],
+        ],
+      },
+      {
+        columnHeaderType: AnnotationColumnHeaderType.ADDITIONAL_SAME_LEVEL_DRUG,
+        title: `Updated therapeutic implications - Addition of therapy(s) associated with a tumor type-specific leveled alteration(s) (without changing the alteration's highest level of evidence)`,
+        content: [
+          [
+            'EGFR',
+            'Exon 20 in-frame insertions',
+            'Non-Small Cell Lung Cancer',
+            '1',
+            'Amivantamab, Mobocertinib (Level 1); Erlotinib, Afatinib, Gefitinib (Level R1)',
+            'Amivantamab + Chemotherapy (Level 1)',
+            <WithSeparator separator={EVIDENCE_COLUMN_SEPARATOR}>
+              <FdaApprovalLink
+                approval="Amivantamab + Carboplatin + Pemetrexed"
+                link="https://www.fda.gov/drugs/resources-information-approved-drugs/fda-approves-amivantamab-vmjw-egfr-exon-20-insertion-mutated-non-small-cell-lung-cancer-indications"
+              />
+              <PMIDLink pmids="37870976" />
+            </WithSeparator>,
+          ],
+        ],
+      },
+    ],
+    newlyAddedGenes: ['MAP3K21', 'NQO1', 'POU2F2', 'RPS15'],
+  },
+  '02082024': {
+    news: [
+      <span>
+        Updated therapeutic implications - Demotion of tumor type-specific level
+        of evidence for an alteration(s)
+        <Row className={'overflow-auto'}>
+          <table className="table">
+            <thead>
+              <tr>
+                <th>{GENE}</th>
+                <th>{MUTATION}</th>
+                <th>{CANCER_TYPE}</th>
+                <th>{DRUGS}</th>
+                <th>{PREVIOUS_LEVEL}</th>
+                <th>{CURRENT_LEVEL}</th>
+                <th>{REASON}</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td>
+                  <GenePageLink hugoSymbol="FGFR3" />
+                </td>
+                <td>
+                  <span>
+                    Fusions (excluding FGFR3-TACC3 Fusion and FGFR3-BAIAP2L1
+                    Fusion which remain Level 1)
+                  </span>
+                </td>
+                <td>Bladder Cancer</td>
+                <td>Erdafitinib</td>
+                <td>1</td>
+                <td>2</td>
+                <td>
+                  <WithSeparator separator={EVIDENCE_COLUMN_SEPARATOR}>
+                    <Linkout link="https://www.accessdata.fda.gov/drugsatfda_docs/label/2020/212018s001lbl.pdf">
+                      Adherence to FDA-drug label and CDx for Erdafitinib
+                    </Linkout>
+                    <span>
+                      Inclusion in NCCN Bladder Cancer Guidelines V3.2023
+                    </span>
+                    <PMIDLink pmids="37870920" />
+                  </WithSeparator>
+                </td>
+              </tr>
+            </tbody>
+          </table>
+        </Row>
+      </span>,
+      <span>
+        Updated therapeutic implications - Promotion of tumor type-specific
+        level of evidence for an alteration(s)
+        <Row className={'overflow-auto'}>
+          <table className="table">
+            <thead>
+              <tr>
+                <th>{GENE}</th>
+                <th>{MUTATION}</th>
+                <th>{CANCER_TYPE}</th>
+                <th>{DRUGS}</th>
+                <th>{PREVIOUS_LEVEL}</th>
+                <th>{CURRENT_LEVEL}</th>
+                <th>{REASON}</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td>
+                  <GenePageLink hugoSymbol="FGFR3" />
+                </td>
+                <td>
+                  <span>
+                    <WithSeparator separator={', '}>
+                      {['S371C', 'G380R', 'K650'].map(alt => (
+                        <AlterationPageLink
+                          hugoSymbol="FGFR3"
+                          alteration={alt}
+                        />
+                      ))}
+                    </WithSeparator>
+                  </span>
+                </td>
+                <td rowSpan={2}>Bladder Cancer</td>
+                <td rowSpan={2}>Erdafitinib</td>
+                <td>3A</td>
+                <td>2</td>
+                <td rowSpan={2}>
+                  {' '}
+                  <WithSeparator separator={EVIDENCE_COLUMN_SEPARATOR}>
+                    <Linkout link="https://www.accessdata.fda.gov/drugsatfda_docs/label/2020/212018s001lbl.pdf">
+                      Adherence to FDA-drug label and CDx for Erdafitinib
+                    </Linkout>
+                    <span>
+                      Inclusion in NCCN Bladder Cancer Guidelines V3.2023
+                    </span>
+                    <PMIDLink pmids="37870920" />
+                  </WithSeparator>
+                </td>
+              </tr>
+              <tr>
+                <td>
+                  <GenePageLink hugoSymbol="FGFR3" />
+                </td>
+                <td>
+                  <span>
+                    Oncogenic Mutations (excluding G370C, R248C, S249C, Y373C
+                    which remain Level 1)
+                  </span>
+                </td>
+                <td>4</td>
+                <td>2</td>
+              </tr>
+              <tr>
+                <td>
+                  <GenePageLink hugoSymbol="MDM2" />
+                </td>
+                <td>
+                  <span>
+                    <AlterationPageLink
+                      hugoSymbol="MDM2"
+                      alteration="Amplification"
+                    />
+                  </span>
+                </td>
+                <td>
+                  Dedifferentiated Liposarcoma, Well-Differentiated Liposarcoma
+                </td>
+                <td>
+                  <div>
+                    <div style={{ fontStyle: 'italic' }}>
+                      {DRUGS_CURRENTLY_IN_ONCOKB}:
+                    </div>
+                    <div>Milademetan (Level 4)</div>
+                    <br></br>
+                    <div style={{ fontStyle: 'italic' }}>
+                      {DRUGS_ADDED_TO_ONCOKB}:
+                    </div>
+                    <div>Brigimadlin (Level 3A)</div>
+                  </div>
+                </td>
+                <td>4</td>
+                <td>3A</td>
+                <td>
+                  <PMIDLink pmids="37269344" />
+                </td>
+              </tr>
+            </tbody>
+          </table>
+        </Row>
+      </span>,
+    ],
+    changedAnnotations: [
+      {
+        columnHeaderType: AnnotationColumnHeaderType.DRUG_REMOVAL,
+        content: [
+          [
+            'FGFR2',
+            'Fusions',
+            'Bladder Cancer',
+            'Level 1',
+            'No Level',
+            <div>
+              <div>Erdafitinib (Level 1)</div>
+              <div>AZD4547 (Level 4)</div>
+            </div>,
+            'Erdafitinib, AZD4547',
+            <WithSeparator separator={EVIDENCE_COLUMN_SEPARATOR}>
+              <Linkout link="https://www.accessdata.fda.gov/drugsatfda_docs/label/2020/212018s001lbl.pdf">
+                Amendment to the FDA-drug label for Erdafitinib
+              </Linkout>
+              <span>
+                4/25 (16%) response rate for FGFR2/3 fusion+ bladder cancer, 0/6
+                (0%) response for FGFR2 fusion+ bladder cancer
+              </span>
+              <PMIDLink pmids="31340094" />
+            </WithSeparator>,
+          ],
+        ],
+      },
+    ],
+    updatedImplicationTitle:
+      'Updated therapeutic implications - New alteration(s) with a tumor type-specific level of evidence',
+    updatedImplication: [
+      [
+        '3A',
+        'MDM2',
+        'Amplification',
+        'Intimal Sarcoma',
+        'Milademetan',
+        <PMIDLink pmids={'37369013'} />,
+      ],
+    ],
+    newlyAddedGenes: [
+      'ANKRD26',
+      'ARHGAP26',
+      'ATIC',
+      'CD70',
+      'ERCC1',
+      'FGF1',
+      'FGF2',
+      'FGF5',
+      'HFE',
+      'HOXA11',
+      'MN1',
+      'PML',
+      'SRP72',
+      'TNFRSF17',
+    ],
+  },
+  '01172024': {
+    priorityNews: [
+      <span>
+        Happy New Year! As of December 31, 2023, 11 level 1, 7 level 2, 4 level
+        3 and 3 level 4 treatments for unique biomarker-selected indications
+        were added to OncoKB. A table summarizing these changes can be found{' '}
+        <YearEndReviewPageLink year={'2023'}>here</YearEndReviewPageLink>. The
+        Precision Oncology: 2023 in review article can be found{' '}
+        <Linkout
+          link={
+            'https://aacrjournals.org/cancerdiscovery/article/13/12/2525/731600/Precision-Oncology-2023-in-Review'
+          }
+        >
+          here
+        </Linkout>
+        .
+      </span>,
+    ],
+  },
+  '12212023': {
+    priorityNews: [
+      <span>
+        Release of{' '}
+        <a
+          href="https://sop.oncokb.org/?version=v3.1"
+          target="_blank"
+          rel="noopener noreferrer"
+        >
+          {ONCOKB_TM} SOP v3.1
+        </a>
+      </span>,
+      <span>
+        We have replaced the "Precision Oncology Therapies" page with{' '}
+        <Link to={PAGE_ROUTE.ONCOLOGY_TX}>
+          "FDA-Approved Oncology Therapies"
+        </Link>{' '}
+        which includes classification of which oncology therapies are considered
+        "precision oncology therapies"
+      </span>,
+    ],
+    updatedImplicationTitle:
+      'Updated therapeutic implications - New alterations with a level of evidence',
+    updatedImplication: [
+      [
+        'R2',
+        'EGFR',
+        <WithSeparator separator={', '}>
+          {['S464L', 'G465E', 'G465R', 'V441D', 'V441G', 'S492R'].map(
+            alteration => (
+              <AlterationPageLink
+                hugoSymbol="EGFR"
+                alteration={alteration}
+                key={alteration}
+              />
+            )
+          )}
+        </WithSeparator>,
+        'Colorectal Cancer',
+        'Cetuximab, Panitumumab',
+        <PMIDLink pmids={'29423521, 29196463'} />,
+      ],
+    ],
+    newlyAddedGenes: [
+      'EMSY',
+      'FGF23',
+      'FRS2',
+      'GABRA6',
+      'GATA4',
+      'KEL',
+      'PIK3C2B',
+      'PRKDC',
+      'QKI',
+      'RANBP2',
+      'SOX10',
+      'STAT4',
+      'TAF1',
+    ],
+  },
+  '12062023': {
+    changedAnnotations: [
+      {
+        columnHeaderType: AnnotationColumnHeaderType.LEVEL,
+        title: 'Updated therapeutic implications - Changed level of evidence',
+        content: [
+          [
+            'AKT1',
+            'Oncogenic Mutations',
+            'Breast Cancer',
+            'Capivasertib + Fulvestrant',
+            '3A (Capivasertib monotherapy for AKT1 E17K only)',
+            '1',
+            <WithSeparator separator={EVIDENCE_COLUMN_SEPARATOR}>
+              <FdaApprovalLink
+                approval="Capivasertib + Fulvestrant"
+                link="https://www.fda.gov/drugs/resources-information-approved-drugs/fda-approves-capivasertib-fulvestrant-breast-cancer"
+              />
+              <PMIDLink pmids={'37256976'} />
+            </WithSeparator>,
+          ],
+          [
+            'PTEN',
+            'Oncogenic Mutations',
+            'Breast Cancer',
+            <div>
+              <div style={{ fontStyle: 'italic' }}>
+                {DRUGS_CURRENTLY_IN_ONCOKB}:
+              </div>
+              <div>GSK2636771, AZD8186 (Currently Level 4)</div>
+              <br></br>
+              <div style={{ fontStyle: 'italic' }}>
+                {DRUGS_ADDED_TO_ONCOKB}:
+              </div>
+              <div>Capivasertib + Fulvestrant (Level 1)</div>
+            </div>,
+            '4',
+            '1',
+            <WithSeparator separator={EVIDENCE_COLUMN_SEPARATOR}>
+              <FdaApprovalLink
+                approval="Capivasertib + Fulvestrant"
+                link="https://www.fda.gov/drugs/resources-information-approved-drugs/fda-approves-capivasertib-fulvestrant-breast-cancer"
+              />
+              <PMIDLink pmids={'37256976'} />
+            </WithSeparator>,
+          ],
+          [
+            'KRAS',
+            'G12A/D/R/S/V',
+            'Pancreatic Adenocarcinoma, Non-Small Cell Lung Cancer',
+            'RMC-6236',
+            '4',
+            '3A',
+            <AbstractLink
+              abstract="Arbour, KC. et al. Abstract# 6520, Annals of Oncol. 2023"
+              link="https://oncologypro.esmo.org/meeting-resources/esmo-congress/preliminary-clinical-activity-of-rmc-6236-a-first-in-class-ras-selective-tri-complex-ras-multi-on-inhibitor-in-patients-with-kras-mutant-pancre"
+            />,
+          ],
+        ],
+      },
+      {
+        columnHeaderType: AnnotationColumnHeaderType.ADDITIONAL_SAME_LEVEL_DRUG,
+        content: [
+          [
+            'PIK3CA',
+            'Oncogenic Mutations',
+            'Breast Cancer',
+            '1',
+            'Alpelisib + Fulvestrant (Level 1; select PIK3CA mts only), RLY-2608 + Fulvestrant (Level 4)',
+            'Capivasertib + Fulvestrant (Level 1)',
+            <WithSeparator separator={EVIDENCE_COLUMN_SEPARATOR}>
+              <FdaApprovalLink
+                approval={'Capivasertib + Fulvestrant'}
+                link={
+                  'https://www.fda.gov/drugs/resources-information-approved-drugs/fda-approves-capivasertib-fulvestrant-breast-cancer'
+                }
+              />
+              <PMIDLink pmids={'37256976'} />
+            </WithSeparator>,
+          ],
+          [
+            'ROS1',
+            'Fusions',
+            'Non-Small Cell Lung Cancer',
+            '1',
+            'Crizotinib, Entrectinib (Level 1), Ceritinib, Lorlatinib (Level 2),  Repotrectinib (Level 3A)',
+            'Repotrectinib (Promoted to Level 1)',
+            <WithSeparator separator={EVIDENCE_COLUMN_SEPARATOR}>
+              <FdaApprovalLink
+                approval={'Repotrectinib for ROS1+ NSCLC'}
+                link={
+                  'https://www.fda.gov/drugs/resources-information-approved-drugs/fda-approves-repotrectinib-ros1-positive-non-small-cell-lung-cancer'
+                }
+              />
+              <AbstractLink
+                abstract="Cho et al. Abstract# OA03.06, J. of Thoracic Oncol. Nov. 2023"
+                link="https://www.jto.org/article/S1556-0864(23)00837-7/fulltext"
+              />
+            </WithSeparator>,
+          ],
+        ],
+      },
+    ],
+    news: [
+      <span>
+        Updated therapeutic implications - New alterations with a level of
+        evidence
+        <Row className={'overflow-auto'}>
+          <table className="table">
+            <thead>
+              <tr>
+                <th>{LEVEL}</th>
+                <th>{GENE}</th>
+                <th>{MUTATION}</th>
+                <th>{CANCER_TYPE}</th>
+                <th>{DRUGS}</th>
+                <th>{EVIDENCE}</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td>3A</td>
+                <td>
+                  <GenePageLink hugoSymbol="EGFR" />
+                </td>
+                <td>
+                  <AlterationPageLink
+                    alteration="Amplification"
+                    hugoSymbol="EGFR"
+                  />
+                </td>
+                <td>Gastroesophageal Adenocarcinoma</td>
+                <td>
+                  Cetuximab, Cetuximab + Chemotherapy, Panitumumab, Panitumumab
+                  + Chemotherapy
+                </td>
+                <td>
+                  <PMIDLink pmids={'35349370'} />
+                </td>
+              </tr>
+            </tbody>
+          </table>
+        </Row>
+      </span>,
+    ],
+    newlyAddedGenes: [
+      'FGF6',
+      'HSD3B1',
+      'IRF2',
+      'PAX3',
+      'PAX7',
+      'PDK1',
+      'ZNF217',
+    ],
+  },
+  '11132023': {
+    news: [
+      <span>
+        Updated therapeutic implications - Addition of therapies for variants
+        with a level of evidence
+        <Row className={'overflow-auto'}>
+          <table className="table">
+            <thead>
+              <tr>
+                <th>{GENE}</th>
+                <th>{MUTATION}</th>
+                <th>{CANCER_TYPE}</th>
+                <th>{CURRENT_LEVEL_OF_EVIDENCE}</th>
+                <th>{DRUGS_CURRENTLY_IN_ONCOKB}</th>
+                <th>{DRUGS_ADDED_TO_ONCOKB}</th>
+                <th>{EVIDENCE}</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td>
+                  <GenePageLink hugoSymbol="BRCA1" />
+                </td>
+                <td rowSpan={2} style={{ verticalAlign: 'middle' }}>
+                  Oncogenic Mutations
+                </td>
+                <td rowSpan={2} style={{ verticalAlign: 'middle' }}>
+                  Prostate Cancer
+                </td>
+                <td rowSpan={2} style={{ verticalAlign: 'middle' }}>
+                  1
+                </td>
+                <td rowSpan={2} style={{ verticalAlign: 'middle' }}>
+                  Olaparib, Rucaparib, Olaparib + Abiraterone + Prednisone,
+                  Talazoparib + Enzalutamide (Level 1)
+                </td>
+                <td rowSpan={2} style={{ verticalAlign: 'middle' }}>
+                  Niraparib + Abiraterone Acetate + Prednisone (Level 1)
+                </td>
+                <td rowSpan={2} style={{ verticalAlign: 'middle' }}>
+                  <WithSeparator separator={EVIDENCE_COLUMN_SEPARATOR}>
+                    <FdaApprovalLink
+                      approval={'Niraparib + Abiraterone Acetate + Prednisone'}
+                      link={
+                        'https://www.fda.gov/drugs/resources-information-approved-drugs/fda-approves-niraparib-and-abiraterone-acetate-plus-prednisone-brca-mutated-metastatic-castration'
+                      }
+                    />
+                    <PMIDLink pmids={'36952634'} />
+                  </WithSeparator>
+                </td>
+              </tr>
+              <tr>
+                <td>
+                  <GenePageLink hugoSymbol="BRCA2" />
+                </td>
+              </tr>
+            </tbody>
+          </table>
+        </Row>
+      </span>,
+    ],
+    changedAnnotations: [
+      {
+        columnHeaderType: AnnotationColumnHeaderType.LEVEL,
+        title: 'Updated therapeutic implications - Changed level of evidence',
+        content: [
+          [
+            'IDH1',
+            'R132',
+            'Myelodysplastic Syndromes',
+            'Ivosidenib',
+            '3B',
+            '1',
+            <WithSeparator separator={EVIDENCE_COLUMN_SEPARATOR}>
+              <FdaApprovalLink
+                approval="Ivosidenib for patients with IDH1-mutant myelodysplastic syndrome"
+                link="https://www.fda.gov/drugs/resources-information-approved-drugs/fda-approves-ivosidenib-myelodysplastic-syndromes"
+              />
+              <AbstractLink
+                abstract="DiNardo et al. Abstract# MDS-457, SOHO 2023"
+                link="https://www.sciencedirect.com/science/article/pii/S2152265023011898"
+              />
+            </WithSeparator>,
+          ],
+        ],
+      },
+    ],
+    newlyAddedGenes: ['CTNNA1', 'FGF10', 'FGF14', 'HSP90AA1'],
+  },
+  '10242023': {
+    changedAnnotations: [
+      {
+        columnHeaderType: AnnotationColumnHeaderType.LEVEL,
+        title: 'Updated therapeutic implications - Changed level of evidence',
+        content: [
+          [
+            'KRAS',
+            'G12C',
+            'Colorectal Cancer',
+            <div>
+              <div style={{ fontStyle: 'italic' }}>
+                {DRUGS_CURRENTLY_IN_ONCOKB}:
+              </div>
+              <div>Adagrasib + Cetuximab (Level 3A)</div>
+              <br></br>
+              <div style={{ fontStyle: 'italic' }}>
+                {DRUGS_ADDED_TO_ONCOKB}:
+              </div>
+              <div>
+                Adagrasib + Panitumumab; Sotorasib + Cetuximab; Sotorasib +
+                Panitumumab
+              </div>
+            </div>,
+            '3A',
+            '2',
+            <WithSeparator separator={EVIDENCE_COLUMN_SEPARATOR}>
+              <span>
+                Inclusion in Colon Cancer NCCN guidelines v3.2023 and in Rectal
+                Cancer NCCN guidelines v5.2023
+              </span>
+              <PMIDLink pmids={'36546659'} />
+              <AbstractLink
+                link={
+                  'https://www.annalsofoncology.org/article/S0923-7534(22)04268-5/fulltext'
+                }
+                abstract="Kuboki et al. Abstract# 45MO, ESMO 2022."
+              />
+            </WithSeparator>,
+          ],
+        ],
+      },
+      {
+        columnHeaderType: AnnotationColumnHeaderType.ADDITIONAL_SAME_LEVEL_DRUG,
+        content: [
+          [
+            'BRAF',
+            'V600E',
+            'Non-Small Cell Lung Cancer',
+            '1',
+            'Dabrafenib + Trametinib (Level 1)',
+            'Encorafenib + Binimetinib (Level 1)',
+            <WithSeparator separator={EVIDENCE_COLUMN_SEPARATOR}>
+              <FdaApprovalLink
+                approval={'Encorafenib + Binimetinib for BRAF V600E NSCLC'}
+                link={
+                  'https://www.fda.gov/drugs/resources-information-approved-drugs/fda-approves-encorafenib-binimetinib-metastatic-non-small-cell-lung-cancer-braf-v600e-mutation'
+                }
+              />
+              <PMIDLink pmids={'37270692'} />
+            </WithSeparator>,
+          ],
+        ],
+      },
+    ],
+    newlyAddedGenes: ['EPHB4', 'ETS1', 'FANCE', 'FANCF', 'FANCG', 'MYB'],
+  },
+  '10022023': {
+    changedAnnotations: [
+      {
+        columnHeaderType: AnnotationColumnHeaderType.LEVEL,
+        title: 'Updated therapeutic implications - Changed level of evidence',
+        content: [
+          [
+            'RET',
+            'Oncogenic Mutations',
+            'Medullary Thyroid Cancer (MTC)',
+            'Pralsetinib',
+            '1',
+            '3A',
+            <FdaWithdrawalLink linkText="Withdrawal of FDA approval for Pralsetinib for RET-mutant MTC" />,
+          ],
+          [
+            'ALK',
+            'Oncogenic Mutations',
+            'Non-Small Cell Lung Cancer',
+            'Lorlatinib',
+            '1',
+            'No level',
+            <Linkout link="https://www.accessdata.fda.gov/drugsatfda_docs/label/2021/210868s004lbl.pdf">
+              Adherence to FDA drug label and CDx for Lorlatinib
+            </Linkout>,
+          ],
+        ],
+      },
+      {
+        columnHeaderType: AnnotationColumnHeaderType.ADDITIONAL_SAME_LEVEL_DRUG,
+        content: [
+          [
+            'Other Biomarkers',
+            'MSI-H',
+            'Endometrial Cancer',
+            '1',
+            'Pembrolizumab (All Solid Tumors)',
+            'Dostarlimab + Carboplatin + Paclitaxel (Level 1, Endometrial Cancer)',
+            <WithSeparator separator={EVIDENCE_COLUMN_SEPARATOR}>
+              <FdaApprovalLink
+                approval={'Dostarlimab for MSI-H endometrial cancer'}
+                link={
+                  'https://www.fda.gov/drugs/drug-approvals-and-databases/fda-approves-quizartinib-newly-diagnosed-acute-myeloid-leukemia'
+                }
+              />
+              <PMIDLink pmids={'36972026'} />
+            </WithSeparator>,
+          ],
+        ],
+      },
+    ],
+    newlyAddedGenes: [
+      'ELF4',
+      'ELK4',
+      'ELL',
+      'ELN',
+      'ERC1',
+      'FOXN4',
+      'HIRA',
+      'ONECUT2',
+      'POU3F2',
+      'SF3B2',
+      'ZBTB7A',
+    ],
+  },
+  '09012023': {
+    newlyAddedGenes: [
+      'ACVR1B',
+      'ARHGEF12',
+      'BCL7A',
+      'CD19',
+      'CHD2',
+      'COL2A1',
+      'DNM2',
+      'DPYD',
+      'EBF1',
+      'EIF3E',
+      'FANCM',
+      'FHIT',
+      'FOXO3',
+      'GATA6',
+      'GRM3',
+      'HDAC2',
+      'HNF1B',
+      'IFNAR1',
+      'ING1',
+      'ITPKB',
+      'KDM5D',
+      'KLHL6',
+      'LEF1',
+      'MAP3K7',
+      'MLH3',
+      'MS4A1',
+      'PHLPP1',
+      'PHLPP2',
+      'PTPN13',
+      'PTPN14',
+      'RPL5',
+      'SLC9A3R1',
+      'SLIT2',
+      'SZT2',
+      'TONSL',
+      'XPC',
+      'XRCC1',
+      'ZMYM3',
+    ],
+  },
   '07282023': {
     changedAnnotations: [
       {

@@ -3,6 +3,7 @@ package org.mskcc.cbio.oncokb.service;
 import com.google.gson.Gson;
 import io.github.jhipster.config.JHipsterProperties;
 import org.apache.commons.lang3.StringUtils;
+import org.apache.commons.text.similarity.JaroWinklerSimilarity;
 import org.mskcc.cbio.oncokb.config.Constants;
 import org.mskcc.cbio.oncokb.config.cache.CacheNameResolver;
 import org.mskcc.cbio.oncokb.domain.*;
@@ -16,7 +17,7 @@ import org.mskcc.cbio.oncokb.repository.UserDetailsRepository;
 import org.mskcc.cbio.oncokb.repository.UserRepository;
 import org.mskcc.cbio.oncokb.security.AuthoritiesConstants;
 import org.mskcc.cbio.oncokb.security.SecurityUtils;
-import org.mskcc.cbio.oncokb.security.uuid.TokenProvider;
+import org.mskcc.cbio.oncokb.security.token.TokenProvider;
 import org.mskcc.cbio.oncokb.service.dto.useradditionalinfo.*;
 import org.mskcc.cbio.oncokb.service.dto.CompanyDTO;
 import org.mskcc.cbio.oncokb.service.dto.UserDTO;
@@ -41,6 +42,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.cache.annotation.Cacheable;
 
+import javax.mail.MessagingException;
 import javax.validation.constraints.NotNull;
 import java.time.Instant;
 import java.time.temporal.ChronoUnit;
@@ -95,6 +97,8 @@ public class UserService {
 
     private final AuditEventService auditEventService;
 
+    private final SmartsheetService smartsheetService;
+
     @Autowired
     private UserMapper userMapper;
 
@@ -118,8 +122,8 @@ public class UserService {
         UserMailsService userMailsService,
         AuditEventService auditEventService,
         CompanyDomainRepository companyDomainRepository,
-        CompanyRepository companyRepository
-    ) {
+        CompanyRepository companyRepository,
+        SmartsheetService smartsheetService) {
         this.userRepository = userRepository;
         this.userDetailsRepository = userDetailsRepository;
         this.passwordEncoder = passwordEncoder;
@@ -137,6 +141,7 @@ public class UserService {
         this.auditEventService = auditEventService;
         this.companyDomainRepository = companyDomainRepository;
         this.companyRepository = companyRepository;
+        this.smartsheetService = smartsheetService;
     }
 
     public Optional<User> activateRegistration(String key) {
@@ -371,51 +376,55 @@ public class UserService {
         return user;
     }
 
+    public Optional<UserDTO> updateUserFromUserDTO(UserDTO userDTO) {
+        Optional<UserDTO> updatedUserDTO = Optional.of(userRepository
+        .findById(userDTO.getId()))
+        .filter(Optional::isPresent)
+        .map(Optional::get)
+        .map(user -> {
+            this.clearUserCaches(user);
+            user.setLogin(userDTO.getLogin().toLowerCase());
+            user.setFirstName(userDTO.getFirstName());
+            user.setLastName(userDTO.getLastName());
+            if (userDTO.getEmail() != null) {
+                user.setEmail(userDTO.getEmail().toLowerCase());
+            }
+            user.setImageUrl(userDTO.getImageUrl());
+            user.setActivationKey(userDTO.getActivationKey());
+            user.setResetKey(userDTO.getResetKey());
+            user.setResetDate(userDTO.getResetDate());
+            if (userDTO.isActivated() != user.getActivated()) {
+                user.setActivated(userDTO.isActivated());
+                user.setActivationKey(null);
+                user.setResetKey(null);
+                user.setResetDate(null);
+            }
+            user.setLangKey(userDTO.getLangKey());
+            Set<Authority> managedAuthorities = user.getAuthorities();
+            managedAuthorities.clear();
+            userDTO.getAuthorities().stream()
+                .map(authorityRepository::findById)
+                .filter(Optional::isPresent)
+                .map(Optional::get)
+                .forEach(managedAuthorities::add);
+            this.clearUserCaches(user);
+            log.debug("Changed Information for User: {}", user);
+            UserDTO newUserDTO =  new UserDTO(user, getUpdatedUserDetails(
+                user, userDTO.getLicenseType(), userDTO.getJobTitle(), userDTO.getCompanyName(), userDTO.getCompany(), new Gson().toJson(userDTO.getAdditionalInfo()), userDTO.getCity(), userDTO.getCountry()));
+            newUserDTO.setCompany(userDTO.getCompany());
+            return newUserDTO;
+        });
+        return updatedUserDTO;
+    }
+
     /**
      * Update all information for a specific user, and return the modified user.
      *
      * @param userDTO user to update.
      * @return updated user.
      */
-    public Optional<UserDTO> updateUser(UserDTO userDTO) {
-        Optional<UserDTO> updatedUserDTO = Optional.of(userRepository
-            .findById(userDTO.getId()))
-            .filter(Optional::isPresent)
-            .map(Optional::get)
-            .map(user -> {
-                this.clearUserCaches(user);
-                user.setLogin(userDTO.getLogin().toLowerCase());
-                user.setFirstName(userDTO.getFirstName());
-                user.setLastName(userDTO.getLastName());
-                if (userDTO.getEmail() != null) {
-                    user.setEmail(userDTO.getEmail().toLowerCase());
-                }
-                user.setImageUrl(userDTO.getImageUrl());
-                user.setActivationKey(userDTO.getActivationKey());
-                user.setResetKey(userDTO.getResetKey());
-                user.setResetDate(userDTO.getResetDate());
-                if (userDTO.isActivated() != user.getActivated()) {
-                    user.setActivated(userDTO.isActivated());
-                    user.setActivationKey(null);
-                    user.setResetKey(null);
-                    user.setResetDate(null);
-                }
-                user.setLangKey(userDTO.getLangKey());
-                Set<Authority> managedAuthorities = user.getAuthorities();
-                managedAuthorities.clear();
-                userDTO.getAuthorities().stream()
-                    .map(authorityRepository::findById)
-                    .filter(Optional::isPresent)
-                    .map(Optional::get)
-                    .forEach(managedAuthorities::add);
-                this.clearUserCaches(user);
-                log.debug("Changed Information for User: {}", user);
-                UserDTO newUserDTO =  new UserDTO(user, getUpdatedUserDetails(
-                    user, userDTO.getLicenseType(), userDTO.getJobTitle(), userDTO.getCompanyName(), userDTO.getCompany(), new Gson().toJson(userDTO.getAdditionalInfo()), userDTO.getCity(), userDTO.getCountry()));
-                newUserDTO.setCompany(userDTO.getCompany());
-                return newUserDTO;
-            });
-
+    public Optional<UserDTO> updateUserAndTokens(UserDTO userDTO) {
+        Optional<UserDTO> updatedUserDTO = updateUserFromUserDTO(userDTO);
 
         if (updatedUserDTO.isPresent()) {
             if (updatedUserDTO.get().isActivated()) {
@@ -431,6 +440,10 @@ public class UserService {
             }
         }
         return updatedUserDTO;
+    }
+
+    public Optional<UserDTO> updateUserBeforeTrialAccountActivation(UserDTO userDTO) {
+        return updateUserFromUserDTO(userDTO);
     }
 
     private UserDetails getUpdatedUserDetails(User user, LicenseType licenseType, String jobTitle, String companyName, CompanyDTO companyDTO, String additionalInfo, String city, String country) {
@@ -566,7 +579,7 @@ public class UserService {
         if (!userDTO.isActivated()) {
             userDTO.setActivated(true);
         }
-        Optional<UserDTO> updatedUserDTO = updateUser(userDTO);
+        Optional<UserDTO> updatedUserDTO = updateUserAndTokens(userDTO);
         if (updatedUserDTO.isPresent()) {
             List<Token> tokens =
                 generateTokenForUserIfNotExist(
@@ -603,7 +616,7 @@ public class UserService {
             userDTO.setActivated(true);
         }
 
-        Optional<UserDTO> updatedUserDTO = updateUser(userDTO);
+        Optional<UserDTO> updatedUserDTO = updateUserAndTokens(userDTO);
         if (!updatedUserDTO.isPresent()) {
             return;
         }
@@ -667,6 +680,26 @@ public class UserService {
         return user.getAuthorities().stream().filter(userAuth -> userAuth.getName().equalsIgnoreCase(authority)).count() > 0;
     }
 
+    public List<UserDTO> getPotentialDuplicateAccountsByUser(UserDTO user) {
+        return searchAccountsForPotentialDuplicateUser(user, getAllManagedUsers());
+    }
+
+    public List<UserDTO> searchAccountsForPotentialDuplicateUser(UserDTO user, List<UserDTO> allUsers) {
+        JaroWinklerSimilarity jw = new JaroWinklerSimilarity();
+        List<UserDTO> potentialDuplicateUsers = new ArrayList<>();
+        for (UserDTO potentialDuplicate : allUsers) {
+            if (user.getId().equals(potentialDuplicate.getId())) {
+                continue;
+            }
+
+            Double similarity = jw.apply(user.getFirstName(), potentialDuplicate.getFirstName()) * .3 + jw.apply(user.getLastName(), potentialDuplicate.getLastName()) * .7;
+            if (similarity > .87) {
+                potentialDuplicateUsers.add(potentialDuplicate);
+            }
+        }
+        return potentialDuplicateUsers;
+    }
+
     /**
      * Gets a list of all the authorities.
      *
@@ -690,7 +723,7 @@ public class UserService {
         userDTO.setCompanyName(company.getName());
         userDTO.setCompany(companyMapper.toDto(company));
         userDTO.setLicenseType(company.getLicenseType());
-        Optional<UserDTO> updatedUserDTO = updateUser(userDTO);
+        Optional<UserDTO> updatedUserDTO = updateUserAndTokens(userDTO);
 
         if (updatedUserDTO.isPresent()) {
             // Update the user with the company's license
@@ -714,7 +747,7 @@ public class UserService {
                         if (!isAccountCreation) {
                             mailService.sendActiveTrialMail(userMapper.userToUserDTO(updatedUser.get()), false);
                         }
-                        updatedUserDTO = updateUser(userMapper.userToUserDTO(updatedUser.get()));
+                        updatedUserDTO = updateUserAndTokens(userMapper.userToUserDTO(updatedUser.get()));
                     }
                 }
             }else if (companyLicenseStatus.equals(LicenseStatus.TRIAL_EXPIRED) || companyLicenseStatus.equals(LicenseStatus.EXPIRED)) {
@@ -732,7 +765,7 @@ public class UserService {
     private void expireUserAccount(UserDTO userDTO) {
         if(userDTO.isActivated()) {
             userDTO.setActivated(false);
-            updateUser(userDTO);
+            updateUserAndTokens(userDTO);
         } else {
             if (userHasUnactivatedTrial(userDTO)) {
                 clearTrialAccountInformation(userDTO);
@@ -856,5 +889,19 @@ public class UserService {
             Objects.requireNonNull(cacheManager.getCache(this.cacheNameResolver.getCacheName(USERS_BY_EMAIL_CACHE))).evict(user.getEmail());
         }
         Objects.requireNonNull(cacheManager.getCache(this.cacheNameResolver.getCacheName(ALL_USERS_CACHE))).evict("getAllManagedUsers");;
+    }
+
+    public void sendUserToRocReview(UserDTO userDTO) throws MessagingException {
+        smartsheetService.addUserToSheet(userDTO);
+        if (userDTO.getAdditionalInfo() == null) {
+            userDTO.setAdditionalInfo(new AdditionalInfoDTO());
+        }
+        userDTO.getAdditionalInfo().setSentToRocReview(true);
+        updateUserAndTokens(userDTO);
+    }
+
+    public boolean isAdmin(String userLogin) {
+        Optional<User> user = getUserByLogin(userLogin);
+        return user.isPresent() && user.get().getAuthorities().stream().filter(authority -> authority.getName().equalsIgnoreCase(AuthoritiesConstants.ADMIN)).count() > 0;
     }
 }

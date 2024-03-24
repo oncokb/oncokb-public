@@ -2,7 +2,7 @@ package org.mskcc.cbio.oncokb.web.rest;
 
 import org.mskcc.cbio.oncokb.config.application.ApplicationProperties;
 import org.mskcc.cbio.oncokb.config.application.FrontendProperties;
-import org.mskcc.cbio.oncokb.security.uuid.TokenProvider;
+import org.mskcc.cbio.oncokb.security.token.TokenProvider;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.MediaType;

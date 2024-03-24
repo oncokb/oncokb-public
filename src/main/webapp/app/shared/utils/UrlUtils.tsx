@@ -5,18 +5,13 @@ import {
   ONCOKB_TM,
   PAGE_ROUTE,
   REFERENCE_GENOME,
-  REGEXP,
-  REGEXP_LINK,
   SOP_LINK,
   YOUTUBE_VIDEO_IDS,
 } from 'app/config/constants';
-import _ from 'lodash';
-import { PMIDLink } from 'app/shared/links/PMIDLink';
-import reactStringReplace from 'react-string-replace';
-import { ReactNodeArray } from 'prop-types';
 import {
   encodeSlash,
   getAlterationName,
+  getCategoricalAlteration,
   getYouTubeLink,
   IAlteration,
 } from 'app/shared/utils/Utils';
@@ -29,8 +24,7 @@ import {
   GenePageSearchQueries,
 } from 'app/shared/route/types';
 import * as QueryString from 'querystring';
-import { LEVEL_TYPE_TO_VERSION, Version } from 'app/pages/LevelOfEvidencePage';
-import { YEAR_END_SUMMARY_RANGE } from 'app/pages/aboutGroup/AboutPageNavTab';
+import { YEAR_END_SUMMARY_RANGE } from 'app/pages/newsPage/NewsPageNavTab';
 
 export const getGenePageLink = (props: {
   hugoSymbol: string;
@@ -80,17 +74,19 @@ export const getAlterationPageLink = (props: {
   searchQueries?: AlterationPageSearchQueries;
   hashQueries?: AlterationPageHashQueries;
 }): string => {
-  let pageLink = `${PAGE_ROUTE.GENE_HEADER}/${props.hugoSymbol}/${
+  const linkoutAltName = getCategoricalAlteration(
     typeof props.alteration === 'string'
       ? props.alteration
       : props.alteration.name
-  }`;
+  );
+
+  let pageLink = `${PAGE_ROUTE.GENE_HEADER}/${props.hugoSymbol}/${linkoutAltName}`;
   if (props.cancerType) {
     pageLink = `${pageLink}/${encodeSlash(props.cancerType)}`;
   }
   const sq = props.searchQueries || {};
 
-  // Prop alterationRefGenomes is just a convinient way to process reference genomes when it's a list.
+  // Prop alterationRefGenomes is just a convenient way to process reference genomes when it's a list.
   if (!sq.refGenome && props.alterationRefGenomes) {
     if (!props.alterationRefGenomes.includes(DEFAULT_REFERENCE_GENOME)) {
       sq.refGenome = props.alterationRefGenomes[0];
@@ -193,42 +189,6 @@ export const MSILink: React.FunctionComponent<{}> = () => {
       microsatellite instability high (MSI-H)
     </AlterationPageLink>
   );
-};
-
-export const CitationLink: React.FunctionComponent<{
-  content: string;
-}> = props => {
-  const regexps = [REGEXP.PMID, REGEXP.NCTID];
-  let contentWithLink: ReactNodeArray = [props.content];
-  _.forEach(regexps, regexp => {
-    contentWithLink = reactStringReplace(
-      contentWithLink,
-      new RegExp(regexp, 'ig'),
-      (match, i) => {
-        switch (regexp) {
-          case REGEXP.PMID: {
-            return <PMIDLink pmids={match} />;
-            break;
-          }
-          case REGEXP.NCTID:
-            return (
-              <a
-                href={`${REGEXP_LINK[regexp]}${match}`}
-                target="_blank"
-                rel="noopener noreferrer"
-              >
-                ${match}
-              </a>
-            );
-            break;
-          default:
-            return match;
-            break;
-        }
-      }
-    );
-  });
-  return <div>{contentWithLink}</div>;
 };
 
 export const OncoTreeLink: React.FunctionComponent<{}> = props => {

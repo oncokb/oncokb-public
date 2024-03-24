@@ -1,11 +1,239 @@
 import React from 'react';
 
-import { YEAR_END_SUMMARY_RANGE } from 'app/pages/aboutGroup/AboutPageNavTab';
-import { TableData } from 'app/pages/yearEndSummaryPage/BiomarkerTable';
+import {
+  TableData,
+  TableKey,
+} from 'app/pages/yearEndSummaryPage/BiomarkerTable';
 import { LEVELS } from 'app/config/constants';
 
-type DataKey = typeof YEAR_END_SUMMARY_RANGE[number];
-export const DATA: { [key in DataKey]: TableData } = {
+export const DATA: { [key in TableKey]: TableData } = {
+  '2023': {
+    [LEVELS.Tx1]: [
+      [
+        'ERBB2 Amplification',
+        'Colorectal Cancer',
+        'Tucatinib + Trastuzumab',
+        'Novel Level 1 clinically actionable biomarker in this cancer type',
+      ],
+      [
+        'ESR1 Oncogenic Ligand-Binding Domain Missense Mutations (310_547)',
+        'Breast Cancer',
+        'Elacestrant',
+        'Novel Level 1 clinically actionable biomarker',
+      ],
+      [
+        'ATM, CDK12, CHEK2, PALB2, RAD51C Oncogenic Mutations',
+        'Prostate Cancer',
+        'Talazoparib + Enzalutamide',
+        'Addition of a novel drug to an existing Level 1 clinically actionable biomarker',
+      ],
+      [
+        'ATR, FANCA, MLH1, MRE11, NBN Oncogenic Mutations',
+        'Prostate Cancer',
+        'Talazoparib + Enzalutamide',
+        'Novel Level 1 clinically actionable biomarker',
+      ],
+      [
+        'BRCA1/2 Oncogenic Mutations',
+        'Prostate Cancer',
+        'Talazoparib + Enzalutamide',
+        'Addition of a novel drug to an existing Level 1 clinically actionable biomarker',
+      ],
+      [
+        'BRCA1/2 Oncogenic Mutations',
+        'Prostate Cancer',
+        'Olaparib + Abiraterone + Prednisone/ Prednisolone',
+        'Addition of a novel drug to an existing Level 1 clinically actionable biomarker',
+      ],
+      [
+        'BRCA1/2 Oncogenic Mutations',
+        'Prostate Cancer',
+        'Niraparib + Abiraterone Acetate + Prednisone',
+        'Addition of a novel drug to an existing Level 1 clinically actionable biomarker',
+      ],
+      [
+        'FLT3 Internal Tandem Duplication',
+        'Acute Myeloid Leukemia',
+        'Quizartinib',
+        'Addition of a novel drug to an existing Level 1 clinically actionable biomarker',
+      ],
+      [
+        'MSI-H',
+        'Endometrial Cancer',
+        'Dostarlimab + Carboplatin + Paclitaxel',
+        'Addition of a novel drug to an existing Level 1 clinically actionable biomarker',
+      ],
+      [
+        'BRAF V600E',
+        'Non-Small Cell Lung Cancer',
+        'Encorafenib + Binimetinib',
+        'Addition of a novel drug to an existing Level 1 clinically actionable biomarker',
+      ],
+      [
+        'IDH1 R132',
+        'Myelodysplastic Syndrome',
+        'Ivosidenib',
+        'Novel Level 1 clinically actionable biomarker in this cancer type',
+      ],
+      [
+        'ROS1 Fusions',
+        'Non-Small Cell Lung Cancer',
+        'Repotrectinib',
+        'Addition of a novel drug to an existing Level 1 clinically actionable biomarker',
+      ],
+      [
+        'PTEN or AKT1 Oncogenic Mutations',
+        'Breast Cancer',
+        'Capivasertib + Fulvestrant',
+        'Novel Level 1 clinically actionable biomarker',
+      ],
+      [
+        'PIK3CA Oncogenic Mutations',
+        'Breast Cancer',
+        'Capivasertib + Fulvestrant',
+        'Addition of a novel drug to an existing Level 1 clinically actionable biomarker',
+      ],
+    ],
+    [LEVELS.Tx2]: [
+      [
+        'KRAS G12C',
+        'Pancreatic Adenocarcinoma',
+        'Adagrasib',
+        'Novel Level 2 clinically actionable biomarker in this cancer type',
+      ],
+      [
+        'KRAS G12C',
+        'Pancreatic Adenocarcinoma',
+        'Sotorasib',
+        'Novel Level 2 clinically actionable biomarker in this cancer type',
+      ],
+      [
+        'ESR1 Oncogenic ligand-binding domain in-frame insertions or deletions',
+        'Breast Cancer',
+        'Elacestrant',
+        'Novel Level 2 clinically actionable biomarker',
+      ],
+      [
+        'ERBB2 Amplification',
+        'Biliary Tract Cancer',
+        'Trastuzumab + Pertuzumab',
+        'Novel Level 2 clinically actionable biomarker in this cancer type',
+      ],
+      [
+        'ALK Fusions',
+        'Inflammatory Myofibroblastic Tumors',
+        'Alectinib',
+        'Addition of a novel drug to an existing clinically actionable biomarker',
+      ],
+      [
+        'IDH1 Oncogenic Mutations',
+        'Oligodendroglioma',
+        'Ivosidenib',
+        'Novel Level 2 clinically actionable biomarker in this cancer type',
+      ],
+      [
+        'KRAS G12C',
+        'Colorectal and Rectal Cancer',
+        '(Sotorasib or Adagrasib) + (Cetuximab or Panitumumab)',
+        'Novel Level 2 clinically actionable biomarker in this cancer type',
+      ],
+    ],
+    [LEVELS.Tx3]: [
+      [
+        'IDH1 R132',
+        'Oligodendroglioma, Astrocytoma',
+        'Vorasidenib',
+        'Addition of a novel drug to an existing Level 3A clinically actionable biomarker in this cancer type',
+      ],
+      [
+        'IDH2 R172',
+        'Oligodendroglioma, Astrocytoma',
+        'Vorasidenib',
+        'Novel Level 3A clinically actionable biomarker in this cancer type',
+      ],
+      [
+        'FGFR2 Oncogenic mutations',
+        'Cholangiocarcinoma',
+        'RLY-4008',
+        'Novel Level 3A clinically actionable biomarker',
+      ],
+      [
+        'EGFR Amplification',
+        'Gastroesophageal Adenocarcinoma',
+        'Cetuximab, Cetuximab + Chemotherapy, Panitumumab, Panitumumab + Chemotherapy',
+        'Novel Level 3A clinically actionable biomarker in this cancer type',
+      ],
+      [
+        'KRAS G12A/D/R/S/V',
+        'Pancreatic Adenocarcinoma, Non-small Cell Lung Cancer',
+        'RMC-6236',
+        'Novel Level 3A clinically actionable biomarker in this cancer type',
+      ],
+    ],
+    [LEVELS.Tx4]: [
+      [
+        'KRAS G12D',
+        'All Solid Tumors',
+        'MRTX-1133 and ASP3082',
+        'Addition of a novel drug to an existing Level 4 clinically actionable biomarker',
+      ],
+      [
+        'FGFR2 Oncogenic Mutations',
+        'All Solid Tumors',
+        'RLY-4008',
+        'Addition of a novel drug to an existing Level 4 clinically actionable biomarker',
+      ],
+      [
+        'FGFR2 Amplification',
+        'All Solid Tumors',
+        'RLY-4008',
+        'Novel clinically actionable biomarker',
+      ],
+      [
+        'KRAS G12A/D/R/S/V',
+        'All Solid Tumors',
+        'RMC-6236',
+        'Novel Level 4 clinically actionable biomarker',
+      ],
+    ],
+    discontinued: [
+      [
+        'FGFR1 Amplification',
+        'Lung Squamous Cell Carcinoma',
+        'Debio1347',
+        '3A',
+        'Drug development discontinued due to lack of efficacy',
+      ],
+      [
+        'FGFR2 Fusions',
+        'Cholangiocarcinoma',
+        'Infigratinib',
+        '1',
+        'Drug development discontinued due to difficulties recruiting and enrolling study participants',
+      ],
+      [
+        'FGFR1 Amplification',
+        'Lung Squamous Cell Carcinoma',
+        'Infigratinib',
+        '3A',
+        'Drug development discontinued due to difficulties recruiting and enrolling study participants',
+      ],
+      [
+        'FGFR1, FGFR2, FGFR3 Oncogenic Mutations',
+        'All Solid Tumors',
+        'Infigratinib',
+        '4',
+        'Drug development discontinued due to difficulties recruiting and enrolling study participants',
+      ],
+      [
+        'RET Oncogenic Mutations',
+        'Medullary Thyroid Cancer',
+        'Pralsetinib',
+        '1',
+        'FDA approval was withdrawn (note OncoKB Level was changed from 1 to 3A)',
+      ],
+    ],
+  },
   '2022': {
     [LEVELS.Tx1]: [
       [

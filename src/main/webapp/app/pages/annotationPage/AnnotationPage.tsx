@@ -78,6 +78,7 @@ import { Else, If, Then } from 'react-if';
 import { UnknownGeneAlert } from 'app/shared/alert/UnknownGeneAlert';
 import { RouterStore } from 'mobx-react-router';
 import { Option } from 'app/shared/select/FormSelectWithLabelField';
+import MutationEffectDescription from 'app/pages/annotationPage/MutationEffectDescription';
 
 export enum AnnotationType {
   GENE,
@@ -498,7 +499,7 @@ export default class AnnotationPage extends React.Component<
     return (
       <>
         <div className={'d-flex justify-content-between flex-wrap'}>
-          <div>
+          <div style={{ flex: '1 1 300px' }}>
             <h2
               className={'d-flex align-items-baseline flex-wrap'}
               style={{ marginBottom: 0 }}
@@ -601,12 +602,12 @@ export default class AnnotationPage extends React.Component<
                 show={this.showMutationEffect}
                 title="mutation effect description"
                 content={
-                  <SummaryWithRefs
-                    content={
+                  <MutationEffectDescription
+                    hugoSymbol={this.props.store.hugoSymbol}
+                    description={
                       this.props.store.annotationData.result.mutationEffect
                         .description
                     }
-                    type="linkout"
                   />
                 }
                 onClick={() =>

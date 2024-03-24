@@ -12,7 +12,6 @@ import org.mskcc.cbio.oncokb.service.dto.useradditionalinfo.TrialAccount;
 import org.mskcc.cbio.oncokb.service.mapper.UserMapper;
 
 import io.github.jhipster.security.RandomUtil;
-
 import org.apache.commons.lang3.RandomStringUtils;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -25,9 +24,13 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.transaction.annotation.Transactional;
 
+import com.mysql.cj.conf.ConnectionUrlParser.Pair;
+
 import java.time.Instant;
 import java.time.temporal.ChronoUnit;
 import java.time.LocalDateTime;
+import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 import java.util.Optional;
 import java.util.UUID;
@@ -130,7 +133,7 @@ public class UserServiceIT {
 
         UserDTO userDTO = userMapper.userToUserDTO(user);
         userDTO.setActivated(false);
-        Optional<UserDTO> updatedUserDto = userService.updateUser(userDTO);
+        Optional<UserDTO> updatedUserDto = userService.updateUserAndTokens(userDTO);
         assertThat(updatedUserDto).isPresent();
         assertThat(updatedUserDto.get().isActivated()).isFalse();
         assertThat(updatedUserDto.get().getActivationKey()).isNullOrEmpty();
@@ -146,7 +149,7 @@ public class UserServiceIT {
 
         UserDTO userDTO = userMapper.userToUserDTO(user);
         userDTO.setActivated(false);
-        Optional<UserDTO> updatedUserDto = userService.updateUser(userDTO);
+        Optional<UserDTO> updatedUserDto = userService.updateUserAndTokens(userDTO);
         assertThat(updatedUserDto).isPresent();
         assertThat(updatedUserDto.get().isActivated()).isFalse();
         assertThat(updatedUserDto.get().getResetKey()).isNullOrEmpty();
@@ -362,16 +365,118 @@ public class UserServiceIT {
         User savedUser = userService.createUser(userDTO, Optional.empty(), Optional.of(Boolean.TRUE));
         userDTO = userMapper.userToUserDTO(savedUser);
         userDTO.setActivated(false);
-        userDTO = userService.updateUser(userDTO).get();
+        userDTO = userService.updateUserAndTokens(userDTO).get();
 
         assertThat(tokenService.findByUser(savedUser).get(0).getExpiration()).isBefore(Instant.now());
         assertThat(tokenService.findByUser(savedUser).get(0).isRenewable()).isTrue();
 
         userDTO.setActivated(true);
-        userService.updateUser(userDTO);
+        userService.updateUserAndTokens(userDTO);
 
         assertThat(tokenService.findByUser(savedUser).get(0).getExpiration()).isAfter(Instant.now());
         assertThat(tokenService.findByUser(savedUser).get(0).isRenewable()).isTrue();
     }
 
+    //UNIT TESTS
+    public void testDuplicates(Pair<String, String> originalName, List<Pair<String, String>> similarNames, List<Pair<String, String>> dissimilarNames) {
+        Long id = 6000L;
+
+        UserDTO user = new UserDTO();
+        user.setFirstName(originalName.left);
+        user.setLastName(originalName.right);
+        user.setId(id);
+
+        List<UserDTO> allUsers = new ArrayList<>();
+
+        List<UserDTO> similarUsers = new ArrayList<>();
+        for (Pair<String, String> similarName : similarNames) {
+            UserDTO newUser = new UserDTO();
+            newUser.setFirstName(similarName.left);
+            newUser.setLastName(similarName.right);
+            newUser.setId(++id);
+            similarUsers.add(newUser);
+
+            allUsers.add(newUser);
+        }
+
+        for (Pair<String, String> dissimilarName : dissimilarNames) {
+            UserDTO newUser = new UserDTO();
+            newUser.setFirstName(dissimilarName.left);
+            newUser.setLastName(dissimilarName.right);
+            newUser.setId(++id);
+
+            allUsers.add(newUser);
+        }
+
+        UserDTO testSameIdUser = new UserDTO(); //need this to ensure comparison of IDs is done correctly, Longs are compared by reference
+        testSameIdUser.setFirstName(user.getFirstName());
+        testSameIdUser.setLastName(user.getLastName());
+        testSameIdUser.setId(new Long(user.getId()));
+        allUsers.add(testSameIdUser);
+
+        List<UserDTO> duplicateUsers = userService.searchAccountsForPotentialDuplicateUser(user, allUsers);
+        assertThat(duplicateUsers).containsExactlyInAnyOrder(similarUsers.toArray(new UserDTO[similarUsers.size()]));
+    }
+
+    @Test
+    public void assertThatDuplicateUsersAreCaught() {
+        //TEST 1
+        Pair<String, String> originalUserName = new Pair<String,String>("Jon", "Doe");
+        List<Pair<String, String>> similarNames = Arrays.asList(
+            new Pair<>("Jon", "Doh"),
+            new Pair<>("Joon", "Doe"),
+            new Pair<>("Jonny", "Doe"),
+            new Pair<>("Jonathon", "Doe"),
+            new Pair<>("Jon", "Doel"),
+            new Pair<>("Jonny", "Dole")
+        );
+        List<Pair<String, String>> dissimilarNames = Arrays.asList(
+            new Pair<>("Mark", "Thompson"),
+            new Pair<>("Emily", "Davis"),
+            new Pair<>("William", "Brown"),
+            new Pair<>("Jessica", "White"),
+            new Pair<>("Christopher", "Lee")
+        );
+        testDuplicates(originalUserName, similarNames, dissimilarNames);
+
+        //TEST 2
+        originalUserName = new Pair<String,String>("Christopher", "Wardell");
+        similarNames = Arrays.asList(
+            new Pair<>("Christophe", "Wardell"),
+            new Pair<>("Chris", "Wardell"),
+            new Pair<>("Christopher", "Wardel")
+        );
+        dissimilarNames = Arrays.asList(
+            new Pair<>("Christopher", "Coldren"),
+            new Pair<>("Christoph", "Ritzel"),
+            new Pair<>("Christophe", "Roos"),
+            new Pair<>("Christoph", "Schatz"),
+            new Pair<>("Christopher", "Szeto"),
+            new Pair<>("Christopher", "Benz"),
+            new Pair<>("Christopher", "Edlund"),
+            new Pair<>("Christopher", "Hubbard"),
+            new Pair<>("Christopher", "Roberts"),
+            new Pair<>("Christopher", "Douville"),
+            new Pair<>("Christopher", "Krolla"),
+            new Pair<>("Christophe", "Lemetre"),
+            new Pair<>("Dan", "Wardell")
+        );
+        testDuplicates(originalUserName, similarNames, dissimilarNames);
+
+        //TEST 3
+        originalUserName = new Pair<String,String>("Antonio", "Galvano");
+        similarNames = Arrays.asList(
+            new Pair<>("Anton", "Galvano"),
+            new Pair<>("Anthony", "Galvano")
+        );
+        dissimilarNames = Arrays.asList(
+            new Pair<>("Antonio", "De Falco"),
+            new Pair<>("Antonio", "Lázaro"),
+            new Pair<>("Antonio", "Martinez"),
+            new Pair<>("Antonio", "Viana Alonso"),
+            new Pair<>("Antonio", "Marra"),
+            new Pair<>("Anthony", "Gal")
+        );
+        testDuplicates(originalUserName, similarNames, dissimilarNames);
+    }
 }

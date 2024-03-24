@@ -109,6 +109,9 @@ public class MailsController {
     public List<MailTypeInfo> getMailsTypes() {
         List<MailTypeInfo> mailTypeInfos = new ArrayList<>();
         for (MailType mailType : MailType.values()) {
+            if (MailType.TEST.equals(mailType)) {
+                continue;
+            }
             mailTypeInfos.add(new MailTypeInfo(mailType));
         }
         return mailTypeInfos;

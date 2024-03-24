@@ -13,7 +13,7 @@ export default class MenuItem extends React.Component<IMenuItem> {
     const { to, icon, id, children } = this.props;
 
     return (
-      <DropdownItem as={Link} to={to} id={id}>
+      <DropdownItem as={Link} to={to} id={id} style={{ lineHeight: '2.75rem' }}>
         <i className={`fa fa-${icon} fa-fw mr-1`} /> {children}
       </DropdownItem>
     );

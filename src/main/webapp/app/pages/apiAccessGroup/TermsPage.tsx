@@ -44,14 +44,17 @@ export const TermsPage = () => {
                   .
                 </p>
                 <p>
-                  You may view the Content solely for your own personal
-                  reference or use for research in an academic setting, provided
-                  that all academic research use of the Content must credit{' '}
-                  {ONCOKB_TM} as the source of the Content and reference these
-                  Terms of Use; outside of scientific publication, you may not
-                  otherwise redistribute or share the Content with any third
-                  party, in part or in whole, for any purpose, without the
-                  express permission of MSK.
+                  You agree to use {ONCOKB_TM} in compliance with all applicable
+                  statutes and regulations, including but not limited to, all
+                  U.S. Export Control laws and regulations. You may view the
+                  Content solely for your own personal reference or use for
+                  research in an academic setting, provided that all academic
+                  research use of the Content must credit {ONCOKB_TM} as the
+                  source of the Content and reference these Terms of Use;
+                  outside of scientific publication, you may not otherwise
+                  redistribute or share the Content with any third party, in
+                  part or in whole, for any purpose, without the express
+                  permission of MSK.
                 </p>
                 <div>
                   Unless you have signed a license agreement with MSK, you may

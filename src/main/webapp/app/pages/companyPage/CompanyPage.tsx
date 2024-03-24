@@ -1,5 +1,5 @@
 import React from 'react';
-import { observer } from 'mobx-react';
+import { inject, observer } from 'mobx-react';
 import { getSectionClassName } from 'app/pages/account/AccountUtils';
 import { AvField, AvForm } from 'availity-reactstrap-validation';
 import {
@@ -10,6 +10,7 @@ import {
   LicenseModel,
   LicenseStatus,
   PAGE_ROUTE,
+  REDIRECT_TIMEOUT_MILLISECONDS,
 } from 'app/config/constants';
 import { Alert, Button, Col, Row } from 'react-bootstrap';
 import {
@@ -67,9 +68,14 @@ import {
 import UsageText from 'app/shared/texts/UsageText';
 import { DateSelector } from 'app/components/dateSelector/DateSelector';
 import { DownloadButton } from 'app/components/downloadButton/DownloadButton';
+import { RouterStore } from 'mobx-react-router';
 
 interface MatchParams {
   id: string;
+}
+
+interface ICompanyPage extends RouteComponentProps<MatchParams> {
+  routing: RouterStore;
 }
 
 type SelectOptionType = {
@@ -97,10 +103,15 @@ const LICENSE_STATUS_UPDATE_MESSAGES = {
   },
 };
 
+enum SimpleConfirmModalType {
+  NA,
+  DELETE_COMPANY,
+  UPDATE_COMPANY,
+}
+
+@inject('routing')
 @observer
-export default class CompanyPage extends React.Component<
-  RouteComponentProps<MatchParams>
-> {
+export default class CompanyPage extends React.Component<ICompanyPage> {
   @observable getCompanyStatus = PromiseStatus.pending;
   @observable getCompanyUsersStatus = PromiseStatus.pending;
   @observable getDropdownUsersStatus = PromiseStatus.pending;
@@ -108,7 +119,7 @@ export default class CompanyPage extends React.Component<
   @observable selectedLicenseStatus: LicenseStatus;
   @observable conflictingDomains: string[] = [];
 
-  @observable showLicenseChangeModal = false;
+  @observable showModal = false;
   @observable confirmLicenseChangeModalText = '';
   @observable formValues: any;
 
@@ -118,10 +129,13 @@ export default class CompanyPage extends React.Component<
   @observable dropDownUsers: SelectOptionType[] = [];
   @observable selectedUsersOptions: SelectOptionType[] = [];
 
+  @observable simpleConfirmModalType: SimpleConfirmModalType =
+    SimpleConfirmModalType.NA;
+
   @observable resourcesTypeToggleValue: ToggleValue =
     ToggleValue.PUBLIC_RESOURCES;
 
-  constructor(props: RouteComponentProps<MatchParams>) {
+  constructor(props: ICompanyPage) {
     super(props);
     this.getCompany();
     this.getDropdownUsers();
@@ -182,8 +196,8 @@ export default class CompanyPage extends React.Component<
   }
 
   @action.bound
-  updateCompany() {
-    this.showLicenseChangeModal = false;
+  onConfirmUpdateCompany() {
+    this.showModal = false;
     this.getCompanyStatus = PromiseStatus.pending;
     this.getCompanyUsersStatus = PromiseStatus.pending;
     this.getDropdownUsersStatus = PromiseStatus.pending;
@@ -218,6 +232,38 @@ export default class CompanyPage extends React.Component<
       });
   }
 
+  @autobind
+  onConfirmDeleteAccountButton() {
+    this.showModal = false;
+    client.deleteCompanyUsingDELETE({ id: this.company.id }).then(
+      () => {
+        notifySuccess(
+          'Deleted company, we will redirect you to the company details page.'
+        );
+        setTimeout(() => {
+          this.props.routing.history.push(PAGE_ROUTE.ADMIN_COMPANY_DETAILS);
+        }, REDIRECT_TIMEOUT_MILLISECONDS);
+      },
+      (error: Error) => notifyError(error)
+    );
+  }
+
+  @autobind
+  onConfirmSimpleConfirmModal() {
+    switch (this.simpleConfirmModalType) {
+      case SimpleConfirmModalType.UPDATE_COMPANY:
+        this.onConfirmUpdateCompany();
+        break;
+      case SimpleConfirmModalType.DELETE_COMPANY:
+        this.onConfirmDeleteAccountButton();
+        break;
+      case SimpleConfirmModalType.NA:
+      default:
+        break;
+    }
+    this.simpleConfirmModalType = SimpleConfirmModalType.NA;
+  }
+
   @action.bound
   async verifyUserEmail(user: UserDTO) {
     try {
@@ -247,13 +293,13 @@ export default class CompanyPage extends React.Component<
       this.company.licenseStatus !== this.selectedLicenseStatus &&
       this.companyUsers.length > 0
     ) {
-      this.showLicenseChangeModal = true;
+      this.showModal = true;
       this.confirmLicenseChangeModalText =
         LICENSE_STATUS_UPDATE_MESSAGES[this.company.licenseStatus][
           this.selectedLicenseStatus
         ];
     } else {
-      this.updateCompany();
+      this.onConfirmUpdateCompany();
     }
   }
 
@@ -323,23 +369,41 @@ export default class CompanyPage extends React.Component<
       option => !hideOptions.includes(option.value)
     );
   }
+  @computed
+  get licenseChangeModalTitle() {
+    if (this.simpleConfirmModalType === SimpleConfirmModalType.UPDATE_COMPANY) {
+      return 'Review Company Changes';
+    } else if (
+      this.simpleConfirmModalType === SimpleConfirmModalType.DELETE_COMPANY
+    ) {
+      return 'Confirm Deleting Company';
+    }
+  }
 
   @computed
   get licenseChangeModalBody() {
-    return (
-      <>
-        <div>
-          Are you sure you want to change the company's license status from{' '}
-          <span className="font-weight-bold">{this.company.licenseStatus}</span>{' '}
-          to{' '}
-          <span className="font-weight-bold">{this.selectedLicenseStatus}</span>
-          ?
-        </div>
-        <Alert variant={'warning'} style={{ marginTop: '20px' }}>
-          Warning: {this.confirmLicenseChangeModalText}
-        </Alert>
-      </>
-    );
+    if (this.simpleConfirmModalType === SimpleConfirmModalType.UPDATE_COMPANY) {
+      return (
+        <>
+          <div>
+            Are you sure you want to change the company's license status from{' '}
+            <span className="font-weight-bold">
+              {this.company.licenseStatus}
+            </span>{' '}
+            to{' '}
+            <span className="font-weight-bold">
+              {this.selectedLicenseStatus}
+            </span>
+            ?
+          </div>
+          <Alert variant={'warning'} style={{ marginTop: '20px' }}>
+            Warning: {this.confirmLicenseChangeModalText}
+          </Alert>
+        </>
+      );
+    } else {
+      return undefined;
+    }
   }
 
   @computed
@@ -876,13 +940,34 @@ export default class CompanyPage extends React.Component<
                           </Button>
                         </Col>
                       </Row>
+                      <Row>
+                        <Col className={getSectionClassName()}>
+                          <div className={'my-2 text-danger'}>Danger Zone</div>
+                          <div>
+                            <Button
+                              variant="danger"
+                              onClick={() => {
+                                this.showModal = true;
+                                this.simpleConfirmModalType =
+                                  SimpleConfirmModalType.DELETE_COMPANY;
+                              }}
+                            >
+                              Delete Account
+                            </Button>
+                          </div>
+                        </Col>
+                      </Row>
                     </AvForm>
                     <SimpleConfirmModal
-                      show={this.showLicenseChangeModal}
-                      title={'Review Company Changes'}
+                      key="company-page-simple-confirm-modal"
+                      show={this.showModal}
+                      title={this.licenseChangeModalTitle}
                       body={this.licenseChangeModalBody}
-                      onCancel={() => (this.showLicenseChangeModal = false)}
-                      onConfirm={this.updateCompany}
+                      onCancel={() => {
+                        this.showModal = false;
+                        this.simpleConfirmModalType = SimpleConfirmModalType.NA;
+                      }}
+                      onConfirm={this.onConfirmSimpleConfirmModal}
                     />
                   </>
                 </DocumentTitle>

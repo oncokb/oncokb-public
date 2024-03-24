@@ -21,7 +21,7 @@ import {
 import { Link } from 'react-router-dom';
 import AppStore from 'app/store/AppStore';
 import { Linkout } from 'app/shared/links/Linkout';
-import { COLOR_BLACK, COLOR_WARNING } from 'app/config/theme';
+import { COLOR_BLACK, COLOR_DARK_BLUE, COLOR_WARNING } from 'app/config/theme';
 
 export interface IUserMessage {
   dateStart?: number;
@@ -51,6 +51,42 @@ if (
     // UNIQUE ID IS IMPORTANT B/C WE REMEMBER A MESSAGE HAS BEEN SHOWN
     // BASED ON USERS LOCALSTORAGE
     {
+      dateEnd: 1705276800000,
+      content: (
+        <div>
+          <div>
+            <span>
+              Happy Holidays to you and your loved ones from the OncoKB Team. We
+              had a very productive year, and we look forward to further
+              improving OncoKB in 2024. 🎄🌟🎄🌟
+            </span>
+          </div>
+        </div>
+      ),
+      backgroundColor: '#C3E2FF',
+      color: COLOR_DARK_BLUE,
+      id: '2023-holiday-message',
+    },
+    {
+      dateEnd: 100000000000000,
+      content: (
+        <div>
+          <span>Check out our latest publication in Cancer Discovery, </span>
+          <Linkout
+            link={
+              'https://aacrjournals.org/cancerdiscovery/article/doi/10.1158/2159-8290.CD-23-0467/729589/Quantifying-the-Expanding-Landscape-of-Clinical'
+            }
+          >
+            Quantifying the Expanding Landscape of Clinical Actionability for
+            Patients with Cancer
+          </Linkout>
+          <span>, and visit our new </span>
+          <Link to={PAGE_ROUTE.ONCOLOGY_TX}>Oncology Therapies page!</Link>
+        </div>
+      ),
+      id: '2023-precision-oncology-therapies',
+    },
+    {
       dateEnd: 1,
       content: (
         <div>
@@ -76,50 +112,45 @@ if (
         <span>
           Part of {ONCOKB_TM}’s content is now FDA-recognized. For more details,
           please see our{' '}
-          <Link
-            to={PAGE_ROUTE.FDA_RECOGNITION}
-            style={{ color: 'white', textDecoration: 'underline' }}
-          >
-            FDA Recognition
-          </Link>{' '}
-          page.
+          <Link to={PAGE_ROUTE.FDA_RECOGNITION}>FDA Recognition</Link> page.
         </span>
       ),
       id: '2021-fda-recognition',
     },
     {
-      dateEnd: 1686196800000,
+      dateEnd: 1700373600000,
       content: (
         <div>
-          Join us at ASCO 2023! Visit our booth (
+          Join us at AMP 2023! Visit our booth (
           <Linkout
             link={
-              'https://events.jspargo.com/asco23/Public/EventMap.aspx?ver=html&EventID=729&MapID=906&MapItBoothID=887434&MapItBooth=28161'
+              'https://www.conferenceharvester.com/floorplan/v2/index.asp?EventKey=ZQTAJJYL'
             }
-            style={{ color: 'white', textDecoration: 'underline' }}
           >
-            #28161
+            #928
           </Linkout>
-          ) and our{' '}
+          ) and join{' '}
           <Linkout
-            link={'https://meetings.asco.org/abstracts-presentations/219452'}
-            style={{ color: 'white', textDecoration: 'underline' }}
+            link={
+              'https://amp23.eventscribe.net/ajaxcalls/PresentationInfo.asp?PresentationID=1303633'
+            }
           >
-            poster
+            Dr. Chakravarty's presentation on OncoKB™
           </Linkout>{' '}
-          (Mon 06/05, 1pm, Hall A, Poster Bd #171) to meet our team and explore
-          the latest developments from OncoKB™. See you there!
+          during the plenary session "Clinical Grade Knowledge Bases for Genomic
+          Actionability" (Thu 11/16, 1:15pm MST).
         </div>
       ),
-      id: '2023_asco',
+      id: '2023_amp',
     },
     {
-      dateEnd: 1686456000000,
+      dateStart: 1709337600000,
+      dateEnd: 1710028800000,
       content: (
         <div>
           <b>Attention</b>: We want to inform you of an upcoming infrastructure
-          update that may lead to a temporary service disruption over the
-          weekend, planned <b>June 10th, 10am-12pm EDT</b>.
+          update that may lead to a temporary service disruption, planned{' '}
+          <b>March 9th, 9AM-12PM</b>.
           <br />
           During this period, you may experience intermittent service
           interruptions, brief outages, or slower response times while accessing
@@ -129,7 +160,7 @@ if (
       ),
       backgroundColor: COLOR_WARNING,
       color: COLOR_BLACK,
-      id: 'warning_msg_06102023',
+      id: 'warning_msg_11252023',
     },
   ];
 }
@@ -172,8 +203,11 @@ export default class UserMessage extends React.Component<UserMessageProps> {
     }
     return _.filter(MESSAGE_DATA, message => {
       const notYetShown = !localStorage.getItem(makeMessageKey(message.id));
+      const toBeShown = message.dateStart
+        ? Date.now() >= message.dateStart
+        : true;
       const expired = Date.now() > message.dateEnd;
-      return notYetShown && !expired;
+      return notYetShown && toBeShown && !expired;
     }).sort((a, b) => a.dateEnd - b.dateEnd);
   }
 

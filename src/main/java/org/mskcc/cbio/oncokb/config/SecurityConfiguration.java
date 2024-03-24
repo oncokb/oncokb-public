@@ -1,8 +1,8 @@
 package org.mskcc.cbio.oncokb.config;
 
 import org.mskcc.cbio.oncokb.security.AuthoritiesConstants;
-import org.mskcc.cbio.oncokb.security.uuid.TokenProvider;
-import org.mskcc.cbio.oncokb.security.uuid.UUIDConfigurer;
+import org.mskcc.cbio.oncokb.security.token.TokenConfigurer;
+import org.mskcc.cbio.oncokb.security.token.TokenProvider;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Import;
 import org.springframework.http.HttpMethod;
@@ -95,7 +95,7 @@ public class SecurityConfiguration extends WebSecurityConfigurerAdapter {
             .antMatchers("/api/v1/v2/api-docs").permitAll()
             .antMatchers("/api/private/utils/data/**").hasAnyAuthority(AuthoritiesConstants.DATA_DOWNLOAD)
 
-            .antMatchers("/api/v1/annotate/**").hasAnyAuthority(AuthoritiesConstants.USER)
+            .antMatchers("/api/v1/annotate/**").hasAnyAuthority(AuthoritiesConstants.API)
 
             .antMatchers("/api/v1/genes/lookup").hasAnyAuthority(AuthoritiesConstants.PUBLIC_WEBSITE, AuthoritiesConstants.USER, AuthoritiesConstants.ADMIN)
             .antMatchers("/api/v1/variants/lookup").hasAnyAuthority(AuthoritiesConstants.PUBLIC_WEBSITE, AuthoritiesConstants.USER, AuthoritiesConstants.ADMIN)
@@ -107,6 +107,14 @@ public class SecurityConfiguration extends WebSecurityConfigurerAdapter {
             .antMatchers("/api/v1/utils/cancerGeneList").permitAll()
             .antMatchers("/api/v1/utils/cancerGeneList.txt").permitAll()
             .antMatchers("/api/v1/utils/cancerGeneList.json").permitAll()
+
+            .antMatchers("/api/v1/annotation/search").hasAnyAuthority(AuthoritiesConstants.PREMIUM_USER, AuthoritiesConstants.ADMIN)
+            .antMatchers("/api/v1/drugs").hasAnyAuthority(AuthoritiesConstants.PREMIUM_USER, AuthoritiesConstants.ADMIN)
+            .antMatchers("/api/v1/utils/allActionableVariants").hasAnyAuthority(AuthoritiesConstants.PREMIUM_USER, AuthoritiesConstants.ADMIN)
+            .antMatchers("/api/v1/utils/allActionableVariants.txt").hasAnyAuthority(AuthoritiesConstants.PREMIUM_USER, AuthoritiesConstants.ADMIN)
+            .antMatchers("/api/v1/utils/allAnnotatedVariants").hasAnyAuthority(AuthoritiesConstants.PREMIUM_USER, AuthoritiesConstants.ADMIN)
+            .antMatchers("/api/v1/utils/allAnnotatedVariants.txt").hasAnyAuthority(AuthoritiesConstants.PREMIUM_USER, AuthoritiesConstants.ADMIN)
+
             .antMatchers("/api/v1/**").hasAnyAuthority(AuthoritiesConstants.ADMIN)
 
             .antMatchers("/api/account/reset-password/init").permitAll()
@@ -144,7 +152,7 @@ public class SecurityConfiguration extends WebSecurityConfigurerAdapter {
         // @formatter:on
     }
 
-    private UUIDConfigurer securityConfigurerAdapter() {
-        return new UUIDConfigurer(tokenProvider);
+    private TokenConfigurer securityConfigurerAdapter() {
+        return new TokenConfigurer(tokenProvider);
     }
 }

@@ -21,11 +21,13 @@ export const getUniqueFdaImplications = (
   const finalList: FdaImplication[] = [];
   for (const key in uniqueData) {
     if (uniqueData[key].length > 0) {
-      finalList.push(
-        _.sortBy(uniqueData[key], fdaImplication => {
+      const sortedFdaBasedOnLevel = _.chain(uniqueData[key])
+        .sortBy(fdaImplication => {
           return LEVEL_PRIORITY.indexOf(fdaImplication.level as LEVELS);
-        })[0]
-      );
+        })
+        .reverse()
+        .value();
+      finalList.push(sortedFdaBasedOnLevel[0]);
     }
   }
   return finalList;

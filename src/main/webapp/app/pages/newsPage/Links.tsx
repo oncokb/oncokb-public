@@ -13,6 +13,15 @@ export const FdaApprovalLink: React.FunctionComponent<{
   linkText += `of ${props.approval}`;
   return <Linkout link={props.link}>{linkText}</Linkout>;
 };
+export const FdaWithdrawalLink: React.FunctionComponent<{
+  linkText: string;
+}> = props => {
+  return (
+    <Linkout link="https://www.fda.gov/drugs/resources-information-approved-drugs/withdrawn-cancer-accelerated-approvals">
+      {props.linkText}
+    </Linkout>
+  );
+};
 export const FdaBreakthroughLink: React.FunctionComponent<{
   link: string;
 }> = props => {

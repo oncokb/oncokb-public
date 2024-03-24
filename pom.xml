@@ -5,7 +5,7 @@
 
     <groupId>org.mskcc.cbio.oncokb</groupId>
     <artifactId>public-website</artifactId>
-    <version>3.9.10</version>
+    <version>3.12.14</version>
     <packaging>jar</packaging>
     <name>OncoKB Public Website</name>
 
@@ -117,7 +117,6 @@
     </dependencyManagement>
 
     <dependencies>
-
         <dependency>
             <groupId>com.google.cloud</groupId>
             <artifactId>google-cloud-recaptchaenterprise</artifactId>
@@ -136,9 +135,9 @@
             <artifactId>javax.annotation-api</artifactId>
         </dependency>
         <dependency>
-            <groupId>com.amazonaws</groupId>
-            <artifactId>aws-java-sdk</artifactId>
-            <version>1.11.163</version>
+            <groupId>software.amazon.awssdk</groupId>
+            <artifactId>aws-sdk-java</artifactId>
+            <version>2.22.7</version>
         </dependency>
         <dependency>
             <groupId>org.json</groupId>
@@ -398,7 +397,16 @@
           <artifactId>bucket4j-core</artifactId>
           <version>${bucket4j.version}</version>
         </dependency>
-
+        <dependency>
+            <groupId>org.apache.commons</groupId>
+            <artifactId>commons-text</artifactId>
+            <version>1.10.0</version>
+        </dependency>
+        <dependency>
+            <groupId>org.jsoup</groupId>
+            <artifactId>jsoup</artifactId>
+            <version>1.14.3</version>
+        </dependency>
     </dependencies>
 
     <build>

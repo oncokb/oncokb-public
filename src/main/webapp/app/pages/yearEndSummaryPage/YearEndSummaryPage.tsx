@@ -1,19 +1,19 @@
 import * as React from 'react';
+import { useEffect, useState } from 'react';
 import { Col, Row } from 'react-bootstrap';
 import DocumentTitle from 'react-document-title';
 import {
-  PAGE_TITLE,
   PAGE_ROUTE,
-  YEAR_END_SUMMARY_TITLE_DATE_FORMAT,
+  PAGE_TITLE,
   YEAR_END_SUMMARY_DATE_FORMAT,
+  YEAR_END_SUMMARY_TITLE_DATE_FORMAT,
 } from 'app/config/constants';
 import HashLink from 'app/shared/links/HashLink';
-import { useEffect, useState } from 'react';
 import moment from 'moment/moment';
 import { BiomarkerTable } from 'app/pages/yearEndSummaryPage/BiomarkerTable';
-import { YEAR_END_SUMMARY_RANGE } from 'app/pages/aboutGroup/AboutPageNavTab';
 import { DATA } from 'app/pages/yearEndSummaryPage/BiomarkerTableData';
 import { getPageTitle, scrollWidthOffset } from 'app/shared/utils/Utils';
+import { YEAR_END_SUMMARY_RANGE } from 'app/pages/newsPage/NewsPageNavTab';
 
 const getTitle = (date: string) => {
   return moment(date, YEAR_END_SUMMARY_DATE_FORMAT).format(
@@ -71,7 +71,7 @@ export const YearEndSummaryPage: React.FunctionComponent<{
                 <BiomarkerTable
                   tableKey={`biomarker-table-${year}`}
                   year={year}
-                  data={DATA['2022']}
+                  data={DATA[year]}
                 />
               </div>
             </Col>

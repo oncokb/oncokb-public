@@ -1,14 +1,14 @@
 package org.mskcc.cbio.oncokb.domain;
 
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
-import org.hibernate.annotations.Type;
 
 import javax.persistence.*;
 import javax.validation.constraints.*;
 
 import java.io.Serializable;
 import java.time.Instant;
-import java.util.UUID;
+
+import org.mskcc.cbio.oncokb.domain.enumeration.TokenType;
 
 /**
  * A Token.
@@ -23,9 +23,8 @@ public class Token implements Serializable {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @Type(type = "uuid-char")
-    @Column(name = "token", length = 36)
-    private UUID token;
+    @Column(name = "token")
+    private String token;
 
     @Column(name = "creation")
     private Instant creation;
@@ -42,7 +41,12 @@ public class Token implements Serializable {
 
     @NotNull
     @Column(name = "renewable", nullable = false)
-    private Boolean renewable = true;
+    private Boolean renewable;
+
+    @NotNull
+    @Enumerated(EnumType.STRING)
+    @Column(name = "type", nullable = false)
+    private TokenType type;
 
     @ManyToOne
     @JsonIgnoreProperties(value = "tokens", allowSetters = true)
@@ -57,16 +61,16 @@ public class Token implements Serializable {
         this.id = id;
     }
 
-    public UUID getToken() {
+    public String getToken() {
         return token;
     }
 
-    public Token token(UUID token) {
+    public Token token(String token) {
         this.token = token;
         return this;
     }
 
-    public void setToken(UUID token) {
+    public void setToken(String token) {
         this.token = token;
     }
 
@@ -135,6 +139,19 @@ public class Token implements Serializable {
         this.renewable = renewable;
     }
 
+    public TokenType getType() {
+        return type;
+    }
+
+    public Token type(TokenType type) {
+        this.type = type;
+        return this;
+    }
+
+    public void setType(TokenType type) {
+        this.type = type;
+    }
+
     public User getUser() {
         return user;
     }
@@ -176,6 +193,7 @@ public class Token implements Serializable {
             ", usageLimit=" + getUsageLimit() +
             ", currentUsage=" + getCurrentUsage() +
             ", renewable='" + isRenewable() + "'" +
+            ", type='" + getType() + "'" +
             "}";
     }
 }

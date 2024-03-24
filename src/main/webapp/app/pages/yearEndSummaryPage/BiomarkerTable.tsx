@@ -6,75 +6,102 @@ import {
 import { Col, Row } from 'react-bootstrap';
 import React from 'react';
 import styles from './main.module.scss';
-import { LEVEL_PRIORITY, LEVELS } from 'app/config/constants';
+import { LEVEL_PRIORITY, LEVELS, ONCOKB_TM } from 'app/config/constants';
 import OncoKBTable from 'app/components/oncokbTable/OncoKBTable';
 
-const COLUMNS = [
+const INCLUSION_COLUMNS = [
   { name: 'Molecular Biomarker' },
   { name: 'Cancer Type' },
   { name: 'Drug' },
   {
-    name: 'Significance (Reason for inclusion in OncoKB)',
+    name: `Significance (Reason for inclusion in ${ONCOKB_TM})`,
     content: (
       <div style={{ minWidth: 300 }}>
         <div>Significance</div>
-        <div>(Reason for inclusion in OncoKB)</div>
+        <div>(Reason for inclusion in {ONCOKB_TM})</div>
+      </div>
+    ),
+  },
+];
+const REMOVAL_COLUMNS = [
+  { name: 'Molecular Biomarker' },
+  { name: 'Cancer Type' },
+  { name: 'Discontinued Drug' },
+  { name: 'Previous Level of Evidence' },
+  {
+    name: `Reason for removal from ${ONCOKB_TM}`,
+    content: (
+      <div style={{ minWidth: 300 }}>
+        <div>Reason for removal from {ONCOKB_TM}</div>
       </div>
     ),
   },
 ];
 
-const TABLE_TITLE: { [level in LEVELS]?: string } = {
+export type TableKey = Record<LEVELS, string> & 'discontinued';
+
+const TABLE_TITLE: { [level in TableKey]?: string } = {
   [LEVELS.Tx1]:
-    'Biomarkers listed in the tumor type specific “Indications and Usage” section of the FDA-drug label',
+    'Level 1: Biomarkers listed in the tumor type specific “Indications and Usage” section of the FDA-drug label',
   [LEVELS.Tx2]:
-    'Biomarkers listed in the treatment recommendations section of a tumor type specific National Comprehensive Cancer Network (NCCN) guideline',
+    'Level 2: Biomarkers listed in the treatment recommendations section of a tumor type specific National Comprehensive Cancer Network (NCCN) guideline',
   [LEVELS.Tx3]:
-    'Biomarkers predictive of response to targeted agents as demonstrated by phase III clinical evidence, compelling phase I/II trial data',
+    'Level 3: Biomarkers predictive of response to targeted agents as demonstrated by phase III clinical evidence, compelling phase I/II trial data',
   [LEVELS.Tx4]:
-    'Biomarkers predictive of response to targeted agents as demonstrated by compelling biological evidence',
+    'Level 4: Biomarkers predictive of response to targeted agents as demonstrated by compelling biological evidence',
+  discontinued: 'Discontinued associations',
 };
 
-export type TableData = { [level in LEVELS]?: (string | ElementType)[][] };
+export type TableData = { [level in TableKey]?: (string | ElementType)[][] };
 export const BiomarkerTable = (props: {
   tableKey: string;
   year: string;
   data: TableData;
 }) => {
+  const visualizedLevels = LEVEL_PRIORITY.filter(
+    level => !!props.data[level]
+  ).reverse();
+
+  const tableKeys = [...visualizedLevels, 'discontinued'].filter(
+    key => !!props.data[key]
+  );
+
   return (
     <>
-      {LEVEL_PRIORITY.filter(level => !!props.data[level])
-        .reverse()
-        .map(level => (
-          <div key={`biomarker-table-div-${level}`}>
-            {TABLE_TITLE[level] && (
-              <b
-                style={{ fontWeight: 500 }}
-              >{`Level ${level}: ${TABLE_TITLE[level]} in ${props.year}`}</b>
-            )}
-            <Row className={'overflow-auto'}>
-              <Col>
-                <SimpleTable
-                  theadClassName={styles.header}
-                  columns={COLUMNS}
-                  rows={props.data[level]!.map(
-                    (item: ElementType[], index: number) => {
-                      return {
-                        key: `biomarker-table-${props.tableKey}-${index}`,
-                        content: item.map((subItem, subIndex) => {
-                          return {
-                            key: `changedAnnotation-${props.tableKey}-${index}-${subIndex}`,
-                            content: subItem,
-                          };
-                        }),
-                      };
-                    }
-                  )}
-                />
-              </Col>
-            </Row>
-          </div>
-        ))}
+      {tableKeys.map(tableKey => (
+        <div key={`biomarker-table-div-${tableKey}`}>
+          {TABLE_TITLE[tableKey] && (
+            <b
+              style={{ fontWeight: 500 }}
+            >{`${TABLE_TITLE[tableKey]} in ${props.year}`}</b>
+          )}
+          <Row className={'overflow-auto'}>
+            <Col>
+              <SimpleTable
+                theadClassName={styles.header}
+                columns={
+                  tableKey === 'discontinued'
+                    ? REMOVAL_COLUMNS
+                    : INCLUSION_COLUMNS
+                }
+                rows={props.data[tableKey]!.map(
+                  (item: ElementType[], index: number) => {
+                    return {
+                      key: `biomarker-table-${props.tableKey}-${index}`,
+                      content: item.map((subItem, subIndex) => {
+                        return {
+                          key: `changedAnnotation-${props.tableKey}-${index}-${subIndex}`,
+                          content: subItem,
+                        };
+                      }),
+                    };
+                  }
+                )}
+              />
+            </Col>
+          </Row>
+        </div>
+      ))}
     </>
   );
 };

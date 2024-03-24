@@ -1,5 +1,7 @@
 package org.mskcc.cbio.oncokb.web.rest.vm.usageAnalysis;
 
+import java.util.Map;
+
 /**
  * Created by Yifu Yao on 2020-11-2
  */
@@ -9,9 +11,11 @@ public class UserOverviewUsage {
     private String userEmail;
     private String endpoint;
     private String noPrivateEndpoint;
-    private long maxUsage;
-    private long noPrivateMaxUsage;
+    private float maxUsageProportion;
+    private float noPrivateMaxUsageProportion;
     private long totalUsage;
+    private Map<String, Long> dayUsage;
+    private Map<String, Long> monthUsage;
 
     public String getEndpoint() {
         return endpoint;
@@ -29,12 +33,12 @@ public class UserOverviewUsage {
         this.userEmail = userEmail;
     }
 
-    public long getMaxUsage() {
-        return maxUsage;
+    public float getMaxUsageProportion() {
+        return maxUsageProportion;
     }
 
-    public void setMaxUsage(long maxUsage) {
-        this.maxUsage = maxUsage;
+    public void setMaxUsageProportion(float maxUsageProportion) {
+        this.maxUsageProportion = maxUsageProportion;
     }
 
     public long getTotalUsage() {
@@ -61,12 +65,28 @@ public class UserOverviewUsage {
         this.noPrivateEndpoint = noPrivateEndpoint;
     }
 
-    public long getNoPrivateMaxUsage() {
-        return noPrivateMaxUsage;
+    public float getNoPrivateMaxUsageProportion() {
+        return noPrivateMaxUsageProportion;
     }
 
-    public void setNoPrivateMaxUsage(long noPrivateMaxUsage) {
-        this.noPrivateMaxUsage = noPrivateMaxUsage;
+    public void setNoPrivateMaxUsageProportion(float noPrivateMaxUsageProportion) {
+        this.noPrivateMaxUsageProportion = noPrivateMaxUsageProportion;
+    }
+
+    public Map<String, Long> getDayUsage() {
+        return dayUsage;
+    }
+
+    public void setDayUsage(Map<String, Long> dayUsage) {
+        this.dayUsage = dayUsage;
+    }
+
+    public Map<String, Long> getMonthUsage() {
+        return monthUsage;
+    }
+
+    public void setMonthUsage(Map<String, Long> monthUsage) {
+        this.monthUsage = monthUsage;
     }
 }
 

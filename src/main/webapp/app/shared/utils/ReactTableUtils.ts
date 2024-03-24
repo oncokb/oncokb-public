@@ -6,7 +6,7 @@ import {
 } from 'app/config/constants';
 import _ from 'lodash';
 import { Alteration, Citations } from '../api/generated/OncoKbAPI';
-import {levelOfEvidence2Level} from "app/shared/utils/Utils";
+import { levelOfEvidence2Level } from 'app/shared/utils/Utils';
 
 export function sortByArrayIndexAsc(aIndex: number, bIndex: number) {
   if (aIndex === bIndex) {
@@ -32,7 +32,7 @@ export function sortByLevelWithLevels(a: string, b: string, levels: LEVELS[]) {
 }
 
 export function sortByLevel(a: string, b: string) {
-  return sortByLevelWithLevels(a, b, LEVEL_PRIORITY)
+  return sortByLevelWithLevels(a, b, LEVEL_PRIORITY);
 }
 
 export function defaultSortMethod(a: any, b: any): number {

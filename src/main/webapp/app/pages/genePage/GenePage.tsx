@@ -36,7 +36,7 @@ import {
   REFERENCE_GENOME,
 } from 'app/config/constants';
 import { ClinicalVariant } from 'app/shared/api/generated/OncoKbPrivateAPI';
-import { AlterationPageLink, CitationLink } from 'app/shared/utils/UrlUtils';
+import { AlterationPageLink } from 'app/shared/utils/UrlUtils';
 import AppStore from 'app/store/AppStore';
 import _ from 'lodash';
 import { MskimpactLink } from 'app/components/MskimpactLink';
@@ -61,6 +61,7 @@ import OncokbLollipopPlot from './OncokbLollipopPlot';
 import { getUniqueFdaImplications } from 'app/pages/annotationPage/Utils';
 import ShowHideText from 'app/shared/texts/ShowHideText';
 import { AnnotationType } from 'app/pages/annotationPage/AnnotationPage';
+import SummaryWithRefs from 'app/oncokb-frontend-commons/src/components/SummaryWithRefs';
 
 interface MatchParams {
   hugoSymbol: string;
@@ -460,7 +461,10 @@ export default class GenePage extends React.Component<GenePageProps, any> {
                             />
                             {this.store.geneSummary.result && (
                               <div className="mt-2">
-                                {this.store.geneSummary.result}
+                                <SummaryWithRefs
+                                  content={this.store.geneSummary.result}
+                                  type="linkout"
+                                />
                               </div>
                             )}
                             {this.store.geneBackground.result && (
@@ -468,8 +472,9 @@ export default class GenePage extends React.Component<GenePageProps, any> {
                                 show={this.showGeneBackground}
                                 title={`${this.store.hugoSymbol} background`}
                                 content={
-                                  <CitationLink
+                                  <SummaryWithRefs
                                     content={this.store.geneBackground.result}
+                                    type="linkout"
                                   />
                                 }
                                 onClick={this.toggleGeneBackground}

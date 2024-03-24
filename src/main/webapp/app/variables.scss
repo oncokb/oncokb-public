@@ -22,19 +22,21 @@ $breadcrumb-padding-y: 0;
 $breadcrumb-margin-bottom: 0.5rem;
 
 $navbar-padding-x: 0;
+
+$navbar-item-border-bottom: 0.5rem;
+$navbar-padding-top: $navbar-item-border-bottom;
+
 $grid-breakpoints: (
   xs: 0,
   sm: 576px,
   md: 768px,
   lg: 1050px,
-  xl: 1500px,
+  xl: 1413px,
 ) !default;
 
 // we only need to define the max width for xl, smaller size will use the fluid width.
 $container-max-widths: (
   xl: 1500px,
 ) !default;
-
-$view-wrapper-default-p-y: 2rem;
 
 $bigger-default-font-size: 1.2rem;

@@ -199,7 +199,8 @@ export default class APIAccessPage extends React.Component<{
                         Example:{' '}
                         <code>
                           curl -H &quot;Authorization: Bearer [your token]&quot;
-                          https://www.oncokb.org/api/v1/utils/allCuratedGenes
+                          {this.props.windowStore.baseUrl}
+                          /api/v1/utils/allCuratedGenes
                         </code>
                       </div>
                       <div className={'mt-2'}>

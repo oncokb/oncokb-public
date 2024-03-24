@@ -341,7 +341,7 @@ export default class CancerGenesPage extends React.Component<{
       }) => (
         <>
           <span>
-            Cancer Gene Census
+            COSMIC Cancer Gene Census
             <br />
             Tier 1
           </span>
@@ -354,10 +354,10 @@ export default class CancerGenesPage extends React.Component<{
                   target="_blank"
                   rel="noopener noreferrer"
                 >
-                  Cancer Gene Census Tier 1
+                  COSMIC Cancer Gene Census Tier 1
                 </a>{' '}
-                ({getPanelGeneCount(props.data, 'sangerCGC')} genes, v92 - 27th
-                August 2020)
+                ({getPanelGeneCount(props.data, 'sangerCGC')} genes, v99 - 28th
+                November 2023)
               </span>
             }
           />

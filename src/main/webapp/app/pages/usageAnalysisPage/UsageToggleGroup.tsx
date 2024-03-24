@@ -12,7 +12,11 @@ type IUsageToggleGroupProps = {
 export const UsageToggleGroup = observer((props: IUsageToggleGroupProps) => {
   const ToggleButtons: any[] = [];
   props.toggleValues.forEach(value => {
-    ToggleButtons.push(<ToggleButton value={value}>{value}</ToggleButton>);
+    ToggleButtons.push(
+      <ToggleButton key={value.toString()} value={value}>
+        {value}
+      </ToggleButton>
+    );
   });
   return (
     <ToggleButtonGroup

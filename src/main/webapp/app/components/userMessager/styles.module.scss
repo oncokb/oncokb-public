@@ -7,7 +7,15 @@
   color: #fff;
   font-size: $oncokb-font-font-size;
   position: relative;
+  border-bottom: 1px solid lightgrey;
 
+  a {
+    color: white;
+    text-decoration: underline;
+  }
+  a:hover {
+    color: lightgrey;
+  }
   .messageContainer {
     display: flex;
     justify-content: space-between;

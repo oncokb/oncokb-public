@@ -20,6 +20,7 @@ import { PromiseStatus } from 'app/shared/utils/PromiseUtils';
 import { Link } from 'react-router-dom';
 import { getErrorMessage } from 'app/shared/alert/ErrorAlertUtils';
 import { COLOR_LIGHT_GREY } from 'app/config/theme';
+import RocReviewLanguage from 'app/shared/texts/RocReviewLanguage';
 
 interface MatchParams {
   id: string;
@@ -433,8 +434,7 @@ export class CreateCompanyUsersPage extends React.Component<
               <Row>
                 <Col>
                   <div className={'alert alert-warning'}>
-                    Only send to MSK ROC review when user resides outside of
-                    United States
+                    <RocReviewLanguage />
                   </div>
                 </Col>
               </Row>

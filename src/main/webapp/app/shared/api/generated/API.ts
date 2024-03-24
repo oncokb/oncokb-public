@@ -12,9 +12,19 @@ export type Activation = {
 
 };
 export type AdditionalInfoDTO = {
-    'trialAccount': TrialAccount
+    'apiAccessRequest': ApiAccessRequest
+
+        'sentToRocReview': boolean
+
+        'trialAccount': TrialAccount
 
         'userCompany': UserCompany
+
+};
+export type ApiAccessRequest = {
+    'justification': string
+
+        'requested': boolean
 
 };
 export type CompanyDTO = {
@@ -111,7 +121,7 @@ export type LoginVM = {
 export type MailTypeInfo = {
     'description': string
 
-        'mailType': "ACTIVATION" | "APPROVAL" | "REJECTION" | "CREATION" | "PASSWORD_RESET" | "LICENSE_REVIEW_COMMERCIAL" | "LICENSE_REVIEW_RESEARCH_COMMERCIAL" | "LICENSE_REVIEW_HOSPITAL" | "CLARIFY_ACADEMIC_FOR_PROFIT" | "CLARIFY_ACADEMIC_NON_INSTITUTE_EMAIL" | "CLARIFY_USE_CASE" | "CLARIFY_DUPLICATE_USER" | "CLARIFY_REGISTRATION_INFO" | "LICENSE_OPTIONS" | "REJECT_ALUMNI_ADDRESS" | "VERIFY_EMAIL_BEFORE_ACCOUNT_EXPIRES" | "APPROVAL_ALIGN_LICENSE_WITH_COMPANY" | "TRIAL_ACCOUNT_IS_ABOUT_TO_EXPIRE" | "TRIAL_ACCOUNT_IS_ACTIVATED" | "ACTIVATE_FREE_TRIAL" | "TOKEN_HAS_BEEN_EXPOSED" | "TOKEN_HAS_BEEN_EXPOSED_USER" | "SEARCHING_RESPONSE_STRUCTURE_HAS_CHANGED" | "LIST_OF_UNAPPROVED_USERS" | "DATA_USAGE_EXCEEDS_THRESHOLD" | "TEST"
+        'mailType': "ACTIVATION" | "CREATION" | "APPROVAL" | "API_ACCESS_APPROVAL" | "APPROVAL_ALIGN_LICENSE_WITH_COMPANY" | "REJECTION" | "REJECTION_US_SANCTION" | "REJECT_ALUMNI_ADDRESS" | "PASSWORD_RESET" | "LICENSE_REVIEW_COMMERCIAL" | "LICENSE_REVIEW_RESEARCH_COMMERCIAL" | "LICENSE_REVIEW_HOSPITAL" | "CLARIFY_ACADEMIC_FOR_PROFIT" | "CLARIFY_ACADEMIC_NON_INSTITUTE_EMAIL" | "CLARIFY_USE_CASE" | "CLARIFY_DUPLICATE_USER" | "CLARIFY_REGISTRATION_INFO" | "LICENSE_OPTIONS" | "VERIFY_EMAIL_BEFORE_ACCOUNT_EXPIRES" | "ACTIVATE_FREE_TRIAL" | "TRIAL_ACCOUNT_IS_ABOUT_TO_EXPIRE" | "TRIAL_ACCOUNT_IS_ACTIVATED" | "DATA_USAGE_EXCEEDS_THRESHOLD" | "TOKEN_HAS_BEEN_EXPOSED" | "TOKEN_HAS_BEEN_EXPOSED_USER" | "SEARCHING_RESPONSE_STRUCTURE_HAS_CHANGED" | "LIST_OF_UNAPPROVED_USERS" | "TEST"
 
 };
 export type ManagedUserVM = {
@@ -319,7 +329,7 @@ export type UserDetailsDTO = {
 export type UserMailsDTO = {
     'id': number
 
-        'mailType': "ACTIVATION" | "APPROVAL" | "REJECTION" | "CREATION" | "PASSWORD_RESET" | "LICENSE_REVIEW_COMMERCIAL" | "LICENSE_REVIEW_RESEARCH_COMMERCIAL" | "LICENSE_REVIEW_HOSPITAL" | "CLARIFY_ACADEMIC_FOR_PROFIT" | "CLARIFY_ACADEMIC_NON_INSTITUTE_EMAIL" | "CLARIFY_USE_CASE" | "CLARIFY_DUPLICATE_USER" | "CLARIFY_REGISTRATION_INFO" | "LICENSE_OPTIONS" | "REJECT_ALUMNI_ADDRESS" | "VERIFY_EMAIL_BEFORE_ACCOUNT_EXPIRES" | "APPROVAL_ALIGN_LICENSE_WITH_COMPANY" | "TRIAL_ACCOUNT_IS_ABOUT_TO_EXPIRE" | "TRIAL_ACCOUNT_IS_ACTIVATED" | "ACTIVATE_FREE_TRIAL" | "TOKEN_HAS_BEEN_EXPOSED" | "TOKEN_HAS_BEEN_EXPOSED_USER" | "SEARCHING_RESPONSE_STRUCTURE_HAS_CHANGED" | "LIST_OF_UNAPPROVED_USERS" | "DATA_USAGE_EXCEEDS_THRESHOLD" | "TEST"
+        'mailType': "ACTIVATION" | "CREATION" | "APPROVAL" | "API_ACCESS_APPROVAL" | "APPROVAL_ALIGN_LICENSE_WITH_COMPANY" | "REJECTION" | "REJECTION_US_SANCTION" | "REJECT_ALUMNI_ADDRESS" | "PASSWORD_RESET" | "LICENSE_REVIEW_COMMERCIAL" | "LICENSE_REVIEW_RESEARCH_COMMERCIAL" | "LICENSE_REVIEW_HOSPITAL" | "CLARIFY_ACADEMIC_FOR_PROFIT" | "CLARIFY_ACADEMIC_NON_INSTITUTE_EMAIL" | "CLARIFY_USE_CASE" | "CLARIFY_DUPLICATE_USER" | "CLARIFY_REGISTRATION_INFO" | "LICENSE_OPTIONS" | "VERIFY_EMAIL_BEFORE_ACCOUNT_EXPIRES" | "ACTIVATE_FREE_TRIAL" | "TRIAL_ACCOUNT_IS_ABOUT_TO_EXPIRE" | "TRIAL_ACCOUNT_IS_ACTIVATED" | "DATA_USAGE_EXCEEDS_THRESHOLD" | "TOKEN_HAS_BEEN_EXPOSED" | "TOKEN_HAS_BEEN_EXPOSED_USER" | "SEARCHING_RESPONSE_STRUCTURE_HAS_CHANGED" | "LIST_OF_UNAPPROVED_USERS" | "TEST"
 
         'sentBy': string
 
@@ -335,17 +345,21 @@ export type UserMailsDTO = {
 export type UserOverviewUsage = {
     'endpoint': string
 
-        'maxUsage': number
-
         'noPrivateEndpoint': string
 
-        'noPrivateMaxUsage': number
+        'maxUsageProportion': number
+
+        'noPrivateMaxUsageProportion': number
 
         'totalUsage': number
 
         'userEmail': string
 
         'userId': string
+
+        'dayUsage': {}
+
+        'monthUsage': {}
 
 };
 export type UserUsage = {
@@ -941,6 +955,82 @@ export default class API {
         $domain ? : string
     }): Promise < UserDTO > {
         return this.generateResetKeyUsingPOSTWithHttpInfo(parameters).then(function(response: request.Response) {
+            return response.body;
+        });
+    };
+    requestApiAccessUsingPOSTURL(parameters: {
+        'apiAccessRequest': ApiAccessRequest,
+        $queryParameters ? : any
+    }): string {
+        let queryParameters: any = {};
+        let path = '/api/account/request-api-access';
+
+        if (parameters.$queryParameters) {
+            Object.keys(parameters.$queryParameters).forEach(function(parameterName) {
+                var parameter = parameters.$queryParameters[parameterName];
+                queryParameters[parameterName] = parameter;
+            });
+        }
+        let keys = Object.keys(queryParameters);
+        return this.domain + path + (keys.length > 0 ? '?' + (keys.map(key => key + '=' + encodeURIComponent(queryParameters[key])).join('&')) : '');
+    };
+
+    /**
+     * requestApiAccess
+     * @method
+     * @name API#requestApiAccessUsingPOST
+     * @param {} apiAccessRequest - apiAccessRequest
+     */
+    requestApiAccessUsingPOSTWithHttpInfo(parameters: {
+        'apiAccessRequest': ApiAccessRequest,
+        $queryParameters ? : any,
+        $domain ? : string
+    }): Promise < request.Response > {
+        const domain = parameters.$domain ? parameters.$domain : this.domain;
+        const errorHandlers = this.errorHandlers;
+        const request = this.request;
+        let path = '/api/account/request-api-access';
+        let body: any;
+        let queryParameters: any = {};
+        let headers: any = {};
+        let form: any = {};
+        return new Promise(function(resolve, reject) {
+            headers['Accept'] = '*/*';
+            headers['Content-Type'] = 'application/json';
+
+            if (parameters['apiAccessRequest'] !== undefined) {
+                body = parameters['apiAccessRequest'];
+            }
+
+            if (parameters['apiAccessRequest'] === undefined) {
+                reject(new Error('Missing required  parameter: apiAccessRequest'));
+                return;
+            }
+
+            if (parameters.$queryParameters) {
+                Object.keys(parameters.$queryParameters).forEach(function(parameterName) {
+                    var parameter = parameters.$queryParameters[parameterName];
+                    queryParameters[parameterName] = parameter;
+                });
+            }
+
+            request('POST', domain + path, body, headers, queryParameters, form, reject, resolve, errorHandlers);
+
+        });
+    };
+
+    /**
+     * requestApiAccess
+     * @method
+     * @name API#requestApiAccessUsingPOST
+     * @param {} apiAccessRequest - apiAccessRequest
+     */
+    requestApiAccessUsingPOST(parameters: {
+        'apiAccessRequest': ApiAccessRequest,
+        $queryParameters ? : any,
+        $domain ? : string
+    }): Promise < any > {
+        return this.requestApiAccessUsingPOSTWithHttpInfo(parameters).then(function(response: request.Response) {
             return response.body;
         });
     };
@@ -2044,6 +2134,81 @@ export default class API {
         $domain ? : string
     }): Promise < CompanyDTO > {
         return this.getCompanyUsingGETWithHttpInfo(parameters).then(function(response: request.Response) {
+            return response.body;
+        });
+    };
+    deleteCompanyUsingDELETEURL(parameters: {
+        'id': number,
+        $queryParameters ? : any
+    }): string {
+        let queryParameters: any = {};
+        let path = '/api/companies/{id}';
+
+        path = path.replace('{id}', parameters['id'] + '');
+
+        if (parameters.$queryParameters) {
+            Object.keys(parameters.$queryParameters).forEach(function(parameterName) {
+                var parameter = parameters.$queryParameters[parameterName];
+                queryParameters[parameterName] = parameter;
+            });
+        }
+        let keys = Object.keys(queryParameters);
+        return this.domain + path + (keys.length > 0 ? '?' + (keys.map(key => key + '=' + encodeURIComponent(queryParameters[key])).join('&')) : '');
+    };
+
+    /**
+     * deleteCompany
+     * @method
+     * @name API#deleteCompanyUsingDELETE
+     * @param {integer} id - id
+     */
+    deleteCompanyUsingDELETEWithHttpInfo(parameters: {
+        'id': number,
+        $queryParameters ? : any,
+        $domain ? : string
+    }): Promise < request.Response > {
+        const domain = parameters.$domain ? parameters.$domain : this.domain;
+        const errorHandlers = this.errorHandlers;
+        const request = this.request;
+        let path = '/api/companies/{id}';
+        let body: any;
+        let queryParameters: any = {};
+        let headers: any = {};
+        let form: any = {};
+        return new Promise(function(resolve, reject) {
+            headers['Accept'] = '*/*';
+
+            path = path.replace('{id}', parameters['id'] + '');
+
+            if (parameters['id'] === undefined) {
+                reject(new Error('Missing required  parameter: id'));
+                return;
+            }
+
+            if (parameters.$queryParameters) {
+                Object.keys(parameters.$queryParameters).forEach(function(parameterName) {
+                    var parameter = parameters.$queryParameters[parameterName];
+                    queryParameters[parameterName] = parameter;
+                });
+            }
+
+            request('DELETE', domain + path, body, headers, queryParameters, form, reject, resolve, errorHandlers);
+
+        });
+    };
+
+    /**
+     * deleteCompany
+     * @method
+     * @name API#deleteCompanyUsingDELETE
+     * @param {integer} id - id
+     */
+    deleteCompanyUsingDELETE(parameters: {
+        'id': number,
+        $queryParameters ? : any,
+        $domain ? : string
+    }): Promise < any > {
+        return this.deleteCompanyUsingDELETEWithHttpInfo(parameters).then(function(response: request.Response) {
             return response.body;
         });
     };
@@ -3325,7 +3490,7 @@ export default class API {
         'by': string,
         'cc' ? : string,
         'from': string,
-        'mailType': "ACTIVATION" | "APPROVAL" | "REJECTION" | "CREATION" | "PASSWORD_RESET" | "LICENSE_REVIEW_COMMERCIAL" | "LICENSE_REVIEW_RESEARCH_COMMERCIAL" | "LICENSE_REVIEW_HOSPITAL" | "CLARIFY_ACADEMIC_FOR_PROFIT" | "CLARIFY_ACADEMIC_NON_INSTITUTE_EMAIL" | "CLARIFY_USE_CASE" | "CLARIFY_DUPLICATE_USER" | "CLARIFY_REGISTRATION_INFO" | "LICENSE_OPTIONS" | "REJECT_ALUMNI_ADDRESS" | "VERIFY_EMAIL_BEFORE_ACCOUNT_EXPIRES" | "APPROVAL_ALIGN_LICENSE_WITH_COMPANY" | "TRIAL_ACCOUNT_IS_ABOUT_TO_EXPIRE" | "TRIAL_ACCOUNT_IS_ACTIVATED" | "ACTIVATE_FREE_TRIAL" | "TOKEN_HAS_BEEN_EXPOSED" | "TOKEN_HAS_BEEN_EXPOSED_USER" | "SEARCHING_RESPONSE_STRUCTURE_HAS_CHANGED" | "LIST_OF_UNAPPROVED_USERS" | "DATA_USAGE_EXCEEDS_THRESHOLD" | "TEST",
+        'mailType': "ACTIVATION" | "CREATION" | "APPROVAL" | "API_ACCESS_APPROVAL" | "APPROVAL_ALIGN_LICENSE_WITH_COMPANY" | "REJECTION" | "REJECTION_US_SANCTION" | "REJECT_ALUMNI_ADDRESS" | "PASSWORD_RESET" | "LICENSE_REVIEW_COMMERCIAL" | "LICENSE_REVIEW_RESEARCH_COMMERCIAL" | "LICENSE_REVIEW_HOSPITAL" | "CLARIFY_ACADEMIC_FOR_PROFIT" | "CLARIFY_ACADEMIC_NON_INSTITUTE_EMAIL" | "CLARIFY_USE_CASE" | "CLARIFY_DUPLICATE_USER" | "CLARIFY_REGISTRATION_INFO" | "LICENSE_OPTIONS" | "VERIFY_EMAIL_BEFORE_ACCOUNT_EXPIRES" | "ACTIVATE_FREE_TRIAL" | "TRIAL_ACCOUNT_IS_ABOUT_TO_EXPIRE" | "TRIAL_ACCOUNT_IS_ACTIVATED" | "DATA_USAGE_EXCEEDS_THRESHOLD" | "TOKEN_HAS_BEEN_EXPOSED" | "TOKEN_HAS_BEEN_EXPOSED_USER" | "SEARCHING_RESPONSE_STRUCTURE_HAS_CHANGED" | "LIST_OF_UNAPPROVED_USERS" | "TEST",
         'to': string,
         $queryParameters ? : any
     }): string {
@@ -3375,7 +3540,7 @@ export default class API {
         'by': string,
         'cc' ? : string,
         'from': string,
-        'mailType': "ACTIVATION" | "APPROVAL" | "REJECTION" | "CREATION" | "PASSWORD_RESET" | "LICENSE_REVIEW_COMMERCIAL" | "LICENSE_REVIEW_RESEARCH_COMMERCIAL" | "LICENSE_REVIEW_HOSPITAL" | "CLARIFY_ACADEMIC_FOR_PROFIT" | "CLARIFY_ACADEMIC_NON_INSTITUTE_EMAIL" | "CLARIFY_USE_CASE" | "CLARIFY_DUPLICATE_USER" | "CLARIFY_REGISTRATION_INFO" | "LICENSE_OPTIONS" | "REJECT_ALUMNI_ADDRESS" | "VERIFY_EMAIL_BEFORE_ACCOUNT_EXPIRES" | "APPROVAL_ALIGN_LICENSE_WITH_COMPANY" | "TRIAL_ACCOUNT_IS_ABOUT_TO_EXPIRE" | "TRIAL_ACCOUNT_IS_ACTIVATED" | "ACTIVATE_FREE_TRIAL" | "TOKEN_HAS_BEEN_EXPOSED" | "TOKEN_HAS_BEEN_EXPOSED_USER" | "SEARCHING_RESPONSE_STRUCTURE_HAS_CHANGED" | "LIST_OF_UNAPPROVED_USERS" | "DATA_USAGE_EXCEEDS_THRESHOLD" | "TEST",
+        'mailType': "ACTIVATION" | "CREATION" | "APPROVAL" | "API_ACCESS_APPROVAL" | "APPROVAL_ALIGN_LICENSE_WITH_COMPANY" | "REJECTION" | "REJECTION_US_SANCTION" | "REJECT_ALUMNI_ADDRESS" | "PASSWORD_RESET" | "LICENSE_REVIEW_COMMERCIAL" | "LICENSE_REVIEW_RESEARCH_COMMERCIAL" | "LICENSE_REVIEW_HOSPITAL" | "CLARIFY_ACADEMIC_FOR_PROFIT" | "CLARIFY_ACADEMIC_NON_INSTITUTE_EMAIL" | "CLARIFY_USE_CASE" | "CLARIFY_DUPLICATE_USER" | "CLARIFY_REGISTRATION_INFO" | "LICENSE_OPTIONS" | "VERIFY_EMAIL_BEFORE_ACCOUNT_EXPIRES" | "ACTIVATE_FREE_TRIAL" | "TRIAL_ACCOUNT_IS_ABOUT_TO_EXPIRE" | "TRIAL_ACCOUNT_IS_ACTIVATED" | "DATA_USAGE_EXCEEDS_THRESHOLD" | "TOKEN_HAS_BEEN_EXPOSED" | "TOKEN_HAS_BEEN_EXPOSED_USER" | "SEARCHING_RESPONSE_STRUCTURE_HAS_CHANGED" | "LIST_OF_UNAPPROVED_USERS" | "TEST",
         'to': string,
         $queryParameters ? : any,
         $domain ? : string
@@ -3458,7 +3623,7 @@ export default class API {
         'by': string,
         'cc' ? : string,
         'from': string,
-        'mailType': "ACTIVATION" | "APPROVAL" | "REJECTION" | "CREATION" | "PASSWORD_RESET" | "LICENSE_REVIEW_COMMERCIAL" | "LICENSE_REVIEW_RESEARCH_COMMERCIAL" | "LICENSE_REVIEW_HOSPITAL" | "CLARIFY_ACADEMIC_FOR_PROFIT" | "CLARIFY_ACADEMIC_NON_INSTITUTE_EMAIL" | "CLARIFY_USE_CASE" | "CLARIFY_DUPLICATE_USER" | "CLARIFY_REGISTRATION_INFO" | "LICENSE_OPTIONS" | "REJECT_ALUMNI_ADDRESS" | "VERIFY_EMAIL_BEFORE_ACCOUNT_EXPIRES" | "APPROVAL_ALIGN_LICENSE_WITH_COMPANY" | "TRIAL_ACCOUNT_IS_ABOUT_TO_EXPIRE" | "TRIAL_ACCOUNT_IS_ACTIVATED" | "ACTIVATE_FREE_TRIAL" | "TOKEN_HAS_BEEN_EXPOSED" | "TOKEN_HAS_BEEN_EXPOSED_USER" | "SEARCHING_RESPONSE_STRUCTURE_HAS_CHANGED" | "LIST_OF_UNAPPROVED_USERS" | "DATA_USAGE_EXCEEDS_THRESHOLD" | "TEST",
+        'mailType': "ACTIVATION" | "CREATION" | "APPROVAL" | "API_ACCESS_APPROVAL" | "APPROVAL_ALIGN_LICENSE_WITH_COMPANY" | "REJECTION" | "REJECTION_US_SANCTION" | "REJECT_ALUMNI_ADDRESS" | "PASSWORD_RESET" | "LICENSE_REVIEW_COMMERCIAL" | "LICENSE_REVIEW_RESEARCH_COMMERCIAL" | "LICENSE_REVIEW_HOSPITAL" | "CLARIFY_ACADEMIC_FOR_PROFIT" | "CLARIFY_ACADEMIC_NON_INSTITUTE_EMAIL" | "CLARIFY_USE_CASE" | "CLARIFY_DUPLICATE_USER" | "CLARIFY_REGISTRATION_INFO" | "LICENSE_OPTIONS" | "VERIFY_EMAIL_BEFORE_ACCOUNT_EXPIRES" | "ACTIVATE_FREE_TRIAL" | "TRIAL_ACCOUNT_IS_ABOUT_TO_EXPIRE" | "TRIAL_ACCOUNT_IS_ACTIVATED" | "DATA_USAGE_EXCEEDS_THRESHOLD" | "TOKEN_HAS_BEEN_EXPOSED" | "TOKEN_HAS_BEEN_EXPOSED_USER" | "SEARCHING_RESPONSE_STRUCTURE_HAS_CHANGED" | "LIST_OF_UNAPPROVED_USERS" | "TEST",
         'to': string,
         $queryParameters ? : any,
         $domain ? : string

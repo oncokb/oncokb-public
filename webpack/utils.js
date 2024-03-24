@@ -5,14 +5,12 @@ const tsconfig = require('../tsconfig.json');
 module.exports = {
   root,
   mapTypescriptAliasToWebpackAlias,
-  sassResourcesLoader:  {
-    loader:'sass-resources-loader',
+  sassResourcesLoader: {
+    loader: 'sass-resources-loader',
     options: {
-      resources:[
-        './src/main/webapp/app/variables.scss'
-      ]
-    }
-  }
+      resources: ['./src/main/webapp/app/variables.scss'],
+    },
+  },
 };
 
 const _root = path.resolve(__dirname, '..');

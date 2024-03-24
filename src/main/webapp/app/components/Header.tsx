@@ -78,6 +78,7 @@ class Header extends React.Component<IHeaderProps> {
       ],
     },
     { title: 'Actionable Genes', link: PAGE_ROUTE.ACTIONABLE_GENE },
+    { title: 'Oncology Therapies', link: PAGE_ROUTE.ONCOLOGY_TX },
     { title: 'Cancer Genes', link: PAGE_ROUTE.CANCER_GENES },
     {
       title: 'API / License',
@@ -96,10 +97,13 @@ class Header extends React.Component<IHeaderProps> {
         PAGE_ROUTE.TEAM,
         PAGE_ROUTE.FDA_RECOGNITION,
         PAGE_ROUTE.SOP,
-        PAGE_ROUTE.YEAR_END_SUMMARY,
       ],
     },
-    { title: 'News', link: PAGE_ROUTE.NEWS },
+    {
+      title: 'News',
+      link: PAGE_ROUTE.NEWS,
+      matchedPaths: [PAGE_ROUTE.NEWS, PAGE_ROUTE.YEAR_END_SUMMARY],
+    },
     { title: 'FAQ', link: PAGE_ROUTE.FAQ_ACCESS },
   ];
 
@@ -124,7 +128,7 @@ class Header extends React.Component<IHeaderProps> {
       <NavLink
         to={page.link}
         key={page.title}
-        className={'mr-auto nav-item'}
+        className={'mr-auto nav-item d-flex align-items-center'}
         isActive={(match, location) => {
           if (
             match ||
@@ -216,7 +220,6 @@ class Header extends React.Component<IHeaderProps> {
                       )}
                       {!this.searchBarIsHovered && (
                         <Nav.Item
-                          style={{ paddingRight: 0 }}
                           onMouseEnter={this.enterSearchBar}
                           onMouseLeave={this.leaveSearchBar}
                           onBlur={this.leaveSearchBar}

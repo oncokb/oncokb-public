@@ -1,10 +1,15 @@
 entity Token {
-	token UUID,
+    token String,
     creation Instant,
     expiration Instant,
     usageLimit Integer,
     currentUsage Integer required,
-    renewable Boolean required
+    renewable Boolean required,
+    type TokenType required
+}
+
+enum TokenType {
+	PERSONAL,SERVICE,WEB
 }
 
 entity TokenStats {

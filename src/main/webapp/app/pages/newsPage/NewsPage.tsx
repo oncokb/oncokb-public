@@ -1,7 +1,11 @@
 import * as React from 'react';
 import { CitationText } from 'app/components/CitationText';
 import NewsList, { getNews, getNewsTitle } from 'app/pages/newsPage/NewsList';
-import { NEWS_BY_DATE } from 'app/pages/newsPage/NewsPageContent';
+import {
+  DRUGS_ADDED_TO_ONCOKB,
+  DRUGS_CURRENTLY_IN_ONCOKB,
+  NEWS_BY_DATE,
+} from 'app/pages/newsPage/NewsPageContent';
 import {
   FAQ_LINK,
   IMG_MAX_WIDTH,
@@ -42,7 +46,9 @@ export default class NewsPage extends React.Component<{
         const id = this.props.routing.location.hash.slice(1);
         const element = document.getElementById(id);
         scrollWidthOffset(element);
-      }, 500);
+      }, 200);
+    } else {
+      window.scrollTo({ top: 0, behavior: 'auto' });
     }
   }
 
@@ -85,6 +91,15 @@ export default class NewsPage extends React.Component<{
             <CitationText />
           </div>
           <div className="mt-2">
+            <NewsList date={'03212024'} />
+            <NewsList date={'02082024'} />
+            <NewsList date={'01172024'} />
+            <NewsList date={'12212023'} />
+            <NewsList date={'12062023'} />
+            <NewsList date={'11132023'} />
+            <NewsList date={'10242023'} />
+            <NewsList date={'10022023'} />
+            <NewsList date={'09012023'} />
             <NewsList date={'07282023'} />
             <NewsList date={'07122023'} />
             <NewsList date={'05192023'} />
@@ -170,8 +185,8 @@ export default class NewsPage extends React.Component<{
                                 <th>Mutation</th>
                                 <th>Cancer Type</th>
                                 <th>Current Level of Evidence</th>
-                                <th>Drug(s) Already in {ONCOKB_TM}</th>
-                                <th>Newly Added Drug(s)</th>
+                                <th>{DRUGS_CURRENTLY_IN_ONCOKB}</th>
+                                <th>{DRUGS_ADDED_TO_ONCOKB}</th>
                                 <th>Evidence</th>
                               </tr>
                             </thead>

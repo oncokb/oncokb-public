@@ -13,6 +13,7 @@ import {
   UsageTableColumnKey,
 } from 'app/pages/usageAnalysisPage/UsageAnalysisPage';
 import {
+  PAGE_ROUTE,
   TABLE_DAY_FORMAT,
   TABLE_MONTH_FORMAT,
   USAGE_ALL_TIME_KEY,
@@ -27,6 +28,7 @@ import {
   filterDependentTimeHeader,
 } from 'app/components/oncokbTable/HeaderConstants';
 import UsageText from 'app/shared/texts/UsageText';
+import { Link } from 'react-router-dom';
 
 type IUserUsageDetailsTable = {
   data: Map<string, UsageRecord[]>;
@@ -130,8 +132,21 @@ export default class UserUsageDetailsTable extends React.Component<
             {
               ...getUsageTableColumnDefinition(UsageTableColumnKey.RESOURCES),
               Header: filterDependentResourceHeader(this.timeTypeToggleValue),
-              onFilter: (data: UsageRecord, keyword) =>
-                filterByKeyword(data.resource, keyword),
+              onFilter: (row: UsageRecord, keyword) =>
+                filterByKeyword(row.resource, keyword),
+              Cell(props: { original: UsageRecord }) {
+                return props.original.resource === 'ALL' ? (
+                  <div>ALL</div>
+                ) : (
+                  <Link
+                    to={`${
+                      PAGE_ROUTE.ADMIN_RESOURCE_DETAILS_LINK
+                    }${props.original.resource.replace(/\//g, '!')}`}
+                  >
+                    {props.original.resource}
+                  </Link>
+                );
+              },
             },
             {
               ...getUsageTableColumnDefinition(UsageTableColumnKey.USAGE),
@@ -142,8 +157,8 @@ export default class UserUsageDetailsTable extends React.Component<
             {
               ...getUsageTableColumnDefinition(UsageTableColumnKey.TIME),
               Header: filterDependentTimeHeader(this.timeTypeToggleValue),
-              onFilter: (data: UsageRecord, keyword) =>
-                filterByKeyword(data.time, keyword),
+              onFilter: (row: UsageRecord, keyword) =>
+                filterByKeyword(row.time, keyword),
             },
           ]}
           loading={!this.props.loadedData}

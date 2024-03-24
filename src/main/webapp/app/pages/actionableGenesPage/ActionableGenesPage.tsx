@@ -91,7 +91,7 @@ export default class ActionableGenesPage extends React.Component<
   ActionableGenesPageProps,
   any
 > {
-  @observable relevantTumorTypeSearchKeyword = '';
+  @observable relevantCancerTypeSearchKeyword = '';
   @observable drugSearchKeyword = '';
   @observable geneSearchKeyword = '';
   @observable refGenome = DEFAULT_REFERENCE_GENOME;
@@ -116,28 +116,6 @@ export default class ActionableGenesPage extends React.Component<
         .uniq()
         .value()
         .sort();
-    },
-    default: [],
-  });
-
-  readonly allTumorTypes = remoteData<string[]>({
-    await: () => [this.allMainTypes, this.evidencesByLevel],
-    invoke: async () => {
-      let allTumorTypes: string[] = _.uniq(
-        this.allMainTypes.result
-          .filter(mainType => !mainType.endsWith('NOS'))
-          .map(mainType => mainType)
-      );
-
-      this.allTreatments.forEach(treatment => {
-        allTumorTypes = allTumorTypes.concat(
-          treatment.cancerTypes.map(cancerType =>
-            getCancerTypeNameFromOncoTreeType(cancerType)
-          )
-        );
-      });
-
-      return Promise.resolve(_.uniq(allTumorTypes));
     },
     default: [],
   });
@@ -183,7 +161,10 @@ export default class ActionableGenesPage extends React.Component<
             this.geneSearchKeyword = queryStrings.hugoSymbol;
           }
           if (queryStrings.tumorType) {
-            this.relevantTumorTypeSearchKeyword = queryStrings.tumorType;
+            this.relevantCancerTypeSearchKeyword = queryStrings.tumorType;
+          }
+          if (queryStrings.cancerType) {
+            this.relevantCancerTypeSearchKeyword = queryStrings.cancerType;
           }
           if (queryStrings.drug) {
             this.drugSearchKeyword = queryStrings.drug;
@@ -325,8 +306,8 @@ export default class ActionableGenesPage extends React.Component<
     if (this.geneSearchKeyword) {
       queryString.hugoSymbol = this.geneSearchKeyword;
     }
-    if (this.relevantTumorTypeSearchKeyword) {
-      queryString.tumorType = this.relevantTumorTypeSearchKeyword;
+    if (this.relevantCancerTypeSearchKeyword) {
+      queryString.cancerType = this.relevantCancerTypeSearchKeyword;
     }
     if (this.drugSearchKeyword) {
       queryString.drug = this.drugSearchKeyword;
@@ -390,15 +371,15 @@ export default class ActionableGenesPage extends React.Component<
         match = false;
       }
       if (
-        this.relevantTumorTypeSearchKeyword &&
+        this.relevantCancerTypeSearchKeyword &&
         treatment.relevantCancerTypes.filter(rct => {
           if (rct.code) {
             return (
-              rct.code === this.relevantTumorTypeSearchKeyword ||
-              rct.subtype === this.relevantTumorTypeSearchKeyword
+              rct.code === this.relevantCancerTypeSearchKeyword ||
+              rct.subtype === this.relevantCancerTypeSearchKeyword
             );
           } else {
-            return rct.mainType === this.relevantTumorTypeSearchKeyword;
+            return rct.mainType === this.relevantCancerTypeSearchKeyword;
           }
         }).length === 0
       ) {
@@ -429,7 +410,7 @@ export default class ActionableGenesPage extends React.Component<
   get secondLayerFilterEnabled() {
     return (
       !!this.geneSearchKeyword ||
-      !!this.relevantTumorTypeSearchKeyword ||
+      !!this.relevantCancerTypeSearchKeyword ||
       !!this.drugSearchKeyword
     );
   }
@@ -530,10 +511,10 @@ export default class ActionableGenesPage extends React.Component<
 
   @computed
   get tumorTypeSelectValue() {
-    return this.relevantTumorTypeSearchKeyword
+    return this.relevantCancerTypeSearchKeyword
       ? {
-          label: this.relevantTumorTypeSearchKeyword,
-          value: this.relevantTumorTypeSearchKeyword,
+          label: this.relevantCancerTypeSearchKeyword,
+          value: this.relevantCancerTypeSearchKeyword,
         }
       : null;
   }
@@ -574,7 +555,7 @@ export default class ActionableGenesPage extends React.Component<
   @action
   clearFilters() {
     this.levelSelected = this.initLevelSelected();
-    this.relevantTumorTypeSearchKeyword = '';
+    this.relevantCancerTypeSearchKeyword = '';
     this.drugSearchKeyword = '';
     this.geneSearchKeyword = '';
   }
@@ -938,9 +919,9 @@ export default class ActionableGenesPage extends React.Component<
               xs={12}
             >
               <CancerTypeSelect
-                tumorType={this.relevantTumorTypeSearchKeyword}
+                cancerType={this.relevantCancerTypeSearchKeyword}
                 onChange={(selectedOption: any) =>
-                  (this.relevantTumorTypeSearchKeyword = selectedOption
+                  (this.relevantCancerTypeSearchKeyword = selectedOption
                     ? selectedOption.value
                     : '')
                 }

@@ -25,6 +25,7 @@ export const DEV_URL = 'http://localhost:9095';
 
 export const AUTHORITIES = {
   ADMIN: 'ROLE_ADMIN',
+  API: 'ROLE_API',
   USER: 'ROLE_USER',
 };
 
@@ -103,7 +104,7 @@ export const SHORTEN_TEXT_FROM_LIST_THRESHOLD = 5;
 export const TOKEN_ABOUT_2_EXPIRE_NOTICE_IN_DAYS = 14;
 export const USAGE_TOP_USERS_LIMIT = 10000;
 export const USAGE_ALL_TIME_KEY = 'All';
-export const USAGE_ALL_TIME_VALUE = 'This year';
+export const USAGE_ALL_TIME_VALUE = 'Year To Date';
 export const USAGE_DETAIL_TIME_KEY = 'Detail';
 export const USAGE_DAY_DETAIL_TIME_KEY = 'Day Detail';
 
@@ -533,11 +534,16 @@ export enum PAGE_TITLE {
 export enum PAGE_ROUTE {
   LOGIN = '/login',
   LOGOUT = '/logout',
-  DATA_ACCESS = '/dataAccess',
-  API_ACCESS = '/apiAccess',
+  LEGACY_DATA_ACCESS = '/dataAccess',
+  LEGACY_API_ACCESS = '/apiAccess',
+  API_ACCESS = '/api-access',
   FAQ_ACCESS = '/faq',
-  CANCER_GENES = '/cancerGenes',
-  ACTIONABLE_GENE = '/actionableGenes',
+  LEGACY_CANCER_GENES = '/cancerGenes',
+  CANCER_GENES = '/cancer-genes',
+  LEGACY_ACTIONABLE_GENE = '/actionableGenes',
+  ACTIONABLE_GENE = '/actionable-genes',
+  PO_TX = '/precision-oncology-therapies',
+  ONCOLOGY_TX = '/oncology-therapies',
   GENE_HEADER = '/gene',
   GENE = '/gene/:hugoSymbol',
   ALTERATION = '/gene/:hugoSymbol/:alteration',
@@ -610,6 +616,14 @@ export const GAIN_OF_FUNCTION_MUTATIONS = 'Gain-of-function Mutations';
 export const LOSS_OF_FUNCTION_MUTATIONS = 'Loss-of-function Mutations';
 export const SWITCH_OF_FUNCTION_MUTATIONS = 'Switch-of-function Mutations';
 
+export const CATEGORICAL_ALTERATIONS = [
+  ONCOGENIC_MUTATIONS,
+  FUSIONS,
+  TRUNCATING_MUTATIONS,
+  GAIN_OF_FUNCTION_MUTATIONS,
+  LOSS_OF_FUNCTION_MUTATIONS,
+  SWITCH_OF_FUNCTION_MUTATIONS,
+];
 export enum SEARCH_QUERY_KEY {
   REFERENCE_GENOME = 'refGenome',
 }
@@ -711,7 +725,7 @@ export enum ACCOUNT_TITLES {
   COUNTRY = 'Country',
   API_TOKEN = 'API Token',
   LICENSE_TYPE = 'License',
-  ADDITIONAL_INFO_USER_CASE = 'Use Case',
+  ADDITIONAL_INFO_USE_CASE = 'Use Case',
 }
 
 export enum API_CALL_STATUS {
@@ -779,6 +793,14 @@ export type DataRelease = {
 };
 
 export const DATA_RELEASES: DataRelease[] = [
+  { date: '03212024', version: 'v4.15' },
+  { date: '02082024', version: 'v4.14' },
+  { date: '12212023', version: 'v4.13' },
+  { date: '12062023', version: 'v4.12' },
+  { date: '11132023', version: 'v4.11' },
+  { date: '10242023', version: 'v4.10' },
+  { date: '10022023', version: 'v4.9' },
+  { date: '09012023', version: 'v4.8' },
   { date: '07282023', version: 'v4.7' },
   { date: '07122023', version: 'v4.6' },
   { date: '05192023', version: 'v4.5' },
@@ -860,6 +882,7 @@ export const UNAUTHORIZED_ALLOWED_PATH = [
 
 export enum USER_AUTHORITY {
   ROLE_USER = 'ROLE_USER',
+  ROLE_API = 'ROLE_API',
   ROLE_PREMIUM_USER = 'ROLE_PREMIUM_USER',
   ROLE_ADMIN = 'ROLE_ADMIN',
   ROLE_DATA_DOWNLOAD = 'ROLE_DATA_DOWNLOAD',
@@ -868,6 +891,7 @@ export enum USER_AUTHORITY {
 
 export const USER_AUTHORITIES = [
   USER_AUTHORITY.ROLE_ADMIN,
+  USER_AUTHORITY.ROLE_API,
   USER_AUTHORITY.ROLE_PREMIUM_USER,
   USER_AUTHORITY.ROLE_DATA_DOWNLOAD,
   USER_AUTHORITY.ROLE_USER,
@@ -878,16 +902,6 @@ export const NOT_CHANGEABLE_AUTHORITIES = [
   USER_AUTHORITY.ROLE_USER,
   USER_AUTHORITY.ROLE_PUBLIC_WEBSITE,
 ];
-
-export enum REGEXP {
-  PMID = 'PMID:\\s*([0-9]+,*\\s*)+',
-  NCTID = 'NCT[0-9]+',
-}
-
-export const REGEXP_LINK: { [key: string]: string } = {
-  [REGEXP.PMID]: 'https://www.ncbi.nlm.nih.gov/pubmed/',
-  [REGEXP.NCTID]: 'http://clinicaltrials.gov/show/',
-};
 
 export enum REFERENCE_GENOME {
   GRCh37 = 'GRCh37',

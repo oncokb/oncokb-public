@@ -5,6 +5,9 @@ import {
   CHANGED_ANNOTATION_ADDITIONAL_DRUG_DIFF_LEVEL_COLUMNS,
   GENE,
   MUTATION,
+  CHANGED_ANNOTATION_DRUG_REMOVAL_COLUMNS,
+  CHANGED_ANNOTATION_LEVEL_WITH_EVIDENCE_COLUMNS,
+  CHANGED_ANNOTATION_SENSITIVITY_LEVEL_COLUMNS,
 } from 'app/pages/newsPage/NewsPageContent';
 import { SimpleTable, SimpleTableRow } from 'app/components/SimpleTable';
 import { Row } from 'react-bootstrap';
@@ -24,6 +27,10 @@ export enum AnnotationColumnHeaderType {
   DRUG,
   ADDITIONAL_SAME_LEVEL_DRUG,
   ADDITIONAL_DIFF_LEVEL_DRUG,
+  ADDITIONAL_SENSITIVITY_LEVEL_DRUG,
+  DRUG_REMOVAL,
+  DEMOTION_TUMOR_TYPE_SPECIFIC_EVIDENCE,
+  PROMOTION_TUMOR_TYPE_SPECIFIC_EVIDENCE,
 }
 
 export const ChangedAnnotationListItem = (props: {
@@ -48,12 +55,36 @@ export const ChangedAnnotationListItem = (props: {
       annotationColumnHeader = CHANGED_ANNOTATION_ADDITIONAL_DRUG_SAME_LEVEL_COLUMNS;
       useOneLineRowClass = false;
       defaultTitle =
-        'Updated therapeutic implications - addition of therapies for variants with a level of evidence';
+        'Updated therapeutic implications - Addition of therapies for variants with a level of evidence';
       break;
     case AnnotationColumnHeaderType.ADDITIONAL_DIFF_LEVEL_DRUG:
       annotationColumnHeader = CHANGED_ANNOTATION_ADDITIONAL_DRUG_DIFF_LEVEL_COLUMNS;
       useOneLineRowClass = false;
       defaultTitle = 'Changed Annotation';
+      break;
+    case AnnotationColumnHeaderType.ADDITIONAL_SENSITIVITY_LEVEL_DRUG:
+      annotationColumnHeader = CHANGED_ANNOTATION_SENSITIVITY_LEVEL_COLUMNS;
+      useOneLineRowClass = false;
+      defaultTitle =
+        'Updated therapeutic implications - Addition of sensitivity-associated therapy(s) for an alteration(s) with a tumor type-specific resistance level of evidence';
+      break;
+    case AnnotationColumnHeaderType.DRUG_REMOVAL:
+      annotationColumnHeader = CHANGED_ANNOTATION_DRUG_REMOVAL_COLUMNS;
+      useOneLineRowClass = false;
+      defaultTitle =
+        'Updated therapeutic implications - Removal of therapie(s) and changed tumor type-specific level of evidence for an alteration(s)';
+      break;
+    case AnnotationColumnHeaderType.PROMOTION_TUMOR_TYPE_SPECIFIC_EVIDENCE:
+      annotationColumnHeader = CHANGED_ANNOTATION_LEVEL_WITH_EVIDENCE_COLUMNS;
+      useOneLineRowClass = false;
+      defaultTitle =
+        'Updated therapeutic implications - Promotion of tumor type-specific level of evidence for an alteration(s)';
+      break;
+    case AnnotationColumnHeaderType.DEMOTION_TUMOR_TYPE_SPECIFIC_EVIDENCE:
+      annotationColumnHeader = CHANGED_ANNOTATION_LEVEL_WITH_EVIDENCE_COLUMNS;
+      useOneLineRowClass = false;
+      defaultTitle =
+        'Updated therapeutic implications - Demotion of tumor type-specific level of evidence for an alteration(s)';
       break;
     case AnnotationColumnHeaderType.LEVEL:
     default:
@@ -78,6 +109,7 @@ export const ChangedAnnotationListItem = (props: {
         if (linkableMutationName(geneInput, mutationInput)) {
           row.content[mutationColumnIndex].content = (
             <AlterationPageLink
+              key={`${geneInput}-${mutationInput}`}
               hugoSymbol={geneInput}
               alteration={mutationInput}
             />
