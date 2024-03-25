@@ -952,7 +952,7 @@ export default class CompanyPage extends React.Component<ICompanyPage> {
                                   SimpleConfirmModalType.DELETE_COMPANY;
                               }}
                             >
-                              Delete Account
+                              Delete Company
                             </Button>
                           </div>
                         </Col>
