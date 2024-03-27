@@ -92,7 +92,9 @@ export type Alteration = {
 
 };
 export type AnnotatedVariant = {
-    'entrezGeneId': number
+    'description': string
+
+        'entrezGeneId': number
 
         'gene': string
 
@@ -221,6 +223,12 @@ export type GeneEvidence = {
         'status': string
 
 };
+export type AnnotationSearchResult = {
+    'indicatorQueryResp': IndicatorQueryResp
+
+        'queryType': "GENE" | "VARIANT" | "DRUG" | "CANCER_TYPE"
+
+};
 export type Evidence = {
     'additionalInfo': string
 
@@ -335,6 +343,8 @@ export type ActionableGene = {
     'abstracts': string
 
         'cancerType': string
+
+        'description': string
 
         'drugs': string
 
@@ -1850,6 +1860,99 @@ export default class OncoKbAPI {
         }): Promise < Array < IndicatorQueryResp >
         > {
             return this.annotateStructuralVariantsPostUsingPOSTWithHttpInfo(parameters).then(function(response: request.Response) {
+                return response.body;
+            });
+        };
+    annotationSearchGetUsingGETURL(parameters: {
+        'query': string,
+        'limit' ? : number,
+        $queryParameters ? : any
+    }): string {
+        let queryParameters: any = {};
+        let path = '/annotation/search';
+        if (parameters['query'] !== undefined) {
+            queryParameters['query'] = parameters['query'];
+        }
+
+        if (parameters['limit'] !== undefined) {
+            queryParameters['limit'] = parameters['limit'];
+        }
+
+        if (parameters.$queryParameters) {
+            Object.keys(parameters.$queryParameters).forEach(function(parameterName) {
+                var parameter = parameters.$queryParameters[parameterName];
+                queryParameters[parameterName] = parameter;
+            });
+        }
+        let keys = Object.keys(queryParameters);
+        return this.domain + path + (keys.length > 0 ? '?' + (keys.map(key => key + '=' + encodeURIComponent(queryParameters[key])).join('&')) : '');
+    };
+
+    /**
+     * Get annotations based on search
+     * @method
+     * @name OncoKbAPI#annotationSearchGetUsingGET
+     * @param {string} query - The search query, it could be hugoSymbol, variant or cancer type. At least two characters. Maximum two keywords are supported, separated by space
+     * @param {integer} limit - The limit of returned result.
+     */
+    annotationSearchGetUsingGETWithHttpInfo(parameters: {
+        'query': string,
+        'limit' ? : number,
+        $queryParameters ? : any,
+        $domain ? : string
+    }): Promise < request.Response > {
+        const domain = parameters.$domain ? parameters.$domain : this.domain;
+        const errorHandlers = this.errorHandlers;
+        const request = this.request;
+        let path = '/annotation/search';
+        let body: any;
+        let queryParameters: any = {};
+        let headers: any = {};
+        let form: any = {};
+        return new Promise(function(resolve, reject) {
+            headers['Accept'] = 'application/json';
+            headers['Content-Type'] = 'application/json';
+
+            if (parameters['query'] !== undefined) {
+                queryParameters['query'] = parameters['query'];
+            }
+
+            if (parameters['query'] === undefined) {
+                reject(new Error('Missing required  parameter: query'));
+                return;
+            }
+
+            if (parameters['limit'] !== undefined) {
+                queryParameters['limit'] = parameters['limit'];
+            }
+
+            if (parameters.$queryParameters) {
+                Object.keys(parameters.$queryParameters).forEach(function(parameterName) {
+                    var parameter = parameters.$queryParameters[parameterName];
+                    queryParameters[parameterName] = parameter;
+                });
+            }
+
+            request('GET', domain + path, body, headers, queryParameters, form, reject, resolve, errorHandlers);
+
+        });
+    };
+
+    /**
+     * Get annotations based on search
+     * @method
+     * @name OncoKbAPI#annotationSearchGetUsingGET
+     * @param {string} query - The search query, it could be hugoSymbol, variant or cancer type. At least two characters. Maximum two keywords are supported, separated by space
+     * @param {integer} limit - The limit of returned result.
+     */
+    annotationSearchGetUsingGET(parameters: {
+            'query': string,
+            'limit' ? : number,
+            $queryParameters ? : any,
+            $domain ? : string
+        }): Promise < Array < AnnotationSearchResult >
+        > {
+            return this.annotationSearchGetUsingGETWithHttpInfo(parameters).then(function(response: request.Response) {
                 return response.body;
             });
         };

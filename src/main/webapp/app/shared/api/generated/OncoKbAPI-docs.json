@@ -713,6 +713,51 @@
         }
       }
     },
+    "/annotation/search": {
+      "get": {
+        "tags": [
+          "Annotations"
+        ],
+        "summary": "annotationSearchGet",
+        "description": "Get annotations based on search",
+        "operationId": "annotationSearchGetUsingGET",
+        "consumes": [
+          "application/json"
+        ],
+        "produces": [
+          "application/json"
+        ],
+        "parameters": [
+          {
+            "name": "query",
+            "in": "query",
+            "description": "The search query, it could be hugoSymbol, variant or cancer type. At least two characters. Maximum two keywords are supported, separated by space",
+            "required": true,
+            "type": "string"
+          },
+          {
+            "name": "limit",
+            "in": "query",
+            "description": "The limit of returned result.",
+            "required": false,
+            "type": "integer",
+            "default": 10,
+            "format": "int32"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "schema": {
+              "type": "array",
+              "items": {
+                "$ref": "#/definitions/AnnotationSearchResult"
+              }
+            }
+          }
+        }
+      }
+    },
     "/classification/variants": {
       "get": {
         "tags": [
@@ -2455,6 +2500,9 @@
     "AnnotatedVariant": {
       "type": "object",
       "properties": {
+        "description": {
+          "type": "string"
+        },
         "entrezGeneId": {
           "type": "integer",
           "format": "int32"
@@ -2740,6 +2788,23 @@
         },
         "status": {
           "type": "string"
+        }
+      }
+    },
+    "AnnotationSearchResult": {
+      "type": "object",
+      "properties": {
+        "indicatorQueryResp": {
+          "$ref": "#/definitions/IndicatorQueryResp"
+        },
+        "queryType": {
+          "type": "string",
+          "enum": [
+            "GENE",
+            "VARIANT",
+            "DRUG",
+            "CANCER_TYPE"
+          ]
         }
       }
     },
@@ -3218,6 +3283,9 @@
           "type": "string"
         },
         "cancerType": {
+          "type": "string"
+        },
+        "description": {
           "type": "string"
         },
         "drugs": {
