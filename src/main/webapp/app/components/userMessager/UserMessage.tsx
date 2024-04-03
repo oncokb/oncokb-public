@@ -118,30 +118,15 @@ if (
       id: '2021-fda-recognition',
     },
     {
-      dateEnd: 1700373600000,
+      dateEnd: 1712808000000,
       content: (
         <div>
-          Join us at AMP 2023! Visit our booth (
-          <Linkout
-            link={
-              'https://www.conferenceharvester.com/floorplan/v2/index.asp?EventKey=ZQTAJJYL'
-            }
-          >
-            #928
-          </Linkout>
-          ) and join{' '}
-          <Linkout
-            link={
-              'https://amp23.eventscribe.net/ajaxcalls/PresentationInfo.asp?PresentationID=1303633'
-            }
-          >
-            Dr. Chakravarty's presentation on OncoKB™
-          </Linkout>{' '}
-          during the plenary session "Clinical Grade Knowledge Bases for Genomic
-          Actionability" (Thu 11/16, 1:15pm MST).
+          Join us at AACR 2024! Visit our poster session (Sat 4/8, 1:30PM,
+          Section 36, Poster 3544) to learn more about OncoKB and meet some of
+          our team members. See you there!
         </div>
       ),
-      id: '2023_amp',
+      id: '2024_aacr',
     },
     {
       dateStart: 1709337600000,
