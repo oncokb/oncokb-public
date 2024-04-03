@@ -121,7 +121,7 @@ if (
       dateEnd: 1712808000000,
       content: (
         <div>
-          Join us at AACR 2024! Visit our poster session (Sat 4/8, 1:30PM,
+          Join us at AACR 2024! Visit our poster session (Sat 4/8, 1:30PM PDT,
           Section 36, Poster 3544) to learn more about OncoKB and meet some of
           our team members. See you there!
         </div>
