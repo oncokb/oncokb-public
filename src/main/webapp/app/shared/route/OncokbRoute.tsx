@@ -37,7 +37,10 @@ function CanonicalLink({ routeProps, canonicalProps }: CanonicalLinkProps) {
 
     linkNode.setAttribute('id', 'canonical');
     linkNode.setAttribute('rel', 'canonical');
-    linkNode.setAttribute('href', `${location.host}${canonicalEndpoint}`);
+    linkNode.setAttribute(
+      'href',
+      `${location.protocol}${location.host}${canonicalEndpoint}`
+    );
 
     document.head.appendChild(linkNode);
 
