@@ -1,10 +1,5 @@
 import React from 'react';
-import {
-  Route,
-  Redirect,
-  RouteProps,
-  RouteComponentProps,
-} from 'react-router-dom';
+import { Redirect, RouteComponentProps } from 'react-router-dom';
 import { observer } from 'mobx-react';
 import ErrorBoundary from 'app/shared/error/error-boundary';
 import AuthenticationStore from 'app/store/AuthenticationStore';
@@ -13,8 +8,9 @@ import { PAGE_ROUTE } from 'app/config/constants';
 import { isAuthorized } from 'app/shared/auth/AuthUtils';
 import { getRedirectLoginState } from 'app/shared/utils/Utils';
 import { AppConfig } from 'app/appConfig';
+import OncokbRoute, { OncokbRouteProps } from '../route/OncokbRoute';
 
-export interface IPrivateRouteProps extends RouteProps {
+export interface IPrivateRouteProps extends OncokbRouteProps {
   authenticationStore: AuthenticationStore;
   routing: RouterStore;
   hasAnyAuthorities?: string[];
@@ -81,6 +77,6 @@ export const PrivateRoute = observer(
         }`
       );
 
-    return <Route {...rest} render={renderRedirect} />;
+    return <OncokbRoute {...rest} render={renderRedirect} />;
   }
 );
