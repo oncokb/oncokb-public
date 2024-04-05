@@ -77,7 +77,7 @@ public class AccountResourceIT {
         recaptchaProp.setThreshold((float) 0.5);
         applicationProperties.setRecaptcha(recaptchaProp);
 
-        accountResource = new AccountResource(userRepository, userService, null, null, null, null, null, null, passwordEncoder, null, null, applicationProperties);
+        accountResource = new AccountResource(userRepository, userService, null, null, null, null, null, passwordEncoder, null, null, applicationProperties);
     }
 
     @Test
