@@ -21,8 +21,6 @@ public class ManagedUserVM extends UserDTO {
 
     private Boolean notifyUserOnTrialCreation = false;
 
-    private Boolean needsMskRocReview = true;
-
     public ManagedUserVM() {
         // Empty constructor needed for Jackson.
     }
@@ -58,15 +56,6 @@ public class ManagedUserVM extends UserDTO {
     public void setNotifyUserOnTrialCreation(Boolean notifyUserOnTrialCreation) {
         this.notifyUserOnTrialCreation = notifyUserOnTrialCreation;
     }
-
-    public Boolean getNeedsMskRocReview() {
-        return needsMskRocReview;
-    }
-
-    public void setNeedsMskRocReview(Boolean needsMskRocReview) {
-        this.needsMskRocReview = needsMskRocReview;
-    }
-
     // prettier-ignore
     @Override
     public String toString() {

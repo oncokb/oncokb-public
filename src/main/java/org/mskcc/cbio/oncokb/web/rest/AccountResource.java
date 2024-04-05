@@ -60,8 +60,6 @@ public class AccountResource {
 
     private final SlackService slackService;
 
-    private final SmartsheetService smartsheetService;
-
     private final EmailService emailService;
 
     private final TokenService tokenService;
@@ -82,7 +80,6 @@ public class AccountResource {
     public AccountResource(UserRepository userRepository, UserService userService,
                            MailService mailService, TokenProvider tokenProvider,
                            SlackService slackService, EmailService emailService,
-                           SmartsheetService smartsheetService,
                            AuthenticationManagerBuilder authenticationManagerBuilder,
                            PasswordEncoder passwordEncoder, UserDetailsService userDetailsService,
                            TokenService tokenService, ApplicationProperties applicationProperties
@@ -94,7 +91,6 @@ public class AccountResource {
         this.mailService = mailService;
         this.tokenProvider = tokenProvider;
         this.slackService = slackService;
-        this.smartsheetService = smartsheetService;
         this.emailService = emailService;
         this.passwordEncoder = passwordEncoder;
         this.tokenService = tokenService;

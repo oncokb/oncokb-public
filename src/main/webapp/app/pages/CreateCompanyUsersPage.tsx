@@ -20,7 +20,6 @@ import { PromiseStatus } from 'app/shared/utils/PromiseUtils';
 import { Link } from 'react-router-dom';
 import { getErrorMessage } from 'app/shared/alert/ErrorAlertUtils';
 import { COLOR_LIGHT_GREY } from 'app/config/theme';
-import RocReviewLanguage from 'app/shared/texts/RocReviewLanguage';
 
 interface MatchParams {
   id: string;
@@ -47,7 +46,6 @@ type UserInfoType = {
   lastName: string;
   city: string;
   country: string;
-  needsMskRocReview: boolean;
 };
 
 const emptyUserInfo: UserInfoType = {
@@ -59,7 +57,6 @@ const emptyUserInfo: UserInfoType = {
   lastName: '',
   city: '',
   country: '',
-  needsMskRocReview: false,
 };
 
 const batchUserInputFormatText = `Enter the user information (one user per line) using the format: email, first name, last name, city, country \nie) user@email.com,Sample,User,City,Country
@@ -132,7 +129,6 @@ export class CreateCompanyUsersPage extends React.Component<
         companyName: this.company.result?.name,
         notifyUserOnTrialCreation:
           this.company.result?.licenseStatus === LicenseStatus.TRIAL,
-        needsMskRocReview: userInfo.needsMskRocReview,
       } as ManagedUserVM;
     });
 
@@ -209,7 +205,6 @@ export class CreateCompanyUsersPage extends React.Component<
           city: userInfoFields[3] || '',
           country: userInfoFields[4] || '',
           creationStatus: { status },
-          needsMskRocReview: false,
         });
         return true;
       }
@@ -348,21 +343,6 @@ export class CreateCompanyUsersPage extends React.Component<
                   disabled={CreateUserMode[mode] === CreateUserMode.BATCH}
                 />
               </Col>
-              <Col>
-                <Form.Check
-                  inline
-                  onClick={() =>
-                    (this.userInfos[idx].needsMskRocReview = !this.userInfos[
-                      idx
-                    ].needsMskRocReview)
-                  }
-                  checked={this.userInfos[idx].needsMskRocReview}
-                  label={'Send to MSK ROC review'}
-                  type={'checkbox'}
-                  key={`needsMskRocReview${idx}`}
-                  id={`needsMskRocReview${idx}`}
-                />
-              </Col>
               {CreateUserMode[mode] === CreateUserMode.SINGLE && (
                 <i
                   style={
@@ -429,13 +409,6 @@ export class CreateCompanyUsersPage extends React.Component<
                   <Link to={`/companies/${this.company.result?.id}`}>
                     Return to Company Page
                   </Link>
-                </Col>
-              </Row>
-              <Row>
-                <Col>
-                  <div className={'alert alert-warning'}>
-                    <RocReviewLanguage />
-                  </div>
                 </Col>
               </Row>
               <Row className={getSectionClassName(true)}>

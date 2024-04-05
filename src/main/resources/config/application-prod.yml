@@ -156,8 +156,6 @@ application:
     address: 'redis://oncokb-public-sentinel-redis:6379'
   public-website-api-threshold: 2000
   db-read-only: false # Certain endpoints will be disabled when readonly is set to true
-  smartsheet:
-    editor: OncoKB
   frontend:
     enable-auth: true
   recaptcha:
