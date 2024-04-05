@@ -25,11 +25,24 @@ function CanonicalLink({ routeProps, canonicalProps }: CanonicalLinkProps) {
     if (!canonicalProps) return;
     const removedPropsUrl = routeProps.match.path.replace(/\/:.*/, '');
     const canonicalEndpoint =
+      /*
+       * copies the entire URL and uses it as the canonical link
+       */
       canonicalProps.__canonicalTypeName === 'location'
         ? routeProps.location.pathname
-        : canonicalProps.__canonicalTypeName === 'function'
+        : /*
+         * allows to build the canonical URL based on the information
+         * provided by react router.
+         */
+        canonicalProps.__canonicalTypeName === 'function'
         ? canonicalProps.getCanonicalEndpoint(routeProps, removedPropsUrl)
-        : canonicalProps.__canonicalTypeName === 'location-without-url-params'
+        : /*
+         * strips the URL parameters from the URL for example:
+         * /gene/:hugoSymbol/:alteration
+         * becomes
+         * /gene
+         */
+        canonicalProps.__canonicalTypeName === 'location-without-url-params'
         ? removedPropsUrl
         : undefined;
 
