@@ -136,9 +136,6 @@ public class UserResource {
             }
             User newUser = userService.createUser(managedUserVM, Optional.ofNullable(managedUserVM.getTokenValidDays()), Optional.ofNullable(managedUserVM.getTokenIsRenewable()));
             UserDTO newUserDTO = userMapper.userToUserDTO(newUser);
-            if (managedUserVM.getNeedsMskRocReview()) {
-                this.userService.sendUserToRocReview(newUserDTO);
-            }
             if (managedUserVM.getNotifyUserOnTrialCreation()) {
                 userService.initiateTrialAccountActivation(newUser.getLogin());
                 mailService.sendActiveTrialMail(newUserDTO, true);

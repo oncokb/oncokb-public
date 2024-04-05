@@ -97,8 +97,6 @@ public class UserService {
 
     private final AuditEventService auditEventService;
 
-    private final SmartsheetService smartsheetService;
-
     @Autowired
     private UserMapper userMapper;
 
@@ -122,8 +120,7 @@ public class UserService {
         UserMailsService userMailsService,
         AuditEventService auditEventService,
         CompanyDomainRepository companyDomainRepository,
-        CompanyRepository companyRepository,
-        SmartsheetService smartsheetService) {
+        CompanyRepository companyRepository) {
         this.userRepository = userRepository;
         this.userDetailsRepository = userDetailsRepository;
         this.passwordEncoder = passwordEncoder;
@@ -141,7 +138,6 @@ public class UserService {
         this.auditEventService = auditEventService;
         this.companyDomainRepository = companyDomainRepository;
         this.companyRepository = companyRepository;
-        this.smartsheetService = smartsheetService;
     }
 
     public Optional<User> activateRegistration(String key) {
@@ -889,15 +885,6 @@ public class UserService {
             Objects.requireNonNull(cacheManager.getCache(this.cacheNameResolver.getCacheName(USERS_BY_EMAIL_CACHE))).evict(user.getEmail());
         }
         Objects.requireNonNull(cacheManager.getCache(this.cacheNameResolver.getCacheName(ALL_USERS_CACHE))).evict("getAllManagedUsers");;
-    }
-
-    public void sendUserToRocReview(UserDTO userDTO) throws MessagingException {
-        smartsheetService.addUserToSheet(userDTO);
-        if (userDTO.getAdditionalInfo() == null) {
-            userDTO.setAdditionalInfo(new AdditionalInfoDTO());
-        }
-        userDTO.getAdditionalInfo().setSentToRocReview(true);
-        updateUserAndTokens(userDTO);
     }
 
     public boolean isAdmin(String userLogin) {

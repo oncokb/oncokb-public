@@ -36,7 +36,6 @@ public enum ActionId {
     , UPDATE_USER("update-user")
     , INPUT_SUBJECT("input-subject")
     , INPUT_BODY("input-body")
-    , SEND_ROC_REVIEW("send-roc-review")
     ;
 
     String id;

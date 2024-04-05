@@ -4,7 +4,6 @@ import com.google.gson.Gson;
 import com.slack.api.app_backend.interactive_components.payload.BlockActionPayload;
 import com.slack.api.app_backend.views.payload.ViewSubmissionPayload;
 import com.slack.api.util.json.GsonFactory;
-import liquibase.pro.packaged.A;
 import org.apache.commons.lang3.StringUtils;
 import org.mskcc.cbio.oncokb.domain.CompanyCandidate;
 import org.mskcc.cbio.oncokb.domain.UnknownPayload;
@@ -14,10 +13,8 @@ import org.mskcc.cbio.oncokb.repository.UserRepository;
 import org.mskcc.cbio.oncokb.security.AuthoritiesConstants;
 import org.mskcc.cbio.oncokb.service.MailService;
 import org.mskcc.cbio.oncokb.service.SlackService;
-import org.mskcc.cbio.oncokb.service.SmartsheetService;
 import org.mskcc.cbio.oncokb.service.UserService;
 import org.mskcc.cbio.oncokb.service.dto.UserDTO;
-import org.mskcc.cbio.oncokb.service.dto.useradditionalinfo.AdditionalInfoDTO;
 import org.mskcc.cbio.oncokb.service.mapper.UserMapper;
 import org.mskcc.cbio.oncokb.web.rest.slack.ActionId;
 import org.mskcc.cbio.oncokb.web.rest.slack.BlockId;
@@ -125,12 +122,12 @@ public class SlackController {
                             mailService.sendApiAccessApprovalEmail(userDTO);
                         }
                         break;
-                    case GIVE_TRIAL_ACCESS: 
+                    case GIVE_TRIAL_ACCESS:
                         user = userService.initiateTrialAccountActivation(login);
                         userDTO = userMapper.userToUserDTO(user.get());
 
                         updateUserWithRoleApiIfRequested(userDTO);
-                        
+
                         Optional<UserDTO> updatedTrialUser = userService.updateUserBeforeTrialAccountActivation(userDTO);
                         if (updatedTrialUser.isPresent()) {
                             userDTO = updatedTrialUser.get();
@@ -146,9 +143,6 @@ public class SlackController {
                         break;
                     case CONVERT_TO_REGULAR_ACCOUNT:
                         userService.convertUserToRegular(userDTO);
-                        break;
-                    case SEND_ROC_REVIEW:
-                        userService.sendUserToRocReview(userDTO);
                         break;
                     default:
                         break;

@@ -76,17 +76,15 @@ public class SlackService {
     private final EmailService emailService;
     private final UserService userService;
     private final UserMailsService userMailsService;
-    private final SmartsheetService smartsheetService;
     private final UserMapper userMapper;
     private final Slack slack;
 
-    public SlackService(ApplicationProperties applicationProperties, MailService mailService, EmailService emailService, @Lazy UserService userService, UserMailsService userMailsService, SmartsheetService smartsheetService, UserMapper userMapper, Slack slack) {
+    public SlackService(ApplicationProperties applicationProperties, MailService mailService, EmailService emailService, @Lazy UserService userService, UserMailsService userMailsService, UserMapper userMapper, Slack slack) {
         this.applicationProperties = applicationProperties;
         this.mailService = mailService;
         this.emailService = emailService;
         this.userService = userService;
         this.userMailsService = userMailsService;
-        this.smartsheetService = smartsheetService;
         this.userMapper = userMapper;
         this.slack = slack;
     }
@@ -607,11 +605,6 @@ public class SlackService {
             }
             layoutBlocks.add(buildMarkdownBlock(sb.toString(), DUPLICATE_USER_CLARIFICATION_NOTE));
         }
-
-        // Add ROC review info block
-        if (smartsheetService.sentToRocReview(userDTO)) {
-            layoutBlocks.add(buildPlainTextBlock("User info has been sent to ROC for review", SENT_TO_ROC_REVIEW_NOTE));
-        }
         return layoutBlocks;
     }
 
@@ -621,11 +614,6 @@ public class SlackService {
         // Add button - Approve
         if (!userDTO.isActivated()) {
             actionElements.add(buildApproveButton(userDTO));
-        }
-
-        // Add button - Send ROC Review
-        if (smartsheetService.shouldAddUser(userDTO)) {
-            actionElements.add(buildRocReviewButton(userDTO));
         }
 
         // Add button - Update Above Info
@@ -653,12 +641,6 @@ public class SlackService {
         if (user.getLicenseType() != LicenseType.ACADEMIC) {
             button.setConfirm(buildConfirmationDialogObject("You are going to approve a commercial account."));
         }
-        return button;
-    }
-
-    private ButtonElement buildRocReviewButton(UserDTO user) {
-        ButtonElement button = buildButton("Send ROC Review", user.getLogin(), SEND_ROC_REVIEW);
-        button.setConfirm(buildConfirmationDialogObject(smartsheetService.getSendReviewalCriteria()));
         return button;
     }
 

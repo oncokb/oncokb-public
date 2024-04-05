@@ -14,8 +14,6 @@ public class AdditionalInfoDTO implements Serializable{
 
     ApiAccessRequest apiAccessRequest;
 
-    Boolean sentToRocReview;
-
     public AdditionalInfoDTO() {
 
     }
@@ -44,11 +42,4 @@ public class AdditionalInfoDTO implements Serializable{
         this.apiAccessRequest = apiAccessRequest;
     }
 
-    public Boolean getSentToRocReview() {
-        return sentToRocReview;
-    }
-
-    public void setSentToRocReview(Boolean sentToRocReview) {
-        this.sentToRocReview = sentToRocReview;
-    }
 }

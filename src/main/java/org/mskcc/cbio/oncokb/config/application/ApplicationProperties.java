@@ -36,7 +36,6 @@ public class ApplicationProperties {
     private SamlAwsProperties samlAws;
     private String githubToken;
     private Boolean dbReadOnly;
-    private SmartsheetProperties smartsheet;
     private RecaptchaProperties recaptcha;
 
     public String getName() {
@@ -180,14 +179,6 @@ public class ApplicationProperties {
 
     public void setDbReadOnly(Boolean dbReadOnly) {
         this.dbReadOnly = dbReadOnly;
-    }
-
-    public SmartsheetProperties getSmartsheet() {
-        return smartsheet;
-    }
-
-    public void setSmartsheet(SmartsheetProperties smartsheet) {
-        this.smartsheet = smartsheet;
     }
 
     public RecaptchaProperties getRecaptcha() {
