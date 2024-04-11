@@ -9,6 +9,12 @@ import { FormTextAreaField } from '../../shared/textarea/FormTextAreaField';
 import { FormSelectWithLabelField } from '../../shared/select/FormSelectWithLabelField';
 import { AvField, AvForm } from 'availity-reactstrap-validation';
 import {
+  LONG_TEXT_VAL,
+  SHORT_TEXT_VAL,
+  TEXT_VAL,
+  OPTIONAL_TEXT_VAL,
+} from 'app/shared/utils/FormValidationUtils';
+import {
   LicenseType,
   LICENSE_TITLES,
   LicenseStatus,
@@ -137,7 +143,7 @@ export class NewCompanyForm extends React.Component<INewCompanyFormProps> {
               label="Name"
               validate={{
                 ...fieldRequiredValidation('company name'),
-                ...textValidation(1, 100),
+                ...TEXT_VAL,
                 async: debouncedCompanyNameValidator,
               }}
             />
@@ -160,12 +166,12 @@ export class NewCompanyForm extends React.Component<INewCompanyFormProps> {
             <AvField
               name="businessContact"
               label="Business Contact"
-              validate={{ ...textValidation(0, 255) }}
+              validate={{ ...OPTIONAL_TEXT_VAL }}
             />
             <AvField
               name="legalContact"
               label="Legal Contact"
-              validate={{ ...textValidation(0, 255) }}
+              validate={{ ...OPTIONAL_TEXT_VAL }}
             />
             <FormListField
               list={this.companyDomains}

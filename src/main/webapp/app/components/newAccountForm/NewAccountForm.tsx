@@ -43,6 +43,7 @@ import {
   LONG_TEXT_VAL,
   SHORT_TEXT_VAL,
   TEXT_VAL,
+  OPTIONAL_TEXT_VAL,
 } from 'app/shared/utils/FormValidationUtils';
 import { NOT_USED_IN_AI_MODELS } from 'app/config/constants/terms';
 
@@ -463,6 +464,9 @@ export class NewAccountForm extends React.Component<INewAccountForm> {
                       ACCOUNT_TITLES.POSITION,
                       this.selectedLicense
                     )}
+                    validate={{
+                      ...OPTIONAL_TEXT_VAL,
+                    }}
                   />
                   <AvField
                     name="email"
@@ -610,7 +614,7 @@ export class NewAccountForm extends React.Component<INewAccountForm> {
                             errorMessage:
                               'Please let us know where you located.',
                           },
-                          ...SHORT_TEXT_VAL,
+                          ...TEXT_VAL,
                         }}
                       />
                       <AvField
@@ -625,7 +629,7 @@ export class NewAccountForm extends React.Component<INewAccountForm> {
                             errorMessage:
                               'Please let us know where you located.',
                           },
-                          ...SHORT_TEXT_VAL,
+                          ...TEXT_VAL,
                         }}
                       />
                       <AvField

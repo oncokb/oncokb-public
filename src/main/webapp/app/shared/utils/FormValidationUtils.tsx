@@ -73,6 +73,8 @@ export const textValidation = (minLength?: number, maxLength?: number) => {
   return validation;
 };
 
+export const OPTIONAL_TEXT_VAL = textValidation(0, 255);
+
 export const TEXT_VAL = textValidation(2, 255);
 
 export const SHORT_TEXT_VAL = textValidation(2, 50);
@@ -89,7 +91,7 @@ export const EMAIL_VAL = {
     errorMessage: 'Your email is required to be at least 5 characters.',
   },
   maxLength: {
-    value: 254,
+    value: 50,
     errorMessage: 'Your email cannot be longer than 50 characters.',
   },
 };

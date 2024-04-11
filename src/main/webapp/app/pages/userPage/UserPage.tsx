@@ -73,6 +73,7 @@ import {
   LONG_TEXT_VAL,
   SHORT_TEXT_VAL,
   TEXT_VAL,
+  OPTIONAL_TEXT_VAL,
 } from 'app/shared/utils/FormValidationUtils';
 import AuthenticationStore from 'app/store/AuthenticationStore';
 import ButtonWithTooltip from 'app/shared/button/ButtonWithTooltip';
@@ -83,7 +84,7 @@ import {
 import UserUsageDetailsTable from 'app/pages/usageAnalysisPage/UserUsageDetailsTable';
 import { DateSelector } from 'app/components/dateSelector/DateSelector';
 import { KeyInputGroups } from 'app/pages/userPage/KeyInputGroups';
-import { Input, Label } from 'reactstrap';
+import { Label } from 'reactstrap';
 import {
   getAccountActivationLink,
   getPasswordResetLink,
@@ -873,7 +874,7 @@ export default class UserPage extends React.Component<IUserPage> {
                                 licenseType={this.selectedLicense}
                               />
                             }
-                            validate={SHORT_TEXT_VAL}
+                            validate={OPTIONAL_TEXT_VAL}
                             value={this.user.jobTitle}
                           />
                           <AvField
@@ -893,7 +894,7 @@ export default class UserPage extends React.Component<IUserPage> {
                                 ) : null}
                               </>
                             }
-                            validate={SHORT_TEXT_VAL}
+                            validate={TEXT_VAL}
                             value={
                               this.user.company
                                 ? this.user.company.name
@@ -925,7 +926,7 @@ export default class UserPage extends React.Component<IUserPage> {
                               />
                             }
                             value={this.user.city}
-                            validate={SHORT_TEXT_VAL}
+                            validate={TEXT_VAL}
                           />
                           <AvField
                             name="country"
@@ -936,7 +937,7 @@ export default class UserPage extends React.Component<IUserPage> {
                               />
                             }
                             value={this.user.country}
-                            validate={SHORT_TEXT_VAL}
+                            validate={TEXT_VAL}
                           />
                           <div className={'mb-2 font-weight-bold'}>
                             Account Type
