@@ -83,7 +83,7 @@ import {
 import UserUsageDetailsTable from 'app/pages/usageAnalysisPage/UserUsageDetailsTable';
 import { DateSelector } from 'app/components/dateSelector/DateSelector';
 import { KeyInputGroups } from 'app/pages/userPage/KeyInputGroups';
-import { Input, Label } from 'reactstrap';
+import { Label } from 'reactstrap';
 import {
   getAccountActivationLink,
   getPasswordResetLink,
@@ -893,7 +893,7 @@ export default class UserPage extends React.Component<IUserPage> {
                                 ) : null}
                               </>
                             }
-                            validate={SHORT_TEXT_VAL}
+                            validate={TEXT_VAL}
                             value={
                               this.user.company
                                 ? this.user.company.name

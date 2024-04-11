@@ -41,6 +41,7 @@ import {
   debouncedCompanyNameValidator,
   fieldRequiredValidation,
   textValidation,
+  OPTIONAL_TEXT_VAL,
 } from 'app/shared/utils/FormValidationUtils';
 import { Link } from 'react-router-dom';
 import { QuickToolButton } from '../userPage/QuickToolButton';
@@ -69,6 +70,11 @@ import UsageText from 'app/shared/texts/UsageText';
 import { DateSelector } from 'app/components/dateSelector/DateSelector';
 import { DownloadButton } from 'app/components/downloadButton/DownloadButton';
 import { RouterStore } from 'mobx-react-router';
+import {
+  LONG_TEXT_VAL,
+  SHORT_TEXT_VAL,
+  TEXT_VAL,
+} from 'app/shared/utils/FormValidationUtils';
 
 interface MatchParams {
   id: string;
@@ -563,7 +569,7 @@ export default class CompanyPage extends React.Component<ICompanyPage> {
                             }
                             validate={{
                               ...fieldRequiredValidation('company name'),
-                              ...textValidation(1, 100),
+                              ...TEXT_VAL,
                               async: (
                                 value: string,
                                 ctx: any,
@@ -618,7 +624,7 @@ export default class CompanyPage extends React.Component<ICompanyPage> {
                                 Business Contact
                               </span>
                             }
-                            validate={{ ...textValidation(0, 255) }}
+                            validate={{ ...OPTIONAL_TEXT_VAL }}
                           />
                           <AvField
                             name="legalContact"
@@ -628,7 +634,7 @@ export default class CompanyPage extends React.Component<ICompanyPage> {
                                 Legal Contact
                               </span>
                             }
-                            validate={{ ...textValidation(0, 255) }}
+                            validate={{ ...OPTIONAL_TEXT_VAL }}
                           />
                           <div className="form-group">
                             <div className={'font-weight-bold'}>
