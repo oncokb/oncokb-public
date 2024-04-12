@@ -519,11 +519,6 @@ export default class CompanyPage extends React.Component<ICompanyPage> {
                           <Link
                             className="btn btn-outline-primary m-2"
                             to={`/companies/${this.company.id}/create-users`}
-                            onClick={() =>
-                              this.props.routing.history.push(
-                                `/companies/${this.company.id}/create-users`
-                              )
-                            }
                           >
                             Create Company Users
                           </Link>
