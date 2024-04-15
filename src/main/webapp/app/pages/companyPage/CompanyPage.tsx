@@ -516,13 +516,12 @@ export default class CompanyPage extends React.Component<ICompanyPage> {
                       <Col>
                         <div>Quick Tools</div>
                         <div>
-                          <QuickToolButton>
-                            <Link
-                              to={`/companies/${this.company.id}/create-users`}
-                            >
-                              Create Company Users
-                            </Link>
-                          </QuickToolButton>
+                          <Link
+                            className="btn btn-outline-primary m-2"
+                            to={`/companies/${this.company.id}/create-users`}
+                          >
+                            Create Company Users
+                          </Link>
                           {this.companyHasTrialUsers && (
                             <DefaultTooltip
                               overlay={
