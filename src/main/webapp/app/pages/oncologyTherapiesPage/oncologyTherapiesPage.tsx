@@ -474,7 +474,7 @@ const OncologyTherapiesPage: React.FunctionComponent<{}> = props => {
                 'https://www.fda.gov/drugs/resources-information-approved-drugs/oncology-cancer-hematologic-malignancies-approval-notifications'
               }
             >
-              Content current as of 1/19/2024
+              Content current as of 4/23/2024
             </Linkout>
           </div>
           <div>
