@@ -1,5 +1,6 @@
 package org.mskcc.cbio.oncokb.service;
 
+import com.google.gson.Gson;
 import com.slack.api.Slack;
 import com.slack.api.app_backend.interactive_components.payload.BlockActionPayload;
 import com.slack.api.app_backend.views.payload.ViewSubmissionPayload;
@@ -17,8 +18,12 @@ import com.slack.api.model.block.element.StaticSelectElement;
 import com.slack.api.model.view.View;
 import com.slack.api.model.view.ViewSubmit;
 import com.slack.api.model.view.ViewTitle;
+import com.slack.api.util.json.GsonFactory;
 import com.slack.api.webhook.Payload;
 import com.slack.api.webhook.WebhookResponse;
+
+import io.sentry.SentryLevel;
+
 import org.apache.commons.lang3.StringUtils;
 import org.mskcc.cbio.oncokb.config.application.ApplicationProperties;
 import org.mskcc.cbio.oncokb.domain.Company;
@@ -73,20 +78,26 @@ public class SlackService {
 
     private final ApplicationProperties applicationProperties;
     private final MailService mailService;
-    private final EmailService emailService;
     private final UserService userService;
     private final UserMailsService userMailsService;
     private final UserMapper userMapper;
     private final Slack slack;
+    private final SentryService sentryService;
 
-    public SlackService(ApplicationProperties applicationProperties, MailService mailService, EmailService emailService, @Lazy UserService userService, UserMailsService userMailsService, UserMapper userMapper, Slack slack) {
+    public SlackService(ApplicationProperties applicationProperties,
+            MailService mailService,
+            @Lazy UserService userService,
+            UserMailsService userMailsService,
+            UserMapper userMapper,
+            Slack slack,
+            SentryService sentryService) {
         this.applicationProperties = applicationProperties;
         this.mailService = mailService;
-        this.emailService = emailService;
         this.userService = userService;
         this.userMailsService = userMailsService;
         this.userMapper = userMapper;
         this.slack = slack;
+        this.sentryService = sentryService;
     }
 
     @Async
@@ -260,9 +271,12 @@ public class SlackService {
             log.info("Send the latest user blocks to slack with response code " + response.getCode());
             if (!Integer.valueOf(200).equals(response.getCode())) {
                 log.error("Getting a response code other than 200, {}", response);
+                String payloadStr = GsonFactory.createSnakeCase().toJson(payload);
+                String sentryMessage = String.format("Non-200 response from slack %s. Sent to \"%s\"\n\n%s", response.getCode(), url, payloadStr);
+                this.sentryService.throwMessage(SentryLevel.ERROR, sentryMessage, null);
             }
         } catch (Exception e) {
-            log.error("Failed to send message to slack {}", e);
+            log.error("Failed to send message to slack {}", e.toString());
         }
     }
 
