@@ -44,6 +44,7 @@ import {
   SHORT_TEXT_VAL,
   TEXT_VAL,
   OPTIONAL_TEXT_VAL,
+  textValidation,
 } from 'app/shared/utils/FormValidationUtils';
 import { NOT_USED_IN_AI_MODELS } from 'app/config/constants/terms';
 
@@ -81,6 +82,8 @@ type CompanySelectOptionType = {
   label: string;
   value: CompanyDTO;
 };
+
+export const SLACK_TEXT_VAL = textValidation(2, 1900);
 
 export const ACCOUNT_TYPE_DEFAULT = AccountType.REGULAR;
 @observer
@@ -641,6 +644,7 @@ export class NewAccountForm extends React.Component<INewAccountForm> {
                         type={'textarea'}
                         placeholder={this.companyDescriptionPlaceholder}
                         rows={4}
+                        validate={...SLACK_TEXT_VAL}
                       />
                       {this.isCommercialLicense && (
                         <>
@@ -669,7 +673,7 @@ export class NewAccountForm extends React.Component<INewAccountForm> {
                         placeholder={this.useCasePlaceholder}
                         rows={6}
                         validate={{
-                          ...LONG_TEXT_VAL,
+                          ...SLACK_TEXT_VAL,
                           required: {
                             value: true,
                             errorMessage: 'Your use case is required.',

@@ -5,6 +5,10 @@ import com.slack.api.model.block.LayoutBlock;
 import com.slack.api.model.block.SectionBlock;
 import com.slack.api.model.block.composition.TextObject;
 import com.slack.api.webhook.Payload;
+import com.slack.api.webhook.WebhookResponse;
+
+import io.sentry.SentryLevel;
+
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.mockito.ArgumentCaptor;
@@ -23,6 +27,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 
 import java.io.IOException;
+import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Set;
 
@@ -43,9 +48,6 @@ class SlackServiceIT {
     private MailService mailService;
 
     @Autowired
-    private EmailService emailService;
-
-    @Autowired
     private UserService userService;
 
     @Autowired
@@ -56,6 +58,9 @@ class SlackServiceIT {
 
     @Spy
     private Slack slack;
+
+    @Spy
+    private SentryService sentryService;
 
     @Captor
     private ArgumentCaptor<String> urlCaptor;
@@ -75,13 +80,21 @@ class SlackServiceIT {
         applicationProperties.setSlack(new SlackProperties());
         applicationProperties.getSlack().setUserRegistrationWebhook(USER_REGISTRATION_WEBHOOK);
 
-        slackService = new SlackService(applicationProperties, mailService, emailService, userService, userMailsService, userMapper, slack);
+        slackService = new SlackService(applicationProperties, mailService, userService, userMailsService, userMapper, slack, sentryService);
+    }
+
+    private void setMockResponse(Integer code) throws IOException {
+        WebhookResponse response =  WebhookResponse.builder()
+                .code(code)
+                .build();
+        doReturn(response).when(slack).send(any(String.class), any(Payload.class));
     }
 
     @Test
     void testSendUserRegistrationToChannel() throws IOException {
         // Create mock user
         UserDTO user = new UserDTO();
+        setMockResponse(200);
         user.setId(0L);
         user.setEmail("john.doe@example.com");
         user.setFirstName("john");
@@ -130,5 +143,29 @@ class SlackServiceIT {
             }
         }
         assertThat(expectedValues).isEmpty();
+    }
+
+    @Test
+    void testSend400Response() throws IOException {
+        // Create mock user
+        UserDTO user = new UserDTO();
+        setMockResponse(400);
+        user.setId(0L);
+        user.setEmail("john.doe@example.com");
+        user.setFirstName("john");
+        user.setLastName("doe");
+        user.setJobTitle("job title");
+        user.setCompanyName("company name");
+        user.setCity("city");
+        user.setCountry("country");
+        user.setLicenseType(LicenseType.COMMERCIAL);
+        Company company = new Company();
+        company.setName("company name");
+        company.setLicenseType(LicenseType.COMMERCIAL);
+        company.setLicenseStatus(LicenseStatus.UNKNOWN);
+
+        slackService.sendUserRegistrationToChannel(user, false, company);
+        verify(slack).send(urlCaptor.capture(), payloadCaptor.capture());
+        verify(sentryService).throwMessage(eq(SentryLevel.ERROR), anyString(), isNull());
     }
 }

@@ -120,6 +120,9 @@ public class SlackControllerIT {
     private Slack slack;
 
     @Spy
+    private SentryService sentryService;
+
+    @Spy
     private MethodsClient methodsClient;
 
     @Captor
@@ -181,7 +184,7 @@ public class SlackControllerIT {
 
         // Inject mock dependencies
         mailService = new MailService(jHipsterProperties, javaMailSender, messageSource, templateEngine, userMailsService, applicationProperties);
-        slackService = new SlackService(applicationProperties, mailService, emailService, userService, userMailsService, userMapper, slack);
+        slackService = new SlackService(applicationProperties, mailService, userService, userMailsService, userMapper, slack, sentryService);
         slackController = new SlackController(userService, userRepository, mailService, slackService, userMapper);
 
         /******************************
