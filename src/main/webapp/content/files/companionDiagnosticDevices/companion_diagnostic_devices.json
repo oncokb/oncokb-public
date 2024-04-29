@@ -11783,13 +11783,6 @@
                 "variantResidues": null,
                 "genes": [
                   {
-                    "id": 13953,
-                    "entrezGeneId": 613,
-                    "hugoSymbol": "BCR",
-                    "hgncId": "1014",
-                    "evidences": null
-                  },
-                  {
                     "id": 27789,
                     "entrezGeneId": 25,
                     "hugoSymbol": "ABL1",

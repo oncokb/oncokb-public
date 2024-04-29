@@ -195,89 +195,96 @@ const CompanionDiagnosticDevicePage: React.FunctionComponent<{}> = () => {
   const [filteredCDx, setFilteredCdx] = useState<ICompanionDiagnosticDevice[]>(
     parsedCDx
   );
-  const [alterationSearch, setAlterationSearch] = useState('');
+  const [selectedAlterations, setSelectedAlterations] = useState<
+    SelectOption[]
+  >([]);
   const [selectedGenes, setSelectedGenes] = useState<SelectOption[]>([]);
-  const [
-    relevantCancerTypeSearchKeyword,
-    setRelevantCancerTypeSearchKeyword,
-  ] = useState('');
-  const [selectedDrug, setSelectedDrug] = useState<SelectOption | null>(null);
-  const [selectedCDx, setSelectedCDx] = useState<SelectOption | null>(null);
+  const [selectedCancerTypes, setSelectedCancerTypes] = useState<
+    SelectOption[]
+  >([]);
+  const [selectedDrugs, setSelectedDrugs] = useState<SelectOption[]>([]);
+  const [selectedCDxs, setSelectedCDxs] = useState<SelectOption[]>([]);
 
   useEffect(() => {
     const filterPresent =
-      !!relevantCancerTypeSearchKeyword ||
-      !!selectedDrug ||
-      !!selectedCDx ||
-      !!alterationSearch ||
+      selectedCancerTypes.length > 0 ||
+      selectedDrugs.length > 0 ||
+      selectedCDxs.length > 0 ||
+      selectedAlterations.length > 0 ||
       selectedGenes.length > 0;
     setHasFilter(filterPresent);
 
     const getFilteredCdx = async () => {
       if (filterPresent) {
         let rcts: TumorType[] = [];
-        if (relevantCancerTypeSearchKeyword) {
-          rcts = await privateClient.utilRelevantTumorTypesGetUsingGET({
-            tumorType: relevantCancerTypeSearchKeyword,
-          });
+        for (const ct of selectedCancerTypes) {
+          rcts = rcts.concat(
+            await privateClient.utilRelevantTumorTypesGetUsingGET({
+              tumorType: ct.label,
+            })
+          );
         }
-        setFilteredCdx([
-          ...parsedCDx.filter(cdx => {
+        const filtered = parsedCDx.filter(cdx => {
+          if (
+            selectedCDxs.length > 0 &&
+            selectedCDxs.filter(selectedCDx =>
+              cdx.name.toLowerCase().includes(selectedCDx.value.toLowerCase())
+            ).length === 0
+          ) {
+            return false;
+          }
+          if (
+            selectedGenes.length > 0 &&
+            selectedGenes.filter(selectedGene =>
+              cdx.biomarkerAssociation.gene.includes(selectedGene.value)
+            ).length === 0
+          ) {
+            return false;
+          }
+
+          if (selectedCancerTypes.length > 0) {
             if (
-              selectedCDx &&
-              !cdx.name.toLowerCase().includes(selectedCDx.value.toLowerCase())
+              cdx.biomarkerAssociation.cancerTypes.filter(ct => {
+                if (
+                  rcts.filter(rct => {
+                    if (rct.code) {
+                      return rct.code === ct.code || rct.subtype === ct.subtype;
+                    } else {
+                      return rct.mainType === ct.mainType;
+                    }
+                  }).length === 0
+                ) {
+                  return false;
+                }
+                return true;
+              }).length === 0
             ) {
               return false;
             }
-            if (
-              selectedGenes.length > 0 &&
-              selectedGenes.filter(selectedGene =>
-                cdx.biomarkerAssociation.gene.includes(selectedGene.value)
-              ).length === 0
-            ) {
-              return false;
-            }
-            if (relevantCancerTypeSearchKeyword) {
-              if (
-                cdx.biomarkerAssociation.cancerTypes.filter(ct => {
-                  if (
-                    rcts.filter(rct => {
-                      if (rct.code) {
-                        return (
-                          rct.code === ct.code || rct.subtype === ct.subtype
-                        );
-                      } else {
-                        return rct.mainType === ct.mainType;
-                      }
-                    }).length === 0
-                  ) {
-                    return false;
-                  }
-                  return true;
-                }).length === 0
-              ) {
-                return false;
-              }
-            }
-            if (
-              selectedDrug &&
-              !cdx.biomarkerAssociation.drugs
+          }
+          if (
+            selectedDrugs.length > 0 &&
+            selectedDrugs.filter(selectedDrug =>
+              cdx.biomarkerAssociation.drugs
                 .toLowerCase()
                 .includes(selectedDrug.value.toLowerCase())
-            ) {
-              return false;
-            }
-            if (
-              alterationSearch &&
-              cdx.biomarkerAssociation.alterations.filter(a =>
-                a.toLowerCase().includes(alterationSearch.toLowerCase())
-              ).length === 0
-            ) {
-              return false;
-            }
-            return true;
-          }),
-        ]);
+            ).length === 0
+          ) {
+            return false;
+          }
+          if (
+            selectedAlterations.length > 0 &&
+            cdx.biomarkerAssociation.alterations.filter(a =>
+              selectedAlterations.some(sa =>
+                sa.value.toLowerCase().includes(a.toLowerCase())
+              )
+            ).length === 0
+          ) {
+            return false;
+          }
+          return true;
+        });
+        setFilteredCdx([...filtered]);
       } else {
         setFilteredCdx(parsedCDx);
       }
@@ -286,18 +293,18 @@ const CompanionDiagnosticDevicePage: React.FunctionComponent<{}> = () => {
     getFilteredCdx();
   }, [
     selectedGenes,
-    relevantCancerTypeSearchKeyword,
-    selectedDrug,
-    selectedCDx,
-    alterationSearch,
+    selectedCancerTypes,
+    selectedDrugs,
+    selectedCDxs,
+    selectedAlterations,
   ]);
 
   const clearFilters = () => {
-    setAlterationSearch('');
-    setRelevantCancerTypeSearchKeyword('');
-    setSelectedDrug(null);
-    setSelectedCDx(null);
+    setSelectedCancerTypes([]);
+    setSelectedDrugs([]);
+    setSelectedCDxs([]);
     setSelectedGenes([]);
+    setSelectedAlterations([]);
   };
 
   const columns: SearchColumn<ICompanionDiagnosticDevice>[] = [
@@ -416,13 +423,6 @@ const CompanionDiagnosticDevicePage: React.FunctionComponent<{}> = () => {
       .value();
   }, [filteredCDx]);
 
-  const filteredDrugs = useMemo(() => {
-    return _.chain(filteredCDx)
-      .map(cdx => cdx.biomarkerAssociation.drugs)
-      .uniq()
-      .value();
-  }, [filteredCDx]);
-
   const filteredCdxNames = useMemo(() => {
     return _.chain(filteredCDx)
       .map(cdx => cdx.name)
@@ -506,7 +506,7 @@ const CompanionDiagnosticDevicePage: React.FunctionComponent<{}> = () => {
       >
         <Col className={classnames(...COMPONENT_PADDING)} lg={2} md={6} xs={12}>
           <Select
-            placeholder={'Gene'}
+            placeholder={'Gene(s)'}
             options={_.chain(parsedCDx)
               .map(cdx => ({
                 label: cdx.biomarkerAssociation.gene,
@@ -519,64 +519,82 @@ const CompanionDiagnosticDevicePage: React.FunctionComponent<{}> = () => {
             isMulti
             value={selectedGenes}
             closeMenuOnSelect={false}
-            onChange={(selectedOptions: any[]) => {
-              setSelectedGenes(selectedOptions);
+            onChange={(selectedOptions: any[] | undefined) => {
+              setSelectedGenes(selectedOptions || []);
             }}
           />
         </Col>
         <Col className={classnames(...COMPONENT_PADDING)} lg={2} md={6} xs={12}>
-          <Input
-            style={{ height: 38 }}
-            placeholder={'Search Alteration'}
-            value={alterationSearch}
-            onChange={event => setAlterationSearch(event.target.value)}
+          <Select
+            placeholder={'Alteration(s)'}
+            options={_.chain(parsedCDx)
+              .reduce((acc, curr) => {
+                acc = acc.concat(curr.biomarkerAssociation.alterations);
+                return acc;
+              }, [] as string[])
+              .uniq()
+              .map(alt => ({
+                label: alt,
+                value: alt,
+              }))
+              .sortBy('label')
+              .value()}
+            isClearable={true}
+            isMulti
+            value={selectedAlterations}
+            closeMenuOnSelect={false}
+            onChange={(selectedOptions: any[] | undefined) => {
+              setSelectedAlterations(selectedOptions || []);
+            }}
           />
         </Col>
         <Col className={classnames(...COMPONENT_PADDING)} lg={3} md={6} xs={12}>
           <CancerTypeSelect
-            cancerType={relevantCancerTypeSearchKeyword}
-            onChange={(selectedOption: any) =>
-              setRelevantCancerTypeSearchKeyword(
-                selectedOption ? selectedOption.value : ''
-              )
-            }
+            isMulti
+            cancerTypes={selectedCancerTypes.map(ct => ct.label)}
+            onChange={(selectedOptions: any) => {
+              setSelectedCancerTypes(selectedOptions ? selectedOptions : []);
+            }}
           />
         </Col>
         <Col className={classnames(...COMPONENT_PADDING)} lg={2} md={6} xs={12}>
           <Select
-            placeholder={'Drug'}
-            options={_.chain(filteredDrugs)
-              .map(drugs => ({
-                label: drugs,
-                value: drugs,
+            placeholder={'Drug(s)'}
+            options={_.chain(parsedCDx)
+              .map(cdx => ({
+                label: cdx.biomarkerAssociation.drugs,
+                value: cdx.biomarkerAssociation.drugs,
               }))
               .uniqBy('label')
               .sortBy('label')
               .value()}
             isClearable={true}
-            value={selectedDrug}
+            isMulti
+            value={selectedDrugs}
             closeMenuOnSelect={false}
             onChange={(selectedOption: any) => {
-              setSelectedDrug(selectedOption);
+              setSelectedDrugs(selectedOption || []);
             }}
           />
         </Col>
         <Col className={classnames(...COMPONENT_PADDING)} lg={3} md={6} xs={12}>
           <Select
-            placeholder={`Companion Diagnostic Device`}
+            placeholder={'CDx'}
             options={_.chain(
-              filteredCdxNames.map(name => ({
-                label: name,
-                value: name,
+              parsedCDx.map(cdx => ({
+                label: cdx.name,
+                value: cdx.name,
               }))
             )
+              .uniqBy('label')
               .sortBy('label')
               .value()}
             isClearable={true}
-            value={selectedCDx}
+            isMulti
+            value={selectedCDxs}
             closeMenuOnSelect={false}
             onChange={(selectedOption: any) => {
-              setSelectedCDx(selectedOption);
+              setSelectedCDxs(selectedOption || []);
             }}
           />
         </Col>
