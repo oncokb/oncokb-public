@@ -1192,12 +1192,12 @@
   {
     "year": "2017",
     "tx": "Inotuzumab Ozogamicin",
-    "biomarker": "",
+    "biomarker": "CD22",
     "agentClass": "Hematopoietic protein binding antibody, ADC or cytotoxin",
     "drugTarget": "CD22-directed antibody-drug conjugate",
     "targetedTx": "Y",
-    "pxTx": "N",
-    "ngsTest": "NA"
+    "pxTx": "Y",
+    "ngsTest": "N"
   },
   {
     "year": "2017",
@@ -2168,5 +2168,35 @@
     "targetedTx": "Y",
     "pxTx": "N",
     "ngsTest": "NA"
+  },
+  {
+    "year": "2024",
+    "tx": "Lifileucel",
+    "biomarker": "",
+    "agentClass": "Other Immunotherapy",
+    "drugTarget": "Tumor-infiltrating lymphocyte therapy",
+    "targetedTx": "Y",
+    "pxTx": "N",
+    "ngsTest": "NA"
+  },
+  {
+    "year": "2024",
+    "tx": "Nogapendekin alfa inbakicept",
+    "biomarker": "",
+    "agentClass": "Other Immunotherapy",
+    "drugTarget": "Interleukin-15 (IL-15) antagonist",
+    "targetedTx": "Y",
+    "pxTx": "N",
+    "ngsTest": "NA"
+  },
+  {
+    "year": "2024",
+    "tx": "Tovorafenib",
+    "biomarker": "BRAF Fusions, BRAF Rearrangement, BRAF V600",
+    "agentClass": "Small molecule kinase inhibitor",
+    "drugTarget": "RAF inhibitor",
+    "targetedTx": "Y",
+    "pxTx": "Y",
+    "ngsTest": "Y"
   }
 ]

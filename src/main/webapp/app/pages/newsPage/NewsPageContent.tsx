@@ -238,6 +238,154 @@ const EVIDENCE_COLUMN_SEPARATOR = '; ';
 // https://stackoverflow.com/questions/41947168/is-it-possible-to-use-keyof-operator-on-literals-instead-of-interfaces
 
 export const NEWS_BY_DATE: { [date: string]: NewsData } = {
+  '04302024': {
+    priorityNews: [
+      <span>
+        Release of the FDA Cleared or Approved Companion Diagnostic Devices
+        (CDx) page, which includes the companion diagnostics that are listed in
+        the FDA-drug labels of {ONCOKB_TM} level 1 precision oncology drugs{' '}
+      </span>,
+      <span>
+        We have updated our <Link to={PAGE_ROUTE.FAQ_ACCESS}>FAQ page</Link>{' '}
+        with the most commonly asked questions of 2023. Take a look at what our
+        users are asking us
+      </span>,
+    ],
+    changedAnnotations: [
+      {
+        columnHeaderType:
+          AnnotationColumnHeaderType.PROMOTION_TUMOR_TYPE_SPECIFIC_EVIDENCE,
+        title:
+          'Updated therapeutic implications - Promotion of tumor type-specific level of evidence for an alteration',
+        content: [
+          [
+            'BRAF',
+            'Fusions',
+            'Low-Grade Glioma',
+            <div>
+              <div style={{ fontStyle: 'italic' }}>
+                {DRUGS_CURRENTLY_IN_ONCOKB}:
+              </div>
+              <div>Trametinib, Cobimetinib, Selumetinib (Level 3B)</div>
+              <br />
+              <div style={{ fontStyle: 'italic' }}>
+                {DRUGS_PROMOTED_IN_ONCOKB}:
+              </div>
+              <div>Tovorafenib (Level 1)</div>
+            </div>,
+            '3B',
+            '1',
+            <WithSeparator separator={EVIDENCE_COLUMN_SEPARATOR}>
+              <FdaApprovalLink
+                link="https://www.fda.gov/drugs/resources-information-approved-drugs/fda-grants-accelerated-approval-tovorafenib-patients-relapsed-or-refractory-braf-altered-pediatric"
+                approval="Tovorafenib"
+              />
+              <PMIDLink pmids="37978284" />
+            </WithSeparator>,
+          ],
+          [
+            'BRAF',
+            'V600',
+            'Low-Grade Glioma',
+            <div>
+              <div style={{ fontStyle: 'italic' }}>
+                {DRUGS_CURRENTLY_IN_ONCOKB}:
+              </div>
+              <div style={{ textDecoration: 'underline' }}>BRAF V600E:</div>
+              <div>Dabrafenib + Trametinib (Level 1)</div>
+              <br />
+              <div>
+                <div style={{ textDecoration: 'underline' }}>BRAF V600K:</div>
+                <span style={{ whiteSpace: 'normal' }}>
+                  Dabrafenib + Trametinib, Trametinib, Vemurafenib +
+                  Cobimetinib, Encorafenib + Binimetinib, Vemurafenib +
+                  Atezolizumab + Cobimetinib (Level 3B)
+                </span>
+              </div>
+              <br />
+              <div style={{ textDecoration: 'underline' }}>
+                All Other BRAF V600 Variants:
+              </div>
+              <span>Vemurafenib + Atezolizumab + Cobimetinib (Level 3B)</span>
+              <div style={{ fontStyle: 'italic' }}>
+                {DRUGS_ADDED_TO_ONCOKB}:
+              </div>
+              <div>Tovorafenib (Level 1)</div>
+            </div>,
+            '3B',
+            '1',
+            <WithSeparator separator={EVIDENCE_COLUMN_SEPARATOR}>
+              <FdaApprovalLink
+                link="https://www.fda.gov/drugs/resources-information-approved-drugs/fda-grants-accelerated-approval-tovorafenib-patients-relapsed-or-refractory-braf-altered-pediatric"
+                approval="Tovorafenib"
+              />
+              <PMIDLink pmids="37978284" />
+            </WithSeparator>,
+          ],
+          [
+            'ERBB2',
+            'Amplification',
+            'Salivary Gland Cancer',
+            <div>
+              <div>Trastuzumab,</div>
+              <div>Trastuzumab + Docetaxel,</div>
+              <div>Ado-Trastuzumab Emtansine,</div>
+              <div>Trastuzumab Deruxtecan,</div>
+              <div>Trastuzumab + Pertuzumab</div>
+            </div>,
+            '3B',
+            '2',
+            <WithSeparator separator={EVIDENCE_COLUMN_SEPARATOR}>
+              <span>
+                Inclusion in NCCN Head and Neck Cancer Guidelines V3.2024
+              </span>
+              <PMIDLink
+                pmids="28006087, 30452336, 31504139, 38231777, 32067683"
+                wrapText
+              />
+              <AbstractLink
+                abstract="Liu, D. et al. Abstract# 3025, JCO 2023."
+                link="https://ascopubs.org/doi/10.1200/JCO.2023.41.16_suppl.3025"
+              />
+            </WithSeparator>,
+          ],
+          [
+            'ERBB2',
+            'Amplification',
+            <span style={{ whiteSpace: 'normal' }}>
+              All Solid Tumors (excluding Breast Cancer, Esophagogastric Cancer,
+              and Colorectal Cancer where ERBB2 amp remains Level 1; Biliary
+              Tract Cancer, Salivary Gland Cancer, and Uterine Cancer where
+              ERBB2 amp remains Level 2)
+            </span>,
+            'Trastuzumab Deruxtecan',
+            '3B',
+            '3A',
+            <WithSeparator separator={EVIDENCE_COLUMN_SEPARATOR}>
+              <FdaApprovalLink
+                link="https://www.fda.gov/drugs/resources-information-approved-drugs/fda-grants-accelerated-approval-fam-trastuzumab-deruxtecan-nxki-unresectable-or-metastatic-her2"
+                approval="Trastuzumab Deruxtecan for HER2+ (IHC3+) Solid Tumors"
+              />
+              <span>
+                Clinical response demonstrated in various HER2-expressing (IHC
+                3+) solid tumors
+              </span>
+              <PMIDLink pmids="37870536, 38547891, 37286557" wrapText />
+            </WithSeparator>,
+          ],
+        ],
+      },
+    ],
+    newlyAddedGenes: [
+      'FGF7',
+      'FOLR1',
+      'GRB7',
+      'MTHFD2',
+      'MYO5A',
+      'SLIT3',
+      'UCHL1',
+    ],
+  },
   '03212024': {
     priorityNews: [
       <span>
