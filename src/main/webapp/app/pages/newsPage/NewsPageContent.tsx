@@ -323,7 +323,7 @@ export const NEWS_BY_DATE: { [date: string]: NewsData } = {
             '3A',
             <WithSeparator separator={EVIDENCE_COLUMN_SEPARATOR}>
               <FdaApprovalLink
-                approval="Trastuzumab Deruxtecan for HER2+ (IHC3+) Solid Tumors"
+                approval="Trastuzumab Deruxtecan for HER2+ (IHC 3+) Solid Tumors"
                 link="https://www.fda.gov/drugs/resources-information-approved-drugs/fda-grants-accelerated-approval-fam-trastuzumab-deruxtecan-nxki-unresectable-or-metastatic-her2"
               />
               <span>
