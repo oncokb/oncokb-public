@@ -83,6 +83,8 @@ export const DRUGS_CURRENTLY_IN_ONCOKB = `Drug(s) currently in ${ONCOKB_TM}`;
 export const DRUGS_REMOVED_FROM_ONCOKB = `Drug(s) removed from ${ONCOKB_TM}`;
 export const DRUGS_DEMOTED_IN_ONCOKB = `Drug(s) demoted in ${ONCOKB_TM}`;
 export const DRUGS_PROMOTED_IN_ONCOKB = `Drug(s) promoted in ${ONCOKB_TM}`;
+export const DRUGS_ASSOCIATED_WITH_CURRENT_LEVEL =
+  'Drug(s) Associated with the Current Level';
 export const CURRENT_SENSITIVITY_LEVEL = 'Current Sensitivity Level';
 export const CURRENT_RESISTANCE_LEVEL = 'Current Resistance Level';
 export const PREVIOUS_BIOMARKER_ASSOCIATION = 'Previous Biomarker Association';
@@ -123,7 +125,7 @@ export const CHANGED_ANNOTATION_LEVEL_WITH_EVIDENCE_COLUMNS = [
   { name: GENE },
   { name: MUTATION },
   { name: CANCER_TYPE },
-  { name: DRUGS },
+  { name: DRUGS_ASSOCIATED_WITH_CURRENT_LEVEL },
   { name: PREVIOUS_LEVEL },
   { name: CURRENT_LEVEL },
   { name: EVIDENCE },
@@ -261,18 +263,8 @@ export const NEWS_BY_DATE: { [date: string]: NewsData } = {
           [
             'BRAF',
             'Fusions',
-            'Low-Grade Glioma',
-            <div>
-              <div style={{ fontStyle: 'italic' }}>
-                {DRUGS_CURRENTLY_IN_ONCOKB}:
-              </div>
-              <div>Trametinib, Cobimetinib, Selumetinib (Level 3B)</div>
-              <br />
-              <div style={{ fontStyle: 'italic' }}>
-                {DRUGS_PROMOTED_IN_ONCOKB}:
-              </div>
-              <div>Tovorafenib (Level 1)</div>
-            </div>,
+            'Low-Grade Giloma',
+            'Tovorafenib',
             '3B',
             '1',
             <WithSeparator separator={EVIDENCE_COLUMN_SEPARATOR}>
@@ -285,33 +277,9 @@ export const NEWS_BY_DATE: { [date: string]: NewsData } = {
           ],
           [
             'BRAF',
-            'V600',
+            'V600 (excluding V600E)',
             'Low-Grade Glioma',
-            <div>
-              <div style={{ fontStyle: 'italic' }}>
-                {DRUGS_CURRENTLY_IN_ONCOKB}:
-              </div>
-              <div style={{ textDecoration: 'underline' }}>BRAF V600E:</div>
-              <div>Dabrafenib + Trametinib (Level 1)</div>
-              <br />
-              <div>
-                <div style={{ textDecoration: 'underline' }}>BRAF V600K:</div>
-                <span style={{ whiteSpace: 'normal' }}>
-                  Dabrafenib + Trametinib, Trametinib, Vemurafenib +
-                  Cobimetinib, Encorafenib + Binimetinib, Vemurafenib +
-                  Atezolizumab + Cobimetinib (Level 3B)
-                </span>
-              </div>
-              <br />
-              <div style={{ textDecoration: 'underline' }}>
-                All Other BRAF V600 Variants:
-              </div>
-              <span>Vemurafenib + Atezolizumab + Cobimetinib (Level 3B)</span>
-              <div style={{ fontStyle: 'italic' }}>
-                {DRUGS_ADDED_TO_ONCOKB}:
-              </div>
-              <div>Tovorafenib (Level 1)</div>
-            </div>,
+            'Tovorafenib',
             '3B',
             '1',
             <WithSeparator separator={EVIDENCE_COLUMN_SEPARATOR}>
@@ -326,13 +294,7 @@ export const NEWS_BY_DATE: { [date: string]: NewsData } = {
             'ERBB2',
             'Amplification',
             'Salivary Gland Cancer',
-            <div>
-              <div>Trastuzumab,</div>
-              <div>Trastuzumab + Docetaxel,</div>
-              <div>Ado-Trastuzumab Emtansine,</div>
-              <div>Trastuzumab Deruxtecan,</div>
-              <div>Trastuzumab + Pertuzumab</div>
-            </div>,
+            'Trastuzumab, Trastuzumab + Docetaxel,Ado-Trastuzumab Emtansine,Trastuzumab Deruxtecan, Trastuzumab + Pertuzumab',
             '3B',
             '2',
             <WithSeparator separator={EVIDENCE_COLUMN_SEPARATOR}>
@@ -352,25 +314,41 @@ export const NEWS_BY_DATE: { [date: string]: NewsData } = {
           [
             'ERBB2',
             'Amplification',
-            <span style={{ whiteSpace: 'normal' }}>
-              All Solid Tumors (excluding Breast Cancer, Esophagogastric Cancer,
-              and Colorectal Cancer where ERBB2 amp remains Level 1; Biliary
-              Tract Cancer, Salivary Gland Cancer, and Uterine Cancer where
-              ERBB2 amp remains Level 2)
-            </span>,
+            'All Solid Tumors (excluding Breast Cancer, Esophagogastric Cancer, and Colorectal Cancer where ERBB2 amplification remains Level 1; Biliary Tract Cancer, Salivary Gland Cancer, and Uterine Cancer where ERBB2 amplification remains Level 2)',
             'Trastuzumab Deruxtecan',
             '3B',
             '3A',
             <WithSeparator separator={EVIDENCE_COLUMN_SEPARATOR}>
               <FdaApprovalLink
-                link="https://www.fda.gov/drugs/resources-information-approved-drugs/fda-grants-accelerated-approval-fam-trastuzumab-deruxtecan-nxki-unresectable-or-metastatic-her2"
                 approval="Trastuzumab Deruxtecan for HER2+ (IHC3+) Solid Tumors"
+                link="https://www.fda.gov/drugs/resources-information-approved-drugs/fda-grants-accelerated-approval-fam-trastuzumab-deruxtecan-nxki-unresectable-or-metastatic-her2"
               />
               <span>
                 Clinical response demonstrated in various HER2-expressing (IHC
                 3+) solid tumors
               </span>
               <PMIDLink pmids="37870536, 38547891, 37286557" wrapText />
+            </WithSeparator>,
+          ],
+        ],
+      },
+      {
+        columnHeaderType: AnnotationColumnHeaderType.ADDITIONAL_SAME_LEVEL_DRUG,
+        title: `Addition of therapy(s) associated with a tumor type-specific leveled alteration(s) (without changing the alteration's highest level of evidence)`,
+        content: [
+          [
+            'BRAF',
+            'V600E',
+            'Low-Grade Glioma',
+            '1',
+            'Dabrafenib + Trametinib (Level 1)',
+            'Tovorafenib (Level 1)',
+            <WithSeparator separator={EVIDENCE_COLUMN_SEPARATOR}>
+              <FdaApprovalLink
+                link="https://www.fda.gov/drugs/resources-information-approved-drugs/fda-grants-accelerated-approval-tovorafenib-patients-relapsed-or-refractory-braf-altered-pediatric"
+                approval="Tovorafenib"
+              />
+              <PMIDLink pmids="37978284" />
             </WithSeparator>,
           ],
         ],
