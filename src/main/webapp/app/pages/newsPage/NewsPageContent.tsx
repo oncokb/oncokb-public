@@ -277,7 +277,10 @@ export const NEWS_BY_DATE: { [date: string]: NewsData } = {
           ],
           [
             'BRAF',
-            'V600 (excluding V600E)',
+            <>
+              <AlterationPageLink hugoSymbol="BRAF" alteration="V600" />{' '}
+              (excluding V600E)
+            </>,
             'Low-Grade Glioma',
             'Tovorafenib',
             '3B',
@@ -294,7 +297,7 @@ export const NEWS_BY_DATE: { [date: string]: NewsData } = {
             'ERBB2',
             'Amplification',
             'Salivary Gland Cancer',
-            'Trastuzumab, Trastuzumab + Docetaxel,Ado-Trastuzumab Emtansine,Trastuzumab Deruxtecan, Trastuzumab + Pertuzumab',
+            'Trastuzumab, Trastuzumab + Docetaxel, Ado-Trastuzumab Emtansine, Trastuzumab Deruxtecan, Trastuzumab + Pertuzumab',
             '3B',
             '2',
             <WithSeparator separator={EVIDENCE_COLUMN_SEPARATOR}>
