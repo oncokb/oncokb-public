@@ -243,7 +243,10 @@ export const NEWS_BY_DATE: { [date: string]: NewsData } = {
   '05012024': {
     priorityNews: [
       <span>
-        Release of the FDA Cleared or Approved Companion Diagnostic Devices
+        Release of the{' '}
+        <Link to={PAGE_ROUTE.CDX}>
+          "FDA Cleared or Approved Companion Diagnostic Devices"
+        </Link>{' '}
         (CDx) page, which includes the companion diagnostics that are listed in
         the FDA-drug labels of {ONCOKB_TM} level 1 precision oncology drugs{' '}
       </span>,
