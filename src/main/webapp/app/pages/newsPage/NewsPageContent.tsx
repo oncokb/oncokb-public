@@ -83,6 +83,8 @@ export const DRUGS_CURRENTLY_IN_ONCOKB = `Drug(s) currently in ${ONCOKB_TM}`;
 export const DRUGS_REMOVED_FROM_ONCOKB = `Drug(s) removed from ${ONCOKB_TM}`;
 export const DRUGS_DEMOTED_IN_ONCOKB = `Drug(s) demoted in ${ONCOKB_TM}`;
 export const DRUGS_PROMOTED_IN_ONCOKB = `Drug(s) promoted in ${ONCOKB_TM}`;
+export const DRUGS_ASSOCIATED_WITH_CURRENT_LEVEL =
+  'Drug(s) Associated with the Current Level';
 export const CURRENT_SENSITIVITY_LEVEL = 'Current Sensitivity Level';
 export const CURRENT_RESISTANCE_LEVEL = 'Current Resistance Level';
 export const PREVIOUS_BIOMARKER_ASSOCIATION = 'Previous Biomarker Association';
@@ -123,7 +125,7 @@ export const CHANGED_ANNOTATION_LEVEL_WITH_EVIDENCE_COLUMNS = [
   { name: GENE },
   { name: MUTATION },
   { name: CANCER_TYPE },
-  { name: DRUGS },
+  { name: DRUGS_ASSOCIATED_WITH_CURRENT_LEVEL },
   { name: PREVIOUS_LEVEL },
   { name: CURRENT_LEVEL },
   { name: EVIDENCE },
@@ -238,6 +240,136 @@ const EVIDENCE_COLUMN_SEPARATOR = '; ';
 // https://stackoverflow.com/questions/41947168/is-it-possible-to-use-keyof-operator-on-literals-instead-of-interfaces
 
 export const NEWS_BY_DATE: { [date: string]: NewsData } = {
+  '05012024': {
+    priorityNews: [
+      <span>
+        Release of the{' '}
+        <Link to={PAGE_ROUTE.CDX}>
+          "FDA Cleared or Approved Companion Diagnostic Devices"
+        </Link>{' '}
+        (CDx) page, which includes the companion diagnostics that are listed in
+        the FDA-drug labels of {ONCOKB_TM} level 1 precision oncology drugs{' '}
+      </span>,
+      <span>
+        We have updated our <Link to={PAGE_ROUTE.FAQ_ACCESS}>FAQ page</Link>{' '}
+        with the most commonly asked questions of 2023. Take a look at what our
+        users are asking us
+      </span>,
+    ],
+    changedAnnotations: [
+      {
+        columnHeaderType:
+          AnnotationColumnHeaderType.PROMOTION_TUMOR_TYPE_SPECIFIC_EVIDENCE,
+        title:
+          'Updated therapeutic implications - Promotion of tumor type-specific level of evidence for an alteration',
+        content: [
+          [
+            'BRAF',
+            'Fusions',
+            'Low-Grade Giloma',
+            'Tovorafenib',
+            '3B',
+            '1',
+            <WithSeparator separator={EVIDENCE_COLUMN_SEPARATOR}>
+              <FdaApprovalLink
+                link="https://www.fda.gov/drugs/resources-information-approved-drugs/fda-grants-accelerated-approval-tovorafenib-patients-relapsed-or-refractory-braf-altered-pediatric"
+                approval="Tovorafenib"
+              />
+              <PMIDLink pmids="37978284" />
+            </WithSeparator>,
+          ],
+          [
+            'BRAF',
+            <>
+              <AlterationPageLink hugoSymbol="BRAF" alteration="V600" />{' '}
+              (excluding V600E)
+            </>,
+            'Low-Grade Glioma',
+            'Tovorafenib',
+            '3B',
+            '1',
+            <WithSeparator separator={EVIDENCE_COLUMN_SEPARATOR}>
+              <FdaApprovalLink
+                link="https://www.fda.gov/drugs/resources-information-approved-drugs/fda-grants-accelerated-approval-tovorafenib-patients-relapsed-or-refractory-braf-altered-pediatric"
+                approval="Tovorafenib"
+              />
+              <PMIDLink pmids="37978284" />
+            </WithSeparator>,
+          ],
+          [
+            'ERBB2',
+            'Amplification',
+            'Salivary Gland Cancer',
+            'Trastuzumab, Trastuzumab + Docetaxel, Ado-Trastuzumab Emtansine, Trastuzumab Deruxtecan, Trastuzumab + Pertuzumab',
+            '3B',
+            '2',
+            <WithSeparator separator={EVIDENCE_COLUMN_SEPARATOR}>
+              <span>
+                Inclusion in NCCN Head and Neck Cancer Guidelines V3.2024
+              </span>
+              <PMIDLink
+                pmids="28006087, 30452336, 31504139, 38231777, 32067683"
+                wrapText
+              />
+              <AbstractLink
+                abstract="Liu, D. et al. Abstract# 3025, JCO 2023."
+                link="https://ascopubs.org/doi/10.1200/JCO.2023.41.16_suppl.3025"
+              />
+            </WithSeparator>,
+          ],
+          [
+            'ERBB2',
+            'Amplification',
+            'All Solid Tumors (excluding Breast Cancer, Esophagogastric Cancer, and Colorectal Cancer where ERBB2 amplification remains Level 1; Biliary Tract Cancer, Salivary Gland Cancer, and Uterine Cancer where ERBB2 amplification remains Level 2)',
+            'Trastuzumab Deruxtecan',
+            '3B',
+            '3A',
+            <WithSeparator separator={EVIDENCE_COLUMN_SEPARATOR}>
+              <FdaApprovalLink
+                approval="Trastuzumab Deruxtecan for HER2+ (IHC 3+) Solid Tumors"
+                link="https://www.fda.gov/drugs/resources-information-approved-drugs/fda-grants-accelerated-approval-fam-trastuzumab-deruxtecan-nxki-unresectable-or-metastatic-her2"
+              />
+              <span>
+                Clinical response demonstrated in various HER2-expressing (IHC
+                3+) solid tumors
+              </span>
+              <PMIDLink pmids="37870536, 38547891, 37286557" wrapText />
+            </WithSeparator>,
+          ],
+        ],
+      },
+      {
+        columnHeaderType: AnnotationColumnHeaderType.ADDITIONAL_SAME_LEVEL_DRUG,
+        title: `Addition of therapy(s) associated with a tumor type-specific leveled alteration(s) (without changing the alteration's highest level of evidence)`,
+        content: [
+          [
+            'BRAF',
+            'V600E',
+            'Low-Grade Glioma',
+            '1',
+            'Dabrafenib + Trametinib (Level 1)',
+            'Tovorafenib (Level 1)',
+            <WithSeparator separator={EVIDENCE_COLUMN_SEPARATOR}>
+              <FdaApprovalLink
+                link="https://www.fda.gov/drugs/resources-information-approved-drugs/fda-grants-accelerated-approval-tovorafenib-patients-relapsed-or-refractory-braf-altered-pediatric"
+                approval="Tovorafenib"
+              />
+              <PMIDLink pmids="37978284" />
+            </WithSeparator>,
+          ],
+        ],
+      },
+    ],
+    newlyAddedGenes: [
+      'FGF7',
+      'FOLR1',
+      'GRB7',
+      'MTHFD2',
+      'MYO5A',
+      'SLIT3',
+      'UCHL1',
+    ],
+  },
   '03212024': {
     priorityNews: [
       <span>

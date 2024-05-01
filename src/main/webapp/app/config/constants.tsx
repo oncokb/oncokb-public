@@ -544,6 +544,7 @@ export enum PAGE_ROUTE {
   ACTIONABLE_GENE = '/actionable-genes',
   PO_TX = '/precision-oncology-therapies',
   ONCOLOGY_TX = '/oncology-therapies',
+  CDX = '/companion-diagnostic-devices',
   GENE_HEADER = '/gene',
   GENE = '/gene/:hugoSymbol',
   ALTERATION = '/gene/:hugoSymbol/:alteration',
@@ -798,6 +799,7 @@ export type DataRelease = {
 };
 
 export const DATA_RELEASES: DataRelease[] = [
+  { date: '05012024', version: 'v4.16' },
   { date: '03212024', version: 'v4.15' },
   { date: '02082024', version: 'v4.14' },
   { date: '12212023', version: 'v4.13' },
@@ -917,4 +919,11 @@ export const DEFAULT_REFERENCE_GENOME = REFERENCE_GENOME.GRCh37;
 
 export const DEFAULT_FEEDBACK_ANNOTATION: Feedback = {
   type: FeedbackType.ANNOTATION,
+};
+
+export const FDA_SUBMISSION_URL_SUFFIX = {
+  PMA: 'cfpma/pma.cfm',
+  PMN: 'cfpmn/pmn.cfm',
+  HDE: 'cfhde/hde.cfm',
+  DEN: 'cfpmn/denovo.cfm',
 };

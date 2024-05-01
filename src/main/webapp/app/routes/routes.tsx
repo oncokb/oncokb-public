@@ -36,6 +36,7 @@ import ReadOnlyMode from 'app/shared/readonly/ReadOnlyMode';
 import * as QueryString from 'query-string';
 import OncologyTherapiesPage from 'app/pages/oncologyTherapiesPage/oncologyTherapiesPage';
 import { NewsPageNavTab } from 'app/pages/newsPage/NewsPageNavTab';
+import CompanionDiagnosticDevicePage from 'app/pages/companionDiagnosticDevicesPage/companionDiagnosticDevicePage';
 
 const getOldLevelsRedirectRoute = (hash: string) => {
   const queryStrings = QueryString.parse(hash) as {
@@ -160,6 +161,13 @@ const AppRouts = (props: {
             appStore={props.appStore}
             path={PAGE_ROUTE.ONCOLOGY_TX}
             component={OncologyTherapiesPage}
+          />
+          <RecaptchaBoundaryRoute
+            exact
+            isUserAuthenticated={props.authenticationStore.isUserAuthenticated}
+            appStore={props.appStore}
+            path={PAGE_ROUTE.CDX}
+            component={CompanionDiagnosticDevicePage}
           />
           <RecaptchaBoundaryRoute
             exact

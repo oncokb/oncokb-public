@@ -8,7 +8,7 @@ import privateClient from 'app/shared/api/oncokbPrivateClientInstance';
 import { remoteData } from 'cbioportal-frontend-commons';
 
 interface ICancerTypeSelect extends SelectProps {
-  cancerType?: string;
+  cancerTypes?: string[];
 }
 
 @observer
@@ -26,25 +26,25 @@ export default class CancerTypeSelect extends React.Component<
 
   @computed
   get tumorTypeSelectValue() {
-    if (this.props.cancerType) {
-      const matchedSubtype = _.find(
-        this.allSubtypes,
-        cancerType => cancerType.code === this.props.cancerType
-      );
-      if (matchedSubtype) {
-        return {
-          label: matchedSubtype.subtype,
-          value: matchedSubtype.code,
-        };
-      } else {
-        return {
-          label: this.props.cancerType,
-          value: this.props.cancerType,
-        };
-      }
-    } else {
-      return null;
-    }
+    return (
+      this.props.cancerTypes?.map(ct => {
+        const matchedSubtype = _.find(
+          this.allSubtypes,
+          cancerType => cancerType.code === ct
+        );
+        if (matchedSubtype) {
+          return {
+            label: matchedSubtype.subtype,
+            value: matchedSubtype.code,
+          };
+        } else {
+          return {
+            label: ct,
+            value: ct,
+          };
+        }
+      }) || []
+    );
   }
 
   @computed
@@ -98,9 +98,22 @@ export default class CancerTypeSelect extends React.Component<
   }
 
   render() {
+    if (this.props.isMulti) {
+      return (
+        <Select
+          isMulti
+          placeholder="Cancer Type(s)"
+          value={this.tumorTypeSelectValue}
+          options={this.allTumorTypesOptions}
+          formatGroupLabel={data => <span>{data.label}</span>}
+          isClearable={true}
+          onChange={this.props.onChange}
+        />
+      );
+    }
     return (
       <Select
-        value={this.tumorTypeSelectValue}
+        value={this.tumorTypeSelectValue[0]}
         placeholder="Select a cancer type"
         options={this.allTumorTypesOptions}
         formatGroupLabel={data => <span>{data.label}</span>}
