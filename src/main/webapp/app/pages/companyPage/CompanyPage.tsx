@@ -292,7 +292,7 @@ export default class CompanyPage extends React.Component<ICompanyPage> {
   }
 
   @action.bound
-  showConfirmModal(event: any, value: any) {
+  onValidFormSubmit(event: any, value: any) {
     this.formValues = value;
     // Show warnings when license status is being changed and there are company users
     if (
@@ -304,6 +304,7 @@ export default class CompanyPage extends React.Component<ICompanyPage> {
         LICENSE_STATUS_UPDATE_MESSAGES[this.company.licenseStatus][
           this.selectedLicenseStatus
         ];
+      this.simpleConfirmModalType = SimpleConfirmModalType.UPDATE_COMPANY;
     } else {
       this.onConfirmUpdateCompany();
     }
@@ -539,7 +540,7 @@ export default class CompanyPage extends React.Component<ICompanyPage> {
                       </Col>
                     </Row>
                     <AvForm
-                      onValidSubmit={this.showConfirmModal}
+                      onValidSubmit={this.onValidFormSubmit}
                       onKeyPress={(event: any) => {
                         if (event.which === 13) {
                           event.preventDefault();
