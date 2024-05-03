@@ -1,11 +1,10 @@
 import ErrorBoundaryRoute from 'app/shared/error/error-boundary-route';
 import { observer } from 'mobx-react';
 import React from 'react';
-import { RouteProps } from 'react-router-dom';
-import { ContactLink } from '../links/ContactLink';
 import AppStore from 'app/store/AppStore';
+import { OncokbRouteProps } from '../route/OncokbRoute';
 
-export interface IRecaptchaBoundaryRoute extends RouteProps {
+export interface IRecaptchaBoundaryRoute extends OncokbRouteProps {
   isUserAuthenticated: boolean;
   appStore: AppStore;
 }

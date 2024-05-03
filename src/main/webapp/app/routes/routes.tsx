@@ -1,4 +1,4 @@
-import { Redirect, Route, Switch } from 'react-router-dom';
+import { Redirect, Switch } from 'react-router-dom';
 import ErrorBoundaryRoute from 'app/shared/error/error-boundary-route';
 import Login from 'app/components/login/LoginPage';
 import { Logout } from 'app/components/login/logout';
@@ -37,6 +37,7 @@ import * as QueryString from 'query-string';
 import OncologyTherapiesPage from 'app/pages/oncologyTherapiesPage/oncologyTherapiesPage';
 import { NewsPageNavTab } from 'app/pages/newsPage/NewsPageNavTab';
 import CompanionDiagnosticDevicePage from 'app/pages/companionDiagnosticDevicesPage/companionDiagnosticDevicePage';
+import OncokbRoute from 'app/shared/route/OncokbRoute';
 
 const getOldLevelsRedirectRoute = (hash: string) => {
   const queryStrings = QueryString.parse(hash) as {
@@ -73,7 +74,7 @@ const AppRouts = (props: {
   // Redirect needs to be defined first
   return (
     <Switch>
-      <Route exact path={PAGE_ROUTE.HOME} component={HomePage} />
+      <OncokbRoute exact path={PAGE_ROUTE.HOME} component={HomePage} />
       <Redirect exact from={'/updates'} to={PAGE_ROUTE.NEWS} />
       <Redirect exact from={'/genes'} to={PAGE_ROUTE.CANCER_GENES} />
       <Redirect
@@ -174,6 +175,7 @@ const AppRouts = (props: {
             isUserAuthenticated={props.authenticationStore.isUserAuthenticated}
             appStore={props.appStore}
             path={PAGE_ROUTE.GENE}
+            addCanonicalLink
             component={GenePage}
           />
           <RecaptchaBoundaryRoute
@@ -181,6 +183,7 @@ const AppRouts = (props: {
             isUserAuthenticated={props.authenticationStore.isUserAuthenticated}
             appStore={props.appStore}
             path={PAGE_ROUTE.ALTERATION}
+            addCanonicalLink
             component={AlterationPage}
           />
           <RecaptchaBoundaryRoute
@@ -202,34 +205,63 @@ const AppRouts = (props: {
             isUserAuthenticated={props.authenticationStore.isUserAuthenticated}
             appStore={props.appStore}
             path={PAGE_ROUTE.ALTERATION_TUMOR_TYPE}
+            addCanonicalLink
             component={AlterationPage}
           />
-          <Route exact path={PAGE_ROUTE.ABOUT} component={AboutPageNavTab} />
-          <Route exact path={PAGE_ROUTE.TEAM} component={AboutPageNavTab} />
-          <Route exact path={PAGE_ROUTE.SOP} component={AboutPageNavTab} />
-          <Route
+          <OncokbRoute
+            exact
+            path={PAGE_ROUTE.ABOUT}
+            component={AboutPageNavTab}
+          />
+          <OncokbRoute
+            exact
+            path={PAGE_ROUTE.TEAM}
+            component={AboutPageNavTab}
+          />
+          <OncokbRoute
+            exact
+            path={PAGE_ROUTE.SOP}
+            component={AboutPageNavTab}
+          />
+          <OncokbRoute
             exact
             path={PAGE_ROUTE.YEAR_END_SUMMARY}
             component={NewsPageNavTab}
           />
-          <Route exact path={PAGE_ROUTE.NEWS} component={NewsPageNavTab} />
-          <Route
+          <OncokbRoute
+            exact
+            path={PAGE_ROUTE.NEWS}
+            component={NewsPageNavTab}
+          />
+          <OncokbRoute
             exact
             path={PAGE_ROUTE.FDA_RECOGNITION}
             component={AboutPageNavTab}
           />
-          <Route
+          <OncokbRoute
             exact
             path={PAGE_ROUTE.TERMS}
             component={ApiAccessPageNavTab}
           />
-          <Route exact path={PAGE_ROUTE.LEVELS}>
+          <OncokbRoute exact path={PAGE_ROUTE.LEVELS}>
             {getOldLevelsRedirectRoute(window.location.hash)}
-          </Route>
-          <Route exact path={PAGE_ROUTE.DX} component={LevelOfEvidencePage} />
-          <Route exact path={PAGE_ROUTE.PX} component={LevelOfEvidencePage} />
-          <Route exact path={PAGE_ROUTE.V2} component={LevelOfEvidencePage} />
-          <Route
+          </OncokbRoute>
+          <OncokbRoute
+            exact
+            path={PAGE_ROUTE.DX}
+            component={LevelOfEvidencePage}
+          />
+          <OncokbRoute
+            exact
+            path={PAGE_ROUTE.PX}
+            component={LevelOfEvidencePage}
+          />
+          <OncokbRoute
+            exact
+            path={PAGE_ROUTE.V2}
+            component={LevelOfEvidencePage}
+          />
+          <OncokbRoute
             exact
             path={PAGE_ROUTE.FDA_NGS}
             component={LevelOfEvidencePage}
