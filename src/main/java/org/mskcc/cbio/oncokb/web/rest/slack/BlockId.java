@@ -13,6 +13,7 @@ public enum BlockId {
     , FOR_PROFIT_CLARIFICATION_NOTE("for-profit-clarification-note")
     , USE_CASE_CLARIFICATION_NOTE("use-case-clarification-note")
     , DUPLICATE_USER_CLARIFICATION_NOTE("duplicate-user-clarification-note")
+    , DUPLICATE_USER_INFO("duplicate-user-info")
     , REGISTRATION_INFO_CLARIFICATION_NOTE("registration-info-clarification-note")
     , LICENSE_OPTIONS_NOTE("license-options-clarification-note")
     , REJECTION_NOTE("rejection-note")
