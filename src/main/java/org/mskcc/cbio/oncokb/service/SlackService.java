@@ -617,7 +617,7 @@ public class SlackService {
                     sb.append(", *REJECTED*");
                 }
             }
-            layoutBlocks.add(buildMarkdownBlock(sb.toString(), DUPLICATE_USER_CLARIFICATION_NOTE));
+            layoutBlocks.add(buildMarkdownBlock(sb.toString(), DUPLICATE_USER_INFO));
         }
         return layoutBlocks;
     }
