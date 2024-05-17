@@ -233,7 +233,6 @@ For more information refer to [Using Docker and Docker-Compose][], this page als
 
    - Change `spring.mail.username` to dev.oncokb@gmail.com
    - Change `spring.mail.password` to the password for dev.oncokb@gmail.com found in the secret server
-   - Check your `application.api-proxy-url` points to a running instance of OncoKB core
    - Change `application.slack.user-registration-webhook` to the slack hook.
    - Change `application.slack.slack-base-url` to https://oncokb.slack.com
    - Change `application.slack.user-registration-channel-id` to C03EASPQ8AZ
