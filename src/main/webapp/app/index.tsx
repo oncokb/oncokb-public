@@ -125,6 +125,7 @@ if (AppConfig.serverConfig?.sentryProjectId) {
     ignoreErrors: [
       // the following errors are for this project only
       'ResizeObserver loop limit exceeded',
+      'ResizeObserver loop completed',
       'Request has been terminated',
       'Failed to fetch all transcripts',
       'Non-Error promise rejection captured',
@@ -176,6 +177,25 @@ if (AppConfig.serverConfig?.sentryProjectId) {
       /webappstoolbarba\.texthelp\.com\//i,
       /metrics\.itunes\.apple\.com\.edgesuite\.net\//i,
     ],
+
+    // Called for message and error events
+    beforeSend(event) {
+      // identify deprecated API that used for mutation mapper. Do not report such event.
+      // we need to upgrade mutation mapper but it's limited by our node version
+      const hasInvalidUrl =
+        (
+          event.breadcrumbs?.filter(breadcrumb => {
+            const url = breadcrumb.data?.url || '';
+            return url.includes('getMutationAligner.json');
+          }) || []
+        ).length > 0;
+
+      if (hasInvalidUrl) {
+        return null;
+      } else {
+        return event;
+      }
+    },
   });
 }
 
