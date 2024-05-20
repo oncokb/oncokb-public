@@ -12,7 +12,7 @@ function CanonicalLink({ routeProps }: CanonicalLinkProps) {
     linkNode.setAttribute('rel', 'canonical');
     linkNode.setAttribute(
       'href',
-      `${location.protocol}${location.host}${canonicalEndpoint}`
+      `${location.protocol}//${location.host}${canonicalEndpoint}`
     );
 
     document.head.appendChild(linkNode);
