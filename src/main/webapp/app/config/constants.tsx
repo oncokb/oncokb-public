@@ -799,6 +799,7 @@ export type DataRelease = {
 };
 
 export const DATA_RELEASES: DataRelease[] = [
+  { date: '05282024', version: 'v4.17' },
   { date: '05012024', version: 'v4.16' },
   { date: '03212024', version: 'v4.15' },
   { date: '02082024', version: 'v4.14' },

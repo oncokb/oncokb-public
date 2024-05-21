@@ -240,6 +240,114 @@ const EVIDENCE_COLUMN_SEPARATOR = '; ';
 // https://stackoverflow.com/questions/41947168/is-it-possible-to-use-keyof-operator-on-literals-instead-of-interfaces
 
 export const NEWS_BY_DATE: { [date: string]: NewsData } = {
+  '05282024': {
+    changedAnnotations: [
+      {
+        columnHeaderType: AnnotationColumnHeaderType.NEW_ALTERATION_WITH_LEVEL,
+        content: [
+          [
+            '3A',
+            'MTAP',
+            'Deletion',
+            'Solid Tumors',
+            'AMG193, MRTX1719',
+            <WithSeparator separator={EVIDENCE_COLUMN_SEPARATOR}>
+              <PMIDLink pmids="37552839" />
+              <AbstractLink
+                abstract="Rodon, J. et al. Abstract# PR006, AACR-NCI-EORTC 2023"
+                link="https://aacrjournals.org/mct/article/22/12_Supplement/PR006/730845/Abstract-PR006-Initial-results-from-first-in-human"
+              />
+            </WithSeparator>,
+          ],
+        ],
+      },
+      {
+        columnHeaderType:
+          AnnotationColumnHeaderType.ADDITIONAL_SENSITIVITY_LEVEL_DRUG,
+        content: [
+          [
+            'ALK',
+            'G1202R',
+            'Non-Small Cell Lung Cancer',
+            'Alectinib (Level R2)',
+            'Lorlatinib (Level 2)',
+            '2',
+            'R2',
+            <WithSeparator separator={EVIDENCE_COLUMN_SEPARATOR}>
+              <span>
+                Inclusion in the NCCN Non-Small Cell Lung Cancer Guidelines
+                V5.2024
+              </span>
+              <PMIDLink pmids="30892989" />
+            </WithSeparator>,
+          ],
+          [
+            'ALK',
+            'L1196M',
+            'Non-Small Cell Lung Cancer',
+            'Crizotinib (Level R2)',
+            'Lorlatinib (Level 2)',
+            '2',
+            'R2',
+            <WithSeparator separator={EVIDENCE_COLUMN_SEPARATOR}>
+              <span>
+                Inclusion in the NCCN Non-Small Cell Lung Cancer Guidelines
+                V5.2024
+              </span>
+              <PMIDLink pmids="30892989" />
+            </WithSeparator>,
+          ],
+        ],
+      },
+      {
+        columnHeaderType: AnnotationColumnHeaderType.ADDITIONAL_SAME_LEVEL_DRUG,
+        title: `Updated therapeutic implications - Addition of therapy(s) associated with a tumor type-specific leveled alteration(s) (without changing the alteration's highest level of evidence)`,
+        content: [
+          [
+            'ALK',
+            'G1202R',
+            'Non-Small Cell Lung Cancer',
+            'R2',
+            'Alcetinib',
+            'Crizotinib, Ceritinib, Brigatinib',
+            <PMIDLink
+              pmids="31358542, 29935304, 27432227,
+            24675041, 25727400,
+            26698910, 31585938, 22277784"
+              wrapText
+            />,
+          ],
+        ],
+      },
+      {
+        columnHeaderType: AnnotationColumnHeaderType.DRUG_REMOVAL,
+        title: `Removal of therapy(s) associated with a tumor type-specific leveled alteration(s) (without changing the alteration's highest level of evidence)`,
+        content: [
+          [
+            'EGFR',
+            'Exon 20 in-frame insertions',
+            'Non-Small Cell Lung Cancer',
+            '1',
+            'Amivantamab, Amivantamab + Chemotherapy (Level 1); Poziotinib, CLN-081 (Level 3A)',
+            'Mobocertinib (Level 1)',
+            <WithSeparator separator={EVIDENCE_COLUMN_SEPARATOR}>
+              <Linkout link="https://www.onclive.com/view/takeda-to-voluntarily-withdraw-mobocertinib-for-egfr-exon-20-insertion-nsclc">
+                Withdrawal of Mobocertinib
+              </Linkout>
+              <span>
+                EXCLAIM-2 trial failed to meet primary endpoint of PFS
+              </span>
+              <AbstractLink
+                abstract="Jänne, PA. et al. Abstract# 507O, Annals of Oncol. 2023"
+                link="https://www.annalsofoncology.org/article/S0923-7534(23)04792-0/fulltext"
+              />
+            </WithSeparator>,
+          ],
+        ],
+      },
+    ],
+    newlyAddedGenes: ['DDB2', 'FGF8', 'FGF9', 'TOP2A'],
+  },
   '05012024': {
     priorityNews: [
       <span>

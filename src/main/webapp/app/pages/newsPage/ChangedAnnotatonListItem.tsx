@@ -8,6 +8,7 @@ import {
   CHANGED_ANNOTATION_DRUG_REMOVAL_COLUMNS,
   CHANGED_ANNOTATION_LEVEL_WITH_EVIDENCE_COLUMNS,
   CHANGED_ANNOTATION_SENSITIVITY_LEVEL_COLUMNS,
+  UPDATED_IMPLICATION_COLUMNS,
 } from 'app/pages/newsPage/NewsPageContent';
 import { SimpleTable, SimpleTableRow } from 'app/components/SimpleTable';
 import { Row } from 'react-bootstrap';
@@ -31,6 +32,7 @@ export enum AnnotationColumnHeaderType {
   DRUG_REMOVAL,
   DEMOTION_TUMOR_TYPE_SPECIFIC_EVIDENCE,
   PROMOTION_TUMOR_TYPE_SPECIFIC_EVIDENCE,
+  NEW_ALTERATION_WITH_LEVEL,
 }
 
 export const ChangedAnnotationListItem = (props: {
@@ -85,6 +87,12 @@ export const ChangedAnnotationListItem = (props: {
       useOneLineRowClass = false;
       defaultTitle =
         'Updated therapeutic implications - Demotion of tumor type-specific level of evidence for an alteration(s)';
+      break;
+    case AnnotationColumnHeaderType.NEW_ALTERATION_WITH_LEVEL:
+      annotationColumnHeader = UPDATED_IMPLICATION_COLUMNS;
+      useOneLineRowClass = false;
+      defaultTitle =
+        'Updated therapeutic implications - New alteration(s) with a tumor type-specific level of evidence';
       break;
     case AnnotationColumnHeaderType.LEVEL:
     default:
