@@ -412,11 +412,28 @@ export default class UserPage extends React.Component<IUserPage> {
         ...this.user.additionalInfo,
         userCompany: updatedUserCompany,
       };
-      if (!values.authorities.includes(AUTHORITIES.API)) {
+
+      // If previously the user has API role, but in the latest, it's removed, then we will clean up the api access request
+      if (
+        this.user.authorities.includes(AUTHORITIES.API) &&
+        !values.authorities.includes(AUTHORITIES.API)
+      ) {
         updatedAdditionalInfo.apiAccessRequest = {
           requested: false,
           justification: '',
         };
+      }
+
+      if (values.additionalInfoApiAccessJustification) {
+        if (updatedAdditionalInfo.apiAccessRequest) {
+          updatedAdditionalInfo.apiAccessRequest.justification =
+            values.additionalInfoApiAccessJustification;
+        } else {
+          updatedAdditionalInfo.apiAccessRequest = {
+            requested: true,
+            justification: values.additionalInfoApiAccessJustification,
+          };
+        }
       }
 
       const updatedUser: UserDTO = {
@@ -912,6 +929,23 @@ export default class UserPage extends React.Component<IUserPage> {
                             }
                             value={
                               this.user.additionalInfo?.userCompany?.useCase
+                            }
+                            rows={3}
+                            type={'textarea'}
+                            validate={LONG_TEXT_VAL}
+                          />
+                          <AvField
+                            name="additionalInfoApiAccessJustification"
+                            label={
+                              <BoldAccountTitle
+                                title={
+                                  ACCOUNT_TITLES.ADDITIONAL_INFO_API_ACCESS_JUSTIFICATION
+                                }
+                              />
+                            }
+                            value={
+                              this.user.additionalInfo?.apiAccessRequest
+                                ?.justification
                             }
                             rows={3}
                             type={'textarea'}

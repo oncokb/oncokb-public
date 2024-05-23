@@ -6,8 +6,8 @@ import org.mskcc.cbio.oncokb.domain.CompanyCandidate;
 import org.mskcc.cbio.oncokb.domain.Token;
 import org.mskcc.cbio.oncokb.domain.User;
 import org.mskcc.cbio.oncokb.domain.enumeration.LicenseStatus;
+import org.mskcc.cbio.oncokb.domain.enumeration.LicenseType;
 import org.mskcc.cbio.oncokb.repository.UserRepository;
-import org.mskcc.cbio.oncokb.security.AuthoritiesConstants;
 import org.mskcc.cbio.oncokb.security.SecurityUtils;
 import org.mskcc.cbio.oncokb.security.uuid.TokenProvider;
 import org.mskcc.cbio.oncokb.service.*;
@@ -197,13 +197,21 @@ public class AccountResource {
             slackService.sendUserRegistrationToChannel(userDTO, userService.isUserOnTrial(userDTO), limitedCompany);
         } else {
             Company company = companyCandidate.getCompanyCandidate().get();
-            userService.updateUserWithCompanyLicense(userDTO, company, false, false);
-            // Don't send the automated approval message to slack if the company is on trial
-            // We only want a message when the user accepts the trial license agreement.
             if (company.getLicenseStatus().equals(LicenseStatus.REGULAR)) {
-                userService.approveUser(userDTO, false);
-                slackService.sendApprovedConfirmation(userDTO, company);
-                userIsActivated = true;
+                Optional<Boolean> apiRequestedOptional = Optional.ofNullable(userDTO.getAdditionalInfo())
+                    .map(AdditionalInfoDTO::getApiAccessRequest)
+                    .map(ApiAccessRequest::isRequested);
+                if (apiRequestedOptional.isPresent() && apiRequestedOptional.get() && LicenseType.ACADEMIC.equals(company.getLicenseType())) {
+                    // if user specifically asked for API access, we need to send the justification to user channel for approval
+                    slackService.sendUserRegistrationToChannel(userDTO, userService.isUserOnTrial(userDTO), company);
+                } else {
+                    // Don't send the automated approval message to slack if the company is on trial
+                    // We only want a message when the user accepts the trial license agreement.
+                    userService.updateUserWithCompanyLicense(userDTO, company, false, false);
+                    userService.approveUser(userDTO, false);
+                    slackService.sendApprovedConfirmation(userDTO, company);
+                    userIsActivated = true;
+                }
             }
         }
 

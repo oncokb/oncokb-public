@@ -810,7 +810,7 @@ public class UserService {
                     return new CompanyCandidate(Optional.of(company), true);
                 }
             } else if (companies.size() > 1) {
-                // If there are mutliple companies with the domain, then we find a company with a regular license.
+                // If there are multiple companies with the domain, then we find a company with a regular license.
                 Optional<Company> foundCompany = companies
                     .stream()
                     .filter(c -> {

@@ -727,6 +727,7 @@ export enum ACCOUNT_TITLES {
   API_TOKEN = 'API Token',
   LICENSE_TYPE = 'License',
   ADDITIONAL_INFO_USE_CASE = 'Use Case',
+  ADDITIONAL_INFO_API_ACCESS_JUSTIFICATION = 'API Access Justification',
 }
 
 export enum API_CALL_STATUS {
