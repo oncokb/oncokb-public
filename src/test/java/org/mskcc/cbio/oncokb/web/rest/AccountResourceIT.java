@@ -4,13 +4,23 @@ import org.mskcc.cbio.oncokb.OncokbPublicApp;
 import org.mskcc.cbio.oncokb.config.Constants;
 import org.mskcc.cbio.oncokb.config.application.ApplicationProperties;
 import org.mskcc.cbio.oncokb.config.application.RecaptchaProperties;
+import org.mskcc.cbio.oncokb.domain.Company;
 import org.mskcc.cbio.oncokb.domain.User;
-import org.mskcc.cbio.oncokb.repository.AuthorityRepository;
-import org.mskcc.cbio.oncokb.repository.UserRepository;
+import org.mskcc.cbio.oncokb.domain.enumeration.CompanyType;
+import org.mskcc.cbio.oncokb.domain.enumeration.LicenseModel;
+import org.mskcc.cbio.oncokb.domain.enumeration.LicenseStatus;
+import org.mskcc.cbio.oncokb.domain.enumeration.LicenseType;
+import org.mskcc.cbio.oncokb.repository.*;
 import org.mskcc.cbio.oncokb.security.AuthoritiesConstants;
 import org.mskcc.cbio.oncokb.service.UserService;
+import org.mskcc.cbio.oncokb.service.dto.CompanyDTO;
 import org.mskcc.cbio.oncokb.service.dto.PasswordChangeDTO;
 import org.mskcc.cbio.oncokb.service.dto.UserDTO;
+import org.mskcc.cbio.oncokb.service.dto.UserDetailsDTO;
+import org.mskcc.cbio.oncokb.service.dto.useradditionalinfo.AdditionalInfoDTO;
+import org.mskcc.cbio.oncokb.service.dto.useradditionalinfo.ApiAccessRequest;
+import org.mskcc.cbio.oncokb.service.mapper.CompanyMapper;
+import org.mskcc.cbio.oncokb.service.mapper.UserDetailsMapper;
 import org.mskcc.cbio.oncokb.web.rest.vm.KeyAndPasswordVM;
 import org.mskcc.cbio.oncokb.web.rest.vm.ManagedUserVM;
 import org.apache.commons.lang3.RandomStringUtils;
@@ -26,14 +36,12 @@ import org.springframework.security.test.context.support.WithMockUser;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.transaction.annotation.Transactional;
 
-import javax.swing.text.html.Option;
 
 import java.io.IOException;
 import java.time.Instant;
 import java.util.*;
 
 import static org.assertj.core.api.Assertions.assertThat;
-import static org.mockito.ArgumentMatchers.isNull;
 import static org.mskcc.cbio.oncokb.web.rest.AccountResourceIT.TEST_USER_LOGIN;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
@@ -49,6 +57,18 @@ public class AccountResourceIT {
 
     @Autowired
     private UserRepository userRepository;
+
+    @Autowired
+    private UserDetailsRepository userDetailsRepository;
+
+    @Autowired
+    private UserDetailsMapper userDetailsMapper;
+
+    @Autowired
+    private CompanyMapper companyMapper;
+
+    @Autowired
+    private CompanyRepository companyRepository;
 
     @Autowired
     private AuthorityRepository authorityRepository;
@@ -84,7 +104,7 @@ public class AccountResourceIT {
     @WithUnauthenticatedMockUser
     public void testNonAuthenticatedUser() throws Exception {
         restAccountMockMvc.perform(get("/api/authenticate")
-            .accept(MediaType.APPLICATION_JSON))
+                .accept(MediaType.APPLICATION_JSON))
             .andExpect(status().isOk())
             .andExpect(content().string(""));
     }
@@ -92,11 +112,11 @@ public class AccountResourceIT {
     @Test
     public void testAuthenticatedUser() throws Exception {
         restAccountMockMvc.perform(get("/api/authenticate")
-            .with(request -> {
-                request.setRemoteUser(TEST_USER_LOGIN);
-                return request;
-            })
-            .accept(MediaType.APPLICATION_JSON))
+                .with(request -> {
+                    request.setRemoteUser(TEST_USER_LOGIN);
+                    return request;
+                })
+                .accept(MediaType.APPLICATION_JSON))
             .andExpect(status().isOk())
             .andExpect(content().string(TEST_USER_LOGIN));
     }
@@ -117,7 +137,7 @@ public class AccountResourceIT {
         userService.createUser(user, Optional.empty(), Optional.empty());
 
         restAccountMockMvc.perform(get("/api/account")
-            .accept(MediaType.APPLICATION_JSON))
+                .accept(MediaType.APPLICATION_JSON))
             .andExpect(status().isOk())
             .andExpect(content().contentType(MediaType.APPLICATION_JSON_VALUE))
             .andExpect(jsonPath("$.login").value(TEST_USER_LOGIN))
@@ -132,7 +152,7 @@ public class AccountResourceIT {
     @Test
     public void testGetUnknownAccount() throws Exception {
         restAccountMockMvc.perform(get("/api/account")
-            .accept(MediaType.APPLICATION_PROBLEM_JSON))
+                .accept(MediaType.APPLICATION_PROBLEM_JSON))
             .andExpect(status().isInternalServerError());
     }
 
@@ -151,10 +171,10 @@ public class AccountResourceIT {
         assertThat(userRepository.findOneWithAuthoritiesByLogin("test-register-valid").isPresent()).isFalse();
 
         restAccountMockMvc.perform(
-            post("/api/register")
-                .contentType(MediaType.APPLICATION_JSON)
-                .content(TestUtil.convertObjectToJsonBytes(validUser))
-                .header("g-recaptcha-response", Constants.TESTING_TOKEN))
+                post("/api/register")
+                    .contentType(MediaType.APPLICATION_JSON)
+                    .content(TestUtil.convertObjectToJsonBytes(validUser))
+                    .header("g-recaptcha-response", Constants.TESTING_TOKEN))
             .andExpect(status().isCreated());
 
         assertThat(userRepository.findOneWithAuthoritiesByLogin("test-register-valid").isPresent()).isTrue();
@@ -175,10 +195,10 @@ public class AccountResourceIT {
         invalidUser.setAuthorities(Collections.singleton(AuthoritiesConstants.USER));
 
         restAccountMockMvc.perform(
-            post("/api/register")
-                .contentType(MediaType.APPLICATION_JSON)
-                .content(TestUtil.convertObjectToJsonBytes(invalidUser))
-                .header("g-recaptcha-response", Constants.TESTING_TOKEN))
+                post("/api/register")
+                    .contentType(MediaType.APPLICATION_JSON)
+                    .content(TestUtil.convertObjectToJsonBytes(invalidUser))
+                    .header("g-recaptcha-response", Constants.TESTING_TOKEN))
             .andExpect(status().isBadRequest());
 
         Optional<User> user = userRepository.findOneWithAuthoritiesByEmailIgnoreCase("funky@example.com");
@@ -200,10 +220,10 @@ public class AccountResourceIT {
         invalidUser.setAuthorities(Collections.singleton(AuthoritiesConstants.USER));
 
         restAccountMockMvc.perform(
-            post("/api/register")
-                .contentType(MediaType.APPLICATION_JSON)
-                .content(TestUtil.convertObjectToJsonBytes(invalidUser))
-                .header("g-recaptcha-response", Constants.TESTING_TOKEN))
+                post("/api/register")
+                    .contentType(MediaType.APPLICATION_JSON)
+                    .content(TestUtil.convertObjectToJsonBytes(invalidUser))
+                    .header("g-recaptcha-response", Constants.TESTING_TOKEN))
             .andExpect(status().isBadRequest());
 
         Optional<User> user = userRepository.findOneWithAuthoritiesByLogin("bob");
@@ -225,10 +245,10 @@ public class AccountResourceIT {
         invalidUser.setAuthorities(Collections.singleton(AuthoritiesConstants.USER));
 
         restAccountMockMvc.perform(
-            post("/api/register")
-                .contentType(MediaType.APPLICATION_JSON)
-                .content(TestUtil.convertObjectToJsonBytes(invalidUser))
-                .header("g-recaptcha-response", Constants.TESTING_TOKEN))
+                post("/api/register")
+                    .contentType(MediaType.APPLICATION_JSON)
+                    .content(TestUtil.convertObjectToJsonBytes(invalidUser))
+                    .header("g-recaptcha-response", Constants.TESTING_TOKEN))
             .andExpect(status().isBadRequest());
 
         Optional<User> user = userRepository.findOneWithAuthoritiesByLogin("bob");
@@ -250,10 +270,10 @@ public class AccountResourceIT {
         invalidUser.setAuthorities(Collections.singleton(AuthoritiesConstants.USER));
 
         restAccountMockMvc.perform(
-            post("/api/register")
-                .contentType(MediaType.APPLICATION_JSON)
-                .content(TestUtil.convertObjectToJsonBytes(invalidUser))
-                .header("g-recaptcha-response", Constants.TESTING_TOKEN))
+                post("/api/register")
+                    .contentType(MediaType.APPLICATION_JSON)
+                    .content(TestUtil.convertObjectToJsonBytes(invalidUser))
+                    .header("g-recaptcha-response", Constants.TESTING_TOKEN))
             .andExpect(status().isBadRequest());
 
         Optional<User> user = userRepository.findOneWithAuthoritiesByLogin("bob");
@@ -291,10 +311,10 @@ public class AccountResourceIT {
 
         // First user
         restAccountMockMvc.perform(
-            post("/api/register")
-                .contentType(MediaType.APPLICATION_JSON)
-                .content(TestUtil.convertObjectToJsonBytes(firstUser))
-                .header("g-recaptcha-response", Constants.TESTING_TOKEN))
+                post("/api/register")
+                    .contentType(MediaType.APPLICATION_JSON)
+                    .content(TestUtil.convertObjectToJsonBytes(firstUser))
+                    .header("g-recaptcha-response", Constants.TESTING_TOKEN))
             .andExpect(status().isCreated());
 
         Optional<User> testUser1 = userRepository.findOneWithAuthoritiesByEmailIgnoreCase("alice@example.com");
@@ -302,10 +322,10 @@ public class AccountResourceIT {
 
         // Second (non activated) user
         restAccountMockMvc.perform(
-            post("/api/register")
-                .contentType(MediaType.APPLICATION_JSON)
-                .content(TestUtil.convertObjectToJsonBytes(secondUser))
-                .header("g-recaptcha-response", Constants.TESTING_TOKEN))
+                post("/api/register")
+                    .contentType(MediaType.APPLICATION_JSON)
+                    .content(TestUtil.convertObjectToJsonBytes(secondUser))
+                    .header("g-recaptcha-response", Constants.TESTING_TOKEN))
             .andExpect(status().is4xxClientError());
 
         Optional<User> testUser2 = userRepository.findOneWithAuthoritiesByEmailIgnoreCase("alice2@example.com");
@@ -328,10 +348,10 @@ public class AccountResourceIT {
 
         // Register first user
         restAccountMockMvc.perform(
-            post("/api/register")
-                .contentType(MediaType.APPLICATION_JSON)
-                .content(TestUtil.convertObjectToJsonBytes(firstUser))
-                .header("g-recaptcha-response", Constants.TESTING_TOKEN))
+                post("/api/register")
+                    .contentType(MediaType.APPLICATION_JSON)
+                    .content(TestUtil.convertObjectToJsonBytes(firstUser))
+                    .header("g-recaptcha-response", Constants.TESTING_TOKEN))
             .andExpect(status().isCreated());
 
         Optional<User> testUser1 = userRepository.findOneWithAuthoritiesByLogin("test-register-duplicate-email");
@@ -350,10 +370,10 @@ public class AccountResourceIT {
 
         // Register second (non activated) user
         restAccountMockMvc.perform(
-            post("/api/register")
-                .contentType(MediaType.APPLICATION_JSON)
-                .content(TestUtil.convertObjectToJsonBytes(secondUser))
-                .header("g-recaptcha-response", Constants.TESTING_TOKEN))
+                post("/api/register")
+                    .contentType(MediaType.APPLICATION_JSON)
+                    .content(TestUtil.convertObjectToJsonBytes(secondUser))
+                    .header("g-recaptcha-response", Constants.TESTING_TOKEN))
             .andExpect(status().isBadRequest());
 
         Optional<User> testUser2 = userRepository.findOneWithAuthoritiesByLogin("test-register-duplicate-email");
@@ -376,10 +396,10 @@ public class AccountResourceIT {
 
         // Register third (not activated) user
         restAccountMockMvc.perform(
-            post("/api/register")
-                .contentType(MediaType.APPLICATION_JSON)
-                .content(TestUtil.convertObjectToJsonBytes(userWithUpperCaseEmail))
-                .header("g-recaptcha-response", Constants.TESTING_TOKEN))
+                post("/api/register")
+                    .contentType(MediaType.APPLICATION_JSON)
+                    .content(TestUtil.convertObjectToJsonBytes(userWithUpperCaseEmail))
+                    .header("g-recaptcha-response", Constants.TESTING_TOKEN))
             .andExpect(status().isBadRequest());
 
         Optional<User> testUser4 = userRepository.findOneWithAuthoritiesByLogin("test-register-duplicate-email-3");
@@ -401,10 +421,10 @@ public class AccountResourceIT {
         validUser.setAuthorities(Collections.singleton(AuthoritiesConstants.ADMIN));
 
         restAccountMockMvc.perform(
-            post("/api/register")
-                .contentType(MediaType.APPLICATION_JSON)
-                .content(TestUtil.convertObjectToJsonBytes(validUser))
-                .header("g-recaptcha-response", Constants.TESTING_TOKEN))
+                post("/api/register")
+                    .contentType(MediaType.APPLICATION_JSON)
+                    .content(TestUtil.convertObjectToJsonBytes(validUser))
+                    .header("g-recaptcha-response", Constants.TESTING_TOKEN))
             .andExpect(status().isCreated());
 
         Optional<User> userDup = userRepository.findOneWithAuthoritiesByLogin("badguy");
@@ -474,6 +494,227 @@ public class AccountResourceIT {
 
     @Test
     @Transactional
+    public void testActivateAccountWithoutApiRequestAndNoInstitution() throws Exception {
+        final String activationKey = "some activation key";
+        final String userLogin = "activate-account";
+        final String companyDomain = "example.com";
+
+        User user = new User();
+        user.setLogin(userLogin);
+        user.setEmail("activate-account@" + companyDomain);
+        user.setPassword(RandomStringUtils.random(60));
+        user.setActivated(false);
+        user.setActivationKey(activationKey);
+
+        userRepository.saveAndFlush(user);
+
+        restAccountMockMvc.perform(get("/api/activate?key={activationKey}&login={userLogin}", activationKey, userLogin))
+            .andExpect(status().isOk());
+
+        user = userRepository.findOneWithAuthoritiesByLogin(user.getLogin()).orElse(null);
+
+        // For user without any institution association, we should not auto-approve
+        assertThat(user.getActivated()).isFalse();
+    }
+
+    @Test
+    @Transactional
+    public void testActivateAccountWithoutApiRequestAndAcademic() throws Exception {
+        final String activationKey = "some activation key";
+        final String userLogin = "activate-account";
+        final String companyDomain = "example.com";
+
+        User user = new User();
+        user.setLogin(userLogin);
+        user.setEmail("activate-account@" + companyDomain);
+        user.setPassword(RandomStringUtils.random(60));
+        user.setActivated(false);
+        user.setActivationKey(activationKey);
+
+        userRepository.saveAndFlush(user);
+
+        CompanyDTO companyDTO = new CompanyDTO();
+        companyDTO.setName("test company");
+        companyDTO.setLicenseType(LicenseType.ACADEMIC);
+        companyDTO.setLicenseStatus(LicenseStatus.REGULAR);
+        companyDTO.setLicenseModel(LicenseModel.FULL);
+        companyDTO.setCompanyType(CompanyType.PARENT);
+        companyDTO.setCompanyDomains(Collections.singleton(companyDomain));
+        companyRepository.saveAndFlush(companyMapper.toEntity(companyDTO));
+
+        restAccountMockMvc.perform(get("/api/activate?key={activationKey}&login={userLogin}", activationKey, userLogin))
+            .andExpect(status().isOk());
+
+        user = userRepository.findOneWithAuthoritiesByLogin(user.getLogin()).orElse(null);
+
+        // For academic user with a valid institution license, we should auto-approve when API access is not requested
+        assertThat(user.getActivated()).isTrue();
+    }
+
+    @Test
+    @Transactional
+    public void testActivateAccountWithoutApiRequestAndCommercial() throws Exception {
+        final String activationKey = "some activation key";
+        final String userLogin = "activate-account";
+        final String companyDomain = "example.com";
+
+        User user = new User();
+        user.setLogin(userLogin);
+        user.setEmail("activate-account@" + companyDomain);
+        user.setPassword(RandomStringUtils.random(60));
+        user.setActivated(false);
+        user.setActivationKey(activationKey);
+
+        userRepository.saveAndFlush(user);
+
+        CompanyDTO companyDTO = new CompanyDTO();
+        companyDTO.setName("test company");
+        companyDTO.setLicenseType(LicenseType.COMMERCIAL);
+        companyDTO.setLicenseStatus(LicenseStatus.REGULAR);
+        companyDTO.setLicenseModel(LicenseModel.FULL);
+        companyDTO.setCompanyType(CompanyType.PARENT);
+        companyDTO.setCompanyDomains(Collections.singleton(companyDomain));
+        companyRepository.saveAndFlush(companyMapper.toEntity(companyDTO));
+
+        restAccountMockMvc.perform(get("/api/activate?key={activationKey}&login={userLogin}", activationKey, userLogin))
+            .andExpect(status().isOk());
+
+        user = userRepository.findOneWithAuthoritiesByLogin(user.getLogin()).orElse(null);
+
+        // For commercial user with a valid company license, we should auto-approve when API access is not requested
+        assertThat(user.getActivated()).isTrue();
+    }
+
+    @Test
+    @Transactional
+    public void testActivateAccountWithApiRequestAndNoInstitution() throws Exception {
+        final String activationKey = "some activation key";
+        final String userLogin = "activate-account";
+        final String companyDomain = "example.com";
+
+        User user = new User();
+        user.setLogin(userLogin);
+        user.setEmail("activate-account@" + companyDomain);
+        user.setPassword(RandomStringUtils.random(60));
+        user.setActivated(false);
+        user.setActivationKey(activationKey);
+
+        userRepository.saveAndFlush(user);
+
+        UserDetailsDTO userDetailsDTO = new UserDetailsDTO();
+        userDetailsDTO.setUserId(user.getId());
+
+        AdditionalInfoDTO additionalInfoDTO = new AdditionalInfoDTO();
+        ApiAccessRequest apiAccessRequest = new ApiAccessRequest();
+        apiAccessRequest.setRequested(true);
+        apiAccessRequest.setJustification("random request");
+        additionalInfoDTO.setApiAccessRequest(apiAccessRequest);
+        userDetailsDTO.setAdditionalInfo(additionalInfoDTO);
+        userDetailsRepository.saveAndFlush(userDetailsMapper.toEntity(userDetailsDTO));
+
+        restAccountMockMvc.perform(get("/api/activate?key={activationKey}&login={userLogin}", activationKey, userLogin))
+            .andExpect(status().isOk());
+
+        user = userRepository.findOneWithAuthoritiesByLogin(user.getLogin()).orElse(null);
+
+        // For user without a company, we should not auto-approve when API access is requested
+        assertThat(user.getActivated()).isFalse();
+    }
+
+    @Test
+    @Transactional
+    public void testActivateAccountWithApiRequestAndAcademic() throws Exception {
+        final String activationKey = "some activation key";
+        final String userLogin = "activate-account";
+        final String companyDomain = "example.com";
+
+        User user = new User();
+        user.setLogin(userLogin);
+        user.setEmail("activate-account@" + companyDomain);
+        user.setPassword(RandomStringUtils.random(60));
+        user.setActivated(false);
+        user.setActivationKey(activationKey);
+
+        userRepository.saveAndFlush(user);
+
+        CompanyDTO companyDTO = new CompanyDTO();
+        companyDTO.setName("test company");
+        companyDTO.setLicenseType(LicenseType.ACADEMIC);
+        companyDTO.setLicenseStatus(LicenseStatus.REGULAR);
+        companyDTO.setLicenseModel(LicenseModel.FULL);
+        companyDTO.setCompanyType(CompanyType.PARENT);
+        companyDTO.setCompanyDomains(Collections.singleton(companyDomain));
+        Company company = companyRepository.saveAndFlush(companyMapper.toEntity(companyDTO));
+
+        UserDetailsDTO userDetailsDTO = new UserDetailsDTO();
+        userDetailsDTO.setUserId(user.getId());
+        userDetailsDTO.setCompanyId(company.getId());
+
+        AdditionalInfoDTO additionalInfoDTO = new AdditionalInfoDTO();
+        ApiAccessRequest apiAccessRequest = new ApiAccessRequest();
+        apiAccessRequest.setRequested(true);
+        apiAccessRequest.setJustification("random request");
+        additionalInfoDTO.setApiAccessRequest(apiAccessRequest);
+        userDetailsDTO.setAdditionalInfo(additionalInfoDTO);
+        userDetailsRepository.saveAndFlush(userDetailsMapper.toEntity(userDetailsDTO));
+
+        restAccountMockMvc.perform(get("/api/activate?key={activationKey}&login={userLogin}", activationKey, userLogin))
+            .andExpect(status().isOk());
+
+        user = userRepository.findOneWithAuthoritiesByLogin(user.getLogin()).orElse(null);
+
+        // For academic user with a valid institution license, we should not auto-approve when API access is requested
+        assertThat(user.getActivated()).isFalse();
+    }
+
+    @Test
+    @Transactional
+    public void testActivateAccountWithApiRequestAndCommercial() throws Exception {
+        final String activationKey = "some activation key";
+        final String userLogin = "activate-account";
+        final String companyDomain = "example.com";
+
+        User user = new User();
+        user.setLogin(userLogin);
+        user.setEmail("activate-account@" + companyDomain);
+        user.setPassword(RandomStringUtils.random(60));
+        user.setActivated(false);
+        user.setActivationKey(activationKey);
+
+        userRepository.saveAndFlush(user);
+
+        CompanyDTO companyDTO = new CompanyDTO();
+        companyDTO.setName("test company");
+        companyDTO.setLicenseType(LicenseType.COMMERCIAL);
+        companyDTO.setLicenseStatus(LicenseStatus.REGULAR);
+        companyDTO.setLicenseModel(LicenseModel.FULL);
+        companyDTO.setCompanyType(CompanyType.PARENT);
+        companyDTO.setCompanyDomains(Collections.singleton(companyDomain));
+        Company company = companyRepository.saveAndFlush(companyMapper.toEntity(companyDTO));
+
+        UserDetailsDTO userDetailsDTO = new UserDetailsDTO();
+        userDetailsDTO.setUserId(user.getId());
+        userDetailsDTO.setCompanyId(company.getId());
+
+        AdditionalInfoDTO additionalInfoDTO = new AdditionalInfoDTO();
+        ApiAccessRequest apiAccessRequest = new ApiAccessRequest();
+        apiAccessRequest.setRequested(true);
+        apiAccessRequest.setJustification("random request");
+        additionalInfoDTO.setApiAccessRequest(apiAccessRequest);
+        userDetailsDTO.setAdditionalInfo(additionalInfoDTO);
+        userDetailsRepository.saveAndFlush(userDetailsMapper.toEntity(userDetailsDTO));
+
+        restAccountMockMvc.perform(get("/api/activate?key={activationKey}&login={userLogin}", activationKey, userLogin))
+            .andExpect(status().isOk());
+
+        user = userRepository.findOneWithAuthoritiesByLogin(user.getLogin()).orElse(null);
+
+        // For commercial user with a valid company license, we should auto-approve when API access is requested
+        assertThat(user.getActivated()).isTrue();
+    }
+
+    @Test
+    @Transactional
     @WithMockUser("save-account")
     public void testSaveAccount() throws Exception {
         User user = new User();
@@ -496,9 +737,9 @@ public class AccountResourceIT {
         userDTO.setAuthorities(Collections.singleton(AuthoritiesConstants.ADMIN));
 
         restAccountMockMvc.perform(
-            post("/api/account")
-                .contentType(MediaType.APPLICATION_JSON)
-                .content(TestUtil.convertObjectToJsonBytes(userDTO)))
+                post("/api/account")
+                    .contentType(MediaType.APPLICATION_JSON)
+                    .content(TestUtil.convertObjectToJsonBytes(userDTO)))
             .andExpect(status().isOk());
 
         User updatedUser = userRepository.findOneWithAuthoritiesByLogin(user.getLogin()).orElse(null);
@@ -535,9 +776,9 @@ public class AccountResourceIT {
         userDTO.setAuthorities(Collections.singleton(AuthoritiesConstants.ADMIN));
 
         restAccountMockMvc.perform(
-            post("/api/account")
-                .contentType(MediaType.APPLICATION_JSON)
-                .content(TestUtil.convertObjectToJsonBytes(userDTO)))
+                post("/api/account")
+                    .contentType(MediaType.APPLICATION_JSON)
+                    .content(TestUtil.convertObjectToJsonBytes(userDTO)))
             .andExpect(status().isBadRequest());
 
         assertThat(userRepository.findOneWithAuthoritiesByEmailIgnoreCase("invalid email")).isNotPresent();
@@ -573,9 +814,9 @@ public class AccountResourceIT {
         userDTO.setAuthorities(Collections.singleton(AuthoritiesConstants.ADMIN));
 
         restAccountMockMvc.perform(
-            post("/api/account")
-                .contentType(MediaType.APPLICATION_JSON)
-                .content(TestUtil.convertObjectToJsonBytes(userDTO)))
+                post("/api/account")
+                    .contentType(MediaType.APPLICATION_JSON)
+                    .content(TestUtil.convertObjectToJsonBytes(userDTO)))
             .andExpect(status().isBadRequest());
 
         User updatedUser = userRepository.findOneWithAuthoritiesByLogin("save-existing-email").orElse(null);
@@ -606,9 +847,9 @@ public class AccountResourceIT {
         userDTO.setAuthorities(Collections.singleton(AuthoritiesConstants.ADMIN));
 
         restAccountMockMvc.perform(
-            post("/api/account")
-                .contentType(MediaType.APPLICATION_JSON)
-                .content(TestUtil.convertObjectToJsonBytes(userDTO)))
+                post("/api/account")
+                    .contentType(MediaType.APPLICATION_JSON)
+                    .content(TestUtil.convertObjectToJsonBytes(userDTO)))
             .andExpect(status().isOk());
 
         // User updatedUser = userRepository.findOneWithAuthoritiesByLogin("save-existing-email-and-login").orElse(null);
@@ -627,9 +868,9 @@ public class AccountResourceIT {
         userRepository.saveAndFlush(user);
 
         restAccountMockMvc.perform(post("/api/account/change-password")
-            .contentType(MediaType.APPLICATION_JSON)
-            .content(TestUtil.convertObjectToJsonBytes(new PasswordChangeDTO("1"+currentPassword, "new password")))
-)
+                .contentType(MediaType.APPLICATION_JSON)
+                .content(TestUtil.convertObjectToJsonBytes(new PasswordChangeDTO("1" + currentPassword, "new password")))
+            )
             .andExpect(status().isBadRequest());
 
         User updatedUser = userRepository.findOneWithAuthoritiesByLogin("change-password-wrong-existing-password").orElse(null);
@@ -649,9 +890,9 @@ public class AccountResourceIT {
         userRepository.saveAndFlush(user);
 
         restAccountMockMvc.perform(post("/api/account/change-password")
-            .contentType(MediaType.APPLICATION_JSON)
-            .content(TestUtil.convertObjectToJsonBytes(new PasswordChangeDTO(currentPassword, "new password")))
-)
+                .contentType(MediaType.APPLICATION_JSON)
+                .content(TestUtil.convertObjectToJsonBytes(new PasswordChangeDTO(currentPassword, "new password")))
+            )
             .andExpect(status().isOk());
 
         User updatedUser = userRepository.findOneWithAuthoritiesByLogin("change-password").orElse(null);
@@ -672,9 +913,9 @@ public class AccountResourceIT {
         String newPassword = RandomStringUtils.random(ManagedUserVM.PASSWORD_MIN_LENGTH - 1);
 
         restAccountMockMvc.perform(post("/api/account/change-password")
-            .contentType(MediaType.APPLICATION_JSON)
-            .content(TestUtil.convertObjectToJsonBytes(new PasswordChangeDTO(currentPassword, newPassword)))
-)
+                .contentType(MediaType.APPLICATION_JSON)
+                .content(TestUtil.convertObjectToJsonBytes(new PasswordChangeDTO(currentPassword, newPassword)))
+            )
             .andExpect(status().isBadRequest());
 
         User updatedUser = userRepository.findOneWithAuthoritiesByLogin("change-password-too-small").orElse(null);
@@ -695,9 +936,9 @@ public class AccountResourceIT {
         String newPassword = RandomStringUtils.random(ManagedUserVM.PASSWORD_MAX_LENGTH + 1);
 
         restAccountMockMvc.perform(post("/api/account/change-password")
-            .contentType(MediaType.APPLICATION_JSON)
-            .content(TestUtil.convertObjectToJsonBytes(new PasswordChangeDTO(currentPassword, newPassword)))
-)
+                .contentType(MediaType.APPLICATION_JSON)
+                .content(TestUtil.convertObjectToJsonBytes(new PasswordChangeDTO(currentPassword, newPassword)))
+            )
             .andExpect(status().isBadRequest());
 
         User updatedUser = userRepository.findOneWithAuthoritiesByLogin("change-password-too-long").orElse(null);
@@ -716,9 +957,9 @@ public class AccountResourceIT {
         userRepository.saveAndFlush(user);
 
         restAccountMockMvc.perform(post("/api/account/change-password")
-            .contentType(MediaType.APPLICATION_JSON)
-            .content(TestUtil.convertObjectToJsonBytes(new PasswordChangeDTO(currentPassword, "")))
-)
+                .contentType(MediaType.APPLICATION_JSON)
+                .content(TestUtil.convertObjectToJsonBytes(new PasswordChangeDTO(currentPassword, "")))
+            )
             .andExpect(status().isBadRequest());
 
         User updatedUser = userRepository.findOneWithAuthoritiesByLogin("change-password-empty").orElse(null);
@@ -736,8 +977,8 @@ public class AccountResourceIT {
         userRepository.saveAndFlush(user);
 
         restAccountMockMvc.perform(post("/api/account/reset-password/init")
-            .content("password-reset@example.com")
-            .header("g-recaptcha-response", Constants.TESTING_TOKEN))
+                .content("password-reset@example.com")
+                .header("g-recaptcha-response", Constants.TESTING_TOKEN))
             .andExpect(status().isOk());
     }
 
@@ -752,17 +993,17 @@ public class AccountResourceIT {
         userRepository.saveAndFlush(user);
 
         restAccountMockMvc.perform(post("/api/account/reset-password/init")
-            .content("password-reset-upper-case@EXAMPLE.COM")
-            .header("g-recaptcha-response", Constants.TESTING_TOKEN))
+                .content("password-reset-upper-case@EXAMPLE.COM")
+                .header("g-recaptcha-response", Constants.TESTING_TOKEN))
             .andExpect(status().isOk());
     }
 
     @Test
     public void testRequestPasswordResetWrongEmail() throws Exception {
         restAccountMockMvc.perform(
-            post("/api/account/reset-password/init")
-                .content("password-reset-wrong-email@example.com")
-                .header("g-recaptcha-response", Constants.TESTING_TOKEN))
+                post("/api/account/reset-password/init")
+                    .content("password-reset-wrong-email@example.com")
+                    .header("g-recaptcha-response", Constants.TESTING_TOKEN))
             .andExpect(status().isOk());
     }
 
@@ -782,9 +1023,9 @@ public class AccountResourceIT {
         keyAndPassword.setNewPassword("new password");
 
         restAccountMockMvc.perform(
-            post("/api/account/reset-password/finish")
-                .contentType(MediaType.APPLICATION_JSON)
-                .content(TestUtil.convertObjectToJsonBytes(keyAndPassword)))
+                post("/api/account/reset-password/finish")
+                    .contentType(MediaType.APPLICATION_JSON)
+                    .content(TestUtil.convertObjectToJsonBytes(keyAndPassword)))
             .andExpect(status().isOk());
 
         User updatedUser = userRepository.findOneWithAuthoritiesByLogin(user.getLogin()).orElse(null);
@@ -807,9 +1048,9 @@ public class AccountResourceIT {
         keyAndPassword.setNewPassword("foo");
 
         restAccountMockMvc.perform(
-            post("/api/account/reset-password/finish")
-                .contentType(MediaType.APPLICATION_JSON)
-                .content(TestUtil.convertObjectToJsonBytes(keyAndPassword)))
+                post("/api/account/reset-password/finish")
+                    .contentType(MediaType.APPLICATION_JSON)
+                    .content(TestUtil.convertObjectToJsonBytes(keyAndPassword)))
             .andExpect(status().isBadRequest());
 
         User updatedUser = userRepository.findOneWithAuthoritiesByLogin(user.getLogin()).orElse(null);
@@ -824,9 +1065,9 @@ public class AccountResourceIT {
         keyAndPassword.setNewPassword("new password");
 
         restAccountMockMvc.perform(
-            post("/api/account/reset-password/finish")
-                .contentType(MediaType.APPLICATION_JSON)
-                .content(TestUtil.convertObjectToJsonBytes(keyAndPassword)))
+                post("/api/account/reset-password/finish")
+                    .contentType(MediaType.APPLICATION_JSON)
+                    .content(TestUtil.convertObjectToJsonBytes(keyAndPassword)))
             .andExpect(status().isInternalServerError());
     }
 }

@@ -33,6 +33,7 @@ import org.mskcc.cbio.oncokb.domain.enumeration.slack.*;
 import org.mskcc.cbio.oncokb.service.dto.UserDTO;
 import org.mskcc.cbio.oncokb.service.dto.UserMailsDTO;
 import org.mskcc.cbio.oncokb.service.dto.useradditionalinfo.AdditionalInfoDTO;
+import org.mskcc.cbio.oncokb.service.dto.useradditionalinfo.ApiAccessRequest;
 import org.mskcc.cbio.oncokb.service.mapper.UserMapper;
 import org.mskcc.cbio.oncokb.util.ObjectUtil;
 import org.mskcc.cbio.oncokb.util.StringUtil;
@@ -397,6 +398,20 @@ public class SlackService {
             blocks.add(SectionBlock.builder().text(MarkdownTextObject.builder().text(text).build()).build());
         }
 
+        // Add API request info if exists
+        Optional<Boolean> apiAccessRequestedOptional = Optional.ofNullable(userDTO)
+            .map(UserDTO::getAdditionalInfo)
+            .map(AdditionalInfoDTO::getApiAccessRequest)
+            .map(ApiAccessRequest::isRequested);
+        if (apiAccessRequestedOptional.isPresent() && apiAccessRequestedOptional.get()) {
+            String apiRequestJustification = userDTO.getAdditionalInfo().getApiAccessRequest().getJustification();
+            if (apiRequestJustification.isEmpty()) {
+                apiRequestJustification = "[no justification provided]";
+            }
+            String text = ":information_source: *API Access Requested*: " + apiRequestJustification;
+            blocks.add(SectionBlock.builder().text(MarkdownTextObject.builder().text(text).build()).build());
+        }
+
         return blocks;
     }
 
@@ -405,10 +420,6 @@ public class SlackService {
         boolean isAcademicLicense = userDTO.getLicenseType().equals(LicenseType.ACADEMIC);
         sb.append("*" + userDTO.getLicenseType().getName() + "*" + (isAcademicLicense ? "" : " :clap:") +"\n");
 
-        boolean apiAccessRequested = userDTO.getAdditionalInfo() != null && userDTO.getAdditionalInfo().getApiAccessRequest() != null && userDTO.getAdditionalInfo().getApiAccessRequest().isRequested();
-        if (isAcademicLicense && apiAccessRequested) {
-            sb.append(":information_source: API Access\n");
-        }
         if (StringUtils.isNotEmpty(userDTO.getCompanyName())) {
             sb.append("*" + userDTO.getCompanyName() + "*");
         }
