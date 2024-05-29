@@ -118,15 +118,22 @@ if (
       id: '2021-fda-recognition',
     },
     {
-      dateEnd: 1712808000000,
+      dateEnd: 1717560000000,
       content: (
         <div>
-          Join us at AACR 2024! Visit our poster session (Mon 4/8, 1:30PM PDT,
-          Section 36, Poster 3544) to learn more about OncoKB and meet some of
-          our team members. See you there!
+          Join us May 31-June 4 at ASCO 2024! Visit our booth (
+          <Linkout
+            link={
+              'https://events.jspargo.com/ASCO24/Public/Eventmap.aspx?EventId=776&MapID=990&MapItBoothID=960826&MapItBooth=37106'
+            }
+          >
+            #37106
+          </Linkout>
+          ) to meet our team and explore the latest developments from OncoKB™.
+          See you there!
         </div>
       ),
-      id: '2024_aacr',
+      id: '2024_asco',
     },
     {
       dateStart: 1709337600000,
