@@ -85,8 +85,8 @@ export const DRUGS_DEMOTED_IN_ONCOKB = `Drug(s) demoted in ${ONCOKB_TM}`;
 export const DRUGS_PROMOTED_IN_ONCOKB = `Drug(s) promoted in ${ONCOKB_TM}`;
 export const DRUGS_ASSOCIATED_WITH_CURRENT_LEVEL =
   'Drug(s) Associated with the Current Level';
-export const CURRENT_SENSITIVITY_LEVEL = 'Current Sensitivity Level';
-export const CURRENT_RESISTANCE_LEVEL = 'Current Resistance Level';
+export const UPDATED_SENSITIVITY_LEVEL = 'Updated Sensitivity Level';
+export const UPDATED_RESISTANCE_LEVEL = 'Updated Resistance Level';
 export const PREVIOUS_BIOMARKER_ASSOCIATION = 'Previous Biomarker Association';
 export const CURRENT_BIOMARKER_ASSOCIATION = 'Current Biomarker Association';
 
@@ -179,8 +179,8 @@ export const CHANGED_ANNOTATION_SENSITIVITY_LEVEL_COLUMNS = [
   { name: CANCER_TYPE },
   { name: DRUGS_CURRENTLY_IN_ONCOKB },
   { name: DRUGS_ADDED_TO_ONCOKB },
-  { name: CURRENT_SENSITIVITY_LEVEL },
-  { name: CURRENT_RESISTANCE_LEVEL },
+  { name: UPDATED_SENSITIVITY_LEVEL },
+  { name: UPDATED_RESISTANCE_LEVEL },
   { name: EVIDENCE },
 ];
 
@@ -241,6 +241,18 @@ const EVIDENCE_COLUMN_SEPARATOR = '; ';
 
 export const NEWS_BY_DATE: { [date: string]: NewsData } = {
   '05282024': {
+    priorityNews: [
+      <span>
+        Release of{' '}
+        <a
+          href="https://sop.oncokb.org/?version=v4.0"
+          target="_blank"
+          rel="noopener noreferrer"
+        >
+          {ONCOKB_TM} SOP v4.0
+        </a>
+      </span>,
+    ],
     changedAnnotations: [
       {
         columnHeaderType: AnnotationColumnHeaderType.NEW_ALTERATION_WITH_LEVEL,
@@ -249,7 +261,7 @@ export const NEWS_BY_DATE: { [date: string]: NewsData } = {
             '3A',
             'MTAP',
             'Deletion',
-            'Solid Tumors',
+            'All Solid Tumors',
             'AMG193, MRTX1719',
             <WithSeparator separator={EVIDENCE_COLUMN_SEPARATOR}>
               <PMIDLink pmids="37552839" />
@@ -346,7 +358,7 @@ export const NEWS_BY_DATE: { [date: string]: NewsData } = {
         ],
       },
     ],
-    newlyAddedGenes: ['DDB2', 'FGF8', 'FGF9', 'TOP2A'],
+    newlyAddedGenes: ['DDB2', 'FGF8', 'FGF9', 'GPC3', 'TOP2A'],
   },
   '05012024': {
     priorityNews: [
