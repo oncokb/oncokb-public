@@ -173,6 +173,16 @@ export const CHANGED_ANNOTATION_DRUG_REMOVAL_COLUMNS = [
   { name: EVIDENCE },
 ];
 
+export const CHANGED_ANNOTATION_DRUG_REMOVAL_SAME_HIGHEST_LEVEL_COLUMNS = [
+  { name: GENE },
+  { name: MUTATION },
+  { name: CANCER_TYPE },
+  { name: CURRENT_LEVEL_OF_EVIDENCE },
+  { name: DRUGS_CURRENTLY_IN_ONCOKB },
+  { name: DRUGS_REMOVED_FROM_ONCOKB },
+  { name: EVIDENCE },
+];
+
 export const CHANGED_ANNOTATION_SENSITIVITY_LEVEL_COLUMNS = [
   { name: GENE },
   { name: MUTATION },
@@ -258,6 +268,42 @@ export const NEWS_BY_DATE: { [date: string]: NewsData } = {
         columnHeaderType: AnnotationColumnHeaderType.NEW_ALTERATION_WITH_LEVEL,
         content: [
           [
+            '2',
+            'POLE',
+            'Exonuclease Domain Missense Mutations (268_471mis)',
+            'Colorectal Cancer, Small Bowel Cancer',
+            'Pembrolizumab, Nivolumab, Ipilimumab + Nivolumab, Dostarlimab',
+            <WithSeparator separator={EVIDENCE_COLUMN_SEPARATOR}>
+              <span>
+                Inclusion in Colon Cancer NCCN Guidelines V2.2024 and in Small
+                Bowel Adenocarcinoma NCCN Guidelines V3.2024
+              </span>
+              <PMIDLink pmids="26028255, 31682550, 28734759, 37917058" />
+              <AbstractLink
+                abstract="Chae et al. Abstract# 3417, AACR 2020"
+                link="https://aacrjournals.org/cancerres/article/80/16_Supplement/3417/642689/Abstract-3417-A-phase-II-basket-trial-of-dual-anti"
+              />
+            </WithSeparator>,
+          ],
+          [
+            '2',
+            'POLD1',
+            'Exonuclease Domain Missense Mutations (304_533mis)',
+            'Colorectal Cancer, Small Bowel Cancer',
+            'Pembrolizumab, Nivolumab, Ipilimumab + Nivolumab, Dostarlimab',
+            <WithSeparator separator={EVIDENCE_COLUMN_SEPARATOR}>
+              <span>
+                Inclusion in Colon Cancer NCCN Guidelines V2.2024 and in Small
+                Bowel Adenocarcinoma NCCN Guidelines V3.2024
+              </span>
+              <PMIDLink pmids="26028255, 31682550, 28734759, 37917058" />
+              <AbstractLink
+                abstract="Chae et al. Abstract# 3417, AACR 2020"
+                link="https://aacrjournals.org/cancerres/article/80/16_Supplement/3417/642689/Abstract-3417-A-phase-II-basket-trial-of-dual-anti"
+              />
+            </WithSeparator>,
+          ],
+          [
             '3A',
             'MTAP',
             'Deletion',
@@ -316,12 +362,42 @@ export const NEWS_BY_DATE: { [date: string]: NewsData } = {
         title: `Updated therapeutic implications - Addition of therapy(s) associated with a tumor type-specific leveled alteration(s) (without changing the alteration's highest level of evidence)`,
         content: [
           [
+            'Other Biomarkers',
+            'MSI-H',
+            'Colorectal Cancer',
+            '1',
+            'Pembrolizumab, Nivolumab, Ipilimumab + Nivolumab',
+            'Dostarlimab (Level 2)',
+            <WithSeparator separator={EVIDENCE_COLUMN_SEPARATOR}>
+              <span>Inclusion in Colon Cancer NCCN Guidelines V2.2024</span>
+              <PMIDLink pmids="37917058" />
+            </WithSeparator>,
+          ],
+          [
+            'Other Biomarkers',
+            'MSI-H',
+            'Small Bowel Cancer',
+            '1',
+            'Pembrolizumab',
+            'Nivolumab, Ipilimumab + Nivolumab, Dostarlimab (Level 2)',
+            <WithSeparator separator={EVIDENCE_COLUMN_SEPARATOR}>
+              <span>
+                Inclusion in Small Bowel Adenocarcinoma NCCN Guidelines V3.2024
+              </span>
+              <PMIDLink pmids="328734759, 37917058" />
+              <AbstractLink
+                abstract="Chae et al. Abstract# 3417, AACR 2020"
+                link="https://aacrjournals.org/cancerres/article/80/16_Supplement/3417/642689/Abstract-3417-A-phase-II-basket-trial-of-dual-anti"
+              />
+            </WithSeparator>,
+          ],
+          [
             'ALK',
             'G1202R',
             'Non-Small Cell Lung Cancer',
             'R2',
             'Alcetinib',
-            'Crizotinib, Ceritinib, Brigatinib',
+            'Crizotinib, Ceritinib, Brigatinib (Level R2)',
             <PMIDLink
               pmids="31358542, 29935304, 27432227,
             24675041, 25727400,
@@ -332,8 +408,8 @@ export const NEWS_BY_DATE: { [date: string]: NewsData } = {
         ],
       },
       {
-        columnHeaderType: AnnotationColumnHeaderType.DRUG_REMOVAL,
-        title: `Removal of therapy(s) associated with a tumor type-specific leveled alteration(s) (without changing the alteration's highest level of evidence)`,
+        columnHeaderType:
+          AnnotationColumnHeaderType.DRUG_REMOVAL_SAME_HIGHEST_LEVEL,
         content: [
           [
             'EGFR',
