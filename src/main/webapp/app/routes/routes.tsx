@@ -43,7 +43,7 @@ import {
   exampleTreatments,
   patientId,
   patientInfo,
-} from 'app/oncokb-annotation-visualisation/config/APIResponse';
+} from 'app/APIResponse';
 
 const getOldLevelsRedirectRoute = (hash: string) => {
   const queryStrings = QueryString.parse(hash) as {

@@ -3,7 +3,7 @@ import {
   LG_TABLE_FIXED_HEIGHT,
   MUTATIONS_TABLE_COLUMN_KEY,
   THRESHOLD_TABLE_FIXED_HEIGHT,
-} from '../config/constants';
+} from '../../config/constants';
 import React from 'react';
 import { SortingRule } from 'react-table';
 

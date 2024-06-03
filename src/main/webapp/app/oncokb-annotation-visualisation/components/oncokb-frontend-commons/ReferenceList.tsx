@@ -7,7 +7,7 @@ import PmidItem from './PmidItem';
 
 import styles from './listGroupItem.module.scss';
 import request from 'superagent';
-import LoadingIndicator from '../LoadingIndicator/LoadingIndicator';
+import LoadingIndicator from '../loadingIndicator/LoadingIndicator';
 
 type ReferenceListProps = {
   pmids: number[];

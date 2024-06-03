@@ -53,6 +53,10 @@ export default class OncoKBTable<T> extends React.Component<
   }
 
   render() {
+    const NoDataConst = (props: string) => (
+      <div className="text-center justify-center">No Results</div>
+    );
+
     return (
       <div>
         <div className="row">
@@ -89,12 +93,13 @@ export default class OncoKBTable<T> extends React.Component<
             {...this.props}
             showPagination={this.props.showPagination}
             className={classNames(
-              `-striped -highlight oncokbReactTable ${
+              `-highlight oncokbReactTable ${
                 this.props.fixedHeight ? 'fixedHeight' : ''
               }`,
               this.props.className
             )}
             data={this.filteredData}
+            NoDataComponent={NoDataConst}
           />
         </div>
       </div>

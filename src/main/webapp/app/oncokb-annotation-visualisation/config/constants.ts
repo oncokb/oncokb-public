@@ -123,6 +123,7 @@ export type AnnotationImplication = {
   location: string;
   oncogenicity: string;
   biologicalEffect: string;
+  alterationType: string;
 };
 
 export type TreatmentImplication = {
@@ -130,19 +131,7 @@ export type TreatmentImplication = {
   drug: string;
   level: string;
   annotation: string;
-};
-
-export type TherapeuticImplication = {
-  level: string;
-  gene: string;
-  mutation: string;
-  consequenceType: string;
-  drug: string;
-  location: string;
-  oncogenicity: string;
-  biologicalEffect: string;
-  biomarker: string;
-  annotation: string;
+  alterationType: string;
 };
 
 export type QueryParams = {

@@ -1,5 +1,5 @@
 import * as React from 'react';
-import { ArticleAbstract } from '../../config/OncoKbAPI';
+import { ArticleAbstract } from '../../config/oncokbAPI';
 import styles from './citationListGroupItem.module.scss';
 
 export default class ArticleAbstractItem extends React.Component<

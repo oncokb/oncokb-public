@@ -7,17 +7,16 @@ import {
   ONCOGENICITY,
   MUTATION_EFFECT,
 } from './../config/constants';
-import { Alteration, Citations } from '../config/OncoKbAPI';
+import { Alteration, Citations } from '../config/oncokbAPI';
 import { TableCellRenderer } from 'react-table';
-import InfoIcon from './Icons/InfoIcon';
+import InfoIcon from './icons/InfoIcon';
 import {
   DEFAULT_REFERENCE_GENOME,
   PAGE_ROUTE,
   REFERENCE_GENOME,
 } from './../config/constants';
-import ExternalLinkIcon from './Icons/ExternalLinkIcon';
+import ExternalLinkIcon from './icons/ExternalLinkIcon';
 import { PAGE_TITLE } from './../config/constants';
-import { Link } from 'react-router-dom';
 import {
   AlterationPageHashQueries,
   AlterationPageSearchQueries,
@@ -28,7 +27,7 @@ import {
 } from './../config/constants';
 import * as QueryString from 'querystring';
 import React, { CSSProperties } from 'react';
-import { LevelWithDescription } from './Icons/LevelWithDescription';
+import { LevelWithDescription } from './icons/LevelWithDescription';
 import { HOSTNAME } from './../config/constants';
 
 export const Linkout: React.FunctionComponent<{
@@ -539,7 +538,7 @@ export function getDefaultColumnDefinition<T>(
     case MUTATIONS_TABLE_COLUMN_KEY.GENE:
       return {
         id: MUTATIONS_TABLE_COLUMN_KEY.GENE,
-        Header: <span>Gene</span>,
+        Header: <span className="font-medium">Gene</span>,
         accessor: 'gene',
         width: 150,
         minWidth: 100,
@@ -552,7 +551,7 @@ export function getDefaultColumnDefinition<T>(
     case MUTATIONS_TABLE_COLUMN_KEY.MUTATION:
       return {
         id: MUTATIONS_TABLE_COLUMN_KEY.MUTATION,
-        Header: <span>Mutation</span>,
+        Header: <span className="font-medium">Mutation</span>,
         accessor: 'mutation',
         width: 150,
         minWidth: 100,
@@ -570,10 +569,10 @@ export function getDefaultColumnDefinition<T>(
     case MUTATIONS_TABLE_COLUMN_KEY.CONSEQUENCE_TYPE:
       return {
         id: MUTATIONS_TABLE_COLUMN_KEY.CONSEQUENCE_TYPE,
-        Header: <span>Consequence Type</span>,
+        Header: <span className="font-medium">Consequence Type</span>,
         accessor: 'consequenceType',
         style: { whiteSpace: 'normal' },
-        width: 150,
+        width: 130,
         minWidth: 100,
         defaultSortDesc: false,
         sortMethod: defaultSortMethod,
@@ -581,7 +580,7 @@ export function getDefaultColumnDefinition<T>(
     case MUTATIONS_TABLE_COLUMN_KEY.BIOMARKER:
       return {
         id: MUTATIONS_TABLE_COLUMN_KEY.BIOMARKER,
-        Header: <span>BIOMARKER</span>,
+        Header: <span className="font-medium">Biomarker</span>,
         accessor: 'biomarker',
         style: { whiteSpace: 'normal' },
         width: 170,
@@ -592,7 +591,7 @@ export function getDefaultColumnDefinition<T>(
     case MUTATIONS_TABLE_COLUMN_KEY.DRUG:
       return {
         id: MUTATIONS_TABLE_COLUMN_KEY.DRUG,
-        Header: <span>Drug</span>,
+        Header: <span className="font-medium">Drug</span>,
         accessor: 'drug',
         style: { whiteSpace: 'normal' },
         width: 170,
@@ -603,12 +602,13 @@ export function getDefaultColumnDefinition<T>(
     case MUTATIONS_TABLE_COLUMN_KEY.ONCOGENICITY:
       return {
         id: MUTATIONS_TABLE_COLUMN_KEY.ONCOGENICITY,
-        Header: <span>Oncogenicity</span>,
+        Header: <span className="font-medium">Oncogenicity</span>,
         accessor: 'oncogenicity',
-        width: 120,
+        width: 130,
         minWidth: 80,
         defaultSortDesc: true,
-        sortable: false,
+        sortable: true,
+        sortMethod: oncogenicitySortMethod,
         Cell(props: any) {
           return (
             <div className={'d-flex justify-content-center'}>
@@ -625,7 +625,7 @@ export function getDefaultColumnDefinition<T>(
         id: MUTATIONS_TABLE_COLUMN_KEY.LEVEL,
         Header: (
           <div className={'d-flex justify-content-center'}>
-            <span>Level of Evidence</span>
+            <span className="font-medium">Level of Evidence</span>
             <InfoIcon
               overlay={
                 <span>
@@ -656,12 +656,12 @@ export function getDefaultColumnDefinition<T>(
               {props.original.level[6] === 'F' ? (
                 <FdaLevelIcon
                   level={props.original.level}
-                  withDescription={true}
+                  withDescription={false}
                 />
               ) : (
                 <EvidenceLevelIcon
                   level={props.original.level}
-                  withDescription={true}
+                  withDescription={false}
                 />
               )}
             </div>
@@ -672,9 +672,9 @@ export function getDefaultColumnDefinition<T>(
     case MUTATIONS_TABLE_COLUMN_KEY.LOCATION:
       return {
         id: MUTATIONS_TABLE_COLUMN_KEY.LOCATION,
-        Header: <span>Location</span>,
+        Header: <span className="font-medium">Location</span>,
         accessor: 'location',
-        width: 150,
+        width: 140,
         minWidth: 100,
         defaultSortDesc: false,
         sortable: false,
@@ -682,7 +682,7 @@ export function getDefaultColumnDefinition<T>(
     case MUTATIONS_TABLE_COLUMN_KEY.BIOLOGICAL_EFFECT:
       return {
         id: MUTATIONS_TABLE_COLUMN_KEY.BIOLOGICAL_EFFECT,
-        Header: <span>Biological effect</span>,
+        Header: <span className="font-medium">Biological effect</span>,
         accessor: 'biologicalEffect',
         width: 170,
         minWidth: 100,
@@ -692,7 +692,7 @@ export function getDefaultColumnDefinition<T>(
     case MUTATIONS_TABLE_COLUMN_KEY.ANNOTATION:
       return {
         id: MUTATIONS_TABLE_COLUMN_KEY.ANNOTATION,
-        Header: <span>Annotation</span>,
+        Header: <span className="font-medium">Annotation</span>,
         accessor: 'annotation',
         width: 700,
         minWidth: 100,

@@ -2,11 +2,11 @@ import AppStore from 'app/store/AppStore';
 import { inject } from 'mobx-react';
 import React from 'react';
 import { DefaultTooltip } from 'cbioportal-frontend-commons';
-import { InfoLevel } from './../../config/OncoKbAPI';
+import { InfoLevel } from '../../config/oncokbAPI';
 import _ from 'lodash';
-import { level2LevelOfEvidence } from './../Utils';
+import { level2LevelOfEvidence } from '../Utils';
 import ReactHtmlParser from 'react-html-parser';
-import { LEVELS } from './../../config/constants';
+import { LEVELS } from '../../config/constants';
 
 export const LevelWithDescription: React.FunctionComponent<{
   level: LEVELS;

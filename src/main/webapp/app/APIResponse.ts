@@ -1,4 +1,7 @@
-import { AnnotationImplication, TreatmentImplication } from './constants';
+import {
+  AnnotationImplication,
+  TreatmentImplication,
+} from './oncokb-annotation-visualisation/config/constants';
 export const patientId = 'P-0000435';
 export const patientInfo = 'Pilocytic Astrocytoma, Male, 50 years old';
 const APIResponse1 = {
@@ -8,7 +11,7 @@ const APIResponse1 = {
     hugoSymbol: 'BRAF',
     entrezGeneId: 673,
     alteration: 'V600F',
-    alterationType: null,
+    alterationType: 'MUTATION',
     svType: null,
     tumorType: 'melanoma',
     consequence: null,
@@ -257,7 +260,7 @@ const APIResponse2 = {
     hugoSymbol: 'BRAF',
     entrezGeneId: 673,
     alteration: 'V600E',
-    alterationType: null,
+    alterationType: 'MUTATION',
     svType: null,
     tumorType: 'melanoma',
     consequence: null,
@@ -756,7 +759,7 @@ const APIResponse3 = {
     hugoSymbol: 'BRAF',
     entrezGeneId: 673,
     alteration: 'V600D',
-    alterationType: null,
+    alterationType: 'MUTATION',
     svType: null,
     tumorType: 'melanoma',
     consequence: null,
@@ -1021,7 +1024,7 @@ const APIResponse4 = {
     hugoSymbol: 'BRAF',
     entrezGeneId: 673,
     alteration: 'V600G',
-    alterationType: null,
+    alterationType: 'COPY_NUMBER_ALTERATION',
     svType: null,
     tumorType: 'melanoma',
     consequence: null,
@@ -1276,7 +1279,7 @@ const APIResponse5 = {
     hugoSymbol: 'KIT',
     entrezGeneId: 3815,
     alteration: 'D816',
-    alterationType: null,
+    alterationType: 'STRUCTURAL_VARIANT',
     svType: null,
     tumorType: 'mastocytosis',
     consequence: null,
@@ -1377,7 +1380,7 @@ const APIResponse6 = {
     hugoSymbol: 'EGFR',
     entrezGeneId: 1956,
     alteration: 'Amplification',
-    alterationType: null,
+    alterationType: 'COPY_NUMBER_ALTERATION',
     svType: null,
     tumorType: 'glioma',
     consequence: null,
@@ -1493,20 +1496,18 @@ export const exampleAnnotations: AnnotationImplication[] = responses.map(
       : 'NA',
     oncogenicity: response['oncogenic'],
     biologicalEffect: response['mutationEffect']['knownEffect'],
+    alterationType: response['query']['alterationType'],
   })
 );
-
-export const exampleTreatments: TreatmentImplication[] = responses.map(
-  response => ({
-    biomarker:
-      response['query']['hugoSymbol'] + ' ' + response['query']['alteration'],
-    drug: response['treatments'][0]['drugs'][0]['drugName'],
-    level: response['treatments'][0]['level'],
-    annotation:
-      response['geneSummary'] +
-      ' ' +
-      response['variantSummary'] +
-      ' ' +
-      response['tumorTypeSummary'],
-  })
+export const exampleTreatments: TreatmentImplication[] = responses.flatMap(
+  (response: any) =>
+    response.treatments.flatMap((treatment: any) =>
+      treatment.drugs.map((drug: any) => ({
+        biomarker: `${response.query.hugoSymbol} ${response.query.alteration}`,
+        drug: drug.drugName,
+        level: treatment.level,
+        annotation: `${response.geneSummary} ${response.variantSummary} ${response.tumorTypeSummary}`,
+        alterationType: response.query.alterationType,
+      }))
+    )
 );

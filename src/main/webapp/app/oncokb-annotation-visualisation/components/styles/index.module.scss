@@ -35,3 +35,8 @@
 :global(.RRT__tab) {
   z-index: 0 !important;
 }
+
+.nav-link {
+  color: white;
+  background-color: $light-grey;
+}
