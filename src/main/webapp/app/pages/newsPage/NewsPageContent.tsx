@@ -250,7 +250,7 @@ const EVIDENCE_COLUMN_SEPARATOR = '; ';
 // https://stackoverflow.com/questions/41947168/is-it-possible-to-use-keyof-operator-on-literals-instead-of-interfaces
 
 export const NEWS_BY_DATE: { [date: string]: NewsData } = {
-  '06032024': {
+  '06042024': {
     priorityNews: [
       <span>
         Release of{' '}
@@ -270,7 +270,12 @@ export const NEWS_BY_DATE: { [date: string]: NewsData } = {
           [
             '2',
             'POLE',
-            'Exonuclease Domain Missense Mutations (268_471mis)',
+            <AlterationPageLink
+              hugoSymbol="POLE"
+              alteration={'Exonuclease Domain Missense Mutations'}
+            >
+              Exonuclease Domain Missense Mutations (268_471mis)
+            </AlterationPageLink>,
             'Colorectal Cancer, Small Bowel Cancer',
             'Pembrolizumab, Nivolumab, Ipilimumab + Nivolumab, Dostarlimab',
             <WithSeparator separator={EVIDENCE_COLUMN_SEPARATOR}>
@@ -288,7 +293,12 @@ export const NEWS_BY_DATE: { [date: string]: NewsData } = {
           [
             '2',
             'POLD1',
-            'Exonuclease Domain Missense Mutations (304_533mis)',
+            <AlterationPageLink
+              hugoSymbol="POLD1"
+              alteration={'Exonuclease Domain Missense Mutations'}
+            >
+              Exonuclease Domain Missense Mutations (304_533mis)
+            </AlterationPageLink>,
             'Colorectal Cancer, Small Bowel Cancer',
             'Pembrolizumab, Nivolumab, Ipilimumab + Nivolumab, Dostarlimab',
             <WithSeparator separator={EVIDENCE_COLUMN_SEPARATOR}>
@@ -396,7 +406,7 @@ export const NEWS_BY_DATE: { [date: string]: NewsData } = {
             'G1202R',
             'Non-Small Cell Lung Cancer',
             'R2',
-            'Alcetinib',
+            'Alectinib',
             'Crizotinib, Ceritinib, Brigatinib (Level R2)',
             <PMIDLink
               pmids="31358542, 29935304, 27432227,
