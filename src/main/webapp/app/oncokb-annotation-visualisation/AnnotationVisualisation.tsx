@@ -10,17 +10,19 @@ import {
 import {
   AnnotationImplication,
   TreatmentImplication,
+  NotificationImplication,
   MUTATIONS_TABLE_COLUMN_KEY,
 } from './config/constants';
 import Tab from 'react-bootstrap/Tab';
 import Tabs from 'react-bootstrap/Tabs';
-
+import Notification from './components/notifications/notifications';
 export interface AnnotationVisualisationProps {
   annotations: AnnotationImplication[];
   treatments: TreatmentImplication[];
   patientId: string;
   patientInfo: string;
   isPatientInfoVisible?: boolean;
+  notifications: NotificationImplication[];
 }
 
 export class AnnotationVisualisation extends React.Component<
@@ -65,6 +67,27 @@ export class AnnotationVisualisation extends React.Component<
   get structuralTreatments(): TreatmentImplication[] {
     return this.props.treatments.filter(
       treatment => treatment.alterationType === 'STRUCTURAL_VARIANT'
+    );
+  }
+
+  @computed
+  get mutationsNotifications(): NotificationImplication[] {
+    return this.props.notifications.filter(
+      notification => notification.alterationType === 'MUTATION'
+    );
+  }
+
+  @computed
+  get copyNumberNotifications(): NotificationImplication[] {
+    return this.props.notifications.filter(
+      notification => notification.alterationType === 'COPY_NUMBER_ALTERATION'
+    );
+  }
+
+  @computed
+  get structuralNotifications(): NotificationImplication[] {
+    return this.props.notifications.filter(
+      notification => notification.alterationType === 'STRUCTURAL_VARIANT'
     );
   }
 
@@ -152,10 +175,11 @@ export class AnnotationVisualisation extends React.Component<
         <Tabs
           defaultActiveKey="mutations"
           id="uncontrolled-tab-example"
-          className="mb-3"
+          className="my-3"
         >
           <Tab eventKey="mutations" title="Mutations">
             <div>
+              <Notification notifications={this.mutationsNotifications} />
               <div className="mt-4">
                 <GenePageTable
                   name={'Mutations in the sample'}
@@ -176,6 +200,7 @@ export class AnnotationVisualisation extends React.Component<
           </Tab>
           <Tab eventKey="copyNumberAlterations" title="Copy Number Alterations">
             <div>
+              <Notification notifications={this.copyNumberNotifications} />
               <div className="mt-4">
                 <GenePageTable
                   name={'Mutations in the sample'}
@@ -196,6 +221,7 @@ export class AnnotationVisualisation extends React.Component<
           </Tab>
           <Tab eventKey="structuralVariants" title="Structural Variants">
             <div>
+              <Notification notifications={this.structuralNotifications} />
               <div className="mt-4">
                 <GenePageTable
                   name={'Mutations in the sample'}

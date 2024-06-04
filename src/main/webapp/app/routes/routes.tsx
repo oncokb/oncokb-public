@@ -43,6 +43,7 @@ import {
   exampleTreatments,
   patientId,
   patientInfo,
+  notifications,
 } from 'app/APIResponse';
 
 const getOldLevelsRedirectRoute = (hash: string) => {
@@ -281,6 +282,8 @@ const AppRouts = (props: {
                 patientInfo={patientInfo}
                 annotations={exampleAnnotations}
                 treatments={exampleTreatments}
+                isPatientInfoVisible={true}
+                notifications={notifications}
               />
             )}
           />

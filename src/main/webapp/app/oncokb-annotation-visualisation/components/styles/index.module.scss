@@ -40,3 +40,8 @@
   color: white;
   background-color: $light-grey;
 }
+
+.notification-container {
+  display: flex;
+  justify-content: flex-end;
+}

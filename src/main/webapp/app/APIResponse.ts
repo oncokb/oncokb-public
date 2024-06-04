@@ -1,6 +1,8 @@
 import {
   AnnotationImplication,
+  NotificationImplication,
   TreatmentImplication,
+  NOTIFICATION_TYPE,
 } from './oncokb-annotation-visualisation/config/constants';
 export const patientId = 'P-0000435';
 export const patientInfo = 'Pilocytic Astrocytoma, Male, 50 years old';
@@ -1511,3 +1513,36 @@ export const exampleTreatments: TreatmentImplication[] = responses.flatMap(
       }))
     )
 );
+
+export const notifications: NotificationImplication[] = [
+  {
+    message: 'Could not annotate 5 variants',
+    type: NOTIFICATION_TYPE.ERROR,
+    alterationType: 'COPY_NUMBER_ALTERATION',
+  },
+  {
+    message: 'Did not include treatment X because of alteration Y',
+    type: NOTIFICATION_TYPE.INFO,
+    alterationType: 'MUTATION',
+  },
+  {
+    message: 'Could not annotate 5 variants',
+    type: NOTIFICATION_TYPE.ERROR,
+    alterationType: 'MUTATION',
+  },
+  {
+    message: 'Nothing to annotate',
+    type: NOTIFICATION_TYPE.WARNING,
+    alterationType: 'STRUCTURAL_VARIANT',
+  },
+  {
+    message: 'Nothing to annotate',
+    type: NOTIFICATION_TYPE.WARNING,
+    alterationType: 'COPY_NUMBER_ALTERATION',
+  },
+  {
+    message: 'Annotated 4 variants',
+    type: NOTIFICATION_TYPE.SUCCESS,
+    alterationType: 'MUTATION',
+  },
+];

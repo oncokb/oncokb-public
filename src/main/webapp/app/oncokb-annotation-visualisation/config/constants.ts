@@ -114,6 +114,13 @@ export enum MUTATION_EFFECT {
   UNKNOWN = 'Unknown',
 }
 
+export enum NOTIFICATION_TYPE {
+  INFO = 'primary',
+  ERROR = 'danger',
+  WARNING = 'warning',
+  SUCCESS = 'success',
+}
+
 export type AnnotationImplication = {
   level: string;
   gene: string;
@@ -131,6 +138,12 @@ export type TreatmentImplication = {
   drug: string;
   level: string;
   annotation: string;
+  alterationType: string;
+};
+
+export type NotificationImplication = {
+  message: string;
+  type: NOTIFICATION_TYPE;
   alterationType: string;
 };
 

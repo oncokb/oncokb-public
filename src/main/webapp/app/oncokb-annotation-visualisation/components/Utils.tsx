@@ -583,7 +583,7 @@ export function getDefaultColumnDefinition<T>(
         Header: <span className="font-medium">Biomarker</span>,
         accessor: 'biomarker',
         style: { whiteSpace: 'normal' },
-        width: 170,
+        width: 160,
         minWidth: 100,
         defaultSortDesc: false,
         sortMethod: defaultSortMethod,
