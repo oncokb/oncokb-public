@@ -177,7 +177,7 @@ const APIResponse1 = {
       ],
       abstracts: [],
       description:
-        'Dabrafenib, an orally bioavailable RAF inhibitor, and trametinib, an orally bioavailable MEK1/2 inhibitor, are FDA-approved alone or in combination for the treatment of patients with metastatic melanoma harboring a V600E or V600K BRAF mutation. FDA approval of dabrafenib in combination with trametinib was based on results from an open-label Phase III study of combination therapy versus dabrafenib monotherapy in 247 patients with metastatic melanoma who were naive to treatment with BRAF inhibitors. Combined dabrafenib and trametinib, administered in full monotherapy doses, improved the response rate in patients with BRAF V600-mutant metastatic melanoma versus dabrafenib monotherapy (67% vs.51%; p\u003C0.002). However, median progression-free survival improved by only two weeks (9.3 months vs 8.8 months; HR = 0.75) compared with dabrafenib monotherapy (PMID: 23020132). Combination therapy is associated with less cutaneous toxicity than monotherapy, but systemic toxicity may be increased (PMID: 25287827, 25399551). Follow-up trials have demonstrated that all clinical measures inclusive of overall and median progression-free survival as well as objective response rates, median duration of response and number of patients with complete response favored patients treated with combination dabrafenib and trametinib, administered in full monotherapy doses, compared to either dabrafenib or vemurafenib monotherapy, including patients who previously progressed on BRAF inhibitor monotherapy (PMID: 25287827, 25399551, 25265492). Additionally, patients with melanoma treated with dabrafenib and trametinib in both the neoadjuvant and adjuvant settings have improved survival over patients given standard of care (PMID: 29361468, 28991513, 28891408). Promising clinical data has also suggested that addition of an immunotherapy agent to combination RAF and MEK inhibitor treatment may improve rate of overall response and duration of response in melanoma patients (PMID: 31171876, 31171879, 31171878).',
+        'Dabrafenib, an orally bioavailable RAF inhibitor, and trametinib, an orally bioavailable MEK1/2 inhibitor, are FDA-approved alone or in combination for the treatment of patients with metastatic melanoma harboring a V600E or V600K BRAF mutation. FDA approval of dabrafenib in combination with trametinib was based on results from an open-label Phase III study of combination therapy versus dabrafenib monotherapy in 247 patients with metastatic melanoma who were naive to treatment with BRAF inhibitors. Combined dabrafenib and trametinib, administered in full monotherapy doses, improved the response rate in patients with BRAF V600-mutant metastatic melanoma versus dabrafenib monotherapy (67% vs.51%; p\u003C0.002).',
     },
     {
       alterations: ['V600 (excluding V600E and V600K)'],
@@ -754,271 +754,6 @@ const APIResponse2 = {
   vus: false,
 };
 
-const APIResponse3 = {
-  query: {
-    id: null,
-    referenceGenome: 'GRCh37',
-    hugoSymbol: 'BRAF',
-    entrezGeneId: 673,
-    alteration: 'V600D',
-    alterationType: 'MUTATION',
-    svType: null,
-    tumorType: 'melanoma',
-    consequence: null,
-    proteinStart: null,
-    proteinEnd: null,
-    hgvs: null,
-  },
-  geneExist: true,
-  variantExist: true,
-  alleleExist: true,
-  oncogenic: 'Oncogenic',
-  mutationEffect: {
-    knownEffect: 'Gain-of-function',
-    description:
-      'The class I activating exon 15 BRAF V600D mutation is located in the kinase domain of the protein (PMID: 28783719). This mutation is recurrent in melanoma (PMID: 26091043, 23579220, 22614978). Comprehensive biological characterization of the BRAF V600D mutation has demonstrated that this mutation activates the downstream MAPK pathway independently of RAS and renders BRAF constitutively activated in monomeric form (PMID: 15035987, 12068308, 19251651, 26343582, 20179705). Preclinical studies with melanoma cells expressing BRAF V600D demonstrate sensitivity to treatment with CCT196969, CCT241161, AZ628, TAK-632, PLX7904, vemurafenib, dabrafenib, ASTX029 and cobimetinib plus HM95573 as measured by inhibition of MEK and ERK phosphorylation and cellular proliferation (PMID: 25500121, 17210691, 27523909, 33953400, 34330842). In a case report, a patient with pilocytic astrocytoma harboring BRAF V600D was treated with single-agent dabrafenib then subsequently treated with combination therapy of dabrafenib plus trametinib and demonstrated stable disease (PMID: 28784858). In a Phase II trial, a patient with non-small cell lung cancer harboring BRAF V600D was treated with vemurafenib and demonstrated partial response with a progression-free survival of 3.8 months (PMID: 31959346).',
-    citations: {
-      pmids: [
-        '31959346',
-        '22614978',
-        '20179705',
-        '26091043',
-        '26343582',
-        '12068308',
-        '17210691',
-        '34330842',
-        '27523909',
-        '28783719',
-        '25500121',
-        '28784858',
-        '23579220',
-        '19251651',
-        '33953400',
-        '15035987',
-      ],
-      abstracts: [],
-    },
-  },
-  highestSensitiveLevel: 'LEVEL_1',
-  highestResistanceLevel: null,
-  highestDiagnosticImplicationLevel: null,
-  highestPrognosticImplicationLevel: null,
-  highestFdaLevel: 'LEVEL_Fda2',
-  otherSignificantSensitiveLevels: [],
-  otherSignificantResistanceLevels: [],
-  hotspot: true,
-  geneSummary:
-    'BRAF, an intracellular kinase, is frequently mutated in melanoma, thyroid and lung cancers among others.',
-  variantSummary: 'The BRAF V600D mutation is known to be oncogenic.',
-  tumorTypeSummary:
-    'The RAF-targeted inhibitors encorafenib, dabrafenib and vemurafenib, alone or in combination with the MEK1/2-targeted inhibitors binimetinib, trametinib and cobimetinib respectively, are FDA-approved for the treatment of patients with BRAF V600E/K mutant melanoma and NCCN-compendium listed for the treatment of patients with BRAF V600-mutant melanoma. Additionally, the anti-PD-L1 antibody atezolizumab in combination with cobimetinib + vemurafenib is FDA-approved for the treatment of patients with unresectable or advanced BRAF V600-mutant melanoma.',
-  prognosticSummary: '',
-  diagnosticSummary: '',
-  diagnosticImplications: [],
-  prognosticImplications: [],
-  treatments: [
-    {
-      alterations: ['V600'],
-      drugs: [
-        {
-          ncitCode: 'C64768',
-          drugName: 'Vemurafenib',
-        },
-        {
-          ncitCode: 'C106250',
-          drugName: 'Atezolizumab',
-        },
-        {
-          ncitCode: 'C68923',
-          drugName: 'Cobimetinib',
-        },
-      ],
-      approvedIndications: [],
-      level: 'LEVEL_1',
-      fdaLevel: 'LEVEL_Fda2',
-      levelAssociatedCancerType: {
-        id: 453,
-        code: 'MEL',
-        color: 'Black',
-        name: 'Melanoma',
-        mainType: {
-          id: null,
-          name: 'Melanoma',
-          tumorForm: 'SOLID',
-        },
-        tissue: 'Skin',
-        children: {},
-        parent: 'SKIN',
-        level: 2,
-        tumorForm: 'SOLID',
-      },
-      levelExcludedCancerTypes: [],
-      pmids: ['32534646'],
-      abstracts: [],
-      description:
-        'The combination of vemurafenib, an inhibitor of V600-mutant BRAF, and cobimetinib, an inhibitor of MEK1/2, with atezolizumab, an immunotherapeutic PD-L1 antibody, is FDA-approved for patients with BRAF V600 mutation-positive unresectable or metastatic melanoma. FDA approval was based on the results of the Phase III double-blind, randomized, placebo-controlled IMspire150 trial of Atezolizumab + Cobimetinib + Vemurafenib versus Placebo + Cobimetinib + Vemurafenib in 514 patients with BRAF V600-mutant melanoma in which the median progression-free survival was 15.1 mos (95% CI=11.4,18.4) in the triplet arm versus 10.6 mos (95% CI=9.3,12.7) in the doublet + placebo arm (HR=0.78; 95% CI= 0.63, 0.97; p=0.0249) (PMID: 32534646).',
-    },
-    {
-      alterations: ['V600 (excluding V600E and V600K)'],
-      drugs: [
-        {
-          ncitCode: 'C98283',
-          drugName: 'Encorafenib',
-        },
-        {
-          ncitCode: 'C84865',
-          drugName: 'Binimetinib',
-        },
-      ],
-      approvedIndications: [],
-      level: 'LEVEL_2',
-      fdaLevel: 'LEVEL_Fda2',
-      levelAssociatedCancerType: {
-        id: 453,
-        code: 'MEL',
-        color: 'Black',
-        name: 'Melanoma',
-        mainType: {
-          id: null,
-          name: 'Melanoma',
-          tumorForm: 'SOLID',
-        },
-        tissue: 'Skin',
-        children: {},
-        parent: 'SKIN',
-        level: 2,
-        tumorForm: 'SOLID',
-      },
-      levelExcludedCancerTypes: [],
-      pmids: ['29573941'],
-      abstracts: [],
-      description:
-        'The combination of encorafenib, an inhibitor of V600E- or V600K-mutant BRAF, and binimetinib, an inhibitor of MEK1/2, is FDA-approved in combination for patients with unresectable or metastatic melanoma with a BRAF V600E or V600K mutation. FDA approval was based on the results of the Phase III COLUMBUS trial of combined encorafenib plus binimetinib versus single agent vemurafenib in 577 patients with BRAF V600E- or V600K-mutant metastatic melanoma in which the median progression-free survival was 14.9 months (95% CI: 11.0-18.5) in the encorafenib plus binimetinib group versus 7.3 months (95% CI: 5.6-8.2) in the single agent vemurafenib group (HR= 0.54, 95% CI: 0.41-0.71; p\u003C0·0001) (PMID: 29573941).',
-    },
-    {
-      alterations: ['V600 (excluding V600E and V600K)'],
-      drugs: [
-        {
-          ncitCode: 'C82386',
-          drugName: 'Dabrafenib',
-        },
-        {
-          ncitCode: 'C77908',
-          drugName: 'Trametinib',
-        },
-      ],
-      approvedIndications: [],
-      level: 'LEVEL_2',
-      fdaLevel: 'LEVEL_Fda2',
-      levelAssociatedCancerType: {
-        id: 453,
-        code: 'MEL',
-        color: 'Black',
-        name: 'Melanoma',
-        mainType: {
-          id: null,
-          name: 'Melanoma',
-          tumorForm: 'SOLID',
-        },
-        tissue: 'Skin',
-        children: {},
-        parent: 'SKIN',
-        level: 2,
-        tumorForm: 'SOLID',
-      },
-      levelExcludedCancerTypes: [],
-      pmids: [
-        '31171876',
-        '28891408',
-        '31171878',
-        '31171879',
-        '25265492',
-        '25287827',
-        '29361468',
-        '28991513',
-        '23020132',
-        '25399551',
-      ],
-      abstracts: [],
-      description:
-        'Dabrafenib, an orally bioavailable RAF inhibitor, and trametinib, an orally bioavailable MEK1/2 inhibitor, are FDA-approved alone or in combination for the treatment of patients with metastatic melanoma harboring a V600E or V600K BRAF mutation. FDA approval of dabrafenib in combination with trametinib was based on results from an open-label Phase III study of combination therapy versus dabrafenib monotherapy in 247 patients with metastatic melanoma who were naive to treatment with BRAF inhibitors. Combined dabrafenib and trametinib, administered in full monotherapy doses, improved the response rate in patients with BRAF V600-mutant metastatic melanoma versus dabrafenib monotherapy (67% vs.51%; p\u003C0.002). However, median progression-free survival improved by only two weeks (9.3 months vs 8.8 months; HR = 0.75) compared with dabrafenib monotherapy (PMID: 23020132). Combination therapy is associated with less cutaneous toxicity than monotherapy, but systemic toxicity may be increased (PMID: 25287827, 25399551). Follow-up trials have demonstrated that all clinical measures inclusive of overall and median progression-free survival as well as objective response rates, median duration of response and number of patients with complete response favored patients treated with combination dabrafenib and trametinib, administered in full monotherapy doses, compared to either dabrafenib or vemurafenib monotherapy, including patients who previously progressed on BRAF inhibitor monotherapy (PMID: 25287827, 25399551, 25265492). Additionally, patients with melanoma treated with dabrafenib and trametinib in both the neoadjuvant and adjuvant settings have improved survival over patients given standard of care (PMID: 29361468, 28991513, 28891408). Promising clinical data has also suggested that addition of an immunotherapy agent to combination RAF and MEK inhibitor treatment may improve rate of overall response and duration of response in melanoma patients (PMID: 31171876, 31171879, 31171878).',
-    },
-    {
-      alterations: ['V600 (excluding V600E and V600K)'],
-      drugs: [
-        {
-          ncitCode: 'C64768',
-          drugName: 'Vemurafenib',
-        },
-        {
-          ncitCode: 'C68923',
-          drugName: 'Cobimetinib',
-        },
-      ],
-      approvedIndications: [],
-      level: 'LEVEL_2',
-      fdaLevel: 'LEVEL_Fda2',
-      levelAssociatedCancerType: {
-        id: 453,
-        code: 'MEL',
-        color: 'Black',
-        name: 'Melanoma',
-        mainType: {
-          id: null,
-          name: 'Melanoma',
-          tumorForm: 'SOLID',
-        },
-        tissue: 'Skin',
-        children: {},
-        parent: 'SKIN',
-        level: 2,
-        tumorForm: 'SOLID',
-      },
-      levelExcludedCancerTypes: [],
-      pmids: ['27480103', '25265494'],
-      abstracts: [],
-      description:
-        'The combination of vemurafenib, an orally available kinse inhibitor of V600-mutant BRAF, and cobimetinib, an orally available kinase inhibitor of MEK1/2, is FDA-approved for the treatment of patients with BRAF V600-mutant metastatic or unresectable locally advanced melanoma. FDA approval was based on results from the randomized Phase III coBRIM trial of combined vemurafenib and cobimetinib versus vemurafenib and placebo in 495 patients with metastatic BRAF V600-mutant melanoma that demonstrated superior clinical benefit measures in the combination versus the control arm. Specifically, median progression-free survival was 9.9 months in the combination arm versus 6.2 months in the control arm (HR = 0.51), with a complete response rate of 10% versus 4%, respectively, and interim nine-month overall survival of 81% versus 73%, respectively (PMID: 25265494). Follow-up analysis of the coBRIM trial showed two-year overall survival was 48.3% in the combination group versus 38.0% in the monotherapy group (PMID: 27480103).',
-    },
-    {
-      alterations: ['V600'],
-      drugs: [
-        {
-          ncitCode: 'C106254',
-          drugName: 'Tovorafenib',
-        },
-      ],
-      approvedIndications: [],
-      level: 'LEVEL_3B',
-      fdaLevel: 'LEVEL_Fda3',
-      levelAssociatedCancerType: {
-        id: 259,
-        code: 'LGGNOS',
-        color: 'Gray',
-        name: 'Low-Grade Glioma, NOS',
-        mainType: {
-          id: null,
-          name: 'Glioma',
-          tumorForm: 'SOLID',
-        },
-        tissue: 'CNS/Brain',
-        children: {},
-        parent: 'ENCG',
-        level: 3,
-        tumorForm: 'SOLID',
-      },
-      levelExcludedCancerTypes: [],
-      pmids: ['37978284'],
-      abstracts: [],
-      description:
-        'Tovorafenib is an orally available, pan-RAF small molecule inhibitor that is FDA-approved for the treatment of pediatric patients six months of age and older with relapsed or refractory pediatric low-grade glioma (LGG) harboring a BRAF fusion or rearrangement, or BRAF V600 mutation. FDA approval was based on the results of the Phase II FIREFLY-1 (NCT04775485) trial of tovorafenib in 76 patients (median age=8 years old [range=2-21]) with relapsed or refractory pediatric LGG harboring an activating BRAF alteration based on local laboratory testing. In the Phase II FIREFLY-1 (NCT04775485) trial, the overall RAPNO-LGG cohort demonstrated an objective response rate (ORR) of 51% (95% CI=40-63), with a 37% (n=28) partial response rate and 14% (n=11) minor response rate, a median duration of response (DOR) of 13.8 months (95% CI=11.3-NE) in 39 patients and a median progression-free survival of 13.8 months (95% CI=8.3-16.9) (PMID: 37978284). The BRAF V600E mutation subcohort (n=12) demonstrated an ORR of 50% (95% CI=21-79) and a median DOR that was not evaluable (95% CI=8.4-NE) (PMID: 37978284).',
-    },
-  ],
-  dataVersion: 'v4.16',
-  lastUpdate: '04/26/2024',
-  vus: false,
-};
-
 const APIResponse4 = {
   query: {
     id: null,
@@ -1281,7 +1016,7 @@ const APIResponse5 = {
     hugoSymbol: 'KIT',
     entrezGeneId: 3815,
     alteration: 'D816',
-    alterationType: 'STRUCTURAL_VARIANT',
+    alterationType: 'COPY_NUMBER_ALTERATION',
     svType: null,
     tumorType: 'mastocytosis',
     consequence: null,
@@ -1382,7 +1117,7 @@ const APIResponse6 = {
     hugoSymbol: 'EGFR',
     entrezGeneId: 1956,
     alteration: 'Amplification',
-    alterationType: 'COPY_NUMBER_ALTERATION',
+    alterationType: 'STRUCTURAL_VARIANT',
     svType: null,
     tumorType: 'glioma',
     consequence: null,
@@ -1477,7 +1212,6 @@ const APIResponse6 = {
 const responses = [
   APIResponse1,
   APIResponse2,
-  APIResponse3,
   APIResponse4,
   APIResponse5,
   APIResponse6,
@@ -1499,6 +1233,12 @@ export const exampleAnnotations: AnnotationImplication[] = responses.map(
     oncogenicity: response['oncogenic'],
     biologicalEffect: response['mutationEffect']['knownEffect'],
     alterationType: response['query']['alterationType'],
+    mutationDescription: response['mutationEffect']['description'],
+    entrezGeneId: String(response['query']['entrezGeneId']),
+    tumorType: response['query']['tumorType'],
+    // citations:   response['mutationEffect']['citations'],
+    fdaLevel: response['query']['highestFdaLevel'],
+    lastUpdate: response['lastUpdate'],
   })
 );
 export const exampleTreatments: TreatmentImplication[] = responses.flatMap(
@@ -1510,6 +1250,8 @@ export const exampleTreatments: TreatmentImplication[] = responses.flatMap(
         level: treatment.level,
         annotation: `${response.geneSummary} ${response.variantSummary} ${response.tumorTypeSummary}`,
         alterationType: response.query.alterationType,
+        treatmentFdaLevel: treatment.fdaLevel,
+        treatmentDescription: treatment.description,
       }))
     )
 );
@@ -1536,12 +1278,7 @@ export const notifications: NotificationImplication[] = [
     alterationType: 'STRUCTURAL_VARIANT',
   },
   {
-    message: 'Nothing to annotate',
-    type: NOTIFICATION_TYPE.WARNING,
-    alterationType: 'COPY_NUMBER_ALTERATION',
-  },
-  {
-    message: 'Annotated 4 variants',
+    message: 'Annotated 4 variants successfully',
     type: NOTIFICATION_TYPE.SUCCESS,
     alterationType: 'MUTATION',
   },

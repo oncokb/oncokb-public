@@ -6,6 +6,7 @@ import {
   MUTATIONS_TABLE_COLUMN_KEY,
   ONCOGENICITY,
   MUTATION_EFFECT,
+  TREATMENTS_TABLE_COLUMN_KEY,
 } from './../config/constants';
 import { Alteration, Citations } from '../config/oncokbAPI';
 import { TableCellRenderer } from 'react-table';
@@ -29,6 +30,8 @@ import * as QueryString from 'querystring';
 import React, { CSSProperties } from 'react';
 import { LevelWithDescription } from './icons/LevelWithDescription';
 import { HOSTNAME } from './../config/constants';
+import { DefaultTooltip } from 'cbioportal-frontend-commons';
+import { CitationTooltip } from './oncokb-frontend-commons/CitationToolTip';
 
 export const Linkout: React.FunctionComponent<{
   link: string;
@@ -519,7 +522,7 @@ export const EvidenceLevelIcon: React.FunctionComponent<{
 };
 
 export function getDefaultColumnDefinition<T>(
-  columnKey: MUTATIONS_TABLE_COLUMN_KEY
+  columnKey: MUTATIONS_TABLE_COLUMN_KEY | TREATMENTS_TABLE_COLUMN_KEY
 ):
   | {
       id: string;
@@ -577,9 +580,9 @@ export function getDefaultColumnDefinition<T>(
         defaultSortDesc: false,
         sortMethod: defaultSortMethod,
       };
-    case MUTATIONS_TABLE_COLUMN_KEY.BIOMARKER:
+    case TREATMENTS_TABLE_COLUMN_KEY.BIOMARKER:
       return {
-        id: MUTATIONS_TABLE_COLUMN_KEY.BIOMARKER,
+        id: TREATMENTS_TABLE_COLUMN_KEY.BIOMARKER,
         Header: <span className="font-medium">Biomarker</span>,
         accessor: 'biomarker',
         style: { whiteSpace: 'normal' },
@@ -591,6 +594,17 @@ export function getDefaultColumnDefinition<T>(
     case MUTATIONS_TABLE_COLUMN_KEY.DRUG:
       return {
         id: MUTATIONS_TABLE_COLUMN_KEY.DRUG,
+        Header: <span className="font-medium">Drug</span>,
+        accessor: 'drug',
+        style: { whiteSpace: 'normal' },
+        width: 170,
+        minWidth: 100,
+        defaultSortDesc: false,
+        sortMethod: defaultSortMethod,
+      };
+    case TREATMENTS_TABLE_COLUMN_KEY.DRUG:
+      return {
+        id: TREATMENTS_TABLE_COLUMN_KEY.DRUG,
         Header: <span className="font-medium">Drug</span>,
         accessor: 'drug',
         style: { whiteSpace: 'normal' },
@@ -668,7 +682,54 @@ export function getDefaultColumnDefinition<T>(
           );
         },
       };
-
+    case TREATMENTS_TABLE_COLUMN_KEY.LEVEL:
+      return {
+        id: TREATMENTS_TABLE_COLUMN_KEY.LEVEL,
+        Header: (
+          <div className={'d-flex justify-content-center'}>
+            <span className="font-medium">Level of Evidence</span>
+            <InfoIcon
+              overlay={
+                <span>
+                  For more information about the FDA Level of Evidence, please
+                  see{' '}
+                  <LevelOfEvidencePageLink levelType={LEVEL_TYPES.FDA}>
+                    <b>HERE</b>
+                  </LevelOfEvidencePageLink>
+                  .
+                </span>
+              }
+            />
+          </div>
+        ),
+        accessor: 'level',
+        width: 170,
+        minWidth: 100,
+        defaultSortDesc: true,
+        sortMethod(a: string, b: string) {
+          return (
+            LEVEL_PRIORITY.indexOf(a.replace('LEVEL_', '') as LEVELS) -
+            LEVEL_PRIORITY.indexOf(b.replace('LEVEL_', '') as LEVELS)
+          );
+        },
+        Cell(props: any) {
+          return (
+            <div className={'d-flex justify-content-center'}>
+              {props.original.level[6] === 'F' ? (
+                <FdaLevelIcon
+                  level={props.original.level}
+                  withDescription={false}
+                />
+              ) : (
+                <EvidenceLevelIcon
+                  level={props.original.level}
+                  withDescription={false}
+                />
+              )}
+            </div>
+          );
+        },
+      };
     case MUTATIONS_TABLE_COLUMN_KEY.LOCATION:
       return {
         id: MUTATIONS_TABLE_COLUMN_KEY.LOCATION,
@@ -689,16 +750,168 @@ export function getDefaultColumnDefinition<T>(
         defaultSortDesc: false,
         sortMethod: defaultSortMethod,
       };
-    case MUTATIONS_TABLE_COLUMN_KEY.ANNOTATION:
+    case TREATMENTS_TABLE_COLUMN_KEY.ANNOTATION:
       return {
-        id: MUTATIONS_TABLE_COLUMN_KEY.ANNOTATION,
+        id: TREATMENTS_TABLE_COLUMN_KEY.ANNOTATION,
         Header: <span className="font-medium">Annotation</span>,
         accessor: 'annotation',
-        width: 700,
+        width: 800,
         minWidth: 100,
         defaultSortDesc: false,
         sortable: false,
       };
+    case MUTATIONS_TABLE_COLUMN_KEY.MUTATION_DESCRIPTION:
+      return {
+        id: MUTATIONS_TABLE_COLUMN_KEY.MUTATION_DESCRIPTION,
+        Header: <span className="font-medium">Mutation Description</span>,
+        accessor: 'mutationDescription',
+        style: { whiteSpace: 'normal' },
+        width: 800,
+        minWidth: 100,
+        defaultSortDesc: false,
+        sortable: false,
+      };
+    case TREATMENTS_TABLE_COLUMN_KEY.TREATMENT_DESCRIPTION:
+      return {
+        id: TREATMENTS_TABLE_COLUMN_KEY.TREATMENT_DESCRIPTION,
+        Header: <span className="font-medium">Treatment Description</span>,
+        accessor: 'treatmentDescription',
+        style: { whiteSpace: 'normal' },
+        width: 650,
+        minWidth: 100,
+        defaultSortDesc: false,
+        sortable: false,
+      };
+    case MUTATIONS_TABLE_COLUMN_KEY.ENTREZ_GENE_ID:
+      return {
+        id: MUTATIONS_TABLE_COLUMN_KEY.ENTREZ_GENE_ID,
+        Header: <span className="font-medium">Entrez Gene Id</span>,
+        accessor: 'entrezGeneId',
+        style: { whiteSpace: 'normal' },
+        width: 170,
+        minWidth: 100,
+        defaultSortDesc: false,
+        sortMethod: defaultSortMethod,
+      };
+    case MUTATIONS_TABLE_COLUMN_KEY.TUMOR_TYPE:
+      return {
+        id: MUTATIONS_TABLE_COLUMN_KEY.TUMOR_TYPE,
+        Header: <span className="font-medium">Tumor Type</span>,
+        accessor: 'tumorType',
+        style: { whiteSpace: 'normal' },
+        width: 170,
+        minWidth: 100,
+        defaultSortDesc: false,
+        sortMethod: defaultSortMethod,
+      };
+    case MUTATIONS_TABLE_COLUMN_KEY.FDA_LEVEL:
+      return {
+        id: MUTATIONS_TABLE_COLUMN_KEY.FDA_LEVEL,
+        Header: <span className="font-medium">FDA Level</span>,
+        accessor: 'fdaLevel',
+        style: { whiteSpace: 'normal' },
+        width: 170,
+        minWidth: 100,
+        defaultSortDesc: false,
+        sortMethod(a: string, b: string) {
+          return (
+            LEVEL_PRIORITY.indexOf(a.replace('LEVEL_', '') as LEVELS) -
+            LEVEL_PRIORITY.indexOf(b.replace('LEVEL_', '') as LEVELS)
+          );
+        },
+        Cell(props: any) {
+          return (
+            <div className={'d-flex justify-content-center'}>
+              {props.original.level[6] === 'F' ? (
+                <FdaLevelIcon
+                  level={props.original.level}
+                  withDescription={false}
+                />
+              ) : (
+                <EvidenceLevelIcon
+                  level={props.original.level}
+                  withDescription={false}
+                />
+              )}
+            </div>
+          );
+        },
+      };
+    case TREATMENTS_TABLE_COLUMN_KEY.TREATMENT_FDA_LEVEL:
+      return {
+        id: TREATMENTS_TABLE_COLUMN_KEY.TREATMENT_FDA_LEVEL,
+        Header: <span className="font-medium">FDA Level</span>,
+        accessor: 'treatmentFdaLevel',
+        style: { whiteSpace: 'normal' },
+        width: 170,
+        minWidth: 100,
+        defaultSortDesc: false,
+        sortMethod(a: string, b: string) {
+          return (
+            LEVEL_PRIORITY.indexOf(a.replace('LEVEL_', '') as LEVELS) -
+            LEVEL_PRIORITY.indexOf(b.replace('LEVEL_', '') as LEVELS)
+          );
+        },
+        Cell(props: any) {
+          return (
+            <div className={'d-flex justify-content-center'}>
+              {props.original.level[6] === 'F' ? (
+                <FdaLevelIcon
+                  level={props.original.level}
+                  withDescription={false}
+                />
+              ) : (
+                <EvidenceLevelIcon
+                  level={props.original.level}
+                  withDescription={false}
+                />
+              )}
+            </div>
+          );
+        },
+      };
+    case MUTATIONS_TABLE_COLUMN_KEY.LAST_UPDATE:
+      return {
+        id: MUTATIONS_TABLE_COLUMN_KEY.LAST_UPDATE,
+        Header: <span className="font-medium">Last Updated</span>,
+        accessor: 'lastUpdate',
+        style: { whiteSpace: 'normal' },
+        width: 170,
+        minWidth: 100,
+        defaultSortDesc: false,
+        sortMethod: defaultSortMethod,
+      };
+    // case MUTATIONS_TABLE_COLUMN_KEY.CITATIONS:
+    //   return {
+    //     id: MUTATIONS_TABLE_COLUMN_KEY.CITATIONS,
+    //     Header: <span>Citations</span>,
+    //     accessor: 'citations',
+    //     minWidth: 90,
+    //     width: 90,
+    //     defaultSortDesc: false,
+    //     sortMethod: citationsSortMethod,
+    //     Cell(props: any) {
+    //       const numOfReferences =
+    //         props.original.drugAbstracts.length +
+    //         props.original.drugPmids.length;
+    //       return (
+    //         <div>
+    //           <DefaultTooltip
+    //             placement="left"
+    //             trigger={['hover', 'focus']}
+    //             overlay={() => (
+    //               <CitationTooltip
+    //                 pmids={props.original.drugPmids}
+    //                 abstracts={props.original.drugAbstracts}
+    //               />
+    //             )}
+    //           >
+    //             <span>{numOfReferences}</span>
+    //           </DefaultTooltip>
+    //         </div>
+    //       );
+    //     },
+    //   };
     default:
       return undefined;
   }

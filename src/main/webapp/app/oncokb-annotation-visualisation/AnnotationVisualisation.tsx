@@ -12,6 +12,7 @@ import {
   TreatmentImplication,
   NotificationImplication,
   MUTATIONS_TABLE_COLUMN_KEY,
+  TREATMENTS_TABLE_COLUMN_KEY,
 } from './config/constants';
 import Tab from 'react-bootstrap/Tab';
 import Tabs from 'react-bootstrap/Tabs';
@@ -94,10 +95,18 @@ export class AnnotationVisualisation extends React.Component<
   @computed
   get treatmentTableColumns(): SearchColumn<TreatmentImplication>[] {
     const treatmentColumns = [
-      { key: MUTATIONS_TABLE_COLUMN_KEY.BIOMARKER, prop: 'biomarker' },
-      { key: MUTATIONS_TABLE_COLUMN_KEY.DRUG, prop: 'drug' },
-      { key: MUTATIONS_TABLE_COLUMN_KEY.LEVEL, prop: 'level' },
-      { key: MUTATIONS_TABLE_COLUMN_KEY.ANNOTATION, prop: 'annotation' },
+      { key: TREATMENTS_TABLE_COLUMN_KEY.BIOMARKER, prop: 'biomarker' },
+      { key: TREATMENTS_TABLE_COLUMN_KEY.DRUG, prop: 'drug' },
+      { key: TREATMENTS_TABLE_COLUMN_KEY.LEVEL, prop: 'level' },
+      { key: TREATMENTS_TABLE_COLUMN_KEY.ANNOTATION, prop: 'annotation' },
+      {
+        key: TREATMENTS_TABLE_COLUMN_KEY.TREATMENT_FDA_LEVEL,
+        prop: 'treatmentFdaLevel',
+      },
+      {
+        key: TREATMENTS_TABLE_COLUMN_KEY.TREATMENT_DESCRIPTION,
+        prop: 'treatmentDescription',
+      },
     ];
 
     const treatmentTableColumns: SearchColumn<TreatmentImplication>[] = [];
@@ -129,7 +138,15 @@ export class AnnotationVisualisation extends React.Component<
         key: MUTATIONS_TABLE_COLUMN_KEY.BIOLOGICAL_EFFECT,
         prop: 'biologicalEffect',
       },
-      { key: MUTATIONS_TABLE_COLUMN_KEY.LEVEL, prop: 'level' },
+      {
+        key: MUTATIONS_TABLE_COLUMN_KEY.MUTATION_DESCRIPTION,
+        prop: 'mutationDescription',
+      },
+      { key: MUTATIONS_TABLE_COLUMN_KEY.ENTREZ_GENE_ID, prop: 'entrezGeneId' },
+      { key: MUTATIONS_TABLE_COLUMN_KEY.TUMOR_TYPE, prop: 'tumorType' },
+      // { key: MUTATIONS_TABLE_COLUMN_KEY.CITATIONS, prop: 'citations' },
+      { key: MUTATIONS_TABLE_COLUMN_KEY.FDA_LEVEL, prop: 'fdaLevel' },
+      { key: MUTATIONS_TABLE_COLUMN_KEY.LAST_UPDATE, prop: 'lastUpdate' },
     ];
 
     const annotationTableColumns: SearchColumn<AnnotationImplication>[] = [];

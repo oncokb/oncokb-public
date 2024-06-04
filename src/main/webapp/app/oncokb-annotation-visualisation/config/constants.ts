@@ -82,8 +82,20 @@ export enum MUTATIONS_TABLE_COLUMN_KEY {
   BIOLOGICAL_EFFECT = 'BIOLOGICAL_EFFECT',
   DRUG = 'DRUG',
   LEVEL = 'LEVEL',
+  MUTATION_DESCRIPTION = 'MUTATION_DESCRIPTION',
+  ENTREZ_GENE_ID = 'ENTREZ_GENE_ID',
+  TUMOR_TYPE = 'TUMOR_TYPE',
+  // CITATIONS = 'CITATIONS',
+  FDA_LEVEL = 'FDA_LEVEL',
+  LAST_UPDATE = 'LAST_UPDATE',
+}
+export enum TREATMENTS_TABLE_COLUMN_KEY {
   BIOMARKER = 'BIOMARKER',
+  DRUG = 'DRUG',
+  LEVEL = 'LEVEL',
   ANNOTATION = 'ANNOTATION',
+  TREATMENT_FDA_LEVEL = 'TREATMENT_FDA_LEVEL',
+  TREATMENT_DESCRIPTION = 'TREATMENT_DESCRIPTION',
 }
 export const TOOLTIP_MAX_HEIGHT = 300;
 export const LG_TABLE_FIXED_HEIGHT = 640;
@@ -131,6 +143,12 @@ export type AnnotationImplication = {
   oncogenicity: string;
   biologicalEffect: string;
   alterationType: string;
+  mutationDescription: string;
+  entrezGeneId: string;
+  tumorType: string;
+  // citations: {};
+  fdaLevel: string;
+  lastUpdate: string;
 };
 
 export type TreatmentImplication = {
@@ -139,6 +157,8 @@ export type TreatmentImplication = {
   level: string;
   annotation: string;
   alterationType: string;
+  treatmentFdaLevel: string;
+  treatmentDescription: string;
 };
 
 export type NotificationImplication = {
