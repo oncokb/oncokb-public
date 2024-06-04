@@ -50,8 +50,8 @@ export default function Notification({ notifications }: NotificationProps) {
         </div>
       )}
 
-      {notifications.length > 2 &&
-        (!showAll ? (
+      {notifications.length > 2 && (
+        <div>
           <div>
             {visibleNotifications.map(notification => (
               <Alert
@@ -63,35 +63,12 @@ export default function Notification({ notifications }: NotificationProps) {
                 {notification.message}
               </Alert>
             ))}
-            <Button
-              variant="link"
-              onClick={toggleShowAll}
-              style={{ float: 'right' }}
-            >
-              Show less
-            </Button>
           </div>
-        ) : (
-          <div>
-            {visibleNotifications.map(notification => (
-              <Alert
-                key={notification.message}
-                variant={notification.type}
-                onClose={() => handleClose(notification.message)}
-                dismissible
-              >
-                {notification.message}
-              </Alert>
-            ))}
-            <Button
-              variant="link"
-              onClick={toggleShowAll}
-              style={{ float: 'right' }}
-            >
-              Show all ({notifications.length})
-            </Button>
-          </div>
-        ))}
+          <Button variant="link" onClick={toggleShowAll}>
+            {!showAll ? 'Show Less' : `Show All (${notifications.length})`}
+          </Button>
+        </div>
+      )}
     </div>
   );
 }
