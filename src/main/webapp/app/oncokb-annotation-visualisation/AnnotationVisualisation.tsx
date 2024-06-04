@@ -324,7 +324,7 @@ export class AnnotationVisualisation extends React.Component<
                     label: treatmentColumns.find(c => c.key === col)?.label,
                   }))}
                   onChange={this.handleTreatmentColumnsChange}
-                  className="mt-2"
+                  className="mt-0"
                 />
               </div>
               <div className="mt-4">
@@ -347,9 +347,9 @@ export class AnnotationVisualisation extends React.Component<
                     value: col.key,
                     label: col.label,
                   }))}
-                  defaultValue={annotationColumns.map(col => ({
-                    value: col.key,
-                    label: col.label,
+                  value={this.state.selectedAnnotationColumns.map(col => ({
+                    value: col,
+                    label: annotationColumns.find(c => c.key === col)?.label,
                   }))}
                   onChange={this.handleAnnotationColumnsChange}
                 />
@@ -369,12 +369,12 @@ export class AnnotationVisualisation extends React.Component<
                     value: col.key,
                     label: col.label,
                   }))}
-                  defaultValue={treatmentColumns.map(col => ({
-                    value: col.key,
-                    label: col.label,
+                  value={this.state.selectedTreatmentColumns.map(col => ({
+                    value: col,
+                    label: treatmentColumns.find(c => c.key === col)?.label,
                   }))}
                   onChange={this.handleTreatmentColumnsChange}
-                  className="mt-2"
+                  className="mt-0"
                 />
               </div>
               <div className="mt-4">
@@ -397,9 +397,9 @@ export class AnnotationVisualisation extends React.Component<
                     value: col.key,
                     label: col.label,
                   }))}
-                  defaultValue={annotationColumns.map(col => ({
-                    value: col.key,
-                    label: col.label,
+                  value={this.state.selectedAnnotationColumns.map(col => ({
+                    value: col,
+                    label: annotationColumns.find(c => c.key === col)?.label,
                   }))}
                   onChange={this.handleAnnotationColumnsChange}
                 />
@@ -419,12 +419,12 @@ export class AnnotationVisualisation extends React.Component<
                     value: col.key,
                     label: col.label,
                   }))}
-                  defaultValue={treatmentColumns.map(col => ({
-                    value: col.key,
-                    label: col.label,
+                  value={this.state.selectedTreatmentColumns.map(col => ({
+                    value: col,
+                    label: treatmentColumns.find(c => c.key === col)?.label,
                   }))}
                   onChange={this.handleTreatmentColumnsChange}
-                  className="mt-2"
+                  className="mt-0"
                 />
               </div>
               <div className="mt-4">

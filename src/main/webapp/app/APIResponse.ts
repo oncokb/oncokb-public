@@ -1209,10 +1209,110 @@ const APIResponse6 = {
   vus: false,
 };
 
+const APIResponse3 = {
+  query: {
+    id: null,
+    referenceGenome: 'GRCh37',
+    hugoSymbol: 'EGFR',
+    entrezGeneId: 1956,
+    alteration: 'Amplification',
+    alterationType: 'STRUCTURAL_VARIANT',
+    svType: null,
+    tumorType: 'glioma',
+    consequence: null,
+    proteinStart: null,
+    proteinEnd: null,
+    hgvs: null,
+  },
+  geneExist: true,
+  variantExist: true,
+  alleleExist: false,
+  oncogenic: 'Oncogenic',
+  mutationEffect: {
+    knownEffect: 'Gain-of-function',
+    description:
+      'EGFR amplification results from the gain of extra copies of the EGFR gene on chromosome 7p11. Often, this leads to the overexpression of EGFR protein and hyperactivation of downstream signaling through the MAPK pathway (PMID: 24120142, 10728703). EGFR amplification is found across various cancers, including lung adenocarcinoma, esophageal carcinoma and glioma (PMID: 25079552, 28052061, 24120142). In vitro and in vivo studies demonstrate that EGFR amplification in primary glioma sphere-forming cell samples results in sensitivity to the PARP inhibitor talazoparib as measured by decreased viability and reduced tumor growth in a xenograft model upon drug treatment (PMID: 31852834). Patients with non-small cell lung cancer who harbor amplification of wildtype or tyrosine kinase inhibitor (TKI)-sensitive mutant EGFR have shown clinical benefit in response to EGFR TKIs (PMID: 30622811, 30284706). Additionally, EGFR amplification has been associated with sensitivity to HER2 inhibition with afatinib in HER2+ esophagogastric cancer (PMID: 30463996). A patient with salivary gland cancer harboring high-level EGFR amplification had a durable, near-complete response to treatment with afatinib (Abstract: Lai et al. JCO PO, 2019. https://ascopubs.org/doi/full/10.1200/PO.19.00186).',
+    citations: {
+      pmids: [
+        '24120142',
+        '30463996',
+        '10728703',
+        '28052061',
+        '30284706',
+        '30622811',
+        '25079552',
+        '31852834',
+      ],
+      abstracts: [
+        {
+          link: 'https://ascopubs.org/doi/full/10.1200/PO.19.00186',
+          abstract: 'Lai et al. JCO PO, 2019',
+        },
+      ],
+    },
+  },
+  highestSensitiveLevel: 'LEVEL_4',
+  highestResistanceLevel: null,
+  highestDiagnosticImplicationLevel: null,
+  highestPrognosticImplicationLevel: null,
+  highestFdaLevel: 'LEVEL_Fda3',
+  otherSignificantSensitiveLevels: [],
+  otherSignificantResistanceLevels: [],
+  hotspot: false,
+  geneSummary:
+    'EGFR, a receptor tyrosine kinase, is altered by amplification and/or mutation in lung and brain cancers among others.',
+  variantSummary: 'EGFR amplification is known to be oncogenic.',
+  tumorTypeSummary:
+    'Laboratory data suggest that cancer cells with EGFR-amplification may be sensitive to the EGFR/HER2 tyrosine kinase inhibitor lapatinib.',
+  prognosticSummary: '',
+  diagnosticSummary: '',
+  diagnosticImplications: [],
+  prognosticImplications: [],
+  treatments: [
+    {
+      alterations: ['Amplification'],
+      drugs: [
+        {
+          ncitCode: 'C26653',
+          drugName: 'Lapatinib',
+        },
+      ],
+      approvedIndications: [],
+      level: 'LEVEL_4',
+      fdaLevel: 'LEVEL_Fda3',
+      levelAssociatedCancerType: {
+        id: 882,
+        code: '',
+        color: 'Gray',
+        name: '',
+        mainType: {
+          id: null,
+          name: 'Glioma',
+          tumorForm: 'SOLID',
+        },
+        tissue: 'CNS/Brain',
+        children: {},
+        parent: null,
+        level: 0,
+        tumorForm: 'SOLID',
+      },
+      levelExcludedCancerTypes: [],
+      pmids: ['22588883', '20459769', '18334972'],
+      abstracts: [],
+      description:
+        'Lapatinib is a small molecule tyrosine kinase inhibitor of the ERBB2 and EGFR kinases. In vitro studies of glioma cell lines expressing EGFR ectodomain mutations demonstrated that they were sensitive to treatment with lapatinib as shown by apoptosis and decreased pathway activation upon drug treatment. Lapatinib sensitivity has also been observed in lung cancer cell lines with EGFR ectodomain mutations or EGFR amplification, and in endometrial cancer cell lines with increased EGFR expression (PMID: 22588883, 20459769, 18334972).',
+    },
+  ],
+  dataVersion: 'v4.16',
+  lastUpdate: '02/23/2023',
+  vus: false,
+};
+
 const responses = [
   APIResponse1,
   APIResponse2,
   APIResponse4,
+  APIResponse3,
   APIResponse5,
   APIResponse6,
 ];
