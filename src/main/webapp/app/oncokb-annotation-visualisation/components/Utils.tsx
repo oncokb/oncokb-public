@@ -602,17 +602,6 @@ export function getDefaultColumnDefinition<T>(
         defaultSortDesc: false,
         sortMethod: defaultSortMethod,
       };
-    case TREATMENTS_TABLE_COLUMN_KEY.DRUG:
-      return {
-        id: TREATMENTS_TABLE_COLUMN_KEY.DRUG,
-        Header: <span className="font-medium">Drug</span>,
-        accessor: 'drug',
-        style: { whiteSpace: 'normal' },
-        width: 170,
-        minWidth: 100,
-        defaultSortDesc: false,
-        sortMethod: defaultSortMethod,
-      };
     case MUTATIONS_TABLE_COLUMN_KEY.ONCOGENICITY:
       return {
         id: MUTATIONS_TABLE_COLUMN_KEY.ONCOGENICITY,
@@ -633,6 +622,17 @@ export function getDefaultColumnDefinition<T>(
             </div>
           );
         },
+      };
+    case TREATMENTS_TABLE_COLUMN_KEY.DRUG:
+      return {
+        id: TREATMENTS_TABLE_COLUMN_KEY.DRUG,
+        Header: <span className="font-medium">Drug</span>,
+        accessor: 'drug',
+        style: { whiteSpace: 'normal' },
+        width: 170,
+        minWidth: 100,
+        defaultSortDesc: false,
+        sortMethod: defaultSortMethod,
       };
     case MUTATIONS_TABLE_COLUMN_KEY.LEVEL:
       return {
@@ -763,7 +763,7 @@ export function getDefaultColumnDefinition<T>(
     case MUTATIONS_TABLE_COLUMN_KEY.MUTATION_DESCRIPTION:
       return {
         id: MUTATIONS_TABLE_COLUMN_KEY.MUTATION_DESCRIPTION,
-        Header: <span className="font-medium">Mutation Description</span>,
+        Header: <span className="font-medium">Description</span>,
         accessor: 'mutationDescription',
         style: { whiteSpace: 'normal' },
         width: 800,

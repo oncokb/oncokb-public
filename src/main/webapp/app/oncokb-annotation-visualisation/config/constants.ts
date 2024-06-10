@@ -126,6 +126,61 @@ export enum MUTATION_EFFECT {
   UNKNOWN = 'Unknown',
 }
 
+export const annotationColumns = [
+  { key: MUTATIONS_TABLE_COLUMN_KEY.GENE, label: 'Gene', prop: 'gene' },
+  {
+    key: MUTATIONS_TABLE_COLUMN_KEY.MUTATION,
+    label: 'Mutation',
+    prop: 'mutation',
+  },
+  {
+    key: MUTATIONS_TABLE_COLUMN_KEY.CONSEQUENCE_TYPE,
+    label: 'Consequence Type',
+    prop: 'consequenceType',
+  },
+  {
+    key: MUTATIONS_TABLE_COLUMN_KEY.ONCOGENICITY,
+    label: 'Oncogenicity',
+    prop: 'oncogenicity',
+  },
+  { key: MUTATIONS_TABLE_COLUMN_KEY.DRUG, label: 'Drug', prop: 'drug' },
+  {
+    key: MUTATIONS_TABLE_COLUMN_KEY.LOCATION,
+    label: 'Location',
+    prop: 'location',
+  },
+  {
+    key: MUTATIONS_TABLE_COLUMN_KEY.BIOLOGICAL_EFFECT,
+    label: 'Biological Effect',
+    prop: 'biologicalEffect',
+  },
+  {
+    key: MUTATIONS_TABLE_COLUMN_KEY.MUTATION_DESCRIPTION,
+    label: 'Description',
+    prop: 'mutationDescription',
+  },
+  {
+    key: MUTATIONS_TABLE_COLUMN_KEY.ENTREZ_GENE_ID,
+    label: 'Entrez Gene ID',
+    prop: 'entrezGeneId',
+  },
+  {
+    key: MUTATIONS_TABLE_COLUMN_KEY.TUMOR_TYPE,
+    label: 'Tumor Type',
+    prop: 'tumorType',
+  },
+  {
+    key: MUTATIONS_TABLE_COLUMN_KEY.FDA_LEVEL,
+    label: 'FDA Level',
+    prop: 'fdaLevel',
+  },
+  {
+    key: MUTATIONS_TABLE_COLUMN_KEY.LAST_UPDATE,
+    label: 'Last Update',
+    prop: 'lastUpdate',
+  },
+];
+
 export enum NOTIFICATION_TYPE {
   INFO = 'primary',
   ERROR = 'danger',

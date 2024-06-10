@@ -1,5 +1,5 @@
 import * as React from 'react';
-import { COLOR_BLUE } from './config/theme';
+import { COLOR_BLUE, COLOR_GREY } from './config/theme';
 import { GenePageTable } from './components/tables/GenePageTable';
 import { SearchColumn } from './components/tables/OncoKBTable';
 import { computed } from 'mobx';
@@ -11,12 +11,13 @@ import {
   AnnotationImplication,
   TreatmentImplication,
   NotificationImplication,
-  MUTATIONS_TABLE_COLUMN_KEY,
   TREATMENTS_TABLE_COLUMN_KEY,
 } from './config/constants';
 import Tab from 'react-bootstrap/Tab';
 import Tabs from 'react-bootstrap/Tabs';
 import Notification from './components/notifications/notifications';
+import './components/styles/index.module.scss';
+import TabNumbers from './components/icons/TabNumbers';
 export interface AnnotationVisualisationProps {
   annotations: AnnotationImplication[];
   treatments: TreatmentImplication[];
@@ -26,66 +27,12 @@ export interface AnnotationVisualisationProps {
   notifications: NotificationImplication[];
 }
 import Select from 'react-select';
+import { annotationColumns } from './config/constants';
 
 export interface AnnotationVisualisationState {
   selectedAnnotationColumns: string[];
   selectedTreatmentColumns: string[];
 }
-
-const annotationColumns = [
-  { key: MUTATIONS_TABLE_COLUMN_KEY.GENE, label: 'Gene', prop: 'gene' },
-  {
-    key: MUTATIONS_TABLE_COLUMN_KEY.MUTATION,
-    label: 'Mutation',
-    prop: 'mutation',
-  },
-  {
-    key: MUTATIONS_TABLE_COLUMN_KEY.CONSEQUENCE_TYPE,
-    label: 'Consequence Type',
-    prop: 'consequenceType',
-  },
-  { key: MUTATIONS_TABLE_COLUMN_KEY.DRUG, label: 'Drug', prop: 'drug' },
-  {
-    key: MUTATIONS_TABLE_COLUMN_KEY.LOCATION,
-    label: 'Location',
-    prop: 'location',
-  },
-  {
-    key: MUTATIONS_TABLE_COLUMN_KEY.ONCOGENICITY,
-    label: 'Oncogenicity',
-    prop: 'oncogenicity',
-  },
-  {
-    key: MUTATIONS_TABLE_COLUMN_KEY.BIOLOGICAL_EFFECT,
-    label: 'Biological Effect',
-    prop: 'biologicalEffect',
-  },
-  {
-    key: MUTATIONS_TABLE_COLUMN_KEY.MUTATION_DESCRIPTION,
-    label: 'Mutation Description',
-    prop: 'mutationDescription',
-  },
-  {
-    key: MUTATIONS_TABLE_COLUMN_KEY.ENTREZ_GENE_ID,
-    label: 'Entrez Gene ID',
-    prop: 'entrezGeneId',
-  },
-  {
-    key: MUTATIONS_TABLE_COLUMN_KEY.TUMOR_TYPE,
-    label: 'Tumor Type',
-    prop: 'tumorType',
-  },
-  {
-    key: MUTATIONS_TABLE_COLUMN_KEY.FDA_LEVEL,
-    label: 'FDA Level',
-    prop: 'fdaLevel',
-  },
-  {
-    key: MUTATIONS_TABLE_COLUMN_KEY.LAST_UPDATE,
-    label: 'Last Update',
-    prop: 'lastUpdate',
-  },
-];
 
 const treatmentColumns = [
   {
@@ -287,23 +234,18 @@ export class AnnotationVisualisation extends React.Component<
           id="uncontrolled-tab-example"
           className="my-3 text-xl"
         >
-          <Tab eventKey="mutations" title="Mutations">
+          <Tab
+            eventKey="mutations"
+            title={
+              <TabNumbers
+                number={this.mutationsAnnotations.length}
+                title="Mutations"
+              />
+            }
+          >
             <div>
               <Notification notifications={this.mutationsNotifications} />
-              <div className="mt-3">
-                <Select
-                  isMulti
-                  options={annotationColumns.map(col => ({
-                    value: col.key,
-                    label: col.label,
-                  }))}
-                  value={this.state.selectedAnnotationColumns.map(col => ({
-                    value: col,
-                    label: annotationColumns.find(c => c.key === col)?.label,
-                  }))}
-                  onChange={this.handleAnnotationColumnsChange}
-                />
-              </div>
+
               <div className="mt-4">
                 <GenePageTable
                   name={'Mutations in the sample'}
@@ -337,7 +279,15 @@ export class AnnotationVisualisation extends React.Component<
               </div>
             </div>
           </Tab>
-          <Tab eventKey="copyNumberAlterations" title="Copy Number Alterations">
+          <Tab
+            eventKey="copyNumberAlterations"
+            title={
+              <TabNumbers
+                number={this.copyNumberAnnotations.length}
+                title="Copy Number Alterations"
+              />
+            }
+          >
             <div>
               <Notification notifications={this.copyNumberNotifications} />
               <div className="mt-3">
@@ -356,7 +306,7 @@ export class AnnotationVisualisation extends React.Component<
               </div>
               <div className="mt-4">
                 <GenePageTable
-                  name={'Mutations in the sample'}
+                  name={'Copy Number Alterations in the sample'}
                   data={this.copyNumberAnnotations}
                   columns={this.annotationTableColumns}
                   isPending={false}
@@ -387,7 +337,15 @@ export class AnnotationVisualisation extends React.Component<
               </div>
             </div>
           </Tab>
-          <Tab eventKey="structuralVariants" title="Structural Variants">
+          <Tab
+            eventKey="structuralVariants"
+            title={
+              <TabNumbers
+                number={this.structuralAnnotations.length}
+                title="Structural Variants"
+              />
+            }
+          >
             <div>
               <Notification notifications={this.structuralNotifications} />
               <div className="mt-3">
@@ -406,7 +364,7 @@ export class AnnotationVisualisation extends React.Component<
               </div>
               <div className="mt-4">
                 <GenePageTable
-                  name={'Mutations in the sample'}
+                  name={'Structural variants in the sample'}
                   data={this.structuralAnnotations}
                   columns={this.annotationTableColumns}
                   isPending={false}

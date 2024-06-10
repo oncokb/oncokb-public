@@ -4,6 +4,8 @@ import { observer } from 'mobx-react';
 import { observable, computed } from 'mobx';
 import classNames from 'classnames';
 import { COLOR_BLUE } from 'app/config/theme';
+import { annotationColumns } from './../../config/constants';
+import Select from 'react-select';
 
 export type SearchColumn<T> = Column<T> & {
   onFilter?: (data: T, keyword: string) => boolean;
@@ -60,6 +62,20 @@ export default class OncoKBTable<T> extends React.Component<
     return (
       <div>
         <div className="row">
+          <div className="mt-3">
+            <Select
+              isMulti
+              options={annotationColumns.map(col => ({
+                value: col.key,
+                label: col.label,
+              }))}
+              value={this.state.selectedAnnotationColumns.map(col => ({
+                value: col,
+                label: annotationColumns.find(c => c.key === col)?.label,
+              }))}
+              onChange={this.props.columnsChange}
+            />
+          </div>
           {/* <div className="col-auto">
       {this.props.filters === undefined ? (
         ""
