@@ -1,5 +1,5 @@
 import React from 'react';
-import { COLOR_GREY } from 'app/config/theme';
+import { COLOR_BLACK, COLOR_LIGHT_GREY } from './../../config/theme';
 
 export interface TabNumbersProps {
   number: number;
@@ -23,8 +23,8 @@ class TabNumbers extends React.Component<TabNumbersProps> {
       lineHeight: '1.2rem',
       borderRadius: '50%',
       textAlign: 'center',
-      backgroundColor: COLOR_GREY,
-      color: 'white',
+      backgroundColor: COLOR_LIGHT_GREY,
+      color: COLOR_BLACK,
       display: 'flex',
       alignItems: 'center',
       justifyContent: 'center',

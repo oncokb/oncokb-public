@@ -126,6 +126,35 @@ export enum MUTATION_EFFECT {
   UNKNOWN = 'Unknown',
 }
 
+export type HandleColumnsChange = (
+  selectedOptions: { value: string; label: string }[]
+) => void;
+
+export const treatmentColumns = [
+  {
+    key: TREATMENTS_TABLE_COLUMN_KEY.BIOMARKER,
+    label: 'Biomarker',
+    prop: 'biomarker',
+  },
+  { key: TREATMENTS_TABLE_COLUMN_KEY.DRUG, label: 'Drug', prop: 'drug' },
+  { key: TREATMENTS_TABLE_COLUMN_KEY.LEVEL, label: 'Level', prop: 'level' },
+  {
+    key: TREATMENTS_TABLE_COLUMN_KEY.ANNOTATION,
+    label: 'Annotation',
+    prop: 'annotation',
+  },
+  {
+    key: TREATMENTS_TABLE_COLUMN_KEY.TREATMENT_FDA_LEVEL,
+    label: 'Treatment FDA Level',
+    prop: 'treatmentFdaLevel',
+  },
+  {
+    key: TREATMENTS_TABLE_COLUMN_KEY.TREATMENT_DESCRIPTION,
+    label: 'Treatment Description',
+    prop: 'treatmentDescription',
+  },
+];
+
 export const annotationColumns = [
   { key: MUTATIONS_TABLE_COLUMN_KEY.GENE, label: 'Gene', prop: 'gene' },
   {
@@ -179,6 +208,26 @@ export const annotationColumns = [
     label: 'Last Update',
     prop: 'lastUpdate',
   },
+  {
+    key: MUTATIONS_TABLE_COLUMN_KEY.LEVEL,
+    label: 'Level of Evidence',
+    prop: 'level',
+  },
+];
+
+export const defaultAnnotationColumns = [
+  'gene',
+  'mutation',
+  'oncogenicity',
+  'drug',
+  'mutationDescription',
+];
+export const defaultTreatmentColumns = [
+  'biomarker',
+  'drug',
+  'level',
+  'annotation',
+  'treatmentDescription',
 ];
 
 export enum NOTIFICATION_TYPE {

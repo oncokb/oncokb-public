@@ -1,5 +1,5 @@
 import * as React from 'react';
-import { COLOR_BLUE, COLOR_GREY } from './config/theme';
+import { COLOR_BLUE } from './config/theme';
 import { GenePageTable } from './components/tables/GenePageTable';
 import { SearchColumn } from './components/tables/OncoKBTable';
 import { computed } from 'mobx';
@@ -11,13 +11,17 @@ import {
   AnnotationImplication,
   TreatmentImplication,
   NotificationImplication,
-  TREATMENTS_TABLE_COLUMN_KEY,
 } from './config/constants';
 import Tab from 'react-bootstrap/Tab';
 import Tabs from 'react-bootstrap/Tabs';
 import Notification from './components/notifications/notifications';
 import './components/styles/index.module.scss';
 import TabNumbers from './components/icons/TabNumbers';
+import {
+  defaultAnnotationColumns,
+  defaultTreatmentColumns,
+} from './config/constants';
+import { TREATMENTS_TABLE_COLUMN_KEY } from './config/constants';
 export interface AnnotationVisualisationProps {
   annotations: AnnotationImplication[];
   treatments: TreatmentImplication[];
@@ -26,39 +30,12 @@ export interface AnnotationVisualisationProps {
   isPatientInfoVisible?: boolean;
   notifications: NotificationImplication[];
 }
-import Select from 'react-select';
-import { annotationColumns } from './config/constants';
+import { annotationColumns, treatmentColumns } from './config/constants';
 
 export interface AnnotationVisualisationState {
   selectedAnnotationColumns: string[];
   selectedTreatmentColumns: string[];
 }
-
-const treatmentColumns = [
-  {
-    key: TREATMENTS_TABLE_COLUMN_KEY.BIOMARKER,
-    label: 'Biomarker',
-    prop: 'biomarker',
-  },
-  { key: TREATMENTS_TABLE_COLUMN_KEY.DRUG, label: 'Drug', prop: 'drug' },
-  { key: TREATMENTS_TABLE_COLUMN_KEY.LEVEL, label: 'Level', prop: 'level' },
-  {
-    key: TREATMENTS_TABLE_COLUMN_KEY.ANNOTATION,
-    label: 'Annotation',
-    prop: 'annotation',
-  },
-  {
-    key: TREATMENTS_TABLE_COLUMN_KEY.TREATMENT_FDA_LEVEL,
-    label: 'Treatment FDA Level',
-    prop: 'treatmentFdaLevel',
-  },
-  {
-    key: TREATMENTS_TABLE_COLUMN_KEY.TREATMENT_DESCRIPTION,
-    label: 'Treatment Description',
-    prop: 'treatmentDescription',
-  },
-];
-
 export class AnnotationVisualisation extends React.Component<
   AnnotationVisualisationProps,
   AnnotationVisualisationState
@@ -129,8 +106,8 @@ export class AnnotationVisualisation extends React.Component<
   constructor(props: AnnotationVisualisationProps) {
     super(props);
     this.state = {
-      selectedAnnotationColumns: annotationColumns.map(col => col.key),
-      selectedTreatmentColumns: treatmentColumns.map(col => col.key),
+      selectedAnnotationColumns: defaultAnnotationColumns,
+      selectedTreatmentColumns: defaultTreatmentColumns,
     };
   }
 
@@ -152,8 +129,8 @@ export class AnnotationVisualisation extends React.Component<
 
   handleAnnotationColumnsChange = (selectedOptions: any) => {
     this.setState({
-      selectedAnnotationColumns: selectedOptions.map(
-        (option: any) => option.value
+      selectedAnnotationColumns: selectedOptions.map((option: any) =>
+        option.value ? option.value : option.prop
       ),
     });
     localStorage.setItem(
@@ -180,9 +157,15 @@ export class AnnotationVisualisation extends React.Component<
     const filteredColumns = treatmentColumns.filter(col =>
       selectedKeys.includes(col.key)
     );
-
+    const hasAnnotation = selectedKeys.some(
+      column => column === TREATMENTS_TABLE_COLUMN_KEY.ANNOTATION
+    );
+    const totalColumns = selectedKeys.length;
+    const calculatedWidth = hasAnnotation
+      ? 800 / (totalColumns - 1)
+      : 1200 / totalColumns;
     return filteredColumns.map(column => ({
-      ...getDefaultColumnDefinition(column.key),
+      ...getDefaultColumnDefinition(column.key, calculatedWidth),
       onFilter: (data: TreatmentImplication, keyword) =>
         filterByKeyword(data[column.prop], keyword),
     }));
@@ -196,7 +179,10 @@ export class AnnotationVisualisation extends React.Component<
     );
 
     return filteredColumns.map(column => ({
-      ...getDefaultColumnDefinition(column.key),
+      ...getDefaultColumnDefinition(
+        column.key,
+        1200 / this.state.selectedAnnotationColumns.length
+      ),
       onFilter: (data: AnnotationImplication, keyword) =>
         filterByKeyword(data[column.prop], keyword),
     }));
@@ -235,6 +221,42 @@ export class AnnotationVisualisation extends React.Component<
           className="my-3 text-xl"
         >
           <Tab
+            eventKey="all"
+            title={
+              <TabNumbers number={this.props.annotations.length} title="All" />
+            }
+          >
+            <div>
+              <Notification notifications={this.props.notifications} />
+              <div className="mt-4">
+                <GenePageTable
+                  name={'All Alterations in the sample'}
+                  data={this.props.annotations}
+                  columns={this.annotationTableColumns}
+                  isPending={false}
+                  selectedAnnotationColumns={
+                    this.state.selectedAnnotationColumns
+                  }
+                  selectedColumns={annotationColumns}
+                  handleColumnsChange={this.handleAnnotationColumnsChange}
+                />
+              </div>
+              <div className="mt-4">
+                <GenePageTable
+                  name={'Treatments for the Biomarker'}
+                  data={this.props.treatments}
+                  columns={this.treatmentTableColumns}
+                  isPending={false}
+                  selectedColumns={treatmentColumns}
+                  selectedAnnotationColumns={
+                    this.state.selectedTreatmentColumns
+                  }
+                  handleColumnsChange={this.handleTreatmentColumnsChange}
+                />
+              </div>
+            </div>
+          </Tab>
+          <Tab
             eventKey="mutations"
             title={
               <TabNumbers
@@ -245,28 +267,17 @@ export class AnnotationVisualisation extends React.Component<
           >
             <div>
               <Notification notifications={this.mutationsNotifications} />
-
               <div className="mt-4">
                 <GenePageTable
                   name={'Mutations in the sample'}
                   data={this.mutationsAnnotations}
                   columns={this.annotationTableColumns}
                   isPending={false}
-                />
-              </div>
-              <div className="mt-3">
-                <Select
-                  isMulti
-                  options={treatmentColumns.map(col => ({
-                    value: col.key,
-                    label: col.label,
-                  }))}
-                  value={this.state.selectedTreatmentColumns.map(col => ({
-                    value: col,
-                    label: treatmentColumns.find(c => c.key === col)?.label,
-                  }))}
-                  onChange={this.handleTreatmentColumnsChange}
-                  className="mt-0"
+                  selectedAnnotationColumns={
+                    this.state.selectedAnnotationColumns
+                  }
+                  selectedColumns={annotationColumns}
+                  handleColumnsChange={this.handleAnnotationColumnsChange}
                 />
               </div>
               <div className="mt-4">
@@ -275,6 +286,11 @@ export class AnnotationVisualisation extends React.Component<
                   data={this.mutationsTreatments}
                   columns={this.treatmentTableColumns}
                   isPending={false}
+                  selectedColumns={treatmentColumns}
+                  selectedAnnotationColumns={
+                    this.state.selectedTreatmentColumns
+                  }
+                  handleColumnsChange={this.handleTreatmentColumnsChange}
                 />
               </div>
             </div>
@@ -290,41 +306,17 @@ export class AnnotationVisualisation extends React.Component<
           >
             <div>
               <Notification notifications={this.copyNumberNotifications} />
-              <div className="mt-3">
-                <Select
-                  isMulti
-                  options={annotationColumns.map(col => ({
-                    value: col.key,
-                    label: col.label,
-                  }))}
-                  value={this.state.selectedAnnotationColumns.map(col => ({
-                    value: col,
-                    label: annotationColumns.find(c => c.key === col)?.label,
-                  }))}
-                  onChange={this.handleAnnotationColumnsChange}
-                />
-              </div>
-              <div className="mt-4">
+              <div className="mt-4" style={{ zIndex: 1 }}>
                 <GenePageTable
                   name={'Copy Number Alterations in the sample'}
                   data={this.copyNumberAnnotations}
                   columns={this.annotationTableColumns}
                   isPending={false}
-                />
-              </div>
-              <div className="mt-3">
-                <Select
-                  isMulti
-                  options={treatmentColumns.map(col => ({
-                    value: col.key,
-                    label: col.label,
-                  }))}
-                  value={this.state.selectedTreatmentColumns.map(col => ({
-                    value: col,
-                    label: treatmentColumns.find(c => c.key === col)?.label,
-                  }))}
-                  onChange={this.handleTreatmentColumnsChange}
-                  className="mt-0"
+                  selectedAnnotationColumns={
+                    this.state.selectedAnnotationColumns
+                  }
+                  selectedColumns={annotationColumns}
+                  handleColumnsChange={this.handleAnnotationColumnsChange}
                 />
               </div>
               <div className="mt-4">
@@ -333,6 +325,11 @@ export class AnnotationVisualisation extends React.Component<
                   data={this.copyNumberTreatments}
                   columns={this.treatmentTableColumns}
                   isPending={false}
+                  selectedColumns={treatmentColumns}
+                  selectedAnnotationColumns={
+                    this.state.selectedTreatmentColumns
+                  }
+                  handleColumnsChange={this.handleTreatmentColumnsChange}
                 />
               </div>
             </div>
@@ -348,41 +345,17 @@ export class AnnotationVisualisation extends React.Component<
           >
             <div>
               <Notification notifications={this.structuralNotifications} />
-              <div className="mt-3">
-                <Select
-                  isMulti
-                  options={annotationColumns.map(col => ({
-                    value: col.key,
-                    label: col.label,
-                  }))}
-                  value={this.state.selectedAnnotationColumns.map(col => ({
-                    value: col,
-                    label: annotationColumns.find(c => c.key === col)?.label,
-                  }))}
-                  onChange={this.handleAnnotationColumnsChange}
-                />
-              </div>
               <div className="mt-4">
                 <GenePageTable
-                  name={'Structural variants in the sample'}
+                  name={'Structural Variants in the sample'}
                   data={this.structuralAnnotations}
                   columns={this.annotationTableColumns}
                   isPending={false}
-                />
-              </div>
-              <div className="mt-3">
-                <Select
-                  isMulti
-                  options={treatmentColumns.map(col => ({
-                    value: col.key,
-                    label: col.label,
-                  }))}
-                  value={this.state.selectedTreatmentColumns.map(col => ({
-                    value: col,
-                    label: treatmentColumns.find(c => c.key === col)?.label,
-                  }))}
-                  onChange={this.handleTreatmentColumnsChange}
-                  className="mt-0"
+                  selectedAnnotationColumns={
+                    this.state.selectedAnnotationColumns
+                  }
+                  selectedColumns={annotationColumns}
+                  handleColumnsChange={this.handleAnnotationColumnsChange}
                 />
               </div>
               <div className="mt-4">
@@ -391,6 +364,11 @@ export class AnnotationVisualisation extends React.Component<
                   data={this.structuralTreatments}
                   columns={this.treatmentTableColumns}
                   isPending={false}
+                  selectedColumns={treatmentColumns}
+                  selectedAnnotationColumns={
+                    this.state.selectedTreatmentColumns
+                  }
+                  handleColumnsChange={this.handleTreatmentColumnsChange}
                 />
               </div>
             </div>

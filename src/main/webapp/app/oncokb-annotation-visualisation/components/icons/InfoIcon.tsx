@@ -1,7 +1,7 @@
 import React from 'react';
 import { RCTooltip } from 'rc-tooltip';
 import { DefaultTooltip } from 'cbioportal-frontend-commons';
-type IconType = 'info' | 'question';
+type IconType = 'info' | 'question' | 'description';
 const InfoIcon: React.FunctionComponent<{
   overlay?:
     | (() => React.ReactChild)
@@ -26,6 +26,8 @@ const InfoIcon: React.FunctionComponent<{
             style={style}
           ></i>
         );
+      case 'description':
+        return <i className={`fa ${props.className}`} style={style}></i>;
       case 'info':
       default:
         return (

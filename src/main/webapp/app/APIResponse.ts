@@ -1308,14 +1308,7 @@ const APIResponse3 = {
   vus: false,
 };
 
-const responses = [
-  APIResponse1,
-  APIResponse2,
-  APIResponse4,
-  APIResponse3,
-  APIResponse5,
-  APIResponse6,
-];
+const responses = [APIResponse1];
 
 export const exampleAnnotations: AnnotationImplication[] = responses.map(
   response => ({
@@ -1337,7 +1330,7 @@ export const exampleAnnotations: AnnotationImplication[] = responses.map(
     entrezGeneId: String(response['query']['entrezGeneId']),
     tumorType: response['query']['tumorType'],
     // citations:   response['mutationEffect']['citations'],
-    fdaLevel: response['query']['highestFdaLevel'],
+    fdaLevel: response['highestFdaLevel'],
     lastUpdate: response['lastUpdate'],
   })
 );

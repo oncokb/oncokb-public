@@ -30,8 +30,7 @@ import * as QueryString from 'querystring';
 import React, { CSSProperties } from 'react';
 import { LevelWithDescription } from './icons/LevelWithDescription';
 import { HOSTNAME } from './../config/constants';
-import { DefaultTooltip } from 'cbioportal-frontend-commons';
-import { CitationTooltip } from './oncokb-frontend-commons/CitationToolTip';
+import ReadMore from './readMore/ReadMore';
 
 export const Linkout: React.FunctionComponent<{
   link: string;
@@ -522,7 +521,8 @@ export const EvidenceLevelIcon: React.FunctionComponent<{
 };
 
 export function getDefaultColumnDefinition<T>(
-  columnKey: MUTATIONS_TABLE_COLUMN_KEY | TREATMENTS_TABLE_COLUMN_KEY
+  columnKey: MUTATIONS_TABLE_COLUMN_KEY | TREATMENTS_TABLE_COLUMN_KEY,
+  width?: number
 ):
   | {
       id: string;
@@ -543,8 +543,8 @@ export function getDefaultColumnDefinition<T>(
         id: MUTATIONS_TABLE_COLUMN_KEY.GENE,
         Header: <span className="font-medium">Gene</span>,
         accessor: 'gene',
-        width: 150,
-        minWidth: 100,
+        width: width ? width : 100,
+        minWidth: width,
         defaultSortDesc: false,
         sortMethod: defaultSortMethod,
         Cell(props: { original: any }) {
@@ -556,8 +556,8 @@ export function getDefaultColumnDefinition<T>(
         id: MUTATIONS_TABLE_COLUMN_KEY.MUTATION,
         Header: <span className="font-medium">Mutation</span>,
         accessor: 'mutation',
-        width: 150,
-        minWidth: 100,
+        width: width ? width : 100,
+        minWidth: width,
         defaultSortDesc: false,
         sortMethod: defaultSortMethod,
         Cell(props: { original: any }) {
@@ -575,8 +575,8 @@ export function getDefaultColumnDefinition<T>(
         Header: <span className="font-medium">Consequence Type</span>,
         accessor: 'consequenceType',
         style: { whiteSpace: 'normal' },
-        width: 130,
-        minWidth: 100,
+        width: width ? width : 100,
+        minWidth: width,
         defaultSortDesc: false,
         sortMethod: defaultSortMethod,
       };
@@ -586,8 +586,8 @@ export function getDefaultColumnDefinition<T>(
         Header: <span className="font-medium">Biomarker</span>,
         accessor: 'biomarker',
         style: { whiteSpace: 'normal' },
-        width: 160,
-        minWidth: 100,
+        width: width ? width : 100,
+        minWidth: width,
         defaultSortDesc: false,
         sortMethod: defaultSortMethod,
       };
@@ -597,8 +597,8 @@ export function getDefaultColumnDefinition<T>(
         Header: <span className="font-medium">Drug</span>,
         accessor: 'drug',
         style: { whiteSpace: 'normal' },
-        width: 170,
-        minWidth: 100,
+        width: width ? width : 100,
+        minWidth: width,
         defaultSortDesc: false,
         sortMethod: defaultSortMethod,
       };
@@ -607,17 +607,17 @@ export function getDefaultColumnDefinition<T>(
         id: MUTATIONS_TABLE_COLUMN_KEY.ONCOGENICITY,
         Header: <span className="font-medium">Oncogenicity</span>,
         accessor: 'oncogenicity',
-        width: 130,
-        minWidth: 80,
+        width: width ? width : 100,
+        minWidth: width,
         defaultSortDesc: true,
         sortable: true,
         sortMethod: oncogenicitySortMethod,
         Cell(props: any) {
           return (
-            <div className={'d-flex justify-content-center'}>
+            <div className={'d-flex justify-content-center my-1'}>
               <OncoKBLevelIcon
                 level={props.original.oncogenicity}
-                withDescription={true}
+                withDescription={false}
               />
             </div>
           );
@@ -629,8 +629,8 @@ export function getDefaultColumnDefinition<T>(
         Header: <span className="font-medium">Drug</span>,
         accessor: 'drug',
         style: { whiteSpace: 'normal' },
-        width: 170,
-        minWidth: 100,
+        width: width ? width : 100,
+        minWidth: width,
         defaultSortDesc: false,
         sortMethod: defaultSortMethod,
       };
@@ -655,8 +655,8 @@ export function getDefaultColumnDefinition<T>(
           </div>
         ),
         accessor: 'level',
-        width: 170,
-        minWidth: 100,
+        width: width ? width : 100,
+        minWidth: width,
         defaultSortDesc: true,
         sortMethod(a: string, b: string) {
           return (
@@ -703,8 +703,8 @@ export function getDefaultColumnDefinition<T>(
           </div>
         ),
         accessor: 'level',
-        width: 170,
-        minWidth: 100,
+        width: width ? width : 100,
+        minWidth: width,
         defaultSortDesc: true,
         sortMethod(a: string, b: string) {
           return (
@@ -716,10 +716,15 @@ export function getDefaultColumnDefinition<T>(
           return (
             <div className={'d-flex justify-content-center'}>
               {props.original.level[6] === 'F' ? (
-                <FdaLevelIcon
-                  level={props.original.level}
-                  withDescription={false}
-                />
+                <span
+                  className="fa-stack"
+                  style={{ fontSize: 9, lineHeight: '18px', margin: '0 3px' }}
+                >
+                  <span className="fa fa-circle-thin fa-stack-2x"></span>
+                  <strong className="fa-stack-1x" style={{ fontSize: '1.2em' }}>
+                    {props.original.level.replace('LEVEL_Fda', '')}
+                  </strong>
+                </span>
               ) : (
                 <EvidenceLevelIcon
                   level={props.original.level}
@@ -735,8 +740,8 @@ export function getDefaultColumnDefinition<T>(
         id: MUTATIONS_TABLE_COLUMN_KEY.LOCATION,
         Header: <span className="font-medium">Location</span>,
         accessor: 'location',
-        width: 140,
-        minWidth: 100,
+        width: width ? width : 100,
+        minWidth: width,
         defaultSortDesc: false,
         sortable: false,
       };
@@ -745,8 +750,8 @@ export function getDefaultColumnDefinition<T>(
         id: MUTATIONS_TABLE_COLUMN_KEY.BIOLOGICAL_EFFECT,
         Header: <span className="font-medium">Biological effect</span>,
         accessor: 'biologicalEffect',
-        width: 170,
-        minWidth: 100,
+        width: width ? width : 100,
+        minWidth: width,
         defaultSortDesc: false,
         sortMethod: defaultSortMethod,
       };
@@ -755,10 +760,17 @@ export function getDefaultColumnDefinition<T>(
         id: TREATMENTS_TABLE_COLUMN_KEY.ANNOTATION,
         Header: <span className="font-medium">Annotation</span>,
         accessor: 'annotation',
-        width: 800,
-        minWidth: 100,
+        width: 400,
+        minWidth: width,
         defaultSortDesc: false,
         sortable: false,
+        Cell(props: any) {
+          return (
+            <div className={'d-flex justify-content-center my-1'}>
+              <ReadMore text={props.original.treatmentDescription} />
+            </div>
+          );
+        },
       };
     case MUTATIONS_TABLE_COLUMN_KEY.MUTATION_DESCRIPTION:
       return {
@@ -766,10 +778,21 @@ export function getDefaultColumnDefinition<T>(
         Header: <span className="font-medium">Description</span>,
         accessor: 'mutationDescription',
         style: { whiteSpace: 'normal' },
-        width: 800,
-        minWidth: 100,
+        width: width ? width : 100,
+        minWidth: width,
         defaultSortDesc: false,
         sortable: false,
+        Cell(props: any) {
+          return (
+            <div className={'d-flex justify-content-center my-1'}>
+              <InfoIcon
+                type="description"
+                className="fa-info-circle"
+                overlay={<span>{props.original.mutationDescription}</span>}
+              />
+            </div>
+          );
+        },
       };
     case TREATMENTS_TABLE_COLUMN_KEY.TREATMENT_DESCRIPTION:
       return {
@@ -777,10 +800,21 @@ export function getDefaultColumnDefinition<T>(
         Header: <span className="font-medium">Treatment Description</span>,
         accessor: 'treatmentDescription',
         style: { whiteSpace: 'normal' },
-        width: 650,
-        minWidth: 100,
+        width: width ? width : 100,
+        minWidth: width,
         defaultSortDesc: false,
         sortable: false,
+        Cell(props: any) {
+          return (
+            <div className={'d-flex justify-content-center my-1'}>
+              <InfoIcon
+                type="description"
+                className="fa-info-circle"
+                overlay={<span>{props.original.treatmentDescription}</span>}
+              />
+            </div>
+          );
+        },
       };
     case MUTATIONS_TABLE_COLUMN_KEY.ENTREZ_GENE_ID:
       return {
@@ -788,8 +822,8 @@ export function getDefaultColumnDefinition<T>(
         Header: <span className="font-medium">Entrez Gene Id</span>,
         accessor: 'entrezGeneId',
         style: { whiteSpace: 'normal' },
-        width: 170,
-        minWidth: 100,
+        width: width ? width : 100,
+        minWidth: width,
         defaultSortDesc: false,
         sortMethod: defaultSortMethod,
       };
@@ -799,8 +833,8 @@ export function getDefaultColumnDefinition<T>(
         Header: <span className="font-medium">Tumor Type</span>,
         accessor: 'tumorType',
         style: { whiteSpace: 'normal' },
-        width: 170,
-        minWidth: 100,
+        width: width ? width : 100,
+        minWidth: width,
         defaultSortDesc: false,
         sortMethod: defaultSortMethod,
       };
@@ -810,8 +844,8 @@ export function getDefaultColumnDefinition<T>(
         Header: <span className="font-medium">FDA Level</span>,
         accessor: 'fdaLevel',
         style: { whiteSpace: 'normal' },
-        width: 170,
-        minWidth: 100,
+        width: width ? width : 100,
+        minWidth: width,
         defaultSortDesc: false,
         sortMethod(a: string, b: string) {
           return (
@@ -822,17 +856,15 @@ export function getDefaultColumnDefinition<T>(
         Cell(props: any) {
           return (
             <div className={'d-flex justify-content-center'}>
-              {props.original.level[6] === 'F' ? (
-                <FdaLevelIcon
-                  level={props.original.level}
-                  withDescription={false}
-                />
-              ) : (
-                <EvidenceLevelIcon
-                  level={props.original.level}
-                  withDescription={false}
-                />
-              )}
+              <span
+                className="fa-stack"
+                style={{ fontSize: 9, lineHeight: '18px', margin: '0 3px' }}
+              >
+                <span className="fa fa-circle-thin fa-stack-2x"></span>
+                <strong className="fa-stack-1x" style={{ fontSize: '1.2em' }}>
+                  {props.original.fdaLevel.replace('LEVEL_Fda', '')}
+                </strong>
+              </span>
             </div>
           );
         },
@@ -843,8 +875,8 @@ export function getDefaultColumnDefinition<T>(
         Header: <span className="font-medium">FDA Level</span>,
         accessor: 'treatmentFdaLevel',
         style: { whiteSpace: 'normal' },
-        width: 170,
-        minWidth: 100,
+        width: width ? width : 100,
+        minWidth: width,
         defaultSortDesc: false,
         sortMethod(a: string, b: string) {
           return (
@@ -855,17 +887,15 @@ export function getDefaultColumnDefinition<T>(
         Cell(props: any) {
           return (
             <div className={'d-flex justify-content-center'}>
-              {props.original.level[6] === 'F' ? (
-                <FdaLevelIcon
-                  level={props.original.level}
-                  withDescription={false}
-                />
-              ) : (
-                <EvidenceLevelIcon
-                  level={props.original.level}
-                  withDescription={false}
-                />
-              )}
+              <span
+                className="fa-stack"
+                style={{ fontSize: 9, lineHeight: '18px', margin: '0 3px' }}
+              >
+                <span className="fa fa-circle-thin fa-stack-2x"></span>
+                <strong className="fa-stack-1x" style={{ fontSize: '1.2em' }}>
+                  {props.original.treatmentFdaLevel.replace('LEVEL_Fda', '')}
+                </strong>
+              </span>
             </div>
           );
         },
@@ -876,42 +906,11 @@ export function getDefaultColumnDefinition<T>(
         Header: <span className="font-medium">Last Updated</span>,
         accessor: 'lastUpdate',
         style: { whiteSpace: 'normal' },
-        width: 170,
-        minWidth: 100,
+        width: width ? width : 100,
+        minWidth: width,
         defaultSortDesc: false,
         sortMethod: defaultSortMethod,
       };
-    // case MUTATIONS_TABLE_COLUMN_KEY.CITATIONS:
-    //   return {
-    //     id: MUTATIONS_TABLE_COLUMN_KEY.CITATIONS,
-    //     Header: <span>Citations</span>,
-    //     accessor: 'citations',
-    //     minWidth: 90,
-    //     width: 90,
-    //     defaultSortDesc: false,
-    //     sortMethod: citationsSortMethod,
-    //     Cell(props: any) {
-    //       const numOfReferences =
-    //         props.original.drugAbstracts.length +
-    //         props.original.drugPmids.length;
-    //       return (
-    //         <div>
-    //           <DefaultTooltip
-    //             placement="left"
-    //             trigger={['hover', 'focus']}
-    //             overlay={() => (
-    //               <CitationTooltip
-    //                 pmids={props.original.drugPmids}
-    //                 abstracts={props.original.drugAbstracts}
-    //               />
-    //             )}
-    //           >
-    //             <span>{numOfReferences}</span>
-    //           </DefaultTooltip>
-    //         </div>
-    //       );
-    //     },
-    //   };
     default:
       return undefined;
   }

@@ -4,8 +4,12 @@ import { observer } from 'mobx-react';
 import { observable, computed } from 'mobx';
 import classNames from 'classnames';
 import { COLOR_BLUE } from 'app/config/theme';
-import { annotationColumns } from './../../config/constants';
-import Select from 'react-select';
+import {
+  HandleColumnsChange,
+  MUTATIONS_TABLE_COLUMN_KEY,
+  TREATMENTS_TABLE_COLUMN_KEY,
+} from './../../config/constants';
+import Select, { StylesConfig } from 'react-select';
 
 export type SearchColumn<T> = Column<T> & {
   onFilter?: (data: T, keyword: string) => boolean;
@@ -23,7 +27,64 @@ interface ITableWithSearchBox<T> extends Partial<TableProps<T>> {
   filters?: React.FunctionComponent;
   className?: string;
   tableName: string;
+  selectedColumnsState: string[];
+  selectedColumns: {
+    key: MUTATIONS_TABLE_COLUMN_KEY | TREATMENTS_TABLE_COLUMN_KEY;
+    label: string;
+    prop: string;
+  }[];
+  handleColumnsChange: HandleColumnsChange;
 }
+
+const colourStyles: StylesConfig<any, true> = {
+  control: (styles: any) => ({ ...styles, backgroundColor: 'white' }),
+  option(styles, { isDisabled, isFocused, isSelected }) {
+    return {
+      ...styles,
+      backgroundColor: isDisabled
+        ? undefined
+        : isSelected
+        ? COLOR_BLUE
+        : isFocused
+        ? 'rgba(0, 123, 255, 0.1)'
+        : undefined,
+      color: isDisabled ? '#ccc' : isSelected ? 'white' : COLOR_BLUE,
+      cursor: isDisabled ? 'not-allowed' : 'default',
+
+      ':active': {
+        ...styles[':active'],
+        backgroundColor: !isDisabled
+          ? isSelected
+            ? COLOR_BLUE
+            : 'rgba(0, 123, 255, 0.1)'
+          : 'rgba(0, 123, 255, 0.1)',
+      },
+    };
+  },
+  multiValue(styles: any) {
+    return {
+      ...styles,
+      marginTop: '3px',
+      paddingLeft: '3px',
+      paddingRight: '3px',
+      color: COLOR_BLUE,
+      backgroundColor: 'rgba(0, 123, 255, 0.1)',
+    };
+  },
+  multiValueLabel: (styles: any) => ({
+    ...styles,
+    color: COLOR_BLUE,
+    backgroundColor: undefined,
+  }),
+  multiValueRemove: (styles: any) => ({
+    ...styles,
+    color: COLOR_BLUE,
+    ':hover': {
+      backgroundColor: COLOR_BLUE,
+      color: 'white',
+    },
+  }),
+};
 
 @observer
 export default class OncoKBTable<T> extends React.Component<
@@ -56,53 +117,52 @@ export default class OncoKBTable<T> extends React.Component<
 
   render() {
     const NoDataConst = (props: string) => (
-      <div className="text-center justify-center">No Results</div>
+      <div className="text-center justify-center mb-3">No Results</div>
     );
 
     return (
       <div>
-        <div className="row">
-          <div className="mt-3">
-            <Select
-              isMulti
-              options={annotationColumns.map(col => ({
-                value: col.key,
-                label: col.label,
-              }))}
-              value={this.state.selectedAnnotationColumns.map(col => ({
-                value: col,
-                label: annotationColumns.find(c => c.key === col)?.label,
-              }))}
-              onChange={this.props.columnsChange}
-            />
-          </div>
-          {/* <div className="col-auto">
-      {this.props.filters === undefined ? (
-        ""
-      ) : (
-        <this.props.filters />
-      )}
-    </div> */}
-          <div className="col-sm">
-            {this.props.disableSearch ? (
-              <></>
-            ) : (
-              <div className="d-flex space-between">
-                <h4 style={{ color: COLOR_BLUE }}>{this.props.tableName}</h4>
-                <div className="ml-auto">
-                  <input
-                    onChange={(event: any) => {
-                      this.searchKeyword = event.target.value.toLowerCase();
-                    }}
-                    className="form-control input-sm"
-                    type="text"
-                    placeholder="Search ..."
-                  />
-                </div>
+        {this.props.disableSearch ? (
+          <></>
+        ) : (
+          <>
+            <div className="d-flex space-between">
+              <h4 className="mt-1" style={{ color: COLOR_BLUE }}>
+                {this.props.tableName}
+              </h4>
+              <div className="ml-auto">
+                <input
+                  onChange={(event: any) => {
+                    this.searchKeyword = event.target.value.toLowerCase();
+                  }}
+                  className="form-control input-sm"
+                  type="text"
+                  placeholder="Search ..."
+                />
               </div>
-            )}
-          </div>
-        </div>
+            </div>
+            <div className="my-3 mb-4">
+              <Select
+                isMulti
+                options={this.props.selectedColumns.map(col => ({
+                  value: col.key,
+                  label: col.label,
+                }))}
+                value={this.props.selectedColumnsState.map(col => {
+                  const column = this.props.selectedColumns.find(
+                    c => c.key === col
+                  );
+                  return {
+                    value: column?.key,
+                    label: column?.label,
+                  };
+                })}
+                onChange={this.props.handleColumnsChange}
+                styles={colourStyles}
+              />
+            </div>
+          </>
+        )}
 
         <div className="mt-2">
           <ReactTable
