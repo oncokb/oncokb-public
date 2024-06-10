@@ -38,7 +38,7 @@ interface ITableWithSearchBox<T> extends Partial<TableProps<T>> {
 
 const colourStyles: StylesConfig<any, true> = {
   control: (styles: any) => ({ ...styles, backgroundColor: 'white' }),
-  option(styles, { isDisabled, isFocused, isSelected }) {
+  option(styles: any, { isDisabled, isFocused, isSelected }) {
     return {
       ...styles,
       backgroundColor: isDisabled

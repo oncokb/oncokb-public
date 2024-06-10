@@ -522,7 +522,7 @@ export const EvidenceLevelIcon: React.FunctionComponent<{
 
 export function getDefaultColumnDefinition<T>(
   columnKey: MUTATIONS_TABLE_COLUMN_KEY | TREATMENTS_TABLE_COLUMN_KEY,
-  width?: number
+  width: number
 ):
   | {
       id: string;

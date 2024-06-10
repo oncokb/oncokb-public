@@ -1308,7 +1308,14 @@ const APIResponse3 = {
   vus: false,
 };
 
-const responses = [APIResponse1];
+const responses = [
+  APIResponse1,
+  APIResponse2,
+  APIResponse4,
+  APIResponse3,
+  APIResponse5,
+  APIResponse6,
+];
 
 export const exampleAnnotations: AnnotationImplication[] = responses.map(
   response => ({
