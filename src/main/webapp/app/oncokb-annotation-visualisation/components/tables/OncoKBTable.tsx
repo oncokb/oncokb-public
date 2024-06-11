@@ -36,9 +36,16 @@ interface ITableWithSearchBox<T> extends Partial<TableProps<T>> {
   handleColumnsChange: HandleColumnsChange;
 }
 
-const colourStyles: StylesConfig<any, true> = {
+const colourStyles: StylesConfig = {
   control: (styles: any) => ({ ...styles, backgroundColor: 'white' }),
-  option(styles: any, { isDisabled, isFocused, isSelected }) {
+  option(
+    styles: any,
+    {
+      isDisabled,
+      isFocused,
+      isSelected,
+    }: { isDisabled: boolean; isFocused: boolean; isSelected: boolean }
+  ) {
     return {
       ...styles,
       backgroundColor: isDisabled

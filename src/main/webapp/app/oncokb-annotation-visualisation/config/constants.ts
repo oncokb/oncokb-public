@@ -1,4 +1,6 @@
 import { default as URL } from 'url';
+import { ActionMeta } from 'react-select';
+import { ValueType } from 'react-select';
 
 export const ONCOGENIC_MUTATIONS = 'Oncogenic Mutations';
 export const FUSIONS = 'Fusions';
@@ -126,9 +128,19 @@ export enum MUTATION_EFFECT {
   UNKNOWN = 'Unknown',
 }
 
+// export type HandleColumnsChange = (
+//   selectedOptions: { value: string; label: string }[]
+// ) => void;
+
 export type HandleColumnsChange = (
-  selectedOptions: { value: string; label: string }[]
+  value: ValueType<ColumnOption>,
+  actionMeta: ActionMeta<ColumnOption>
 ) => void;
+
+interface ColumnOption {
+  value: TREATMENTS_TABLE_COLUMN_KEY | MUTATIONS_TABLE_COLUMN_KEY | undefined;
+  label: string | undefined;
+}
 
 export const treatmentColumns = [
   {

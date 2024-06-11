@@ -1341,19 +1341,26 @@ export const exampleAnnotations: AnnotationImplication[] = responses.map(
     lastUpdate: response['lastUpdate'],
   })
 );
-export const exampleTreatments: TreatmentImplication[] = responses.flatMap(
-  (response: any) =>
-    response.treatments.flatMap((treatment: any) =>
-      treatment.drugs.map((drug: any) => ({
-        biomarker: `${response.query.hugoSymbol} ${response.query.alteration}`,
-        drug: drug.drugName,
-        level: treatment.level,
-        annotation: `${response.geneSummary} ${response.variantSummary} ${response.tumorTypeSummary}`,
-        alterationType: response.query.alterationType,
-        treatmentFdaLevel: treatment.fdaLevel,
-        treatmentDescription: treatment.description,
-      }))
-    )
+export const exampleTreatments: TreatmentImplication[] = responses.reduce(
+  (acc: TreatmentImplication[], response: any) => {
+    const treatments = response.treatments.reduce(
+      (tAcc: TreatmentImplication[], treatment: any) => {
+        const drugs = treatment.drugs.map((drug: any) => ({
+          biomarker: `${response.query.hugoSymbol} ${response.query.alteration}`,
+          drug: drug.drugName,
+          level: treatment.level,
+          annotation: `${response.geneSummary} ${response.variantSummary} ${response.tumorTypeSummary}`,
+          alterationType: response.query.alterationType,
+          treatmentFdaLevel: treatment.fdaLevel,
+          treatmentDescription: treatment.description,
+        }));
+        return tAcc.concat(drugs);
+      },
+      []
+    );
+    return acc.concat(treatments);
+  },
+  []
 );
 
 export const notifications: NotificationImplication[] = [
