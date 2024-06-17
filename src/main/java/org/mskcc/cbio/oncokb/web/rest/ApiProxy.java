@@ -18,6 +18,7 @@ import org.springframework.http.converter.StringHttpMessageConverter;
 import org.springframework.scheduling.annotation.Async;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.client.HttpClientErrorException;
 import org.springframework.web.client.RestTemplate;
@@ -63,7 +64,7 @@ public class ApiProxy {
 
     private String IP_HEADER = "X-FORWARDED-FOR";
 
-    @RequestMapping("/**")
+    @RequestMapping(path = "/**", method = {RequestMethod.GET, RequestMethod.POST, RequestMethod.PUT, RequestMethod.PATCH, RequestMethod.DELETE, RequestMethod.HEAD})
     public ResponseEntity<String> proxy(@RequestBody(required = false) String body, HttpMethod method, HttpServletRequest request)
         throws URISyntaxException {
         URI uri = apiProxyService.prepareURI(request);
@@ -83,6 +84,10 @@ public class ApiProxy {
         restTemplate.getMessageConverters().add(0, new StringHttpMessageConverter(StandardCharsets.UTF_8));
 
         try {
+            if (method.equals(HttpMethod.HEAD)) {
+                ResponseEntity<String> response = restTemplate.exchange(uri, HttpMethod.GET, new HttpEntity<>(body, httpHeaders), String.class);
+                return new ResponseEntity<>(response.getHeaders(), response.getStatusCode());
+            }
             return restTemplate.exchange(uri, method, new HttpEntity<>(body, httpHeaders), String.class);
         } catch (HttpClientErrorException httpClientErrorException) {
             if (httpClientErrorException.getStatusCode() != null && httpClientErrorException.getStatusCode().equals(HttpStatus.BAD_REQUEST)) {
