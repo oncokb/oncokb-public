@@ -1,10 +1,10 @@
 import { useState } from 'react';
-import Alert from 'react-bootstrap/Alert';
+import Alert from './../alert/Alert';
 import React from 'react';
 import { COLOR_ERROR } from './../../config/theme';
 interface NotificationImplication {
   message: string;
-  type: string;
+  type: 'danger' | 'primary' | 'warning' | 'success';
 }
 
 enum NotificationType {
@@ -26,7 +26,7 @@ export default function Notification({ notifications }: NotificationProps) {
   };
 
   return (
-    <div style={{ position: 'absolute', top: '80px', right: '10px' }}>
+    <div style={{ position: 'absolute', top: '40px', right: '10px' }}>
       <div
         style={{
           display: 'flex',

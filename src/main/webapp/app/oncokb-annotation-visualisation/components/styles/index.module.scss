@@ -1,8 +1,8 @@
-@import '~bootstrap/scss/bootstrap';
 @import 'variables';
 
+// Custom styles
 .btnLinkText {
-  @extend .btn-link;
+  @extend .btn-link !optional;
 
   &:hover {
     cursor: pointer;
@@ -10,7 +10,7 @@
 }
 
 .linkOutText {
-  color: $primary;
+  color: #0968c3;
   cursor: pointer;
 
   &:hover {
@@ -19,11 +19,11 @@
 }
 
 .biggerText {
-  font-size: $bigger-default-font-size;
+  font-size: 1.2rem;
 }
 
 :global(.btn).actionButton {
-  border: 1px solid $light-grey;
+  border: 1px solid #d3d3d3;
   background-color: white;
   border-radius: 0.5rem;
   width: 100%;
@@ -31,14 +31,13 @@
 }
 
 // Overwrite react-responsive-tabs
-// unassigned the z-index. The z-index makes the tab header higher than the menu in the alteration page
 :global(.RRT__tab) {
   z-index: 0 !important;
 }
 
 .nav-link {
   color: white;
-  background-color: $light-grey;
+  background-color: #d3d3d3;
 }
 
 .notification-container {

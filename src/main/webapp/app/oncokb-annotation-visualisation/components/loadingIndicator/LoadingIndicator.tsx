@@ -2,7 +2,7 @@ import * as React from 'react';
 import { If, Then } from 'react-if';
 import Spinner from 'react-spinkit';
 import classnames from 'classnames';
-import styles from './styles.module.scss';
+import styles from './../loadingIndicator/styles.module.scss';
 import { COLOR_BLUE } from '../../config/theme';
 
 export enum LoaderSize {

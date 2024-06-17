@@ -37,7 +37,7 @@ import OncologyTherapiesPage from 'app/pages/oncologyTherapiesPage/oncologyThera
 import { NewsPageNavTab } from 'app/pages/newsPage/NewsPageNavTab';
 import CompanionDiagnosticDevicePage from 'app/pages/companionDiagnosticDevicesPage/companionDiagnosticDevicePage';
 import OncokbRoute from 'app/shared/route/OncokbRoute';
-import { AnnotationVisualisation } from 'app/oncokb-annotation-visualisation/AnnotationVisualisation';
+import { AnnotationVisualisation } from 'oncokb-annotation-visualisation/AnnotationVisualisation';
 import {
   exampleAnnotations,
   exampleTreatments,

@@ -39,4 +39,9 @@ $container-max-widths: (
   xl: 1500px,
 ) !default;
 
+// $font-size-base: 1rem; // or your base font size in rem
+// $nav-link-padding-y: 0.5rem; // converted value from px to rem
+
+// $nav-link-height: ($font-size-base * $line-height-base) + ($nav-link-padding-y * 2);
+
 $bigger-default-font-size: 1.2rem;

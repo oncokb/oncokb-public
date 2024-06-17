@@ -4,7 +4,7 @@ import * as React from 'react';
 
 import { ReferenceList } from './ReferenceList';
 
-import mainStyles from './main.module.scss';
+import mainStyles from './../oncokb-frontend-commons/main.module.scss';
 
 /* eslint-disable react/jsx-no-target-blank */
 export default class RefComponent extends React.Component<{

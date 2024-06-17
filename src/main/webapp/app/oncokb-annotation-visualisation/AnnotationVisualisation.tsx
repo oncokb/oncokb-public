@@ -12,8 +12,8 @@ import {
   TreatmentImplication,
   NotificationImplication,
 } from './config/constants';
-import Tab from 'react-bootstrap/Tab';
-import Tabs from 'react-bootstrap/Tabs';
+import Tab from './components/tabs/Tab';
+import Tabs from './components/tabs/Tabs';
 import Notification from './components/notifications/notifications';
 import './components/styles/index.module.scss';
 import TabNumbers from './components/icons/TabNumbers';
@@ -218,7 +218,7 @@ export class AnnotationVisualisation extends React.Component<
         <Tabs
           defaultActiveKey="mutations"
           id="uncontrolled-tab-example"
-          className="my-3 text-xl"
+          className="my-3 text-2xl"
         >
           <Tab
             eventKey="all"
@@ -228,7 +228,7 @@ export class AnnotationVisualisation extends React.Component<
           >
             <div>
               <Notification notifications={this.props.notifications} />
-              <div className="mt-4">
+              <div className="mt-1">
                 <GenePageTable
                   name={'All Alterations in the sample'}
                   data={this.props.annotations}
@@ -267,7 +267,7 @@ export class AnnotationVisualisation extends React.Component<
           >
             <div>
               <Notification notifications={this.mutationsNotifications} />
-              <div className="mt-4">
+              <div className="mt-1">
                 <GenePageTable
                   name={'Mutations in the sample'}
                   data={this.mutationsAnnotations}
@@ -306,7 +306,7 @@ export class AnnotationVisualisation extends React.Component<
           >
             <div>
               <Notification notifications={this.copyNumberNotifications} />
-              <div className="mt-4" style={{ zIndex: 1 }}>
+              <div className="mt-1">
                 <GenePageTable
                   name={'Copy Number Alterations in the sample'}
                   data={this.copyNumberAnnotations}
@@ -345,7 +345,7 @@ export class AnnotationVisualisation extends React.Component<
           >
             <div>
               <Notification notifications={this.structuralNotifications} />
-              <div className="mt-4">
+              <div className="mt-1">
                 <GenePageTable
                   name={'Structural Variants in the sample'}
                   data={this.structuralAnnotations}

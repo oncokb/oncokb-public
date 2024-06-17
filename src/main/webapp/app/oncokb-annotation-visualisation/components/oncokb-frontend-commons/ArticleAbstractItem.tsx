@@ -1,6 +1,6 @@
 import * as React from 'react';
 import { ArticleAbstract } from '../../config/oncokbAPI';
-import styles from './citationListGroupItem.module.scss';
+import styles from './../oncokb-frontend-commons/citationListGroupItem.module.scss';
 
 export default class ArticleAbstractItem extends React.Component<
   ArticleAbstract

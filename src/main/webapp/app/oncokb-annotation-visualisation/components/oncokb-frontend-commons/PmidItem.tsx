@@ -1,6 +1,6 @@
 import { getNCBIlink } from 'cbioportal-frontend-commons';
 import * as React from 'react';
-import styles from './citationListGroupItem.module.scss';
+import styles from './../oncokb-frontend-commons/citationListGroupItem.module.scss';
 
 type PmidItemProps = {
   title: string;

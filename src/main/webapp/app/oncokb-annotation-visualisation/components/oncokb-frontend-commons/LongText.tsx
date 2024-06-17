@@ -1,7 +1,7 @@
 import * as React from 'react';
 import { useState } from 'react';
 import SummaryWithRefs from './SummaryWithRefs';
-import styles from '../../index.module.scss';
+import styles from './../styles/index.module.scss';
 import classnames from 'classnames';
 import { shortenTextByCharacters } from '../Utils';
 import { LONG_TEXT_CUTOFF } from '../../config/constants';

@@ -5,7 +5,7 @@ import _ from 'lodash';
 import ArticleAbstractItem from './ArticleAbstractItem';
 import PmidItem from './PmidItem';
 
-import styles from './listGroupItem.module.scss';
+import styles from './../oncokb-frontend-commons/listGroupItem.module.scss';
 import request from 'superagent';
 import LoadingIndicator from '../loadingIndicator/LoadingIndicator';
 
