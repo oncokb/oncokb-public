@@ -234,10 +234,7 @@ class Header extends React.Component<IHeaderProps> {
                     <AccountMenu
                       isAuthenticated={this.props.isUserAuthenticated}
                       isAdmin={this.props.isAdmin}
-                      hideAccountText={
-                        this.props.windowStore.isLargeScreen &&
-                        !this.props.windowStore.isXLscreen
-                      }
+                      showAccountText={this.props.windowStore.isXLscreen}
                     />
                   )}
                   <Nav.Item style={{ paddingRight: 0 }}>
