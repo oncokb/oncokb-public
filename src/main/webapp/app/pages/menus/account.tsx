@@ -55,13 +55,14 @@ const AccountMenuItems: React.FunctionComponent<{}> = () => (
 export default class AccountMenu extends React.Component<{
   isAuthenticated: boolean;
   isAdmin: boolean;
+  showAccountText?: boolean;
 }> {
   render() {
     return (
       <Dropdown as={NavItem}>
         <Dropdown.Toggle id={'account-menu'} as={NavLink}>
           <i className={'fa fa-user-o mr-1'} />
-          {PAGE_TITLE.ACCOUNT}
+          {this.props.showAccountText ? PAGE_TITLE.ACCOUNT : undefined}
         </Dropdown.Toggle>
         <Dropdown.Menu alignRight={true}>
           {this.props.isAuthenticated ? (
