@@ -37,12 +37,16 @@ export const sortTherapeuticImplications = (
   implications: TherapeuticImplication[],
   desc = true
 ) => {
-  return implications.sort(
-    (a, b) =>
+  return implications.sort((a, b) => {
+    let compareScore =
       (LEVEL_PRIORITY.indexOf(a.level as LEVELS) -
         LEVEL_PRIORITY.indexOf(b.level as LEVELS)) *
-      (desc ? -1 : 1)
-  );
+      (desc ? -1 : 1);
+    if (compareScore === 0) {
+      compareScore = a.drugs.localeCompare(b.drugs);
+    }
+    return compareScore;
+  });
 };
 
 export enum SummaryKey {

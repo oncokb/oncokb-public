@@ -38,6 +38,7 @@ import {
   getCancerTypeNameFromOncoTreeType,
   getCancerTypesName,
   getCategoricalAlterationDescription,
+  getTreatmentNameByPriority,
   getTreatmentNameFromEvidence,
   isCategoricalAlteration,
   isPositionalAlteration,
@@ -123,7 +124,7 @@ export default class AnnotationPage extends React.Component<
   }
 
   getImplications(evidences: Evidence[]) {
-    return evidences.map(evidence => {
+    return evidences.reduce((acc, evidence) => {
       const level = levelOfEvidence2Level(evidence.levelOfEvidence);
       const fdaLevel = levelOfEvidence2Level(evidence.fdaLevel);
       const alterations = _.chain(evidence.alterations)
@@ -133,65 +134,134 @@ export default class AnnotationPage extends React.Component<
           )
         )
         .value();
+      const alterationsName = alterations
+        .map(alteration => alteration.name)
+        .join(', ');
       const cancerTypes = evidence.cancerTypes.map(cancerType =>
         getCancerTypeNameFromOncoTreeType(cancerType)
       );
       const excludedCancerTypes = evidence.excludedCancerTypes.map(ct =>
         getCancerTypeNameFromOncoTreeType(ct)
       );
-      return {
-        level,
-        fdaLevel,
-        drugDescription: evidence.description,
-        alterations: alterations.map(alteration => alteration.name).join(', '),
-        alterationsView: (
-          <WithSeparator separator={', '}>
-            {alterations.map(alteration =>
-              alteration.consequence ? (
-                <AlterationPageLink
-                  key={alteration.name}
-                  hugoSymbol={this.props.store.hugoSymbol}
-                  alteration={{
-                    alteration: alteration.alteration,
-                    name: alteration.name,
-                  }}
-                  alterationRefGenomes={
-                    alteration.referenceGenomes as REFERENCE_GENOME[]
-                  }
-                />
-              ) : (
-                <span>{alteration.name}</span>
-              )
-            )}
-          </WithSeparator>
-        ),
-        drugs: getTreatmentNameFromEvidence(evidence),
-        cancerTypes: getCancerTypesName(cancerTypes, excludedCancerTypes),
-        cancerTypesView: (
-          <>
+      const cancerTypesName = getCancerTypesName(
+        cancerTypes,
+        excludedCancerTypes
+      );
+      if (evidence.treatments.length > 0) {
+        evidence.treatments.forEach(treatment => {
+          acc.push({
+            level,
+            fdaLevel,
+            drugDescription: evidence.description,
+            alterations: alterationsName,
+            alterationsView: (
+              <WithSeparator separator={', '}>
+                {alterations.map(alteration =>
+                  alteration.consequence ? (
+                    <AlterationPageLink
+                      key={alteration.name}
+                      hugoSymbol={this.props.store.hugoSymbol}
+                      alteration={{
+                        alteration: alteration.alteration,
+                        name: alteration.name,
+                      }}
+                      alterationRefGenomes={
+                        alteration.referenceGenomes as REFERENCE_GENOME[]
+                      }
+                    />
+                  ) : (
+                    <span>{alteration.name}</span>
+                  )
+                )}
+              </WithSeparator>
+            ),
+            drugs: getTreatmentNameByPriority(treatment),
+            cancerTypes: cancerTypesName,
+            cancerTypesView: (
+              <>
+                <WithSeparator separator={', '}>
+                  {cancerTypes.map(cancerType => (
+                    <AlterationPageLink
+                      key={`${this.props.store.alterationName}-${cancerType}`}
+                      hugoSymbol={this.props.store.hugoSymbol}
+                      alteration={this.props.store.alterationName}
+                      alterationRefGenomes={[
+                        this.props.store.referenceGenomeQuery,
+                      ]}
+                      cancerType={cancerType}
+                    >
+                      {cancerType}
+                    </AlterationPageLink>
+                  ))}
+                </WithSeparator>
+                {excludedCancerTypes.length > 0 ? (
+                  <span> (excluding {excludedCancerTypes.join(', ')})</span>
+                ) : (
+                  <></>
+                )}
+              </>
+            ),
+            citations: articles2Citations(evidence.articles),
+          } as TherapeuticImplication);
+        });
+      } else {
+        acc.push({
+          level,
+          fdaLevel,
+          drugDescription: evidence.description,
+          alterations: alterationsName,
+          alterationsView: (
             <WithSeparator separator={', '}>
-              {cancerTypes.map(cancerType => (
-                <AlterationPageLink
-                  key={`${this.props.store.alterationName}-${cancerType}`}
-                  hugoSymbol={this.props.store.hugoSymbol}
-                  alteration={this.props.store.alterationName}
-                  alterationRefGenomes={[this.props.store.referenceGenomeQuery]}
-                  cancerType={cancerType}
-                >
-                  {cancerType}
-                </AlterationPageLink>
-              ))}
+              {alterations.map(alteration =>
+                alteration.consequence ? (
+                  <AlterationPageLink
+                    key={alteration.name}
+                    hugoSymbol={this.props.store.hugoSymbol}
+                    alteration={{
+                      alteration: alteration.alteration,
+                      name: alteration.name,
+                    }}
+                    alterationRefGenomes={
+                      alteration.referenceGenomes as REFERENCE_GENOME[]
+                    }
+                  />
+                ) : (
+                  <span>{alteration.name}</span>
+                )
+              )}
             </WithSeparator>
-            {excludedCancerTypes.length > 0 ? (
-              <span> (excluding {excludedCancerTypes.join(', ')})</span>
-            ) : (
-              <></>
-            )}
-          </>
-        ),
-        citations: articles2Citations(evidence.articles),
-      } as TherapeuticImplication;
-    });
+          ),
+          drugs: '',
+          cancerTypes: cancerTypesName,
+          cancerTypesView: (
+            <>
+              <WithSeparator separator={', '}>
+                {cancerTypes.map(cancerType => (
+                  <AlterationPageLink
+                    key={`${this.props.store.alterationName}-${cancerType}`}
+                    hugoSymbol={this.props.store.hugoSymbol}
+                    alteration={this.props.store.alterationName}
+                    alterationRefGenomes={[
+                      this.props.store.referenceGenomeQuery,
+                    ]}
+                    cancerType={cancerType}
+                  >
+                    {cancerType}
+                  </AlterationPageLink>
+                ))}
+              </WithSeparator>
+              {excludedCancerTypes.length > 0 ? (
+                <span> (excluding {excludedCancerTypes.join(', ')})</span>
+              ) : (
+                <></>
+              )}
+            </>
+          ),
+          citations: articles2Citations(evidence.articles),
+        } as TherapeuticImplication);
+      }
+      return acc;
+    }, [] as TherapeuticImplication[]);
   }
 
   getEvidenceByEvidenceTypes(

@@ -15,6 +15,7 @@ import {
   Alteration,
   Evidence,
   TumorType,
+  Treatment as EvidenceTreatment,
 } from 'app/shared/api/generated/OncoKbPrivateAPI';
 import Select from 'react-select';
 import _ from 'lodash';
@@ -25,7 +26,7 @@ import {
   getDefaultColumnDefinition,
   getDrugNameFromTreatment,
   getPageTitle,
-  getTreatmentNameFromEvidence,
+  getTreatmentNameByPriority,
   isFdaLevel,
   levelOfEvidence2Level,
   OncoKBLevelIcon,
@@ -70,10 +71,12 @@ type Treatment = {
   fdaLevel: string;
   hugoSymbol: string;
   alterations: Alteration[];
+  alterationsName: string;
   cancerTypes: TumorType[];
   excludedCancerTypes: TumorType[];
   relevantCancerTypes: TumorType[];
-  treatments: {}[];
+  cancerTypesName: string;
+  treatment: EvidenceTreatment | undefined;
   uniqueDrugs: string[];
   drugs: string;
 };
@@ -258,29 +261,52 @@ export default class ActionableGenesPage extends React.Component<
         alteration.referenceGenomes.includes(this.refGenome)
       );
       if (matchedAlterations.length > 0) {
-        treatments.push({
-          level: levelOfEvidence2Level(item.levelOfEvidence, true),
-          fdaLevel: levelOfEvidence2Level(item.fdaLevel, true),
-          hugoSymbol: item.gene.hugoSymbol || 'NA',
-          alterations: _.sortBy(matchedAlterations, 'name'),
-          cancerTypes: item.cancerTypes,
-          excludedCancerTypes: item.excludedCancerTypes,
-          relevantCancerTypes: item.relevantCancerTypes,
-          treatments: item.treatments,
-          uniqueDrugs: _.uniq(
-            _.reduce(
-              item.treatments,
-              (acc, treatment) => {
-                const result: string[] = treatment.drugs.map(drug =>
-                  getDrugNameFromTreatment(drug)
-                );
-                return acc.concat(result);
-              },
-              [] as string[]
-            )
-          ),
-          drugs: getTreatmentNameFromEvidence(item),
-        });
+        const level = levelOfEvidence2Level(item.levelOfEvidence, true);
+        const fdaLevel = levelOfEvidence2Level(item.fdaLevel, true);
+        const sortedAlts = _.sortBy(matchedAlterations, 'name');
+        const sortedAltsName = sortedAlts
+          .map(alteration => alteration.name)
+          .sort()
+          .join(', ');
+        const cancerTypesName = getCancerTypesNameFromOncoTreeType(
+          item.cancerTypes,
+          item.excludedCancerTypes
+        );
+        if (item.treatments.length > 0) {
+          item.treatments.forEach(treatment => {
+            treatments.push({
+              level,
+              fdaLevel,
+              hugoSymbol: item.gene.hugoSymbol || 'NA',
+              alterations: sortedAlts,
+              alterationsName: sortedAltsName,
+              cancerTypes: item.cancerTypes,
+              excludedCancerTypes: item.excludedCancerTypes,
+              relevantCancerTypes: item.relevantCancerTypes,
+              cancerTypesName,
+              treatment,
+              uniqueDrugs: _.uniq(
+                treatment.drugs.map(drug => getDrugNameFromTreatment(drug))
+              ),
+              drugs: getTreatmentNameByPriority(treatment),
+            });
+          });
+        } else {
+          treatments.push({
+            level,
+            fdaLevel,
+            hugoSymbol: item.gene.hugoSymbol || 'NA',
+            alterations: sortedAlts,
+            alterationsName: sortedAltsName,
+            cancerTypes: item.cancerTypes,
+            excludedCancerTypes: item.excludedCancerTypes,
+            relevantCancerTypes: item.relevantCancerTypes,
+            cancerTypesName,
+            treatment: undefined,
+            uniqueDrugs: [],
+            drugs: '',
+          });
+        }
       }
     });
     return treatments;
@@ -343,7 +369,11 @@ export default class ActionableGenesPage extends React.Component<
     _.forEach(this.evidencesByLevel.result, (content, levelOfEvidence) => {
       treatments = treatments.concat(this.getTreatments(content));
     });
-    return treatments;
+    return _.uniqBy(
+      treatments,
+      treatment =>
+        `${treatment.level}-${treatment.hugoSymbol}-${treatment.alterationsName}-${treatment.cancerTypesName}-${treatment.drugs}`
+    );
   }
 
   @computed
@@ -357,7 +387,11 @@ export default class ActionableGenesPage extends React.Component<
           level: treatment.fdaLevel,
         } as Treatment);
       });
-    return treatments;
+    return _.uniqBy(
+      treatments,
+      treatment =>
+        `${treatment.level}-${treatment.hugoSymbol}-${treatment.alterationsName}-${treatment.cancerTypesName}`
+    );
   }
 
   @computed
@@ -571,14 +605,8 @@ export default class ActionableGenesPage extends React.Component<
       .map(treatment => ({
         level: treatment.level,
         hugoSymbol: treatment.hugoSymbol,
-        alterations: treatment.alterations
-          .map(alteration => alteration.name)
-          .sort()
-          .join(', '),
-        tumorType: getCancerTypesNameFromOncoTreeType(
-          treatment.cancerTypes,
-          treatment.excludedCancerTypes
-        ),
+        alterations: treatment.alterationsName,
+        tumorType: treatment.cancerTypesName,
         drugs: treatment.drugs,
       }))
       .sort((treatmentA, treatmentB) => {
@@ -744,22 +772,7 @@ export default class ActionableGenesPage extends React.Component<
         ...getDefaultColumnDefinition(TABLE_COLUMN_KEY.EVIDENCE_CANCER_TYPE),
         Header: <span>Cancer Types</span>,
         minWidth: 300,
-        accessor: 'cancerTypes',
-        sortMethod(a: TumorType[], b: TumorType[]) {
-          return getCancerTypesNameFromOncoTreeType(a).localeCompare(
-            getCancerTypesNameFromOncoTreeType(b)
-          );
-        },
-        Cell(props: { original: Treatment }) {
-          return (
-            <span>
-              {getCancerTypesNameFromOncoTreeType(
-                props.original.cancerTypes,
-                props.original.excludedCancerTypes
-              )}
-            </span>
-          );
-        },
+        accessor: 'cancerTypesName',
       },
     ];
     if (this.drugRelatedLevelSelected) {
