@@ -1,0 +1,177 @@
+@import './../styles/variables';
+
+.oncoKBTable-container {
+  .header {
+    display: flex;
+    justify-content: space-between;
+    width: 100%;
+    margin-bottom: 2vh;
+    margin-top: 3vh;
+
+    .table-header-left {
+      color: $oncokb-blue;
+      font-size: 3vh;
+      margin-bottom: 0;
+      padding-bottom: 0;
+      bottom: 0;
+      font-weight: bold;
+      flex: 1;
+    }
+
+    .table-header-right {
+      display: flex;
+      align-items: flex-end;
+      flex: 1;
+
+      .search-container,
+      .dropdown-container {
+        flex: 1;
+        margin-left: 1rem;
+      }
+    }
+  }
+
+  @media (max-width: 768px) {
+    .header {
+      flex-direction: column;
+      align-items: flex-start;
+
+      .table-header-right {
+        flex-direction: row;
+        justify-content: space-between;
+        width: 100%;
+
+        .search-container,
+        .dropdown-container {
+          width: 100%;
+          margin-left: 1rem;
+          margin-top: 1rem;
+        }
+      }
+    }
+  }
+
+  .mt-2 {
+    margin-top: 2vh;
+  }
+
+  .text-center {
+    text-align: center;
+  }
+
+  .justify-center {
+    justify-content: center;
+  }
+
+  .mb-3 {
+    margin-bottom: 3vh;
+  }
+
+  .fixedHeight {
+    max-height: 400px;
+    overflow-y: scroll;
+  }
+}
+
+// Overwrite react-table styles
+.oncokbReactTable.ReactTable {
+  .-sort-desc {
+    box-shadow: none !important;
+    &:before {
+      font-family: FontAwesome;
+      content: '\f0dd';
+      float: right;
+    }
+  }
+
+  .-sort-asc {
+    box-shadow: none !important;
+    &:before {
+      font-family: FontAwesome;
+      content: '\f0de';
+      float: right;
+    }
+  }
+
+  .rt-table {
+    &::-webkit-scrollbar {
+      height: 1.5vh;
+    }
+
+    &::-webkit-scrollbar-track {
+      background: #f1f1f1;
+    }
+
+    &::-webkit-scrollbar-thumb {
+      background: $light-grey;
+    }
+
+    .rt-thead {
+      .rt-resizable-header-content {
+        font-weight: bold;
+        text-align: center;
+        margin: 1vh;
+        white-space: normal;
+        word-break: break-word;
+      }
+    }
+
+    .rt-tbody {
+      &::-webkit-scrollbar {
+        width: 1.5vh;
+      }
+
+      &::-webkit-scrollbar-track {
+        background: #f1f1f1;
+      }
+
+      &::-webkit-scrollbar-thumb {
+        background: $light-grey;
+      }
+
+      overflow-x: hidden;
+      overflow-y: hidden;
+
+      &.has-data {
+        overflow-x: hidden;
+        overflow-y: auto;
+      }
+
+      &.no-data {
+        overflow-x: hidden;
+        overflow-y: hidden;
+      }
+
+      .rt-td {
+        text-align: center;
+        white-space: normal;
+        word-break: break-word;
+        min-height: 7vh;
+      }
+    }
+  }
+}
+
+.no-results {
+  min-height: 15vh;
+  text-align: center;
+  align-items: center;
+  margin-top: 4vh;
+}
+
+.oncokbTable-main {
+  padding-top: 1vh;
+  padding-bottom: 1vh;
+}
+
+.no-results {
+  min-height: 15vh;
+  text-align: center;
+  align-items: center;
+  margin-top: 4vh;
+}
+
+.oncokbTable-main {
+  padding-top: 1vh;
+  padding-bottom: 1vh;
+}

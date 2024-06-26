@@ -14,7 +14,6 @@ const LESS_THAN_ENTITY = '&lt;';
 const GREATER_THAN_ENTITY = '&gt;';
 
 function trimOffHtmlTagsByEntity(htmlStr: string) {
-  // was trying to use negative lookahead but that seems only work in looking for a whole string, not multiple groups
   return htmlStr
     .split(LESS_THAN_ENTITY)
     .map((substr, index) => {

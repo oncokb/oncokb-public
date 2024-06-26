@@ -39,8 +39,7 @@ import CompanionDiagnosticDevicePage from 'app/pages/companionDiagnosticDevicesP
 import OncokbRoute from 'app/shared/route/OncokbRoute';
 import { AnnotationVisualisation } from 'oncokb-annotation-visualisation/AnnotationVisualisation';
 import {
-  exampleAnnotations,
-  exampleTreatments,
+  responses,
   patientId,
   patientInfo,
   notifications,
@@ -280,8 +279,7 @@ const AppRouts = (props: {
               <AnnotationVisualisation
                 patientId={patientId}
                 patientInfo={patientInfo}
-                annotations={exampleAnnotations}
-                treatments={exampleTreatments}
+                data={responses}
                 isPatientInfoVisible={true}
                 notifications={notifications}
               />

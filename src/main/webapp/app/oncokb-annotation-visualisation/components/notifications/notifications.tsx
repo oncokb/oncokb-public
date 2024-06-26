@@ -1,7 +1,8 @@
-import { useState } from 'react';
+import React, { useState } from 'react';
 import Alert from './../alert/Alert';
-import React from 'react';
 import { COLOR_ERROR } from './../../config/theme';
+import './styles.scss';
+
 interface NotificationImplication {
   message: string;
   type: 'danger' | 'primary' | 'warning' | 'success';
@@ -13,68 +14,38 @@ enum NotificationType {
   'warning' = 'exclamation-triangle',
   'success' = 'check',
 }
+
 interface NotificationProps {
   notifications: NotificationImplication[];
 }
 
-export default function Notification({ notifications }: NotificationProps) {
+const Notification: React.FC<NotificationProps> = ({ notifications }) => {
   const [show, setShow] = useState(false);
   const [showNotificationsCount, setShowNotificationsCount] = useState(true);
+
   const toggleShow = () => {
     setShow(!show);
     if (showNotificationsCount) setShowNotificationsCount(false);
   };
 
   return (
-    <div style={{ position: 'absolute', top: '40px', right: '10px' }}>
-      <div
-        style={{
-          display: 'flex',
-          alignItems: 'center',
-          justifyContent: 'flex-end',
-        }}
-      >
+    <div className="notification-container">
+      <div className="notification-icon-container">
         <i
-          className="fa fa-bell fa-lg"
+          className="fa fa-bell fa-lg notification-icon"
           onClick={toggleShow}
-          style={{ position: 'relative', cursor: 'pointer' }}
           aria-hidden="true"
         >
           {showNotificationsCount && (
-            <span
-              style={{
-                position: 'absolute',
-                top: '-2px',
-                left: '12px',
-                backgroundColor: COLOR_ERROR,
-                color: '#fff',
-                width: '0.8rem',
-                lineHeight: '0.8rem',
-                borderRadius: '50%',
-                fontSize: '0.5rem',
-                display: 'flex',
-                alignItems: 'center',
-                justifyContent: 'center',
-                fontWeight: 'bold',
-              }}
-            >
-              {notifications.length}
+            <span className="notification-badge">
+              {notifications.length > 10 ? '10+' : notifications.length}
             </span>
           )}
         </i>
       </div>
       {show && (
-        <div
-          className="mt-3"
-          style={{
-            position: 'absolute',
-            top: '10px',
-            width: '300px',
-            right: '20px',
-            zIndex: 1001,
-          }}
-        >
-          {notifications &&
+        <div className="notification-dropdown">
+          {notifications.length > 0 ? (
             notifications.map(notification => (
               <Alert key={notification.message} variant={notification.type}>
                 <i
@@ -85,8 +56,8 @@ export default function Notification({ notifications }: NotificationProps) {
                 ></i>
                 {notification.message}
               </Alert>
-            ))}
-          {!notifications && (
+            ))
+          ) : (
             <Alert variant="warning">
               <i
                 className={`fa fa-${NotificationType['warning']} mr-2`}
@@ -99,4 +70,6 @@ export default function Notification({ notifications }: NotificationProps) {
       )}
     </div>
   );
-}
+};
+
+export default Notification;

@@ -1,7 +1,7 @@
 import React from 'react';
 import ReactTable, { Column, TableProps } from 'react-table';
 import { observer } from 'mobx-react';
-import { observable, computed } from 'mobx';
+import { computed } from 'mobx';
 import classNames from 'classnames';
 import { COLOR_BLUE } from './../../config/theme';
 import {
@@ -9,7 +9,8 @@ import {
   MUTATIONS_TABLE_COLUMN_KEY,
   TREATMENTS_TABLE_COLUMN_KEY,
 } from './../../config/constants';
-import Select, { StylesConfig } from 'react-select';
+import CustomDropdown from './../CustomDropdown/CustomDropdown';
+import './OncoKBTable.scss';
 
 export type SearchColumn<T> = Column<T> & {
   onFilter?: (data: T, keyword: string) => boolean;
@@ -36,69 +37,17 @@ interface ITableWithSearchBox<T> extends Partial<TableProps<T>> {
   handleColumnsChange: HandleColumnsChange;
 }
 
-const colourStyles: StylesConfig = {
-  control: (styles: any) => ({ ...styles, backgroundColor: 'white' }),
-  option(
-    styles: any,
-    {
-      isDisabled,
-      isFocused,
-      isSelected,
-    }: { isDisabled: boolean; isFocused: boolean; isSelected: boolean }
-  ) {
-    return {
-      ...styles,
-      backgroundColor: isDisabled
-        ? undefined
-        : isSelected
-        ? COLOR_BLUE
-        : isFocused
-        ? 'rgba(0, 123, 255, 0.1)'
-        : undefined,
-      color: isDisabled ? '#ccc' : isSelected ? 'white' : COLOR_BLUE,
-      cursor: isDisabled ? 'not-allowed' : 'default',
-
-      ':active': {
-        ...styles[':active'],
-        backgroundColor: !isDisabled
-          ? isSelected
-            ? COLOR_BLUE
-            : 'rgba(0, 123, 255, 0.1)'
-          : 'rgba(0, 123, 255, 0.1)',
-      },
-    };
-  },
-  multiValue(styles: any) {
-    return {
-      ...styles,
-      marginTop: '3px',
-      paddingLeft: '3px',
-      paddingRight: '3px',
-      color: COLOR_BLUE,
-      backgroundColor: 'rgba(0, 123, 255, 0.1)',
-    };
-  },
-  multiValueLabel: (styles: any) => ({
-    ...styles,
-    color: COLOR_BLUE,
-    backgroundColor: undefined,
-  }),
-  multiValueRemove: (styles: any) => ({
-    ...styles,
-    color: COLOR_BLUE,
-    ':hover': {
-      backgroundColor: COLOR_BLUE,
-      color: 'white',
-    },
-  }),
-};
-
 @observer
 export default class OncoKBTable<T> extends React.Component<
   ITableWithSearchBox<T>,
-  {}
+  { searchKeyword: string }
 > {
-  @observable searchKeyword = '';
+  constructor(props: ITableWithSearchBox<T>) {
+    super(props);
+    this.state = {
+      searchKeyword: '',
+    };
+  }
 
   public static defaultProps = {
     disableSearch: false,
@@ -114,7 +63,7 @@ export default class OncoKBTable<T> extends React.Component<
       );
       if (filterableColumns.length > 0) {
         return filterableColumns
-          .map(column => column.onFilter!(item, this.searchKeyword))
+          .map(column => column.onFilter!(item, this.state.searchKeyword))
           .includes(true);
       } else {
         return true;
@@ -122,64 +71,72 @@ export default class OncoKBTable<T> extends React.Component<
     });
   }
 
+  componentDidUpdate() {
+    this.toggleOverflowClass();
+  }
+
+  componentDidMount() {
+    this.toggleOverflowClass();
+  }
+
+  toggleOverflowClass() {
+    const tableBody = document.querySelector(
+      '.oncoKBTable-container .oncokbTable-main .rt-table .rt-tbody'
+    );
+    if (tableBody) {
+      if (this.filteredData.length === 0) {
+        tableBody.classList.add('no-data');
+        tableBody.classList.remove('has-data');
+      } else {
+        tableBody.classList.add('has-data');
+        tableBody.classList.remove('no-data');
+      }
+    }
+  }
+
   render() {
-    const NoDataConst = (props: string) => (
-      <div className="text-center justify-center mb-3">No Results</div>
+    const NoDataConst = () => (
+      <div className="text-center justify-center no-results">No Results</div>
     );
 
     return (
-      <div>
-        {this.props.disableSearch ? (
-          <></>
-        ) : (
-          <>
-            <div className="d-flex space-between">
-              <h4 className="mt-1" style={{ color: COLOR_BLUE }}>
-                {this.props.tableName}
-              </h4>
-              <div className="ml-auto">
+      <div className="oncoKBTable-container">
+        {!this.props.disableSearch && (
+          <div className="header">
+            <div className="table-header-left">{this.props.tableName}</div>
+            <div className="table-header-right">
+              <div className="dropdown-container">
+                <CustomDropdown
+                  options={this.props.selectedColumns.map(col => ({
+                    value: col.key,
+                    label: col.label,
+                  }))}
+                  selectedOptions={this.props.selectedColumnsState}
+                  onChange={this.props.handleColumnsChange}
+                />
+              </div>
+              <div className="search-container">
                 <input
-                  onChange={(event: any) => {
-                    this.searchKeyword = event.target.value.toLowerCase();
-                  }}
-                  className="form-control input-sm"
+                  onChange={event =>
+                    this.setState({
+                      searchKeyword: event.target.value.toLowerCase(),
+                    })
+                  }
+                  className="form-control input-sm search-input"
                   type="text"
                   placeholder="Search ..."
                 />
               </div>
             </div>
-            <div className="my-3 mb-4">
-              <Select
-                isMulti
-                options={this.props.selectedColumns.map(col => ({
-                  value: col.key,
-                  label: col.label,
-                }))}
-                value={this.props.selectedColumnsState.map(col => {
-                  const column = this.props.selectedColumns.find(
-                    c => c.key === col
-                  );
-                  return {
-                    value: column?.key,
-                    label: column?.label,
-                  };
-                })}
-                onChange={this.props.handleColumnsChange}
-                styles={colourStyles}
-              />
-            </div>
-          </>
+          </div>
         )}
-
-        <div className="mt-2">
+        <div className="oncokbTable-main">
           <ReactTable
             {...this.props}
             showPagination={this.props.showPagination}
             className={classNames(
-              `-highlight oncokbReactTable ${
-                this.props.fixedHeight ? 'fixedHeight' : ''
-              }`,
-              this.props.className
+              `-striped -highlight oncokbReactTable`,
+              this.props.className ? this.props.className : ''
             )}
             data={this.filteredData}
             NoDataComponent={NoDataConst}

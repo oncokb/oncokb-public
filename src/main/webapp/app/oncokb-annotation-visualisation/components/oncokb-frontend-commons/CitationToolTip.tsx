@@ -3,7 +3,7 @@ import { observer } from 'mobx-react';
 import { remoteData } from 'cbioportal-frontend-commons';
 import request from 'superagent';
 import LoadingIndicator from '../loadingIndicator/LoadingIndicator';
-import { ArticleAbstract } from '../../config/oncokbAPI';
+import { ArticleAbstract } from '../../config/constants';
 import _ from 'lodash';
 import PmidItem from './PmidItem';
 import ArticleAbstractItem from './ArticleAbstractItem';

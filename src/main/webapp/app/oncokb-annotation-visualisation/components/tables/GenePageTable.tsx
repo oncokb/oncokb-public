@@ -35,10 +35,10 @@ export const GenePageTable: React.FunctionComponent<{
       handleColumnsChange={props.handleColumnsChange}
       style={
         props.data.length === 0 || props.selectedAnnotationColumns.length === 0
-          ? { height: '50px' }
+          ? { height: '10vh' }
           : props.data.length > THRESHOLD_TABLE_FIXED_HEIGHT
           ? { height: LG_TABLE_FIXED_HEIGHT }
-          : undefined
+          : {}
       }
       fixedHeight={
         props.data.length === 0 || props.selectedAnnotationColumns.length === 0
@@ -48,15 +48,12 @@ export const GenePageTable: React.FunctionComponent<{
       defaultSorted={
         props.defaultSorted || [
           {
-            id: MUTATIONS_TABLE_COLUMN_KEY.LEVEL,
-            desc: true,
-          },
-          {
             id: MUTATIONS_TABLE_COLUMN_KEY.ONCOGENICITY,
             desc: true,
           },
         ]
       }
+      className={'no-scroll'}
     />
   );
 };

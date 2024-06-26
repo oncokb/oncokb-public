@@ -17,6 +17,11 @@ export const CATEGORICAL_ALTERATIONS = [
   LOSS_OF_FUNCTION_MUTATIONS,
   SWITCH_OF_FUNCTION_MUTATIONS,
 ];
+export enum ANNOTATION_TYPE {
+  MUTATION = 'MUTATION',
+  COPY_NUMBER_ALTERATION = 'COPY_NUMBER_ALTERATION',
+  STRUCTURAL_VARIANT = 'STRUCTURAL_VARIANT',
+}
 
 type AnnotationPageSearchQueries = {
   refGenome?: REFERENCE_GENOME;
@@ -85,11 +90,8 @@ export enum MUTATIONS_TABLE_COLUMN_KEY {
   DRUG = 'DRUG',
   LEVEL = 'LEVEL',
   MUTATION_DESCRIPTION = 'MUTATION_DESCRIPTION',
-  ENTREZ_GENE_ID = 'ENTREZ_GENE_ID',
   TUMOR_TYPE = 'TUMOR_TYPE',
-  // CITATIONS = 'CITATIONS',
   FDA_LEVEL = 'FDA_LEVEL',
-  LAST_UPDATE = 'LAST_UPDATE',
 }
 export enum TREATMENTS_TABLE_COLUMN_KEY {
   BIOMARKER = 'BIOMARKER',
@@ -201,11 +203,6 @@ export const annotationColumns = [
     prop: 'mutationDescription',
   },
   {
-    key: MUTATIONS_TABLE_COLUMN_KEY.ENTREZ_GENE_ID,
-    label: 'Entrez Gene ID',
-    prop: 'entrezGeneId',
-  },
-  {
     key: MUTATIONS_TABLE_COLUMN_KEY.TUMOR_TYPE,
     label: 'Tumor Type',
     prop: 'tumorType',
@@ -216,11 +213,6 @@ export const annotationColumns = [
     prop: 'fdaLevel',
   },
   {
-    key: MUTATIONS_TABLE_COLUMN_KEY.LAST_UPDATE,
-    label: 'Last Update',
-    prop: 'lastUpdate',
-  },
-  {
     key: MUTATIONS_TABLE_COLUMN_KEY.LEVEL,
     label: 'Level of Evidence',
     prop: 'level',
@@ -228,18 +220,18 @@ export const annotationColumns = [
 ];
 
 export const defaultAnnotationColumns = [
-  'gene',
-  'mutation',
-  'oncogenicity',
-  'drug',
-  'mutationDescription',
+  MUTATIONS_TABLE_COLUMN_KEY.GENE,
+  MUTATIONS_TABLE_COLUMN_KEY.MUTATION,
+  MUTATIONS_TABLE_COLUMN_KEY.ONCOGENICITY,
+  MUTATIONS_TABLE_COLUMN_KEY.DRUG,
+  MUTATIONS_TABLE_COLUMN_KEY.MUTATION_DESCRIPTION,
 ];
 export const defaultTreatmentColumns = [
-  'biomarker',
-  'drug',
-  'level',
-  'annotation',
-  'treatmentDescription',
+  TREATMENTS_TABLE_COLUMN_KEY.BIOMARKER,
+  TREATMENTS_TABLE_COLUMN_KEY.DRUG,
+  TREATMENTS_TABLE_COLUMN_KEY.LEVEL,
+  TREATMENTS_TABLE_COLUMN_KEY.ANNOTATION,
+  TREATMENTS_TABLE_COLUMN_KEY.TREATMENT_DESCRIPTION,
 ];
 
 export enum NOTIFICATION_TYPE {
@@ -260,11 +252,9 @@ export type AnnotationImplication = {
   biologicalEffect: string;
   alterationType: string;
   mutationDescription: string;
-  entrezGeneId: string;
   tumorType: string;
   // citations: {};
   fdaLevel: string;
-  lastUpdate: string;
 };
 
 export type TreatmentImplication = {
@@ -279,7 +269,7 @@ export type TreatmentImplication = {
 
 export type NotificationImplication = {
   message: string;
-  type: NOTIFICATION_TYPE;
+  type: 'danger' | 'primary' | 'warning' | 'success';
   alterationType: string;
 };
 
@@ -350,6 +340,7 @@ export enum LEVELS {
   Fda1 = 'Fda1',
   Fda2 = 'Fda2',
   Fda3 = 'Fda3',
+  NA = 'NA',
 }
 
 export const LEVEL_PRIORITY: LEVELS[] = [
@@ -370,4 +361,106 @@ export const LEVEL_PRIORITY: LEVELS[] = [
   LEVELS.Tx2,
   LEVELS.R1,
   LEVELS.Tx1,
+  LEVELS.NA,
 ];
+
+//OncoKB API constants
+
+export type ArticleAbstract = {
+  abstract: string;
+
+  link: string;
+};
+
+export type Citations = {
+  abstracts: Array<ArticleAbstract>;
+
+  pmids: Array<string>;
+};
+
+export type InfoLevel = {
+  colorHex: string;
+
+  description: string;
+
+  htmlDescription: string;
+
+  levelOfEvidence:
+    | 'LEVEL_1'
+    | 'LEVEL_2'
+    | 'LEVEL_3A'
+    | 'LEVEL_3B'
+    | 'LEVEL_4'
+    | 'LEVEL_R1'
+    | 'LEVEL_R2'
+    | 'LEVEL_Px1'
+    | 'LEVEL_Px2'
+    | 'LEVEL_Px3'
+    | 'LEVEL_Dx1'
+    | 'LEVEL_Dx2'
+    | 'LEVEL_Dx3'
+    | 'LEVEL_Fda1'
+    | 'LEVEL_Fda2'
+    | 'LEVEL_Fda3'
+    | 'NO';
+};
+
+export type Gene = {
+  entrezGeneId: number;
+
+  geneAliases: Array<string>;
+
+  genesets: Array<Geneset>;
+
+  grch37Isoform: string;
+
+  grch37RefSeq: string;
+
+  grch38Isoform: string;
+
+  grch38RefSeq: string;
+
+  hugoSymbol: string;
+
+  oncogene: boolean;
+
+  tsg: boolean;
+};
+
+export type Geneset = {
+  genes: Array<Gene>;
+
+  id: number;
+
+  name: string;
+
+  uuid: string;
+};
+
+export type VariantConsequence = {
+  description: string;
+
+  isGenerallyTruncating: boolean;
+
+  term: string;
+};
+
+export type Alteration = {
+  alteration: string;
+
+  consequence: VariantConsequence;
+
+  gene: Gene;
+
+  name: string;
+
+  proteinEnd: number;
+
+  proteinStart: number;
+
+  refResidues: string;
+
+  referenceGenomes: Array<'GRCh37' | 'GRCh38'>;
+
+  variantResidues: string;
+};

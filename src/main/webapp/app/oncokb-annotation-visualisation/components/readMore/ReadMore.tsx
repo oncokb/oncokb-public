@@ -1,4 +1,5 @@
 import React, { useState } from 'react';
+import './styles.scss';
 
 const ReadMoreCell = ({ text }: { text: string }) => {
   const [isExpanded, setIsExpanded] = useState(false);
@@ -9,25 +10,19 @@ const ReadMoreCell = ({ text }: { text: string }) => {
       return (
         <>
           {text}
-          <span
-            style={{ color: 'blue', cursor: 'pointer', marginLeft: '5px' }}
-            onClick={toggleReadMore}
-          >
+          <span className="read-more-toggle" onClick={toggleReadMore}>
             Read less
           </span>
         </>
       );
     }
     const limitedText =
-      text.length > 150 ? text.substring(0, 150) + '...' : text;
+      text.length > 100 ? text.substring(0, 100) + '...' : text;
     return (
       <>
         {limitedText}
         {text.length > 100 && (
-          <span
-            style={{ color: 'blue', cursor: 'pointer', marginLeft: '5px' }}
-            onClick={toggleReadMore}
-          >
+          <span className="read-more-toggle" onClick={toggleReadMore}>
             Read more
           </span>
         )}

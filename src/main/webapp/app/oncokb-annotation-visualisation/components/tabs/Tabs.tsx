@@ -22,7 +22,7 @@ const Tabs: React.FC<TabsProps> = ({
   };
 
   return (
-    <div id={id} className={className}>
+    <div id={id} className={`tabs-container ${className || ''}`}>
       <div className="tab-headers">
         {React.Children.map(children, child => (
           <div

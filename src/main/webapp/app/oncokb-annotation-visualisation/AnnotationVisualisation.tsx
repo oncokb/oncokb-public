@@ -16,25 +16,26 @@ import Tab from './components/tabs/Tab';
 import Tabs from './components/tabs/Tabs';
 import Notification from './components/notifications/notifications';
 import './components/styles/index.module.scss';
-import TabNumbers from './components/icons/TabNumbers';
+import TabNumbers from './components/tabs/TabNumbers';
 import {
   defaultAnnotationColumns,
   defaultTreatmentColumns,
 } from './config/constants';
 import { TREATMENTS_TABLE_COLUMN_KEY } from './config/constants';
 export interface AnnotationVisualisationProps {
-  annotations: AnnotationImplication[];
-  treatments: TreatmentImplication[];
+  data: any;
   patientId: string;
   patientInfo: string;
   isPatientInfoVisible?: boolean;
   notifications: NotificationImplication[];
 }
 import { annotationColumns, treatmentColumns } from './config/constants';
+import { ANNOTATION_TYPE } from './config/constants';
 
 export interface AnnotationVisualisationState {
   selectedAnnotationColumns: string[];
   selectedTreatmentColumns: string[];
+  viewportWidth: number;
 }
 export class AnnotationVisualisation extends React.Component<
   AnnotationVisualisationProps,
@@ -42,64 +43,91 @@ export class AnnotationVisualisation extends React.Component<
 > {
   @computed
   get mutationsAnnotations(): AnnotationImplication[] {
-    return this.props.annotations.filter(
-      annotation => annotation.alterationType === 'MUTATION'
+    return this.getAnnotations(
+      ANNOTATION_TYPE.MUTATION,
+      this.props.data['mutationData']
     );
   }
 
   @computed
   get copyNumberAnnotations(): AnnotationImplication[] {
-    return this.props.annotations.filter(
-      annotation => annotation.alterationType === 'COPY_NUMBER_ALTERATION'
+    return this.getAnnotations(
+      ANNOTATION_TYPE.COPY_NUMBER_ALTERATION,
+      this.props.data['cnaData']
     );
   }
 
   @computed
   get structuralAnnotations(): AnnotationImplication[] {
-    return this.props.annotations.filter(
-      annotation => annotation.alterationType === 'STRUCTURAL_VARIANT'
+    return this.getAnnotations(
+      ANNOTATION_TYPE.STRUCTURAL_VARIANT,
+      this.props.data['structuralVariant']
     );
   }
 
   @computed
+  get allAnnotations(): AnnotationImplication[] {
+    const annotations = [
+      ...this.mutationsAnnotations,
+      ...this.copyNumberAnnotations,
+      ...this.structuralAnnotations,
+    ];
+    return annotations;
+  }
+
+  @computed
   get mutationsTreatments(): TreatmentImplication[] {
-    return this.props.treatments.filter(
-      treatment => treatment.alterationType === 'MUTATION'
+    return this.getTreatments(
+      ANNOTATION_TYPE.MUTATION,
+      this.props.data['mutationData']
     );
   }
 
   @computed
   get copyNumberTreatments(): TreatmentImplication[] {
-    return this.props.treatments.filter(
-      treatment => treatment.alterationType === 'COPY_NUMBER_ALTERATION'
+    return this.getTreatments(
+      ANNOTATION_TYPE.COPY_NUMBER_ALTERATION,
+      this.props.data['cnaData']
     );
   }
 
   @computed
   get structuralTreatments(): TreatmentImplication[] {
-    return this.props.treatments.filter(
-      treatment => treatment.alterationType === 'STRUCTURAL_VARIANT'
+    return this.getTreatments(
+      ANNOTATION_TYPE.STRUCTURAL_VARIANT,
+      this.props.data['structualVariantData']
     );
+  }
+
+  @computed
+  get allTreatments(): TreatmentImplication[] {
+    return [
+      ...this.mutationsTreatments,
+      ...this.copyNumberTreatments,
+      ...this.structuralTreatments,
+    ];
   }
 
   @computed
   get mutationsNotifications(): NotificationImplication[] {
     return this.props.notifications.filter(
-      notification => notification.alterationType === 'MUTATION'
+      notification => notification.alterationType === ANNOTATION_TYPE.MUTATION
     );
   }
 
   @computed
   get copyNumberNotifications(): NotificationImplication[] {
     return this.props.notifications.filter(
-      notification => notification.alterationType === 'COPY_NUMBER_ALTERATION'
+      notification =>
+        notification.alterationType === ANNOTATION_TYPE.COPY_NUMBER_ALTERATION
     );
   }
 
   @computed
   get structuralNotifications(): NotificationImplication[] {
     return this.props.notifications.filter(
-      notification => notification.alterationType === 'STRUCTURAL_VARIANT'
+      notification =>
+        notification.alterationType === ANNOTATION_TYPE.STRUCTURAL_VARIANT
     );
   }
 
@@ -108,7 +136,9 @@ export class AnnotationVisualisation extends React.Component<
     this.state = {
       selectedAnnotationColumns: defaultAnnotationColumns,
       selectedTreatmentColumns: defaultTreatmentColumns,
+      viewportWidth: window.innerWidth,
     };
+    this.handleResize = this.handleResize.bind(this);
   }
 
   componentDidMount() {
@@ -119,12 +149,33 @@ export class AnnotationVisualisation extends React.Component<
       'selectedTreatmentColumns'
     );
 
-    if (savedAnnotationColumns && savedTreatmentColumns) {
+    if (savedAnnotationColumns === null) {
+      this.setState({
+        selectedAnnotationColumns: defaultAnnotationColumns,
+      });
+    } else {
       this.setState({
         selectedAnnotationColumns: JSON.parse(savedAnnotationColumns),
+      });
+    }
+
+    if (savedTreatmentColumns === null) {
+      this.setState({
+        selectedTreatmentColumns: defaultTreatmentColumns,
+      });
+    } else {
+      this.setState({
         selectedTreatmentColumns: JSON.parse(savedTreatmentColumns),
       });
     }
+    window.addEventListener('resize', this.handleResize);
+  }
+  componentWillUnmount() {
+    window.removeEventListener('resize', this.handleResize);
+  }
+
+  handleResize() {
+    this.setState({ viewportWidth: window.innerWidth });
   }
 
   handleAnnotationColumnsChange = (selectedOptions: any) => {
@@ -151,8 +202,9 @@ export class AnnotationVisualisation extends React.Component<
     );
   };
 
-  @computed
-  get treatmentTableColumns(): SearchColumn<TreatmentImplication>[] {
+  treatmentTableColumns(
+    alterationType: string
+  ): SearchColumn<TreatmentImplication>[] {
     const selectedKeys = this.state.selectedTreatmentColumns;
     const filteredColumns = treatmentColumns.filter(col =>
       selectedKeys.includes(col.key)
@@ -160,19 +212,20 @@ export class AnnotationVisualisation extends React.Component<
     const hasAnnotation = selectedKeys.some(
       column => column === TREATMENTS_TABLE_COLUMN_KEY.ANNOTATION
     );
-    const totalColumns = selectedKeys.length;
-    const calculatedWidth = hasAnnotation
-      ? 800 / (totalColumns - 1)
-      : 1200 / totalColumns;
     return filteredColumns.map(column => ({
-      ...getDefaultColumnDefinition(column.key, calculatedWidth),
+      ...getDefaultColumnDefinition(
+        column.key,
+        this.state.viewportWidth,
+        alterationType
+      ),
       onFilter: (data: TreatmentImplication, keyword) =>
         filterByKeyword(data[column.prop], keyword),
     }));
   }
 
-  @computed
-  get annotationTableColumns(): SearchColumn<AnnotationImplication>[] {
+  annotationTableColumns(
+    alterationType: string
+  ): SearchColumn<AnnotationImplication>[] {
     const selectedKeys = this.state.selectedAnnotationColumns;
     const filteredColumns = annotationColumns.filter(col =>
       selectedKeys.includes(col.key)
@@ -181,25 +234,128 @@ export class AnnotationVisualisation extends React.Component<
     return filteredColumns.map(column => ({
       ...getDefaultColumnDefinition(
         column.key,
-        1200 / this.state.selectedAnnotationColumns.length
+        this.state.viewportWidth,
+        alterationType
       ),
       onFilter: (data: AnnotationImplication, keyword) =>
         filterByKeyword(data[column.prop], keyword),
     }));
   }
 
-  filterAnnotationsByType(alterationType: string): AnnotationImplication[] {
-    return this.props.annotations.filter(
-      annotation => annotation.alterationType === alterationType
-    );
+  getTreatments(
+    annotationType: ANNOTATION_TYPE,
+    data: any
+  ): TreatmentImplication[] {
+    let treatments: TreatmentImplication[] = [];
+
+    // Iterate over each entry in data
+    for (let key in data) {
+      if (data.hasOwnProperty(key)) {
+        const response = data[key];
+
+        if (!response || !response['treatments']) {
+          continue;
+        }
+
+        const uniqueEntries = new Set();
+
+        const treatmentEntries = response['treatments'].reduce(
+          (acc, treatment) => {
+            if (!treatment || !treatment['drugs']) {
+              return acc;
+            }
+
+            const drugs = treatment['drugs']
+              .map(drug => {
+                if (!drug || !drug['drugName']) {
+                  return null;
+                }
+
+                const biomarker =
+                  response['query']['hugoSymbol'] &&
+                  response['query']['alteration']
+                    ? `${response['query']['hugoSymbol']} ${response['query']['alteration']}`
+                    : 'NA';
+                const drugName = drug['drugName'] || 'NA';
+
+                const biomarkerDrugPair = `${biomarker}-${drugName}`;
+
+                if (uniqueEntries.has(biomarkerDrugPair)) {
+                  return null;
+                }
+
+                uniqueEntries.add(biomarkerDrugPair);
+
+                return {
+                  biomarker: biomarker,
+                  drug: drugName,
+                  level: treatment['level'] || 'NA',
+                  annotation:
+                    response['geneSummary'] ||
+                    response['variantSummary'] ||
+                    response['tumorTypeSummary']
+                      ? `${response['geneSummary'] || ''} ${
+                          response['variantSummary'] || ''
+                        } ${response['tumorTypeSummary'] || ''}`
+                      : 'NA',
+                  alterationType: annotationType,
+                  treatmentFdaLevel: treatment['fdaLevel'] || 'NA',
+                  treatmentDescription: treatment['description'] || 'NA',
+                };
+              })
+              .filter(Boolean);
+
+            return acc.concat(drugs);
+          },
+          []
+        );
+
+        treatments = treatments.concat(treatmentEntries);
+      }
+    }
+
+    return treatments;
   }
 
-  filterTreatmentsByType(alterationType: string): TreatmentImplication[] {
-    return this.props.treatments.filter(
-      treatment => treatment.alterationType === alterationType
-    );
+  getAnnotations(
+    annotationType: ANNOTATION_TYPE,
+    data: any
+  ): AnnotationImplication[] {
+    let listData = [];
+    for (let key in data) {
+      if (data.hasOwnProperty(key)) {
+        listData.push(data[key]);
+      }
+    }
+    const annotations = listData.map((response: any) => {
+      return {
+        level: response['highestSensitiveLevel'] || 'NA',
+        gene: response['query']['hugoSymbol'] || 'NA',
+        mutation: response['query']['alteration'] || 'NA',
+        consequenceType: response['query']['consequence'] || 'NA',
+        drug:
+          response['treatments'] &&
+          response['treatments'].length > 0 &&
+          response['treatments'][0]['drugs'] &&
+          response['treatments'][0]['drugs'].length > 0
+            ? response['treatments'][0]['drugs'][0]['drugName']
+            : 'NA',
+        location: response['query']['proteinStart']
+          ? response['query']['proteinStart'] +
+            (response['query']['proteinEnd']
+              ? ',' + response['query']['proteinEnd']
+              : '')
+          : 'NA',
+        oncogenicity: response['oncogenic'],
+        biologicalEffect: response['mutationEffect']['knownEffect'] || 'NA',
+        alterationType: annotationType,
+        mutationDescription: response['mutationEffect']['description'] || 'NA',
+        tumorType: response['query']['tumorType'] || 'NA',
+        fdaLevel: response['highestFdaLevel'] || 'NA',
+      };
+    });
+    return annotations;
   }
-
   render() {
     return (
       <>
@@ -215,24 +371,20 @@ export class AnnotationVisualisation extends React.Component<
             </div>
           </div>
         )}
-        <Tabs
-          defaultActiveKey="mutations"
-          id="uncontrolled-tab-example"
-          className="my-3 text-2xl"
-        >
+        <Tabs defaultActiveKey="mutations" id="uncontrolled-tab-example">
           <Tab
             eventKey="all"
             title={
-              <TabNumbers number={this.props.annotations.length} title="All" />
+              <TabNumbers number={this.allAnnotations.length} title="All" />
             }
           >
             <div>
               <Notification notifications={this.props.notifications} />
-              <div className="mt-1">
+              <div>
                 <GenePageTable
                   name={'All Alterations in the sample'}
-                  data={this.props.annotations}
-                  columns={this.annotationTableColumns}
+                  data={this.allAnnotations}
+                  columns={this.annotationTableColumns('Alteration')}
                   isPending={false}
                   selectedAnnotationColumns={
                     this.state.selectedAnnotationColumns
@@ -241,11 +393,11 @@ export class AnnotationVisualisation extends React.Component<
                   handleColumnsChange={this.handleAnnotationColumnsChange}
                 />
               </div>
-              <div className="mt-4">
+              <div>
                 <GenePageTable
                   name={'Treatments for the Biomarker'}
-                  data={this.props.treatments}
-                  columns={this.treatmentTableColumns}
+                  data={this.allTreatments}
+                  columns={this.treatmentTableColumns('Alteration')}
                   isPending={false}
                   selectedColumns={treatmentColumns}
                   selectedAnnotationColumns={
@@ -267,11 +419,11 @@ export class AnnotationVisualisation extends React.Component<
           >
             <div>
               <Notification notifications={this.mutationsNotifications} />
-              <div className="mt-1">
+              <div>
                 <GenePageTable
                   name={'Mutations in the sample'}
                   data={this.mutationsAnnotations}
-                  columns={this.annotationTableColumns}
+                  columns={this.annotationTableColumns('Mutation')}
                   isPending={false}
                   selectedAnnotationColumns={
                     this.state.selectedAnnotationColumns
@@ -280,11 +432,11 @@ export class AnnotationVisualisation extends React.Component<
                   handleColumnsChange={this.handleAnnotationColumnsChange}
                 />
               </div>
-              <div className="mt-4">
+              <div>
                 <GenePageTable
                   name={'Treatments for the Biomarker'}
                   data={this.mutationsTreatments}
-                  columns={this.treatmentTableColumns}
+                  columns={this.treatmentTableColumns('Mutation')}
                   isPending={false}
                   selectedColumns={treatmentColumns}
                   selectedAnnotationColumns={
@@ -306,11 +458,13 @@ export class AnnotationVisualisation extends React.Component<
           >
             <div>
               <Notification notifications={this.copyNumberNotifications} />
-              <div className="mt-1">
+              <div>
                 <GenePageTable
                   name={'Copy Number Alterations in the sample'}
                   data={this.copyNumberAnnotations}
-                  columns={this.annotationTableColumns}
+                  columns={this.annotationTableColumns(
+                    'Copy Number Alteration'
+                  )}
                   isPending={false}
                   selectedAnnotationColumns={
                     this.state.selectedAnnotationColumns
@@ -319,11 +473,11 @@ export class AnnotationVisualisation extends React.Component<
                   handleColumnsChange={this.handleAnnotationColumnsChange}
                 />
               </div>
-              <div className="mt-4">
+              <div>
                 <GenePageTable
                   name={'Treatments for the Biomarker'}
                   data={this.copyNumberTreatments}
-                  columns={this.treatmentTableColumns}
+                  columns={this.treatmentTableColumns('Copy Number Alteration')}
                   isPending={false}
                   selectedColumns={treatmentColumns}
                   selectedAnnotationColumns={
@@ -345,11 +499,11 @@ export class AnnotationVisualisation extends React.Component<
           >
             <div>
               <Notification notifications={this.structuralNotifications} />
-              <div className="mt-1">
+              <div>
                 <GenePageTable
                   name={'Structural Variants in the sample'}
                   data={this.structuralAnnotations}
-                  columns={this.annotationTableColumns}
+                  columns={this.annotationTableColumns('Structural Variant')}
                   isPending={false}
                   selectedAnnotationColumns={
                     this.state.selectedAnnotationColumns
@@ -358,11 +512,11 @@ export class AnnotationVisualisation extends React.Component<
                   handleColumnsChange={this.handleAnnotationColumnsChange}
                 />
               </div>
-              <div className="mt-4">
+              <div>
                 <GenePageTable
                   name={'Treatments for the Biomarker'}
                   data={this.structuralTreatments}
-                  columns={this.treatmentTableColumns}
+                  columns={this.treatmentTableColumns('Structural Variant')}
                   isPending={false}
                   selectedColumns={treatmentColumns}
                   selectedAnnotationColumns={

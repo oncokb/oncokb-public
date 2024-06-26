@@ -2,7 +2,7 @@ import AppStore from 'app/store/AppStore';
 import { inject } from 'mobx-react';
 import React from 'react';
 import { DefaultTooltip } from 'cbioportal-frontend-commons';
-import { InfoLevel } from '../../config/oncokbAPI';
+import { InfoLevel } from '../../config/constants';
 import _ from 'lodash';
 import { level2LevelOfEvidence } from '../Utils';
 import ReactHtmlParser from 'react-html-parser';

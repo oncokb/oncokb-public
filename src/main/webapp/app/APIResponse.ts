@@ -1308,7 +1308,7 @@ const APIResponse3 = {
   vus: false,
 };
 
-const responses = [
+export const responses = [
   APIResponse1,
   APIResponse2,
   APIResponse4,
