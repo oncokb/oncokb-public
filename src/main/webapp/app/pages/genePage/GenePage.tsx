@@ -107,74 +107,96 @@ export default class GenePage extends React.Component<GenePageProps, any> {
   getClinicalImplications(
     clinicalVariants: ClinicalVariant[]
   ): TherapeuticImplication[] {
-    return clinicalVariants.map(variant => {
+    return clinicalVariants.reduce((acc, variant) => {
       const cancerTypeNames = variant.cancerTypes.map(cancerType =>
         getCancerTypeNameFromOncoTreeType(cancerType)
       );
       const excludedCancerTypeNames = variant.excludedCancerTypes.map(
         cancerType => getCancerTypeNameFromOncoTreeType(cancerType)
       );
-      return {
-        level: variant.level,
-        alterations: variant.variant.name,
-        alterationsView: variant.variant.consequence ? (
-          <AlterationPageLink
-            key={variant.variant.name}
-            hugoSymbol={this.store.hugoSymbol}
-            alteration={{
-              alteration: variant.variant.alteration,
-              name: variant.variant.name,
-            }}
-            alterationRefGenomes={
-              variant.variant.referenceGenomes as REFERENCE_GENOME[]
-            }
-          />
-        ) : (
-          <span>{variant.variant.name}</span>
-        ),
-        drugs: variant.drug.join(', '),
-        cancerTypes: getCancerTypesName(
-          cancerTypeNames,
-          excludedCancerTypeNames
-        ),
-        drugDescription: variant.drugDescription,
-        cancerTypesView: (
-          <>
-            <WithSeparator separator={', '}>
-              {cancerTypeNames.map(cancerType =>
-                variant.variant.consequence ? (
-                  <AlterationPageLink
-                    key={`${variant.variant.name}-${cancerType}`}
-                    hugoSymbol={this.store.hugoSymbol}
-                    alteration={{
-                      alteration: variant.variant.alteration,
-                      name: variant.variant.name,
-                    }}
-                    alterationRefGenomes={
-                      variant.variant.referenceGenomes as REFERENCE_GENOME[]
-                    }
-                    cancerType={cancerType}
-                  >
-                    {cancerType}
-                  </AlterationPageLink>
-                ) : (
-                  <span>{cancerType}</span>
-                )
-              )}
-            </WithSeparator>
-            {excludedCancerTypeNames.length > 0 ? (
-              <span> (excluding {excludedCancerTypeNames.join(', ')})</span>
-            ) : (
-              <></>
+      const alterationView = variant.variant.consequence ? (
+        <AlterationPageLink
+          key={variant.variant.name}
+          hugoSymbol={this.store.hugoSymbol}
+          alteration={{
+            alteration: variant.variant.alteration,
+            name: variant.variant.name,
+          }}
+          alterationRefGenomes={
+            variant.variant.referenceGenomes as REFERENCE_GENOME[]
+          }
+        />
+      ) : (
+        <span>{variant.variant.name}</span>
+      );
+      const cancerTypesName = getCancerTypesName(
+        cancerTypeNames,
+        excludedCancerTypeNames
+      );
+      const cancerTypesView = (
+        <>
+          <WithSeparator separator={', '}>
+            {cancerTypeNames.map(cancerType =>
+              variant.variant.consequence ? (
+                <AlterationPageLink
+                  key={`${variant.variant.name}-${cancerType}`}
+                  hugoSymbol={this.store.hugoSymbol}
+                  alteration={{
+                    alteration: variant.variant.alteration,
+                    name: variant.variant.name,
+                  }}
+                  alterationRefGenomes={
+                    variant.variant.referenceGenomes as REFERENCE_GENOME[]
+                  }
+                  cancerType={cancerType}
+                >
+                  {cancerType}
+                </AlterationPageLink>
+              ) : (
+                <span>{cancerType}</span>
+              )
             )}
-          </>
-        ),
-        citations: {
-          abstracts: variant.drugAbstracts,
-          pmids: variant.drugPmids,
-        },
-      };
-    });
+          </WithSeparator>
+          {excludedCancerTypeNames.length > 0 ? (
+            <span> (excluding {excludedCancerTypeNames.join(', ')})</span>
+          ) : (
+            <></>
+          )}
+        </>
+      );
+      if (variant.drug.length > 0) {
+        variant.drug.forEach(drug => {
+          acc.push({
+            level: variant.level,
+            alterations: variant.variant.name,
+            alterationsView: alterationView,
+            drugs: drug,
+            cancerTypes: cancerTypesName,
+            drugDescription: variant.drugDescription,
+            cancerTypesView,
+            citations: {
+              abstracts: variant.drugAbstracts,
+              pmids: variant.drugPmids,
+            },
+          });
+        });
+      } else {
+        acc.push({
+          level: variant.level,
+          alterations: variant.variant.name,
+          alterationsView: alterationView,
+          drugs: '',
+          cancerTypes: cancerTypesName,
+          drugDescription: variant.drugDescription,
+          cancerTypesView,
+          citations: {
+            abstracts: variant.drugAbstracts,
+            pmids: variant.drugPmids,
+          },
+        });
+      }
+      return acc;
+    }, [] as TherapeuticImplication[]);
   }
 
   getFdaImplication(clinicalVariants: ClinicalVariant[]): FdaImplication[] {

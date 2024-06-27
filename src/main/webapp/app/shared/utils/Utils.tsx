@@ -35,6 +35,7 @@ import {
   Alteration,
   EnsemblGene,
   Evidence,
+  Treatment,
   TumorType,
 } from 'app/shared/api/generated/OncoKbPrivateAPI';
 import {
@@ -175,13 +176,15 @@ export function getDrugNameFromTreatment(drug: TreatmentDrug) {
   return drug.drugName;
 }
 
+export function getTreatmentNameByPriority(treatment: Treatment) {
+  return _.sortBy(treatment.drugs, 'priority')
+    .map(drug => getDrugNameFromTreatment(drug))
+    .join(' + ');
+}
+
 export function getTreatmentNameFromEvidence(evidence: Evidence) {
   return _.sortBy(evidence.treatments, 'priority')
-    .map(treatment =>
-      _.sortBy(treatment.drugs, 'priority')
-        .map(drug => getDrugNameFromTreatment(drug))
-        .join(' + ')
-    )
+    .map(getTreatmentNameByPriority)
     .join(', ');
 }
 
