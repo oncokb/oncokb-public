@@ -135,7 +135,7 @@ export default class OncoKBTable<T> extends React.Component<
             {...this.props}
             showPagination={this.props.showPagination}
             className={classNames(
-              `-striped -highlight oncokbReactTable`,
+              `-highlight oncokbReactTable`,
               this.props.className ? this.props.className : ''
             )}
             data={this.filteredData}

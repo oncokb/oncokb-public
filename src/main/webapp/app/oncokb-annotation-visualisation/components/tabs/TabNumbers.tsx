@@ -25,9 +25,9 @@ class TabNumbers extends React.Component<TabNumbersProps> {
     };
 
     return (
-      <div className="tab-numbers-container">
+      <div className="oncokb-tab-numbers">
         <h6>{title}</h6>
-        <div className="alteration-count" style={alterationCountStyle}>
+        <div className="oncokb-alteration-count" style={alterationCountStyle}>
           {number > 1000 ? '1000+' : number}
         </div>
       </div>

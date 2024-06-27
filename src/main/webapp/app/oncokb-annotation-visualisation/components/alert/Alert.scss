@@ -1,11 +1,16 @@
 .alert {
+  display: flex;
+  align-items: center;
   padding: 1rem;
   border: 1px solid transparent;
   border-radius: 0.25rem;
-  min-height: 6vh;
+  min-height: 3rem;
   box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.1); /* Add shadow effect */
   background-color: white; /* Adjust background color as needed */
-
+  text-align: left;
+  .mr-2 {
+    padding-right: 0.8rem;
+  }
   &-danger {
     color: #721c24;
     background-color: #f8d7da;

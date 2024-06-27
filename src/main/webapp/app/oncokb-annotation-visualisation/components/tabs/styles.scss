@@ -1,39 +1,59 @@
 @import './../styles/variables';
 
-.tab-headers {
+.oncokb-tab-headers {
   display: flex;
+  justify-content: space-between;
+  align-items: center;
   position: relative;
-  .tab-header {
-    padding: 0.5rem;
-    cursor: pointer;
-    flex: 1;
-    text-align: center;
-    position: relative;
-    transition: background-color 0.3s ease, border-bottom 0.3s ease;
+  border-bottom: 2px solid $light-grey;
+  width: 100%;
+  .oncokb-tab-header-left {
+    display: flex;
+    justify-content: flex-start;
+    align-items: center;
+    flex-direction: row;
+    background-color: #f4f5f5;
+    color: $light-grey !important;
+    .header-left-child {
+      display: flex;
+      padding: 1rem;
+      cursor: pointer;
+      flex-direction: row;
 
-    &.active {
-      background-color: #fff;
-      color: black;
-      z-index: 1;
-      font-weight: bold;
-      border-bottom: 2px solid $oncokb-blue;
+      &.active {
+        z-index: 1;
+        font-weight: bold;
+        border-bottom: 2px solid $oncokb-blue;
+        color: black !important;
+      }
+
+      &:not(.active) {
+        border-bottom: 2px solid transparent;
+      }
     }
+  }
 
-    &:not(.active) {
-      border-bottom: 2px solid transparent; // No border for inactive tabs
-    }
+  .oncokb-tab-header-right {
+    display: flex;
+    justify-content: flex-end;
+    align-items: center;
+    flex-direction: row;
 
-    &:hover {
-      background-color: #f8f8f8;
-      color: black;
+    & > * {
+      margin-right: 1rem;
+
+      &:last-child {
+        margin-right: 0;
+      }
     }
   }
 }
-.tab-content {
+
+.oncokb-tab-content {
   padding: 0 2vh;
 }
 
-.tab-numbers-container {
+.oncokb-tab-numbers {
   display: flex;
   flex-direction: row;
   align-items: center;
@@ -42,7 +62,7 @@
     margin: 0;
   }
 
-  .alteration-count {
+  .oncokb-alteration-count {
     width: 1.4rem;
     line-height: 1rem;
     border-radius: 50%;
@@ -65,4 +85,16 @@
       width: 2rem;
     }
   }
+}
+
+.data-info {
+  display: flex;
+  flex-direction: column;
+  font-weight: bold;
+  font-size: 0.7rem;
+}
+
+.fa-download-color {
+  color: $oncokb-blue;
+  cursor: pointer;
 }

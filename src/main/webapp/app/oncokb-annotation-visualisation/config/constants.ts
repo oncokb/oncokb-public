@@ -87,7 +87,6 @@ export enum MUTATIONS_TABLE_COLUMN_KEY {
   LOCATION = 'LOCATION',
   ONCOGENICITY = 'ONCOGENICITY',
   BIOLOGICAL_EFFECT = 'BIOLOGICAL_EFFECT',
-  DRUG = 'DRUG',
   LEVEL = 'LEVEL',
   MUTATION_DESCRIPTION = 'MUTATION_DESCRIPTION',
   TUMOR_TYPE = 'TUMOR_TYPE',
@@ -151,7 +150,11 @@ export const treatmentColumns = [
     prop: 'biomarker',
   },
   { key: TREATMENTS_TABLE_COLUMN_KEY.DRUG, label: 'Drug', prop: 'drug' },
-  { key: TREATMENTS_TABLE_COLUMN_KEY.LEVEL, label: 'Level', prop: 'level' },
+  {
+    key: TREATMENTS_TABLE_COLUMN_KEY.LEVEL,
+    label: 'Level',
+    prop: 'treatmentLevel',
+  },
   {
     key: TREATMENTS_TABLE_COLUMN_KEY.ANNOTATION,
     label: 'Annotation',
@@ -186,7 +189,6 @@ export const annotationColumns = [
     label: 'Oncogenicity',
     prop: 'oncogenicity',
   },
-  { key: MUTATIONS_TABLE_COLUMN_KEY.DRUG, label: 'Drug', prop: 'drug' },
   {
     key: MUTATIONS_TABLE_COLUMN_KEY.LOCATION,
     label: 'Location',
@@ -223,7 +225,6 @@ export const defaultAnnotationColumns = [
   MUTATIONS_TABLE_COLUMN_KEY.GENE,
   MUTATIONS_TABLE_COLUMN_KEY.MUTATION,
   MUTATIONS_TABLE_COLUMN_KEY.ONCOGENICITY,
-  MUTATIONS_TABLE_COLUMN_KEY.DRUG,
   MUTATIONS_TABLE_COLUMN_KEY.MUTATION_DESCRIPTION,
 ];
 export const defaultTreatmentColumns = [
@@ -246,7 +247,6 @@ export type AnnotationImplication = {
   gene: string;
   mutation: string;
   consequenceType: string;
-  drug: string;
   location: string;
   oncogenicity: string;
   biologicalEffect: string;

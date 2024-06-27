@@ -8,12 +8,12 @@ const ReadMoreCell = ({ text }: { text: string }) => {
   const renderText = () => {
     if (isExpanded) {
       return (
-        <>
+        <div className="left-align-content">
           {text}
           <span className="read-more-toggle" onClick={toggleReadMore}>
             Read less
           </span>
-        </>
+        </div>
       );
     }
     const limitedText =

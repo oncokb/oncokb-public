@@ -5,12 +5,12 @@
     display: flex;
     justify-content: space-between;
     width: 100%;
-    margin-bottom: 2vh;
-    margin-top: 3vh;
+    margin-bottom: 1rem;
+    margin-top: 1rem;
 
     .table-header-left {
       color: $oncokb-blue;
-      font-size: 3vh;
+      font-size: 1.2rem;
       margin-bottom: 0;
       padding-bottom: 0;
       bottom: 0;
@@ -94,8 +94,9 @@
   }
 
   .rt-table {
+    border: none;
     &::-webkit-scrollbar {
-      height: 1.5vh;
+      height: 0.5em;
     }
 
     &::-webkit-scrollbar-track {
@@ -107,7 +108,9 @@
     }
 
     .rt-thead {
+      border: none;
       .rt-resizable-header-content {
+        border: none;
         font-weight: bold;
         text-align: center;
         margin: 1vh;
@@ -117,8 +120,9 @@
     }
 
     .rt-tbody {
+      border: none;
       &::-webkit-scrollbar {
-        width: 1.5vh;
+        width: 0.5rem;
       }
 
       &::-webkit-scrollbar-track {
@@ -143,6 +147,7 @@
       }
 
       .rt-td {
+        border: none;
         text-align: center;
         white-space: normal;
         word-break: break-word;
@@ -160,8 +165,8 @@
 }
 
 .oncokbTable-main {
-  padding-top: 1vh;
-  padding-bottom: 1vh;
+  padding-top: 0.5rem;
+  padding-bottom: 0.5rem;
 }
 
 .no-results {

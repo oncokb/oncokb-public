@@ -14,7 +14,6 @@ import {
 } from './config/constants';
 import Tab from './components/tabs/Tab';
 import Tabs from './components/tabs/Tabs';
-import Notification from './components/notifications/notifications';
 import './components/styles/index.module.scss';
 import TabNumbers from './components/tabs/TabNumbers';
 import {
@@ -109,26 +108,55 @@ export class AnnotationVisualisation extends React.Component<
   }
 
   @computed
-  get mutationsNotifications(): NotificationImplication[] {
-    return this.props.notifications.filter(
-      notification => notification.alterationType === ANNOTATION_TYPE.MUTATION
-    );
-  }
+  get lastUpdateAndVersion() {
+    let latestDate = null;
+    let highestVersion = null;
 
-  @computed
-  get copyNumberNotifications(): NotificationImplication[] {
-    return this.props.notifications.filter(
-      notification =>
-        notification.alterationType === ANNOTATION_TYPE.COPY_NUMBER_ALTERATION
-    );
-  }
+    const compareDates = (date1: string, date2: string) => {
+      const [day1, month1, year1] =
+        date1 !== null ? date1.split('/').map(Number) : [0, 0, 0];
+      const [day2, month2, year2] =
+        date2 !== null ? date2.split('/').map(Number) : [0, 0, 0];
 
-  @computed
-  get structuralNotifications(): NotificationImplication[] {
-    return this.props.notifications.filter(
-      notification =>
-        notification.alterationType === ANNOTATION_TYPE.STRUCTURAL_VARIANT
-    );
+      if (year1 !== year2) return year1 - year2;
+      if (month1 !== month2) return month1 - month2;
+      return day1 - day2;
+    };
+
+    const compareVersions = (version1: string, version2: string) => {
+      const [major1, minor1] =
+        version1 !== null
+          ? version1.substring(1).split('.').map(Number)
+          : [0, 0];
+      const [major2, minor2] =
+        version2 !== null
+          ? version2.substring(1).split('.').map(Number)
+          : [0, 0];
+
+      if (major1 !== major2) return major1 - major2;
+      return minor1 - minor2;
+    };
+
+    this.allAnnotations.forEach(annotation => {
+      if (
+        annotation['lastUpdate'] &&
+        compareDates(annotation['lastUpdate'], latestDate) > 0
+      ) {
+        latestDate = annotation['lastUpdate'];
+      }
+
+      if (
+        annotation['dataVersion'] &&
+        compareVersions(annotation['dataVersion'], highestVersion) > 0
+      ) {
+        highestVersion = annotation.dataVersion;
+      }
+    });
+
+    return {
+      lastUpdate: latestDate,
+      dataVersion: highestVersion,
+    };
   }
 
   constructor(props: AnnotationVisualisationProps) {
@@ -333,13 +361,6 @@ export class AnnotationVisualisation extends React.Component<
         gene: response['query']['hugoSymbol'] || 'NA',
         mutation: response['query']['alteration'] || 'NA',
         consequenceType: response['query']['consequence'] || 'NA',
-        drug:
-          response['treatments'] &&
-          response['treatments'].length > 0 &&
-          response['treatments'][0]['drugs'] &&
-          response['treatments'][0]['drugs'].length > 0
-            ? response['treatments'][0]['drugs'][0]['drugName']
-            : 'NA',
         location: response['query']['proteinStart']
           ? response['query']['proteinStart'] +
             (response['query']['proteinEnd']
@@ -352,6 +373,8 @@ export class AnnotationVisualisation extends React.Component<
         mutationDescription: response['mutationEffect']['description'] || 'NA',
         tumorType: response['query']['tumorType'] || 'NA',
         fdaLevel: response['highestFdaLevel'] || 'NA',
+        lastUpdate: response['lastUpdate'],
+        dataVersion: response['dataVersion'],
       };
     });
     return annotations;
@@ -371,7 +394,13 @@ export class AnnotationVisualisation extends React.Component<
             </div>
           </div>
         )}
-        <Tabs defaultActiveKey="mutations" id="uncontrolled-tab-example">
+        <Tabs
+          defaultActiveKey="mutations"
+          id="uncontrolled-tab-example"
+          dataVersion={this.lastUpdateAndVersion['dataVersion']}
+          lastUpdate={this.lastUpdateAndVersion['lastUpdate']}
+          notifications={this.props.notifications}
+        >
           <Tab
             eventKey="all"
             title={
@@ -379,7 +408,6 @@ export class AnnotationVisualisation extends React.Component<
             }
           >
             <div>
-              <Notification notifications={this.props.notifications} />
               <div>
                 <GenePageTable
                   name={'All Alterations in the sample'}
@@ -418,7 +446,6 @@ export class AnnotationVisualisation extends React.Component<
             }
           >
             <div>
-              <Notification notifications={this.mutationsNotifications} />
               <div>
                 <GenePageTable
                   name={'Mutations in the sample'}
@@ -457,7 +484,6 @@ export class AnnotationVisualisation extends React.Component<
             }
           >
             <div>
-              <Notification notifications={this.copyNumberNotifications} />
               <div>
                 <GenePageTable
                   name={'Copy Number Alterations in the sample'}
@@ -498,7 +524,6 @@ export class AnnotationVisualisation extends React.Component<
             }
           >
             <div>
-              <Notification notifications={this.structuralNotifications} />
               <div>
                 <GenePageTable
                   name={'Structural Variants in the sample'}
