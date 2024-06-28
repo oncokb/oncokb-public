@@ -273,7 +273,10 @@ export const NEWS_BY_DATE: { [date: string]: NewsData } = {
           {ONCOKB_TM} SOP v4.1
         </a>
       </span>,
-      <span>Updated HUGO symbol for gene SLC9A3R1 to NHERF1</span>,
+      <span>
+        Updated HUGO symbol for gene SLC9A3R1 to{' '}
+        <GenePageLink hugoSymbol="NHERF1" />
+      </span>,
     ],
     changedAnnotations: [
       {
@@ -350,13 +353,17 @@ export const NEWS_BY_DATE: { [date: string]: NewsData } = {
                 Inclusion of Amivantamab + Chemotherapy in NCCN Non-Small Cell
                 Lung Cancer Guidelines V5.2024
               </span>
-              <PMIDLink pmids="37937763, 37710001, 37879444, 38924756" />
+              <PMIDLink
+                pmids="37937763, 37710001, 37879444, 38924756"
+                wrapText
+              />
             </WithSeparator>,
           ],
           [
             'EGFR',
             'S768I, L861Q, G719X',
             'Non-Small Cell Lung Cancer',
+            '1',
             'Afatinib (Level 1); Osimertinib (Level 2); Patritumab Deruxtecan (Level 3A)',
             'Erlotinib, Gefitinib, Dacomitinib, Amivantamab + Chemotherapy  (Level 2); Amivantamab + Lazertinib (Level 3A)',
             <WithSeparator separator={EVIDENCE_COLUMN_SEPARATOR}>
@@ -365,7 +372,7 @@ export const NEWS_BY_DATE: { [date: string]: NewsData } = {
                 Chemotherapy in NCCN Non-Small Cell Lung Cancer Guidelines
                 V5.2024
               </span>
-              <PMIDLink pmids="37879444, 25668120, 35770100" />
+              <PMIDLink pmids="37879444, 25668120, 35770100" wrapText />
               <AbstractLink
                 abstract="Cho, B.C. et al., Abstract #8516, ASCO 2024"
                 link="https://ascopubs.org/doi/pdf/10.1200/JCO.2024.42.16_suppl.8516"
@@ -448,7 +455,10 @@ export const NEWS_BY_DATE: { [date: string]: NewsData } = {
                 Inclusion in Colon Cancer NCCN Guidelines V2.2024 and in Small
                 Bowel Adenocarcinoma NCCN Guidelines V3.2024
               </span>
-              <PMIDLink pmids="26028255, 31682550, 28734759, 37917058" />
+              <PMIDLink
+                pmids="26028255, 31682550, 28734759, 37917058"
+                wrapText
+              />
               <AbstractLink
                 abstract="Chae et al. Abstract# 3417, AACR 2020"
                 link="https://aacrjournals.org/cancerres/article/80/16_Supplement/3417/642689/Abstract-3417-A-phase-II-basket-trial-of-dual-anti"
@@ -471,7 +481,10 @@ export const NEWS_BY_DATE: { [date: string]: NewsData } = {
                 Inclusion in Colon Cancer NCCN Guidelines V2.2024 and in Small
                 Bowel Adenocarcinoma NCCN Guidelines V3.2024
               </span>
-              <PMIDLink pmids="26028255, 31682550, 28734759, 37917058" />
+              <PMIDLink
+                pmids="26028255, 31682550, 28734759, 37917058"
+                wrapText
+              />
               <AbstractLink
                 abstract="Chae et al. Abstract# 3417, AACR 2020"
                 link="https://aacrjournals.org/cancerres/article/80/16_Supplement/3417/642689/Abstract-3417-A-phase-II-basket-trial-of-dual-anti"

@@ -72,7 +72,7 @@ const FdaRecognitionPage = () => {
             <h5>Important Database Links</h5>
             <ul>
               <li>
-                <SopPageLink version={4.0} />
+                <SopPageLink version={4.1} />
               </li>
               <li>
                 <LevelOfEvidencePageLink
@@ -148,7 +148,7 @@ const FdaRecognitionPage = () => {
             <h5>Scope of {ONCOKB_TM} Recognition</h5>
             <p>
               The FDA has reviewed all {ONCOKB_TM} processes documented in the{' '}
-              <SopPageLink version={4.0} />, which include the following:
+              <SopPageLink version={4.1} />, which include the following:
             </p>
             <ol>
               <li>
