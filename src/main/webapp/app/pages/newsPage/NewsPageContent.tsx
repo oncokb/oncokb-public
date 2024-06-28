@@ -262,6 +262,19 @@ const EVIDENCE_COLUMN_SEPARATOR = '; ';
 
 export const NEWS_BY_DATE: { [date: string]: NewsData } = {
   '06272024': {
+    priorityNews: [
+      <span>
+        Release of{' '}
+        <a
+          href="https://sop.oncokb.org/?version=v4.1"
+          target="_blank"
+          rel="noopener noreferrer"
+        >
+          {ONCOKB_TM} SOP v4.1
+        </a>
+      </span>,
+      <span>Updated HUGO symbol for gene SLC9A3R1 to NHERF1</span>,
+    ],
     changedAnnotations: [
       {
         columnHeaderType:
