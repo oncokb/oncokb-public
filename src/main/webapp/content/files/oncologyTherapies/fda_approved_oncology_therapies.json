@@ -2198,5 +2198,25 @@
     "targetedTx": "Y",
     "pxTx": "Y",
     "ngsTest": "Y"
+  },
+  {
+    "year": "2024",
+    "tx": "Tarlatamab",
+    "biomarker": "",
+    "agentClass": "Bispecific T-cell engager",
+    "drugTarget": "Bispecific DLL3-directed CD3 T-cell engager",
+    "targetedTx": "Y",
+    "pxTx": "N",
+    "ngsTest": "NA"
+  },
+  {
+    "year": "2024",
+    "tx": "Imetelstat",
+    "biomarker": "",
+    "agentClass": "Telomerase inhibitor",
+    "drugTarget": "Telomerase template antagonist",
+    "targetedTx": "Y",
+    "pxTx": "N",
+    "ngsTest": "NA"
   }
 ]
