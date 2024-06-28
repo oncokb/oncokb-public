@@ -37,13 +37,13 @@ import OncologyTherapiesPage from 'app/pages/oncologyTherapiesPage/oncologyThera
 import { NewsPageNavTab } from 'app/pages/newsPage/NewsPageNavTab';
 import CompanionDiagnosticDevicePage from 'app/pages/companionDiagnosticDevicesPage/companionDiagnosticDevicePage';
 import OncokbRoute from 'app/shared/route/OncokbRoute';
-import { AnnotationVisualisation } from 'oncokb-annotation-visualisation/AnnotationVisualisation';
+import { AnnotationVisualisation } from '../oncokb-annotation-visualisation/AnnotationVisualisation';
 import {
-  responses,
+  totalData,
   patientId,
   patientInfo,
   notifications,
-} from 'app/APIResponse';
+} from '../../app/APIResponse';
 
 const getOldLevelsRedirectRoute = (hash: string) => {
   const queryStrings = QueryString.parse(hash) as {
@@ -279,7 +279,7 @@ const AppRouts = (props: {
               <AnnotationVisualisation
                 patientId={patientId}
                 patientInfo={patientInfo}
-                data={responses}
+                data={totalData}
                 isPatientInfoVisible={true}
                 notifications={notifications}
               />

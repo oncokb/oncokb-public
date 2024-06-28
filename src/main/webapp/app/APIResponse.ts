@@ -1323,7 +1323,6 @@ export const exampleAnnotations: AnnotationImplication[] = responses.map(
     gene: response['query']['hugoSymbol'],
     mutation: response['query']['alteration'],
     consequenceType: response['query']['consequence'] || 'NA',
-    drug: response['treatments'][0]['drugs'][0]['drugName'],
     location: response['query']['proteinStart']
       ? response['query']['proteinStart'] +
         (response['query']['proteinEnd']
@@ -1390,3 +1389,9 @@ export const notifications: NotificationImplication[] = [
     alterationType: 'MUTATION',
   },
 ];
+
+export const totalData = {
+  mutationData: [APIResponse1, APIResponse2],
+  cnaData: [APIResponse4, APIResponse5],
+  structuralVariantData: [APIResponse3, APIResponse6],
+};

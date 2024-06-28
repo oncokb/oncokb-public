@@ -1,6 +1,5 @@
 import { default as URL } from 'url';
-import { ActionMeta } from 'react-select';
-import { ValueType } from 'react-select';
+import { ActionMeta, ValueType } from 'react-select/src/types';
 
 export const ONCOGENIC_MUTATIONS = 'Oncogenic Mutations';
 export const FUSIONS = 'Fusions';
@@ -165,11 +164,6 @@ export const treatmentColumns = [
     label: 'Treatment FDA Level',
     prop: 'treatmentFdaLevel',
   },
-  {
-    key: TREATMENTS_TABLE_COLUMN_KEY.TREATMENT_DESCRIPTION,
-    label: 'Treatment Description',
-    prop: 'treatmentDescription',
-  },
 ];
 
 export const annotationColumns = [
@@ -180,19 +174,14 @@ export const annotationColumns = [
     prop: 'mutation',
   },
   {
-    key: MUTATIONS_TABLE_COLUMN_KEY.CONSEQUENCE_TYPE,
-    label: 'Consequence Type',
-    prop: 'consequenceType',
-  },
-  {
     key: MUTATIONS_TABLE_COLUMN_KEY.ONCOGENICITY,
     label: 'Oncogenicity',
     prop: 'oncogenicity',
   },
   {
-    key: MUTATIONS_TABLE_COLUMN_KEY.LOCATION,
-    label: 'Location',
-    prop: 'location',
+    key: MUTATIONS_TABLE_COLUMN_KEY.LEVEL,
+    label: 'Level of Evidence',
+    prop: 'level',
   },
   {
     key: MUTATIONS_TABLE_COLUMN_KEY.BIOLOGICAL_EFFECT,
@@ -204,6 +193,17 @@ export const annotationColumns = [
     label: 'Description',
     prop: 'mutationDescription',
   },
+
+  {
+    key: MUTATIONS_TABLE_COLUMN_KEY.LOCATION,
+    label: 'Location',
+    prop: 'location',
+  },
+  {
+    key: MUTATIONS_TABLE_COLUMN_KEY.CONSEQUENCE_TYPE,
+    label: 'Consequence Type',
+    prop: 'consequenceType',
+  },
   {
     key: MUTATIONS_TABLE_COLUMN_KEY.TUMOR_TYPE,
     label: 'Tumor Type',
@@ -214,17 +214,14 @@ export const annotationColumns = [
     label: 'FDA Level',
     prop: 'fdaLevel',
   },
-  {
-    key: MUTATIONS_TABLE_COLUMN_KEY.LEVEL,
-    label: 'Level of Evidence',
-    prop: 'level',
-  },
 ];
 
 export const defaultAnnotationColumns = [
   MUTATIONS_TABLE_COLUMN_KEY.GENE,
   MUTATIONS_TABLE_COLUMN_KEY.MUTATION,
   MUTATIONS_TABLE_COLUMN_KEY.ONCOGENICITY,
+  MUTATIONS_TABLE_COLUMN_KEY.LEVEL,
+  MUTATIONS_TABLE_COLUMN_KEY.BIOLOGICAL_EFFECT,
   MUTATIONS_TABLE_COLUMN_KEY.MUTATION_DESCRIPTION,
 ];
 export const defaultTreatmentColumns = [
@@ -232,7 +229,6 @@ export const defaultTreatmentColumns = [
   TREATMENTS_TABLE_COLUMN_KEY.DRUG,
   TREATMENTS_TABLE_COLUMN_KEY.LEVEL,
   TREATMENTS_TABLE_COLUMN_KEY.ANNOTATION,
-  TREATMENTS_TABLE_COLUMN_KEY.TREATMENT_DESCRIPTION,
 ];
 
 export enum NOTIFICATION_TYPE {
@@ -253,7 +249,6 @@ export type AnnotationImplication = {
   alterationType: string;
   mutationDescription: string;
   tumorType: string;
-  // citations: {};
   fdaLevel: string;
 };
 
@@ -264,7 +259,6 @@ export type TreatmentImplication = {
   annotation: string;
   alterationType: string;
   treatmentFdaLevel: string;
-  treatmentDescription: string;
 };
 
 export type NotificationImplication = {
