@@ -1,4 +1,5 @@
 import React from 'react';
+//@ts-ignore
 import { RCTooltip } from 'rc-tooltip';
 import { DefaultTooltip } from 'cbioportal-frontend-commons';
 type IconType = 'info' | 'question' | 'description';

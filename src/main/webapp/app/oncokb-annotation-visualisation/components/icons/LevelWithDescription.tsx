@@ -1,3 +1,4 @@
+//@ts-ignore
 import AppStore from 'app/store/AppStore';
 import { inject } from 'mobx-react';
 import React from 'react';
@@ -12,6 +13,7 @@ export const LevelWithDescription: React.FunctionComponent<{
   level: LEVELS;
   appStore?: AppStore;
   description?: string;
+  children?: React.ReactNode;
 }> = inject('appStore')(props => {
   const levelOfEvidence = level2LevelOfEvidence(props.level);
 

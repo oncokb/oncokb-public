@@ -30,7 +30,7 @@ const ReadMoreCell = ({ text }: { text: string }) => {
     );
   };
 
-  return <div>{renderText()}</div>;
+  return <div className="left-align-content">{renderText()}</div>;
 };
 
 export default ReadMoreCell;

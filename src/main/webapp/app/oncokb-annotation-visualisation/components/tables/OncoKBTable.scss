@@ -14,7 +14,7 @@
       margin-bottom: 0;
       padding-bottom: 0;
       bottom: 0;
-      font-weight: bold;
+      font-weight: bold !important;
       flex: 1;
     }
 
@@ -109,10 +109,12 @@
 
     .rt-thead {
       border: none;
+
       .rt-resizable-header-content {
         border: none;
         font-weight: bold;
-        text-align: center;
+        justify-content: center;
+        align-items: center;
         margin: 1vh;
         white-space: normal;
         word-break: break-word;

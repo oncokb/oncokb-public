@@ -19,6 +19,7 @@ export interface ILoader {
   centerRelativeToContainer?: boolean;
   size?: LoaderSize;
   className?: string;
+  children?: React.ReactNode;
 }
 
 export default class LoadingIndicator extends React.Component<ILoader, {}> {
@@ -51,6 +52,7 @@ export default class LoadingIndicator extends React.Component<ILoader, {}> {
     };
 
     return (
+      //@ts-ignore
       <If condition={this.props.isLoading}>
         <Then>
           <div
