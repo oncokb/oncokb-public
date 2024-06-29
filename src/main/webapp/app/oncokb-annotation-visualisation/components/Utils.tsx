@@ -510,14 +510,14 @@ export function getDefaultColumnDefinition<T>(
 ):
   | {
       id: string;
-      Header: TableCellRenderer;
+      Header: React.ReactNode;
       accessor: string;
       minWidth?: number;
       width: number;
       style?: object;
       defaultSortDesc: boolean;
-      Cell?: TableCellRenderer;
-      sortMethod?: typeof defaultSortMethod;
+      Cell?: React.FC<{ original: any }>;
+      sortMethod?: (a: any, b: any) => number;
       sortable?: boolean;
     }
   | undefined {
@@ -531,9 +531,9 @@ export function getDefaultColumnDefinition<T>(
         minWidth: viewportWidth / 10,
         defaultSortDesc: false,
         sortMethod: defaultSortMethod,
-        Cell(props: { original: any }) {
-          return <GenePageLink hugoSymbol={props.original.gene} />;
-        },
+        Cell: (props: { original: any }) => (
+          <GenePageLink hugoSymbol={props.original.gene} />
+        ),
       };
     case MUTATIONS_TABLE_COLUMN_KEY.MUTATION:
       return {
@@ -544,14 +544,12 @@ export function getDefaultColumnDefinition<T>(
         minWidth: viewportWidth / 10,
         defaultSortDesc: false,
         sortMethod: defaultSortMethod,
-        Cell(props: { original: any }) {
-          return (
-            <AlterationPageLink
-              hugoSymbol={props.original.gene}
-              alteration={props.original.mutation}
-            />
-          );
-        },
+        Cell: (props: { original: any }) => (
+          <AlterationPageLink
+            hugoSymbol={props.original.gene}
+            alteration={props.original.mutation}
+          />
+        ),
       };
     case MUTATIONS_TABLE_COLUMN_KEY.ONCOGENICITY:
       return {
@@ -563,18 +561,16 @@ export function getDefaultColumnDefinition<T>(
         defaultSortDesc: true,
         sortable: true,
         sortMethod: oncogenicitySortMethod,
-        Cell(props: any) {
-          return (
-            <div className={'d-flex justify-content-center'}>
-              <span className="fa-stack">
-                <OncoKBLevelIcon
-                  level={props.original.oncogenicity}
-                  withDescription={false}
-                />
-              </span>
-            </div>
-          );
-        },
+        Cell: (props: any) => (
+          <div className={'d-flex justify-content-center'}>
+            <span className="fa-stack">
+              <OncoKBLevelIcon
+                level={props.original.oncogenicity}
+                withDescription={false}
+              />
+            </span>
+          </div>
+        ),
       };
     case MUTATIONS_TABLE_COLUMN_KEY.LEVEL:
       return {
@@ -608,29 +604,26 @@ export function getDefaultColumnDefinition<T>(
             LEVEL_PRIORITY.indexOf(b.replace('LEVEL_', '') as LEVELS)
           );
         },
-        Cell(props: any) {
-          return (
-            <div className={'d-flex justify-content-center'}>
-              <span className="fa-stack">
-                {props.original.level === 'NA' ? (
-                  'NA'
-                ) : props.original.level[6] === 'F' ? (
-                  <FdaLevelIcon
-                    level={props.original.level}
-                    withDescription={false}
-                  />
-                ) : (
-                  <EvidenceLevelIcon
-                    level={props.original.level}
-                    withDescription={false}
-                  />
-                )}
-              </span>
-            </div>
-          );
-        },
+        Cell: (props: any) => (
+          <div className={'d-flex justify-content-center'}>
+            <span className="fa-stack">
+              {props.original.level === 'NA' ? (
+                'NA'
+              ) : props.original.level[6] === 'F' ? (
+                <FdaLevelIcon
+                  level={props.original.level}
+                  withDescription={false}
+                />
+              ) : (
+                <EvidenceLevelIcon
+                  level={props.original.level}
+                  withDescription={false}
+                />
+              )}
+            </span>
+          </div>
+        ),
       };
-
     case MUTATIONS_TABLE_COLUMN_KEY.BIOLOGICAL_EFFECT:
       return {
         id: MUTATIONS_TABLE_COLUMN_KEY.BIOLOGICAL_EFFECT,
@@ -651,13 +644,15 @@ export function getDefaultColumnDefinition<T>(
         minWidth: viewportWidth / 3,
         defaultSortDesc: false,
         sortable: false,
-        Cell(props: any) {
-          return (
-            <div className={'d-flex my-1'}>
+        Cell: (props: any) => (
+          <div className={'d-flex my-1'}>
+            {props.original.mutationDescription !== 'NA' ? (
               <ReadMore text={props.original.mutationDescription} />
-            </div>
-          );
-        },
+            ) : (
+              <div>{props.original.mutationDescription}</div>
+            )}
+          </div>
+        ),
       };
     case MUTATIONS_TABLE_COLUMN_KEY.CONSEQUENCE_TYPE:
       return {
@@ -670,7 +665,6 @@ export function getDefaultColumnDefinition<T>(
         defaultSortDesc: false,
         sortMethod: defaultSortMethod,
       };
-
     case TREATMENTS_TABLE_COLUMN_KEY.BIOMARKER:
       return {
         id: TREATMENTS_TABLE_COLUMN_KEY.BIOMARKER,
@@ -682,7 +676,6 @@ export function getDefaultColumnDefinition<T>(
         defaultSortDesc: false,
         sortMethod: defaultSortMethod,
       };
-
     case TREATMENTS_TABLE_COLUMN_KEY.DRUG:
       return {
         id: TREATMENTS_TABLE_COLUMN_KEY.DRUG,
@@ -693,20 +686,21 @@ export function getDefaultColumnDefinition<T>(
         minWidth: viewportWidth / 6,
         defaultSortDesc: false,
         sortMethod: defaultSortMethod,
-        Cell(props: any) {
-          return (
-            <div className={'d-flex justify-content-center'}>
-              <span className="font-medium" style={{ marginRight: '10px' }}>
-                {props.original.drug}
-              </span>
-              <InfoIcon
-                overlay={<span>{props.original.treatmentDescription}</span>}
-              />
-            </div>
-          );
-        },
+        Cell: (props: any) => (
+          <div className={'d-flex justify-content-center'}>
+            <span className="font-medium" style={{ marginRight: '10px' }}>
+              {props.original.drug}
+            </span>
+            <InfoIcon
+              overlay={
+                <div className="info-icon-overlay">
+                  {props.original.treatmentDescription}
+                </div>
+              }
+            />
+          </div>
+        ),
       };
-
     case TREATMENTS_TABLE_COLUMN_KEY.LEVEL:
       return {
         id: TREATMENTS_TABLE_COLUMN_KEY.LEVEL,
@@ -739,32 +733,30 @@ export function getDefaultColumnDefinition<T>(
             LEVEL_PRIORITY.indexOf(b.replace('LEVEL_', '') as LEVELS)
           );
         },
-        Cell(props: any) {
-          return (
-            <div className={'d-flex justify-content-center'}>
-              {props.original.level === 'NA' ? (
-                'NA'
-              ) : props.original.level[6] === 'F' ? (
-                <span
-                  className="fa-stack"
-                  style={{ fontSize: 9, lineHeight: '18px' }}
-                >
-                  <span className="fa fa-circle-thin fa-sm"></span>
-                  <strong style={{ fontSize: '0.8rem' }}>
-                    {props.original.level.replace('LEVEL_Fda', '')}
-                  </strong>
-                </span>
-              ) : (
-                <span className="fa-stack">
-                  <EvidenceLevelIcon
-                    level={props.original.level}
-                    withDescription={false}
-                  />
-                </span>
-              )}
-            </div>
-          );
-        },
+        Cell: (props: any) => (
+          <div className={'d-flex justify-content-center'}>
+            {props.original.level === 'NA' ? (
+              'NA'
+            ) : props.original.level[6] === 'F' ? (
+              <span
+                className="fa-stack"
+                style={{ fontSize: 9, lineHeight: '18px' }}
+              >
+                <span className="fa fa-circle-thin fa-sm"></span>
+                <strong style={{ fontSize: '0.8rem' }}>
+                  {props.original.level.replace('LEVEL_Fda', '')}
+                </strong>
+              </span>
+            ) : (
+              <span className="fa-stack">
+                <EvidenceLevelIcon
+                  level={props.original.level}
+                  withDescription={false}
+                />
+              </span>
+            )}
+          </div>
+        ),
       };
     case MUTATIONS_TABLE_COLUMN_KEY.LOCATION:
       return {
@@ -776,27 +768,22 @@ export function getDefaultColumnDefinition<T>(
         defaultSortDesc: false,
         sortable: false,
       };
-
     case TREATMENTS_TABLE_COLUMN_KEY.ANNOTATION:
       return {
         id: TREATMENTS_TABLE_COLUMN_KEY.ANNOTATION,
         Header: <span className="font-medium">Annotation</span>,
         accessor: 'annotation',
-        width: viewportWidth / 3,
-        minWidth: viewportWidth / 3,
+        width: viewportWidth / 2.5,
+        minWidth: viewportWidth / 2.5,
         defaultSortDesc: false,
         sortable: false,
-        Cell(props: any) {
-          return (
-            <div
-              className={
-                'd-flex justify-content-center my-1 left-align-content'
-              }
-            >
-              {props.original.annotation}
-            </div>
-          );
-        },
+        Cell: (props: any) => (
+          <div
+            className={'d-flex justify-content-center my-1 left-align-content'}
+          >
+            {props.original.annotation}
+          </div>
+        ),
       };
     case MUTATIONS_TABLE_COLUMN_KEY.TUMOR_TYPE:
       return {
@@ -824,27 +811,25 @@ export function getDefaultColumnDefinition<T>(
             LEVEL_PRIORITY.indexOf(b.replace('LEVEL_', '') as LEVELS)
           );
         },
-        Cell(props: any) {
-          return (
-            <div className={'d-flex justify-content-center'}>
-              <span className="fa-stack">
-                {props.original.fdaLevel === 'NA' ? (
-                  'NA'
-                ) : (
-                  <span
-                    className="fa-stack"
-                    style={{ fontSize: 9, lineHeight: '18px' }}
-                  >
-                    <span className="fa fa-circle-thin fa-stack-2x"></span>
-                    <strong className="fa-stack-1x">
-                      {props.original.fdaLevel.replace('LEVEL_Fda', '')}
-                    </strong>
-                  </span>
-                )}
-              </span>
-            </div>
-          );
-        },
+        Cell: (props: any) => (
+          <div className={'d-flex justify-content-center'}>
+            <span className="fa-stack">
+              {props.original.fdaLevel === 'NA' ? (
+                'NA'
+              ) : (
+                <span
+                  className="fa-stack"
+                  style={{ fontSize: 9, lineHeight: '18px' }}
+                >
+                  <span className="fa fa-circle-thin fa-stack-2x"></span>
+                  <strong className="fa-stack-1x">
+                    {props.original.fdaLevel.replace('LEVEL_Fda', '')}
+                  </strong>
+                </span>
+              )}
+            </span>
+          </div>
+        ),
       };
     case TREATMENTS_TABLE_COLUMN_KEY.TREATMENT_FDA_LEVEL:
       return {
@@ -861,30 +846,25 @@ export function getDefaultColumnDefinition<T>(
             LEVEL_PRIORITY.indexOf(b.replace('LEVEL_', '') as LEVELS)
           );
         },
-        Cell(props: any) {
-          return (
-            <div className={'d-flex justify-content-center'}>
-              <span className="fa-stack">
-                {props.original.treatmentFdaLevel === 'NA' ? (
-                  'NA'
-                ) : (
-                  <span
-                    className="fa-stack"
-                    style={{ fontSize: 9, lineHeight: '18px' }}
-                  >
-                    <span className="fa fa-circle-thin fa-stack-2x"></span>
-                    <strong className="fa-stack-1x">
-                      {props.original.treatmentFdaLevel.replace(
-                        'LEVEL_Fda',
-                        ''
-                      )}
-                    </strong>
-                  </span>
-                )}
-              </span>
-            </div>
-          );
-        },
+        Cell: (props: any) => (
+          <div className={'d-flex justify-content-center'}>
+            <span className="fa-stack">
+              {props.original.treatmentFdaLevel === 'NA' ? (
+                'NA'
+              ) : (
+                <span
+                  className="fa-stack"
+                  style={{ fontSize: 9, lineHeight: '18px' }}
+                >
+                  <span className="fa fa-circle-thin fa-stack-2x"></span>
+                  <strong className="fa-stack-1x">
+                    {props.original.treatmentFdaLevel.replace('LEVEL_Fda', '')}
+                  </strong>
+                </span>
+              )}
+            </span>
+          </div>
+        ),
       };
     default:
       return undefined;

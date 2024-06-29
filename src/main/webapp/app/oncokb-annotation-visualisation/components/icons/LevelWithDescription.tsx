@@ -1,4 +1,4 @@
-//@ts-ignore
+// @ts-ignore
 import AppStore from 'app/store/AppStore';
 import { inject } from 'mobx-react';
 import React from 'react';

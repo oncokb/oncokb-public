@@ -61,25 +61,11 @@
   }
 }
 
-input[type='checkbox'],
-input[type='checkbox'],
 input[type='checkbox']:checked {
   + label:before {
     width: 21px;
     letter-spacing: 10px;
     font-family: FontAwesome;
     display: inline-block;
-  }
-}
-
-input[type='checkbox'] {
-  + label:before {
-    content: '\f096';
-  }
-}
-
-input[type='checkbox']:checked {
-  + label:before {
-    content: '\f046';
   }
 }

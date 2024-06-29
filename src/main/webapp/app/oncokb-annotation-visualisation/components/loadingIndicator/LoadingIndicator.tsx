@@ -52,7 +52,7 @@ export default class LoadingIndicator extends React.Component<ILoader, {}> {
     };
 
     return (
-      //@ts-ignore
+      // @ts-ignore
       <If condition={this.props.isLoading}>
         <Then>
           <div

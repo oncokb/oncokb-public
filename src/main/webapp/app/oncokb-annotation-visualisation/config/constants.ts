@@ -358,7 +358,7 @@ export const LEVEL_PRIORITY: LEVELS[] = [
   LEVELS.NA,
 ];
 
-//OncoKB API constants
+// OncoKB API constants
 
 export type ArticleAbstract = {
   abstract: string;

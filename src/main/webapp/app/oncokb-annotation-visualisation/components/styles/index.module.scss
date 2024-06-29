@@ -54,3 +54,20 @@
 .fa-circle-thin {
   color: red !important;
 }
+.info-icon-overlay {
+  max-width: 400;
+  max-height: 400;
+  padding: 5%;
+  font-size: 0.8rem;
+  &::-webkit-scrollbar {
+    width: 5px;
+  }
+
+  &::-webkit-scrollbar-track {
+    background: #f1f1f1;
+  }
+
+  &::-webkit-scrollbar-thumb {
+    background: $grey;
+  }
+}

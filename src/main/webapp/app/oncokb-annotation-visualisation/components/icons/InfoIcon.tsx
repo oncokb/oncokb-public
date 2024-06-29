@@ -1,5 +1,5 @@
 import React from 'react';
-//@ts-ignore
+// @ts-ignore
 import { RCTooltip } from 'rc-tooltip';
 import { DefaultTooltip } from 'cbioportal-frontend-commons';
 type IconType = 'info' | 'question' | 'description';
@@ -52,7 +52,7 @@ const InfoIcon: React.FunctionComponent<{
       overlay={props.overlay ? props.overlay : <span></span>}
       overlayClassName={props.overlayClassName}
       placement={props.placement}
-      disabled={!props.overlay}
+      disabled={props.overlay ? false : true}
     >
       {getIcon()}
     </DefaultTooltip>

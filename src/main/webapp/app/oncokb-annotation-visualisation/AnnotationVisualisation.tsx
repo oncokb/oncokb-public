@@ -108,17 +108,58 @@ export class AnnotationVisualisation extends React.Component<
   }
 
   @computed
-  get copyNumberNotifications(): NotificationImplication[] {
-    return this.props.notifications.filter(
-      notification => notification.alterationType === 'COPY_NUMBER_ALTERATION'
-    );
-  }
+  get lastUpdateAndVersion(): {} {
+    let latestDate: string | null = null;
+    let highestVersion: string | null = null;
 
-  @computed
-  get structuralNotifications(): NotificationImplication[] {
-    return this.props.notifications.filter(
-      notification => notification.alterationType === 'STRUCTURAL_VARIANT'
-    );
+    const compareDates = (date1: string | null, date2: string | null) => {
+      const [day1, month1, year1] =
+        date1 !== null ? date1.split('/').map(Number) : [0, 0, 0];
+      const [day2, month2, year2] =
+        date2 !== null ? date2.split('/').map(Number) : [0, 0, 0];
+
+      if (year1 !== year2) return year1 - year2;
+      if (month1 !== month2) return month1 - month2;
+      return day1 - day2;
+    };
+
+    const compareVersions = (
+      version1: string | null,
+      version2: string | null
+    ) => {
+      const [major1, minor1] =
+        version1 !== null
+          ? version1.substring(1).split('.').map(Number)
+          : [0, 0];
+      const [major2, minor2] =
+        version2 !== null
+          ? version2.substring(1).split('.').map(Number)
+          : [0, 0];
+
+      if (major1 !== major2) return major1 - major2;
+      return minor1 - minor2;
+    };
+
+    this.allAnnotations.forEach(annotation => {
+      if (
+        annotation['lastUpdate'] &&
+        compareDates(annotation['lastUpdate'], latestDate) > 0
+      ) {
+        latestDate = annotation['lastUpdate'];
+      }
+
+      if (
+        annotation['dataVersion'] &&
+        compareVersions(annotation['dataVersion'], highestVersion) > 0
+      ) {
+        highestVersion = annotation['dataVersion'];
+      }
+    });
+
+    return {
+      lastUpdate: latestDate,
+      dataVersion: highestVersion,
+    };
   }
 
   constructor(props: AnnotationVisualisationProps) {
@@ -232,16 +273,118 @@ export class AnnotationVisualisation extends React.Component<
     }));
   }
 
-  filterAnnotationsByType(alterationType: string): AnnotationImplication[] {
-    return this.props.annotations.filter(
-      annotation => annotation.alterationType === alterationType
-    );
+  getTreatments(
+    annotationType: ANNOTATION_TYPE,
+    data: any
+  ): TreatmentImplication[] {
+    let treatments: TreatmentImplication[] = [];
+
+    // Iterate over each entry in data
+    for (const key in data) {
+      if (Object.prototype.hasOwnProperty.call(data, key)) {
+        const response = data[key];
+
+        if (!response || !response['treatments']) {
+          continue;
+        }
+
+        const uniqueEntries = new Set();
+
+        const treatmentEntries = response['treatments'].reduce(
+          (acc, treatment) => {
+            if (!treatment || !treatment['drugs']) {
+              return acc;
+            }
+
+            const drugs = treatment['drugs']
+              .map(drug => {
+                if (!drug || !drug['drugName']) {
+                  return null;
+                }
+
+                const biomarker =
+                  response['query']['hugoSymbol'] &&
+                  response['query']['alteration']
+                    ? `${response['query']['hugoSymbol']} ${response['query']['alteration']}`
+                    : 'NA';
+                const drugName = drug['drugName'] || 'NA';
+
+                const biomarkerDrugPair = `${biomarker}-${drugName}`;
+
+                if (uniqueEntries.has(biomarkerDrugPair)) {
+                  return null;
+                }
+
+                uniqueEntries.add(biomarkerDrugPair);
+
+                return {
+                  biomarker,
+                  drug: drugName,
+                  level: treatment['level'] || 'NA',
+                  annotation:
+                    response['geneSummary'] ||
+                    response['variantSummary'] ||
+                    response['tumorTypeSummary']
+                      ? `${response['geneSummary'] || ''} ${
+                          response['variantSummary'] || ''
+                        } ${response['tumorTypeSummary'] || ''}`
+                      : 'NA',
+                  alterationType: annotationType,
+                  treatmentFdaLevel: treatment['fdaLevel'] || 'NA',
+                  treatmentDescription: treatment['description'] || 'NA',
+                };
+              })
+              .filter(Boolean);
+
+            return acc.concat(drugs);
+          },
+          []
+        );
+
+        treatments = treatments.concat(treatmentEntries);
+      }
+    }
+
+    return treatments;
   }
 
-  filterTreatmentsByType(alterationType: string): TreatmentImplication[] {
-    return this.props.treatments.filter(
-      treatment => treatment.alterationType === alterationType
-    );
+  getAnnotations(
+    annotationType: ANNOTATION_TYPE,
+    data: any
+  ): AnnotationImplication[] {
+    const listData: AnnotationImplication[] = [];
+
+    for (const key in data) {
+      if (Object.prototype.hasOwnProperty.call(data, key)) {
+        const response = data[key];
+        listData.push(response); // Add the response to listData
+      }
+    }
+
+    const annotations = listData.map((response: any) => {
+      return {
+        level: response['highestSensitiveLevel'] || 'NA',
+        gene: response['query']['hugoSymbol'] || 'NA',
+        mutation: response['query']['alteration'] || 'NA',
+        consequenceType: response['query']['consequence'] || 'NA',
+        location: response['query']['proteinStart']
+          ? response['query']['proteinStart'] +
+            (response['query']['proteinEnd']
+              ? ',' + response['query']['proteinEnd']
+              : '')
+          : 'NA',
+        oncogenicity: response['oncogenic'],
+        biologicalEffect: response['mutationEffect']['knownEffect'] || 'NA',
+        alterationType: annotationType,
+        mutationDescription: response['mutationEffect']['description'] || 'NA',
+        tumorType: response['query']['tumorType'] || 'NA',
+        fdaLevel: response['highestFdaLevel'] || 'NA',
+        lastUpdate: response['lastUpdate'],
+        dataVersion: response['dataVersion'],
+      };
+    });
+
+    return annotations;
   }
 
   render() {
