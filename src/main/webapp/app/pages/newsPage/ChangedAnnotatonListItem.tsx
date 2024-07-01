@@ -10,6 +10,7 @@ import {
   CHANGED_ANNOTATION_SENSITIVITY_LEVEL_COLUMNS,
   UPDATED_IMPLICATION_COLUMNS,
   CHANGED_ANNOTATION_DRUG_REMOVAL_SAME_HIGHEST_LEVEL_COLUMNS,
+  CHANGED_ANNOTATION_DRUG_SAME_HIGHEST_LEVEL_COLUMNS,
 } from 'app/pages/newsPage/NewsPageContent';
 import { SimpleTable, SimpleTableRow } from 'app/components/SimpleTable';
 import { Row } from 'react-bootstrap';
@@ -32,6 +33,7 @@ export enum AnnotationColumnHeaderType {
   ADDITIONAL_SENSITIVITY_LEVEL_DRUG,
   DRUG_REMOVAL,
   DRUG_REMOVAL_SAME_HIGHEST_LEVEL,
+  DRUG_UPDATE_SAME_HIGHEST_LEVEL,
   DEMOTION_TUMOR_TYPE_SPECIFIC_EVIDENCE,
   PROMOTION_TUMOR_TYPE_SPECIFIC_EVIDENCE,
   NEW_ALTERATION_WITH_LEVEL,
@@ -60,6 +62,11 @@ export const ChangedAnnotationListItem = (props: {
       useOneLineRowClass = false;
       defaultTitle =
         'Updated therapeutic implications - Addition of therapies for variants with a level of evidence';
+      break;
+    case AnnotationColumnHeaderType.DRUG_UPDATE_SAME_HIGHEST_LEVEL:
+      annotationColumnHeader = CHANGED_ANNOTATION_DRUG_SAME_HIGHEST_LEVEL_COLUMNS;
+      useOneLineRowClass = false;
+      defaultTitle = `Updated therapeutic implications - Changed drug specific tumor-type level of evidence for an alteration-tumor type-drug association currently in OncoKB (without changing the alteration's highest level of evidence)`;
       break;
     case AnnotationColumnHeaderType.ADDITIONAL_DIFF_LEVEL_DRUG:
       annotationColumnHeader = CHANGED_ANNOTATION_ADDITIONAL_DRUG_DIFF_LEVEL_COLUMNS;

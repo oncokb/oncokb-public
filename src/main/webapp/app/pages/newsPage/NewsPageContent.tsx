@@ -83,6 +83,7 @@ export const DRUGS_CURRENTLY_IN_ONCOKB = `Drug(s) currently in ${ONCOKB_TM}`;
 export const DRUGS_REMOVED_FROM_ONCOKB = `Drug(s) removed from ${ONCOKB_TM}`;
 export const DRUGS_DEMOTED_IN_ONCOKB = `Drug(s) demoted in ${ONCOKB_TM}`;
 export const DRUGS_PROMOTED_IN_ONCOKB = `Drug(s) promoted in ${ONCOKB_TM}`;
+export const DRUGS_CHANGED_IN_ONCOKB = `Drug(s) changed in ${ONCOKB_TM}`;
 export const DRUGS_ASSOCIATED_WITH_CURRENT_LEVEL =
   'Drug(s) Associated with the Current Level';
 export const UPDATED_SENSITIVITY_LEVEL = 'Updated Sensitivity Level';
@@ -138,6 +139,16 @@ export const CHANGED_ANNOTATION_DRUG_COLUMNS = [
   { name: CANCER_TYPE },
   { name: PREVIOUS_DRUG },
   { name: CURRENT_DRUG },
+  { name: EVIDENCE },
+];
+
+export const CHANGED_ANNOTATION_DRUG_SAME_HIGHEST_LEVEL_COLUMNS = [
+  { name: LEVEL },
+  { name: GENE },
+  { name: MUTATION },
+  { name: CANCER_TYPE },
+  { name: DRUGS_CURRENTLY_IN_ONCOKB },
+  { name: DRUGS_CHANGED_IN_ONCOKB },
   { name: EVIDENCE },
 ];
 
@@ -250,6 +261,167 @@ const EVIDENCE_COLUMN_SEPARATOR = '; ';
 // https://stackoverflow.com/questions/41947168/is-it-possible-to-use-keyof-operator-on-literals-instead-of-interfaces
 
 export const NEWS_BY_DATE: { [date: string]: NewsData } = {
+  '07022024': {
+    priorityNews: [
+      <span>
+        Release of{' '}
+        <a
+          href="https://sop.oncokb.org/?version=v4.1"
+          target="_blank"
+          rel="noopener noreferrer"
+        >
+          {ONCOKB_TM} SOP v4.1
+        </a>
+      </span>,
+      <span>
+        Updated HUGO symbol for gene SLC9A3R1 to{' '}
+        <GenePageLink hugoSymbol="NHERF1" />
+      </span>,
+    ],
+    changedAnnotations: [
+      {
+        columnHeaderType:
+          AnnotationColumnHeaderType.PROMOTION_TUMOR_TYPE_SPECIFIC_EVIDENCE,
+        content: [
+          [
+            'KRAS',
+            'G12C',
+            'Colorectal Cancer',
+            <div>
+              <div style={{ fontStyle: 'italic' }}>
+                {DRUGS_CURRENTLY_IN_ONCOKB}:
+              </div>
+              <div style={{ textDecoration: 'underline' }}>Sensitivity</div>
+              <div>
+                Adagrasib + Cetuximab, Adagrasib + Panitumumab, Sotorasib +
+                Cetuximab, Sotorasib + Panitumumab (Level 2)
+              </div>
+              <br></br>
+              <div style={{ textDecoration: 'underline' }}>Resistance</div>
+              <div>
+                Tucatinib + Trastuzumab, Cetuximab, Panitumumab (Level R1)
+              </div>
+              <br></br>
+              <div style={{ fontStyle: 'italic' }}>
+                {DRUGS_PROMOTED_IN_ONCOKB}:
+              </div>
+              <div>Adagrasib + Cetuximab (Level 1)</div>
+            </div>,
+            '2',
+            '1',
+            <WithSeparator separator={EVIDENCE_COLUMN_SEPARATOR}>
+              <FdaApprovalLink
+                approval="Adagrasib + Cetuximab"
+                link="https://www.fda.gov/drugs/resources-information-approved-drugs/fda-grants-accelerated-approval-adagrasib-cetuximab-kras-g12c-mutated-colorectal-cancer"
+              />
+              <PMIDLink pmids="38587856" />
+            </WithSeparator>,
+          ],
+          [
+            'KRAS',
+            'G12C',
+            'Biliary Tract Cancer',
+            'Adagrasib',
+            '3A',
+            '2',
+            <WithSeparator separator={EVIDENCE_COLUMN_SEPARATOR}>
+              <span>
+                Inclusion in NCCN Biliary Tract Cancer Guidelines V2.2024
+              </span>
+              <PMIDLink pmids="37099736" />
+            </WithSeparator>,
+          ],
+        ],
+      },
+      {
+        columnHeaderType: AnnotationColumnHeaderType.ADDITIONAL_SAME_LEVEL_DRUG,
+        title: `Updated therapeutic implications - Addition of therapy(s) associated with a tumor type-specific leveled alteration(s) (without changing the alteration's highest level of evidence)`,
+        content: [
+          [
+            'EGFR',
+            'Exon 19 in-frame deletion, L858R',
+            'Non-Small Cell Lung Cancer',
+            '1',
+            'Erlotinib, Afatinib, Gefitinib, Dacomitinib, Erlotinib + Ramucirumab, Osimertinib (Level 1); Patritumab Deruxtecan (Level 3A)',
+            'Osimertinib + Chemotherapy (Level 1); Amivantamab + Chemotherapy (Level 2); Amivantamab + Lazertinib (Level 3A)',
+            <WithSeparator separator={EVIDENCE_COLUMN_SEPARATOR}>
+              <FdaApprovalLink
+                approval="Osimertinib with Chemotherapy"
+                link="https://www.fda.gov/drugs/resources-information-approved-drugs/fda-approves-osimertinib-chemotherapy-egfr-mutated-non-small-cell-lung-cancer"
+              />
+              <span>
+                Inclusion of Amivantamab + Chemotherapy in NCCN Non-Small Cell
+                Lung Cancer Guidelines V5.2024
+              </span>
+              <PMIDLink
+                pmids="37937763, 37710001, 37879444, 38924756"
+                wrapText
+              />
+            </WithSeparator>,
+          ],
+          [
+            'EGFR',
+            'S768I, L861Q, G719X',
+            'Non-Small Cell Lung Cancer',
+            '1',
+            'Afatinib (Level 1); Osimertinib (Level 2); Patritumab Deruxtecan (Level 3A)',
+            'Erlotinib, Gefitinib, Dacomitinib, Amivantamab + Chemotherapy  (Level 2); Amivantamab + Lazertinib (Level 3A)',
+            <WithSeparator separator={EVIDENCE_COLUMN_SEPARATOR}>
+              <span>
+                Inclusion of Erlotinib, Gefitinib, Dacomitinib and Amivantamab +
+                Chemotherapy in NCCN Non-Small Cell Lung Cancer Guidelines
+                V5.2024
+              </span>
+              <PMIDLink pmids="37879444, 25668120, 35770100" wrapText />
+              <AbstractLink
+                abstract="Cho, B.C. et al., Abstract #8516, ASCO 2024"
+                link="https://ascopubs.org/doi/pdf/10.1200/JCO.2024.42.16_suppl.8516"
+              />
+            </WithSeparator>,
+          ],
+          [
+            'ERBB2',
+            'Amplification',
+            'Biliary Tract Cancer',
+            '2',
+            'Trastuzumab + Pertuzumab',
+            'Tucatinib + Trastuzumab (Level 2)',
+            <WithSeparator separator={EVIDENCE_COLUMN_SEPARATOR}>
+              <span>
+                Inclusion in NCCN Biliary Tract Cancer Guidelines V2.2024
+              </span>
+              <PMIDLink pmids="37751561" />
+            </WithSeparator>,
+          ],
+        ],
+      },
+      {
+        columnHeaderType:
+          AnnotationColumnHeaderType.DRUG_UPDATE_SAME_HIGHEST_LEVEL,
+        content: [
+          [
+            '1',
+            'NTRK1, NTRK2, NTRK3',
+            'Fusions',
+            'All Solid Tumors',
+            'Larotrectinib, Entrectinib (Level 1); Repotrectinib (Level 3A)',
+            'Repotrectinib (Level 1)',
+            <WithSeparator separator={EVIDENCE_COLUMN_SEPARATOR}>
+              <FdaApprovalLink
+                approval="Repotrectinib"
+                link="https://www.fda.gov/drugs/resources-information-approved-drugs/fda-grants-accelerated-approval-repotrectinib-adult-and-pediatric-patients-ntrk-gene-fusion-positive"
+              />{' '}
+              <AbstractLink
+                abstract="Solomon, B.J., et al., Abstract #1372P, Ann Oncol Vol 34, Suppl 2, 2023"
+                link="https://www.annalsofoncology.org/article/S0923-7534(23)03242-8/fulltext"
+              />
+            </WithSeparator>,
+          ],
+        ],
+      },
+    ],
+    newlyAddedGenes: ['LMNA', 'PRCC', 'UBA1', 'UBTF', 'RIOK2'],
+  },
   '06042024': {
     priorityNews: [
       <span>
@@ -283,7 +455,10 @@ export const NEWS_BY_DATE: { [date: string]: NewsData } = {
                 Inclusion in Colon Cancer NCCN Guidelines V2.2024 and in Small
                 Bowel Adenocarcinoma NCCN Guidelines V3.2024
               </span>
-              <PMIDLink pmids="26028255, 31682550, 28734759, 37917058" />
+              <PMIDLink
+                pmids="26028255, 31682550, 28734759, 37917058"
+                wrapText
+              />
               <AbstractLink
                 abstract="Chae et al. Abstract# 3417, AACR 2020"
                 link="https://aacrjournals.org/cancerres/article/80/16_Supplement/3417/642689/Abstract-3417-A-phase-II-basket-trial-of-dual-anti"
@@ -306,7 +481,10 @@ export const NEWS_BY_DATE: { [date: string]: NewsData } = {
                 Inclusion in Colon Cancer NCCN Guidelines V2.2024 and in Small
                 Bowel Adenocarcinoma NCCN Guidelines V3.2024
               </span>
-              <PMIDLink pmids="26028255, 31682550, 28734759, 37917058" />
+              <PMIDLink
+                pmids="26028255, 31682550, 28734759, 37917058"
+                wrapText
+              />
               <AbstractLink
                 abstract="Chae et al. Abstract# 3417, AACR 2020"
                 link="https://aacrjournals.org/cancerres/article/80/16_Supplement/3417/642689/Abstract-3417-A-phase-II-basket-trial-of-dual-anti"
