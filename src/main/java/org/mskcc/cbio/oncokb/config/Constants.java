@@ -35,6 +35,7 @@ public final class Constants {
 
     public static final String MONTH_USERS_USAGE_SUMMARY_FILE_PREFIX = "public-website/usage-analysis/month-user-summary_";
     public static final String YEAR_USERS_USAGE_SUMMARY_FILE_PREFIX = "public-website/usage-analysis/year-user-summary_";
+    public static final String MONTH_RESOURCES_USAGE_SUMMARY_FILE_PREFIX = "public-website/usage-analysis/year-resource-summary_";
     public static final String YEAR_RESOURCES_USAGE_SUMMARY_FILE_PREFIX = "public-website/usage-analysis/year-resource-summary_";
     public static final String TOKEN_STATS_STORAGE_FILE_PREFIX = "public-website/token-usage/token-stats_";
 
@@ -43,7 +44,7 @@ public final class Constants {
     public static final String TESTING_TOKEN = "faketoken";
 
     public static final String ONCOKB_S3_BUCKET = "oncokb-v2";
-    
+
     private Constants() {
     }
 
