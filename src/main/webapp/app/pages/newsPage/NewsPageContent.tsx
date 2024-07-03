@@ -90,6 +90,8 @@ export const UPDATED_SENSITIVITY_LEVEL = 'Updated Sensitivity Level';
 export const UPDATED_RESISTANCE_LEVEL = 'Updated Resistance Level';
 export const PREVIOUS_BIOMARKER_ASSOCIATION = 'Previous Biomarker Association';
 export const CURRENT_BIOMARKER_ASSOCIATION = 'Current Biomarker Association';
+export const PREVIOUS_LEVEL_ANNOTATION = 'Previous Variant Annotation';
+export const CURRENT_LEVEL_ANNOTATION = 'Current Variant Annotation';
 
 export const NEWLY_ADDED_LEVEL_FOUR_COLUMNS = [
   { name: GENE, size: 2 },
@@ -261,6 +263,63 @@ const EVIDENCE_COLUMN_SEPARATOR = '; ';
 // https://stackoverflow.com/questions/41947168/is-it-possible-to-use-keyof-operator-on-literals-instead-of-interfaces
 
 export const NEWS_BY_DATE: { [date: string]: NewsData } = {
+  '07042024': {
+    news: [
+      <span>
+        Updated therapeutic implications - Updated variant annotations to more
+        accurately reflect the evidence
+        <Row className={'overflow-auto'}>
+          <table className="table">
+            <thead>
+              <tr>
+                <th>{LEVEL}</th>
+                <th>{GENE}</th>
+                <th>{PREVIOUS_BIOMARKER_ASSOCIATION}</th>
+                <th>{CURRENT_BIOMARKER_ASSOCIATION}</th>
+                <th>{CANCER_TYPE}</th>
+                <th>{DRUGS}</th>
+                <th>{EVIDENCE}</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td>2</td>
+                <td>
+                  <GenePageLink hugoSymbol="POLE" />
+                </td>
+                <td>Exonuclease Domain Missense Mutations (268_471mis)</td>
+                <td>Oncogenic Exonuclease Domain Missense Mutations</td>
+                <td>Colorectal Cancer, Small Bowel Adenocarcinoma</td>
+                <td>
+                  Pembrolizumab, Nivolumab, Ipilimumab + Nivolumab, Dostarlimab
+                </td>
+                <td>
+                  Adherence to the Colon Cancer NCCN Guidelines V2.2024 and in
+                  Small Bowel Adenocarcinoma NCCN Guidelines V3.2024
+                </td>
+              </tr>
+              <tr>
+                <td>2</td>
+                <td>
+                  <GenePageLink hugoSymbol="POLD1" />
+                </td>
+                <td>Exonuclease Domain Missense Mutations (304_533mis)</td>
+                <td>Oncogenic Exonuclease Domain Missense Mutations</td>
+                <td>Colorectal Cancer, Small Bowel Adenocarcinoma</td>
+                <td>
+                  Pembrolizumab, Nivolumab, Ipilimumab + Nivolumab, Dostarlimab
+                </td>
+                <td>
+                  Adherence to the Colon Cancer NCCN Guidelines V2.2024 and in
+                  Small Bowel Adenocarcinoma NCCN Guidelines V3.2024
+                </td>
+              </tr>
+            </tbody>
+          </table>
+        </Row>
+      </span>,
+    ],
+  },
   '07022024': {
     priorityNews: [
       <span>
