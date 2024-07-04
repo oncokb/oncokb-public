@@ -90,6 +90,8 @@ export const UPDATED_SENSITIVITY_LEVEL = 'Updated Sensitivity Level';
 export const UPDATED_RESISTANCE_LEVEL = 'Updated Resistance Level';
 export const PREVIOUS_BIOMARKER_ASSOCIATION = 'Previous Biomarker Association';
 export const CURRENT_BIOMARKER_ASSOCIATION = 'Current Biomarker Association';
+export const PREVIOUS_LEVEL_ANNOTATION = 'Previous Variant Annotation';
+export const CURRENT_LEVEL_ANNOTATION = 'Current Variant Annotation';
 
 export const NEWLY_ADDED_LEVEL_FOUR_COLUMNS = [
   { name: GENE, size: 2 },
@@ -261,6 +263,16 @@ const EVIDENCE_COLUMN_SEPARATOR = '; ';
 // https://stackoverflow.com/questions/41947168/is-it-possible-to-use-keyof-operator-on-literals-instead-of-interfaces
 
 export const NEWS_BY_DATE: { [date: string]: NewsData } = {
+  '07042024': {
+    news: [
+      <span>
+        We updated the level 2 association for actionable POLE and POLD1
+        mutations in colorectal cancer and small bowel adenocarcinoma for
+        immunotherapy to only include known oncogenic mutations in the
+        exonuclease domain.
+      </span>,
+    ],
+  },
   '07022024': {
     priorityNews: [
       <span>
