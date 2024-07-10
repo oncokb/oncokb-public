@@ -94,7 +94,7 @@ export enum MUTATIONS_TABLE_COLUMN_KEY {
 export enum TREATMENTS_TABLE_COLUMN_KEY {
   BIOMARKER = 'BIOMARKER',
   DRUG = 'DRUG',
-  LEVEL = 'LEVEL',
+  TREATMENTS_LEVEL = 'TREATMENTS_LEVEL',
   ANNOTATION = 'ANNOTATION',
   TREATMENT_FDA_LEVEL = 'TREATMENT_FDA_LEVEL',
   TREATMENT_DESCRIPTION = 'TREATMENT_DESCRIPTION',
@@ -150,8 +150,8 @@ export const treatmentColumns = [
   },
   { key: TREATMENTS_TABLE_COLUMN_KEY.DRUG, label: 'Drug', prop: 'drug' },
   {
-    key: TREATMENTS_TABLE_COLUMN_KEY.LEVEL,
-    label: 'Level',
+    key: TREATMENTS_TABLE_COLUMN_KEY.TREATMENTS_LEVEL,
+    label: 'Treatments level',
     prop: 'treatmentLevel',
   },
   {
@@ -259,6 +259,7 @@ export type TreatmentImplication = {
   annotation: string;
   alterationType: string;
   treatmentFdaLevel: string;
+  treatmentDescription: string;
 };
 
 export type NotificationImplication = {

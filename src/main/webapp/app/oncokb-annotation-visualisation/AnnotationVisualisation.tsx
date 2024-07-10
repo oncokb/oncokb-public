@@ -277,9 +277,8 @@ export class AnnotationVisualisation extends React.Component<
     annotationType: ANNOTATION_TYPE,
     data: any
   ): TreatmentImplication[] {
-    let treatments: TreatmentImplication[] = [];
+    const treatmentsMap: Map<string, TreatmentImplication> = new Map();
 
-    // Iterate over each entry in data
     for (const key in data) {
       if (Object.prototype.hasOwnProperty.call(data, key)) {
         const response = data[key];
@@ -288,64 +287,57 @@ export class AnnotationVisualisation extends React.Component<
           continue;
         }
 
-        const uniqueEntries = new Set();
+        response['treatments'].forEach((treatment: any) => {
+          if (!treatment || !treatment['drugs']) {
+            return;
+          }
 
-        const treatmentEntries = response['treatments'].reduce(
-          (acc, treatment) => {
-            if (!treatment || !treatment['drugs']) {
-              return acc;
+          const biomarker =
+            response['query']['hugoSymbol'] && response['query']['alteration']
+              ? `${response['query']['hugoSymbol']} ${response['query']['alteration']}`
+              : 'NA';
+          const level = treatment['level'] || 'NA';
+          const annotation =
+            response['geneSummary'] ||
+            response['variantSummary'] ||
+            response['tumorTypeSummary']
+              ? `${response['geneSummary'] || ''} ${
+                  response['variantSummary'] || ''
+                } ${response['tumorTypeSummary'] || ''}`
+              : 'NA';
+          const alterationType = annotationType;
+          const treatmentFdaLevel = treatment['fdaLevel'] || 'NA';
+          const treatmentDescription = treatment['description'] || 'NA';
+
+          const key = `${biomarker}-${level}`;
+
+          const drugNames = treatment['drugs']
+            .map((drug: any) => drug['drugName'])
+            .filter(Boolean);
+
+          if (treatmentsMap.has(key)) {
+            const existingEntry = treatmentsMap.get(key);
+            if (existingEntry) {
+              const existingDrugs = new Set(existingEntry.drug.split(', '));
+              drugNames.forEach(drug => existingDrugs.add(drug));
+              existingEntry.drug = Array.from(existingDrugs).join(', ');
             }
-
-            const drugs = treatment['drugs']
-              .map(drug => {
-                if (!drug || !drug['drugName']) {
-                  return null;
-                }
-
-                const biomarker =
-                  response['query']['hugoSymbol'] &&
-                  response['query']['alteration']
-                    ? `${response['query']['hugoSymbol']} ${response['query']['alteration']}`
-                    : 'NA';
-                const drugName = drug['drugName'] || 'NA';
-
-                const biomarkerDrugPair = `${biomarker}-${drugName}`;
-
-                if (uniqueEntries.has(biomarkerDrugPair)) {
-                  return null;
-                }
-
-                uniqueEntries.add(biomarkerDrugPair);
-
-                return {
-                  biomarker,
-                  drug: drugName,
-                  level: treatment['level'] || 'NA',
-                  annotation:
-                    response['geneSummary'] ||
-                    response['variantSummary'] ||
-                    response['tumorTypeSummary']
-                      ? `${response['geneSummary'] || ''} ${
-                          response['variantSummary'] || ''
-                        } ${response['tumorTypeSummary'] || ''}`
-                      : 'NA',
-                  alterationType: annotationType,
-                  treatmentFdaLevel: treatment['fdaLevel'] || 'NA',
-                  treatmentDescription: treatment['description'] || 'NA',
-                };
-              })
-              .filter(Boolean);
-
-            return acc.concat(drugs);
-          },
-          []
-        );
-
-        treatments = treatments.concat(treatmentEntries);
+          } else {
+            treatmentsMap.set(key, {
+              biomarker,
+              drug: Array.from(new Set(drugNames)).join(', '),
+              level,
+              annotation,
+              alterationType,
+              treatmentFdaLevel,
+              treatmentDescription,
+            });
+          }
+        });
       }
     }
 
-    return treatments;
+    return Array.from(treatmentsMap.values());
   }
 
   getAnnotations(

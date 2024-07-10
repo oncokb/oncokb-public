@@ -11,9 +11,8 @@
     .table-header-left {
       color: $oncokb-blue;
       font-size: 1.2rem;
-      margin-bottom: 0;
-      padding-bottom: 0;
-      bottom: 0;
+      display: flex;
+      align-items: flex-end;
       font-weight: bold !important;
       flex: 1;
     }
@@ -38,7 +37,6 @@
 
       .table-header-right {
         flex-direction: row;
-        justify-content: space-between;
         width: 100%;
 
         .search-container,
@@ -51,20 +49,12 @@
     }
   }
 
-  .mt-2 {
-    margin-top: 2vh;
-  }
-
   .text-center {
     text-align: center;
   }
 
   .justify-center {
     justify-content: center;
-  }
-
-  .mb-3 {
-    margin-bottom: 3vh;
   }
 
   .fixedHeight {
@@ -115,7 +105,7 @@
         font-weight: bold;
         justify-content: center;
         align-items: center;
-        margin: 1vh;
+        margin: 15px;
         white-space: normal;
         word-break: break-word;
       }

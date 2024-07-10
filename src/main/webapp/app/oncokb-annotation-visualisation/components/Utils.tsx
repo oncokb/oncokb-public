@@ -527,8 +527,8 @@ export function getDefaultColumnDefinition<T>(
         id: MUTATIONS_TABLE_COLUMN_KEY.GENE,
         Header: <span className="font-medium">Gene</span>,
         accessor: 'gene',
-        width: viewportWidth / 10,
-        minWidth: viewportWidth / 10,
+        width: 100,
+        minWidth: 100,
         defaultSortDesc: false,
         sortMethod: defaultSortMethod,
         Cell: (props: { original: any }) => (
@@ -540,8 +540,8 @@ export function getDefaultColumnDefinition<T>(
         id: MUTATIONS_TABLE_COLUMN_KEY.MUTATION,
         Header: <span className="font-medium">{alterationType}</span>,
         accessor: 'mutation',
-        width: viewportWidth / 10,
-        minWidth: viewportWidth / 10,
+        width: 120,
+        minWidth: 120,
         defaultSortDesc: false,
         sortMethod: defaultSortMethod,
         Cell: (props: { original: any }) => (
@@ -556,8 +556,8 @@ export function getDefaultColumnDefinition<T>(
         id: MUTATIONS_TABLE_COLUMN_KEY.ONCOGENICITY,
         Header: <span className="font-medium">Oncogenicity</span>,
         accessor: 'oncogenicity',
-        width: viewportWidth / 10,
-        minWidth: viewportWidth / 10,
+        width: 150,
+        minWidth: 150,
         defaultSortDesc: true,
         sortable: true,
         sortMethod: oncogenicitySortMethod,
@@ -577,26 +577,27 @@ export function getDefaultColumnDefinition<T>(
         id: MUTATIONS_TABLE_COLUMN_KEY.LEVEL,
         Header: (
           <div className={'d-flex justify-content-center'}>
-            <span className="font-medium" style={{ marginRight: '10px' }}>
+            <span className="font-medium">
               Level of evidence
+              <InfoIcon
+                style={{ marginLeft: '5px' }}
+                overlay={
+                  <span>
+                    For more information about the FDA Level of Evidence, please
+                    see{' '}
+                    <LevelOfEvidencePageLink levelType={LEVEL_TYPES.FDA}>
+                      <b>HERE</b>
+                    </LevelOfEvidencePageLink>
+                    .
+                  </span>
+                }
+              />
             </span>
-            <InfoIcon
-              overlay={
-                <span>
-                  For more information about the FDA Level of Evidence, please
-                  see{' '}
-                  <LevelOfEvidencePageLink levelType={LEVEL_TYPES.FDA}>
-                    <b>HERE</b>
-                  </LevelOfEvidencePageLink>
-                  .
-                </span>
-              }
-            />
           </div>
         ),
         accessor: 'level',
-        width: viewportWidth / 6,
-        minWidth: viewportWidth / 6,
+        width: 140,
+        minWidth: 140,
         defaultSortDesc: true,
         sortMethod(a: string, b: string) {
           return (
@@ -629,8 +630,8 @@ export function getDefaultColumnDefinition<T>(
         id: MUTATIONS_TABLE_COLUMN_KEY.BIOLOGICAL_EFFECT,
         Header: <span className="font-medium">Biological effect</span>,
         accessor: 'biologicalEffect',
-        width: viewportWidth / 8,
-        minWidth: viewportWidth / 8,
+        width: 150,
+        minWidth: 150,
         defaultSortDesc: false,
         sortable: false,
       };
@@ -640,8 +641,8 @@ export function getDefaultColumnDefinition<T>(
         Header: <span className="font-medium">Description</span>,
         accessor: 'mutationDescription',
         style: { whiteSpace: 'normal' },
-        width: viewportWidth / 3,
-        minWidth: viewportWidth / 3,
+        width: viewportWidth * 0.275,
+        minWidth: viewportWidth * 0.275,
         defaultSortDesc: false,
         sortable: false,
         Cell: (props: any) => (
@@ -660,8 +661,8 @@ export function getDefaultColumnDefinition<T>(
         Header: <span className="font-medium">Consequence type</span>,
         accessor: 'consequenceType',
         style: { whiteSpace: 'normal' },
-        width: viewportWidth / 8,
-        minWidth: viewportWidth / 8,
+        width: 150,
+        minWidth: 150,
         defaultSortDesc: false,
         sortMethod: defaultSortMethod,
       };
@@ -671,8 +672,8 @@ export function getDefaultColumnDefinition<T>(
         Header: <span className="font-medium">Biomarker</span>,
         accessor: 'biomarker',
         style: { whiteSpace: 'normal' },
-        width: viewportWidth / 8,
-        minWidth: viewportWidth / 8,
+        width: 150,
+        minWidth: 150,
         defaultSortDesc: false,
         sortMethod: defaultSortMethod,
       };
@@ -682,50 +683,42 @@ export function getDefaultColumnDefinition<T>(
         Header: <span className="font-medium">Drug</span>,
         accessor: 'drug',
         style: { whiteSpace: 'normal' },
-        width: viewportWidth / 6,
-        minWidth: viewportWidth / 6,
+        width: 200,
+        minWidth: 200,
         defaultSortDesc: false,
         sortMethod: defaultSortMethod,
         Cell: (props: any) => (
           <div className={'d-flex justify-content-center'}>
-            <span className="font-medium" style={{ marginRight: '10px' }}>
-              {props.original.drug}
-            </span>
-            <InfoIcon
-              overlay={
-                <div className="info-icon-overlay">
-                  {props.original.treatmentDescription}
-                </div>
-              }
-            />
+            <span>{props.original.drug}</span>
           </div>
         ),
       };
-    case TREATMENTS_TABLE_COLUMN_KEY.LEVEL:
+    case TREATMENTS_TABLE_COLUMN_KEY.TREATMENTS_LEVEL:
       return {
-        id: TREATMENTS_TABLE_COLUMN_KEY.LEVEL,
+        id: TREATMENTS_TABLE_COLUMN_KEY.TREATMENTS_LEVEL,
         Header: (
           <div className={'d-flex justify-content-center'}>
-            <div className="font-medium" style={{ marginRight: '10px' }}>
+            <div className="font-medium">
               Level of evidence
+              <InfoIcon
+                style={{ marginLeft: '5px' }}
+                overlay={
+                  <span>
+                    For more information about the FDA Level of Evidence, please
+                    see{' '}
+                    <LevelOfEvidencePageLink levelType={LEVEL_TYPES.FDA}>
+                      <b>HERE</b>
+                    </LevelOfEvidencePageLink>
+                    .
+                  </span>
+                }
+              />
             </div>
-            <InfoIcon
-              overlay={
-                <span>
-                  For more information about the FDA Level of Evidence, please
-                  see{' '}
-                  <LevelOfEvidencePageLink levelType={LEVEL_TYPES.FDA}>
-                    <b>HERE</b>
-                  </LevelOfEvidencePageLink>
-                  .
-                </span>
-              }
-            />
           </div>
         ),
         accessor: 'treatmentLevel',
-        width: viewportWidth / 6,
-        minWidth: viewportWidth / 6,
+        width: 150,
+        minWidth: 150,
         defaultSortDesc: true,
         sortMethod(a: string, b: string) {
           return (
@@ -763,8 +756,8 @@ export function getDefaultColumnDefinition<T>(
         id: MUTATIONS_TABLE_COLUMN_KEY.LOCATION,
         Header: <span className="font-medium">Location</span>,
         accessor: 'location',
-        width: viewportWidth / 8,
-        minWidth: viewportWidth / 8,
+        width: 140,
+        minWidth: 140,
         defaultSortDesc: false,
         sortable: false,
       };
@@ -791,8 +784,8 @@ export function getDefaultColumnDefinition<T>(
         Header: <span className="font-medium">Tumor Type</span>,
         accessor: 'tumorType',
         style: { whiteSpace: 'normal' },
-        width: viewportWidth / 8,
-        minWidth: viewportWidth / 8,
+        width: 130,
+        minWidth: 130,
         defaultSortDesc: false,
         sortMethod: defaultSortMethod,
       };
@@ -802,8 +795,8 @@ export function getDefaultColumnDefinition<T>(
         Header: <span className="font-medium">FDA Level</span>,
         accessor: 'fdaLevel',
         style: { whiteSpace: 'normal' },
-        width: viewportWidth / 8,
-        minWidth: viewportWidth / 8,
+        width: 150,
+        minWidth: 150,
         defaultSortDesc: false,
         sortMethod(a: string, b: string) {
           return (
@@ -837,8 +830,8 @@ export function getDefaultColumnDefinition<T>(
         Header: <span className="font-medium">FDA Level</span>,
         accessor: 'treatmentFdaLevel',
         style: { whiteSpace: 'normal' },
-        width: viewportWidth / 8,
-        minWidth: viewportWidth / 8,
+        width: 130,
+        minWidth: 130,
         defaultSortDesc: false,
         sortMethod(a: string, b: string) {
           return (
