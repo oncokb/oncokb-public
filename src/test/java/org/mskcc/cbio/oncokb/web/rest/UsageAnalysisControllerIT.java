@@ -203,13 +203,13 @@ public class UsageAnalysisControllerIT {
 
   private static class MockS3Data {
 
-    private static class Tuple<X, Y> {
-      public final X first;
-      public final Y second;
+    private static class KeyValuePair<Key, Value> {
+      public final Key key;
+      public final Value value;
 
-      public Tuple(X first, Y second) {
-        this.first = first;
-        this.second = second;
+      public KeyValuePair(Key key, Value value) {
+        this.key = key;
+        this.value = value;
       }
     }
 
@@ -242,7 +242,13 @@ public class UsageAnalysisControllerIT {
       return sampleUrls[Math.abs(random.nextInt() % sampleUrls.length)];
     }
 
-    private Tuple<String, JsonObject> fetchJsonObjectFromFilesObject(
+    /**
+     * Get value from files JSON object based on the JSON path created by the
+     * {@code keys}. If an object is missing in the JSON path then it's created.
+     * @param keys The keys in JSON path
+     * @return The resulting {@code KeyValuePair}
+     */
+    private KeyValuePair<String, JsonObject> fetchJsonObjectFromFilesObject(
       String... keys
     ) {
       JsonObject obj = files;
@@ -254,10 +260,19 @@ public class UsageAnalysisControllerIT {
         obj = (JsonObject) obj.get(key);
       }
       String lastKey = keys[keys.length - 1];
-      return new Tuple<>(lastKey, obj);
+      return new KeyValuePair<>(lastKey, obj);
     }
 
-    private Tuple<String, JsonObject> fetchJsonObjectFromFilesObject(
+    /**
+     * Get value from files JSON object based on the JSON path created by the
+     * {@code filePath}/[{@code index}]/{@code keys}.
+     * If an object is missing in the JSON path then it's created.
+     * @param filePath First key in the files object.
+     * @param index Array index of the array the {@code filePath} parameter points to.
+     * @param keys The remaining JSON path keys.
+     * @return The resulting {@code KeyValuePair}
+     */
+    private KeyValuePair<String, JsonObject> fetchJsonObjectFromFilesObject(
       String filePath,
       int index,
       String... keys
@@ -283,13 +298,19 @@ public class UsageAnalysisControllerIT {
       if (!obj.has(lastKey)) {
         obj.addProperty(lastKey, 0);
       }
-      return new Tuple<>(lastKey, obj);
+      return new KeyValuePair<>(lastKey, obj);
     }
 
+    /**
+     * Adds the passed value to the value found in the files JSON object based on the JSON path created by the
+     * keys. If an object is missing in the JSON path then it's created.
+     * @param value Adds the specified value at the given JSON path.
+     * @param keys The keys in JSON path.
+     */
     private void safeAddNestedValueInFilesObject(int value, String... keys) {
-      Tuple<String, JsonObject> tuple = fetchJsonObjectFromFilesObject(keys);
-      String lastKey = tuple.first;
-      JsonObject obj = tuple.second;
+      KeyValuePair<String, JsonObject> pair = fetchJsonObjectFromFilesObject(keys);
+      String lastKey = pair.key;
+      JsonObject obj = pair.value;
       if (!obj.has(lastKey)) {
         obj.addProperty(lastKey, 0);
       }
@@ -298,67 +319,105 @@ public class UsageAnalysisControllerIT {
       obj.addProperty(lastKey, number + value);
     }
 
+    /**
+     * Adds the passed value to the value found in the files JSON object based on the JSON path created by the
+     * keys. If an object is missing in the JSON path then it's created.
+     * @param value Adds the specified value at the given JSON path.
+     * @param filePath First key in the files object.
+     * @param index Array index of the array the {@code filePath} parameter points to.
+     * @param keys The remaining JSON path keys.
+     */
     private void safeAddNestedValueInFilesObject(
       int value,
       String filePath,
       int index,
       String... keys
     ) {
-      Tuple<String, JsonObject> tuple = fetchJsonObjectFromFilesObject(
+      KeyValuePair<String, JsonObject> pair = fetchJsonObjectFromFilesObject(
         filePath,
         index,
         keys
       );
-      String lastKey = tuple.first;
-      JsonObject obj = tuple.second;
+      String lastKey = pair.key;
+      JsonObject obj = pair.value;
       JsonPrimitive primitive = (JsonPrimitive) obj.get(lastKey);
       int number = primitive.getAsInt();
       obj.addProperty(lastKey, number + value);
     }
 
+    /**
+     * Set the passed value to the value found in the files JSON object based on the JSON path created by the
+     * keys. If an object is missing in the JSON path then it's created.
+     * @param value Sets the specified value at the given JSON path.
+     * @param keys The keys in JSON path.
+     */
     private void safeSetNestedValueInFilesObject(String value, String... keys) {
-      Tuple<String, JsonObject> tuple = fetchJsonObjectFromFilesObject(keys);
-      String lastKey = tuple.first;
-      JsonObject obj = tuple.second;
+      KeyValuePair<String, JsonObject> pair = fetchJsonObjectFromFilesObject(keys);
+      String lastKey = pair.key;
+      JsonObject obj = pair.value;
       obj.addProperty(lastKey, value);
     }
 
+    /**
+     * Set the passed value to the value found in the files JSON object based on the JSON path created by the
+     * keys. If an object is missing in the JSON path then it's created.
+     * @param value The value that is going to be added to value located in the JSON path.
+     * @param filePath First key in the files object.
+     * @param index Array index of the array the {@code filePath} parameter points to.
+     * @param keys The remaining JSON path keys.
+     */
     private void safeSetNestedValueInFilesObject(
       String value,
       String filePath,
       int index,
       String... keys
     ) {
-      Tuple<String, JsonObject> tuple = fetchJsonObjectFromFilesObject(
+      KeyValuePair<String, JsonObject> pair = fetchJsonObjectFromFilesObject(
         filePath,
         index,
         keys
       );
-      String lastKey = tuple.first;
-      JsonObject obj = tuple.second;
+      String lastKey = pair.key;
+      JsonObject obj = pair.value;
       obj.addProperty(lastKey, value);
     }
 
+      /**
+       * Set the passed value to the value found in the files JSON object based on the JSON path created by the
+       * keys. If an object is missing in the JSON path then it's created.
+       * @param value The value that is going to be added to value located in the JSON path.
+       * @param filePath First key in the files object.
+       * @param index Array index of the array the {@code filePath} parameter points to.
+       * @param keys The remaining JSON path keys.
+       */
     private void safeSetNestedValueInFilesObject(
       float value,
       String filePath,
       int index,
       String... keys
     ) {
-      Tuple<String, JsonObject> tuple = fetchJsonObjectFromFilesObject(
+      KeyValuePair<String, JsonObject> pair = fetchJsonObjectFromFilesObject(
         filePath,
         index,
         keys
       );
-      String lastKey = tuple.first;
-      JsonObject obj = tuple.second;
+      String lastKey = pair.key;
+      JsonObject obj = pair.value;
       obj.addProperty(lastKey, value);
     }
 
+     /**
+     * Set an empty object to the value found in the files JSON object based on the JSON path created by the
+     * keys. If an object is missing in the JSON path then it's created.
+     * @param value The value that is going to be added to value located in the JSON path.
+     * @param filePath First key in the files object.
+     * @param index Array index of the array the {@code filePath} parameter points to.
+     * @param keys The remaining JSON path keys.
+     */
     private void safeSetNestedEmptyObjectInFilesObject(String... keys) {
-      Tuple<String, JsonObject> tuple = fetchJsonObjectFromFilesObject(keys);
-      String lastKey = tuple.first;
-      JsonObject obj = tuple.second;
+      KeyValuePair<String, JsonObject> pair = fetchJsonObjectFromFilesObject(keys);
+      String lastKey = pair.key;
+      JsonObject obj = pair.value;
       if (!obj.has(lastKey)) {
         obj.add(lastKey, new JsonObject());
       }
@@ -721,21 +780,21 @@ public class UsageAnalysisControllerIT {
       return userDto;
     }
 
-    private CompanyDTO createMockCompany(int companyIndex, String companyName) {
+    private CompanyDTO createMockCompany(int companyId, String companyName) {
       CompanyDTO companyDTO = new CompanyDTO();
       companyDTO.setName(companyName);
-      companyDTO.setId((long) companyIndex);
+      companyDTO.setId((long) companyId);
       companyDTO.setLicenseType(LicenseType.ACADEMIC);
       return companyDTO;
     }
 
     private User createMockUser(
-      int userIndex,
+      int userId,
       String userName,
       String companyName
     ) {
       User user = new User();
-      user.setId((long) userIndex);
+      user.setId((long) userId);
       user.setEmail(userName + "@" + companyName + ".com");
       user.setFirstName(String.valueOf(userName.charAt(userName.length() - 1)));
       user.setLastName(userName.substring(0, userName.length() - 1));
