@@ -5,6 +5,8 @@ const WorkboxPlugin = require('workbox-webpack-plugin');
 const TerserPlugin = require('terser-webpack-plugin');
 const OptimizeCSSAssetsPlugin = require('optimize-css-assets-webpack-plugin');
 const MomentLocalesPlugin = require('moment-locales-webpack-plugin');
+const BundleAnalyzerPlugin = require('webpack-bundle-analyzer')
+  .BundleAnalyzerPlugin;
 
 const utils = require('./utils.js');
 const commonConfig = require('./webpack.common.js');
@@ -74,6 +76,9 @@ module.exports = webpackMerge(
     },
     optimization: {
       runtimeChunk: false,
+      splitChunks: {
+        chunks: 'all',
+      },
       minimize: true,
       minimizer: [
         new TerserPlugin({
@@ -132,6 +137,7 @@ module.exports = webpackMerge(
         maximumFileSizeToCacheInBytes: 15000000,
         exclude: [/swagger-ui/],
       }),
+      new BundleAnalyzerPlugin(),
     ],
   }
 );
