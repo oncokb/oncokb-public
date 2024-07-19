@@ -537,11 +537,11 @@ public class UsageAnalysisControllerIT {
 
                 // update expected response for monthly resource summary
                 if (isThisYear) {
-                updateResourceSummaryExpectedResponse(
-                  value,
-                  oncokbEndpoint,
-                  monthKey
-                );
+                  updateResourceSummaryExpectedResponse(
+                    value,
+                    oncokbEndpoint,
+                    monthKey
+                  );
                 }
 
                 // update expected response for user usage endpoint
@@ -573,11 +573,14 @@ public class UsageAnalysisControllerIT {
                   );
                 }
 
-
                 if (isThisYear) {
-                  updateSpecificEndpointUserUsageExpectedResponse(value, user, oncokbEndpoint, monthKey);
+                  updateSpecificEndpointUserUsageExpectedResponse(
+                    value,
+                    user,
+                    oncokbEndpoint,
+                    monthKey
+                  );
                 }
-
 
                 // update user endpoint usage endpoint
                 if (isAfterOrEqualToPast12Months && isBeforeOrEqualToToday) {
@@ -598,7 +601,6 @@ public class UsageAnalysisControllerIT {
                       monthKey
                     );
                   }
-
                 }
 
                 if (isThisYear) {
@@ -640,33 +642,34 @@ public class UsageAnalysisControllerIT {
           maxNoPrivateResourceEntry
         );
 
-        updateUserUsageExpectedResponse(
-          user,
-          userDto,
-          usageUserEndpoint
-        );
+        updateUserUsageExpectedResponse(user, userDto, usageUserEndpoint);
       }
     }
 
-    private void updateSpecificEndpointUserUsageExpectedResponse(int value, User user,  String oncokbEndpoint, String monthKey) {
+    private void updateSpecificEndpointUserUsageExpectedResponse(
+      int value,
+      User user,
+      String oncokbEndpoint,
+      String monthKey
+    ) {
       String usageResourcesEndpoint = "/api/usage/resources";
-        safeAddNestedValueInFilesObject(
-            value,
-            usageResourcesEndpoint + "?endpoint=" + oncokbEndpoint,
-            "year",
-            user.getEmail()
-          );
-          safeAddNestedValueInFilesObject(
-            value,
-            usageResourcesEndpoint + "?endpoint=" + oncokbEndpoint,
-            "month",
-            monthKey,
-            user.getEmail()
-          );
-          safeSetNestedEmptyObjectInFilesObject(
-            usageResourcesEndpoint + "?endpoint=" + oncokbEndpoint,
-            "day"
-          );
+      safeAddNestedValueInFilesObject(
+        value,
+        usageResourcesEndpoint + "?endpoint=" + oncokbEndpoint,
+        "year",
+        user.getEmail()
+      );
+      safeAddNestedValueInFilesObject(
+        value,
+        usageResourcesEndpoint + "?endpoint=" + oncokbEndpoint,
+        "month",
+        monthKey,
+        user.getEmail()
+      );
+      safeSetNestedEmptyObjectInFilesObject(
+        usageResourcesEndpoint + "?endpoint=" + oncokbEndpoint,
+        "day"
+      );
     }
 
     private void updateUserSummaryUsageExpectedResponse(
@@ -763,22 +766,22 @@ public class UsageAnalysisControllerIT {
       String oncokbEndpoint,
       String monthKey
     ) {
-        String usageSummaryResources = "/api/usage/summary/resources";
-        safeAddNestedValueInFilesObject(
-          value,
-          usageSummaryResources,
-          "year",
-          oncokbEndpoint
-        );
-        safeAddNestedValueInFilesObject(
-          value,
-          usageSummaryResources,
-          "month",
-          monthKey,
-          oncokbEndpoint
-        );
+      String usageSummaryResources = "/api/usage/summary/resources";
+      safeAddNestedValueInFilesObject(
+        value,
+        usageSummaryResources,
+        "year",
+        oncokbEndpoint
+      );
+      safeAddNestedValueInFilesObject(
+        value,
+        usageSummaryResources,
+        "month",
+        monthKey,
+        oncokbEndpoint
+      );
 
-        safeSetNestedEmptyObjectInFilesObject(usageSummaryResources, "day");
+      safeSetNestedEmptyObjectInFilesObject(usageSummaryResources, "day");
     }
 
     private void updateResourceYearFile(
