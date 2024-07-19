@@ -145,7 +145,8 @@ public class UsageAnalysisControllerIT {
 
   @Test
   public void shouldGetUsageResources() throws Exception {
-    String url = "/api/usage/resources?endpoint=" + data.sampleUrls[0];
+    String url =
+      "/api/usage/resources?endpoint=" + data.sampleOncokbEndpoints[0];
     String expected = gson.toJson(data.files.get(url));
     restMockMvc
       .perform(get(url))
@@ -213,7 +214,7 @@ public class UsageAnalysisControllerIT {
       }
     }
 
-    private final String[] sampleUrls = {
+    private final String[] sampleOncokbEndpoints = {
       "/api/v1/annotate/mutations/byProteinChange",
       "/api/private/utils/numbers/main/",
       "/api/v1/annotate/structuralVariants",
@@ -238,8 +239,10 @@ public class UsageAnalysisControllerIT {
       addUsers(userNames);
     }
 
-    private String getNextSampleUrl() {
-      return sampleUrls[Math.abs(random.nextInt() % sampleUrls.length)];
+    private String getNextOncokbEndpoint() {
+      return sampleOncokbEndpoints[Math.abs(
+          random.nextInt() % sampleOncokbEndpoints.length
+        )];
     }
 
     /**
@@ -308,7 +311,9 @@ public class UsageAnalysisControllerIT {
      * @param keys The keys in JSON path.
      */
     private void safeAddNestedValueInFilesObject(int value, String... keys) {
-      KeyValuePair<String, JsonObject> pair = fetchJsonObjectFromFilesObject(keys);
+      KeyValuePair<String, JsonObject> pair = fetchJsonObjectFromFilesObject(
+        keys
+      );
       String lastKey = pair.key;
       JsonObject obj = pair.value;
       if (!obj.has(lastKey)) {
@@ -352,7 +357,9 @@ public class UsageAnalysisControllerIT {
      * @param keys The keys in JSON path.
      */
     private void safeSetNestedValueInFilesObject(String value, String... keys) {
-      KeyValuePair<String, JsonObject> pair = fetchJsonObjectFromFilesObject(keys);
+      KeyValuePair<String, JsonObject> pair = fetchJsonObjectFromFilesObject(
+        keys
+      );
       String lastKey = pair.key;
       JsonObject obj = pair.value;
       obj.addProperty(lastKey, value);
@@ -382,14 +389,14 @@ public class UsageAnalysisControllerIT {
       obj.addProperty(lastKey, value);
     }
 
-      /**
-       * Set the passed value to the value found in the files JSON object based on the JSON path created by the
-       * keys. If an object is missing in the JSON path then it's created.
-       * @param value The value that is going to be added to value located in the JSON path.
-       * @param filePath First key in the files object.
-       * @param index Array index of the array the {@code filePath} parameter points to.
-       * @param keys The remaining JSON path keys.
-       */
+    /**
+     * Set the passed value to the value found in the files JSON object based on the JSON path created by the
+     * keys. If an object is missing in the JSON path then it's created.
+     * @param value The value that is going to be added to value located in the JSON path.
+     * @param filePath First key in the files object.
+     * @param index Array index of the array the {@code filePath} parameter points to.
+     * @param keys The remaining JSON path keys.
+     */
     private void safeSetNestedValueInFilesObject(
       float value,
       String filePath,
@@ -406,7 +413,7 @@ public class UsageAnalysisControllerIT {
       obj.addProperty(lastKey, value);
     }
 
-     /**
+    /**
      * Set an empty object to the value found in the files JSON object based on the JSON path created by the
      * keys. If an object is missing in the JSON path then it's created.
      * @param value The value that is going to be added to value located in the JSON path.
@@ -415,7 +422,9 @@ public class UsageAnalysisControllerIT {
      * @param keys The remaining JSON path keys.
      */
     private void safeSetNestedEmptyObjectInFilesObject(String... keys) {
-      KeyValuePair<String, JsonObject> pair = fetchJsonObjectFromFilesObject(keys);
+      KeyValuePair<String, JsonObject> pair = fetchJsonObjectFromFilesObject(
+        keys
+      );
       String lastKey = pair.key;
       JsonObject obj = pair.value;
       if (!obj.has(lastKey)) {
@@ -426,24 +435,23 @@ public class UsageAnalysisControllerIT {
     private void addUsers(String[] userNames) throws Exception {
       LocalDate today = TimeUtil.getCurrentNYTime().toLocalDate();
       int currentYear = today.getYear();
-      int userIndex = -1;
-      String usageSummaryResources = "/api/usage/summary/resources";
+      int userId = -1;
       String usageResources = "/api/usage/resources";
       for (String userName : userNames) {
         int totalUsage = 0;
-        userIndex++;
+        userId++;
         // force ordering to consistent since we are doing strict checks on
         // asserts for json
-        userName = userIndex + userName;
+        userName = userId + userName;
         HashMap<String, Integer> userResourceUsage = new HashMap<>();
-        for (String sampleUrl : sampleUrls) {
-          userResourceUsage.put(sampleUrl, 0);
+        for (String oncokbEndpoint : sampleOncokbEndpoints) {
+          userResourceUsage.put(oncokbEndpoint, 0);
         }
 
-        int companyIndex = userIndex % fakeCompanies.length;
+        int companyIndex = userId % fakeCompanies.length;
         String companyName = fakeCompanies[companyIndex];
 
-        User user = createMockUser(userIndex, userName, companyName);
+        User user = createMockUser(userId, userName, companyName);
         users.add(user);
 
         CompanyDTO companyDTO = createMockCompany(companyIndex, companyName);
@@ -451,14 +459,15 @@ public class UsageAnalysisControllerIT {
         UserDTO userDto = createMockUserDto(user, companyDTO);
         userDtos.add(userDto);
 
-        String usageUserUrl = "/api/usage/users/" + user.getId();
-        String[] userUsageSummaryUrls = {
+        String usageUserEndpoint = "/api/usage/users/" + user.getId();
+        String[] userUsageSummaryEndpoints = {
           "/api/usage/summary/users",
           "/api/usage/summary/users?companyId=" + companyDTO.getId(),
         };
 
         for (int yearIndex = 0; yearIndex < 4; yearIndex++) {
           int year = currentYear - yearIndex;
+          Boolean isThisYear = yearIndex == 0;
 
           DateTimeFormatter dayFormatter = DateTimeFormatter.ofPattern(
             "yyyy-MM-dd"
@@ -478,23 +487,6 @@ public class UsageAnalysisControllerIT {
               .atStartOfDay()
               .toLocalDate();
 
-            String resourceYearPath =
-              YEAR_RESOURCES_USAGE_SUMMARY_FILE_PREFIX +
-              yearKey +
-              FileExtension.JSON_FILE.getExtension();
-            String resourceMonthPath =
-              MONTH_RESOURCES_USAGE_SUMMARY_FILE_PREFIX +
-              monthKey +
-              FileExtension.JSON_FILE.getExtension();
-            String userYearPath =
-              YEAR_USERS_USAGE_SUMMARY_FILE_PREFIX +
-              yearKey +
-              FileExtension.JSON_FILE.getExtension();
-            String userMonthPath =
-              MONTH_USERS_USAGE_SUMMARY_FILE_PREFIX +
-              monthKey +
-              FileExtension.JSON_FILE.getExtension();
-
             for (
               LocalDate date = start;
               !date.isAfter(end) && !date.isAfter(today);
@@ -504,117 +496,73 @@ public class UsageAnalysisControllerIT {
               String dayKey = date.format(dayFormatter);
               while (random.nextInt() % 5 == 0 && j < 5) {
                 j++;
-                String sampleUrl = getNextSampleUrl();
+                String oncokbEndpoint = getNextOncokbEndpoint();
                 int value = random.nextInt(100);
-
-                safeAddNestedValueInFilesObject(
+                updateResourceYearFile(
                   value,
-                  resourceYearPath,
-                  "year",
-                  sampleUrl
+                  oncokbEndpoint,
+                  yearKey,
+                  monthKey
                 );
-                safeAddNestedValueInFilesObject(
+
+                updateResourceSummaryExpectedResponse(
                   value,
-                  resourceYearPath,
-                  "month",
-                  monthKey,
-                  sampleUrl
+                  isThisYear,
+                  oncokbEndpoint,
+                  monthKey
                 );
 
                 if (yearIndex == 0) {
                   safeAddNestedValueInFilesObject(
                     value,
-                    usageSummaryResources,
-                    "year",
-                    sampleUrl
-                  );
-                  safeAddNestedValueInFilesObject(
-                    value,
-                    usageSummaryResources,
-                    "month",
-                    monthKey,
-                    sampleUrl
-                  );
-
-                  safeSetNestedEmptyObjectInFilesObject(
-                    usageSummaryResources,
-                    "day"
-                  );
-
-                  safeAddNestedValueInFilesObject(
-                    value,
-                    usageUserUrl,
+                    usageUserEndpoint,
                     "summary",
                     "year",
-                    sampleUrl
+                    oncokbEndpoint
                   );
                 }
 
-                safeAddNestedValueInFilesObject(
+                updateResourceMonthFile(
                   value,
-                  resourceMonthPath,
-                  "month",
+                  oncokbEndpoint,
                   monthKey,
-                  sampleUrl
-                );
-                safeAddNestedValueInFilesObject(
-                  value,
-                  resourceMonthPath,
-                  "day",
-                  dayKey,
-                  sampleUrl
+                  dayKey
                 );
 
-                safeAddNestedValueInFilesObject(
+                updateUserYearFile(
                   value,
-                  userYearPath,
-                  user.getEmail(),
-                  "year",
-                  sampleUrl
-                );
-                safeAddNestedValueInFilesObject(
-                  value,
-                  userYearPath,
-                  user.getEmail(),
-                  "month",
-                  monthKey,
-                  sampleUrl
+                  user,
+                  oncokbEndpoint,
+                  yearKey,
+                  monthKey
                 );
 
                 if (yearIndex == 0) {
                   safeAddNestedValueInFilesObject(
                     value,
-                    usageResources + "?endpoint=" + sampleUrl,
+                    usageResources + "?endpoint=" + oncokbEndpoint,
                     "year",
                     user.getEmail()
                   );
                   safeAddNestedValueInFilesObject(
                     value,
-                    usageResources + "?endpoint=" + sampleUrl,
+                    usageResources + "?endpoint=" + oncokbEndpoint,
                     "month",
                     monthKey,
                     user.getEmail()
                   );
                   safeSetNestedEmptyObjectInFilesObject(
-                    usageResources + "?endpoint=" + sampleUrl,
+                    usageResources + "?endpoint=" + oncokbEndpoint,
                     "day"
                   );
                 }
 
-                safeAddNestedValueInFilesObject(
+                updateUserMonthFile(
                   value,
-                  userMonthPath,
-                  user.getEmail(),
-                  "month",
-                  sampleUrl
-                );
-                safeAddNestedValueInFilesObject(
-                  value,
-                  userMonthPath,
-                  user.getEmail(),
-                  "day",
-                  dayKey,
-                  sampleUrl
+                  user,
+                  oncokbEndpoint,
+                  monthKey,
+                  dayKey
                 );
 
                 boolean isAfterOrEqualToPast12Months = date.isAfter(
@@ -624,19 +572,19 @@ public class UsageAnalysisControllerIT {
                   today.plusMonths(1).withDayOfMonth(1)
                 );
                 if (isAfterOrEqualToPast12Months && isBeforeOrEqualToToday) {
-                  for (String usageSummaryUrl : userUsageSummaryUrls) {
+                  for (String usageSummaryEndpoint : userUsageSummaryEndpoints) {
                     safeAddNestedValueInFilesObject(
                       value,
-                      usageSummaryUrl,
-                      userIndex,
+                      usageSummaryEndpoint,
+                      userId,
                       "dayUsage",
                       dayKey
                     );
 
                     safeAddNestedValueInFilesObject(
                       value,
-                      usageSummaryUrl,
-                      userIndex,
+                      usageSummaryEndpoint,
+                      userId,
                       "monthUsage",
                       monthKey
                     );
@@ -644,32 +592,32 @@ public class UsageAnalysisControllerIT {
 
                   safeAddNestedValueInFilesObject(
                     value,
-                    usageUserUrl,
+                    usageUserEndpoint,
                     "summary",
                     "month",
                     monthKey,
-                    sampleUrl
+                    oncokbEndpoint
                   );
                   safeAddNestedValueInFilesObject(
                     value,
-                    usageUserUrl,
+                    usageUserEndpoint,
                     "summary",
                     "day",
                     dayKey,
-                    sampleUrl
+                    oncokbEndpoint
                   );
                 }
 
                 if (yearIndex == 0) {
                   userResourceUsage.put(
-                    sampleUrl,
-                    userResourceUsage.get(sampleUrl) + value
+                    oncokbEndpoint,
+                    userResourceUsage.get(oncokbEndpoint) + value
                   );
-                  for (String usageSummaryUrl : userUsageSummaryUrls) {
+                  for (String usageSummaryUrl : userUsageSummaryEndpoints) {
                     safeAddNestedValueInFilesObject(
                       value,
                       usageSummaryUrl,
-                      userIndex,
+                      userId,
                       "totalUsage"
                     );
                   }
@@ -691,80 +639,245 @@ public class UsageAnalysisControllerIT {
           .max(Map.Entry.comparingByValue())
           .orElseThrow(Exception::new);
 
-        for (String usageSummaryUrl : userUsageSummaryUrls) {
-          safeSetNestedValueInFilesObject(
-            String.valueOf(user.getId()),
-            usageSummaryUrl,
-            userIndex,
-            "userId"
-          );
-          safeSetNestedValueInFilesObject(
-            user.getEmail(),
-            usageSummaryUrl,
-            userIndex,
-            "userEmail"
-          );
-          safeSetNestedValueInFilesObject(
-            maxResourceEntry.getKey(),
-            usageSummaryUrl,
-            userIndex,
-            "endpoint"
-          );
-          safeSetNestedValueInFilesObject(
-            maxNoPrivateResourceEntry.getKey(),
-            usageSummaryUrl,
-            userIndex,
-            "noPrivateEndpoint"
-          );
-          safeSetNestedValueInFilesObject(
-            (int) (1000 * ((float) maxResourceEntry.getValue() / totalUsage)) /
-            10f,
-            usageSummaryUrl,
-            userIndex,
-            "maxUsageProportion"
-          );
-          safeSetNestedValueInFilesObject(
-            (int) (
-              1000 * ((float) maxNoPrivateResourceEntry.getValue() / totalUsage)
-            ) /
-            10f,
-            usageSummaryUrl,
-            userIndex,
-            "noPrivateMaxUsageProportion"
-          );
-        }
-
-        safeSetNestedValueInFilesObject(
-          user.getFirstName(),
-          usageUserUrl,
-          "userFirstName"
+        updateUserUsageExpectedResponse(
+          user,
+          totalUsage,
+          userUsageSummaryEndpoints,
+          maxResourceEntry,
+          maxNoPrivateResourceEntry
         );
+
+        addUserInformationToUserUsageExpectedResponse(
+          user,
+          userDto,
+          usageUserEndpoint
+        );
+      }
+    }
+
+    private void updateUserUsageExpectedResponse(
+      User user,
+      int totalUsage,
+      String[] userUsageSummaryEndpoints,
+      Entry<String, Integer> maxResourceEntry,
+      Entry<String, Integer> maxNoPrivateResourceEntry
+    ) {
+      int userId = user.getId().intValue();
+      for (String usageSummaryUrl : userUsageSummaryEndpoints) {
         safeSetNestedValueInFilesObject(
-          user.getLastName(),
-          usageUserUrl,
-          "userLastName"
+          String.valueOf(user.getId()),
+          usageSummaryUrl,
+          userId,
+          "userId"
         );
         safeSetNestedValueInFilesObject(
           user.getEmail(),
-          usageUserUrl,
+          usageSummaryUrl,
+          userId,
           "userEmail"
         );
         safeSetNestedValueInFilesObject(
-          userDto.getLicenseType().getName(),
-          usageUserUrl,
-          "licenseType"
+          maxResourceEntry.getKey(),
+          usageSummaryUrl,
+          userId,
+          "endpoint"
         );
         safeSetNestedValueInFilesObject(
-          userDto.getJobTitle(),
-          usageUserUrl,
-          "jobTitle"
+          maxNoPrivateResourceEntry.getKey(),
+          usageSummaryUrl,
+          userId,
+          "noPrivateEndpoint"
         );
         safeSetNestedValueInFilesObject(
-          userDto.getCompanyName(),
-          usageUserUrl,
-          "company"
+          (int) (1000 * ((float) maxResourceEntry.getValue() / totalUsage)) /
+          10f,
+          usageSummaryUrl,
+          userId,
+          "maxUsageProportion"
+        );
+        safeSetNestedValueInFilesObject(
+          (int) (
+            1000 * ((float) maxNoPrivateResourceEntry.getValue() / totalUsage)
+          ) /
+          10f,
+          usageSummaryUrl,
+          userId,
+          "noPrivateMaxUsageProportion"
         );
       }
+    }
+
+    private void addUserInformationToUserUsageExpectedResponse(
+      User user,
+      UserDTO userDto,
+      String usageUserEndpoint
+    ) {
+      safeSetNestedValueInFilesObject(
+        user.getFirstName(),
+        usageUserEndpoint,
+        "userFirstName"
+      );
+      safeSetNestedValueInFilesObject(
+        user.getLastName(),
+        usageUserEndpoint,
+        "userLastName"
+      );
+      safeSetNestedValueInFilesObject(
+        user.getEmail(),
+        usageUserEndpoint,
+        "userEmail"
+      );
+      safeSetNestedValueInFilesObject(
+        userDto.getLicenseType().getName(),
+        usageUserEndpoint,
+        "licenseType"
+      );
+      safeSetNestedValueInFilesObject(
+        userDto.getJobTitle(),
+        usageUserEndpoint,
+        "jobTitle"
+      );
+      safeSetNestedValueInFilesObject(
+        userDto.getCompanyName(),
+        usageUserEndpoint,
+        "company"
+      );
+    }
+
+    private void updateResourceSummaryExpectedResponse(
+      int value,
+      Boolean isThisYear,
+      String oncokbEndpoint,
+      String monthKey
+    ) {
+      if (isThisYear) {
+        String usageSummaryResources = "/api/usage/summary/resources";
+        safeAddNestedValueInFilesObject(
+          value,
+          usageSummaryResources,
+          "year",
+          oncokbEndpoint
+        );
+        safeAddNestedValueInFilesObject(
+          value,
+          usageSummaryResources,
+          "month",
+          monthKey,
+          oncokbEndpoint
+        );
+
+        safeSetNestedEmptyObjectInFilesObject(usageSummaryResources, "day");
+      }
+    }
+
+    private void updateResourceYearFile(
+      int value,
+      String oncokbEndpoint,
+      String yearKey,
+      String monthKey
+    ) {
+      String resourceYearPath =
+        YEAR_RESOURCES_USAGE_SUMMARY_FILE_PREFIX +
+        yearKey +
+        FileExtension.JSON_FILE.getExtension();
+
+      safeAddNestedValueInFilesObject(
+        value,
+        resourceYearPath,
+        "year",
+        oncokbEndpoint
+      );
+      safeAddNestedValueInFilesObject(
+        value,
+        resourceYearPath,
+        "month",
+        monthKey,
+        oncokbEndpoint
+      );
+    }
+
+    private void updateUserYearFile(
+      int value,
+      User user,
+      String oncokbEndpoint,
+      String yearKey,
+      String monthKey
+    ) {
+      String userYearPath =
+        YEAR_USERS_USAGE_SUMMARY_FILE_PREFIX +
+        yearKey +
+        FileExtension.JSON_FILE.getExtension();
+
+      safeAddNestedValueInFilesObject(
+        value,
+        userYearPath,
+        user.getEmail(),
+        "year",
+        oncokbEndpoint
+      );
+      safeAddNestedValueInFilesObject(
+        value,
+        userYearPath,
+        user.getEmail(),
+        "month",
+        monthKey,
+        oncokbEndpoint
+      );
+    }
+
+    private void updateResourceMonthFile(
+      int value,
+      String oncokbEndpoint,
+      String monthKey,
+      String dayKey
+    ) {
+      String resourceMonthPath =
+        MONTH_RESOURCES_USAGE_SUMMARY_FILE_PREFIX +
+        monthKey +
+        FileExtension.JSON_FILE.getExtension();
+      safeAddNestedValueInFilesObject(
+        value,
+        resourceMonthPath,
+        "month",
+        monthKey,
+        oncokbEndpoint
+      );
+      safeAddNestedValueInFilesObject(
+        value,
+        resourceMonthPath,
+        "day",
+        dayKey,
+        oncokbEndpoint
+      );
+    }
+
+    private void updateUserMonthFile(
+      int value,
+      User user,
+      String oncokbEndpoint,
+      String monthKey,
+      String dayKey
+    ) {
+      String userMonthPath =
+        MONTH_USERS_USAGE_SUMMARY_FILE_PREFIX +
+        monthKey +
+        FileExtension.JSON_FILE.getExtension();
+
+      safeAddNestedValueInFilesObject(
+        value,
+        userMonthPath,
+        user.getEmail(),
+        "month",
+        oncokbEndpoint
+      );
+      safeAddNestedValueInFilesObject(
+        value,
+        userMonthPath,
+        user.getEmail(),
+        "day",
+        dayKey,
+        oncokbEndpoint
+      );
     }
 
     private UserDTO createMockUserDto(User user, CompanyDTO companyDTO) {
