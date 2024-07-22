@@ -248,59 +248,67 @@ public class UsageAnalysisControllerIT {
     /**
      * Get value from files JSON object based on the JSON path created by the
      * {@code keys}. If an object is missing in the JSON path then it's created.
-     * @param keys The keys in JSON path
+     * @param firstKey firstKey in JSON path
+     * @param restOfTheKeys The keys in JSON path
      * @return The resulting {@code KeyValuePair}
      */
-    private KeyValuePair<String, JsonObject> fetchJsonObjectFromFilesObject(
-      String... keys
+    private KeyValuePair<String, JsonObject> safeFetchJsonObjectFromFilesObject(
+      String firstKey,
+      String... restOfTheKeys
     ) {
       JsonObject obj = files;
-      for (int i = 0; i < keys.length - 1; i++) {
-        String key = keys[i];
+      if (!obj.has(firstKey)) {
+        obj.add(firstKey, new JsonObject());
+      }
+      obj = (JsonObject) obj.get(firstKey);
+
+      for (int i = 0; i < restOfTheKeys.length - 1; i++) {
+        String key = restOfTheKeys[i];
         if (!obj.has(key)) {
           obj.add(key, new JsonObject());
         }
         obj = (JsonObject) obj.get(key);
       }
-      String lastKey = keys[keys.length - 1];
+      String lastKey = restOfTheKeys.length == 0
+        ? firstKey
+        : restOfTheKeys[restOfTheKeys.length - 1];
       return new KeyValuePair<>(lastKey, obj);
     }
 
     /**
      * Get value from files JSON object based on the JSON path created by the
-     * {@code filePath}/[{@code index}]/{@code keys}.
+     * {@code firstKey}/[{@code index}]/{@code keys}.
      * If an object is missing in the JSON path then it's created.
-     * @param filePath First key in the files object.
-     * @param index Array index of the array the {@code filePath} parameter points to.
-     * @param keys The remaining JSON path keys.
+     * @param firstKey First key in the files object.
+     * @param index Array index of the array the {@code firstKey} parameter points to.
+     * @param restOfTheKeys The remaining JSON path keys.
      * @return The resulting {@code KeyValuePair}
      */
-    private KeyValuePair<String, JsonObject> fetchJsonObjectFromFilesObject(
-      String filePath,
+    private KeyValuePair<String, JsonObject> safeFetchJsonObjectFromFilesObject(
+      String firstKey,
       int index,
-      String... keys
+      String... restOfTheKeys
     ) {
       JsonObject obj = files;
-      if (!obj.has(filePath)) {
-        obj.add(filePath, new JsonArray());
+      if (!obj.has(firstKey)) {
+        obj.add(firstKey, new JsonArray());
       }
-      JsonArray arr = (JsonArray) obj.get(filePath);
+      JsonArray arr = (JsonArray) obj.get(firstKey);
       while (index >= arr.size()) {
         arr.add(new JsonObject());
       }
       obj = (JsonObject) arr.get(index);
 
-      for (int i = 0; i < keys.length - 1; i++) {
-        String key = keys[i];
+      for (int i = 0; i < restOfTheKeys.length - 1; i++) {
+        String key = restOfTheKeys[i];
         if (!obj.has(key)) {
           obj.add(key, new JsonObject());
         }
         obj = (JsonObject) obj.get(key);
       }
-      String lastKey = keys[keys.length - 1];
-      if (!obj.has(lastKey)) {
-        obj.addProperty(lastKey, 0);
-      }
+      String lastKey = restOfTheKeys.length == 0
+        ? firstKey
+        : restOfTheKeys[restOfTheKeys.length - 1];
       return new KeyValuePair<>(lastKey, obj);
     }
 
@@ -308,11 +316,17 @@ public class UsageAnalysisControllerIT {
      * Adds the passed value to the value found in the files JSON object based on the JSON path created by the
      * keys. If an object is missing in the JSON path then it's created.
      * @param value Adds the specified value at the given JSON path.
-     * @param keys The keys in JSON path.
+     * @param firstKey First key in the files object.
+     * @param restOfTheKeys The keys in JSON path.
      */
-    private void safeAddNestedValueInFilesObject(int value, String... keys) {
-      KeyValuePair<String, JsonObject> pair = fetchJsonObjectFromFilesObject(
-        keys
+    private void safeAddNestedValueInFilesObject(
+      int value,
+      String firstKey,
+      String... restOfTheKeys
+    ) {
+      KeyValuePair<String, JsonObject> pair = safeFetchJsonObjectFromFilesObject(
+        firstKey,
+        restOfTheKeys
       );
       String lastKey = pair.key;
       JsonObject obj = pair.value;
@@ -328,21 +342,25 @@ public class UsageAnalysisControllerIT {
      * Adds the passed value to the value found in the files JSON object based on the JSON path created by the
      * keys. If an object is missing in the JSON path then it's created.
      * @param value Adds the specified value at the given JSON path.
-     * @param filePath First key in the files object.
-     * @param index Array index of the array the {@code filePath} parameter points to.
-     * @param keys The remaining JSON path keys.
+     * @param firstKey First key in the files object.
+     * @param index Array index of the array the {@code firstKey} parameter points to.
+     * @param restOfTheKeys The remaining JSON path keys.
      */
     private void safeAddNestedValueInFilesObject(
       int value,
-      String filePath,
+      String firstKey,
       int index,
-      String... keys
+      String... restOfTheKeys
     ) {
-      KeyValuePair<String, JsonObject> pair = fetchJsonObjectFromFilesObject(
-        filePath,
+      KeyValuePair<String, JsonObject> pair = safeFetchJsonObjectFromFilesObject(
+        firstKey,
         index,
-        keys
+        restOfTheKeys
       );
+
+      if (!pair.value.has(pair.key)) {
+        pair.value.addProperty(pair.key, 0);
+      }
       String lastKey = pair.key;
       JsonObject obj = pair.value;
       JsonPrimitive primitive = (JsonPrimitive) obj.get(lastKey);
@@ -354,35 +372,17 @@ public class UsageAnalysisControllerIT {
      * Set the passed value to the value found in the files JSON object based on the JSON path created by the
      * keys. If an object is missing in the JSON path then it's created.
      * @param value Sets the specified value at the given JSON path.
-     * @param keys The keys in JSON path.
-     */
-    private void safeSetNestedValueInFilesObject(String value, String... keys) {
-      KeyValuePair<String, JsonObject> pair = fetchJsonObjectFromFilesObject(
-        keys
-      );
-      String lastKey = pair.key;
-      JsonObject obj = pair.value;
-      obj.addProperty(lastKey, value);
-    }
-
-    /**
-     * Set the passed value to the value found in the files JSON object based on the JSON path created by the
-     * keys. If an object is missing in the JSON path then it's created.
-     * @param value The value that is going to be added to value located in the JSON path.
-     * @param filePath First key in the files object.
-     * @param index Array index of the array the {@code filePath} parameter points to.
-     * @param keys The remaining JSON path keys.
+     * @param firstKey First key in the files object.
+     * @param restOfTheKeys The keys in JSON path.
      */
     private void safeSetNestedValueInFilesObject(
       String value,
-      String filePath,
-      int index,
-      String... keys
+      String firstKey,
+      String... restOfTheKeys
     ) {
-      KeyValuePair<String, JsonObject> pair = fetchJsonObjectFromFilesObject(
-        filePath,
-        index,
-        keys
+      KeyValuePair<String, JsonObject> pair = safeFetchJsonObjectFromFilesObject(
+        firstKey,
+        restOfTheKeys
       );
       String lastKey = pair.key;
       JsonObject obj = pair.value;
@@ -393,18 +393,42 @@ public class UsageAnalysisControllerIT {
      * Set the passed value to the value found in the files JSON object based on the JSON path created by the
      * keys. If an object is missing in the JSON path then it's created.
      * @param value The value that is going to be added to value located in the JSON path.
-     * @param filePath First key in the files object.
-     * @param index Array index of the array the {@code filePath} parameter points to.
+     * @param firstKey First key in the files object.
+     * @param index Array index of the array the {@code firstKey} parameter points to.
+     * @param restOfTheKeys The remaining JSON path keys.
+     */
+    private void safeSetNestedValueInFilesObject(
+      String value,
+      String firstKey,
+      int index,
+      String... restOfTheKeys
+    ) {
+      KeyValuePair<String, JsonObject> pair = safeFetchJsonObjectFromFilesObject(
+        firstKey,
+        index,
+        restOfTheKeys
+      );
+      String lastKey = pair.key;
+      JsonObject obj = pair.value;
+      obj.addProperty(lastKey, value);
+    }
+
+    /**
+     * Set the passed value to the value found in the files JSON object based on the JSON path created by the
+     * keys. If an object is missing in the JSON path then it's created.
+     * @param value The value that is going to be added to value located in the JSON path.
+     * @param firstKey First key in the files object.
+     * @param index Array index of the array the {@code firstKey} parameter points to.
      * @param keys The remaining JSON path keys.
      */
     private void safeSetNestedValueInFilesObject(
       float value,
-      String filePath,
+      String firstKey,
       int index,
       String... keys
     ) {
-      KeyValuePair<String, JsonObject> pair = fetchJsonObjectFromFilesObject(
-        filePath,
+      KeyValuePair<String, JsonObject> pair = safeFetchJsonObjectFromFilesObject(
+        firstKey,
         index,
         keys
       );
@@ -417,12 +441,16 @@ public class UsageAnalysisControllerIT {
      * Set an empty object to the value found in the files JSON object based on the JSON path created by the
      * keys. If an object is missing in the JSON path then it's created.
      * @param value The value that is going to be added to value located in the JSON path.
-     * @param filePath First key in the files object.
-     * @param index Array index of the array the {@code filePath} parameter points to.
+     * @param firstKey First key in the files object.
+     * @param index Array index of the array the {@code firstKey} parameter points to.
      * @param keys The remaining JSON path keys.
      */
-    private void safeSetNestedEmptyObjectInFilesObject(String... keys) {
-      KeyValuePair<String, JsonObject> pair = fetchJsonObjectFromFilesObject(
+    private void safeSetNestedEmptyObjectInFilesObject(
+      String firstKey,
+      String... keys
+    ) {
+      KeyValuePair<String, JsonObject> pair = safeFetchJsonObjectFromFilesObject(
+        firstKey,
         keys
       );
       String lastKey = pair.key;
@@ -652,24 +680,22 @@ public class UsageAnalysisControllerIT {
       String oncokbEndpoint,
       String monthKey
     ) {
-      String usageResourcesEndpoint = "/api/usage/resources";
+      String usageResourcesEndpoint =
+        "/api/usage/resources?endpoint=" + oncokbEndpoint;
       safeAddNestedValueInFilesObject(
         value,
-        usageResourcesEndpoint + "?endpoint=" + oncokbEndpoint,
+        usageResourcesEndpoint,
         "year",
         user.getEmail()
       );
       safeAddNestedValueInFilesObject(
         value,
-        usageResourcesEndpoint + "?endpoint=" + oncokbEndpoint,
+        usageResourcesEndpoint,
         "month",
         monthKey,
         user.getEmail()
       );
-      safeSetNestedEmptyObjectInFilesObject(
-        usageResourcesEndpoint + "?endpoint=" + oncokbEndpoint,
-        "day"
-      );
+      safeSetNestedEmptyObjectInFilesObject(usageResourcesEndpoint, "day");
     }
 
     private void updateUserSummaryUsageExpectedResponse(
