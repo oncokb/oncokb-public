@@ -54,7 +54,7 @@ public class UsageAnalysisController {
     private UserMapper userMapper;
 
     @Autowired
-    private Clock clock = Clock.systemDefaultZone();
+    private Clock clock;
 
     private JSONObject requestData(String file)
             throws UnsupportedEncodingException, IOException, ParseException {
