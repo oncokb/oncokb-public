@@ -309,21 +309,21 @@ export class AnnotationVisualisation extends React.Component<
           const treatmentFdaLevel = treatment['fdaLevel'] || 'NA';
           const treatmentDescription = treatment['description'] || 'NA';
 
-          const key = `${biomarker}-${level}`;
+          const biomarkerKey = `${biomarker}-${level}`;
 
           const drugNames = treatment['drugs']
             .map((drug: any) => drug['drugName'])
             .filter(Boolean);
 
-          if (treatmentsMap.has(key)) {
-            const existingEntry = treatmentsMap.get(key);
+          if (treatmentsMap.has(biomarkerKey)) {
+            const existingEntry = treatmentsMap.get(biomarkerKey);
             if (existingEntry) {
               const existingDrugs = new Set(existingEntry.drug.split(', '));
               drugNames.forEach(drug => existingDrugs.add(drug));
               existingEntry.drug = Array.from(existingDrugs).join(', ');
             }
           } else {
-            treatmentsMap.set(key, {
+            treatmentsMap.set(biomarkerKey, {
               biomarker,
               drug: Array.from(new Set(drugNames)).join(', '),
               level,
