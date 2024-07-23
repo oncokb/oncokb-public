@@ -13,8 +13,11 @@ import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
 import com.google.gson.JsonPrimitive;
 import java.io.InputStream;
+import java.time.Clock;
 import java.time.LocalDate;
 import java.time.YearMonth;
+import java.time.ZoneId;
+import java.time.ZonedDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.*;
 import java.util.Map.Entry;
@@ -24,6 +27,7 @@ import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.Mockito;
 import org.mockito.MockitoAnnotations;
+import org.mockito.Spy;
 import org.mskcc.cbio.oncokb.config.Constants;
 import org.mskcc.cbio.oncokb.domain.User;
 import org.mskcc.cbio.oncokb.domain.enumeration.FileExtension;
@@ -57,16 +61,35 @@ public class UsageAnalysisControllerIT {
   @Mock
   private UserMapper userMapper;
 
+  private Clock clock = Clock.fixed(
+    ZonedDateTime
+      .of(2020, 12, 31, 0, 0, 0, 0, ZoneId.of(Constants.NY_ZONE_ID))
+      .toInstant(),
+    ZoneId.of(Constants.NY_ZONE_ID)
+  );
+
+  @Mock
+  private Clock mockClock;
+
   @InjectMocks
   private UsageAnalysisController usageAnalysisController;
 
   private MockMvc restMockMvc;
 
-  private final MockS3Data data = new MockS3Data(1);
+  private final MockS3Data data = new MockS3Data(1, this.clock);
 
   public UsageAnalysisControllerIT() throws Exception {}
 
   private void mockS3ObjectResponse(MockS3Data data) throws Exception {
+    Mockito
+      .when(mockClock.withZone(any()))
+      .thenAnswer(
+        i -> {
+          ZoneId zone = (ZoneId) i.getArguments()[0];
+          return this.clock.withZone(zone);
+        }
+      );
+
     Mockito
       .when(userMapper.userToUserDTO(any()))
       .thenAnswer(
@@ -230,11 +253,15 @@ public class UsageAnalysisControllerIT {
     private final List<User> users = new ArrayList<>();
     private final List<UserDTO> userDtos = new ArrayList<>();
 
-    public MockS3Data(int seed) throws Exception {
-      this(seed, new String[] { "doej", "smithj" });
+    private final Clock clock;
+
+    public MockS3Data(int seed, Clock clock) throws Exception {
+      this(seed, clock, new String[] { "doej", "smithj" });
     }
 
-    public MockS3Data(int seed, String[] userNames) throws Exception {
+    public MockS3Data(int seed, Clock clock, String[] userNames)
+      throws Exception {
+      this.clock = clock;
       random = new Random(seed);
       addUsers(userNames);
     }
@@ -459,7 +486,7 @@ public class UsageAnalysisControllerIT {
     }
 
     private void addUsers(String[] userNames) throws Exception {
-      LocalDate today = TimeUtil.getCurrentNYTime().toLocalDate();
+      LocalDate today = TimeUtil.getCurrentNYTime(this.clock).toLocalDate();
       int currentYear = today.getYear();
       int userId = -1;
       for (String userName : userNames) {
