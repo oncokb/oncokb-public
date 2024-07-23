@@ -262,17 +262,7 @@ public class UsageAnalysisControllerIT {
       }
       obj = (JsonObject) obj.get(firstKey);
 
-      for (int i = 0; i < restOfTheKeys.length - 1; i++) {
-        String key = restOfTheKeys[i];
-        if (!obj.has(key)) {
-          obj.add(key, new JsonObject());
-        }
-        obj = (JsonObject) obj.get(key);
-      }
-      String lastKey = restOfTheKeys.length == 0
-        ? firstKey
-        : restOfTheKeys[restOfTheKeys.length - 1];
-      return new KeyValuePair<>(lastKey, obj);
+      return getLastKeyValuePair(firstKey, obj, restOfTheKeys);
     }
 
     /**
@@ -299,6 +289,14 @@ public class UsageAnalysisControllerIT {
       }
       obj = (JsonObject) arr.get(index);
 
+      return getLastKeyValuePair(firstKey, obj, restOfTheKeys);
+    }
+
+    private KeyValuePair<String, JsonObject> getLastKeyValuePair(
+      String firstKey,
+      JsonObject obj,
+      String... restOfTheKeys
+    ) {
       for (int i = 0; i < restOfTheKeys.length - 1; i++) {
         String key = restOfTheKeys[i];
         if (!obj.has(key)) {
