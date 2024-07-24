@@ -3,6 +3,7 @@ package org.mskcc.cbio.oncokb.web.rest;
 import java.io.IOException;
 import java.io.InputStreamReader;
 import java.io.UnsupportedEncodingException;
+import java.time.Clock;
 import java.time.format.DateTimeFormatter;
 import java.time.temporal.ChronoUnit;
 import java.util.*;
@@ -52,6 +53,9 @@ public class UsageAnalysisController {
     @Autowired
     private UserMapper userMapper;
 
+    @Autowired
+    private Clock clock;
+
     private JSONObject requestData(String file)
             throws UnsupportedEncodingException, IOException, ParseException {
         Optional<ResponseInputStream<GetObjectResponse>> s3object = s3Service.getObject(Constants.ONCOKB_S3_BUCKET, file);
@@ -66,7 +70,7 @@ public class UsageAnalysisController {
     /**
      * API to get the detail usage info for specific user
      * @param userId
-     * @return user usage infomation of given user
+     * @return user usage information of given user
      * @throws IOException
      * @throws ParseException
      */
@@ -76,13 +80,13 @@ public class UsageAnalysisController {
         HttpStatus status = HttpStatus.OK;
 
         if (userId != null) {
-            int year = TimeUtil.getCurrentNYTime().getYear();
+            int year = TimeUtil.getCurrentNYTime(clock).getYear();
             JSONObject yearSummary = requestData(YEAR_USERS_USAGE_SUMMARY_FILE_PREFIX + year + FileExtension.JSON_FILE.getExtension());
             Map<String, JSONObject> monthSummaries = new HashMap<>();
             int monthsBack = 0;
             JSONObject monthSummary;
             do {
-                String month = TimeUtil.getCurrentNYTime().minus(monthsBack, ChronoUnit.MONTHS).format(DateTimeFormatter.ofPattern("yyyy-MM"));
+                String month = TimeUtil.getCurrentNYTime(clock).minus(monthsBack, ChronoUnit.MONTHS).format(DateTimeFormatter.ofPattern("yyyy-MM"));
                 monthSummary = requestData(MONTH_USERS_USAGE_SUMMARY_FILE_PREFIX + month + FileExtension.JSON_FILE.getExtension());
                 if (monthSummary != null) {
                     monthSummaries.put(month, monthSummary);
@@ -143,13 +147,13 @@ public class UsageAnalysisController {
         throws IOException, ParseException {
         HttpStatus status = HttpStatus.OK;
 
-        int year = TimeUtil.getCurrentNYTime().getYear();
+        int year = TimeUtil.getCurrentNYTime(clock).getYear();
         JSONObject yearSummary = requestData(YEAR_USERS_USAGE_SUMMARY_FILE_PREFIX + year + FileExtension.JSON_FILE.getExtension());
         Map<String, JSONObject> monthSummaries = new HashMap<>();
         int monthsBack = 0;
         JSONObject monthSummary;
         do {
-            String month = TimeUtil.getCurrentNYTime().minus(monthsBack, ChronoUnit.MONTHS).format(DateTimeFormatter.ofPattern("yyyy-MM"));
+            String month = TimeUtil.getCurrentNYTime(clock).minus(monthsBack, ChronoUnit.MONTHS).format(DateTimeFormatter.ofPattern("yyyy-MM"));
             monthSummary = requestData(MONTH_USERS_USAGE_SUMMARY_FILE_PREFIX + month + FileExtension.JSON_FILE.getExtension());
             if (monthSummary != null) {
                 monthSummaries.put(month, monthSummary);
@@ -251,7 +255,7 @@ public class UsageAnalysisController {
         throws IOException, ParseException {
         HttpStatus status = HttpStatus.OK;
 
-        int year = TimeUtil.getCurrentNYTime().getYear();
+        int year = TimeUtil.getCurrentNYTime(clock).getYear();
         JSONObject jsonObject = requestData(YEAR_RESOURCES_USAGE_SUMMARY_FILE_PREFIX + year + FileExtension.JSON_FILE.getExtension());
 
         Gson gson = new Gson();
@@ -263,7 +267,7 @@ public class UsageAnalysisController {
     }
 
     /**
-     * API to get the usage of a sepcific resource
+     * API to get the usage of a specific resource
      * @param endpoint
      * @return usage of a specific endpoint
      * @throws UnsupportedEncodingException
@@ -275,7 +279,7 @@ public class UsageAnalysisController {
             throws UnsupportedEncodingException, IOException, ParseException {
         HttpStatus status = HttpStatus.OK;
 
-        int year = TimeUtil.getCurrentNYTime().getYear();
+        int year = TimeUtil.getCurrentNYTime(clock).getYear();
         JSONObject resourceSummary = requestData(YEAR_RESOURCES_USAGE_SUMMARY_FILE_PREFIX + year + FileExtension.JSON_FILE.getExtension());
         JSONObject userSummary = requestData(YEAR_USERS_USAGE_SUMMARY_FILE_PREFIX + year + FileExtension.JSON_FILE.getExtension());
         if (resourceSummary != null && userSummary != null ){
