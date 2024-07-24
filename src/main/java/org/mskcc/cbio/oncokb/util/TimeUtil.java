@@ -30,6 +30,7 @@ public class TimeUtil {
     return formatter.format(time);
   }
 
+  // TODO: Convert TimeUtil into a service class so we don't have autowire a clock into every class
   public static ZonedDateTime getCurrentNYTime(Clock clock) {
     return ZonedDateTime.now(clock.withZone(ZoneId.of(Constants.NY_ZONE_ID)));
   }
