@@ -102,7 +102,7 @@ const FdaRecognitionPage = () => {
             <ul>
               <li>
                 <Linkout
-                  link={`content/files/fdaRecognition/OncoKB_FDA_Recognition_Recognition_Letter.pdf`}
+                  link={`${window.location.origin}/content/files/fdaRecognition/OncoKB_FDA_Recognition_Recognition_Letter.pdf`}
                 >
                   FDA Recognition Letter
                 </Linkout>
