@@ -68,6 +68,9 @@ public class UsageAnalysisControllerIT {
     ZoneId.of(Constants.NY_ZONE_ID)
   );
 
+  // we need a separate mock object because we want to use a real clock instance
+  // in usageAnalysisController which normally should be done
+  // with @Spy, but @Spy doesn't work because clock has static methods.
   @Mock
   private Clock mockClock;
 
