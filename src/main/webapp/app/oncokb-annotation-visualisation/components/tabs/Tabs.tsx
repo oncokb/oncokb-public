@@ -1,9 +1,15 @@
 import React, { useState, ReactElement } from 'react';
 import { TabProps } from './Tab';
 import './styles.scss';
-import Notifications from './../notifications/notifications';
+import Notifs from './../notifications/notifications';
 import { NotificationImplication } from './../../config/constants';
-import { COLOR_GREY } from './../../config/theme';
+import { COLOR_BLUE } from './../../config/theme';
+import { generatePDF } from './../Utils';
+import { loadImageAsBase64 } from './../Utils';
+import logoImage from './MSK_OncoKB_rgb.png';
+import { patientId } from 'app/oncokb-annotation-visualisation/config/APIResponse';
+import { responses } from 'app/oncokb-annotation-visualisation/config/APIResponse';
+
 interface TabsProps {
   children: ReactElement<TabProps>[];
   defaultActiveKey: string;
@@ -12,6 +18,8 @@ interface TabsProps {
   lastUpdate?: string;
   dataVersion?: string;
   notifications?: NotificationImplication[];
+  bgColor?: string;
+  patientInfo?: {};
 }
 
 const Tabs: React.FC<TabsProps> = ({
@@ -22,11 +30,99 @@ const Tabs: React.FC<TabsProps> = ({
   lastUpdate,
   dataVersion,
   notifications,
+  bgColor,
+  patientInfo,
 }) => {
   const [activeKey, setActiveKey] = useState(defaultActiveKey);
 
   const handleTabClick = (key: string) => {
     setActiveKey(key);
+  };
+
+  const handleDownloadClick = async () => {
+    try {
+      const data = [
+        {
+          col1: 'Sample ID',
+          col2: patientId,
+          col3: 'Gender',
+          col4: 'Male',
+        },
+        {
+          col1: 'Age',
+          col2: '48',
+          col3: 'Date of Report',
+          col4: lastUpdate,
+        },
+      ];
+
+      const processedData = responses.map(response => ({
+        gene: response.query.hugoSymbol || 'NA',
+        mutation: response.query.alteration || 'NA',
+        oncogenicity: response.oncogenic || 'NA',
+        levelOfEvidence: response.highestSensitiveLevel || 'NA',
+        biologicalEffect: response.mutationEffect.knownEffect || 'NA',
+        tumorType: response.query.tumorType || 'NA',
+        alterationType: response.query.alterationType || 'NA',
+      }));
+      const processedTreatmentData = responses.map(response => ({
+        biomarker:
+          response['query']['hugoSymbol'] && response['query']['alteration']
+            ? `${response['query']['hugoSymbol']} ${response['query']['alteration']}`
+            : 'NA',
+        drugNames: response['treatments']
+          ? response['treatments'][0]['drugs']
+              .map(
+                (drug: any) =>
+                  ` ${drug['drugName']} (${
+                    response['treatments'][0]['level'].length > 6
+                      ? response['treatments'][0]['level'].slice(6)
+                      : 'NA'
+                  })`
+              )
+              .filter(Boolean)
+          : ['NA'],
+        annotation:
+          response['geneSummary'] ||
+          response['variantSummary'] ||
+          response['tumorTypeSummary']
+            ? `${response['geneSummary'] || ''} ${
+                response['variantSummary'] || ''
+              } ${response['tumorTypeSummary'] || ''}`
+            : 'NA',
+        alterationType: response.query.alterationType || 'NA',
+        level: response['treatments']
+          ? response['treatments'][0]['level']
+          : 'NA',
+      }));
+
+      const treatmentsMap = new Map();
+
+      processedTreatmentData.forEach(response => {
+        const biomarkerKey = `${response.biomarker}-${response.level}`;
+
+        if (treatmentsMap.has(biomarkerKey)) {
+          const existingEntry = treatmentsMap.get(biomarkerKey);
+          if (existingEntry) {
+            const existingDrugs = new Set(existingEntry.drugNames.split(', '));
+            response.drugNames.forEach(drug => existingDrugs.add(drug));
+            existingEntry.drugNames = Array.from(existingDrugs).join(', ');
+          }
+        } else {
+          treatmentsMap.set(biomarkerKey, {
+            biomarker: response.biomarker,
+            drugNames: Array.from(new Set(response.drugNames)).join(', '),
+            annotation: response.annotation,
+            alterationType: response.alterationType,
+            level: response.level,
+          });
+        }
+      });
+      const logoBase64 = await loadImageAsBase64(logoImage); // Convert image to Base64
+      generatePDF(data, processedData, processedTreatmentData, logoBase64);
+    } catch (error) {
+      console.error('Error downloading PDF:', error);
+    }
   };
 
   return (
@@ -39,7 +135,7 @@ const Tabs: React.FC<TabsProps> = ({
                 child.props.eventKey === activeKey ? 'active' : ''
               }`}
               onClick={() => handleTabClick(child.props.eventKey)}
-              style={{ color: 'black' }}
+              style={{ backgroundColor: bgColor, color: 'black' }}
             >
               {child.props.title}
             </div>
@@ -50,14 +146,16 @@ const Tabs: React.FC<TabsProps> = ({
             <div>Annotation based on {dataVersion || 'NA'}</div>
             <div>Updated on {lastUpdate || 'NA'}</div>
           </div>
-          <div className="oncokb-download-button">
-            <i
-              className="fa fa-download fa-lg fa-download-color"
-              aria-hidden="true"
-            ></i>
+          <div
+            className="oncokb-download-button"
+            data-testid="oncokb-download-button"
+            onClick={handleDownloadClick} // Add click handler
+            style={{ color: COLOR_BLUE, cursor: 'pointer' }}
+          >
+            <i className="fa fa-download" aria-hidden="true"></i>
           </div>
           <div>
-            <Notifications notifications={notifications || []} />
+            <Notifs notifications={notifications || []} />
           </div>
         </div>
       </div>
