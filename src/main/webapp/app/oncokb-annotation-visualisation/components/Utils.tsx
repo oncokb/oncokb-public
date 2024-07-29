@@ -36,6 +36,8 @@ import 'jspdf-autotable';
 import logoImage from './tabs/logo-oncokb.png';
 import { COLOR_BLUE, COLOR_LIGHT_GREY } from './../config/theme';
 import iconsImage from './tabs/icons.png';
+import { readFileSync } from 'fs-extra';
+import * as canvas from 'canvas';
 
 export interface IAlteration {
   alteration: string;
@@ -881,18 +883,302 @@ export function shortenTextByCharacters(text: string, cutoff: number) {
   }
 }
 
+// export const loadImageAsBase64 = path => {
+//   return new Promise((resolve, reject) => {
+//     const img = new Image();
+//     img.crossOrigin = 'Anonymous';
+//     img.src = path;
+//     img.onload = () => {
+//       const c = document.createElement('canvas');
+//       c.width = img.width;
+//       c.height = img.height;
+//       const ctx = c.getContext('2d');
+//       ctx.drawImage(img, 0, 0);
+//       const dataURL = c.toDataURL('image/png');
+//       resolve(dataURL);
+//     };
+//     img.onerror = error =>
+//       reject(new Error(`Failed to load image at path: ${path}`));
+//   });
+// };
+
+// export const generatePDF = async (
+//   patientData,
+//   processedData,
+//   processedTreatmentData
+// ) => {
+//   try {
+//     const doc = new jsPDF();
+
+//     let currentY = 0;
+//     // Load the image as Base64
+//     const logoBase64 = await loadImageAsBase64(logoImage);
+
+//     // Add the logo
+//     currentY += 10;
+//     doc.addImage(
+//       logoBase64,
+//       'PNG',
+//       doc.internal.pageSize.getWidth() / 2 - 22,
+//       currentY,
+//       7,
+//       7
+//     );
+
+//     doc.setFont('helvetica', 'bold');
+//     doc.setFontSize(20);
+//     doc.setTextColor(COLOR_BLUE);
+//     doc.setFontSize(10);
+//     doc.setFontSize(15);
+//     currentY += 5;
+//     doc.text(
+//       'Sample Report',
+//       doc.internal.pageSize.getWidth() / 2 + 5,
+//       currentY,
+//       { align: 'center' }
+//     );
+
+//     const tableRows = patientData.map(item => [
+//       item.col1,
+//       item.col2,
+//       item.col3,
+//       item.col4,
+//     ]);
+//     currentY += 10;
+//     doc.autoTable({
+//       startY: currentY,
+//       startX: 10,
+//       body: tableRows,
+//       columnStyles: {
+//         0: { cellWidth: 35 },
+//         1: { cellWidth: 60 },
+//         2: { cellWidth: 35 },
+//         3: { cellWidth: 50 },
+//       },
+//       styles: {
+//         fontSize: 10,
+//         cellPadding: 3,
+//         overflow: 'linebreak',
+//         lineWidth: 0,
+//       },
+//       bodyStyles: {
+//         fillColor: [255, 238, 204],
+//         textColor: [0, 0, 0],
+//         halign: 'left',
+//         valign: 'middle',
+//       },
+//       alternateRowStyles: {
+//         fillColor: [255, 238, 204],
+//       },
+//       tableLineWidth: 0, // Set to 0 to remove all table borders
+//       tableLineColor: [0, 0, 0],
+//       didParseCell(info) {
+//         if (info.section === 'body') {
+//           if (info.column.index % 2 === 0) {
+//             info.cell.styles.fontStyle = 'bold';
+//           }
+//         }
+//       },
+//       didDrawPage() {
+//         const startY = currentY;
+//         const rows = tableRows.length;
+//         const rowHeight = 10;
+
+//         for (let i = 0; i <= rows; i++) {
+//           doc.setDrawColor(255, 153, 180);
+//           doc.setLineWidth(0.3);
+//           doc.line(15, startY + i * rowHeight, 193, startY + i * rowHeight);
+//         }
+//       },
+//     });
+
+//     // Group data by alterationType
+//     const groupedData = processedData.reduce((acc, row) => {
+//       const { alterationType } = row;
+//       if (!acc[alterationType]) {
+//         acc[alterationType] = [];
+//       }
+//       acc[alterationType].push(row);
+//       return acc;
+//     }, {});
+
+//     // Prepare data for autoTable
+//     const tableData = [];
+//     for (const [alterationType, rows] of Object.entries(groupedData)) {
+//       tableData.push([
+//         {
+//           content: `Alteration Type: ${alterationType}`,
+//           colSpan: 6,
+//           styles: {
+//             fillColor: COLOR_LIGHT_GREY,
+//             textColor: [0, 0, 0],
+//             fontStyle: 'bolditalic',
+//             cellPadding: 2,
+//           },
+//         },
+//       ]);
+//       rows.forEach(row => {
+//         tableData.push([
+//           row.gene,
+//           row.mutation,
+//           row.oncogenicity,
+//           row.levelOfEvidence,
+//           row.biologicalEffect,
+//           row.tumorType,
+//         ]);
+//       });
+//     }
+//     // Initial Y position
+//     currentY += 30;
+
+//     doc.setFontSize(12);
+//     doc.text('Alterations within the sample', 14, currentY, { align: 'left' });
+
+//     // Adjust the Y position for the table
+//     currentY += 5;
+
+//     // Generate the second table
+//     doc.autoTable({
+//       startY: currentY,
+//       head: [
+//         [
+//           'Gene',
+//           'Mutation',
+//           'Oncogenicity',
+//           'Level of Evidence',
+//           'Biological Effect',
+//           'Tumor Type',
+//         ],
+//       ],
+//       body: tableData,
+//       columnStyles: {
+//         0: { cellWidth: 20 },
+//         1: { cellWidth: 30 },
+//         2: { cellWidth: 30 },
+//         3: { cellWidth: 25 },
+//         4: { cellWidth: 40 },
+//         5: { cellWidth: 35 },
+//       },
+//       styles: {
+//         fontSize: 10,
+//         cellPadding: 3,
+//         overflow: 'linebreak',
+//         lineWidth: 0,
+//         halign: 'left',
+//         valign: 'middle',
+//       },
+//       headStyles: {
+//         fillColor: COLOR_BLUE,
+//         textColor: [255, 255, 255],
+//         fontStyle: 'bold',
+//       },
+//       bodyStyles: {
+//         textColor: [0, 0, 0],
+//       },
+//       alternateRowStyles: {
+//         fillColor: [240, 240, 240],
+//       },
+//       tableLineWidth: 0,
+//       tableLineColor: [0, 0, 0],
+//       didDrawPage(data) {
+//         currentY = data.cursor.y + 6; // Update currentY to be after the second table
+//       }
+//     });
+
+//     // Group and prepare data for the treatment table
+//     const groupedTreatmentData = processedTreatmentData.reduce((acc, row) => {
+//       const { alterationType } = row;
+//       if (!acc[alterationType]) {
+//         acc[alterationType] = [];
+//       }
+//       acc[alterationType].push(row);
+//       return acc;
+//     }, {});
+
+//     // Prepare data for autoTable
+//     const tableTreatmentData = [];
+//     for (const [alterationType, rows] of Object.entries(groupedTreatmentData)) {
+//       tableTreatmentData.push([
+//         {
+//           content: `Alteration Type: ${alterationType}`,
+//           colSpan: 6,
+//           styles: {
+//             fillColor: COLOR_LIGHT_GREY,
+//             textColor: [0, 0, 0],
+//             fontStyle: 'bolditalic',
+//             cellPadding: 2,
+//           },
+//         },
+//       ]);
+//       rows.forEach(row => {
+//         tableTreatmentData.push([row.biomarker, row.drugNames, row.annotation]);
+//       });
+//     }
+
+//     // Add spacing before the third heading
+//     currentY += 5;
+
+//     // Set font size and add the third heading
+//     doc.setFontSize(12);
+//     doc.text('Treatment for the biomarker', 14, currentY, { align: 'left' });
+
+//     // Adjust the Y position for the treatment table
+//     currentY += 5;
+
+//     // Generate the treatment table
+//     doc.autoTable({
+//       startY: currentY,
+//       head: [['Biomarker', 'Drug Names', 'Annotation']],
+//       body: tableTreatmentData,
+//       columnStyles: {
+//         0: { cellWidth: 40 },
+//         1: { cellWidth: 50 },
+//         2: { cellWidth: 90 },
+//       },
+//       styles: {
+//         fontSize: 10,
+//         cellPadding: 3,
+//         overflow: 'linebreak',
+//         lineWidth: 0,
+//         halign: 'left',
+//         valign: 'middle',
+//       },
+//       headStyles: {
+//         fillColor: COLOR_BLUE,
+//         textColor: [255, 255, 255],
+//         fontStyle: 'bold',
+//       },
+//       bodyStyles: {
+//         textColor: [0, 0, 0],
+//       },
+//       alternateRowStyles: {
+//         fillColor: [240, 240, 240],
+//       },
+//       tableLineWidth: 0,
+//       tableLineColor: [0, 0, 0],
+//     });
+
+//     // Save the PDF
+//     doc.save('report.pdf');
+//   } catch (error) {
+//     console.error('Error generating PDF:', error);
+//   }
+// };
+
+import html2pdf from 'html2pdf.js';
+
 export const loadImageAsBase64 = path => {
   return new Promise((resolve, reject) => {
     const img = new Image();
     img.crossOrigin = 'Anonymous';
     img.src = path;
     img.onload = () => {
-      const canvas = document.createElement('canvas');
-      canvas.width = img.width;
-      canvas.height = img.height;
-      const ctx = canvas.getContext('2d');
+      const c = document.createElement('canvas');
+      c.width = img.width;
+      c.height = img.height;
+      const ctx = c.getContext('2d');
       ctx.drawImage(img, 0, 0);
-      const dataURL = canvas.toDataURL('image/png');
+      const dataURL = c.toDataURL('image/png');
       resolve(dataURL);
     };
     img.onerror = error =>
@@ -906,91 +1192,7 @@ export const generatePDF = async (
   processedTreatmentData
 ) => {
   try {
-    const doc = new jsPDF();
-
-    let currentY = 0;
-    // Load the image as Base64
     const logoBase64 = await loadImageAsBase64(logoImage);
-
-    // Add the logo
-    currentY += 10;
-    doc.addImage(
-      logoBase64,
-      'PNG',
-      doc.internal.pageSize.getWidth() / 2 - 22,
-      currentY,
-      7,
-      7
-    );
-
-    doc.setFont('helvetica', 'bold');
-    doc.setFontSize(20);
-    doc.setTextColor(COLOR_BLUE);
-    doc.setFontSize(10);
-    doc.setFontSize(15);
-    currentY += 5;
-    doc.text(
-      'Sample Report',
-      doc.internal.pageSize.getWidth() / 2 + 5,
-      currentY,
-      { align: 'center' }
-    );
-
-    const tableRows = patientData.map(item => [
-      item.col1,
-      item.col2,
-      item.col3,
-      item.col4,
-    ]);
-    currentY += 10;
-    doc.autoTable({
-      startY: currentY,
-      startX: 10,
-      body: tableRows,
-      columnStyles: {
-        0: { cellWidth: 35 },
-        1: { cellWidth: 60 },
-        2: { cellWidth: 35 },
-        3: { cellWidth: 50 },
-      },
-      styles: {
-        fontSize: 10,
-        cellPadding: 3,
-        overflow: 'linebreak',
-        lineWidth: 0,
-      },
-      bodyStyles: {
-        fillColor: [255, 238, 204],
-        textColor: [0, 0, 0],
-        halign: 'left',
-        valign: 'middle',
-      },
-      alternateRowStyles: {
-        fillColor: [255, 238, 204],
-      },
-      tableLineWidth: 0, // Set to 0 to remove all table borders
-      tableLineColor: [0, 0, 0],
-      didParseCell(info) {
-        if (info.section === 'body') {
-          if (info.column.index % 2 === 0) {
-            info.cell.styles.fontStyle = 'bold';
-          }
-        }
-      },
-      didDrawPage() {
-        const startY = currentY;
-        const rows = tableRows.length;
-        const rowHeight = 10;
-
-        for (let i = 0; i <= rows; i++) {
-          doc.setDrawColor(255, 153, 180);
-          doc.setLineWidth(0.3);
-          doc.line(15, startY + i * rowHeight, 193, startY + i * rowHeight);
-        }
-      },
-    });
-
-    // Group data by alterationType
     const groupedData = processedData.reduce((acc, row) => {
       const { alterationType } = row;
       if (!acc[alterationType]) {
@@ -1000,97 +1202,6 @@ export const generatePDF = async (
       return acc;
     }, {});
 
-    // Prepare data for autoTable
-    const tableData = [];
-    for (const [alterationType, rows] of Object.entries(groupedData)) {
-      tableData.push([
-        {
-          content: `Alteration Type: ${alterationType}`,
-          colSpan: 6,
-          styles: {
-            fillColor: COLOR_LIGHT_GREY,
-            textColor: [0, 0, 0],
-            fontStyle: 'bolditalic',
-            cellPadding: 2,
-          },
-        },
-      ]);
-      rows.forEach(row => {
-        tableData.push([
-          row.gene,
-          row.mutation,
-          row.oncogenicity,
-          row.levelOfEvidence,
-          row.biologicalEffect,
-          row.tumorType,
-        ]);
-      });
-    }
-    // Initial Y position
-    currentY += 30;
-
-    doc.setFontSize(12);
-    doc.text('Alterations within the sample', 14, currentY, { align: 'left' });
-
-    // Adjust the Y position for the table
-    currentY += 5;
-
-    // Generate the second table
-    doc.autoTable({
-      startY: currentY,
-      head: [
-        [
-          'Gene',
-          'Mutation',
-          'Oncogenicity',
-          'Level of Evidence',
-          'Biological Effect',
-          'Tumor Type',
-        ],
-      ],
-      body: tableData,
-      columnStyles: {
-        0: { cellWidth: 20 },
-        1: { cellWidth: 30 },
-        2: { cellWidth: 30 },
-        3: { cellWidth: 25 },
-        4: { cellWidth: 40 },
-        5: { cellWidth: 35 },
-      },
-      styles: {
-        fontSize: 10,
-        cellPadding: 3,
-        overflow: 'linebreak',
-        lineWidth: 0,
-        halign: 'left',
-        valign: 'middle',
-      },
-      headStyles: {
-        fillColor: COLOR_BLUE,
-        textColor: [255, 255, 255],
-        fontStyle: 'bold',
-      },
-      bodyStyles: {
-        textColor: [0, 0, 0],
-      },
-      alternateRowStyles: {
-        fillColor: [240, 240, 240],
-      },
-      tableLineWidth: 0,
-      tableLineColor: [0, 0, 0],
-      didDrawPage(data) {
-        currentY = data.cursor.y + 6; // Update currentY to be after the second table
-      },
-      didDrawCell(data) {
-        if (data.column.index === 4 && data.cell.section === 'body') {
-          const dim = 10 - data.cell.padding('vertical');
-          const textPos = data.cell;
-          doc.addImage(iconsImage, 'PNG', textPos.x, textPos.y, dim, dim);
-        }
-      },
-    });
-
-    // Group and prepare data for the treatment table
     const groupedTreatmentData = processedTreatmentData.reduce((acc, row) => {
       const { alterationType } = row;
       if (!acc[alterationType]) {
@@ -1100,72 +1211,130 @@ export const generatePDF = async (
       return acc;
     }, {});
 
-    // Prepare data for autoTable
-    const tableTreatmentData = [];
-    for (const [alterationType, rows] of Object.entries(groupedTreatmentData)) {
-      tableTreatmentData.push([
-        {
-          content: `Alteration Type: ${alterationType}`,
-          colSpan: 6,
-          styles: {
-            fillColor: COLOR_LIGHT_GREY,
-            textColor: [0, 0, 0],
-            fontStyle: 'bolditalic',
-            cellPadding: 2,
-          },
-        },
-      ]);
-      rows.forEach(row => {
-        tableTreatmentData.push([row.biomarker, row.drugNames, row.annotation]);
-      });
-    }
+    // Create a container for the HTML content
+    const container = document.createElement('div');
+    container.innerHTML = `
+      <div style="text-align: center;">
+        <div style="display: flex; justify-content: center; align-items: center; margin-bottom: 20px;">
+          <img src="${logoBase64}" width="50" height="50" style="margin-right: 10px;" />
+          <h4 style="color: ${COLOR_BLUE}; font-weight: bold; margin: 0;">Sample Report</h4>
+        </div>
+      </div>
+      <table style="width: 100%; border-collapse: collapse;">
+        <tbody>
+          ${patientData
+            .map(
+              item => `
+            <tr style="border-top: 1px solid #ffc63c; border-bottom: 1px solid #ffc63c;">
+              <td style="background-color: #ffeecc; padding: 8px; font-weight: bold;">${item.col1}</td>
+              <td style="background-color: #ffeecc; padding: 8px;">${item.col2}</td>
+              <td style="background-color: #ffeecc; padding: 8px; font-weight: bold;">${item.col3}</td>
+              <td style="background-color: #ffeecc; padding: 8px;">${item.col4}</td>
+            </tr>
+          `
+            )
+            .join('')}
+        </tbody>
+      </table>
+      <h5 style="color: ${COLOR_BLUE}; font-weight: bold; margin: 20px 0;">Alterations within the sample</h5>
+      <table border="0.5" cellspacing="0" cellpadding="5" style="width: 100%; border-collapse: collapse; border-color: black;">
+        <thead>
+          <tr>
+            <th style="background-color: ${COLOR_BLUE}; color: white; width: 20%;">Gene</th>
+            <th style="background-color: ${COLOR_BLUE}; color: white; width: 20%;">Mutation</th>
+            <th style="background-color: ${COLOR_BLUE}; color: white; width: 15%;">Oncogenicity</th>
+            <th style="background-color: ${COLOR_BLUE}; color: white; width: 15%;">Level of Evidence</th>
+            <th style="background-color: ${COLOR_BLUE}; color: white; width: 20%;">Biological Effect</th>
+            <th style="background-color: ${COLOR_BLUE}; color: white; width: 15%;">Tumor Type</th>
+          </tr>
+        </thead>
+        <tbody>
+          ${Object.entries(groupedData)
+            .map(
+              ([alterationType, rows]) => `
+            <tr style="background-color: lightgrey; font-weight: bold; font-size: 14px; font-style: italic; text-align: left; page-break-inside: avoid;">
+              <td colspan="6">Alteration Type: ${alterationType}</td>
+            </tr>
+            ${rows
+              .map((row, index) => {
+                const levelClass = LevelOfEvidenceToClassnames(
+                  row.levelOfEvidence
+                );
+                const oncogenicityClass = OncogenicityToClassnames(
+                  row.oncogenicity
+                );
+                const backgroundColor = index % 2 === 0 ? '#f3f3f3' : '#ffffff'; // Alternate row color
+                return `
+                <tr style="background-color: ${backgroundColor}; page-break-inside: avoid;">
+                  <td style="width: 10%; text-align: center;">${row.gene}</td>
+                  <td style="width: 20%; text-align: center;">${row.mutation}</td>
+                  <td style="width: 15%; text-align: center;">
+                    <div style="display: flex; align-items: center; justify-content: center;">
+                      <i class="oncokb icon ${oncogenicityClass}"></i>
+                    </div>
+                  </td>
+                  <td style="width: 15%; text-align: center;">
+                    <div style="display: flex; align-items: center; justify-content: center;">
+                      <i class="oncokb icon ${levelClass}"></i>
+                    </div>
+                  </td>
+                  <td style="width: 20%; text-align: center;">${row.biologicalEffect}</td>
+                  <td style="width: 15%; text-align: center;">${row.tumorType}</td>
+                </tr>
+              `;
+              })
+              .join('')}
+          `
+            )
+            .join('')}
+        </tbody>
+      </table>
+      <h5 style="color: ${COLOR_BLUE}; font-weight: bold; margin: 20px 0;">Treatment for the biomarker</h5>
+      <table border="0.5" cellspacing="0" cellpadding="5" style="width: 100%; border-collapse: collapse; border-color: black;">
+        <thead>
+          <tr>
+            <th style="background-color: ${COLOR_BLUE}; color: white; width: 20%;">Biomarker</th>
+            <th style="background-color: ${COLOR_BLUE}; color: white; width: 30%;">Drug Names</th>
+            <th style="background-color: ${COLOR_BLUE}; color: white; width: 50%;">Annotation</th>
+          </tr>
+        </thead>
+        <tbody>
+          ${Object.entries(groupedTreatmentData)
+            .map(
+              ([alterationType, rows]) => `
+            <tr style="background-color: lightgrey; font-weight: bold; font-style: italic; text-align: left; page-break-inside: avoid;">
+              <td colspan="3">Alteration Type: ${alterationType}</td>
+            </tr>
+            ${rows
+              .map((row, index) => {
+                const backgroundColor = index % 2 === 0 ? '#f3f3f3' : '#ffffff'; // Alternate row color
+                return `
+                <tr style="background-color: ${backgroundColor}; page-break-inside: avoid;">
+                  <td style="width: 20%; text-align: center;">${row.biomarker}</td>
+                  <td style="width: 30%; text-align: center;">${row.drugNames}</td>
+                  <td style="width: 50%; text-align: center;">${row.annotation}</td>
+                </tr>
+              `;
+              })
+              .join('')}
+          `
+            )
+            .join('')}
+        </tbody>
+      </table>
+    `;
 
-    // Add spacing before the third heading
-    currentY += 5;
+    const opt = {
+      margin: 1,
+      filename: 'report.pdf',
+      image: { type: 'jpeg', quality: 0.98 },
+      html2canvas: { scale: 2 },
+      jsPDF: { unit: 'in', format: 'letter', orientation: 'portrait' },
+    };
 
-    // Set font size and add the third heading
-    doc.setFontSize(12);
-    doc.text('Treatment for the biomarker', 14, currentY, { align: 'left' });
-
-    // Adjust the Y position for the treatment table
-    currentY += 5;
-
-    // Generate the treatment table
-    doc.autoTable({
-      startY: currentY,
-      head: [['Biomarker', 'Drug Names', 'Annotation']],
-      body: tableTreatmentData,
-      columnStyles: {
-        0: { cellWidth: 40 },
-        1: { cellWidth: 50 },
-        2: { cellWidth: 90 },
-      },
-      styles: {
-        fontSize: 10,
-        cellPadding: 3,
-        overflow: 'linebreak',
-        lineWidth: 0,
-        halign: 'left',
-        valign: 'middle',
-      },
-      headStyles: {
-        fillColor: COLOR_BLUE,
-        textColor: [255, 255, 255],
-        fontStyle: 'bold',
-      },
-      bodyStyles: {
-        textColor: [0, 0, 0],
-      },
-      alternateRowStyles: {
-        fillColor: [240, 240, 240],
-      },
-      tableLineWidth: 0,
-      tableLineColor: [0, 0, 0],
-    });
-
-    // Save the PDF
-    doc.save('report.pdf');
+    // Generate PDF from the HTML content
+    html2pdf().from(container).set(opt).save();
   } catch (error) {
-    console.error('Error generating PDF:', error);
+    console.error('Failed to generate PDF:', error);
   }
 };

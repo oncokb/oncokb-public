@@ -119,7 +119,7 @@ const Tabs: React.FC<TabsProps> = ({
         }
       });
       const logoBase64 = await loadImageAsBase64(logoImage); // Convert image to Base64
-      generatePDF(data, processedData, processedTreatmentData, logoBase64);
+      generatePDF(data, processedData, processedTreatmentData);
     } catch (error) {
       console.error('Error downloading PDF:', error);
     }
