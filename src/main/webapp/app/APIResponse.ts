@@ -5,7 +5,11 @@ import {
   NOTIFICATION_TYPE,
 } from './oncokb-annotation-visualisation/config/constants';
 export const patientId = 'P-0000435';
-export const patientInfo = 'Pilocytic Astrocytoma, Male, 50 years old';
+export const patientInfo = {
+  patientId: 'P-0000435',
+  age: '35',
+  gender: 'Male',
+};
 const APIResponse1 = {
   query: {
     id: null,

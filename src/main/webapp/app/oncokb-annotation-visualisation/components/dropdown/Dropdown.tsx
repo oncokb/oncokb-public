@@ -1,7 +1,7 @@
 import React, { useState, useRef } from 'react';
-import './CustomDropdown.scss';
+import './Dropdown.scss';
 
-const CustomDropdown = ({ options, selectedOptions, onChange }) => {
+const Dropdown = ({ options, selectedOptions, onChange }) => {
   const [isOpen, setIsOpen] = useState(false);
   const dropdownRef = useRef(null);
 
@@ -44,4 +44,4 @@ const CustomDropdown = ({ options, selectedOptions, onChange }) => {
   );
 };
 
-export default CustomDropdown;
+export default Dropdown;

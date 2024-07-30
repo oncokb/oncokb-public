@@ -38,12 +38,7 @@ import { NewsPageNavTab } from 'app/pages/newsPage/NewsPageNavTab';
 import CompanionDiagnosticDevicePage from 'app/pages/companionDiagnosticDevicesPage/companionDiagnosticDevicePage';
 import OncokbRoute from 'app/shared/route/OncokbRoute';
 import { AnnotationVisualisation } from '../oncokb-annotation-visualisation/AnnotationVisualisation';
-import {
-  totalData,
-  patientId,
-  patientInfo,
-  notifications,
-} from '../../app/APIResponse';
+import { totalData, patientInfo, notifications } from '../../app/APIResponse';
 
 const getOldLevelsRedirectRoute = (hash: string) => {
   const queryStrings = QueryString.parse(hash) as {
@@ -277,10 +272,9 @@ const AppRouts = (props: {
             path={PAGE_ROUTE.ANNOTATION_VISUALISATION}
             render={() => (
               <AnnotationVisualisation
-                patientId={patientId}
                 patientInfo={patientInfo}
                 data={totalData}
-                isPatientInfoVisible={true}
+                isPatientInfoVisible={false}
                 notifications={notifications}
               />
             )}

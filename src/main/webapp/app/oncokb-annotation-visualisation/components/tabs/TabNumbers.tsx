@@ -1,5 +1,4 @@
 import React from 'react';
-import { COLOR_BLACK, COLOR_LIGHT_GREY } from './../../config/theme';
 import './styles.scss';
 
 export interface TabNumbersProps {

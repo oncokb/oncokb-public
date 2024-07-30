@@ -9,7 +9,7 @@ import {
   MUTATIONS_TABLE_COLUMN_KEY,
   TREATMENTS_TABLE_COLUMN_KEY,
 } from './../../config/constants';
-import CustomDropdown from './../CustomDropdown/CustomDropdown';
+import Dropdown from '../dropdown/Dropdown';
 import './OncoKBTable.scss';
 
 export type SearchColumn<T> = Column<T> & {
@@ -106,7 +106,7 @@ export default class OncoKBTable<T> extends React.Component<
             <div className="table-header-left">{this.props.tableName}</div>
             <div className="table-header-right">
               <div className="dropdown-container">
-                <CustomDropdown
+                <Dropdown
                   options={this.props.selectedColumns.map(col => ({
                     value: col.key,
                     label: col.label,

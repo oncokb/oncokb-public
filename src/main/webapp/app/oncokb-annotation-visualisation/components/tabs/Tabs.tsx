@@ -2,13 +2,10 @@ import React, { useState, ReactElement } from 'react';
 import { TabProps } from './Tab';
 import './styles.scss';
 import Notifs from './../notifications/notifications';
-import { NotificationImplication } from './../../config/constants';
+import { NotificationImplication, PatientInfo } from './../../config/constants';
 import { COLOR_BLUE } from './../../config/theme';
 import { generatePDF } from './../Utils';
-import { loadImageAsBase64 } from './../Utils';
-import logoImage from './MSK_OncoKB_rgb.png';
-import { patientId } from 'app/oncokb-annotation-visualisation/config/APIResponse';
-import { responses } from 'app/oncokb-annotation-visualisation/config/APIResponse';
+// import { responses } from 'app/oncokb-annotation-visualisation/config/APIResponse';
 
 interface TabsProps {
   children: ReactElement<TabProps>[];
@@ -19,7 +16,8 @@ interface TabsProps {
   dataVersion?: string;
   notifications?: NotificationImplication[];
   bgColor?: string;
-  patientInfo?: {};
+  patientInfo: PatientInfo;
+  responseList: any;
 }
 
 const Tabs: React.FC<TabsProps> = ({
@@ -32,6 +30,7 @@ const Tabs: React.FC<TabsProps> = ({
   notifications,
   bgColor,
   patientInfo,
+  responseList,
 }) => {
   const [activeKey, setActiveKey] = useState(defaultActiveKey);
 
@@ -39,12 +38,12 @@ const Tabs: React.FC<TabsProps> = ({
     setActiveKey(key);
   };
 
-  const handleDownloadClick = async () => {
+  const handleDownloadClick = () => {
     try {
       const data = [
         {
           col1: 'Sample ID',
-          col2: patientId,
+          col2: patientInfo.patientId,
           col3: 'Gender',
           col4: 'Male',
         },
@@ -56,7 +55,7 @@ const Tabs: React.FC<TabsProps> = ({
         },
       ];
 
-      const processedData = responses.map(response => ({
+      const processedData = responseList.map(response => ({
         gene: response.query.hugoSymbol || 'NA',
         mutation: response.query.alteration || 'NA',
         oncogenicity: response.oncogenic || 'NA',
@@ -65,7 +64,7 @@ const Tabs: React.FC<TabsProps> = ({
         tumorType: response.query.tumorType || 'NA',
         alterationType: response.query.alterationType || 'NA',
       }));
-      const processedTreatmentData = responses.map(response => ({
+      const processedTreatmentData = responseList.map(response => ({
         biomarker:
           response['query']['hugoSymbol'] && response['query']['alteration']
             ? `${response['query']['hugoSymbol']} ${response['query']['alteration']}`
@@ -118,7 +117,6 @@ const Tabs: React.FC<TabsProps> = ({
           });
         }
       });
-      const logoBase64 = await loadImageAsBase64(logoImage); // Convert image to Base64
       generatePDF(data, processedData, processedTreatmentData);
     } catch (error) {
       console.error('Error downloading PDF:', error);

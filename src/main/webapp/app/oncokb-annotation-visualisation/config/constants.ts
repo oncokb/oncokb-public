@@ -16,6 +16,7 @@ export const CATEGORICAL_ALTERATIONS = [
   LOSS_OF_FUNCTION_MUTATIONS,
   SWITCH_OF_FUNCTION_MUTATIONS,
 ];
+
 export enum ANNOTATION_TYPE {
   MUTATION = 'MUTATION',
   COPY_NUMBER_ALTERATION = 'COPY_NUMBER_ALTERATION',
@@ -128,10 +129,6 @@ export enum MUTATION_EFFECT {
   UNKNOWN = 'Unknown',
 }
 
-// export type HandleColumnsChange = (
-//   selectedOptions: { value: string; label: string }[]
-// ) => void;
-
 export type HandleColumnsChange = (
   value: ValueType<ColumnOption>,
   actionMeta: ActionMeta<ColumnOption>
@@ -227,7 +224,7 @@ export const defaultAnnotationColumns = [
 export const defaultTreatmentColumns = [
   TREATMENTS_TABLE_COLUMN_KEY.BIOMARKER,
   TREATMENTS_TABLE_COLUMN_KEY.DRUG,
-  TREATMENTS_TABLE_COLUMN_KEY.LEVEL,
+  TREATMENTS_TABLE_COLUMN_KEY.TREATMENTS_LEVEL,
   TREATMENTS_TABLE_COLUMN_KEY.ANNOTATION,
 ];
 
@@ -266,6 +263,12 @@ export type NotificationImplication = {
   message: string;
   type: 'danger' | 'primary' | 'warning' | 'success';
   alterationType: string;
+};
+
+export type PatientInfo = {
+  patientId: string;
+  age: string;
+  gender: string;
 };
 
 export type QueryParams = {

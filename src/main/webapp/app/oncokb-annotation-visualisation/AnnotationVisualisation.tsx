@@ -19,17 +19,20 @@ import TabNumbers from './components/tabs/TabNumbers';
 import {
   defaultAnnotationColumns,
   defaultTreatmentColumns,
+  TREATMENTS_TABLE_COLUMN_KEY,
+  ANNOTATION_TYPE,
+  annotationColumns,
+  treatmentColumns,
+  PatientInfo,
 } from './config/constants';
-import { TREATMENTS_TABLE_COLUMN_KEY } from './config/constants';
+import { compareDates, compareVersions } from './components/Utils';
+
 export interface AnnotationVisualisationProps {
   data: any;
-  patientId: string;
-  patientInfo: string;
+  patientInfo: PatientInfo;
   isPatientInfoVisible?: boolean;
   notifications: NotificationImplication[];
 }
-import { annotationColumns, treatmentColumns } from './config/constants';
-import { ANNOTATION_TYPE } from './config/constants';
 
 export interface AnnotationVisualisationState {
   selectedAnnotationColumns: string[];
@@ -111,35 +114,6 @@ export class AnnotationVisualisation extends React.Component<
   get lastUpdateAndVersion(): {} {
     let latestDate: string | null = null;
     let highestVersion: string | null = null;
-
-    const compareDates = (date1: string | null, date2: string | null) => {
-      const [day1, month1, year1] =
-        date1 !== null ? date1.split('/').map(Number) : [0, 0, 0];
-      const [day2, month2, year2] =
-        date2 !== null ? date2.split('/').map(Number) : [0, 0, 0];
-
-      if (year1 !== year2) return year1 - year2;
-      if (month1 !== month2) return month1 - month2;
-      return day1 - day2;
-    };
-
-    const compareVersions = (
-      version1: string | null,
-      version2: string | null
-    ) => {
-      const [major1, minor1] =
-        version1 !== null
-          ? version1.substring(1).split('.').map(Number)
-          : [0, 0];
-      const [major2, minor2] =
-        version2 !== null
-          ? version2.substring(1).split('.').map(Number)
-          : [0, 0];
-
-      if (major1 !== major2) return major1 - major2;
-      return minor1 - minor2;
-    };
-
     this.allAnnotations.forEach(annotation => {
       if (
         annotation['lastUpdate'] &&
@@ -349,7 +323,7 @@ export class AnnotationVisualisation extends React.Component<
     for (const key in data) {
       if (Object.prototype.hasOwnProperty.call(data, key)) {
         const response = data[key];
-        listData.push(response); // Add the response to listData
+        listData.push(response);
       }
     }
 
@@ -379,6 +353,14 @@ export class AnnotationVisualisation extends React.Component<
     return annotations;
   }
 
+  getAPIResponsesList() {
+    return [
+      ...this.props.data['mutations'],
+      ...this.props.data['cnaData'],
+      ...this.props.data['structuralVariants'],
+    ];
+  }
+
   render() {
     return (
       <>
@@ -386,11 +368,15 @@ export class AnnotationVisualisation extends React.Component<
           <div className="flex flex-row">
             <div>
               <h2 className="mb-1" style={{ color: COLOR_BLUE }}>
-                {this.props.patientId}
+                {this.props.patientInfo.patientId}
               </h2>
             </div>
             <div className="flex flex-col">
-              <h6>{this.props.patientInfo}</h6>
+              <h6>
+                {this.props.patientInfo.age +
+                  ' years, ' +
+                  this.props.patientInfo.gender}
+              </h6>
             </div>
           </div>
         )}
@@ -400,6 +386,8 @@ export class AnnotationVisualisation extends React.Component<
           dataVersion={this.lastUpdateAndVersion['dataVersion']}
           lastUpdate={this.lastUpdateAndVersion['lastUpdate']}
           notifications={this.props.notifications}
+          patientInfo={this.props.patientInfo}
+          responseList={this.getAPIResponsesList}
         >
           <Tab
             eventKey="all"
