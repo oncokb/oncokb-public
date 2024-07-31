@@ -10,7 +10,7 @@ const MutationEffectDescription: React.FunctionComponent<{
   // Add link to alteration page when the allele is unknown but multiple alternative alleles at the same position have mutation effects
   const description = props.description || '';
   const additionalMutationEffectSeparator =
-    'however, we have mutation effect descriptions for';
+    'we have mutation effect description';
   if (description.includes(additionalMutationEffectSeparator)) {
     const segments = description.split(additionalMutationEffectSeparator);
     if (segments.length === 2) {
@@ -49,6 +49,23 @@ const MutationEffectDescription: React.FunctionComponent<{
       }
     }
   }
+
+  // Separate leading sentence when mutation effect comes from relevant alteration
+  const relevantAltMutationEffectSeparator = ' is: ';
+  if (description.includes(relevantAltMutationEffectSeparator)) {
+    const segments = description.split(relevantAltMutationEffectSeparator);
+    if (segments.length === 2) {
+      return (
+        <div>
+          <p>
+            {segments[0]} {relevantAltMutationEffectSeparator}
+          </p>
+          <SummaryWithRefs content={segments[1]} type="linkout" />
+        </div>
+      );
+    }
+  }
+
   // don't do anything but add reference links in the description
   return <SummaryWithRefs content={props.description} type="linkout" />;
 };
