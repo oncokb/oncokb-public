@@ -1,14 +1,12 @@
-import * as XRegExp from 'xregexp';
 import _ from 'lodash';
 import client from '../api/clientInstance';
 import { VerifyCompanyNameVM } from '../api/generated/API';
 import { notifyError } from './NotificationUtils';
 import pluralize from 'pluralize';
-
-export const XREGEXP_VALID_LATIN_TEXT = '^[\\p{Latin}\\p{Common}\\s]+$';
+import { VALID_LATIN_TEXT } from 'app/config/constants/regex';
 
 const LATIN_TEXT_PATTER = {
-  value: XRegExp(XREGEXP_VALID_LATIN_TEXT),
+  value: VALID_LATIN_TEXT,
   errorMessage: 'Sorry, we only support Latin letters for now.',
 };
 
@@ -24,7 +22,7 @@ export const debouncedCompanyNameValidator = _.debounce(
     companyId?: number
   ) => {
     // Don't run the validator if empty string or not latin chars
-    if (value.trim() === '' || !XRegExp(XREGEXP_VALID_LATIN_TEXT).test(value)) {
+    if (value.trim() === '' || !LATIN_TEXT_PATTER.value.test(value)) {
       cb(false);
       return;
     }
