@@ -19,10 +19,8 @@ import { SwaggerApiLink } from 'app/shared/links/SwaggerApiLink';
 import { remoteData } from 'cbioportal-frontend-commons';
 import oncokbPrivateClient from 'app/shared/api/oncokbPrivateClientInstance';
 import { DownloadAvailability } from 'app/shared/api/generated/OncoKbPrivateAPI';
-import _ from 'lodash';
-import { Button, Col, Row } from 'react-bootstrap';
+import { Col, Row } from 'react-bootstrap';
 import { getNewsTitle } from 'app/pages/newsPage/NewsList';
-import { LICENSE_HASH_KEY } from 'app/pages/RegisterPage';
 import { action, computed, observable } from 'mobx';
 import WindowStore from 'app/store/WindowStore';
 import { Link } from 'react-router-dom';
@@ -32,6 +30,7 @@ import AuthenticationStore from 'app/store/AuthenticationStore';
 import { Linkout } from 'app/shared/links/Linkout';
 import { If, Then, Else } from 'react-if';
 import { getPageTitle } from 'app/shared/utils/Utils';
+import { has } from 'app/shared/utils/LodashUtils';
 
 type DownloadAvailabilityWithDate = DataRelease & DownloadAvailability;
 
@@ -102,39 +101,31 @@ export default class APIAccessPage extends React.Component<{
       const result = await oncokbPrivateClient.utilDataAvailabilityGetUsingGET(
         {}
       );
-      const availableVersions = _.reduce(
-        result,
-        (acc, next) => {
-          acc[next.version] = next;
-          return acc;
-        },
-        {} as { [key: string]: DownloadAvailability }
-      );
+      const availableVersions = result.reduce((acc, next) => {
+        acc[next.version] = next;
+        return acc;
+      }, {} as { [key: string]: DownloadAvailability });
       // do not provide data on version 1
-      return _.reduce(
-        DATA_RELEASES.filter(
-          release =>
-            _.has(availableVersions, release.version) &&
-            !release.version.startsWith('v1')
-        ),
-        (acc, next) => {
-          const currentVersionData: DownloadAvailability =
-            availableVersions[next.version];
-          if (
-            currentVersionData.hasAllActionableVariants ||
-            currentVersionData.hasAllAnnotatedVariants ||
-            currentVersionData.hasAllCuratedGenes ||
-            currentVersionData.hasCancerGeneList
-          ) {
-            acc.push({
-              ...availableVersions[next.version],
-              date: next.date,
-            });
-          }
-          return acc;
-        },
-        [] as DownloadAvailabilityWithDate[]
-      );
+      return DATA_RELEASES.filter(
+        release =>
+          has(availableVersions, release.version) &&
+          !release.version.startsWith('v1')
+      ).reduce((acc, next) => {
+        const currentVersionData: DownloadAvailability =
+          availableVersions[next.version];
+        if (
+          currentVersionData.hasAllActionableVariants ||
+          currentVersionData.hasAllAnnotatedVariants ||
+          currentVersionData.hasAllCuratedGenes ||
+          currentVersionData.hasCancerGeneList
+        ) {
+          acc.push({
+            ...availableVersions[next.version],
+            date: next.date,
+          });
+        }
+        return acc;
+      }, [] as DownloadAvailabilityWithDate[]);
     },
     default: [],
   });
@@ -147,10 +138,10 @@ export default class APIAccessPage extends React.Component<{
   @computed
   get selectedData() {
     if (this.selectedVersion) {
-      return _.chain(this.dataAvailability.result)
-        .filter(item => item.version === this.selectedVersion.value)
-        .first()
-        .value();
+      const result = this.dataAvailability.result.filter(
+        item => item.version === this.selectedVersion.value
+      );
+      return result.length > 0 ? result[0] : undefined;
     } else {
       return undefined;
     }

@@ -18,7 +18,6 @@ import {
   Treatment as EvidenceTreatment,
 } from 'app/shared/api/generated/OncoKbPrivateAPI';
 import Select from 'react-select';
-import _ from 'lodash';
 import {
   FdaLevelIcon,
   getCancerTypeNameFromOncoTreeType,
@@ -65,6 +64,13 @@ import {
 } from 'app/shared/route/types';
 import AppStore from 'app/store/AppStore';
 import ShortenTextWithTooltip from 'app/shared/texts/ShortenTextWithTooltip';
+import {
+  flatten,
+  intersection,
+  sortByKey,
+  uniq,
+  uniqBy,
+} from 'app/shared/utils/LodashUtils';
 
 type Treatment = {
   level: string;
@@ -113,12 +119,11 @@ export default class ActionableGenesPage extends React.Component<
     await: () => [],
     async invoke() {
       const result = await privateClient.utilsTumorTypesGetUsingGET({});
-      return _.chain(result)
-        .filter(cancerType => cancerType.level >= 0)
-        .map(cancerType => cancerType.mainType)
-        .uniq()
-        .value()
-        .sort();
+      return uniq(
+        result
+          .filter(cancerType => cancerType.level >= 0)
+          .map(cancerType => cancerType.mainType)
+      ).sort();
     },
     default: [],
   });
@@ -144,14 +149,14 @@ export default class ActionableGenesPage extends React.Component<
           }) as ActionableGenesPageHashQueries;
           if (queryStrings.levels) {
             this.levelSelected = this.initLevelSelected();
-            (_.isArray(queryStrings.levels)
+            (Array.isArray(queryStrings.levels)
               ? queryStrings.levels
               : [queryStrings.levels]
             ).forEach(level => {
               this.levelSelected[level] = true;
             });
             if (!this.collapseInit) {
-              (_.isArray(queryStrings.levels)
+              (Array.isArray(queryStrings.levels)
                 ? queryStrings.levels
                 : [queryStrings.levels]
               ).forEach(level => {
@@ -176,7 +181,7 @@ export default class ActionableGenesPage extends React.Component<
             this.refGenome = queryStrings.refGenome;
           }
           if (queryStrings.sections) {
-            const visibleSections = _.isArray(queryStrings.sections)
+            const visibleSections = Array.isArray(queryStrings.sections)
               ? queryStrings.sections
               : [queryStrings.sections];
             visibleSections.forEach(
@@ -256,14 +261,14 @@ export default class ActionableGenesPage extends React.Component<
 
   getTreatments(evidences: Evidence[]) {
     const treatments: Treatment[] = [];
-    _.forEach(evidences, (item: Evidence) => {
+    evidences.forEach((item: Evidence) => {
       const matchedAlterations = item.alterations.filter(alteration =>
         alteration.referenceGenomes.includes(this.refGenome)
       );
       if (matchedAlterations.length > 0) {
         const level = levelOfEvidence2Level(item.levelOfEvidence, true);
         const fdaLevel = levelOfEvidence2Level(item.fdaLevel, true);
-        const sortedAlts = _.sortBy(matchedAlterations, 'name');
+        const sortedAlts = sortByKey(matchedAlterations, 'name');
         const sortedAltsName = sortedAlts
           .map(alteration => alteration.name)
           .sort()
@@ -285,7 +290,7 @@ export default class ActionableGenesPage extends React.Component<
               relevantCancerTypes: item.relevantCancerTypes,
               cancerTypesName,
               treatment,
-              uniqueDrugs: _.uniq(
+              uniqueDrugs: uniq(
                 treatment.drugs.map(drug => getDrugNameFromTreatment(drug))
               ),
               drugs: getTreatmentNameByPriority(treatment),
@@ -313,14 +318,10 @@ export default class ActionableGenesPage extends React.Component<
   }
 
   initLevelSelected(): { [level in keyof LEVELS]: boolean } {
-    return _.reduce(
-      LEVELS,
-      (acc, level) => {
-        acc[level] = false;
-        return acc;
-      },
-      {} as { [level in keyof LEVELS]: boolean }
-    );
+    return Object.keys(LEVELS).reduce((acc, level) => {
+      acc[level] = false;
+      return acc;
+    }, {} as { [level in keyof LEVELS]: boolean });
   }
 
   @computed
@@ -338,10 +339,10 @@ export default class ActionableGenesPage extends React.Component<
     if (this.drugSearchKeyword) {
       queryString.drug = this.drugSearchKeyword;
     }
-    const visibleSections = _.chain(this.collapseStatus)
-      .values()
-      .filter(sectionStatus => sectionStatus)
-      .value();
+    const visibleSections = Object.values(this.collapseStatus).filter(
+      sectionStatus => sectionStatus
+    );
+
     if (visibleSections.length > 0) {
       const sections: LEVEL_TYPES[] = [];
       for (const visibleSection in this.collapseStatus) {
@@ -366,10 +367,11 @@ export default class ActionableGenesPage extends React.Component<
   @computed
   get allOncokbTreatments() {
     let treatments: Treatment[] = [];
-    _.forEach(this.evidencesByLevel.result, (content, levelOfEvidence) => {
+    Object.keys(this.evidencesByLevel.result).forEach(levelOfEvidence => {
+      const content = this.evidencesByLevel.result[levelOfEvidence];
       treatments = treatments.concat(this.getTreatments(content));
     });
-    return _.uniqBy(
+    return uniqBy(
       treatments,
       treatment =>
         `${treatment.level}-${treatment.hugoSymbol}-${treatment.alterationsName}-${treatment.cancerTypesName}-${treatment.drugs}`
@@ -387,7 +389,7 @@ export default class ActionableGenesPage extends React.Component<
           level: treatment.fdaLevel,
         } as Treatment);
       });
-    return _.uniqBy(
+    return uniqBy(
       treatments,
       treatment =>
         `${treatment.level}-${treatment.hugoSymbol}-${treatment.alterationsName}-${treatment.cancerTypesName}`
@@ -437,7 +439,7 @@ export default class ActionableGenesPage extends React.Component<
 
   @computed
   get noFdaLevelSelected() {
-    return _.intersection(this.selectedLevels, FDA_LEVELS).length === 0;
+    return intersection(this.selectedLevels, FDA_LEVELS).length === 0;
   }
 
   @computed
@@ -456,21 +458,21 @@ export default class ActionableGenesPage extends React.Component<
 
   @computed
   get filteredGenes() {
-    return _.uniq(
+    return uniq(
       this.filteredTreatments.map(treatment => treatment.hugoSymbol)
     ).sort();
   }
 
   @computed
   get filteredDrugs() {
-    return _.uniq(
-      _.flatten(this.filteredTreatments.map(treatment => treatment.uniqueDrugs))
+    return uniq(
+      flatten(this.filteredTreatments.map(treatment => treatment.uniqueDrugs))
     ).sort();
   }
 
   @computed
   get filteredTumorTypes() {
-    return _.uniq(
+    return uniq(
       this.filteredTreatments.map(treatment =>
         treatment.cancerTypes
           .map(ct => getCancerTypeNameFromOncoTreeType(ct))
@@ -481,14 +483,10 @@ export default class ActionableGenesPage extends React.Component<
 
   @computed
   get levelNumbers() {
-    const levelNumbers = _.reduce(
-      LEVELS,
-      (acc, level) => {
-        acc[level] = [];
-        return acc;
-      },
-      {} as { [level: string]: string[] }
-    );
+    const levelNumbers = Object.keys(LEVELS).reduce((acc, level) => {
+      acc[level] = [];
+      return acc;
+    }, {} as { [level: string]: string[] });
 
     // when there is no second layer filtering enabled, we allow to choose multiple levels
     const treatmentSource = this.secondLayerFilterEnabled
@@ -499,19 +497,15 @@ export default class ActionableGenesPage extends React.Component<
         levelNumbers[treatment.level].push(treatment.hugoSymbol);
       }
     });
-    return _.reduce(
-      levelNumbers,
-      (acc, next, level) => {
-        acc[level] = _.uniq(next).length;
-        return acc;
-      },
-      {} as { [level: string]: number }
-    );
+    return Object.keys(levelNumbers).reduce((acc, next) => {
+      acc[next] = uniq(levelNumbers[next]).length;
+      return acc;
+    }, {} as { [level: string]: number });
   }
 
   @computed
   get filteredLevels() {
-    return _.uniq(this.filteredTreatments.map(treatment => treatment.level));
+    return uniq(this.filteredTreatments.map(treatment => treatment.level));
   }
 
   @computed
@@ -521,16 +515,12 @@ export default class ActionableGenesPage extends React.Component<
 
   @computed
   get selectedLevels() {
-    return _.reduce(
-      this.levelSelected,
-      (acc, selected, level) => {
-        if (selected) {
-          acc.push(level);
-        }
-        return acc;
-      },
-      [] as string[]
-    );
+    return Object.keys(this.levelSelected).reduce((acc, level) => {
+      if (this.levelSelected[level]) {
+        acc.push(level);
+      }
+      return acc;
+    }, [] as string[]);
   }
 
   @computed
@@ -690,7 +680,7 @@ export default class ActionableGenesPage extends React.Component<
       return true;
     }
     return (
-      _.intersection(
+      intersection(
         [LEVELS.Tx1, LEVELS.Tx2, LEVELS.Tx3, LEVELS.Tx4, LEVELS.R1, LEVELS.R2],
         this.selectedLevels
       ).length > 0

@@ -58,7 +58,6 @@ import { RouteComponentProps } from 'react-router';
 import autobind from 'autobind-decorator';
 import InfoIcon from 'app/shared/icons/InfoIcon';
 import { daysDiff, getPageTitle } from 'app/shared/utils/Utils';
-import _ from 'lodash';
 import { notifyError, notifySuccess } from 'app/shared/utils/NotificationUtils';
 import TokenInputGroups from 'app/components/tokenInputGroups/TokenInputGroups';
 import { EmailTable } from 'app/shared/table/EmailTable';
@@ -89,6 +88,7 @@ import {
   getAccountActivationLink,
   getPasswordResetLink,
 } from 'app/shared/utils/UrlUtils';
+import { sortBy } from 'app/shared/utils/LodashUtils';
 
 export enum AccountStatus {
   ACTIVATED = 'Activated',
@@ -260,9 +260,7 @@ export default class UserPage extends React.Component<IUserPage> {
 
   @computed
   get shortestToken() {
-    const tokens = _.sortBy(this.userTokens, token =>
-      daysDiff(token.expiration)
-    );
+    const tokens = sortBy(this.userTokens, token => daysDiff(token.expiration));
     return tokens.length > 0 ? tokens[0] : undefined;
   }
 

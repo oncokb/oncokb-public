@@ -3,7 +3,6 @@ import { inject } from 'mobx-react';
 import React from 'react';
 import { DefaultTooltip } from 'cbioportal-frontend-commons';
 import { InfoLevel } from 'app/shared/api/generated/OncoKbAPI';
-import _ from 'lodash';
 import { level2LevelOfEvidence } from 'app/shared/utils/Utils';
 import ReactHtmlParser from 'react-html-parser';
 import { LEVELS } from 'app/config/constants';
@@ -19,8 +18,9 @@ export const LevelWithDescription: React.FunctionComponent<{
     if (props.description) {
       return <span>{props.description}</span>;
     }
-    const match: InfoLevel | undefined = _.find(
-      props.appStore!.appInfo.result.levels,
+    const match:
+      | InfoLevel
+      | undefined = props.appStore!.appInfo.result.levels.find(
       (level: InfoLevel) => level.levelOfEvidence === levelOfEvidence
     );
     return match ? (

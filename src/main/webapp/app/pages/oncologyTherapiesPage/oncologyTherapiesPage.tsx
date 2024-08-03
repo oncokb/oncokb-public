@@ -6,7 +6,6 @@ import fdaTxs from 'content/files/oncologyTherapies/fda_approved_oncology_therap
 import fdaTxsExcel from 'content/files/oncologyTherapies/fda_approved_oncology_therapies.xlsx';
 import { LG_TABLE_FIXED_HEIGHT } from 'app/config/constants';
 import { Button, ButtonProps, Col, FormCheck, Row } from 'react-bootstrap';
-import _ from 'lodash';
 import { DownloadButton } from 'app/components/downloadButton/DownloadButton';
 import InfoIcon from 'app/shared/icons/InfoIcon';
 import ShowHideText from 'app/shared/texts/ShowHideText';
@@ -15,6 +14,7 @@ import styles from 'app/index.module.scss';
 import { Input } from 'reactstrap';
 import Select from 'react-select';
 import pluralize from 'pluralize';
+import { sortByKey, uniq, uniqBy } from 'app/shared/utils/LodashUtils';
 
 type FdaApprovedOncologyTherapy = {
   year: string;
@@ -73,28 +73,30 @@ const sortAndUniqByValue = (
   key: keyof FdaApprovedOncologyTherapy,
   separators?: string[]
 ) => {
-  return _.chain(txs)
-    .reduce((acc, tx: FdaApprovedOncologyTherapy) => {
-      const methods =
-        (separators || []).length > 0
-          ? tx[key]
-              .split(new RegExp(`${separators?.join('|')}`))
-              .map(method => method.trim())
-          : [tx[key]];
-      const options = methods
-        .filter(method => !!method.trim())
-        .map((method: string) => {
-          return {
-            value: method,
-            label: method,
-          };
-        });
-      acc.push(...options);
-      return acc;
-    }, [] as SelectOption[])
-    .uniqBy('value')
-    .sortBy('value')
-    .value();
+  return sortByKey(
+    uniqBy(
+      txs.reduce((acc, tx: FdaApprovedOncologyTherapy) => {
+        const methods =
+          (separators || []).length > 0
+            ? tx[key]
+                .split(new RegExp(`${separators?.join('|')}`))
+                .map(method => method.trim())
+            : [tx[key]];
+        const options = methods
+          .filter(method => !!method.trim())
+          .map((method: string) => {
+            return {
+              value: method,
+              label: method,
+            };
+          });
+        acc.push(...options);
+        return acc;
+      }, [] as SelectOption[]),
+      'value'
+    ),
+    'value'
+  );
 };
 
 const footnotes = {
@@ -368,7 +370,7 @@ const OncologyTherapiesPage: React.FunctionComponent<{}> = props => {
     }
   }, [fdaTxs, poOnly, targetedOnly]);
   const drugTargetOptions: SelectOption[] = useMemo(() => {
-    return _.uniq(
+    return uniq(
       txs.map((tx: FdaApprovedOncologyTherapy) =>
         simplifyDrugTarget(tx.drugTarget)
       )
@@ -452,7 +454,7 @@ const OncologyTherapiesPage: React.FunctionComponent<{}> = props => {
   }, [filteredTxs]);
 
   const numFilteredTxs = useMemo(() => {
-    return _.uniq(filteredTxs.map((tx: FdaApprovedOncologyTherapy) => tx.tx))
+    return uniq(filteredTxs.map((tx: FdaApprovedOncologyTherapy) => tx.tx))
       .length;
   }, [filteredTxs]);
   const clearFilters = () => {

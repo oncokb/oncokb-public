@@ -26,7 +26,6 @@ import {
   LICENSE_MODEL_DESCRIPTIONS,
 } from 'app/config/constants';
 import client from 'app/shared/api/clientInstance';
-import _ from 'lodash';
 import { notifyError } from 'app/shared/utils/NotificationUtils';
 import { AdditionalInfoSelect } from 'app/shared/dropdown/AdditionalInfoSelect';
 import {

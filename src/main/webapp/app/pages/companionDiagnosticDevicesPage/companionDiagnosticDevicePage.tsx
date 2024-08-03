@@ -11,9 +11,7 @@ import {
 import { filterByKeyword, getAllTumorTypesName } from 'app/shared/utils/Utils';
 import React, { useEffect, useState, useMemo } from 'react';
 import { Button, Col, Row } from 'react-bootstrap';
-import _ from 'lodash';
 import classnames from 'classnames';
-import { Input } from 'reactstrap';
 import WithSeparator from 'react-with-separator';
 import { AlterationPageLink, GenePageLink } from 'app/shared/utils/UrlUtils';
 import { pluralize } from 'cbioportal-frontend-commons';
@@ -28,6 +26,14 @@ import { TumorType } from 'app/shared/api/generated/OncoKbPrivateAPI';
 import { FdaSubmissionLink } from 'app/shared/links/FdaSubmissionLink';
 import { Linkout } from 'app/shared/links/Linkout';
 import InfoIcon from 'app/shared/icons/InfoIcon';
+import {
+  flatMap,
+  flatten,
+  sortBy,
+  sortByKey,
+  uniq,
+  uniqBy,
+} from 'app/shared/utils/LodashUtils';
 
 export interface ICompanionDiagnosticDevice {
   name: string;
@@ -114,9 +120,9 @@ const parseCDx = () => {
       }
     }
 
-    _.flatten(
+    flatten(
       associationList.map((assoc: any) => {
-        return _.uniq(
+        return uniq(
           assoc.alterations.reduce(
             (acc: any[], alt: any) =>
               acc.concat(alt.genes.map((gene: any) => gene.hugoSymbol)),
@@ -124,11 +130,7 @@ const parseCDx = () => {
           )
         ).map((gene: any) => ({
           gene,
-          alterations: _.chain(assoc.alterations)
-            .map((a: any) => a.name)
-            .uniq()
-            .sort()
-            .value(),
+          alterations: uniq(assoc.alterations.map((a: any) => a.name)).sort(),
           drugs: assoc.treatments
             .map((treatment: any) =>
               treatment.drugs.map((drug: any) => drug.name).join(' + ')
@@ -149,10 +151,7 @@ const parseCDx = () => {
         name: cdx.name,
         manufacturer: cdx.manufacturer,
         platformType: cdx.platformType,
-        specimenTypes: _.chain(cdx.specimenTypes)
-          .map((st: any) => st.name)
-          .sort()
-          .value(),
+        specimenTypes: cdx.specimenTypes.map((st: any) => st.name).sort(),
         biomarkerAssociation: assoc,
       });
     });
@@ -417,29 +416,24 @@ const CompanionDiagnosticDevicePage: React.FunctionComponent<{}> = () => {
   ];
 
   const filteredCancerTypes = useMemo(() => {
-    return _.chain(filteredCDx)
-      .map(cdx => getAllTumorTypesName(cdx.biomarkerAssociation.cancerTypes))
-      .uniq()
-      .value();
+    return uniq(
+      filteredCDx.map(cdx =>
+        getAllTumorTypesName(cdx.biomarkerAssociation.cancerTypes)
+      )
+    );
   }, [filteredCDx]);
 
   const filteredCdxNames = useMemo(() => {
-    return _.chain(filteredCDx)
-      .map(cdx => cdx.name)
-      .uniq()
-      .value();
+    return uniq(filteredCDx.map(cdx => cdx.name));
   }, [filteredCDx]);
 
   const filteredGenes = useMemo(() => {
-    return _.chain(filteredCDx)
-      .map(cdx => cdx.biomarkerAssociation.gene)
-      .uniq()
-      .value();
+    return uniq(filteredCDx.map(cdx => cdx.biomarkerAssociation.gene));
   }, [filteredCDx]);
 
   const filterSummary = useMemo(() => {
-    const uniqueDrugs = _.uniq(
-      _.flatMap(filteredCDx, 'biomarkerAssociation.drugs')
+    const uniqueDrugs = uniq(
+      flatMap(filteredCDx, filtered => filtered.biomarkerAssociation.drugs)
     );
     return (
       <>
@@ -507,14 +501,16 @@ const CompanionDiagnosticDevicePage: React.FunctionComponent<{}> = () => {
         <Col className={classnames(...COMPONENT_PADDING)} lg={2} md={6} xs={12}>
           <Select
             placeholder={'Gene(s)'}
-            options={_.chain(parsedCDx)
-              .map(cdx => ({
-                label: cdx.biomarkerAssociation.gene,
-                value: cdx.biomarkerAssociation.gene,
-              }))
-              .uniqBy('label')
-              .sortBy('label')
-              .value()}
+            options={sortByKey(
+              uniqBy(
+                parsedCDx.map(cdx => ({
+                  label: cdx.biomarkerAssociation.gene,
+                  value: cdx.biomarkerAssociation.gene,
+                })),
+                'label'
+              ),
+              'label'
+            )}
             isClearable={true}
             isMulti
             value={selectedGenes}
@@ -527,18 +523,18 @@ const CompanionDiagnosticDevicePage: React.FunctionComponent<{}> = () => {
         <Col className={classnames(...COMPONENT_PADDING)} lg={2} md={6} xs={12}>
           <Select
             placeholder={'Alteration(s)'}
-            options={_.chain(parsedCDx)
-              .reduce((acc, curr) => {
-                acc = acc.concat(curr.biomarkerAssociation.alterations);
-                return acc;
-              }, [] as string[])
-              .uniq()
-              .map(alt => ({
+            options={sortByKey(
+              uniq(
+                parsedCDx.reduce((acc, curr) => {
+                  acc = acc.concat(curr.biomarkerAssociation.alterations);
+                  return acc;
+                }, [] as string[])
+              ).map(alt => ({
                 label: alt,
                 value: alt,
-              }))
-              .sortBy('label')
-              .value()}
+              })),
+              'label'
+            )}
             isClearable={true}
             isMulti
             value={selectedAlterations}
@@ -560,14 +556,16 @@ const CompanionDiagnosticDevicePage: React.FunctionComponent<{}> = () => {
         <Col className={classnames(...COMPONENT_PADDING)} lg={2} md={6} xs={12}>
           <Select
             placeholder={'Drug(s)'}
-            options={_.chain(parsedCDx)
-              .map(cdx => ({
-                label: cdx.biomarkerAssociation.drugs,
-                value: cdx.biomarkerAssociation.drugs,
-              }))
-              .uniqBy('label')
-              .sortBy('label')
-              .value()}
+            options={sortByKey(
+              uniqBy(
+                parsedCDx.map(cdx => ({
+                  label: cdx.biomarkerAssociation.drugs,
+                  value: cdx.biomarkerAssociation.drugs,
+                })),
+                'label'
+              ),
+              'label'
+            )}
             isClearable={true}
             isMulti
             value={selectedDrugs}
@@ -580,15 +578,16 @@ const CompanionDiagnosticDevicePage: React.FunctionComponent<{}> = () => {
         <Col className={classnames(...COMPONENT_PADDING)} lg={3} md={6} xs={12}>
           <Select
             placeholder={'CDx'}
-            options={_.chain(
-              parsedCDx.map(cdx => ({
-                label: cdx.name,
-                value: cdx.name,
-              }))
-            )
-              .uniqBy('label')
-              .sortBy('label')
-              .value()}
+            options={sortByKey(
+              uniqBy(
+                parsedCDx.map(cdx => ({
+                  label: cdx.name,
+                  value: cdx.name,
+                })),
+                'label'
+              ),
+              'label'
+            )}
             isClearable={true}
             isMulti
             value={selectedCDxs}

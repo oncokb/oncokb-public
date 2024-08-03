@@ -17,9 +17,9 @@ import {
   getTextWidth,
   getTextDiagonal,
 } from 'cbioportal-frontend-commons';
-import _ from 'lodash';
 import { PortalAlteration } from 'app/shared/api/generated/OncoKbPrivateAPI';
 import { FONT_FAMILY } from 'app/config/constants';
+import { flatten, uniq } from 'app/shared/utils/LodashUtils';
 
 export type BarChartDatum = {
   x: string;
@@ -102,8 +102,8 @@ export default class BarChart extends React.Component<IBarChartProps, {}> {
   get bottomPadding(): number {
     const MIN_PADDING = 10; // used when tickFormat is empty
     const padding =
-      _.max(
-        this.props.data.map(datum => {
+      Math.max(
+        ...this.props.data.map(datum => {
           const content = datum.x;
           const fontFamily = FONT_FAMILY;
           const fontSize = `${FONT_SIZE}px`;
@@ -126,10 +126,10 @@ export default class BarChart extends React.Component<IBarChartProps, {}> {
   get rightPadding(): number {
     const MIN_PADDING = 10; // used when tickFormat is empty
     const MAX_PADDING = 90;
-    const lastThreeElements = _.takeRight(this.props.data, 3);
+    const lastThreeElements = this.props.data.splice(-3);
     const padding =
-      _.max(
-        lastThreeElements.map(datum => {
+      Math.max(
+        ...lastThreeElements.map(datum => {
           const content = datum.x;
           const fontFamily = FONT_FAMILY;
           const fontSize = `${FONT_SIZE}px`;
@@ -161,8 +161,8 @@ export default class BarChart extends React.Component<IBarChartProps, {}> {
                 selectionDimension="x"
                 onSelection={(points: any, bounds: any, props: any) => {
                   if (this.props.onUserSelection) {
-                    const filters = _.uniq(
-                      _.flatten(
+                    const filters = uniq(
+                      flatten(
                         points.map((point: any) =>
                           point.data.map((dataPoint: any) => dataPoint.xName)
                         )

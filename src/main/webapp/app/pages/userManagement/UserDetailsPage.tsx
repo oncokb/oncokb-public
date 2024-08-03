@@ -13,7 +13,6 @@ import OncoKBTable, {
 import { getSectionClassName } from 'app/pages/account/AccountUtils';
 import { notifyError, notifySuccess } from 'app/shared/utils/NotificationUtils';
 import { filterByKeyword, toAppLocalDateFormat } from 'app/shared/utils/Utils';
-import _ from 'lodash';
 import { AUTHORITIES, LicenseType, USER_AUTHORITY } from 'app/config/constants';
 import styles from './UserDetailsPage.module.scss';
 import LoadingIndicator, {
@@ -316,9 +315,7 @@ export default class UserDetailsPage extends React.Component<{
       defaultSortDesc: false,
       sortMethod: defaultSortMethod,
       onFilter: (data: UserDTO, keyword) =>
-        _.some(data.authorities, authority =>
-          filterByKeyword(authority, keyword)
-        ),
+        data.authorities.some(authority => filterByKeyword(authority, keyword)),
       Cell(props: { original: UserDTO }) {
         return (
           <div className={'d-flex flex-column'}>

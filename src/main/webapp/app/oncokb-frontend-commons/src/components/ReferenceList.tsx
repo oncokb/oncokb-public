@@ -1,6 +1,5 @@
 import { ArticleAbstract } from 'oncokb-ts-api-client';
 import * as React from 'react';
-import _ from 'lodash';
 
 import ArticleAbstractItem from './ArticleAbstractItem';
 import PmidItem from './PmidItem';
@@ -87,7 +86,7 @@ export const ReferenceList: React.FunctionComponent<ReferenceListProps> = (
           <PmidItem
             title={articleContent.title}
             author={
-              _.isArray(articleContent.authors) &&
+              Array.isArray(articleContent.authors) &&
               articleContent.authors.length > 0
                 ? articleContent.authors[0].name + ' et al.'
                 : 'Unknown'

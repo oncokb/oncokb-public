@@ -20,3 +20,5 @@ declare module '*.png' {
 declare module 'availity-reactstrap-validation';
 declare module 'react-responsive-tabs';
 declare module 'victory';
+declare module 'lodash.debounce';
+declare module 'lodash';

@@ -4,13 +4,13 @@ import {
   MUTATION_EFFECT,
   ONCOGENICITY,
 } from 'app/config/constants';
-import _ from 'lodash';
 import { Alteration, Citations } from '../api/generated/OncoKbAPI';
 import {
   getAllTumorTypesName,
   levelOfEvidence2Level,
 } from 'app/shared/utils/Utils';
 import { TumorType } from '../api/generated/OncoKbPrivateAPI';
+import { isNumber } from 'app/shared/utils/LodashUtils';
 
 export function sortByArrayIndexAsc(aIndex: number, bIndex: number) {
   if (aIndex === bIndex) {
@@ -77,14 +77,14 @@ export function defaultFdaImplicationSortMethod(a: any, b: any): number {
 }
 
 export function sortNumber(a: number, b: number): number {
-  if (!_.isNumber(a)) {
-    if (!_.isNumber(b)) {
+  if (!isNumber(a)) {
+    if (!isNumber(b)) {
       return 0;
     } else {
       return 1;
     }
   }
-  if (!_.isNumber(b)) {
+  if (!isNumber(b)) {
     return -1;
   }
   return a - b;

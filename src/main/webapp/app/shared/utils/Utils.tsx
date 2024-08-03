@@ -3,7 +3,6 @@ import {
   Citations,
   TreatmentDrug,
 } from 'app/shared/api/generated/OncoKbAPI';
-import _ from 'lodash';
 import React, { ReactNode } from 'react';
 import {
   AMPLIFICATION,
@@ -62,6 +61,7 @@ import * as styles from 'app/index.module.scss';
 import { Version } from 'app/pages/LevelOfEvidencePage';
 import { Link } from 'react-router-dom';
 import { LevelOfEvidencePageLink } from 'app/shared/links/LevelOfEvidencePageLink';
+import { sortBy, sortByKey } from 'app/shared/utils/LodashUtils';
 
 // Likely Oncogenic, Predicted Oncogenic will be converted to Oncogenic
 // Likely Neutral will be converted to Neutral
@@ -113,7 +113,7 @@ export function getCancerTypesNameFromOncoTreeType(
 }
 
 export function trimLevelOfEvidenceSubversion(levelOfEvidence: string) {
-  return _.replace(levelOfEvidence, new RegExp('[AB]'), '');
+  return levelOfEvidence.replace(new RegExp('[AB]'), '');
 }
 
 export function levelOfEvidence2Level(
@@ -177,13 +177,13 @@ export function getDrugNameFromTreatment(drug: TreatmentDrug) {
 }
 
 export function getTreatmentNameByPriority(treatment: Treatment) {
-  return _.sortBy(treatment.drugs, 'priority')
+  return sortByKey(treatment.drugs, 'priority')
     .map(drug => getDrugNameFromTreatment(drug))
     .join(' + ');
 }
 
 export function getTreatmentNameFromEvidence(evidence: Evidence) {
-  return _.sortBy(evidence.treatments, 'priority')
+  return sortByKey(evidence.treatments, 'priority')
     .map(getTreatmentNameByPriority)
     .join(', ');
 }
@@ -807,7 +807,7 @@ export function getAlterationName(
 }
 
 export const getGeneCoordinates = (ensemblGenes: EnsemblGene[]) => {
-  return _.sortBy(ensemblGenes, ensemblGene => ensemblGene.referenceGenome)
+  return sortBy(ensemblGenes, ensemblGene => ensemblGene.referenceGenome)
     .map(
       ensemblGene =>
         `${ensemblGene.referenceGenome}, Chr${ensemblGene.chromosome}:${ensemblGene.start}-${ensemblGene.end}`
