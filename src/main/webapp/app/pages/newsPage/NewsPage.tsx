@@ -32,6 +32,13 @@ import { GenePageLink, SopPageLink } from 'app/shared/utils/UrlUtils';
 import { Row } from 'react-bootstrap';
 import { FdaApprovalLink } from 'app/pages/newsPage/Links';
 import { LevelOfEvidencePageLink } from 'app/shared/links/LevelOfEvidencePageLink';
+import { ViewportList } from 'react-viewport-list';
+
+//<ViewportList viewportRef={window} items={newsDates}>
+//  {date => <NewsList key={date} date={date} />}
+//</ViewportList>
+// use above
+// I haven't changed much becuase I'm not sure it'll work, as I can't test it b/c of the 167 errors
 
 @inject('routing')
 @observer
@@ -55,6 +62,21 @@ export default class NewsPage extends React.Component<{
   render() {
     return (
       <DocumentTitle title={getPageTitle(PAGE_TITLE.NEWS)}>
+        const newsDates = [ '07042024', '07022024', '06042024', '05012024',
+        '03212024', '02082024', '01172024', '12212023', '12062023', '11132023',
+        '10242023', '10022023', '09012023', '07282023', '07122023', '05192023',
+        '04122023', '03222023', '02102023', '02012023', '01052023', '12222022',
+        '12132022', '11302022', '10282022', '09062022', '07252022', '06062022',
+        '05052022', '03292022', '02282022', '01072022', '11292021', '10262021',
+        '10072021', '09292021', '08312021', '07162021', '06172021', '04142021',
+        '03122021', '02102021', '01142021', '12172020', '11132020', '09172020',
+        '08282020', '07232020', '07092020', '06092020', '05112020', '04242020',
+        '04232020', '04162020', '02122020', '12202019', '12122019', '12092019',
+        '08282019', '08042019', '06212019', '05092019', '01242019', '12142018',
+        '11022018', '10262018', '10012018', '08202018', '07122018', '02022018',
+        '10262017', '08172017', '08022017', '05152017', '04052017', '03072017',
+        '12292016', '11222016', '10242016', '09162016', '08102016', '07062016'
+        ];
         <div className="news">
           <div>
             <p>
