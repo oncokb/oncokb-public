@@ -105,7 +105,7 @@ export default class ActionableGenesPage extends React.Component<
   @observable geneSearchKeyword = '';
   @observable refGenome = DEFAULT_REFERENCE_GENOME;
   @observable levelSelected: {
-    [level in keyof LEVELS]: boolean;
+    [level in LEVELS]: boolean;
   } = this.initLevelSelected();
   @observable collapseStatus: { [key in LEVEL_TYPES]: boolean } = {
     [LEVEL_TYPES.TX]: true,
@@ -317,11 +317,11 @@ export default class ActionableGenesPage extends React.Component<
     return treatments;
   }
 
-  initLevelSelected(): { [level in keyof LEVELS]: boolean } {
-    return Object.keys(LEVELS).reduce((acc, level) => {
+  initLevelSelected(): { [level in LEVELS]: boolean } {
+    return Object.values(LEVELS).reduce((acc, level) => {
       acc[level] = false;
       return acc;
-    }, {} as { [level in keyof LEVELS]: boolean });
+    }, {} as { [level in LEVELS]: boolean });
   }
 
   @computed
@@ -483,7 +483,7 @@ export default class ActionableGenesPage extends React.Component<
 
   @computed
   get levelNumbers() {
-    const levelNumbers = Object.keys(LEVELS).reduce((acc, level) => {
+    const levelNumbers = Object.values(LEVELS).reduce((acc, level) => {
       acc[level] = [];
       return acc;
     }, {} as { [level: string]: string[] });
