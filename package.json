@@ -81,8 +81,7 @@
     "tslib": "1.11.1",
     "typeface-open-sans": "^0.0.54",
     "uuid": "7.0.3",
-    "victory": "^31.0.22",
-    "xregexp": "^4.2.4"
+    "victory": "^31.0.22"
   },
   "devDependencies": {
     "@babel/core": "7.6.4",

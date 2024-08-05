@@ -182,5 +182,9 @@ module.exports = options => ({
       base: '/',
       inject: 'body',
     }),
+    new webpack.IgnorePlugin({
+      resourceRegExp: /^\.\/locale$/,
+      contextRegExp: /moment$/,
+    })
   ],
 });

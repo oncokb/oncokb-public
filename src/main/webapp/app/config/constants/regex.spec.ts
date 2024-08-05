@@ -1,4 +1,4 @@
-import { REF_CAPTURE } from 'app/config/constants/regex';
+import { REF_CAPTURE, VALID_LATIN_TEXT } from 'app/config/constants/regex';
 
 describe('Regex constants test', () => {
   describe('Reference capture regex', () => {
@@ -46,5 +46,29 @@ describe('Regex constants test', () => {
         'A statistically (significant) hotspot (PMID: 23525077). To wildtype (Abstract: Zeng et al. Abstract #0177, IDDF 2020.). Preclinical st(udie)s suggest.';
       expect(mixText.split(REF_CAPTURE).length).toEqual(5);
     });
+  });
+
+  describe('Valid latin text regex', () => {
+    test.each([
+      'test',
+      'TEST',
+      'Test',
+      'Test Test',
+      'Test à',
+      'Test Ö',
+      'Test ö',
+      'Test ÿ',
+      "Test !@#$%^&*()_+[]{}|;:',.<>?",
+      '1234567890',
+    ])('Truthy text: %s', text => {
+      expect(VALID_LATIN_TEXT.test(text)).toBeTruthy();
+    });
+
+    test.each(['Привет', 'Γειά', '你好', 'Hello 😊', 'Hello Привет'])(
+      'Falsy text: %s',
+      text => {
+        expect(VALID_LATIN_TEXT.test(text)).toBeFalsy();
+      }
+    );
   });
 });
