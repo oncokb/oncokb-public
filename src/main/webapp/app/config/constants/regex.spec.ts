@@ -49,23 +49,26 @@ describe('Regex constants test', () => {
   });
 
   describe('Valid latin text regex', () => {
-    expect(VALID_LATIN_TEXT.test('test')).toBeTruthy();
-    expect(VALID_LATIN_TEXT.test('TEST')).toBeTruthy();
-    expect(VALID_LATIN_TEXT.test('Test')).toBeTruthy();
-    expect(VALID_LATIN_TEXT.test('Test Test')).toBeTruthy();
-    expect(VALID_LATIN_TEXT.test('Test à')).toBeTruthy();
-    expect(VALID_LATIN_TEXT.test('Test Ö')).toBeTruthy();
-    expect(VALID_LATIN_TEXT.test('Test ö')).toBeTruthy();
-    expect(VALID_LATIN_TEXT.test('Test ÿ')).toBeTruthy();
-    expect(
-      VALID_LATIN_TEXT.test("Test !@#$%^&*()_+[]{}|;:',.<>?")
-    ).toBeTruthy();
-    expect(VALID_LATIN_TEXT.test('1234567890')).toBeTruthy();
+    test.each([
+      'test',
+      'TEST',
+      'Test',
+      'Test Test',
+      'Test à',
+      'Test Ö',
+      'Test ö',
+      'Test ÿ',
+      "Test !@#$%^&*()_+[]{}|;:',.<>?",
+      '1234567890',
+    ])('Truthy text: %s', text => {
+      expect(VALID_LATIN_TEXT.test(text)).toBeTruthy();
+    });
 
-    expect(VALID_LATIN_TEXT.test('Привет')).toBeFalsy();
-    expect(VALID_LATIN_TEXT.test('Γειά')).toBeFalsy();
-    expect(VALID_LATIN_TEXT.test('你好')).toBeFalsy();
-    expect(VALID_LATIN_TEXT.test('Hello 😊')).toBeFalsy();
-    expect(VALID_LATIN_TEXT.test('Hello Привет')).toBeFalsy();
+    test.each(['Привет', 'Γειά', '你好', 'Hello 😊', 'Hello Привет'])(
+      'Falsy text: %s',
+      text => {
+        expect(VALID_LATIN_TEXT.test(text)).toBeFalsy();
+      }
+    );
   });
 });

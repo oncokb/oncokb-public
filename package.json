@@ -1,41 +1,12 @@
 {
   "name": "oncokb-public",
   "version": "0.0.1-SNAPSHOT",
-  "private": true,
   "description": "OncoKB Public Website",
+  "private": true,
   "license": "https://www.oncokb.org/terms",
-  "scripts": {
-    "build": "yarn run webpack:build",
-    "buildAPI": "node scripts/generate-api.js src/main/webapp/app/shared/api/generated API",
-    "buildOncoKbAPI": "node scripts/generate-api.js src/main/webapp/app/shared/api/generated OncoKbAPI OncoKbPrivateAPI",
-    "cleanup": "rimraf target/classes/static/",
-    "fetchAPI": "curl http://localhost:9095/v2/api-docs | json | grep -v basePath | grep -v termsOfService | grep -v host > src/main/webapp/app/shared/api/generated/API-docs.json",
-    "fetchOncoKbAPI": "curl http://localhost:8080/oncokb-public/api/v1/v2/api-docs?group=Private%20APIs | json | grep -v basePath | grep -v termsOfService | grep -v host > src/main/webapp/app/shared/api/generated/OncoKbAPI-docs.json && curl http://localhost:8080/oncokb-public/api/private/v2/api-docs | json | grep -v basePath | grep -v termsOfService | grep -v host > src/main/webapp/app/shared/api/generated/OncoKbPrivateAPI-docs.json",
-    "jest": "jest --coverage --logHeapUsage --maxWorkers=2 --config jest.conf.js",
-    "lint": "eslint . --ext .js,.ts,.jsx,.tsx",
-    "lint:fix": "yarn run lint -- --fix",
-    "prettier:format": "prettier --write \"{,src/**/}*.{md,json,ts,tsx,css,scss,yml}\"",
-    "screenshot-test": "jest -c ./screenshot-test/jest-screenshot.config.js",
-    "screenshot-test-in-docker": "make local_test",
-    "screenshot-test-in-docker:update": "make local_test_update",
-    "screenshot-test:update": "jest -c ./screenshot-test/jest-screenshot.config.js -u",
-    "start": "yarn run webpack:dev",
-    "start-tls": "yarn run webpack:dev -- --env.tls",
-    "test": "yarn run jest --",
-    "updateAPI": "yarn run fetchAPI && yarn run buildAPI",
-    "updateOncoKbAPI": "yarn run fetchOncoKbAPI && yarn run buildOncoKbAPI",
-    "webpack": "node --max_old_space_size=4096 node_modules/webpack/bin/webpack.js",
-    "webpack-dev-server": "node --max_old_space_size=4096 node_modules/webpack-dev-server/bin/webpack-dev-server.js",
-    "webpack:build": "yarn run cleanup && yarn run webpack:build:main",
-    "webpack:build:main": "yarn run webpack -- --config webpack/webpack.dev.js --env.stats=minimal",
-    "webpack:dev": "yarn run webpack-dev-server -- --config webpack/webpack.dev.js --inline --port=9060 --env.stats=minimal",
-    "webpack:dev-verbose": "yarn run webpack-dev-server -- --config webpack/webpack.dev.js --inline --port=9060 --profile --progress --env.stats=normal",
-    "webpack:prod": "yarn run cleanup && yarn run webpack:prod:main",
-    "webpack:prod:main": "yarn run webpack -- --config webpack/webpack.prod.js --profile"
-  },
-  "resolutions": {
-    "@types/react": "16.9.34"
-  },
+  "cacheDirectories": [
+    "node_modules"
+  ],
   "dependencies": {
     "@hot-loader/react-dom": "^16.13.0",
     "@mskcc/core": "^10.2.0",
@@ -110,7 +81,8 @@
     "tslib": "1.11.1",
     "typeface-open-sans": "^0.0.54",
     "uuid": "7.0.3",
-    "victory": "^31.0.22"
+    "victory": "^31.0.22",
+    "xregexp": "^4.2.4"
   },
   "devDependencies": {
     "@babel/core": "7.6.4",
@@ -203,11 +175,40 @@
     "workbox-webpack-plugin": "5.1.3",
     "write-file-webpack-plugin": "4.5.1"
   },
+  "resolutions": {
+    "@types/react": "16.9.34"
+  },
   "engines": {
     "node": ">=12.16.1 <13",
     "yarn": ">=1.19.0"
   },
-  "cacheDirectories": [
-    "node_modules"
-  ]
+  "scripts": {
+    "prettier:format": "prettier --write \"{,src/**/}*.{md,json,ts,tsx,css,scss,yml}\"",
+    "lint": "eslint . --ext .js,.ts,.jsx,.tsx",
+    "lint:fix": "yarn run lint -- --fix",
+    "cleanup": "rimraf target/classes/static/",
+    "start": "yarn run webpack:dev",
+    "start-tls": "yarn run webpack:dev -- --env.tls",
+    "updateAPI": "yarn run fetchAPI && yarn run buildAPI",
+    "fetchAPI": "curl http://localhost:9095/v2/api-docs | json | grep -v basePath | grep -v termsOfService | grep -v host > src/main/webapp/app/shared/api/generated/API-docs.json",
+    "buildAPI": "node scripts/generate-api.js src/main/webapp/app/shared/api/generated API",
+    "updateOncoKbAPI": "yarn run fetchOncoKbAPI && yarn run buildOncoKbAPI",
+    "fetchOncoKbAPI": "curl http://localhost:8080/oncokb-public/api/v1/v2/api-docs?group=Private%20APIs | json | grep -v basePath | grep -v termsOfService | grep -v host > src/main/webapp/app/shared/api/generated/OncoKbAPI-docs.json && curl http://localhost:8080/oncokb-public/api/private/v2/api-docs | json | grep -v basePath | grep -v termsOfService | grep -v host > src/main/webapp/app/shared/api/generated/OncoKbPrivateAPI-docs.json",
+    "buildOncoKbAPI": "node scripts/generate-api.js src/main/webapp/app/shared/api/generated OncoKbAPI OncoKbPrivateAPI",
+    "test": "yarn run jest --",
+    "jest": "jest --coverage --logHeapUsage --maxWorkers=2 --config jest.conf.js",
+    "webpack:dev": "yarn run webpack-dev-server -- --config webpack/webpack.dev.js --inline --port=9060 --env.stats=minimal",
+    "webpack:dev-verbose": "yarn run webpack-dev-server -- --config webpack/webpack.dev.js --inline --port=9060 --profile --progress --env.stats=normal",
+    "webpack:build:main": "yarn run webpack -- --config webpack/webpack.dev.js --env.stats=minimal",
+    "webpack:build": "yarn run cleanup && yarn run webpack:build:main",
+    "build": "yarn run webpack:build",
+    "webpack:prod:main": "yarn run webpack -- --config webpack/webpack.prod.js --profile",
+    "webpack:prod": "yarn run cleanup && yarn run webpack:prod:main",
+    "webpack-dev-server": "node --max_old_space_size=4096 node_modules/webpack-dev-server/bin/webpack-dev-server.js",
+    "webpack": "node --max_old_space_size=4096 node_modules/webpack/bin/webpack.js",
+    "screenshot-test": "jest -c ./screenshot-test/jest-screenshot.config.js",
+    "screenshot-test:update": "jest -c ./screenshot-test/jest-screenshot.config.js -u",
+    "screenshot-test-in-docker": "make local_test",
+    "screenshot-test-in-docker:update": "make local_test_update"
+  }
 }
