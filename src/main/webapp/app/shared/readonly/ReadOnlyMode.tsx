@@ -15,8 +15,8 @@ import ReadOnlyPage from './ReadOnlyPage';
  * will be displayed and a warning message will be added to the top of the page.
  */
 
-export default function ReadOnlyMode(
-  Component: React.ComponentType,
+export default function ReadOnlyMode<T, S extends React.ComponentType<T>>(
+  Component: S | React.LazyExoticComponent<S>,
   showWarningOnly?: boolean
 ) {
   return (props: any) => {

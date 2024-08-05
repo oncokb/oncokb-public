@@ -1,16 +1,28 @@
-import React from 'react';
+import React, { lazy } from 'react';
 import { ErrorBoundaryRoute } from 'app/shared/error/error-boundary-route';
 import { PAGE_ROUTE } from 'app/config/constants';
 import { Switch } from 'react-router-dom';
 import PageNotFound from 'app/shared/error/page-not-found';
-import SendEmailsPage from 'app/pages/sendEmails/SendEmailsPage';
-import UserDetailsPage from '../pages/userManagement/UserDetailsPage';
+const SendEmailsPage = lazy(
+  () => import('app/pages/sendEmails/SendEmailsPage')
+);
+const UserDetailsPage = lazy(
+  () => import('../pages/userManagement/UserDetailsPage')
+);
 import { CreateAccountPage } from 'app/pages/CreateAccountPage';
-import UsageAnalysisPage from 'app/pages/usageAnalysisPage/UsageAnalysisPage';
-import UserUsageDetailsPage from 'app/pages/usageAnalysisPage/UserUsageDetailsPage';
-import ResourceUsageDetailsPage from 'app/pages/usageAnalysisPage/ResourceUsageDetailsPage';
+const UsageAnalysisPage = lazy(
+  () => import('app/pages/usageAnalysisPage/UsageAnalysisPage')
+);
+const UserUsageDetailsPage = lazy(
+  () => import('app/pages/usageAnalysisPage/UserUsageDetailsPage')
+);
+const ResourceUsageDetailsPage = lazy(
+  () => import('app/pages/usageAnalysisPage/ResourceUsageDetailsPage')
+);
 import { CreateCompanyPage } from 'app/pages/CreateCompanyPage';
-import CompanyDetailsPage from 'app/pages/companyManagement/CompanyDetailsPage';
+const CompanyDetailsPage = lazy(
+  () => import('app/pages/companyManagement/CompanyDetailsPage')
+);
 import ReadOnlyMode from 'app/shared/readonly/ReadOnlyMode';
 
 const AdminRoutes = () => {

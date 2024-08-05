@@ -6,6 +6,8 @@ const FriendlyErrorsWebpackPlugin = require('friendly-errors-webpack-plugin');
 const SimpleProgressWebpackPlugin = require('simple-progress-webpack-plugin');
 const WebpackNotifierPlugin = require('webpack-notifier');
 const path = require('path');
+const BundleAnalyzerPlugin = require('webpack-bundle-analyzer')
+  .BundleAnalyzerPlugin;
 
 const utils = require('./utils.js');
 const commonConfig = require('./webpack.common.js');
@@ -133,6 +135,7 @@ module.exports = options =>
           title: 'OncoKB',
           contentImage: path.join(__dirname, 'logo-oncokb.png'),
         }),
+        new BundleAnalyzerPlugin(),
       ].filter(Boolean),
     }
   );
