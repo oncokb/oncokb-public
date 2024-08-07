@@ -2218,5 +2218,25 @@
     "targetedTx": "Y",
     "pxTx": "N",
     "ngsTest": "NA"
+  },
+  {
+    "year": "2024",
+    "tx": "Afamitresgene autoleucel",
+    "biomarker": "HLA-A*02:01P, -A*02:02P, -A*02:03P, or -A*02:06P positive and MAGE-A4 antigen positive",
+    "agentClass": "T cell receptor (TCR) therapy",
+    "drugTarget": "MAGE-A4-directed TCR therapy",
+    "targetedTx": "Y",
+    "pxTx": "Y",
+    "ngsTest": "N"
+  },
+  {
+    "year": "2024",
+    "tx": "Vorasidenib",
+    "biomarker": "IDH1 R132H/C/G/S/L, IDH2 R172K/M/W/S/G",
+    "agentClass": "Small molecule inhibitor",
+    "drugTarget": "IDH1/IDH2 inhibitor",
+    "targetedTx": "Y",
+    "pxTx": "Y",
+    "ngsTest": "Y"
   }
 ]
