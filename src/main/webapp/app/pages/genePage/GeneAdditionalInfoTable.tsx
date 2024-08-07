@@ -1,7 +1,6 @@
 import React from 'react';
 import { Table } from 'react-bootstrap';
 import { EnsemblGene, Gene } from 'app/shared/api/generated/OncoKbPrivateAPI';
-import _ from 'lodash';
 import { Linkout } from 'app/shared/links/Linkout';
 import styles from 'app/pages/genePage/GenePage.module.scss';
 import { REFERENCE_GENOME } from 'app/config/constants';

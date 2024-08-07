@@ -1,6 +1,5 @@
 import React from 'react';
 import Select, { components, Props as SelectProps } from 'react-select';
-import _ from 'lodash';
 
 const Option: React.FunctionComponent<any> = (props: any) => {
   return (

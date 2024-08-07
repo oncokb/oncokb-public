@@ -19,7 +19,6 @@ import { Col, Row } from 'react-bootstrap';
 import { RouterStore } from 'mobx-react-router';
 import { getSectionClassName } from 'app/pages/account/AccountUtils';
 import { notifyError, notifySuccess } from 'app/shared/utils/NotificationUtils';
-import _ from 'lodash';
 import { COMPONENT_PADDING } from 'app/config/constants';
 import Select from 'react-select';
 import classnames from 'classnames';
@@ -126,10 +125,10 @@ export default class UserManagementPage extends React.Component<{
 
   @computed
   get selectedUser() {
-    return _.chain(this.users.result)
-      .filter(user => user.login === this.selectedUserLogin)
-      .first()
-      .value();
+    const result = this.users.result.filter(
+      user => user.login === this.selectedUserLogin
+    );
+    return result.length > 0 ? result[0] : undefined;
   }
 
   readonly users = remoteData<UserDTO[]>({

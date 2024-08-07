@@ -33,7 +33,6 @@ import {
   TumorType,
   VariantAnnotation,
 } from 'app/shared/api/generated/OncoKbPrivateAPI';
-import _ from 'lodash';
 import { BarChartDatum } from 'app/components/barChart/BarChart';
 import {
   getAlterationName,
@@ -54,6 +53,12 @@ import {
 } from 'app/components/oncokbMutationMapper/FilterUtils';
 import { notifyError } from 'app/shared/utils/NotificationUtils';
 import { AnnotationType } from 'app/pages/annotationPage/AnnotationPage';
+import {
+  groupBy,
+  intersection,
+  keyBy,
+  uniq,
+} from 'app/shared/utils/LodashUtils';
 
 export interface IAnnotationStore {
   type: AnnotationType;
@@ -336,6 +341,7 @@ export class AnnotationStore {
         })
       );
     },
+    default: [],
   });
 
   readonly defaultAnnotationResult = remoteData<VariantAnnotation>({
@@ -405,9 +411,9 @@ export class AnnotationStore {
     ],
     invoke: () => {
       // simply mapping by protein change, assuming that protein change is unique for alterations
-      const indexedByProteinChange = _.keyBy(
+      const indexedByProteinChange = keyBy(
         this.mutationMapperDataExternal.result,
-        mutation => mutation.proteinChange
+        'proteinChange'
       );
 
       const data = this.mutationMapperDataPortal.result.map(mutation => {
@@ -451,33 +457,25 @@ export class AnnotationStore {
   });
 
   calculateOncogenicities(biologicalAlterations: BiologicalVariant[]) {
-    const oncogenicities = _.groupBy(
-      _.reduce(
-        biologicalAlterations,
-        (acc, item) => {
-          acc.push({
-            ...item,
-            oncogenic: shortenOncogenicity(item.oncogenic),
-          });
-          return acc;
-        },
-        [] as BiologicalVariant[]
-      ),
-      'oncogenic'
-    );
-    const keys = _.keys(oncogenicities).sort(oncogenicitySortMethod);
-    return _.reduce(
-      keys,
-      (acc, oncogenicity) => {
-        const datum = oncogenicities[oncogenicity];
-        acc.push({
-          oncogenicity,
-          counts: datum.length,
-        });
-        return acc;
-      },
-      [] as Oncogenicity[]
-    );
+    const oncogenicities = biologicalAlterations.reduce((acc, item) => {
+      const oncogenic = shortenOncogenicity(item.oncogenic);
+      const variant = {
+        ...item,
+        oncogenic,
+      };
+      if (!acc[oncogenic]) acc[oncogenic] = [];
+      acc[oncogenic].push(variant);
+      return acc;
+    }, {});
+    const keys = Object.keys(oncogenicities).sort(oncogenicitySortMethod);
+    return keys.reduce((acc, oncogenicity) => {
+      const datum = oncogenicities[oncogenicity];
+      acc.push({
+        oncogenicity,
+        counts: datum.length,
+      });
+      return acc;
+    }, [] as Oncogenicity[]);
   }
 
   @computed
@@ -632,21 +630,21 @@ export class AnnotationStore {
 
   @computed
   get barChartData() {
-    const groupedCanerTypeCounts = _.groupBy(
+    const groupedCanerTypeCounts = groupBy(
       this.mutationMapperDataPortal.result,
       'cancerType'
     );
-    const cancerGroups = _.keyBy(
+    const cancerGroups = keyBy(
       this.portalAlterationSampleCount.result.sort((a, b) =>
         a.count > b.count ? -1 : 1
       ),
       'cancerType'
     );
-    return _.reduce(
-      groupedCanerTypeCounts,
-      (acc, next: PortalAlteration[], cancerType) => {
-        const numUniqSampleCountsInCancerType = _.uniq(
-          next.map(item => item.sampleId)
+    return Object.keys(groupedCanerTypeCounts)
+      .reduce((acc, cancerType) => {
+        const data: PortalAlteration[] = groupedCanerTypeCounts[cancerType];
+        const numUniqSampleCountsInCancerType = uniq(
+          data.map(item => item.sampleId)
         ).length;
         if (cancerGroups[cancerType] && cancerGroups[cancerType].count > 50) {
           acc.push({
@@ -654,14 +652,12 @@ export class AnnotationStore {
             y:
               (100 * numUniqSampleCountsInCancerType) /
               cancerGroups[cancerType].count,
-            alterations: next,
+            alterations: data,
             overlay: '',
           } as BarChartDatum);
         }
         return acc;
-      },
-      [] as BarChartDatum[]
-    )
+      }, [] as BarChartDatum[])
       .sort((a, b) => (a.y > b.y ? -1 : 1))
       .splice(0, 15);
   }
@@ -691,24 +687,24 @@ export class AnnotationStore {
 
   @computed
   get filteredAlterationsByBarChart() {
-    return _.uniq(
-      _.flatten(
-        this.filteredBarChartData.map(data =>
-          data.alterations.map(alteration => alteration.proteinChange)
-        )
+    const uniqSet: Set<string> = new Set();
+    this.filteredBarChartData.forEach(data =>
+      data.alterations.forEach(alteration =>
+        uniqSet.add(alteration.proteinChange)
       )
     );
+    return uniqSet;
   }
 
   @computed
   get filteredPositionsByBarChart() {
-    return _.uniq(
-      _.flatten(
-        this.filteredBarChartData.map(data =>
-          data.alterations.map(alteration => alteration.proteinStartPosition)
-        )
+    const uniqSet: Set<number> = new Set();
+    this.filteredBarChartData.forEach(data =>
+      data.alterations.forEach(alteration =>
+        uniqSet.add(alteration.proteinStartPosition)
       )
     );
+    return uniqSet;
   }
 
   @computed
@@ -726,11 +722,11 @@ export class AnnotationStore {
         }
         if (
           this.selectedCancerTypes.length > 0 &&
-          (_.intersection(
+          (intersection(
             this.selectedCancerTypes,
             alteration.cancerTypes.map(cancerType => cancerType.mainType)
           ).length === 0 ||
-            !this.filteredAlterationsByBarChart.includes(
+            !this.filteredAlterationsByBarChart.has(
               alteration.variant.alteration
             ))
         ) {
@@ -764,9 +760,7 @@ export class AnnotationStore {
         }
         if (
           this.selectedCancerTypes.length > 0 &&
-          !this.filteredAlterationsByBarChart.includes(
-            alteration.variant.alteration
-          )
+          !this.filteredAlterationsByBarChart.has(alteration.variant.alteration)
         ) {
           isMatch = false;
         }

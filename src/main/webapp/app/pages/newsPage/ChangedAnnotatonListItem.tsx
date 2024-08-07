@@ -15,7 +15,6 @@ import {
 import { SimpleTable, SimpleTableRow } from 'app/components/SimpleTable';
 import { Row } from 'react-bootstrap';
 import React from 'react';
-import _ from 'lodash';
 
 import mainStyle from './main.module.scss';
 import {
@@ -24,6 +23,7 @@ import {
   linkableMutationName,
 } from './Util';
 import { AlterationPageLink } from 'app/shared/utils/UrlUtils';
+import { sortBy } from 'app/shared/utils/LodashUtils';
 
 export enum AnnotationColumnHeaderType {
   LEVEL,
@@ -46,7 +46,7 @@ export const ChangedAnnotationListItem = (props: {
 }) => {
   let longestRow = 0;
   if (props.data.length > 0) {
-    longestRow = _.sortBy(props.data, row => -row.content.length)[0].content
+    longestRow = sortBy(props.data, row => -row.content.length)[0].content
       .length;
   }
 

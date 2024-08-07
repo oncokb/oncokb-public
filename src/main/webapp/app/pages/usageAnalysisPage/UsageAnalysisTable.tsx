@@ -28,7 +28,6 @@ import {
   TABLE_MONTH_FORMAT,
 } from 'app/config/constants';
 import moment from 'moment';
-import _ from 'lodash';
 import { Link } from 'react-router-dom';
 import { SortingRule } from 'react-table';
 
@@ -114,7 +113,7 @@ export default class UsageAnalysisTable extends React.Component<
     if (this.resourcesTypeToggleValue === ToggleValue.ALL_RESOURCES) {
       return data;
     } else if (this.resourcesTypeToggleValue === ToggleValue.PUBLIC_RESOURCES) {
-      return _.filter(data, function (usage) {
+      return data.filter(function (usage) {
         return !usage.resource.includes('/private/');
       });
     } else {

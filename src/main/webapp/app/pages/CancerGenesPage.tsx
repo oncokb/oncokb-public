@@ -5,7 +5,6 @@ import { inject, observer } from 'mobx-react';
 import { defaultSortMethod } from 'app/shared/utils/ReactTableUtils';
 import { GenePageLink } from 'app/shared/utils/UrlUtils';
 import { Col, Row } from 'react-bootstrap';
-import * as _ from 'lodash';
 import OncoKBTable, {
   SearchColumn,
 } from 'app/components/oncokbTable/OncoKBTable';
@@ -401,47 +400,35 @@ export default class CancerGenesPage extends React.Component<{
   private readonly extendedCancerGene = remoteData<ExtendCancerGene[]>({
     await: () => [this.annotatedGenes, this.cancerGenes],
     invoke: () => {
-      const annotatedGenes = _.reduce(
-        this.annotatedGenes.result,
-        (acc, next) => {
-          acc[next.entrezGeneId] = true;
-          return acc;
-        },
-        {} as { [entrezGeneId: number]: boolean }
-      );
+      const annotatedGenes = this.annotatedGenes.result.reduce((acc, next) => {
+        acc[next.entrezGeneId] = true;
+        return acc;
+      }, {} as { [entrezGeneId: number]: boolean });
       return Promise.resolve(
-        _.reduce(
-          this.cancerGenes.result,
-          (cancerGenesAcc, cancerGene) => {
-            const sourceKeys: (keyof CancerGene)[] = [
-              'oncokbAnnotated',
-              'mSKImpact',
-              'mSKHeme',
-              'foundation',
-              'foundationHeme',
-              'vogelstein',
-              'sangerCGC',
-            ];
-            cancerGenesAcc.push({
-              ...cancerGene,
-              numOfSources: _.reduce(
-                sourceKeys,
-                (numOfSourcesAcc, next) => {
-                  if (cancerGene[next]) {
-                    numOfSourcesAcc++;
-                  }
-                  return numOfSourcesAcc;
-                },
-                0
-              ),
-              geneType: getGeneType(cancerGene.oncogene, cancerGene.tsg),
-              annotated: !!annotatedGenes[cancerGene.entrezGeneId],
-              geneAliases: cancerGene.geneAliases,
-            });
-            return cancerGenesAcc;
-          },
-          [] as ExtendCancerGene[]
-        )
+        this.cancerGenes.result.reduce((cancerGenesAcc, cancerGene) => {
+          const sourceKeys: (keyof CancerGene)[] = [
+            'oncokbAnnotated',
+            'mSKImpact',
+            'mSKHeme',
+            'foundation',
+            'foundationHeme',
+            'vogelstein',
+            'sangerCGC',
+          ];
+          cancerGenesAcc.push({
+            ...cancerGene,
+            numOfSources: sourceKeys.reduce((numOfSourcesAcc, next) => {
+              if (cancerGene[next]) {
+                numOfSourcesAcc++;
+              }
+              return numOfSourcesAcc;
+            }, 0),
+            geneType: getGeneType(cancerGene.oncogene, cancerGene.tsg),
+            annotated: !!annotatedGenes[cancerGene.entrezGeneId],
+            geneAliases: cancerGene.geneAliases,
+          });
+          return cancerGenesAcc;
+        }, [] as ExtendCancerGene[])
       );
     },
     default: [],

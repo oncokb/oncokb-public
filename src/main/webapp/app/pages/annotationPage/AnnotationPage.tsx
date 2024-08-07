@@ -44,7 +44,6 @@ import {
   isPositionalAlteration,
   levelOfEvidence2Level,
 } from 'app/shared/utils/Utils';
-import _ from 'lodash';
 import WithSeparator from 'react-with-separator';
 import AppStore from 'app/store/AppStore';
 import { FeedbackIcon } from 'app/components/feedback/FeedbackIcon';
@@ -80,6 +79,7 @@ import { UnknownGeneAlert } from 'app/shared/alert/UnknownGeneAlert';
 import { RouterStore } from 'mobx-react-router';
 import { Option } from 'app/shared/select/FormSelectWithLabelField';
 import MutationEffectDescription from 'app/pages/annotationPage/MutationEffectDescription';
+import { uniqBy } from 'app/shared/utils/LodashUtils';
 
 export enum AnnotationType {
   GENE,
@@ -127,13 +127,11 @@ export default class AnnotationPage extends React.Component<
     return evidences.reduce((acc, evidence) => {
       const level = levelOfEvidence2Level(evidence.levelOfEvidence);
       const fdaLevel = levelOfEvidence2Level(evidence.fdaLevel);
-      const alterations = _.chain(evidence.alterations)
-        .filter(alteration =>
-          alteration.referenceGenomes.includes(
-            this.props.store.referenceGenomeQuery
-          )
+      const alterations = evidence.alterations.filter(alteration =>
+        alteration.referenceGenomes.includes(
+          this.props.store.referenceGenomeQuery
         )
-        .value();
+      );
       const alterationsName = alterations
         .map(alteration => alteration.name)
         .join(', ');
@@ -277,7 +275,7 @@ export default class AnnotationPage extends React.Component<
       );
     });
 
-    return _.uniqBy(uniqueEvidences, evidence => evidence.id);
+    return uniqBy(uniqueEvidences, evidence => evidence.id);
   }
 
   @computed

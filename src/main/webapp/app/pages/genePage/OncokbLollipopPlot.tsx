@@ -7,12 +7,12 @@ import { OncokbMutationMapper } from 'app/components/oncokbMutationMapper/Oncokb
 import { GRID_BREAKPOINTS } from 'app/config/constants';
 import { AnnotationStore } from 'app/store/AnnotationStore';
 import WindowStore, { IWindowSize } from 'app/store/WindowStore';
-import _ from 'lodash';
 import { computed, observable } from 'mobx';
 import { observer } from 'mobx-react';
 import React from 'react';
 import { If } from 'react-if';
 import { onFilterOptionSelect } from 'react-mutation-mapper';
+import { xor } from 'app/shared/utils/LodashUtils';
 
 type LollipopPlotProps = {
   store: AnnotationStore;
@@ -70,10 +70,10 @@ export default class OncokbLollipopPlot extends React.Component<
               this.props.store.mutationMapperStore &&
               this.props.store.mutationMapperStore.result
                 ? onFilterOptionSelect(
-                    _.xor(
+                    xor(
                       this.props.store.mutationMapperStore.result?.dataStore.dataFilters.find(
                         f => f.id === ONCOGENICITY_FILTER_ID
-                      )?.values,
+                      )?.values || [],
                       [oncogenicity]
                     ),
                     false,

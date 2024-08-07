@@ -2,10 +2,10 @@ import React from 'react';
 import { observer } from 'mobx-react';
 import Select, { Props as SelectProps } from 'react-select';
 import { computed } from 'mobx';
-import _ from 'lodash';
 import { TumorType } from 'app/shared/api/generated/OncoKbPrivateAPI';
 import privateClient from 'app/shared/api/oncokbPrivateClientInstance';
 import { remoteData } from 'cbioportal-frontend-commons';
+import { uniq } from 'app/shared/utils/LodashUtils';
 
 interface ICancerTypeSelect extends SelectProps {
   cancerTypes?: string[];
@@ -28,8 +28,7 @@ export default class CancerTypeSelect extends React.Component<
   get tumorTypeSelectValue() {
     return (
       this.props.cancerTypes?.map(ct => {
-        const matchedSubtype = _.find(
-          this.allSubtypes,
+        const matchedSubtype = this.allSubtypes.find(
           cancerType => cancerType.code === ct
         );
         if (matchedSubtype) {
@@ -49,7 +48,7 @@ export default class CancerTypeSelect extends React.Component<
 
   @computed
   get allMainTypes() {
-    return _.uniq(
+    return uniq(
       this.allCancerTypes.result
         .filter(cancerType => cancerType.level >= 0)
         .map(cancerType => cancerType.mainType)
@@ -58,7 +57,7 @@ export default class CancerTypeSelect extends React.Component<
 
   @computed
   get allSubtypes() {
-    return _.uniq(
+    return uniq(
       this.allCancerTypes.result.filter(cancerType => cancerType.subtype)
     ).sort();
   }
@@ -76,7 +75,7 @@ export default class CancerTypeSelect extends React.Component<
     return [
       {
         label: 'Cancer Type',
-        options: _.uniq(cancerTypesGroup)
+        options: uniq(cancerTypesGroup)
           .sort()
           .map(cancerType => {
             return {
@@ -87,12 +86,14 @@ export default class CancerTypeSelect extends React.Component<
       },
       {
         label: 'Cancer Type Detailed',
-        options: _.sortBy(_.uniq(this.allSubtypes), 'name').map(cancerType => {
-          return {
-            value: cancerType.code,
-            label: `${cancerType.subtype} (${cancerType.code})`,
-          };
-        }),
+        options: this.allSubtypes
+          .sort((ct1, ct2) => ct1.subtype.localeCompare(ct2.subtype))
+          .map(cancerType => {
+            return {
+              value: cancerType.code,
+              label: `${cancerType.subtype} (${cancerType.code})`,
+            };
+          }),
       },
     ];
   }

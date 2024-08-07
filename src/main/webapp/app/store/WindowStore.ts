@@ -1,8 +1,7 @@
 import { action, observable, computed } from 'mobx';
-import _ from 'lodash';
 import autobind from 'autobind-decorator';
 import { GRID_BREAKPOINTS, PAGE_ROUTE } from 'app/config/constants';
-import React from 'react';
+import { debounce } from 'app/shared/utils/LodashUtils';
 
 export interface IWindowSize {
   width: number;
@@ -11,7 +10,7 @@ export interface IWindowSize {
 
 class WindowStore {
   @observable size: IWindowSize;
-  private handleWindowResize = _.debounce(this.setWindowSize, 200);
+  private handleWindowResize = debounce(this.setWindowSize, 200);
   private windowObj: any;
   private onClickEvents: { (event: any): void }[] = [];
 

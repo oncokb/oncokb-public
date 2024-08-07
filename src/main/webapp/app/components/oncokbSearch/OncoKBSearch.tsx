@@ -14,7 +14,6 @@ import {
 } from 'app/shared/utils/Utils';
 import { inject, observer } from 'mobx-react';
 import { observable } from 'mobx';
-import _ from 'lodash';
 import AppStore from 'app/store/AppStore';
 import SearchInfoIcon from 'app/components/oncokbSearch/SearchInfoIcon';
 import { remoteData } from 'cbioportal-frontend-commons';
@@ -37,21 +36,19 @@ export default class OncoKBSearch extends React.Component<IOncoKBSearch, {}> {
   readonly options = remoteData<ExtendedTypeaheadSearchResp[]>({
     invoke: async () => {
       try {
-        return _.reduce(
+        return (
           await oncokbPrivateClient.searchTypeAheadGetUsingGET({
             query: this.keyword,
             limit: 20,
-          }),
-          (acc, result) => {
-            acc.push({
-              tumorTypesName: getAllTumorTypesName(result.tumorTypes),
-              alterationsName: getAllAlterationsName(result.variants),
-              ...result,
-            });
-            return acc;
-          },
-          [] as ExtendedTypeaheadSearchResp[]
-        );
+          })
+        ).reduce((acc, result) => {
+          acc.push({
+            tumorTypesName: getAllTumorTypesName(result.tumorTypes),
+            alterationsName: getAllAlterationsName(result.variants),
+            ...result,
+          });
+          return acc;
+        }, [] as ExtendedTypeaheadSearchResp[]);
       } catch (error) {
         const errorOptions: ExtendedTypeaheadSearchResp[] = [];
         if (error) {

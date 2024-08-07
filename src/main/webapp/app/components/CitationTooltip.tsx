@@ -4,7 +4,6 @@ import { remoteData } from 'cbioportal-frontend-commons';
 import request from 'superagent';
 import LoadingIndicator from 'app/components/loadingIndicator/LoadingIndicator';
 import { ArticleAbstract } from 'app/shared/api/generated/OncoKbAPI';
-import _ from 'lodash';
 import PmidItem from 'app/components/PmidItem';
 import ArticleAbstractItem from 'app/components/ArticleAbstractItem';
 import { TOOLTIP_MAX_HEIGHT } from 'app/config/constants';
@@ -36,7 +35,7 @@ export class CitationTooltip extends React.Component<
           key={pmid}
           title={data.title}
           author={
-            _.isArray(data.authors) && data.authors.length > 0
+            Array.isArray(data.authors) && data.authors.length > 0
               ? data.authors[0].name + ' et al.'
               : 'Unknown'
           }

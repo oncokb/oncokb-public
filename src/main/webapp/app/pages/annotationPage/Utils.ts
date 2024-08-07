@@ -2,7 +2,6 @@ import {
   FdaImplication,
   TherapeuticImplication,
 } from 'app/store/AnnotationStore';
-import _ from 'lodash';
 import { LEVEL_PRIORITY, LEVELS, PAGE_ROUTE } from 'app/config/constants';
 import { VariantAnnotation } from 'app/shared/api/generated/OncoKbPrivateAPI';
 
@@ -12,21 +11,25 @@ const getFdaImplicationKey = (fdaImplication: FdaImplication) => {
 export const getUniqueFdaImplications = (
   fdaImplications: FdaImplication[]
 ): FdaImplication[] => {
-  const uniqueData: { [key: string]: FdaImplication[] } = _.groupBy(
-    fdaImplications,
-    (fdaImplication: FdaImplication) => {
-      return getFdaImplicationKey(fdaImplication);
-    }
+  const uniqueData: {
+    [key: string]: FdaImplication[];
+  } = fdaImplications.reduce(
+    (r, v, i, a, k = getFdaImplicationKey(v)) => (
+      (r[k] || (r[k] = [])).push(v), r
+    ),
+    {}
   );
   const finalList: FdaImplication[] = [];
   for (const key in uniqueData) {
     if (uniqueData[key].length > 0) {
-      const sortedFdaBasedOnLevel = _.chain(uniqueData[key])
-        .sortBy(fdaImplication => {
-          return LEVEL_PRIORITY.indexOf(fdaImplication.level as LEVELS);
+      const sortedFdaBasedOnLevel = uniqueData[key]
+        .sort((a, b) => {
+          return (
+            LEVEL_PRIORITY.indexOf(a.level as LEVELS) -
+            LEVEL_PRIORITY.indexOf(b.level as LEVELS)
+          );
         })
-        .reverse()
-        .value();
+        .reverse();
       finalList.push(sortedFdaBasedOnLevel[0]);
     }
   }
@@ -69,18 +72,14 @@ export const getSummaries = (
   annotation: VariantAnnotation,
   orderedSummaries: string[]
 ) => {
-  return _.reduce(
-    orderedSummaries,
-    (acc, next) => {
-      if (annotation[next]) {
-        acc.push({
-          key: next,
-          title: SUMMARY_TITLE[next],
-          content: annotation[next],
-        });
-      }
-      return acc;
-    },
-    [] as { key: string; title: string; content: string }[]
-  );
+  return orderedSummaries.reduce((acc, next) => {
+    if (annotation[next]) {
+      acc.push({
+        key: next,
+        title: SUMMARY_TITLE[next],
+        content: annotation[next],
+      });
+    }
+    return acc;
+  }, [] as { key: string; title: string; content: string }[]);
 };

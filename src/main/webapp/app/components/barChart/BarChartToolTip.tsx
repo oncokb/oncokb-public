@@ -1,5 +1,4 @@
 import * as React from 'react';
-import * as _ from 'lodash';
 import { computed } from 'mobx';
 import { Popover } from 'react-bootstrap';
 import classnames from 'classnames';

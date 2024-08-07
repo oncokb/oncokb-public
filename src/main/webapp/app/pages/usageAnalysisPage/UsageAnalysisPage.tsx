@@ -18,7 +18,6 @@ import {
   filterByKeyword,
 } from 'app/shared/utils/Utils';
 import { UserOverviewUsage } from 'app/shared/api/generated/API';
-import _ from 'lodash';
 import { Link } from 'react-router-dom';
 import autobind from 'autobind-decorator';
 import { Row, Dropdown, DropdownButton } from 'react-bootstrap';
@@ -223,12 +222,10 @@ export default class UsageAnalysisPage extends React.Component<{
     ) {
       return this.usageDetail.result.get(this.dropdownValue) || [];
     } else {
-      return (
-        _.filter(this.usageDetail.result.get(this.dropdownValue), function (
-          usage
-        ) {
+      return (this.usageDetail.result.get(this.dropdownValue) || []).filter(
+        function (usage) {
           return !usage.resource.includes('/private/');
-        }) || []
+        }
       );
     }
   }

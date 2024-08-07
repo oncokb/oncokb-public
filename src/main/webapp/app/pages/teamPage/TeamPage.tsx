@@ -1,7 +1,6 @@
 import * as React from 'react';
 import { Col, Row } from 'react-bootstrap';
 import DocumentTitle from 'react-document-title';
-import _, { memoize } from 'lodash';
 import { PAGE_TITLE, ONCOKB_TM } from 'app/config/constants';
 import {
   INSTITUTION,
@@ -14,6 +13,7 @@ import {
 import { getPageTitle } from 'app/shared/utils/Utils';
 import { useState } from 'react';
 import Select from 'react-select';
+import { sortBy, sortByKey } from 'app/shared/utils/LodashUtils';
 
 export const TeamPage = () => {
   const teamMembers: ITeamMember[] = [
@@ -136,7 +136,7 @@ export const TeamPage = () => {
     },
   ];
   const curators: ITeamMember[] = [];
-  const cgac: ITeamMember[] = _.sortBy(
+  const cgac: ITeamMember[] = sortBy(
     [
       {
         firstName: 'Lisa',
@@ -882,17 +882,9 @@ export const TeamPage = () => {
                 </li>
               ))}
             </ul>
-            {/*<h5>Current Curators</h5>*/}
-            {/*<ul>*/}
-            {/*  {_.sortBy(curators, member => member.lastName).map(member => (*/}
-            {/*    <li key={`${member.lastName}-${member.firstName}`}>*/}
-            {/*      <TeamMember {...member} />*/}
-            {/*    </li>*/}
-            {/*  ))}*/}
-            {/*</ul>*/}
             <h5>External Advisory Board</h5>
             <ul>
-              {_.sortBy(eab, member => member.lastName).map(member => (
+              {sortBy(eab, member => member.lastName).map(member => (
                 <li key={`${member.lastName}-${member.firstName}`}>
                   <TeamMember {...member} />
                 </li>
@@ -943,19 +935,16 @@ export const TeamPage = () => {
             {selectedPcType && (
               <>
                 <ul className={'mt-2'}>
-                  {_.chain(pastContributors)
-                    .filter(member => member.type === selectedPcType)
-                    .sortBy(member => member.lastName)
-                    .map(member => (
-                      <li key={`${member.lastName}-${member.firstName}`}>
-                        <TeamMember
-                          {...member}
-                          faculty={false}
-                          showCOI={false}
-                        />
-                      </li>
-                    ))
-                    .value()}
+                  {sortBy(
+                    pastContributors.filter(
+                      member => member.type === selectedPcType
+                    ),
+                    member => member.lastName
+                  ).map(member => (
+                    <li key={`${member.lastName}-${member.firstName}`}>
+                      <TeamMember {...member} faculty={false} showCOI={false} />
+                    </li>
+                  ))}
                 </ul>
                 <div>* We do not track their conflicts of interest.</div>
               </>

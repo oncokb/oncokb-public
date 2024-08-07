@@ -6,7 +6,6 @@ import * as superagent from 'superagent';
 import * as React from 'react';
 import * as ReactDOM from 'react-dom';
 import App from './App';
-import registerServiceWorker from './registerServiceWorker';
 import * as Sentry from '@sentry/react';
 
 import 'font-awesome/css/font-awesome.css';
@@ -25,7 +24,6 @@ import {
   getStoredRecaptchaToken,
 } from 'app/indexUtils';
 import { UNAUTHORIZED_ALLOWED_PATH } from 'app/config/constants';
-import _ from 'lodash';
 import { AppConfig, AppProfile } from 'app/appConfig';
 
 assignPublicToken();
@@ -81,7 +79,7 @@ superagent.Request.prototype.end = function (callback) {
       AppConfig.serverConfig.token &&
       AppConfig.serverConfig.appProfile === AppProfile.PROD &&
       response.req &&
-      !_.some(UNAUTHORIZED_ALLOWED_PATH, path =>
+      UNAUTHORIZED_ALLOWED_PATH.some(path =>
         window.location.pathname.endsWith(path)
       )
     ) {

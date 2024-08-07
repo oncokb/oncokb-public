@@ -34,7 +34,6 @@ import {
   getSectionClassName,
 } from 'app/pages/account/AccountUtils';
 import { If, Then } from 'react-if';
-import _ from 'lodash';
 import { FormSelectWithLabelField } from 'app/shared/select/FormSelectWithLabelField';
 import client from 'app/shared/api/clientInstance';
 import { notifyError } from 'app/shared/utils/NotificationUtils';
@@ -133,7 +132,7 @@ export class NewAccountForm extends React.Component<INewAccountForm> {
       country: values.country,
     };
     const additionalInfo = this.constructAdditionalInfo(values);
-    if (_.keys(additionalInfo).length > 0) {
+    if (Object.keys(additionalInfo).length > 0) {
       newUser.additionalInfo = additionalInfo;
     }
     if (values.tokenValidDays) {
@@ -180,7 +179,7 @@ export class NewAccountForm extends React.Component<INewAccountForm> {
       };
     }
 
-    if (_.keys(additionalInfo.userCompany).length === 0) {
+    if (Object.keys(additionalInfo.userCompany).length === 0) {
       delete additionalInfo.userCompany;
     }
     return additionalInfo;

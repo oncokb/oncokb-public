@@ -25,7 +25,6 @@ import { LevelButton } from 'app/components/levelButton/LevelButton';
 import { levelOfEvidence2Level } from 'app/shared/utils/Utils';
 import { RouterStore } from 'mobx-react-router';
 import { CitationText } from 'app/components/CitationText';
-import _ from 'lodash';
 import AppStore from 'app/store/AppStore';
 import OncoKBSearch from 'app/components/oncokbSearch/OncoKBSearch';
 import autobind from 'autobind-decorator';
@@ -33,6 +32,7 @@ import * as QueryString from 'query-string';
 import { FDA_L1_DISABLED_BTN_TOOLTIP } from 'app/pages/genePage/FdaUtils';
 import { COLOR_DARK_BLUE } from 'app/config/theme';
 import WindowStore from 'app/store/WindowStore';
+import { uniq } from 'app/shared/utils/LodashUtils';
 
 interface IHomeProps {
   content: string;
@@ -133,33 +133,27 @@ class HomePage extends React.Component<IHomeProps, {}> {
         {}
       );
       return Promise.resolve(
-        _.reduce(
-          levelNumber,
-          (acc, next) => {
-            acc[levelOfEvidence2Level(next.level, true)] = next;
-            return acc;
-          },
-          {} as { [level: string]: LevelNumber }
-        )
+        levelNumber.reduce((acc, next) => {
+          acc[levelOfEvidence2Level(next.level, true)] = next;
+          return acc;
+        }, {} as { [level: string]: LevelNumber })
       );
     },
     default: {},
   });
 
   getLevelGenes(levels: string[]) {
-    return _.uniq(
-      _.reduce(
-        levels,
-        (acc, level) => {
+    return uniq(
+      levels
+        .reduce((acc, level) => {
           acc.push(
             ...(this.levelNumbers.result[level]
               ? this.levelNumbers.result[level].genes
               : [])
           );
           return acc;
-        },
-        [] as Gene[]
-      ).map(gene => gene.hugoSymbol)
+        }, [] as Gene[])
+        .map(gene => gene.hugoSymbol)
     );
   }
 

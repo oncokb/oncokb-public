@@ -1,4 +1,3 @@
-import _ from 'lodash';
 import React from 'react';
 import { Col, Row } from 'react-bootstrap';
 import { observer } from 'mobx-react';

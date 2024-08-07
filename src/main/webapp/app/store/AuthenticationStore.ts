@@ -9,7 +9,6 @@ import { Storage } from 'react-jhipster';
 import autobind from 'autobind-decorator';
 import client from 'app/shared/api/clientInstance';
 import { Token, UserDTO } from 'app/shared/api/generated/API';
-import * as _ from 'lodash';
 import { TOKEN_ABOUT_2_EXPIRE_NOTICE_IN_DAYS } from 'app/config/constants';
 import {
   getPublicWebsiteToken,
@@ -132,8 +131,7 @@ class AuthenticationStore {
         .then(() => {
           if (token.token === this.idToken) {
             if (this.tokens.length > 1) {
-              const match = _.find(
-                this.tokens,
+              const match = this.tokens.find(
                 (tokenItem: Token) => tokenItem.token !== this.idToken
               );
               if (match !== undefined) {

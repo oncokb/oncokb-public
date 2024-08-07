@@ -22,7 +22,6 @@ import { RouterStore } from 'mobx-react-router';
 import * as QueryString from 'query-string';
 import WindowStore from 'app/store/WindowStore';
 import SmallPageContainer from 'app/components/SmallPageContainer';
-import MessageToContact from 'app/shared/texts/MessageToContact';
 import { ErrorAlert } from 'app/shared/alert/ErrorAlert';
 import {
   FormSection,
@@ -30,7 +29,6 @@ import {
 } from 'app/components/newAccountForm/NewAccountForm';
 import { getErrorMessage, OncoKBError } from 'app/shared/alert/ErrorAlertUtils';
 import { LicenseInquireLink } from 'app/shared/links/LicenseInquireLink';
-import _ from 'lodash';
 import ReCAPTCHA from 'app/shared/recaptcha/recaptcha';
 import { setRecaptchaToken } from 'app/indexUtils';
 
@@ -95,7 +93,7 @@ export class RegisterPage extends React.Component<IRegisterProps> {
                 }
                 break;
               case 'object':
-                if (_.isArray(showStr)) {
+                if (Array.isArray(showStr)) {
                   this.visibleSections = showStr.map(str =>
                     str.toUpperCase()
                   ) as FormSection[];

@@ -38,7 +38,6 @@ import {
 import { ClinicalVariant } from 'app/shared/api/generated/OncoKbPrivateAPI';
 import { AlterationPageLink } from 'app/shared/utils/UrlUtils';
 import AppStore from 'app/store/AppStore';
-import _ from 'lodash';
 import { MskimpactLink } from 'app/components/MskimpactLink';
 import WindowStore from 'app/store/WindowStore';
 import { DataFilterType, onFilterOptionSelect } from 'react-mutation-mapper';
@@ -62,6 +61,7 @@ import { getUniqueFdaImplications } from 'app/pages/annotationPage/Utils';
 import ShowHideText from 'app/shared/texts/ShowHideText';
 import { AnnotationType } from 'app/pages/annotationPage/AnnotationPage';
 import SummaryWithRefs from 'app/oncokb-frontend-commons/src/components/SummaryWithRefs';
+import { findLast } from 'app/shared/utils/LodashUtils';
 
 interface MatchParams {
   hugoSymbol: string;
@@ -88,7 +88,7 @@ export default class GenePage extends React.Component<GenePageProps, any> {
     alterations: ClinicalVariant[],
     levelType: LEVEL_TYPES
   ) {
-    return _.filter(alterations, alt => {
+    return alterations.filter(alt => {
       return LEVEL_CLASSIFICATION[alt.level] === levelType;
     });
   }
@@ -507,12 +507,12 @@ export default class GenePage extends React.Component<GenePageProps, any> {
                         <Col md={4} style={{ fontSize: '0.8rem' }}>
                           <GeneAdditionalInfoTable
                             gene={this.store.gene.result}
-                            grch37ensemblGene={_.findLast(
+                            grch37ensemblGene={findLast(
                               this.store.ensemblGenes.result,
                               item =>
                                 item.referenceGenome === REFERENCE_GENOME.GRCh37
                             )}
-                            grch38ensemblGene={_.findLast(
+                            grch38ensemblGene={findLast(
                               this.store.ensemblGenes.result,
                               item =>
                                 item.referenceGenome === REFERENCE_GENOME.GRCh38

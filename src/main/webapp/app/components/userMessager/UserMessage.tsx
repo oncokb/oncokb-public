@@ -8,7 +8,6 @@ import {
   IReactionDisposer,
   toJS,
 } from 'mobx';
-import * as _ from 'lodash';
 import styles from './styles.module.scss';
 import classNames from 'classnames';
 import { Container } from 'react-bootstrap';
@@ -193,7 +192,7 @@ export default class UserMessage extends React.Component<UserMessageProps> {
     if (localStorage.getItem(DISABLE_BANNER_OPT) === 'true') {
       return [];
     }
-    return _.filter(MESSAGE_DATA, message => {
+    return MESSAGE_DATA.filter(message => {
       const notYetShown = !localStorage.getItem(makeMessageKey(message.id));
       const toBeShown = message.dateStart
         ? Date.now() >= message.dateStart

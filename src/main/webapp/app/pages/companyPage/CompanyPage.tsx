@@ -25,7 +25,6 @@ import { action, computed, observable } from 'mobx';
 import { Else, If, Then } from 'react-if';
 import LoadingIndicator from 'app/components/loadingIndicator/LoadingIndicator';
 import { RouteComponentProps } from 'react-router';
-import { parseInt } from 'lodash';
 import { notifyError, notifySuccess } from 'app/shared/utils/NotificationUtils';
 import { PromiseStatus } from 'app/shared/utils/PromiseUtils';
 import { FormTextAreaField } from 'app/shared/textarea/FormTextAreaField';
@@ -40,7 +39,6 @@ import { AdditionalInfoSelect } from 'app/shared/dropdown/AdditionalInfoSelect';
 import {
   debouncedCompanyNameValidator,
   fieldRequiredValidation,
-  textValidation,
   OPTIONAL_TEXT_VAL,
 } from 'app/shared/utils/FormValidationUtils';
 import { Link } from 'react-router-dom';
@@ -70,11 +68,7 @@ import UsageText from 'app/shared/texts/UsageText';
 import { DateSelector } from 'app/components/dateSelector/DateSelector';
 import { DownloadButton } from 'app/components/downloadButton/DownloadButton';
 import { RouterStore } from 'mobx-react-router';
-import {
-  LONG_TEXT_VAL,
-  SHORT_TEXT_VAL,
-  TEXT_VAL,
-} from 'app/shared/utils/FormValidationUtils';
+import { TEXT_VAL } from 'app/shared/utils/FormValidationUtils';
 
 interface MatchParams {
   id: string;
