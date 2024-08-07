@@ -136,6 +136,8 @@ export default class NewsList extends React.Component<NewsListProps> {
                       <ChangedAnnotationListItem
                         title={annotation.title}
                         columnHeaderType={annotation.columnHeaderType}
+                        headers={annotation.headers}
+                        useOneLineRowClass={annotation.useOneLineRowClass}
                         data={
                           annotation.content
                             ? annotation.content.map((item, index) => {

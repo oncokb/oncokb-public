@@ -48,6 +48,8 @@ export type ChangedAnnotation = {
   content: ElementType[][];
   title?: string;
   columnHeaderType?: AnnotationColumnHeaderType;
+  headers?: { name: string }[];
+  useOneLineRowClass?: boolean;
 };
 
 export type NewsData = {
@@ -72,10 +74,12 @@ export const DRUGS = 'Drug(s)';
 export const EVIDENCE = 'Evidence';
 export const PREVIOUS_LEVEL = 'Previous Level';
 export const CURRENT_LEVEL = 'Current Level';
+export const UPDATED_LEVEL = 'Updated Level';
 export const REASON = 'Reason';
 export const PREVIOUS_DRUG = 'Previous Drug';
 export const CURRENT_DRUG = 'Current Drug';
 export const UPDATE = 'Update';
+export const LEVEL_OF_EVIDENCE = 'Level of Evidence';
 export const CURRENT_LEVEL_OF_EVIDENCE = 'Current Level of Evidence';
 export const PREVIOUS_LEVEL_OF_EVIDENCE = 'Previous Level of Evidence';
 export const DRUGS_ADDED_TO_ONCOKB = `Drug(s) added to ${ONCOKB_TM}`;
@@ -84,6 +88,7 @@ export const DRUGS_REMOVED_FROM_ONCOKB = `Drug(s) removed from ${ONCOKB_TM}`;
 export const DRUGS_DEMOTED_IN_ONCOKB = `Drug(s) demoted in ${ONCOKB_TM}`;
 export const DRUGS_PROMOTED_IN_ONCOKB = `Drug(s) promoted in ${ONCOKB_TM}`;
 export const DRUGS_CHANGED_IN_ONCOKB = `Drug(s) changed in ${ONCOKB_TM}`;
+export const LEVEL_ASSOCIATED_DRUGS_IN_ONCOKB = `Level-associated Drug(s) in ${ONCOKB_TM}`;
 export const DRUGS_ASSOCIATED_WITH_CURRENT_LEVEL =
   'Drug(s) Associated with the Current Level';
 export const UPDATED_SENSITIVITY_LEVEL = 'Updated Sensitivity Level';
@@ -207,6 +212,26 @@ export const CHANGED_ANNOTATION_SENSITIVITY_LEVEL_COLUMNS = [
   { name: EVIDENCE },
 ];
 
+export const UPDATED_ANNOTATION_LEVEL_COLUMNS = [
+  { name: GENE },
+  { name: MUTATION },
+  { name: CANCER_TYPE },
+  { name: DRUGS },
+  { name: PREVIOUS_LEVEL },
+  { name: UPDATED_LEVEL },
+  { name: EVIDENCE },
+];
+
+export const CHANGED_ANNOTATION_ADDITIONAL_DRUG_SAME_HIGHEST_LEVEL_COLUMNS = [
+  { name: GENE },
+  { name: MUTATION },
+  { name: CANCER_TYPE },
+  { name: LEVEL_OF_EVIDENCE },
+  { name: LEVEL_ASSOCIATED_DRUGS_IN_ONCOKB },
+  { name: DRUGS_ADDED_TO_ONCOKB },
+  { name: EVIDENCE },
+];
+
 export const CDX_COLUMNS = [
   { name: LEVEL },
   { name: GENE },
@@ -263,6 +288,395 @@ const EVIDENCE_COLUMN_SEPARATOR = '; ';
 // https://stackoverflow.com/questions/41947168/is-it-possible-to-use-keyof-operator-on-literals-instead-of-interfaces
 
 export const NEWS_BY_DATE: { [date: string]: NewsData } = {
+  '08082024': {
+    changedAnnotations: [
+      {
+        columnHeaderType: AnnotationColumnHeaderType.NEW_ALTERATION_WITH_LEVEL,
+        content: [
+          [
+            '3A',
+            'FBXW7',
+            'Oncogenic Mutations',
+            'Endometrial Cancer, Ovarian Cancer',
+            'Lunresertib + Camonsertib',
+            <WithSeparator separator={EVIDENCE_COLUMN_SEPARATOR}>
+              <PMIDLink pmids="38410486" />
+              <AbstractLink
+                abstract="Yap, T. et al., Abstract# 35396. AACR-NCI-EORTC 2023"
+                link="https://ir.reparerx.com/static-files/c46f541b-554a-4690-90de-e63fa7dea852"
+              />
+              <AbstractLink
+                abstract="Gallo, D. et al., Abstract# B057, AACR 2023"
+                link="https://aacrjournals.org/mct/article/22/12_Supplement/B057/730329/Abstract-B057-Preclinical-development-of-PKMYT1"
+              />
+              <AbstractLink
+                abstract="Yap, T. et al., Abstract# B156, AACR-NCI-EORTC 2023; FDA fast track designation"
+                link="https://www.onclive.com/view/lunresertib-camonsertib-gets-fast-tracked-by-fda-for-ccne1-or-fbxw7-ppp2r1a-ovarian-cancer"
+              />
+            </WithSeparator>,
+          ],
+          [
+            '3A',
+            'PPP2R1A',
+            'Oncogenic Mutations',
+            'Endometrial Cancer, Ovarian Cancer',
+            'Lunresertib + Camonsertib',
+            <WithSeparator separator={EVIDENCE_COLUMN_SEPARATOR}>
+              <AbstractLink
+                abstract="Yap, T. et al., Abstract# 35396. AACR-NCI-EORTC 2023"
+                link="https://ir.reparerx.com/static-files/c46f541b-554a-4690-90de-e63fa7dea852"
+              />
+              <Linkout link="https://www.onclive.com/view/lunresertib-camonsertib-gets-fast-tracked-by-fda-for-ccne1-or-fbxw7-ppp2r1a-ovarian-cancer">
+                FDA fast track designation
+              </Linkout>
+            </WithSeparator>,
+          ],
+          [
+            '4',
+            'FBXW7',
+            'Oncogenic Mutations',
+            'All Solid Tumors',
+            'Lunresertib + Camonsertib',
+            <WithSeparator separator={EVIDENCE_COLUMN_SEPARATOR}>
+              <PMIDLink pmids="38410486" />
+              <AbstractLink
+                abstract="Yap, T. et al., Abstract# 35396. AACR-NCI-EORTC 2023"
+                link="https://ir.reparerx.com/static-files/c46f541b-554a-4690-90de-e63fa7dea852"
+              />
+              <AbstractLink
+                abstract="Gallo, D. et al., Abstract# B057, AACR 2023"
+                link="https://aacrjournals.org/mct/article/22/12_Supplement/B057/730329/Abstract-B057-Preclinical-development-of-PKMYT1"
+              />
+              <AbstractLink
+                abstract="Yap, T. et al., Abstract# B156, AACR-NCI-EORTC 2023"
+                link="https://www.reparerx.com/wp-content/uploads/2023/10/ANE_B156_MYTHIC-clinical_poster.pdf"
+              />
+            </WithSeparator>,
+          ],
+          [
+            '4',
+            'PPP2R1A',
+            'Oncogenic Mutations',
+            'All Solid Tumors',
+            'Lunresertib + Camonsertib',
+            <WithSeparator separator={EVIDENCE_COLUMN_SEPARATOR}>
+              <AbstractLink
+                abstract="Yap, T. et al., Abstract# 35396. AACR-NCI-EORTC 2023"
+                link="https://ir.reparerx.com/static-files/c46f541b-554a-4690-90de-e63fa7dea852"
+              />
+            </WithSeparator>,
+          ],
+        ],
+      },
+      {
+        columnHeaderType:
+          AnnotationColumnHeaderType.PROMOTION_TUMOR_TYPE_SPECIFIC_EVIDENCE,
+        content: [
+          [
+            'IDH1',
+            'R132',
+            'Oligodendroglioma',
+            <div>
+              <div style={{ fontStyle: 'italic' }}>
+                {DRUGS_CURRENTLY_IN_ONCOKB}:
+              </div>
+              <div>Ivosidenib (Level 2)</div>
+              <br></br>
+              <div style={{ fontStyle: 'italic' }}>
+                {DRUGS_ADDED_TO_ONCOKB}:
+              </div>
+              <div>Vorasidenib (Level 1)</div>
+            </div>,
+            '2',
+            '1',
+            <WithSeparator separator={EVIDENCE_COLUMN_SEPARATOR}>
+              <FdaApprovalLink
+                approval="Vorasidenib"
+                link="https://www.fda.gov/drugs/resources-information-approved-drugs/fda-approves-vorasidenib-grade-2-astrocytoma-or-oligodendroglioma-susceptible-idh1-or-idh2-mutation?utm_medium=email&utm_source=govdelivery"
+              />
+              <PMIDLink pmids="37272516" />
+            </WithSeparator>,
+          ],
+          [
+            'IDH1',
+            'R132',
+            'Astrocytoma',
+            <div>
+              <div style={{ fontStyle: 'italic' }}>
+                {DRUGS_CURRENTLY_IN_ONCOKB}:
+              </div>
+              <div>Vorasidenib (Level 3A), Ivosidenib (Level 3A)</div>
+              <br></br>
+              <div style={{ fontStyle: 'italic' }}>
+                {DRUGS_PROMOTED_IN_ONCOKB}:
+              </div>
+              <div>Vorasidenib (Level 1), Ivosidenib (Level 2)</div>
+            </div>,
+            '3A',
+            '1',
+            <WithSeparator separator={EVIDENCE_COLUMN_SEPARATOR}>
+              <FdaApprovalLink
+                approval="Vorasidenib"
+                link="https://www.fda.gov/drugs/resources-information-approved-drugs/fda-approves-vorasidenib-grade-2-astrocytoma-or-oligodendroglioma-susceptible-idh1-or-idh2-mutation?utm_medium=email&utm_source=govdelivery"
+              />
+              <span>
+                Inclusion of Ivosidenib in NCCN Central Nervous System
+                Guidelines V1.2024
+              </span>
+              <PMIDLink pmids="32530764, 37272516" />
+            </WithSeparator>,
+          ],
+          [
+            'IDH2',
+            'R172',
+            'Astrocytoma, Oligodendroglioma',
+            'Vorasidenib',
+            '3A',
+            '1',
+            <WithSeparator separator={EVIDENCE_COLUMN_SEPARATOR}>
+              <FdaApprovalLink
+                approval="Vorasidenib"
+                link="https://www.fda.gov/drugs/resources-information-approved-drugs/fda-approves-vorasidenib-grade-2-astrocytoma-or-oligodendroglioma-susceptible-idh1-or-idh2-mutation?utm_medium=email&utm_source=govdelivery"
+              />
+              <PMIDLink pmids="37272516" />
+            </WithSeparator>,
+          ],
+          [
+            'CCNE1',
+            'Amplification',
+            'Endometrial Cancer, Ovarian Cancer',
+            <div>
+              <div style={{ fontStyle: 'italic' }}>
+                {DRUGS_CURRENTLY_IN_ONCOKB}:
+              </div>
+              <div>Lunresertib (Level 4), BLU-222 (Level 4)</div>
+              <br></br>
+              <div style={{ fontStyle: 'italic' }}>
+                {DRUGS_ADDED_TO_ONCOKB}:
+              </div>
+              <div>Lunresertib + Camonsertib (Level 3A)</div>
+            </div>,
+            '4',
+            '3A',
+            <WithSeparator separator={EVIDENCE_COLUMN_SEPARATOR}>
+              <PMIDLink pmids="38410486" />
+              <AbstractLink
+                abstract="Yap, T. et al., Abstract# 35396. AACR-NCI-EORTC 2023"
+                link="https://ir.reparerx.com/static-files/c46f541b-554a-4690-90de-e63fa7dea852"
+              />
+              <AbstractLink
+                abstract="Gallo, D. et al., Abstract# B057, AACR 2023"
+                link="https://aacrjournals.org/mct/article/22/12_Supplement/B057/730329/Abstract-B057-Preclinical-development-of-PKMYT1"
+              />
+              <Linkout link="https://www.onclive.com/view/lunresertib-camonsertib-gets-fast-tracked-by-fda-for-ccne1-or-fbxw7-ppp2r1a-ovarian-cancer">
+                FDA fast track designation
+              </Linkout>
+            </WithSeparator>,
+          ],
+        ],
+      },
+      {
+        title:
+          'Updated therapeutic implications - Demotion of tumor type-specific level of evidence for an alteration',
+        headers: UPDATED_ANNOTATION_LEVEL_COLUMNS,
+        content: [
+          [
+            <WithSeparator separator={', '}>
+              <GenePageLink hugoSymbol="SRSF2" />
+              <GenePageLink hugoSymbol="ZRSR2" />
+            </WithSeparator>,
+            'Oncogenic Mutations',
+            'Acute Myeloid Leukemia',
+            'H3B-8800',
+            '4',
+            'No Level',
+            <WithSeparator separator={EVIDENCE_COLUMN_SEPARATOR}>
+              <Linkout link="https://www.onclive.com/view/roivant-sciences-to-discontinue-rvt-2001-development-in-myelodysplastic-syndrome">
+                Discontinuation of H3B-8800 development
+              </Linkout>
+              <span>Encore-MDS trial failed to meet primary endpoints</span>,
+              <PMIDLink pmids="34172893" />
+            </WithSeparator>,
+          ],
+        ],
+      },
+      {
+        useOneLineRowClass: false,
+        headers: CHANGED_ANNOTATION_ADDITIONAL_DRUG_SAME_HIGHEST_LEVEL_COLUMNS,
+        title: `Updated therapeutic implications - Addition of therapy(s) associated with a tumor type-specific leveled alteration(s) (without changing the alteration's highest level of evidence)`,
+        content: [
+          [
+            'PIK3CA',
+            'R88Q, N345K, C420R, E542K, E545A/D/G/K/Q, Q546E/K/R/P, M1043V/I H1047Y/R/L, G1049R',
+            'Breast Cancer',
+            '1',
+            'Capivasertib + Fulvestrant (Level 1); Alpelisib + Fulvestrant (Level 1 for PIK3CA C420R, E542K, E545A/D/G/K, H1047Y/R/L, Q546E/R only)',
+            'Inavolisib + Palbociclib + Fulvestrant (Level 3A)',
+            <WithSeparator separator={EVIDENCE_COLUMN_SEPARATOR}>
+              <AbstractLink
+                abstract="Juric, D. et al., Abstract# GS03-13, SABCS 2023"
+                link="https://medically.gene.com/global/en/unrestricted/oncology/SABCS-2023/sabcs-2023-presentation-jhaveri-inavolisib-or-placebo-i.html"
+              />
+              <Linkout link="https://www.onclive.com/view/inavolisib-receives-fda-breakthrough-therapy-designation-for-pik3ca-mutated-hr-her2-breast-cancer">
+                FDA breakthrough therapy designation
+              </Linkout>
+            </WithSeparator>,
+          ],
+          [
+            'PIK3CA',
+            'Oncogenic Mutations (excluding Level 1 mutations listed above',
+            'Breast Cancer',
+            '2',
+            'Alpelisib + Fulvestrant (Level 2); Capivasertib + Fulvestrant (Level 2)',
+            'Inavolisib + Palbociclib + Fulvestrant (Level 3A)',
+            <WithSeparator separator={EVIDENCE_COLUMN_SEPARATOR}>
+              <AbstractLink
+                abstract="Juric, D. et al., Abstract# GS03-13, SABCS 2023"
+                link="https://medically.gene.com/global/en/unrestricted/oncology/SABCS-2023/sabcs-2023-presentation-jhaveri-inavolisib-or-placebo-i.html"
+              />
+              <Linkout link="https://www.onclive.com/view/inavolisib-receives-fda-breakthrough-therapy-designation-for-pik3ca-mutated-hr-her2-breast-cancer">
+                FDA breakthrough therapy designation
+              </Linkout>
+            </WithSeparator>,
+          ],
+          [
+            'CCNE1',
+            'Amplification',
+            'All Solid Tumors',
+            '4',
+            'Lunresertib, BLU-222 (Level 4)',
+            'Lunresertib + Camonsertib (Level 4)',
+            <WithSeparator separator={EVIDENCE_COLUMN_SEPARATOR}>
+              <PMIDLink pmids="38410486" />
+              <AbstractLink
+                abstract="Yap, T. et al., Abstract# 35396. AACR-NCI-EORTC 2023"
+                link="https://ir.reparerx.com/static-files/c46f541b-554a-4690-90de-e63fa7dea852"
+              />
+              <AbstractLink
+                abstract="Gallo, D. et al., Abstract# B057, AACR 2023"
+                link="https://aacrjournals.org/mct/article/22/12_Supplement/B057/730329/Abstract-B057-Preclinical-development-of-PKMYT1"
+              />
+              <AbstractLink
+                abstract="Yap, T. et al., Abstract# B156, AACR-NCI-EORTC 2023"
+                link="https://www.reparerx.com/wp-content/uploads/2023/10/ANE_B156_MYTHIC-clinical_poster.pdf"
+              />
+            </WithSeparator>,
+          ],
+          [
+            <WithSeparator separator={', '}>
+              <GenePageLink hugoSymbol="SF3B1" />
+              <GenePageLink hugoSymbol="U2AF1" />
+            </WithSeparator>,
+            'Oncogenic Mutations',
+            'Acute Myeloid Leukemia',
+            '4',
+            <span>
+              H3B-8800 (Level 4;{' '}
+              <span style={{ fontWeight: 'bold' }}>Removed in this update</span>
+              )
+            </span>,
+            'Emavusertib (Level 4)',
+            <WithSeparator separator={EVIDENCE_COLUMN_SEPARATOR}>
+              <Linkout link="https://www.onclive.com/view/roivant-sciences-to-discontinue-rvt-2001-development-in-myelodysplastic-syndrome">
+                Discontinuation of H3B-8800 development
+              </Linkout>
+              <span>Encore-MDS trial failed to meet primary endpoints</span>
+              <PMIDLink pmids="34172893" />
+              <AbstractLink
+                abstract="Garcia-Manero, G. et al., Abstract# 7016, JCO, ASCO 2022"
+                link="https://ascopubs.org/doi/10.1200/JCO.2022.40.16_suppl.7016"
+              />
+            </WithSeparator>,
+          ],
+          [
+            <WithSeparator separator={', '}>
+              <GenePageLink hugoSymbol="SF3B1" />
+              <GenePageLink hugoSymbol="U2AF1" />
+            </WithSeparator>,
+            'Oncogenic Mutations',
+            'Myelodysplastic Syndrome',
+            '4',
+            <span>
+              H3B-8800 (Level 4;{' '}
+              <span style={{ fontWeight: 'bold' }}>Removed in this update</span>
+              )
+            </span>,
+            'Emavusertib, Ceralasertib (Level 4)',
+            <WithSeparator separator={EVIDENCE_COLUMN_SEPARATOR}>
+              <Linkout link="https://www.onclive.com/view/roivant-sciences-to-discontinue-rvt-2001-development-in-myelodysplastic-syndrome">
+                Discontinuation of H3B-8800 development
+              </Linkout>
+              <span>Encore-MDS trial failed to meet primary endpoints</span>
+              <PMIDLink pmids="34172893" />
+              <AbstractLink
+                abstract="Garcia-Manero, G. et al., Abstract# 7016, JCO, ASCO 2022"
+                link="https://ascopubs.org/doi/10.1200/JCO.2022.40.16_suppl.7016"
+              />
+              <AbstractLink
+                abstract="Brunner, A. et al., Abstract# P758, HemaSphere, EHA 2022"
+                link="https://journals.lww.com/hemasphere/fulltext/2022/06003/p758__inhibition_of_atr_with_ceralasertib.653.aspx"
+              />
+            </WithSeparator>,
+          ],
+          [
+            <WithSeparator separator={', '}>
+              <GenePageLink hugoSymbol="SRSF2" />
+              <GenePageLink hugoSymbol="ZRSR2" />
+            </WithSeparator>,
+            'Oncogenic Mutations',
+            'Myelodysplastic Syndrome',
+            '4',
+            <span>
+              H3B-8800 (Level 4;{' '}
+              <span style={{ fontWeight: 'bold' }}>Removed in this update</span>
+              )
+            </span>,
+            'Ceralasertib (Level 4)',
+            <WithSeparator separator={EVIDENCE_COLUMN_SEPARATOR}>
+              <Linkout link="https://www.onclive.com/view/roivant-sciences-to-discontinue-rvt-2001-development-in-myelodysplastic-syndrome">
+                Discontinuation of H3B-8800 development
+              </Linkout>
+              <span>Encore-MDS trial failed to meet primary endpoints</span>
+              <PMIDLink pmids="34172893" />
+              <AbstractLink
+                abstract="Brunner, A. et al., Abstract# P758, HemaSphere, EHA 2022"
+                link="https://journals.lww.com/hemasphere/fulltext/2022/06003/p758__inhibition_of_atr_with_ceralasertib.653.aspx"
+              />
+            </WithSeparator>,
+          ],
+          [
+            <WithSeparator separator={', '}>
+              <GenePageLink hugoSymbol="SF3B1" />
+              <GenePageLink hugoSymbol="U2AF1" />
+              <GenePageLink hugoSymbol="SRSF2" />
+              <GenePageLink hugoSymbol="ZRSR2" />
+            </WithSeparator>,
+            'Oncogenic Mutations',
+            'Chronic Myelomonocytic Leukemia',
+            '4',
+            <span>
+              H3B-8800 (Level 4;{' '}
+              <span style={{ fontWeight: 'bold' }}>Removed in this update</span>
+              )
+            </span>,
+            'Ceralasertib (Level 4)',
+            <WithSeparator separator={EVIDENCE_COLUMN_SEPARATOR}>
+              <Linkout link="https://www.onclive.com/view/roivant-sciences-to-discontinue-rvt-2001-development-in-myelodysplastic-syndrome">
+                Discontinuation of H3B-8800 development
+              </Linkout>
+              <span>Encore-MDS trial failed to meet primary endpoints</span>
+              <PMIDLink pmids="34172893" />
+              <AbstractLink
+                abstract="Brunner, A. et al., Abstract# P758, HemaSphere, EHA 2022"
+                link="https://journals.lww.com/hemasphere/fulltext/2022/06003/p758__inhibition_of_atr_with_ceralasertib.653.aspx"
+              />
+            </WithSeparator>,
+          ],
+        ],
+      },
+    ],
+    newlyAddedGenes: ['CTDNEP1', 'SAMD9', 'SAMD9L', 'SMARCA1', 'USP6', 'WRN'],
+  },
   '07042024': {
     news: [
       <span>
