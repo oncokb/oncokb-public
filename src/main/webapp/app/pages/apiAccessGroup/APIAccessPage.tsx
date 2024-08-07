@@ -141,7 +141,7 @@ export default class APIAccessPage extends React.Component<{
       const result = this.dataAvailability.result.filter(
         item => item.version === this.selectedVersion.value
       );
-      return result.length > 0 ? result[0] : undefined;
+      return result[0];
     } else {
       return undefined;
     }

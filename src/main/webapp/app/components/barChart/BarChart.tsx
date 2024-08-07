@@ -19,7 +19,7 @@ import {
 } from 'cbioportal-frontend-commons';
 import { PortalAlteration } from 'app/shared/api/generated/OncoKbPrivateAPI';
 import { FONT_FAMILY } from 'app/config/constants';
-import { flatten, uniq } from 'app/shared/utils/LodashUtils';
+import { uniq } from 'app/shared/utils/LodashUtils';
 
 export type BarChartDatum = {
   x: string;
@@ -159,14 +159,14 @@ export default class BarChart extends React.Component<IBarChartProps, {}> {
             containerComponent={
               <VictorySelectionContainer
                 selectionDimension="x"
-                onSelection={(points: any, bounds: any, props: any) => {
+                onSelection={(points: unknown[], bounds: any, props: any) => {
                   if (this.props.onUserSelection) {
                     const filters = uniq(
-                      flatten(
-                        points.map((point: any) =>
+                      points
+                        .map((point: any) =>
                           point.data.map((dataPoint: any) => dataPoint.xName)
                         )
-                      )
+                        .flat()
                     );
                     // @ts-ignore
                     this.props.onUserSelection(filters);

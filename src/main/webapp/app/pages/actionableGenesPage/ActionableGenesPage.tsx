@@ -65,7 +65,6 @@ import {
 import AppStore from 'app/store/AppStore';
 import ShortenTextWithTooltip from 'app/shared/texts/ShortenTextWithTooltip';
 import {
-  flatten,
   intersection,
   sortByKey,
   uniq,
@@ -466,7 +465,7 @@ export default class ActionableGenesPage extends React.Component<
   @computed
   get filteredDrugs() {
     return uniq(
-      flatten(this.filteredTreatments.map(treatment => treatment.uniqueDrugs))
+      this.filteredTreatments.map(treatment => treatment.uniqueDrugs).flat()
     ).sort();
   }
 

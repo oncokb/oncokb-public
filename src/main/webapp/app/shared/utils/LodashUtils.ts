@@ -9,13 +9,13 @@ type NonArrayObject = { [key: string]: any } & { length?: never }; // This exclu
  * @param wait - The number of milliseconds to delay.
  * @returns The new debounced function.
  */
-export function debounce<F extends (...args: any[]) => any>(
+export function debounce<F extends (...args: unknown[]) => void>(
   func: F,
   wait: number
 ): DebouncedFunction<F> {
   let timeoutId: ReturnType<typeof setTimeout> | null = null;
 
-  return function (this: any, ...args: Parameters<F>) {
+  return function (this: unknown, ...args: Parameters<F>) {
     if (timeoutId !== null) {
       clearTimeout(timeoutId);
     }
@@ -27,6 +27,8 @@ export function debounce<F extends (...args: any[]) => any>(
 }
 
 /**
+ * Please use .flat() instead if ES2019 is included in the build.
+ *
  * Flattens a two-dimensional array into a one-dimensional array.
  * @param array - The array to flatten.
  * @returns The new flattened array.
@@ -36,6 +38,8 @@ export function flatten<T>(array: T[][]) {
 }
 
 /**
+ * Please use .flatMap() instead if ES2019 is included in the build.
+ *
  * Creates a flattened array of values by running each element in `array` through `fn` and flattening the mapped results.
  * @param array - The array to process.
  * @param fn - The function to apply to each element.
@@ -49,6 +53,8 @@ export function flatMap<T>(array: T[], fn: (datum: T) => any) {
 }
 
 /**
+ * Please use .find() instead if ES6 can be supported.
+ *
  * Iterates over elements of `array`, returning the first element `predicate` returns truthy for.
  * @param array - The array to inspect.
  * @param predicate - The function invoked per iteration.
@@ -100,11 +106,10 @@ export function groupBy<T extends object & NonArrayObject, K extends keyof T>(
  */
 export function has<T extends object & NonArrayObject>(obj: T, key: string) {
   const keyParts = key.split('.');
-  let clone = JSON.parse(JSON.stringify(obj));
   let i = 0;
   while (i < keyParts.length) {
-    if (keyParts[i] && clone[keyParts[i]]) {
-      clone = clone[keyParts[i]];
+    if (keyParts[i] && obj[keyParts[i]]) {
+      obj = obj[keyParts[i]];
       i++;
     } else {
       return false;
@@ -127,7 +132,7 @@ export function intersection(...arrays: (number | string)[][]) {
  * @param value - The value to check.
  * @returns `true` if `value` is a number, else `false`.
  */
-export function isNumber(value: any) {
+export function isNumber(value: unknown): value is number {
   return typeof value === 'number' || value instanceof Number;
 }
 
@@ -155,9 +160,11 @@ export function keyBy<T extends object & NonArrayObject, K extends keyof T>(
  */
 export function partition<T>(array: T[], predicate: (datum: T) => boolean) {
   return array.reduce(
-    ([pass, fail], elem) =>
-      predicate(elem) ? [[...pass, elem], fail] : [pass, [...fail, elem]],
-    [[], []]
+    ([pass, fail], elem) => {
+      predicate(elem) ? pass.push(elem) : fail.push(elem);
+      return [pass, fail];
+    },
+    [[] as T[], [] as T[]]
   );
 }
 

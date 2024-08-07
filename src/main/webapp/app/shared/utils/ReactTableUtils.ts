@@ -76,7 +76,10 @@ export function defaultFdaImplicationSortMethod(a: any, b: any): number {
   return compareScore;
 }
 
-export function sortNumber(a: number, b: number): number {
+export function sortNumber(
+  a: number | undefined | null,
+  b: number | undefined | null
+): number {
   if (!isNumber(a)) {
     if (!isNumber(b)) {
       return 0;

@@ -26,14 +26,7 @@ import { TumorType } from 'app/shared/api/generated/OncoKbPrivateAPI';
 import { FdaSubmissionLink } from 'app/shared/links/FdaSubmissionLink';
 import { Linkout } from 'app/shared/links/Linkout';
 import InfoIcon from 'app/shared/icons/InfoIcon';
-import {
-  flatMap,
-  flatten,
-  sortBy,
-  sortByKey,
-  uniq,
-  uniqBy,
-} from 'app/shared/utils/LodashUtils';
+import { sortByKey, uniq, uniqBy } from 'app/shared/utils/LodashUtils';
 
 export interface ICompanionDiagnosticDevice {
   name: string;
@@ -120,8 +113,8 @@ const parseCDx = () => {
       }
     }
 
-    flatten(
-      associationList.map((assoc: any) => {
+    associationList
+      .map((assoc: any) => {
         return uniq(
           assoc.alterations.reduce(
             (acc: any[], alt: any) =>
@@ -146,15 +139,16 @@ const parseCDx = () => {
           fdaSubmissions: assoc.fdaSubmissions,
         }));
       })
-    ).forEach((assoc: IBiomarkerAssociation) => {
-      parsedCompanionDiagnosticDevices.push({
-        name: cdx.name,
-        manufacturer: cdx.manufacturer,
-        platformType: cdx.platformType,
-        specimenTypes: cdx.specimenTypes.map((st: any) => st.name).sort(),
-        biomarkerAssociation: assoc,
+      .flat()
+      .forEach((assoc: IBiomarkerAssociation) => {
+        parsedCompanionDiagnosticDevices.push({
+          name: cdx.name,
+          manufacturer: cdx.manufacturer,
+          platformType: cdx.platformType,
+          specimenTypes: cdx.specimenTypes.map((st: any) => st.name).sort(),
+          biomarkerAssociation: assoc,
+        });
       });
-    });
   }
   return parsedCompanionDiagnosticDevices;
 };
@@ -433,7 +427,7 @@ const CompanionDiagnosticDevicePage: React.FunctionComponent<{}> = () => {
 
   const filterSummary = useMemo(() => {
     const uniqueDrugs = uniq(
-      flatMap(filteredCDx, filtered => filtered.biomarkerAssociation.drugs)
+      filteredCDx.flatMap(filtered => filtered.biomarkerAssociation.drugs)
     );
     return (
       <>
