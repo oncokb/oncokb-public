@@ -126,7 +126,7 @@ export default class BarChart extends React.Component<IBarChartProps, {}> {
   get rightPadding(): number {
     const MIN_PADDING = 10; // used when tickFormat is empty
     const MAX_PADDING = 90;
-    const lastThreeElements = this.props.data.splice(-3);
+    const lastThreeElements = this.props.data.slice(-3);
     const padding =
       Math.max(
         ...lastThreeElements.map(datum => {
