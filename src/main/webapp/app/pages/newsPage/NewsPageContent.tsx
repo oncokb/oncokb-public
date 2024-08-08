@@ -310,9 +310,12 @@ export const NEWS_BY_DATE: { [date: string]: NewsData } = {
                 link="https://aacrjournals.org/mct/article/22/12_Supplement/B057/730329/Abstract-B057-Preclinical-development-of-PKMYT1"
               />
               <AbstractLink
-                abstract="Yap, T. et al., Abstract# B156, AACR-NCI-EORTC 2023; FDA fast track designation"
+                abstract="Yap, T. et al., Abstract# B156, AACR-NCI-EORTC 2023"
                 link="https://www.onclive.com/view/lunresertib-camonsertib-gets-fast-tracked-by-fda-for-ccne1-or-fbxw7-ppp2r1a-ovarian-cancer"
               />
+              <Linkout link="https://www.onclive.com/view/lunresertib-camonsertib-gets-fast-tracked-by-fda-for-ccne1-or-fbxw7-ppp2r1a-ovarian-cancer">
+                FDA fast track designation
+              </Linkout>
             </WithSeparator>,
           ],
           [
@@ -494,7 +497,7 @@ export const NEWS_BY_DATE: { [date: string]: NewsData } = {
               <Linkout link="https://www.onclive.com/view/roivant-sciences-to-discontinue-rvt-2001-development-in-myelodysplastic-syndrome">
                 Discontinuation of H3B-8800 development
               </Linkout>
-              <span>Encore-MDS trial failed to meet primary endpoints</span>,
+              <span>Encore-MDS trial failed to meet primary endpoints</span>
               <PMIDLink pmids="34172893" />
             </WithSeparator>,
           ],
@@ -524,7 +527,7 @@ export const NEWS_BY_DATE: { [date: string]: NewsData } = {
           ],
           [
             'PIK3CA',
-            'Oncogenic Mutations (excluding Level 1 mutations listed above',
+            'Oncogenic Mutations (excluding Level 1 mutations listed above)',
             'Breast Cancer',
             '2',
             'Alpelisib + Fulvestrant (Level 2); Capivasertib + Fulvestrant (Level 2)',
