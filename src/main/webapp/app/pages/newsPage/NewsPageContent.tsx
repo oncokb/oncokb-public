@@ -517,7 +517,7 @@ export const NEWS_BY_DATE: { [date: string]: NewsData } = {
             'Inavolisib + Palbociclib + Fulvestrant (Level 3A)',
             <WithSeparator separator={EVIDENCE_COLUMN_SEPARATOR}>
               <AbstractLink
-                abstract="Juric, D. et al., Abstract# GS03-13, SABCS 2023"
+                abstract="Jhaveri, K. et al., Abstract# GS03-13, SABCS 2023"
                 link="https://medically.gene.com/global/en/unrestricted/oncology/SABCS-2023/sabcs-2023-presentation-jhaveri-inavolisib-or-placebo-i.html"
               />
               <Linkout link="https://www.onclive.com/view/inavolisib-receives-fda-breakthrough-therapy-designation-for-pik3ca-mutated-hr-her2-breast-cancer">
@@ -534,7 +534,7 @@ export const NEWS_BY_DATE: { [date: string]: NewsData } = {
             'Inavolisib + Palbociclib + Fulvestrant (Level 3A)',
             <WithSeparator separator={EVIDENCE_COLUMN_SEPARATOR}>
               <AbstractLink
-                abstract="Juric, D. et al., Abstract# GS03-13, SABCS 2023"
+                abstract="Jhaveri, K. et al., Abstract# GS03-13, SABCS 2023"
                 link="https://medically.gene.com/global/en/unrestricted/oncology/SABCS-2023/sabcs-2023-presentation-jhaveri-inavolisib-or-placebo-i.html"
               />
               <Linkout link="https://www.onclive.com/view/inavolisib-receives-fda-breakthrough-therapy-designation-for-pik3ca-mutated-hr-her2-breast-cancer">
