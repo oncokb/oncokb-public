@@ -1,9 +1,9 @@
 import { toast } from 'react-toastify';
-import _ from 'lodash';
 import { OncoKBError } from 'app/shared/alert/ErrorAlertUtils';
+import { upperFirst } from 'app/shared/utils/LodashUtils';
 
 const getFormattedMessage = (message: string) => {
-  return _.upperFirst(message);
+  return upperFirst(message);
 };
 const getErrorMessage = (error: OncoKBError, additionalInfo?: string) => {
   const content: string[] = [];

@@ -7,7 +7,6 @@ import { defaultSortMethod } from 'app/shared/utils/ReactTableUtils';
 import { filterByKeyword, toAppLocalDateFormat } from 'app/shared/utils/Utils';
 import { Link } from 'react-router-dom';
 import { COLOR_PRIMARY } from 'app/config/theme';
-import _ from 'lodash';
 import client from '../api/clientInstance';
 import { notifyError, notifySuccess } from '../utils/NotificationUtils';
 import { Button } from 'react-bootstrap';
@@ -228,9 +227,7 @@ export class UserTable extends React.Component<IUserTableProps> {
       defaultSortDesc: false,
       sortMethod: defaultSortMethod,
       onFilter: (data: UserDTO, keyword) =>
-        _.some(data.authorities, authority =>
-          filterByKeyword(authority, keyword)
-        ),
+        data.authorities.some(authority => filterByKeyword(authority, keyword)),
       Cell(props: { original: UserDTO }) {
         return (
           <div className={'d-flex flex-column'}>

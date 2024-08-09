@@ -1,9 +1,9 @@
-import _ from 'lodash';
 import client from '../api/clientInstance';
 import { VerifyCompanyNameVM } from '../api/generated/API';
 import { notifyError } from './NotificationUtils';
 import pluralize from 'pluralize';
 import { VALID_LATIN_TEXT } from 'app/config/constants/regex';
+import { debounce } from 'app/shared/utils/LodashUtils';
 
 const LATIN_TEXT_PATTER = {
   value: VALID_LATIN_TEXT,
@@ -13,7 +13,7 @@ const LATIN_TEXT_PATTER = {
 /**
  * Check whether the company name is already in use every 500ms.
  */
-export const debouncedCompanyNameValidator = _.debounce(
+export const debouncedCompanyNameValidator = debounce(
   (
     value: string,
     ctx: any,

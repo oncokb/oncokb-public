@@ -1,7 +1,6 @@
 import OncoKBTable from 'app/components/oncokbTable/OncoKBTable';
 import { filterByKeyword } from 'app/shared/utils/Utils';
 import autobind from 'autobind-decorator';
-import _ from 'lodash';
 import { action, computed, observable } from 'mobx';
 import { observer } from 'mobx-react';
 import React from 'react';
@@ -91,11 +90,9 @@ export default class UserUsageDetailsTable extends React.Component<
     if (this.resourcesTypeToggleValue === ToggleValue.ALL_RESOURCES) {
       return data || [];
     } else if (this.resourcesTypeToggleValue === ToggleValue.PUBLIC_RESOURCES) {
-      return (
-        _.filter(data, function (usage) {
-          return !usage.resource.includes('/private/');
-        }) || []
-      );
+      return (data || []).filter(function (usage) {
+        return !usage.resource.includes('/private/');
+      });
     } else if (this.resourcesTypeToggleValue === ToggleValue.CUMULATIVE_USAGE) {
       if (data) {
         const cumulativeData: Map<string, UsageRecord> = new Map<

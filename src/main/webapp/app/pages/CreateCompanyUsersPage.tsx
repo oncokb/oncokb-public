@@ -12,7 +12,6 @@ import {
   fieldRequiredValidation,
   SHORT_TEXT_VAL,
 } from 'app/shared/utils/FormValidationUtils';
-import _ from 'lodash';
 import { DefaultTooltip, remoteData } from 'cbioportal-frontend-commons';
 import LoadingIndicator from 'app/components/loadingIndicator/LoadingIndicator';
 import { LicenseStatus } from 'app/config/constants';
@@ -20,6 +19,7 @@ import { PromiseStatus } from 'app/shared/utils/PromiseUtils';
 import { Link } from 'react-router-dom';
 import { getErrorMessage } from 'app/shared/alert/ErrorAlertUtils';
 import { COLOR_LIGHT_GREY } from 'app/config/theme';
+import { partition } from 'app/shared/utils/LodashUtils';
 
 interface MatchParams {
   id: string;
@@ -151,7 +151,7 @@ export class CreateCompanyUsersPage extends React.Component<
         })
         .map(promise => promise.catch((error: Error) => error))
     ).then(() => {
-      const [created, notCreated] = _.partition(
+      const [created, notCreated] = partition(
         this.userInfos,
         userInfo => userInfo.creationStatus.status === CreationStatus.SUCCESS
       );
