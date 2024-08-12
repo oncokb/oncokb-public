@@ -134,19 +134,9 @@ export const CHANGED_ANNOTATION_LEVEL_WITH_EVIDENCE_COLUMNS = [
   { name: GENE },
   { name: MUTATION },
   { name: CANCER_TYPE },
-  { name: DRUGS_ASSOCIATED_WITH_CURRENT_LEVEL },
-  { name: PREVIOUS_LEVEL },
-  { name: CURRENT_LEVEL },
-  { name: EVIDENCE },
-];
-
-export const CHANGED_ANNOTATION_LEVEL_WITH_EVIDENCE_COLUMNS_V2 = [
-  { name: GENE },
-  { name: MUTATION },
-  { name: CANCER_TYPE },
   { name: LEVEL_ASSOCIATED_DRUGS_IN_ONCOKB },
   { name: PREVIOUS_LEVEL },
-  { name: CURRENT_LEVEL },
+  { name: UPDATED_LEVEL },
   { name: EVIDENCE },
 ];
 
@@ -299,7 +289,7 @@ const EVIDENCE_COLUMN_SEPARATOR = '; ';
 // https://stackoverflow.com/questions/41947168/is-it-possible-to-use-keyof-operator-on-literals-instead-of-interfaces
 
 export const NEWS_BY_DATE: { [date: string]: NewsData } = {
-  '08082024': {
+  '08142024': {
     changedAnnotations: [
       {
         columnHeaderType: AnnotationColumnHeaderType.NEW_ALTERATION_WITH_LEVEL,
@@ -386,7 +376,7 @@ export const NEWS_BY_DATE: { [date: string]: NewsData } = {
         useOneLineRowClass: false,
         title:
           'Updated therapeutic implications - Promotion of tumor type-specific level of evidence for an alteration(s)',
-        headers: CHANGED_ANNOTATION_LEVEL_WITH_EVIDENCE_COLUMNS_V2,
+        headers: CHANGED_ANNOTATION_LEVEL_WITH_EVIDENCE_COLUMNS,
         content: [
           [
             'IDH1',
