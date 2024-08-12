@@ -390,7 +390,9 @@ export const NEWS_BY_DATE: { [date: string]: NewsData } = {
         content: [
           [
             'IDH1',
-            'R132',
+            <span>
+              {getAlternativeAllelesPageLinks('IDH1', 'R132C/H/G/S/L')}
+            </span>,
             'Oligodendroglioma',
             <div>
               <div style={{ fontStyle: 'italic' }}>
@@ -415,7 +417,9 @@ export const NEWS_BY_DATE: { [date: string]: NewsData } = {
           ],
           [
             'IDH1',
-            'R132',
+            <span>
+              {getAlternativeAllelesPageLinks('IDH1', 'R132C/H/G/S/L')}
+            </span>,
             'Astrocytoma',
             <div>
               <div style={{ fontStyle: 'italic' }}>
@@ -444,7 +448,9 @@ export const NEWS_BY_DATE: { [date: string]: NewsData } = {
           ],
           [
             'IDH2',
-            'R172',
+            <span>
+              {getAlternativeAllelesPageLinks('IDH2', 'R172K/M/W/S/G')}
+            </span>,
             'Astrocytoma, Oligodendroglioma',
             'Vorasidenib',
             '3A',
