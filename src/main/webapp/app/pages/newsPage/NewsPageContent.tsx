@@ -26,6 +26,7 @@ import {
   SopPageLink,
   YearEndReviewPageLink,
   getAlterationPageLink,
+  getAlternativeAllelesPageLinks,
 } from 'app/shared/utils/UrlUtils';
 import { PMIDLink } from 'app/shared/links/PMIDLink';
 import { Linkout } from 'app/shared/links/Linkout';
@@ -134,6 +135,16 @@ export const CHANGED_ANNOTATION_LEVEL_WITH_EVIDENCE_COLUMNS = [
   { name: MUTATION },
   { name: CANCER_TYPE },
   { name: DRUGS_ASSOCIATED_WITH_CURRENT_LEVEL },
+  { name: PREVIOUS_LEVEL },
+  { name: CURRENT_LEVEL },
+  { name: EVIDENCE },
+];
+
+export const CHANGED_ANNOTATION_LEVEL_WITH_EVIDENCE_COLUMNS_V2 = [
+  { name: GENE },
+  { name: MUTATION },
+  { name: CANCER_TYPE },
+  { name: LEVEL_ASSOCIATED_DRUGS_IN_ONCOKB },
   { name: PREVIOUS_LEVEL },
   { name: CURRENT_LEVEL },
   { name: EVIDENCE },
@@ -311,7 +322,7 @@ export const NEWS_BY_DATE: { [date: string]: NewsData } = {
               />
               <AbstractLink
                 abstract="Yap, T. et al., Abstract# B156, AACR-NCI-EORTC 2023"
-                link="https://www.onclive.com/view/lunresertib-camonsertib-gets-fast-tracked-by-fda-for-ccne1-or-fbxw7-ppp2r1a-ovarian-cancer"
+                link="https://www.reparerx.com/wp-content/uploads/2023/10/ANE_B156_MYTHIC-clinical_poster.pdf"
               />
               <Linkout link="https://www.onclive.com/view/lunresertib-camonsertib-gets-fast-tracked-by-fda-for-ccne1-or-fbxw7-ppp2r1a-ovarian-cancer">
                 FDA fast track designation
@@ -372,8 +383,10 @@ export const NEWS_BY_DATE: { [date: string]: NewsData } = {
         ],
       },
       {
-        columnHeaderType:
-          AnnotationColumnHeaderType.PROMOTION_TUMOR_TYPE_SPECIFIC_EVIDENCE,
+        useOneLineRowClass: false,
+        title:
+          'Updated therapeutic implications - Promotion of tumor type-specific level of evidence for an alteration(s)',
+        headers: CHANGED_ANNOTATION_LEVEL_WITH_EVIDENCE_COLUMNS_V2,
         content: [
           [
             'IDH1',
@@ -510,7 +523,18 @@ export const NEWS_BY_DATE: { [date: string]: NewsData } = {
         content: [
           [
             'PIK3CA',
-            'R88Q, N345K, C420R, E542K, E545A/D/G/K/Q, Q546E/K/R/P, M1043V/I H1047Y/R/L, G1049R',
+            <WithSeparator separator={', '}>
+              <AlterationPageLink hugoSymbol="PIK3CA" alteration="R88Q" />
+              <AlterationPageLink hugoSymbol="PIK3CA" alteration="N345K" />
+              <AlterationPageLink hugoSymbol="PIK3CA" alteration="C420R" />
+              <AlterationPageLink hugoSymbol="PIK3CA" alteration="E542K" />
+              {getAlternativeAllelesPageLinks('PIK3CA', 'E545A/D/G/K/Q')}
+              {getAlternativeAllelesPageLinks('PIK3CA', 'Q546E/K/R/P')}
+              {getAlternativeAllelesPageLinks('PIK3CA', 'Q546E/K/R/P')}
+              {getAlternativeAllelesPageLinks('PIK3CA', 'M1043V/I')}
+              {getAlternativeAllelesPageLinks('PIK3CA', 'H1047Y/R/L')}
+              <AlterationPageLink hugoSymbol="PIK3CA" alteration="G1049R" />
+            </WithSeparator>,
             'Breast Cancer',
             '1',
             'Capivasertib + Fulvestrant (Level 1); Alpelisib + Fulvestrant (Level 1 for PIK3CA C420R, E542K, E545A/D/G/K, H1047Y/R/L, Q546E/R only)',
@@ -527,7 +551,13 @@ export const NEWS_BY_DATE: { [date: string]: NewsData } = {
           ],
           [
             'PIK3CA',
-            'Oncogenic Mutations (excluding Level 1 mutations listed above)',
+            <>
+              <AlterationPageLink
+                hugoSymbol="PIK3CA"
+                alteration={'Oncogenic Mutations'}
+              />{' '}
+              <span>(excluding Level 1 mutations listed above)</span>
+            </>,
             'Breast Cancer',
             '2',
             'Alpelisib + Fulvestrant (Level 2); Capivasertib + Fulvestrant (Level 2)',
