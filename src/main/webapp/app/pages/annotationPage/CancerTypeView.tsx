@@ -131,21 +131,23 @@ const DxPxView: React.FunctionComponent<{
         biomarker
       </h5>
       {props.summary && <p>{props.summary}</p>}
-      <CancerTypeViewTable
-        isLargeScreen={props.isLargeScreen}
-        userAuthenticated={props.userAuthenticated}
-        type={props.type}
-        hugoSymbol={props.hugoSymbol}
-        data={props.implications.map(implication => {
-          return {
-            level: implication.level as LEVELS,
-            alterations: implication.alterations,
-            cancerTypes: implication.cancerTypes,
-            citations: implication.citations,
-            description: implication.drugDescription,
-          };
-        })}
-      />
+      {props.implications.length > 0 && (
+        <CancerTypeViewTable
+          isLargeScreen={props.isLargeScreen}
+          userAuthenticated={props.userAuthenticated}
+          type={props.type}
+          hugoSymbol={props.hugoSymbol}
+          data={props.implications.map(implication => {
+            return {
+              level: implication.level as LEVELS,
+              alterations: implication.alterations,
+              cancerTypes: implication.cancerTypes,
+              citations: implication.citations,
+              description: implication.drugDescription,
+            };
+          })}
+        />
+      )}
     </div>
   );
 };
@@ -192,7 +194,8 @@ export const CancerTypeView: React.FunctionComponent<ICancerTypeView> = props =>
         summary={props.annotation.tumorTypeSummary}
         implications={props.therapeuticImplications}
       />
-      {props.diagnosticImplications.length > 0 && (
+      {(props.annotation.diagnosticSummary ||
+        props.diagnosticImplications.length > 0) && (
         <DxPxView
           isLargeScreen={props.isLargeScreen}
           userAuthenticated={props.userAuthenticated}
@@ -202,7 +205,8 @@ export const CancerTypeView: React.FunctionComponent<ICancerTypeView> = props =>
           implications={props.diagnosticImplications}
         />
       )}
-      {props.prognosticImplications.length > 0 && (
+      {(props.annotation.prognosticSummary ||
+        props.prognosticImplications.length > 0) && (
         <DxPxView
           isLargeScreen={props.isLargeScreen}
           userAuthenticated={props.userAuthenticated}
