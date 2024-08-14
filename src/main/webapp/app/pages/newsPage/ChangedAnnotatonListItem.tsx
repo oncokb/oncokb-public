@@ -43,6 +43,10 @@ export const ChangedAnnotationListItem = (props: {
   title?: string;
   data: SimpleTableRow[];
   columnHeaderType?: AnnotationColumnHeaderType;
+  headers?: {
+    name: string;
+  }[];
+  useOneLineRowClass?: boolean;
 }) => {
   let longestRow = 0;
   if (props.data.length > 0) {
@@ -158,9 +162,17 @@ export const ChangedAnnotationListItem = (props: {
       {props.title ? props.title : defaultTitle}
       <Row className={'overflow-auto'}>
         <SimpleTable
-          columns={annotationColumnHeader.slice(0, longestRow)}
+          columns={
+            props.headers
+              ? props.headers
+              : annotationColumnHeader.slice(0, longestRow)
+          }
           rows={props.data}
-          theadClassName={useOneLineRowClass ? mainStyle.oneRowHeader : ''}
+          theadClassName={
+            props.useOneLineRowClass ?? useOneLineRowClass
+              ? mainStyle.oneRowHeader
+              : ''
+          }
         />
       </Row>
     </li>

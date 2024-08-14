@@ -25,6 +25,8 @@ import {
 } from 'app/shared/route/types';
 import * as QueryString from 'querystring';
 import { YEAR_END_SUMMARY_RANGE } from 'app/pages/newsPage/NewsPageNavTab';
+import { ALTERNATIVE_ALLELES_REGEX } from 'app/config/constants/regex';
+import WithSeparator from 'react-with-separator';
 
 export const getGenePageLink = (props: {
   hugoSymbol: string;
@@ -131,6 +133,30 @@ export const AlterationPageLink: React.FunctionComponent<{
       </Link>
     </>
   );
+};
+
+export const getAlternativeAllelesPageLinks = (
+  hugoSymbol: string,
+  alterations: string
+) => {
+  if (ALTERNATIVE_ALLELES_REGEX.test(alterations)) {
+    const matches = ALTERNATIVE_ALLELES_REGEX.exec(alterations);
+    if (matches) {
+      const positionalVar = matches[1];
+      const alternativeAlleles = matches[2];
+      const alleleLines = alternativeAlleles.split('/').map((allele, index) => {
+        return (
+          <AlterationPageLink
+            hugoSymbol={hugoSymbol}
+            alteration={`${positionalVar}${allele}`}
+          >
+            {index === 0 ? `${positionalVar}${allele}` : allele}
+          </AlterationPageLink>
+        );
+      });
+      return <WithSeparator separator={'/'}>{alleleLines}</WithSeparator>;
+    }
+  }
 };
 
 export const getGenomicPageLocation = (props: {
