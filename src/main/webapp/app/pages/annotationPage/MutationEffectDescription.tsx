@@ -1,7 +1,11 @@
 import React from 'react';
-import { AlterationPageLink } from 'app/shared/utils/UrlUtils';
+import {
+  AlterationPageLink,
+  getAlternativeAllelesPageLinks,
+} from 'app/shared/utils/UrlUtils';
 import WithSeparator from 'react-with-separator';
 import SummaryWithRefs from 'app/oncokb-frontend-commons/src/components/SummaryWithRefs';
+import { ALTERNATIVE_ALLELES_REGEX } from 'app/config/constants/regex';
 
 const MutationEffectDescription: React.FunctionComponent<{
   hugoSymbol: string;
@@ -18,30 +22,19 @@ const MutationEffectDescription: React.FunctionComponent<{
       const varSegs = segments[1].split(' ');
       let alterationStr = varSegs.pop();
       if (alterationStr) {
-        const altRegex = new RegExp('([A-Z]+[0-9]+)([A-Z]+(/[A-Z]+)*)', 'i');
+        const altRegex = ALTERNATIVE_ALLELES_REGEX;
         alterationStr = alterationStr.replace('.', '');
         if (altRegex.test(alterationStr)) {
           const matches = altRegex.exec(alterationStr);
           if (matches) {
-            const positionalVar = matches[1];
-            const alternativeAlleles = matches[2];
-            const alleleLines = alternativeAlleles
-              .split('/')
-              .map((allele, index) => {
-                return (
-                  <AlterationPageLink
-                    hugoSymbol={props.hugoSymbol}
-                    alteration={`${positionalVar}${allele}`}
-                  >
-                    {index === 0 ? `${positionalVar}${allele}` : allele}
-                  </AlterationPageLink>
-                );
-              });
             return (
               <span>
                 {segments[0]} {additionalMutationEffectSeparator}
                 {varSegs.join(' ')}{' '}
-                <WithSeparator separator={'/'}>{alleleLines}</WithSeparator>.
+                {getAlternativeAllelesPageLinks(
+                  props.hugoSymbol,
+                  alterationStr
+                )}
               </span>
             );
           }
