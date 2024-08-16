@@ -32,6 +32,11 @@ import { GenePageLink, SopPageLink } from 'app/shared/utils/UrlUtils';
 import { Row } from 'react-bootstrap';
 import { FdaApprovalLink } from 'app/pages/newsPage/Links';
 import { LevelOfEvidencePageLink } from 'app/shared/links/LevelOfEvidencePageLink';
+import {
+  LinkedInLink,
+  TwitterLink,
+  UserGoogleGroupLink,
+} from 'app/shared/links/SocialMediaLinks';
 
 @inject('routing')
 @observer
@@ -71,21 +76,9 @@ export default class NewsPage extends React.Component<{
             </p>
             <p>
               <b>Stay tuned</b> for future data updates (improved annotations,
-              new alterations), as well as new features. You can follow us on
-              Twitter (
-              <a
-                href="https://twitter.com/OncoKB"
-                target="_blank"
-                rel="noopener noreferrer"
-              >
-                @OncoKB
-              </a>
-              ) or subscribe to our{' '}
-              <b>
-                <Linkout link={ONCOKB_NEWS_GROUP_SUBSCRIPTION_LINK}>
-                  low-volume email list
-                </Linkout>
-              </b>{' '}
+              new alterations), as well as new features. You can follow us on{' '}
+              <LinkedInLink /> and <TwitterLink />, or subscribe to our{' '}
+              <UserGoogleGroupLink>low-volume email list</UserGoogleGroupLink>{' '}
               for updates.
             </p>
             <CitationText />
