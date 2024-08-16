@@ -21,6 +21,11 @@ import { Link } from 'react-router-dom';
 import AppStore from 'app/store/AppStore';
 import { Linkout } from 'app/shared/links/Linkout';
 import { COLOR_BLACK, COLOR_DARK_BLUE, COLOR_WARNING } from 'app/config/theme';
+import {
+  LinkedInLink,
+  TwitterLink,
+  UserGoogleGroupLink,
+} from 'app/shared/links/SocialMediaLinks';
 
 export interface IUserMessage {
   dateStart?: number;
@@ -50,6 +55,22 @@ if (
     // UNIQUE ID IS IMPORTANT B/C WE REMEMBER A MESSAGE HAS BEEN SHOWN
     // BASED ON USERS LOCALSTORAGE
     {
+      dateEnd: 1735689600000,
+      content: (
+        <div>
+          <div>
+            <span>
+              Follow us on <LinkedInLink /> and <TwitterLink />, or subscribe to
+              our{' '}
+              <UserGoogleGroupLink>low-volume email list</UserGoogleGroupLink>,
+              to stay updated on our latest data releases and new features!
+            </span>
+          </div>
+        </div>
+      ),
+      id: '2024-social-accounts-message',
+    },
+    {
       dateEnd: 1705276800000,
       content: (
         <div>
@@ -67,7 +88,7 @@ if (
       id: '2023-holiday-message',
     },
     {
-      dateEnd: 100000000000000,
+      dateEnd: 1,
       content: (
         <div>
           <span>Check out our latest publication in Cancer Discovery, </span>
