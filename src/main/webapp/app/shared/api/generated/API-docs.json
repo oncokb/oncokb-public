@@ -1656,6 +1656,90 @@
         "deprecated": false
       }
     },
+    "/api/mails/termination-warning": {
+      "post": {
+        "tags": [
+          "mails-controller"
+        ],
+        "summary": "sendTerminationWarningEmail",
+        "operationId": "sendTerminationWarningEmailUsingPOST",
+        "consumes": [
+          "application/json"
+        ],
+        "produces": [
+          "*/*"
+        ],
+        "parameters": [
+          {
+            "in": "body",
+            "name": "terminationEmailDTO",
+            "description": "terminationEmailDTO",
+            "required": true,
+            "schema": {
+              "$ref": "#/definitions/TerminationEmailDTO"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK"
+          },
+          "201": {
+            "description": "Created"
+          },
+          "401": {
+            "description": "Unauthorized"
+          },
+          "403": {
+            "description": "Forbidden"
+          },
+          "404": {
+            "description": "Not Found"
+          }
+        },
+        "deprecated": false
+      }
+    },
+    "/api/mails/termination-warning/{id}": {
+      "get": {
+        "tags": [
+          "mails-controller"
+        ],
+        "summary": "getTerminationWarningEmail",
+        "operationId": "getTerminationWarningEmailUsingGET",
+        "produces": [
+          "*/*"
+        ],
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "description": "id",
+            "required": true,
+            "type": "integer",
+            "format": "int64"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "schema": {
+              "$ref": "#/definitions/TerminationEmailDTO"
+            }
+          },
+          "401": {
+            "description": "Unauthorized"
+          },
+          "403": {
+            "description": "Forbidden"
+          },
+          "404": {
+            "description": "Not Found"
+          }
+        },
+        "deprecated": false
+      }
+    },
     "/api/mails/types": {
       "get": {
         "tags": [
@@ -3090,7 +3174,7 @@
       "properties": {
         "activation": {
           "type": "string",
-          "format": "date-time"
+          "format": "date"
         },
         "autoRenewal": {
           "type": "boolean"
@@ -3106,7 +3190,7 @@
       "properties": {
         "date": {
           "type": "string",
-          "format": "date-time"
+          "format": "date"
         },
         "notes": {
           "type": "string"
@@ -3460,6 +3544,31 @@
         }
       },
       "title": "PasswordChangeDTO"
+    },
+    "TerminationEmailDTO": {
+      "type": "object",
+      "properties": {
+        "bcc": {
+          "type": "string"
+        },
+        "cc": {
+          "type": "string"
+        },
+        "companyId": {
+          "type": "integer",
+          "format": "int64"
+        },
+        "content": {
+          "type": "string"
+        },
+        "from": {
+          "type": "string"
+        },
+        "subject": {
+          "type": "string"
+        }
+      },
+      "title": "TerminationEmailDTO"
     },
     "Token": {
       "type": "object",

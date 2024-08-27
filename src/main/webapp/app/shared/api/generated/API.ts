@@ -210,6 +210,20 @@ export type PasswordChangeDTO = {
         'newPassword': string
 
 };
+export type TerminationEmailDTO = {
+    'bcc': string
+
+        'cc': string
+
+        'companyId': number
+
+        'content': string
+
+        'from': string
+
+        'subject': string
+
+};
 export type Token = {
     'creation': string
 
@@ -3444,6 +3458,157 @@ export default class API {
                 return response.body;
             });
         };
+    sendTerminationWarningEmailUsingPOSTURL(parameters: {
+        'terminationEmailDto': TerminationEmailDTO,
+        $queryParameters ? : any
+    }): string {
+        let queryParameters: any = {};
+        let path = '/api/mails/termination-warning';
+
+        if (parameters.$queryParameters) {
+            Object.keys(parameters.$queryParameters).forEach(function(parameterName) {
+                var parameter = parameters.$queryParameters[parameterName];
+                queryParameters[parameterName] = parameter;
+            });
+        }
+        let keys = Object.keys(queryParameters);
+        return this.domain + path + (keys.length > 0 ? '?' + (keys.map(key => key + '=' + encodeURIComponent(queryParameters[key])).join('&')) : '');
+    };
+
+    /**
+     * sendTerminationWarningEmail
+     * @method
+     * @name API#sendTerminationWarningEmailUsingPOST
+     * @param {} terminationEmailDto - terminationEmailDTO
+     */
+    sendTerminationWarningEmailUsingPOSTWithHttpInfo(parameters: {
+        'terminationEmailDto': TerminationEmailDTO,
+        $queryParameters ? : any,
+        $domain ? : string
+    }): Promise < request.Response > {
+        const domain = parameters.$domain ? parameters.$domain : this.domain;
+        const errorHandlers = this.errorHandlers;
+        const request = this.request;
+        let path = '/api/mails/termination-warning';
+        let body: any;
+        let queryParameters: any = {};
+        let headers: any = {};
+        let form: any = {};
+        return new Promise(function(resolve, reject) {
+            headers['Accept'] = '*/*';
+            headers['Content-Type'] = 'application/json';
+
+            if (parameters['terminationEmailDto'] !== undefined) {
+                body = parameters['terminationEmailDto'];
+            }
+
+            if (parameters['terminationEmailDto'] === undefined) {
+                reject(new Error('Missing required  parameter: terminationEmailDto'));
+                return;
+            }
+
+            if (parameters.$queryParameters) {
+                Object.keys(parameters.$queryParameters).forEach(function(parameterName) {
+                    var parameter = parameters.$queryParameters[parameterName];
+                    queryParameters[parameterName] = parameter;
+                });
+            }
+
+            request('POST', domain + path, body, headers, queryParameters, form, reject, resolve, errorHandlers);
+
+        });
+    };
+
+    /**
+     * sendTerminationWarningEmail
+     * @method
+     * @name API#sendTerminationWarningEmailUsingPOST
+     * @param {} terminationEmailDto - terminationEmailDTO
+     */
+    sendTerminationWarningEmailUsingPOST(parameters: {
+        'terminationEmailDto': TerminationEmailDTO,
+        $queryParameters ? : any,
+        $domain ? : string
+    }): Promise < any > {
+        return this.sendTerminationWarningEmailUsingPOSTWithHttpInfo(parameters).then(function(response: request.Response) {
+            return response.body;
+        });
+    };
+    getTerminationWarningEmailUsingGETURL(parameters: {
+        'id': number,
+        $queryParameters ? : any
+    }): string {
+        let queryParameters: any = {};
+        let path = '/api/mails/termination-warning/{id}';
+
+        path = path.replace('{id}', parameters['id'] + '');
+
+        if (parameters.$queryParameters) {
+            Object.keys(parameters.$queryParameters).forEach(function(parameterName) {
+                var parameter = parameters.$queryParameters[parameterName];
+                queryParameters[parameterName] = parameter;
+            });
+        }
+        let keys = Object.keys(queryParameters);
+        return this.domain + path + (keys.length > 0 ? '?' + (keys.map(key => key + '=' + encodeURIComponent(queryParameters[key])).join('&')) : '');
+    };
+
+    /**
+     * getTerminationWarningEmail
+     * @method
+     * @name API#getTerminationWarningEmailUsingGET
+     * @param {integer} id - id
+     */
+    getTerminationWarningEmailUsingGETWithHttpInfo(parameters: {
+        'id': number,
+        $queryParameters ? : any,
+        $domain ? : string
+    }): Promise < request.Response > {
+        const domain = parameters.$domain ? parameters.$domain : this.domain;
+        const errorHandlers = this.errorHandlers;
+        const request = this.request;
+        let path = '/api/mails/termination-warning/{id}';
+        let body: any;
+        let queryParameters: any = {};
+        let headers: any = {};
+        let form: any = {};
+        return new Promise(function(resolve, reject) {
+            headers['Accept'] = '*/*';
+
+            path = path.replace('{id}', parameters['id'] + '');
+
+            if (parameters['id'] === undefined) {
+                reject(new Error('Missing required  parameter: id'));
+                return;
+            }
+
+            if (parameters.$queryParameters) {
+                Object.keys(parameters.$queryParameters).forEach(function(parameterName) {
+                    var parameter = parameters.$queryParameters[parameterName];
+                    queryParameters[parameterName] = parameter;
+                });
+            }
+
+            request('GET', domain + path, body, headers, queryParameters, form, reject, resolve, errorHandlers);
+
+        });
+    };
+
+    /**
+     * getTerminationWarningEmail
+     * @method
+     * @name API#getTerminationWarningEmailUsingGET
+     * @param {integer} id - id
+     */
+    getTerminationWarningEmailUsingGET(parameters: {
+        'id': number,
+        $queryParameters ? : any,
+        $domain ? : string
+    }): Promise < TerminationEmailDTO > {
+        return this.getTerminationWarningEmailUsingGETWithHttpInfo(parameters).then(function(response: request.Response) {
+            return response.body;
+        });
+    };
     getMailsTypesUsingGETURL(parameters: {
         $queryParameters ? : any
     }): string {
