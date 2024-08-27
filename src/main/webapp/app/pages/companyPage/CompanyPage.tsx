@@ -69,6 +69,7 @@ import { DateSelector } from 'app/components/dateSelector/DateSelector';
 import { DownloadButton } from 'app/components/downloadButton/DownloadButton';
 import { RouterStore } from 'mobx-react-router';
 import { TEXT_VAL } from 'app/shared/utils/FormValidationUtils';
+import CompanyAdditionalInfo from './CompanyAdditionalInfo';
 
 interface MatchParams {
   id: string;
@@ -679,6 +680,17 @@ export default class CompanyPage extends React.Component<ICompanyPage> {
                                 selectedOption.value)
                             }
                             boldLabel
+                          />
+                        </Col>
+                      </Row>
+                      <Row className={getSectionClassName()}>
+                        <Col>
+                          <CompanyAdditionalInfo
+                            mode="update"
+                            additionalInfo={this.company.additionalInfo}
+                            setAdditionalInfo={x => {
+                              this.company.additionalInfo = x as string;
+                            }}
                           />
                         </Col>
                       </Row>

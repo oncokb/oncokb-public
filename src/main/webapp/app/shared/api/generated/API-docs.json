@@ -2963,9 +2963,6 @@
         "apiAccessRequest": {
           "$ref": "#/definitions/ApiAccessRequest"
         },
-        "sentToRocReview": {
-          "type": "boolean"
-        },
         "trialAccount": {
           "$ref": "#/definitions/TrialAccount"
         },
@@ -2997,6 +2994,9 @@
         "name"
       ],
       "properties": {
+        "additionalInfo": {
+          "type": "string"
+        },
         "businessContact": {
           "type": "string"
         },
@@ -3086,6 +3086,9 @@
         "name"
       ],
       "properties": {
+        "additionalInfo": {
+          "type": "string"
+        },
         "businessContact": {
           "type": "string"
         },
@@ -3378,9 +3381,6 @@
           "minLength": 1,
           "maxLength": 50,
           "pattern": "^[_.\\-\\+@A-Za-z0-9]*$"
-        },
-        "needsMskRocReview": {
-          "type": "boolean"
         },
         "notifyUserOnTrialCreation": {
           "type": "boolean"
@@ -3798,19 +3798,33 @@
     "UserOverviewUsage": {
       "type": "object",
       "properties": {
+        "dayUsage": {
+          "type": "object",
+          "additionalProperties": {
+            "type": "integer",
+            "format": "int64"
+          }
+        },
         "endpoint": {
           "type": "string"
         },
-        "maxUsage": {
-          "type": "integer",
-          "format": "int64"
+        "maxUsageProportion": {
+          "type": "number",
+          "format": "float"
+        },
+        "monthUsage": {
+          "type": "object",
+          "additionalProperties": {
+            "type": "integer",
+            "format": "int64"
+          }
         },
         "noPrivateEndpoint": {
           "type": "string"
         },
-        "noPrivateMaxUsage": {
-          "type": "integer",
-          "format": "int64"
+        "noPrivateMaxUsageProportion": {
+          "type": "number",
+          "format": "float"
         },
         "totalUsage": {
           "type": "integer",

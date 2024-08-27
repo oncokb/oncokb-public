@@ -79,6 +79,8 @@ public class CompanyResourceIT {
     private static final String[] UPDATED_COMPANY_DOMAIN_NAMES = new String[] {"oncokb.org, mskcc.org"};
 
     private static final Set<String> UPDATED_COMPANY_DOMAINS = new HashSet<>(Arrays.asList(UPDATED_COMPANY_DOMAIN_NAMES));
+    private static final String DEFAULT_ADDITIONAL_INFO = "AAAAAAAAAA";
+    private static final String UPDATED_ADDITIONAL_INFO = "BBBBBBBBBB";
 
     @Autowired
     private CompanyRepository companyRepository;
@@ -115,7 +117,8 @@ public class CompanyResourceIT {
             .licenseModel(DEFAULT_LICENSE_MODEL)
             .licenseStatus(DEFAULT_LICENSE_STATUS)
             .businessContact(DEFAULT_BUSINESS_CONTACT)
-            .legalContact(DEFAULT_LEGAL_CONTACT);
+            .legalContact(DEFAULT_LEGAL_CONTACT)
+            .additionalInfo(DEFAULT_ADDITIONAL_INFO);
         return company;
     }
     /**
@@ -133,7 +136,8 @@ public class CompanyResourceIT {
             .licenseModel(UPDATED_LICENSE_MODEL)
             .licenseStatus(UPDATED_LICENSE_STATUS)
             .businessContact(UPDATED_BUSINESS_CONTACT)
-            .legalContact(UPDATED_LEGAL_CONTACT);
+            .legalContact(UPDATED_LEGAL_CONTACT)
+            .additionalInfo(UPDATED_ADDITIONAL_INFO);
         return company;
     }
 
@@ -363,7 +367,8 @@ public class CompanyResourceIT {
             .andExpect(jsonPath("$.[*].licenseModel").value(hasItem(DEFAULT_LICENSE_MODEL.toString())))
             .andExpect(jsonPath("$.[*].licenseStatus").value(hasItem(DEFAULT_LICENSE_STATUS.toString())))
             .andExpect(jsonPath("$.[*].businessContact").value(hasItem(DEFAULT_BUSINESS_CONTACT)))
-            .andExpect(jsonPath("$.[*].legalContact").value(hasItem(DEFAULT_LEGAL_CONTACT)));
+            .andExpect(jsonPath("$.[*].legalContact").value(hasItem(DEFAULT_LEGAL_CONTACT)))
+            .andExpect(jsonPath("$.[*].additionalInfo").value(hasItem(DEFAULT_ADDITIONAL_INFO.toString())));
     }
 
     @Test
@@ -384,7 +389,8 @@ public class CompanyResourceIT {
             .andExpect(jsonPath("$.licenseModel").value(DEFAULT_LICENSE_MODEL.toString()))
             .andExpect(jsonPath("$.licenseStatus").value(DEFAULT_LICENSE_STATUS.toString()))
             .andExpect(jsonPath("$.businessContact").value(DEFAULT_BUSINESS_CONTACT))
-            .andExpect(jsonPath("$.legalContact").value(DEFAULT_LEGAL_CONTACT));
+            .andExpect(jsonPath("$.legalContact").value(DEFAULT_LEGAL_CONTACT))
+            .andExpect(jsonPath("$.additionalInfo").value(DEFAULT_ADDITIONAL_INFO.toString()));
     }
 
     @Test

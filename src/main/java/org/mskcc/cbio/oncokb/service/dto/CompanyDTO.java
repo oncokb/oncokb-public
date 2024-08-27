@@ -14,7 +14,7 @@ import org.mskcc.cbio.oncokb.domain.enumeration.LicenseStatus;
  * A DTO for the {@link org.mskcc.cbio.oncokb.domain.Company} entity.
  */
 public class CompanyDTO implements Serializable {
-    
+
     private Long id;
 
     @NotNull
@@ -41,9 +41,11 @@ public class CompanyDTO implements Serializable {
 
     @NotEmpty
     private Set<String> companyDomains = new HashSet<>();
+    @Lob
+    private String additionalInfo;
 
     private Integer numberOfUsers;
-    
+
     public Long getId() {
         return id;
     }
@@ -124,6 +126,14 @@ public class CompanyDTO implements Serializable {
         this.companyDomains = companyDomains;
     }
 
+    public String getAdditionalInfo() {
+        return additionalInfo;
+    }
+
+    public void setAdditionalInfo(String additionalInfo) {
+        this.additionalInfo = additionalInfo;
+    }
+
     public Integer getNumberOfUsers() {
         return this.numberOfUsers;
     }
@@ -162,6 +172,7 @@ public class CompanyDTO implements Serializable {
             ", licenseStatus='" + getLicenseStatus() + "'" +
             ", businessContact='" + getBusinessContact() + "'" +
             ", legalContact='" + getLegalContact() + "'" +
+            ", additionalInfo='" + getAdditionalInfo() + "'" +
             ", companyDomains='" + getCompanyDomains() + "'" +
             ", numberOfUsers='" + getNumberOfUsers() + "'" +
             "}";

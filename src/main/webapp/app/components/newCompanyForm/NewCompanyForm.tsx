@@ -31,8 +31,19 @@ import { AdditionalInfoSelect } from 'app/shared/dropdown/AdditionalInfoSelect';
 import {
   debouncedCompanyNameValidator,
   fieldRequiredValidation,
-  textValidation,
 } from 'app/shared/utils/FormValidationUtils';
+import CompanyAdditionalInfo, {
+  ParsedAdditionalInfo,
+} from 'app/pages/companyPage/CompanyAdditionalInfo';
+
+const defaultInfo: ParsedAdditionalInfo = {
+  license: {
+    autoRenewal: false,
+    termination: {
+      notificationDays: 60,
+    },
+  },
+};
 
 type INewCompanyFormProps = {
   onValidSubmit: (newCompany: Partial<CompanyVM>) => void;
@@ -70,6 +81,12 @@ export const COMPANY_FORM_OPTIONS = {
 export class NewCompanyForm extends React.Component<INewCompanyFormProps> {
   @observable companyDescription = '';
   @observable companyDomains: string[] = [];
+  @observable companyAdditionalInfo: string = JSON.stringify({
+    license: {
+      ...defaultInfo.license,
+      activation: new Date().toISOString().split('T')[0],
+    },
+  });
   @observable selectedCompanyType: CompanyType = CompanyType.PARENT;
   @observable selectedLicenseModel: LicenseModel = LicenseModel.FULL;
   @observable selectedLicenseType: LicenseType = LicenseType.COMMERCIAL;
@@ -118,6 +135,7 @@ export class NewCompanyForm extends React.Component<INewCompanyFormProps> {
       licenseType: this.selectedLicenseType,
       name: values.companyName,
       companyDomains: this.companyDomains,
+      additionalInfo: this.companyAdditionalInfo,
     };
     this.props.onValidSubmit(newCompany);
   }
@@ -244,6 +262,20 @@ export class NewCompanyForm extends React.Component<INewCompanyFormProps> {
               onSelection={(selectedOption: any) =>
                 (this.selectedLicenseStatus = selectedOption.value)
               }
+            />
+          </Col>
+        </Row>
+        <Row className={getSectionClassName()}>
+          <Col md="3">
+            <h5>Additional Info</h5>
+          </Col>
+          <Col md="9">
+            <CompanyAdditionalInfo
+              mode="create"
+              additionalInfo={this.companyAdditionalInfo}
+              setAdditionalInfo={x => {
+                this.companyAdditionalInfo = x as string;
+              }}
             />
           </Col>
         </Row>

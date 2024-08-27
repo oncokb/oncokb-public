@@ -14,8 +14,6 @@ export type Activation = {
 export type AdditionalInfoDTO = {
     'apiAccessRequest': ApiAccessRequest
 
-        'sentToRocReview': boolean
-
         'trialAccount': TrialAccount
 
         'userCompany': UserCompany
@@ -28,7 +26,9 @@ export type ApiAccessRequest = {
 
 };
 export type CompanyDTO = {
-    'businessContact': string
+    'additionalInfo': string
+
+        'businessContact': string
 
         'companyDomains': Array < string >
 
@@ -58,7 +58,9 @@ export type CompanyDomainDTO = {
 
 };
 export type CompanyVM = {
-    'businessContact': string
+    'additionalInfo': string
+
+        'businessContact': string
 
         'companyDomains': Array < string >
 
@@ -168,8 +170,6 @@ export type ManagedUserVM = {
         'licenseType': "ACADEMIC" | "COMMERCIAL" | "RESEARCH_IN_COMMERCIAL" | "HOSPITAL"
 
         'login': string
-
-        'needsMskRocReview': boolean
 
         'notifyUserOnTrialCreation': boolean
 
@@ -343,11 +343,15 @@ export type UserMailsDTO = {
 
 };
 export type UserOverviewUsage = {
+    'dayUsage': {}
+
     'endpoint': string
 
-        'noPrivateEndpoint': string
-
         'maxUsageProportion': number
+
+        'monthUsage': {}
+
+        'noPrivateEndpoint': string
 
         'noPrivateMaxUsageProportion': number
 
@@ -356,10 +360,6 @@ export type UserOverviewUsage = {
         'userEmail': string
 
         'userId': string
-
-        'dayUsage': {}
-
-        'monthUsage': {}
 
 };
 export type UserUsage = {
