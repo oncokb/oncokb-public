@@ -44,6 +44,7 @@ import {
   LEVELS,
   LG_TABLE_FIXED_HEIGHT,
   ONCOKB_LEVELS,
+  PAGE_DESCRIPTION,
   PAGE_TITLE,
   QUERY_SEPARATOR_FOR_QUERY_STRING,
   REFERENCE_GENOME,
@@ -54,7 +55,6 @@ import AuthenticationStore from 'app/store/AuthenticationStore';
 import * as QueryString from 'query-string';
 import OncoKBTable from 'app/components/oncokbTable/OncoKBTable';
 import { AuthDownloadButton } from 'app/components/authDownloadButton/AuthDownloadButton';
-import DocumentTitle from 'react-document-title';
 import LevelSelectionRow from './LevelSelectionRow';
 import CancerTypeSelect from 'app/shared/dropdown/CancerTypeSelect';
 import {
@@ -70,6 +70,7 @@ import {
   uniq,
   uniqBy,
 } from 'app/shared/utils/LodashUtils';
+import { Helmet } from 'react-helmet-async';
 
 type Treatment = {
   level: string;
@@ -884,103 +885,109 @@ export default class ActionableGenesPage extends React.Component<
     }
 
     return (
-      <DocumentTitle title={getPageTitle(PAGE_TITLE.ACTIONABLE_GENES)}>
-        <>
-          {levelSelectionSection}
-          <Row
-            style={{ paddingLeft: '0.5rem', paddingRight: '0.5rem' }}
-            className={'mb-2'}
+      <>
+        <Helmet>
+          <title>{getPageTitle(PAGE_TITLE.ACTIONABLE_GENES)}</title>
+          <meta
+            name="description"
+            content={PAGE_DESCRIPTION.ACTIONABLE_GENES}
+          ></meta>
+        </Helmet>
+        {levelSelectionSection}
+        <Row
+          style={{ paddingLeft: '0.5rem', paddingRight: '0.5rem' }}
+          className={'mb-2'}
+        >
+          <Col
+            className={classnames(...COMPONENT_PADDING)}
+            lg={this.drugRelatedLevelSelected ? 4 : 6}
+            xs={12}
           >
-            <Col
-              className={classnames(...COMPONENT_PADDING)}
-              lg={this.drugRelatedLevelSelected ? 4 : 6}
-              xs={12}
-            >
+            <Select
+              value={this.geneSelectValue}
+              placeholder={`${this.filteredGenes.length} actionable ${pluralize(
+                'gene',
+                this.filteredGenes.length
+              )}`}
+              options={this.filteredGenes.map(hugoSymbol => {
+                return {
+                  value: hugoSymbol,
+                  label: hugoSymbol,
+                };
+              })}
+              isClearable={true}
+              onChange={(selectedOption: any) =>
+                (this.geneSearchKeyword = selectedOption
+                  ? selectedOption.label
+                  : '')
+              }
+            />
+          </Col>
+          <Col
+            className={classnames(...COMPONENT_PADDING)}
+            lg={this.drugRelatedLevelSelected ? 4 : 6}
+            xs={12}
+          >
+            <CancerTypeSelect
+              cancerType={this.relevantCancerTypeSearchKeyword}
+              onChange={(selectedOption: any) =>
+                (this.relevantCancerTypeSearchKeyword = selectedOption
+                  ? selectedOption.value
+                  : '')
+              }
+            />
+          </Col>
+          {this.drugRelatedLevelSelected && (
+            <Col className={classnames(...COMPONENT_PADDING)} lg={4} xs={12}>
               <Select
-                value={this.geneSelectValue}
-                placeholder={`${
-                  this.filteredGenes.length
-                } actionable ${pluralize('gene', this.filteredGenes.length)}`}
-                options={this.filteredGenes.map(hugoSymbol => {
+                value={this.drugSelectValue}
+                placeholder={`${this.filteredDrugs.length} ${pluralize(
+                  'drug',
+                  this.filteredDrugs.length
+                )}`}
+                options={this.filteredDrugs.map(drug => {
                   return {
-                    value: hugoSymbol,
-                    label: hugoSymbol,
+                    value: drug,
+                    label: drug,
                   };
                 })}
                 isClearable={true}
                 onChange={(selectedOption: any) =>
-                  (this.geneSearchKeyword = selectedOption
+                  (this.drugSearchKeyword = selectedOption
                     ? selectedOption.label
                     : '')
                 }
               />
             </Col>
-            <Col
-              className={classnames(...COMPONENT_PADDING)}
-              lg={this.drugRelatedLevelSelected ? 4 : 6}
-              xs={12}
-            >
-              <CancerTypeSelect
-                cancerType={this.relevantCancerTypeSearchKeyword}
-                onChange={(selectedOption: any) =>
-                  (this.relevantCancerTypeSearchKeyword = selectedOption
-                    ? selectedOption.value
-                    : '')
-                }
-              />
-            </Col>
-            {this.drugRelatedLevelSelected && (
-              <Col className={classnames(...COMPONENT_PADDING)} lg={4} xs={12}>
-                <Select
-                  value={this.drugSelectValue}
-                  placeholder={`${this.filteredDrugs.length} ${pluralize(
-                    'drug',
-                    this.filteredDrugs.length
-                  )}`}
-                  options={this.filteredDrugs.map(drug => {
-                    return {
-                      value: drug,
-                      label: drug,
-                    };
-                  })}
-                  isClearable={true}
-                  onChange={(selectedOption: any) =>
-                    (this.drugSearchKeyword = selectedOption
-                      ? selectedOption.label
-                      : '')
-                  }
-                />
-              </Col>
-            )}
-          </Row>
-          <Row className={'mb-2'}>
-            <Col className="d-flex">
-              <span>{this.filterResult}</span>
-              <AuthDownloadButton
+          )}
+        </Row>
+        <Row className={'mb-2'}>
+          <Col className="d-flex">
+            <span>{this.filterResult}</span>
+            <AuthDownloadButton
+              size={'sm'}
+              className={classnames('ml-2')}
+              getDownloadData={this.downloadAssociation}
+              fileName={'oncokb_biomarker_drug_associations.tsv'}
+              buttonText={'Associations'}
+            />
+            {this.treatmentsAreFiltered ? (
+              <Button
+                variant="link"
                 size={'sm'}
-                className={classnames('ml-2')}
-                getDownloadData={this.downloadAssociation}
-                fileName={'oncokb_biomarker_drug_associations.tsv'}
-                buttonText={'Associations'}
-              />
-              {this.treatmentsAreFiltered ? (
-                <Button
-                  variant="link"
-                  size={'sm'}
-                  style={{ whiteSpace: 'nowrap' }}
-                  className={'ml-auto pr-0'}
-                  onClick={this.clearFilters}
-                >
-                  Reset filters
-                </Button>
-              ) : undefined}
-            </Col>
-          </Row>
-          <Row className="mt-2">
-            <Col>{this.getTable()}</Col>
-          </Row>
-        </>
-      </DocumentTitle>
+                style={{ whiteSpace: 'nowrap' }}
+                className={'ml-auto pr-0'}
+                onClick={this.clearFilters}
+              >
+                Reset filters
+              </Button>
+            ) : undefined}
+          </Col>
+        </Row>
+        <Row className="mt-2">
+          <Col>{this.getTable()}</Col>
+        </Row>
+      </>
     );
   }
 }

@@ -6,7 +6,6 @@ import AppStore from 'app/store/AppStore';
 import { ANNOTATION_PAGE_TAB_KEYS } from 'app/config/constants';
 import { decodeSlash, encodeSlash, getPageTitle } from 'app/shared/utils/Utils';
 import { RouterStore } from 'mobx-react-router';
-import DocumentTitle from 'react-document-title';
 import { RouteComponentProps } from 'react-router';
 import AnnotationPage, {
   AnnotationType,
@@ -19,6 +18,8 @@ import {
 import autobind from 'autobind-decorator';
 import WindowStore from 'app/store/WindowStore';
 import AuthenticationStore from 'app/store/AuthenticationStore';
+import { Helmet } from 'react-helmet-async';
+import { getAlterationPageLink } from 'app/shared/utils/UrlUtils';
 
 interface MatchParams {
   hugoSymbol: string;
@@ -168,7 +169,20 @@ export default class AlterationPage extends React.Component<
 
   render() {
     return (
-      <DocumentTitle title={this.documentTitle}>
+      <>
+        <Helmet>
+          <title>{this.documentTitle}</title>
+          <link
+            id="canonical"
+            rel="canonical"
+            href={getAlterationPageLink({
+              hugoSymbol: this.store.hugoSymbol,
+              alteration: this.store.alterationQuery,
+              cancerType: this.store.cancerTypeName,
+              withProtocolHostPrefix: true,
+            })}
+          />
+        </Helmet>
         <AnnotationPage
           store={this.store}
           appStore={this.props.appStore}
@@ -182,7 +196,7 @@ export default class AlterationPage extends React.Component<
           defaultSelectedTab={this.selectedTab}
           onChangeTab={this.onChangeTab}
         />
-      </DocumentTitle>
+      </>
     );
   }
 }

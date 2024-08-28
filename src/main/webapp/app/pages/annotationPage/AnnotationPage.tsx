@@ -80,6 +80,7 @@ import { RouterStore } from 'mobx-react-router';
 import { Option } from 'app/shared/select/FormSelectWithLabelField';
 import MutationEffectDescription from 'app/pages/annotationPage/MutationEffectDescription';
 import { uniqBy } from 'app/shared/utils/LodashUtils';
+import { Helmet } from 'react-helmet-async';
 
 export enum AnnotationType {
   GENE,
@@ -443,6 +444,15 @@ export default class AnnotationPage extends React.Component<
   }
 
   @computed
+  get annotationPageMetaDescription() {
+    if (this.pageShouldBeRendered) {
+      return `${this.props.store.geneSummary.result} ${this.props.store.annotationData.result.variantSummary} ${this.props.store.annotationData.result.tumorTypeSummary}`;
+    } else {
+      return '';
+    }
+  }
+
+  @computed
   get navBreadcrumbs() {
     let breadcrumbs: (
       | ITextBreadcrumb
@@ -566,6 +576,12 @@ export default class AnnotationPage extends React.Component<
     );
     return (
       <>
+        <Helmet>
+          <meta
+            name="description"
+            content={this.annotationPageMetaDescription}
+          />
+        </Helmet>
         <div className={'d-flex justify-content-between flex-wrap'}>
           <div style={{ flex: '1 1 300px' }}>
             <h2

@@ -175,7 +175,6 @@ const AppRouts = (props: {
             isUserAuthenticated={props.authenticationStore.isUserAuthenticated}
             appStore={props.appStore}
             path={PAGE_ROUTE.GENE}
-            addCanonicalLink
             component={GenePage}
           />
           <RecaptchaBoundaryRoute
@@ -183,7 +182,6 @@ const AppRouts = (props: {
             isUserAuthenticated={props.authenticationStore.isUserAuthenticated}
             appStore={props.appStore}
             path={PAGE_ROUTE.ALTERATION}
-            addCanonicalLink
             component={AlterationPage}
           />
           <RecaptchaBoundaryRoute
@@ -205,7 +203,6 @@ const AppRouts = (props: {
             isUserAuthenticated={props.authenticationStore.isUserAuthenticated}
             appStore={props.appStore}
             path={PAGE_ROUTE.ALTERATION_TUMOR_TYPE}
-            addCanonicalLink
             component={AlterationPage}
           />
           <OncokbRoute

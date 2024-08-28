@@ -8,8 +8,8 @@ import {
   LEVEL_TYPES,
   ONCOKB_TM,
   PAGE_ROUTE,
+  PAGE_DESCRIPTION,
 } from 'app/config/constants';
-import DocumentTitle from 'react-document-title';
 import { inject, observer } from 'mobx-react';
 import {
   action,
@@ -27,6 +27,7 @@ import WindowStore from 'app/store/WindowStore';
 import { Linkout } from 'app/shared/links/Linkout';
 import OptimizedImage from 'app/shared/image/OptimizedImage';
 import { getPageTitle } from 'app/shared/utils/Utils';
+import { Helmet } from 'react-helmet-async';
 
 type LevelOfEvidencePageProps = {
   routing: RouterStore;
@@ -378,7 +379,11 @@ export default class LevelOfEvidencePage extends React.Component<
     });
 
     return (
-      <DocumentTitle title={getPageTitle(PAGE_TITLE[this.version])}>
+      <>
+        <Helmet>
+          <title>{getPageTitle(PAGE_TITLE[this.version])}</title>
+          <meta name="description" content={PAGE_DESCRIPTION.LEVELS}></meta>
+        </Helmet>
         <Row className="justify-content-center">
           <Col lg={10}>
             <div className="levels-of-evidence">
@@ -395,7 +400,7 @@ export default class LevelOfEvidencePage extends React.Component<
             </div>
           </Col>
         </Row>
-      </DocumentTitle>
+      </>
     );
   }
 }

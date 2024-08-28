@@ -1,7 +1,6 @@
 import * as React from 'react';
 import { useEffect, useState } from 'react';
 import { Col, Row } from 'react-bootstrap';
-import DocumentTitle from 'react-document-title';
 import {
   PAGE_ROUTE,
   PAGE_TITLE,
@@ -14,6 +13,7 @@ import { BiomarkerTable } from 'app/pages/yearEndSummaryPage/BiomarkerTable';
 import { DATA } from 'app/pages/yearEndSummaryPage/BiomarkerTableData';
 import { getPageTitle, scrollWidthOffset } from 'app/shared/utils/Utils';
 import { YEAR_END_SUMMARY_RANGE } from 'app/pages/newsPage/NewsPageNavTab';
+import { Helmet } from 'react-helmet-async';
 
 const getTitle = (date: string) => {
   return moment(date, YEAR_END_SUMMARY_DATE_FORMAT).format(
@@ -39,45 +39,46 @@ export const YearEndSummaryPage: React.FunctionComponent<{
   }, [props.selectedYear]);
 
   return (
-    <DocumentTitle
-      title={getPageTitle(
-        `${props.selectedYear ? `${props.selectedYear} ` : ''}${
-          PAGE_TITLE.YEAR_END_SUMMARY
-        }`
-      )}
-    >
-      <div>
-        <Row>
+    <div>
+      <Helmet>
+        <title>
+          {getPageTitle(
+            `${props.selectedYear ? `${props.selectedYear} ` : ''}${
+              PAGE_TITLE.YEAR_END_SUMMARY
+            }`
+          )}
+        </title>
+      </Helmet>
+      <Row>
+        <Col>
+          <h4>Year End Summary</h4>
+        </Col>
+      </Row>
+      {YEAR_END_SUMMARY_RANGE.map(year => (
+        <Row key={`year-end-summary-row-${year}`}>
           <Col>
-            <h4>Year End Summary</h4>
+            <h5
+              id={year}
+              onMouseEnter={() => setShowAnchor(true)}
+              onMouseLeave={() => setShowAnchor(false)}
+            >
+              {getTitle(year)}
+              <HashLink
+                path={PAGE_ROUTE.YEAR_END_SUMMARY}
+                hash={year}
+                show={showAnchor}
+              />
+            </h5>
+            <div className={'mb-3'}>
+              <BiomarkerTable
+                tableKey={`biomarker-table-${year}`}
+                year={year}
+                data={DATA[year]}
+              />
+            </div>
           </Col>
         </Row>
-        {YEAR_END_SUMMARY_RANGE.map(year => (
-          <Row key={`year-end-summary-row-${year}`}>
-            <Col>
-              <h5
-                id={year}
-                onMouseEnter={() => setShowAnchor(true)}
-                onMouseLeave={() => setShowAnchor(false)}
-              >
-                {getTitle(year)}
-                <HashLink
-                  path={PAGE_ROUTE.YEAR_END_SUMMARY}
-                  hash={year}
-                  show={showAnchor}
-                />
-              </h5>
-              <div className={'mb-3'}>
-                <BiomarkerTable
-                  tableKey={`biomarker-table-${year}`}
-                  year={year}
-                  data={DATA[year]}
-                />
-              </div>
-            </Col>
-          </Row>
-        ))}
-      </div>
-    </DocumentTitle>
+      ))}
+    </div>
   );
 };
