@@ -25,8 +25,12 @@ export type ApiAccessRequest = {
         'requested': boolean
 
 };
+export type CompanyAdditionalInfoDTO = {
+    'license': CompanyLicense
+
+};
 export type CompanyDTO = {
-    'additionalInfo': string
+    'additionalInfo': CompanyAdditionalInfoDTO
 
         'businessContact': string
 
@@ -57,8 +61,24 @@ export type CompanyDomainDTO = {
         'name': string
 
 };
+export type CompanyLicense = {
+    'activation': string
+
+        'autoRenewal': boolean
+
+        'termination': CompanyTermination
+
+};
+export type CompanyTermination = {
+    'date': string
+
+        'notes': string
+
+        'notificationDays': number
+
+};
 export type CompanyVM = {
-    'additionalInfo': string
+    'additionalInfo': CompanyAdditionalInfoDTO
 
         'businessContact': string
 

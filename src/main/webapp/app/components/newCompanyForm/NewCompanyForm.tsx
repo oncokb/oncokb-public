@@ -2,11 +2,14 @@ import React from 'react';
 import { observer } from 'mobx-react';
 import { Alert, Button, Col, Row } from 'react-bootstrap';
 import { observable, action, computed } from 'mobx';
-import { CompanyVM } from 'app/shared/api/generated/API';
+import {
+  CompanyVM,
+  CompanyAdditionalInfoDTO,
+} from 'app/shared/api/generated/API';
 import { FormListField } from 'app/shared/list/FormListField';
 import { getSectionClassName } from 'app/pages/account/AccountUtils';
 import { FormTextAreaField } from '../../shared/textarea/FormTextAreaField';
-import { FormSelectWithLabelField } from '../../shared/select/FormSelectWithLabelField';
+import FormSelectWithLabelField from '../../shared/select/FormSelectWithLabelField';
 import { AvField, AvForm } from 'availity-reactstrap-validation';
 import {
   LONG_TEXT_VAL,
@@ -32,15 +35,16 @@ import {
   debouncedCompanyNameValidator,
   fieldRequiredValidation,
 } from 'app/shared/utils/FormValidationUtils';
-import CompanyAdditionalInfo, {
-  ParsedAdditionalInfo,
-} from 'app/pages/companyPage/CompanyAdditionalInfo';
+import CompanyAdditionalInfo from 'app/pages/companyPage/CompanyAdditionalInfo';
 
-const defaultInfo: ParsedAdditionalInfo = {
+const defaultInfo: CompanyAdditionalInfoDTO = {
   license: {
     autoRenewal: false,
+    activation: '',
     termination: {
+      date: '',
       notificationDays: 60,
+      notes: '',
     },
   },
 };
@@ -81,12 +85,12 @@ export const COMPANY_FORM_OPTIONS = {
 export class NewCompanyForm extends React.Component<INewCompanyFormProps> {
   @observable companyDescription = '';
   @observable companyDomains: string[] = [];
-  @observable companyAdditionalInfo: string = JSON.stringify({
+  @observable companyAdditionalInfo: CompanyAdditionalInfoDTO = {
     license: {
       ...defaultInfo.license,
       activation: new Date().toISOString().split('T')[0],
     },
-  });
+  };
   @observable selectedCompanyType: CompanyType = CompanyType.PARENT;
   @observable selectedLicenseModel: LicenseModel = LicenseModel.FULL;
   @observable selectedLicenseType: LicenseType = LicenseType.COMMERCIAL;
@@ -274,7 +278,7 @@ export class NewCompanyForm extends React.Component<INewCompanyFormProps> {
               mode="create"
               additionalInfo={this.companyAdditionalInfo}
               setAdditionalInfo={x => {
-                this.companyAdditionalInfo = x as string;
+                this.companyAdditionalInfo = x as CompanyAdditionalInfoDTO;
               }}
             />
           </Col>

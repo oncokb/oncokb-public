@@ -40,9 +40,6 @@
             <column name="legal_contact" type="varchar(255)">
                 <constraints nullable="true" />
             </column>
-            <column name="additional_info" type="${clobType}">
-                <constraints nullable="true" />
-            </column>
             <!-- jhipster-needle-liquibase-add-column - JHipster will add columns here -->
         </createTable>
     </changeSet>
@@ -85,8 +82,16 @@
             <column name="license_status" type="string"/>
             <column name="business_contact" type="string"/>
             <column name="legal_contact" type="string"/>
-            <column name="additional_info" type="clob"/>
             <!-- jhipster-needle-liquibase-add-loadcolumn - JHipster (and/or extensions) can add load columns here -->
+        </loadData>
+    </changeSet>
+    <changeSet id="20210927165433-2-data" author="calvin" context="faker">
+        <loadData
+                  file="config/liquibase/fake-data/company_company_domain.csv"
+                  separator=";"
+                  tableName="company_company_domain">
+            <column name="company_id" type="numeric"/>
+            <column name="company_domain_id" type="numeric"/>
         </loadData>
     </changeSet>
 

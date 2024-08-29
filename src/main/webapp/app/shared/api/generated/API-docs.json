@@ -2984,6 +2984,15 @@
       },
       "title": "ApiAccessRequest"
     },
+    "CompanyAdditionalInfoDTO": {
+      "type": "object",
+      "properties": {
+        "license": {
+          "$ref": "#/definitions/CompanyLicense"
+        }
+      },
+      "title": "CompanyAdditionalInfoDTO"
+    },
     "CompanyDTO": {
       "type": "object",
       "required": [
@@ -2995,7 +3004,7 @@
       ],
       "properties": {
         "additionalInfo": {
-          "type": "string"
+          "$ref": "#/definitions/CompanyAdditionalInfoDTO"
         },
         "businessContact": {
           "type": "string"
@@ -3076,6 +3085,39 @@
       },
       "title": "CompanyDomainDTO"
     },
+    "CompanyLicense": {
+      "type": "object",
+      "properties": {
+        "activation": {
+          "type": "string",
+          "format": "date-time"
+        },
+        "autoRenewal": {
+          "type": "boolean"
+        },
+        "termination": {
+          "$ref": "#/definitions/CompanyTermination"
+        }
+      },
+      "title": "CompanyLicense"
+    },
+    "CompanyTermination": {
+      "type": "object",
+      "properties": {
+        "date": {
+          "type": "string",
+          "format": "date-time"
+        },
+        "notes": {
+          "type": "string"
+        },
+        "notificationDays": {
+          "type": "integer",
+          "format": "int32"
+        }
+      },
+      "title": "CompanyTermination"
+    },
     "CompanyVM": {
       "type": "object",
       "required": [
@@ -3087,7 +3129,7 @@
       ],
       "properties": {
         "additionalInfo": {
-          "type": "string"
+          "$ref": "#/definitions/CompanyAdditionalInfoDTO"
         },
         "businessContact": {
           "type": "string"

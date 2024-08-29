@@ -7,6 +7,7 @@ import java.util.Set;
 import javax.persistence.Lob;
 import org.mskcc.cbio.oncokb.domain.enumeration.CompanyType;
 import org.mskcc.cbio.oncokb.domain.enumeration.LicenseType;
+import org.mskcc.cbio.oncokb.service.dto.companyadditionalinfo.CompanyAdditionalInfoDTO;
 import org.mskcc.cbio.oncokb.domain.enumeration.LicenseModel;
 import org.mskcc.cbio.oncokb.domain.enumeration.LicenseStatus;
 
@@ -41,8 +42,9 @@ public class CompanyDTO implements Serializable {
 
     @NotEmpty
     private Set<String> companyDomains = new HashSet<>();
+
     @Lob
-    private String additionalInfo;
+    private CompanyAdditionalInfoDTO additionalInfo;
 
     private Integer numberOfUsers;
 
@@ -126,11 +128,11 @@ public class CompanyDTO implements Serializable {
         this.companyDomains = companyDomains;
     }
 
-    public String getAdditionalInfo() {
+    public CompanyAdditionalInfoDTO getAdditionalInfo() {
         return additionalInfo;
     }
 
-    public void setAdditionalInfo(String additionalInfo) {
+    public void setAdditionalInfo(CompanyAdditionalInfoDTO additionalInfo) {
         this.additionalInfo = additionalInfo;
     }
 

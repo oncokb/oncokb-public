@@ -1,11 +1,3 @@
-id;name;description;company_type;license_type;license_model;license_status;business_contact;legal_contact;additional_info
-1;Isle;../fake-data/blob/hipster.txt;BRANCH;RESEARCH_IN_COMMERCIAL;LIMITED;REGULAR;Representative;override orchid reboot;../fake-data/blob/hipster.txt
-2;invoice;../fake-data/blob/hipster.txt;BRANCH;ACADEMIC;FULL;TRIAL;JBOD Martinique system engine;Fantastic Rubber Chips invoice Road;../fake-data/blob/hipster.txt
-3;XML;../fake-data/blob/hipster.txt;PARENT;RESEARCH_IN_COMMERCIAL;FULL;TRIAL_EXPIRED;convergence Graphic Interface middleware;compressing viral;../fake-data/blob/hipster.txt
-4;platforms Grass-roots;../fake-data/blob/hipster.txt;UNKNOWN;ACADEMIC;FULL;UNKNOWN;invoice Investment Account Bedfordshire;mint green;../fake-data/blob/hipster.txt
-5;Alley;../fake-data/blob/hipster.txt;PARENT;RESEARCH_IN_COMMERCIAL;FULL;EXPIRED;Central eco-centric;Borders AGP;../fake-data/blob/hipster.txt
-6;viral;../fake-data/blob/hipster.txt;UNKNOWN;RESEARCH_IN_COMMERCIAL;LIMITED;TRIAL_EXPIRED;Chips;Coordinator;../fake-data/blob/hipster.txt
-7;communities Toys;../fake-data/blob/hipster.txt;UNKNOWN;COMMERCIAL;LIMITED;TRIAL_EXPIRED;Personal Loan Account;Paradigm;../fake-data/blob/hipster.txt
-8;GB Investment Account;../fake-data/blob/hipster.txt;BRANCH;HOSPITAL;LIMITED;TRIAL;Avon Associate responsive;partnerships Credit Card Account;../fake-data/blob/hipster.txt
-9;Reduced;../fake-data/blob/hipster.txt;PARENT;RESEARCH_IN_COMMERCIAL;LIMITED;TRIAL_EXPIRED;Row deposit bricks-and-clicks;Avon;../fake-data/blob/hipster.txt
-10;Operations;../fake-data/blob/hipster.txt;PARENT;HOSPITAL;FULL;REGULAR;Fish;Buckinghamshire cyan;../fake-data/blob/hipster.txt
+id;name;description;company_type;license_type;license_model;license_status;business_contact;legal_contact
+1;Isle;null;BRANCH;RESEARCH_IN_COMMERCIAL;LIMITED;REGULAR;Representative;override orchid reboot
+2;matrix;null;PARENT;HOSPITAL;LIMITED;TRIAL;Steel Configuration Designer;system engine Australian Dollar

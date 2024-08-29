@@ -19,6 +19,7 @@ import {
   Token,
   UserDTO,
   UserOverviewUsage,
+  CompanyAdditionalInfoDTO,
 } from 'app/shared/api/generated/API';
 import client from 'app/shared/api/clientInstance';
 import { action, computed, observable } from 'mobx';
@@ -28,7 +29,7 @@ import { RouteComponentProps } from 'react-router';
 import { notifyError, notifySuccess } from 'app/shared/utils/NotificationUtils';
 import { PromiseStatus } from 'app/shared/utils/PromiseUtils';
 import { FormTextAreaField } from 'app/shared/textarea/FormTextAreaField';
-import { FormSelectWithLabelField } from 'app/shared/select/FormSelectWithLabelField';
+import FormSelectWithLabelField from 'app/shared/select/FormSelectWithLabelField';
 import { COMPANY_FORM_OPTIONS } from 'app/components/newCompanyForm/NewCompanyForm';
 import { FormListField } from 'app/shared/list/FormListField';
 import { UserTable } from 'app/shared/table/UserTable';
@@ -689,7 +690,7 @@ export default class CompanyPage extends React.Component<ICompanyPage> {
                             mode="update"
                             additionalInfo={this.company.additionalInfo}
                             setAdditionalInfo={x => {
-                              this.company.additionalInfo = x as string;
+                              this.company.additionalInfo = x as CompanyAdditionalInfoDTO;
                             }}
                           />
                         </Col>

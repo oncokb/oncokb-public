@@ -1,28 +1,26 @@
-import React, { useEffect, useState } from 'react';
-import { FormSelectWithLabelField } from 'app/shared/select/FormSelectWithLabelField';
-import SimpleInput from 'app/shared/input/SimpleInput';
+import React from 'react';
+import FormSelectWithLabelField from 'app/shared/select/FormSelectWithLabelField';
+import FormInputField from 'app/shared/input/FormInputField';
+import { CompanyAdditionalInfoDTO } from 'app/shared/api/generated/API';
+import { FormTextAreaField } from 'app/shared/textarea/FormTextAreaField';
 
-export type ParsedAdditionalInfo = {
-  license?: {
-    activation?: string;
-    autoRenewal?: boolean;
-    termination?: {
-      notificationDays?: number;
-      date?: string;
-      notes?: string;
-    };
-  };
-};
-
-const defaultInfo: Required<ParsedAdditionalInfo> = {
+const defaultAdditionalInfo: CompanyAdditionalInfoDTO = {
   license: {
-    termination: {},
+    autoRenewal: false,
+    activation: '',
+    termination: {
+      date: '',
+      notes: '',
+      notificationDays: 0,
+    },
   },
 };
 
 type ICompanyAdditionalInfo = {
-  setAdditionalInfo: (additionalInfo: string | null | undefined) => void;
-  additionalInfo: string | null | undefined;
+  setAdditionalInfo: (
+    additionalInfo: CompanyAdditionalInfoDTO | null | undefined
+  ) => void;
+  additionalInfo: CompanyAdditionalInfoDTO | null | undefined;
   mode: 'create' | 'update';
 };
 
@@ -31,135 +29,109 @@ export default function CompanyAdditionalInfo({
   setAdditionalInfo,
   mode,
 }: ICompanyAdditionalInfo) {
-  const [parsedAdditionalInfo, setParsedAdditionalInfo] = useState<
-    ParsedAdditionalInfo
-  >(additionalInfo ? JSON.parse(additionalInfo) : defaultInfo);
-
-  useEffect(() => {
-    const parsed: ParsedAdditionalInfo = additionalInfo
-      ? JSON.parse(additionalInfo)
-      : defaultInfo;
-
-    if (!parsed.license) {
-      parsed.license = {
-        ...defaultInfo.license,
-      };
-    } else if (!parsed.license.termination) {
-      parsed.license.termination = {
-        ...defaultInfo.license.termination,
-      };
-    }
-    setParsedAdditionalInfo(parsed);
-  }, [additionalInfo]);
-
-  useEffect(() => {
-    const stringified = JSON.stringify(parsedAdditionalInfo);
-    setAdditionalInfo(stringified);
-  }, [parsedAdditionalInfo]);
-
   const boldLabel = mode === 'update';
 
   return (
     <>
-      <SimpleInput
+      <FormInputField
         id="activation"
         label="Activation"
         type="date"
-        value={parsedAdditionalInfo.license?.activation}
+        value={additionalInfo?.license?.activation}
         boldLabel={boldLabel}
-        onChange={date => {
-          setParsedAdditionalInfo(x => {
-            return {
-              license: {
-                ...x.license,
-                activation: date,
-              },
-            };
+        onChange={event => {
+          setAdditionalInfo({
+            license: {
+              ...defaultAdditionalInfo.license,
+              ...additionalInfo?.license,
+              activation: event.target.value,
+            },
           });
         }}
       />
       <FormSelectWithLabelField
-        labelText={'Auto-Renewal'}
-        name={'auto-renewal'}
+        labelText="Auto-Renewal"
+        name="auto-renewal"
         boldLabel={boldLabel}
         defaultValue={{
-          value: parsedAdditionalInfo.license?.autoRenewal,
-          label: parsedAdditionalInfo.license?.autoRenewal ? 'Yes' : 'No',
+          value: additionalInfo?.license?.autoRenewal,
+          label: additionalInfo?.license?.autoRenewal ? 'Yes' : 'No',
         }}
         options={[
           { value: true, label: 'Yes' },
           { value: false, label: 'No' },
         ]}
-        onSelection={autoRenewal => {
-          setParsedAdditionalInfo(x => {
-            return {
-              license: {
-                ...x.license,
-                autoRenewal: autoRenewal.value,
-              },
-            };
+        onSelection={autoRenewalOption => {
+          setAdditionalInfo({
+            license: {
+              ...defaultAdditionalInfo.license,
+              ...additionalInfo?.license,
+              autoRenewal: autoRenewalOption.value ?? false,
+            },
           });
         }}
       />
-      <SimpleInput
+      <FormInputField
         id="termination.notification-days"
         label="Termination Notification Days"
         type="number"
-        value={parsedAdditionalInfo.license?.termination?.notificationDays}
+        value={additionalInfo?.license?.termination?.notificationDays}
         boldLabel={boldLabel}
-        onChange={days => {
-          setParsedAdditionalInfo(x => {
-            return {
-              license: {
-                ...x.license,
-                termination: {
-                  ...x.license?.termination,
-                  notificationDays: days ? +days : 0,
-                },
+        onChange={event => {
+          const value = event.target.value;
+          setAdditionalInfo({
+            license: {
+              ...defaultAdditionalInfo.license,
+              ...additionalInfo?.license,
+              termination: {
+                ...defaultAdditionalInfo.license.termination,
+                ...additionalInfo?.license.termination,
+                notificationDays: value
+                  ? +value
+                  : ((undefined as unknown) as number),
               },
-            };
+            },
           });
         }}
       />
       {mode === 'update' && (
         <>
-          <SimpleInput
+          <FormInputField
             id="termination.date"
             label="Termination Date"
             type="date"
-            value={parsedAdditionalInfo.license?.termination?.date}
+            value={additionalInfo?.license?.termination?.date}
             boldLabel={boldLabel}
-            onChange={date => {
-              setParsedAdditionalInfo(x => {
-                return {
-                  license: {
-                    ...x.license,
-                    termination: {
-                      ...x.license?.termination,
-                      date,
-                    },
+            onChange={event => {
+              setAdditionalInfo({
+                license: {
+                  ...defaultAdditionalInfo.license,
+                  ...additionalInfo?.license,
+                  termination: {
+                    ...defaultAdditionalInfo.license.termination,
+                    ...additionalInfo?.license.termination,
+                    date: event.target.value,
                   },
-                };
+                },
               });
             }}
           />
-          <SimpleInput
+          <FormTextAreaField
             id="termination.notes"
             label="Termination Notes"
-            type="text-area"
-            value={parsedAdditionalInfo.license?.termination?.notes}
+            value={additionalInfo?.license?.termination?.notes}
             boldLabel={boldLabel}
-            onChange={notes => {
-              setParsedAdditionalInfo(x => {
-                return {
-                  license: {
-                    ...x.license,
-                    termination: {
-                      ...x.license?.termination,
-                      notes,
-                    },
+            onTextAreaChange={e => {
+              setAdditionalInfo({
+                license: {
+                  ...defaultAdditionalInfo.license,
+                  ...additionalInfo?.license,
+                  termination: {
+                    ...defaultAdditionalInfo.license.termination,
+                    ...additionalInfo?.license.termination,
+                    notes: e.target.value,
                   },
-                };
+                },
               });
             }}
           />
