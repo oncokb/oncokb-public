@@ -39,7 +39,6 @@ import {
   getCancerTypesName,
   getCategoricalAlterationDescription,
   getTreatmentNameByPriority,
-  getTreatmentNameFromEvidence,
   isCategoricalAlteration,
   isPositionalAlteration,
   levelOfEvidence2Level,
@@ -54,7 +53,6 @@ import {
   getUniqueFdaImplications,
   SummaryKey,
 } from 'app/pages/annotationPage/Utils';
-import SummaryWithRefs from 'app/oncokb-frontend-commons/src/components/SummaryWithRefs';
 import ShowHideText from 'app/shared/texts/ShowHideText';
 import AlterationView from 'app/pages/annotationPage/AlterationView';
 import { CancerTypeView } from 'app/pages/annotationPage/CancerTypeView';
@@ -446,7 +444,7 @@ export default class AnnotationPage extends React.Component<
   @computed
   get annotationPageMetaDescription() {
     if (this.pageShouldBeRendered) {
-      return `${this.props.store.geneSummary.result} ${this.props.store.annotationData.result.variantSummary} ${this.props.store.annotationData.result.tumorTypeSummary}`;
+      return `${this.props.store.annotationData.result.geneSummary} ${this.props.store.annotationData.result.variantSummary} ${this.props.store.annotationData.result.tumorTypeSummary}`;
     } else {
       return '';
     }
