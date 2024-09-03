@@ -38,6 +38,8 @@ import OncologyTherapiesPage from 'app/pages/oncologyTherapiesPage/oncologyThera
 import { NewsPageNavTab } from 'app/pages/newsPage/NewsPageNavTab';
 import CompanionDiagnosticDevicePage from 'app/pages/companionDiagnosticDevicesPage/companionDiagnosticDevicePage';
 import OncokbRoute from 'app/shared/route/OncokbRoute';
+import EpicAnnotate from 'app/pages/epic/EpicAnnotate';
+import EpicAuthenticate from 'app/pages/epic/EpicAuthenticate';
 
 const getOldLevelsRedirectRoute = (hash: string) => {
   const queryStrings = QueryString.parse(hash) as {
@@ -340,6 +342,22 @@ const AppRouts = (props: {
             authenticationStore={props.authenticationStore}
             routing={props.routing}
             render={ReadOnlyMode(CreateCompanyUsersPage)}
+            hasAnyAuthorities={[AUTHORITIES.ADMIN]}
+          />
+          <PrivateRoute
+            exact
+            path={PAGE_ROUTE.EPIC_AUTHENTICATE}
+            authenticationStore={props.authenticationStore}
+            routing={props.routing}
+            component={EpicAuthenticate}
+            hasAnyAuthorities={[AUTHORITIES.ADMIN]}
+          />
+          <PrivateRoute
+            exact
+            path={PAGE_ROUTE.EPIC_ANNOTATE}
+            authenticationStore={props.authenticationStore}
+            routing={props.routing}
+            component={EpicAnnotate}
             hasAnyAuthorities={[AUTHORITIES.ADMIN]}
           />
           <ErrorBoundaryRoute component={PageNotFound} />

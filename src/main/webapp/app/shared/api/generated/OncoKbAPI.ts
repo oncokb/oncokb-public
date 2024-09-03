@@ -45,80 +45,6 @@ export type Query = {
         'tumorType': string
 
 };
-export type Article = {
-    'abstract': string
-
-        'authors': string
-
-        'elocationId': string
-
-        'issue': string
-
-        'journal': string
-
-        'link': string
-
-        'pages': string
-
-        'pmid': string
-
-        'pubDate': string
-
-        'reference': string
-
-        'title': string
-
-        'volume': string
-
-};
-export type Alteration = {
-    'alteration': string
-
-        'consequence': VariantConsequence
-
-        'gene': Gene
-
-        'name': string
-
-        'proteinEnd': number
-
-        'proteinStart': number
-
-        'refResidues': string
-
-        'referenceGenomes': Array < "GRCh37" | "GRCh38" >
-
-        'variantResidues': string
-
-};
-export type AnnotatedVariant = {
-    'entrezGeneId': number
-
-        'gene': string
-
-        'grch37Isoform': string
-
-        'grch37RefSeq': string
-
-        'grch38Isoform': string
-
-        'grch38RefSeq': string
-
-        'mutationEffect': string
-
-        'mutationEffectAbstracts': string
-
-        'mutationEffectPmids': string
-
-        'oncogenicity': string
-
-        'proteinChange': string
-
-        'referenceGenome': string
-
-        'variant': string
-
-};
 export type SemVer = {
     'major': number
 
@@ -145,6 +71,22 @@ export type Implication = {
         'pmids': Array < string >
 
         'tumorType': TumorType
+
+};
+export type MutationsQuery = {
+    'cDnaChange': Array < {} >
+
+        'genomicChange': Array < AnnotateMutationByGenomicChangeQuery >
+
+        'hgvsg': Array < AnnotateMutationByHGVSgQuery >
+
+        'proteinChange': Array < AnnotateMutationByProteinChangeQuery >
+
+};
+export type HasMember = {
+    'display': string
+
+        'reference': string
 
 };
 export type TumorType = {
@@ -191,10 +133,22 @@ export type Gene = {
         'tsg': boolean
 
 };
+export type Coding = {
+    'code': string
+
+        'display': string
+
+        'system': string
+
+};
 export type Version = {
     'date': string
 
         'version': string
+
+};
+export type Search = {
+    'mode': string
 
 };
 export type TreatmentDrugId = {
@@ -219,46 +173,6 @@ export type GeneEvidence = {
         'shortDesc': string
 
         'status': string
-
-};
-export type Evidence = {
-    'additionalInfo': string
-
-        'alterations': Array < Alteration >
-
-        'articles': Array < Article >
-
-        'cancerTypes': Array < TumorType >
-
-        'description': string
-
-        'evidenceType': "GENE_SUMMARY" | "MUTATION_SUMMARY" | "TUMOR_TYPE_SUMMARY" | "GENE_TUMOR_TYPE_SUMMARY" | "PROGNOSTIC_SUMMARY" | "DIAGNOSTIC_SUMMARY" | "GENE_BACKGROUND" | "ONCOGENIC" | "MUTATION_EFFECT" | "VUS" | "PROGNOSTIC_IMPLICATION" | "DIAGNOSTIC_IMPLICATION" | "STANDARD_THERAPEUTIC_IMPLICATIONS_FOR_DRUG_SENSITIVITY" | "STANDARD_THERAPEUTIC_IMPLICATIONS_FOR_DRUG_RESISTANCE" | "INVESTIGATIONAL_THERAPEUTIC_IMPLICATIONS_DRUG_SENSITIVITY" | "INVESTIGATIONAL_THERAPEUTIC_IMPLICATIONS_DRUG_RESISTANCE"
-
-        'excludedCancerTypes': Array < TumorType >
-
-        'fdaLevel': "LEVEL_1" | "LEVEL_2" | "LEVEL_3A" | "LEVEL_3B" | "LEVEL_4" | "LEVEL_R1" | "LEVEL_R2" | "LEVEL_Px1" | "LEVEL_Px2" | "LEVEL_Px3" | "LEVEL_Dx1" | "LEVEL_Dx2" | "LEVEL_Dx3" | "LEVEL_Fda1" | "LEVEL_Fda2" | "LEVEL_Fda3" | "NO"
-
-        'gene': Gene
-
-        'id': number
-
-        'knownEffect': string
-
-        'lastEdit': string
-
-        'lastReview': string
-
-        'levelOfEvidence': "LEVEL_1" | "LEVEL_2" | "LEVEL_3A" | "LEVEL_3B" | "LEVEL_4" | "LEVEL_R1" | "LEVEL_R2" | "LEVEL_Px1" | "LEVEL_Px2" | "LEVEL_Px3" | "LEVEL_Dx1" | "LEVEL_Dx2" | "LEVEL_Dx3" | "LEVEL_Fda1" | "LEVEL_Fda2" | "LEVEL_Fda3" | "NO"
-
-        'liquidPropagationLevel': "LEVEL_1" | "LEVEL_2" | "LEVEL_3A" | "LEVEL_3B" | "LEVEL_4" | "LEVEL_R1" | "LEVEL_R2" | "LEVEL_Px1" | "LEVEL_Px2" | "LEVEL_Px3" | "LEVEL_Dx1" | "LEVEL_Dx2" | "LEVEL_Dx3" | "LEVEL_Fda1" | "LEVEL_Fda2" | "LEVEL_Fda3" | "NO"
-
-        'relevantCancerTypes': Array < TumorType >
-
-        'solidPropagationLevel': "LEVEL_1" | "LEVEL_2" | "LEVEL_3A" | "LEVEL_3B" | "LEVEL_4" | "LEVEL_R1" | "LEVEL_R2" | "LEVEL_Px1" | "LEVEL_Px2" | "LEVEL_Px3" | "LEVEL_Dx1" | "LEVEL_Dx2" | "LEVEL_Dx3" | "LEVEL_Fda1" | "LEVEL_Fda2" | "LEVEL_Fda3" | "NO"
-
-        'treatments': Array < Treatment >
-
-        'uuid': string
 
 };
 export type AnnotateStructuralVariantQuery = {
@@ -336,6 +250,8 @@ export type ActionableGene = {
 
         'cancerType': string
 
+        'description': string
+
         'drugs': string
 
         'entrezGeneId': number
@@ -361,12 +277,6 @@ export type ActionableGene = {
         'variant': string
 
 };
-export type ArticleAbstract = {
-    'abstract': string
-
-        'link': string
-
-};
 export type InfoLevel = {
     'colorHex': string
 
@@ -377,10 +287,324 @@ export type InfoLevel = {
         'levelOfEvidence': "LEVEL_1" | "LEVEL_2" | "LEVEL_3A" | "LEVEL_3B" | "LEVEL_4" | "LEVEL_R1" | "LEVEL_R2" | "LEVEL_Px1" | "LEVEL_Px2" | "LEVEL_Px3" | "LEVEL_Dx1" | "LEVEL_Dx2" | "LEVEL_Dx3" | "LEVEL_Fda1" | "LEVEL_Fda2" | "LEVEL_Fda3" | "NO"
 
 };
+export type Trial = {
+    'arms': Array < Arms >
+
+        'briefTitle': string
+
+        'currentTrialStatus': string
+
+        'isUSTrial': boolean
+
+        'nctId': string
+
+        'principalInvestigator': string
+
+};
+export type Resource = {
+    'basedOn': Array < BasedOn >
+
+        'category': Array < Category >
+
+        'code': Code
+
+        'component': Array < Component >
+
+        'derivedFrom': Array < DerivedFrom >
+
+        'effectiveDateTime': string
+
+        'extension': Array < Extension >
+
+        'hasMember': Array < HasMember >
+
+        'id': string
+
+        'issued': string
+
+        'resourceType': string
+
+        'status': string
+
+        'subject': Subject
+
+        'valueCodeableConcept': ValueCodeableConcept
+
+};
+export type Arms = {
+    'armDescription': string
+
+        'drugs': Array < Drug >
+
+};
+export type OncoKBInfo = {
+    'apiVersion': SemVer
+
+        'appVersion': SemVer
+
+        'dataVersion': Version
+
+        'levels': Array < InfoLevel >
+
+        'ncitVersion': string
+
+        'oncoTreeVersion': string
+
+        'publicInstance': boolean
+
+};
+export type VariantConsequence = {
+    'description': string
+
+        'isGenerallyTruncating': boolean
+
+        'term': string
+
+};
+export type Code = {
+    'coding': Array < Coding >
+
+        'text': string
+
+};
+export type ValueRange = {
+    'high': High
+
+        'low': Low
+
+};
+export type EvidenceQueries = {
+    'evidenceTypes': string
+
+        'highestLevelOnly': boolean
+
+        'levels': Array < "LEVEL_1" | "LEVEL_2" | "LEVEL_3A" | "LEVEL_3B" | "LEVEL_4" | "LEVEL_R1" | "LEVEL_R2" | "LEVEL_Px1" | "LEVEL_Px2" | "LEVEL_Px3" | "LEVEL_Dx1" | "LEVEL_Dx2" | "LEVEL_Dx3" | "LEVEL_Fda1" | "LEVEL_Fda2" | "LEVEL_Fda3" | "NO" >
+
+        'queries': Array < Query >
+
+};
+export type AnnotateCopyNumberAlterationQuery = {
+    'copyNameAlterationType': "AMPLIFICATION" | "DELETION" | "GAIN" | "LOSS"
+
+        'evidenceTypes': Array < "GENE_SUMMARY" | "MUTATION_SUMMARY" | "TUMOR_TYPE_SUMMARY" | "GENE_TUMOR_TYPE_SUMMARY" | "PROGNOSTIC_SUMMARY" | "DIAGNOSTIC_SUMMARY" | "GENE_BACKGROUND" | "ONCOGENIC" | "MUTATION_EFFECT" | "VUS" | "PROGNOSTIC_IMPLICATION" | "DIAGNOSTIC_IMPLICATION" | "STANDARD_THERAPEUTIC_IMPLICATIONS_FOR_DRUG_SENSITIVITY" | "STANDARD_THERAPEUTIC_IMPLICATIONS_FOR_DRUG_RESISTANCE" | "INVESTIGATIONAL_THERAPEUTIC_IMPLICATIONS_DRUG_SENSITIVITY" | "INVESTIGATIONAL_THERAPEUTIC_IMPLICATIONS_DRUG_RESISTANCE" >
+
+        'gene': QueryGene
+
+        'id': string
+
+        'referenceGenome': "GRCh37" | "GRCh38"
+
+        'tumorType': string
+
+};
+export type Low = {
+    'value': number
+
+};
+export type BasedOn = {
+    'reference': string
+
+};
+export type Link = {
+    'relation': string
+
+        'url': string
+
+};
+export type Category = {
+    'coding': Array < Coding >
+
+        'text': string
+
+};
+export type Article = {
+    'abstract': string
+
+        'authors': string
+
+        'elocationId': string
+
+        'issue': string
+
+        'journal': string
+
+        'link': string
+
+        'pages': string
+
+        'pmid': string
+
+        'pubDate': string
+
+        'reference': string
+
+        'title': string
+
+        'volume': string
+
+};
+export type Alteration = {
+    'alteration': string
+
+        'consequence': VariantConsequence
+
+        'gene': Gene
+
+        'name': string
+
+        'proteinEnd': number
+
+        'proteinStart': number
+
+        'refResidues': string
+
+        'referenceGenomes': Array < "GRCh37" | "GRCh38" >
+
+        'variantResidues': string
+
+};
+export type GenomicData = {
+    'entry': Array < Entry >
+
+        'link': Array < Link >
+
+        'resourceType': string
+
+        'samples': Array < AnnotateSampleQuery >
+
+        'total': number
+
+        'type': string
+
+};
+export type AnnotatedVariant = {
+    'description': string
+
+        'entrezGeneId': number
+
+        'gene': string
+
+        'grch37Isoform': string
+
+        'grch37RefSeq': string
+
+        'grch38Isoform': string
+
+        'grch38RefSeq': string
+
+        'mutationEffect': string
+
+        'mutationEffectAbstracts': string
+
+        'mutationEffectPmids': string
+
+        'oncogenicity': string
+
+        'proteinChange': string
+
+        'referenceGenome': string
+
+        'variant': string
+
+};
+export type Entry = {
+    'fullUrl': string
+
+        'link': Array < Link >
+
+        'resource': Resource
+
+        'search': Search
+
+};
+export type AnnotateSampleQuery = {
+    'copyNumberAlterations': Array < AnnotateCopyNumberAlterationQuery >
+
+        'mutations': MutationsQuery
+
+        'structuralVariants': Array < AnnotateStructuralVariantQuery >
+
+};
+export type AnnotationSearchResult = {
+    'indicatorQueryResp': IndicatorQueryResp
+
+        'queryType': "GENE" | "VARIANT" | "DRUG" | "CANCER_TYPE"
+
+};
+export type Evidence = {
+    'additionalInfo': string
+
+        'alterations': Array < Alteration >
+
+        'articles': Array < Article >
+
+        'cancerTypes': Array < TumorType >
+
+        'description': string
+
+        'evidenceType': "GENE_SUMMARY" | "MUTATION_SUMMARY" | "TUMOR_TYPE_SUMMARY" | "GENE_TUMOR_TYPE_SUMMARY" | "PROGNOSTIC_SUMMARY" | "DIAGNOSTIC_SUMMARY" | "GENE_BACKGROUND" | "ONCOGENIC" | "MUTATION_EFFECT" | "VUS" | "PROGNOSTIC_IMPLICATION" | "DIAGNOSTIC_IMPLICATION" | "STANDARD_THERAPEUTIC_IMPLICATIONS_FOR_DRUG_SENSITIVITY" | "STANDARD_THERAPEUTIC_IMPLICATIONS_FOR_DRUG_RESISTANCE" | "INVESTIGATIONAL_THERAPEUTIC_IMPLICATIONS_DRUG_SENSITIVITY" | "INVESTIGATIONAL_THERAPEUTIC_IMPLICATIONS_DRUG_RESISTANCE"
+
+        'excludedCancerTypes': Array < TumorType >
+
+        'fdaLevel': "LEVEL_1" | "LEVEL_2" | "LEVEL_3A" | "LEVEL_3B" | "LEVEL_4" | "LEVEL_R1" | "LEVEL_R2" | "LEVEL_Px1" | "LEVEL_Px2" | "LEVEL_Px3" | "LEVEL_Dx1" | "LEVEL_Dx2" | "LEVEL_Dx3" | "LEVEL_Fda1" | "LEVEL_Fda2" | "LEVEL_Fda3" | "NO"
+
+        'gene': Gene
+
+        'id': number
+
+        'knownEffect': string
+
+        'lastEdit': string
+
+        'lastReview': string
+
+        'levelOfEvidence': "LEVEL_1" | "LEVEL_2" | "LEVEL_3A" | "LEVEL_3B" | "LEVEL_4" | "LEVEL_R1" | "LEVEL_R2" | "LEVEL_Px1" | "LEVEL_Px2" | "LEVEL_Px3" | "LEVEL_Dx1" | "LEVEL_Dx2" | "LEVEL_Dx3" | "LEVEL_Fda1" | "LEVEL_Fda2" | "LEVEL_Fda3" | "NO"
+
+        'liquidPropagationLevel': "LEVEL_1" | "LEVEL_2" | "LEVEL_3A" | "LEVEL_3B" | "LEVEL_4" | "LEVEL_R1" | "LEVEL_R2" | "LEVEL_Px1" | "LEVEL_Px2" | "LEVEL_Px3" | "LEVEL_Dx1" | "LEVEL_Dx2" | "LEVEL_Dx3" | "LEVEL_Fda1" | "LEVEL_Fda2" | "LEVEL_Fda3" | "NO"
+
+        'relevantCancerTypes': Array < TumorType >
+
+        'solidPropagationLevel': "LEVEL_1" | "LEVEL_2" | "LEVEL_3A" | "LEVEL_3B" | "LEVEL_4" | "LEVEL_R1" | "LEVEL_R2" | "LEVEL_Px1" | "LEVEL_Px2" | "LEVEL_Px3" | "LEVEL_Dx1" | "LEVEL_Dx2" | "LEVEL_Dx3" | "LEVEL_Fda1" | "LEVEL_Fda2" | "LEVEL_Fda3" | "NO"
+
+        'treatments': Array < Treatment >
+
+        'uuid': string
+
+};
+export type VariantOfUnknownSignificance = {
+    'entrezGeneId': number
+
+        'gene': string
+
+        'variant': string
+
+};
+export type Component = {
+    'code': Code
+
+        'extension': Array < Extension >
+
+        'valueCodeableConcept': ValueCodeableConcept
+
+        'valueRange': ValueRange
+
+        'valueString': string
+
+};
+export type ArticleAbstract = {
+    'abstract': string
+
+        'link': string
+
+};
 export type Drug = {
     'drugName': string
 
         'ncitCode': string
+
+};
+export type High = {
+    'value': number
 
 };
 export type CuratedGene = {
@@ -433,20 +657,6 @@ export type EvidenceQueryRes = {
         'query': Query
 
 };
-export type Trial = {
-    'arms': Array < Arms >
-
-        'briefTitle': string
-
-        'currentTrialStatus': string
-
-        'isUSTrial': boolean
-
-        'nctId': string
-
-        'principalInvestigator': string
-
-};
 export type QueryGene = {
     'entrezGeneId': number
 
@@ -493,12 +703,6 @@ export type CancerGene = {
         'vogelstein': boolean
 
 };
-export type Arms = {
-    'armDescription': string
-
-        'drugs': Array < Drug >
-
-};
 export type MainType = {
     'id': number
 
@@ -507,28 +711,12 @@ export type MainType = {
         'tumorForm': "SOLID" | "LIQUID" | "MIXED"
 
 };
-export type OncoKBInfo = {
-    'apiVersion': SemVer
+export type SampleQueryResp = {
+    'copyNumberAlterations': Array < IndicatorQueryResp >
 
-        'appVersion': SemVer
+        'mutations': Array < IndicatorQueryResp >
 
-        'dataVersion': Version
-
-        'levels': Array < InfoLevel >
-
-        'ncitVersion': string
-
-        'oncoTreeVersion': string
-
-        'publicInstance': boolean
-
-};
-export type VariantConsequence = {
-    'description': string
-
-        'isGenerallyTruncating': boolean
-
-        'term': string
+        'structuralVariants': Array < IndicatorQueryResp >
 
 };
 export type AnnotateMutationByProteinChangeQuery = {
@@ -573,10 +761,36 @@ export type IndicatorQueryTreatment = {
         'pmids': Array < string >
 
 };
+export type DerivedFrom = {
+    'display': string
+
+        'reference': string
+
+};
+export type Subject = {
+    'display': string
+
+        'reference': string
+
+};
+export type Extension = {
+    'extension': Array < Extension >
+
+        'url': string
+
+        'valueBoolean': boolean
+
+        'valueCodeableConcept': ValueCodeableConcept
+
+        'valueString': string
+
+};
 export type ResponseEntity = {
     'body': {}
 
-    'statusCode': "100" | "101" | "102" | "103" | "200" | "201" | "202" | "203" | "204" | "205" | "206" | "207" | "208" | "226" | "300" | "301" | "302" | "302" | "303" | "304" | "305" | "307" | "308" | "400" | "401" | "402" | "403" | "404" | "405" | "406" | "407" | "408" | "409" | "410" | "411" | "412" | "413" | "413" | "414" | "414" | "415" | "416" | "417" | "418" | "419" | "420" | "421" | "422" | "423" | "424" | "426" | "428" | "429" | "431" | "500" | "501" | "502" | "503" | "504" | "505" | "506" | "507" | "508" | "509" | "510" | "511"
+    'statusCode': "100" | "101" | "102" | "103" | "200" | "201" | "202" | "203" | "204" | "205" | "206" | "207" | "208" | "226" | "300" | "301" | "302" | "302" | "303" | "304" | "305" | "307" | "308" | "400" | "401" | "402" | "403" | "404" | "405" | "406" | "407" | "408" | "409" | "410" | "411" | "412" | "413" | "413" | "414" | "414" | "415" | "416" | "417" | "418" | "419" | "420" | "421" | "422" | "423" | "424" | "426" | "428" | "429" | "431" | "451" | "500" | "501" | "502" | "503" | "504" | "505" | "506" | "507" | "508" | "509" | "510" | "511"
+
+        'statusCodeValue': number
 
 };
 export type Treatment = {
@@ -585,16 +799,6 @@ export type Treatment = {
         'drugs': Array < TreatmentDrug >
 
         'priority': number
-
-};
-export type EvidenceQueries = {
-    'evidenceTypes': string
-
-        'highestLevelOnly': boolean
-
-        'levels': Array < "LEVEL_1" | "LEVEL_2" | "LEVEL_3A" | "LEVEL_3B" | "LEVEL_4" | "LEVEL_R1" | "LEVEL_R2" | "LEVEL_Px1" | "LEVEL_Px2" | "LEVEL_Px3" | "LEVEL_Dx1" | "LEVEL_Dx2" | "LEVEL_Dx3" | "LEVEL_Fda1" | "LEVEL_Fda2" | "LEVEL_Fda3" | "NO" >
-
-        'queries': Array < Query >
 
 };
 export type VariantSearchQuery = {
@@ -625,18 +829,10 @@ export type MutationEffectResp = {
         'knownEffect': string
 
 };
-export type AnnotateCopyNumberAlterationQuery = {
-    'copyNameAlterationType': "AMPLIFICATION" | "DELETION" | "GAIN" | "LOSS"
+export type ValueCodeableConcept = {
+    'coding': Array < Coding >
 
-        'evidenceTypes': Array < "GENE_SUMMARY" | "MUTATION_SUMMARY" | "TUMOR_TYPE_SUMMARY" | "GENE_TUMOR_TYPE_SUMMARY" | "PROGNOSTIC_SUMMARY" | "DIAGNOSTIC_SUMMARY" | "GENE_BACKGROUND" | "ONCOGENIC" | "MUTATION_EFFECT" | "VUS" | "PROGNOSTIC_IMPLICATION" | "DIAGNOSTIC_IMPLICATION" | "STANDARD_THERAPEUTIC_IMPLICATIONS_FOR_DRUG_SENSITIVITY" | "STANDARD_THERAPEUTIC_IMPLICATIONS_FOR_DRUG_RESISTANCE" | "INVESTIGATIONAL_THERAPEUTIC_IMPLICATIONS_DRUG_SENSITIVITY" | "INVESTIGATIONAL_THERAPEUTIC_IMPLICATIONS_DRUG_RESISTANCE" >
-
-        'gene': QueryGene
-
-        'id': string
-
-        'referenceGenome': "GRCh37" | "GRCh38"
-
-        'tumorType': string
+        'text': string
 
 };
 export type AnnotateMutationByHGVSgQuery = {
@@ -940,6 +1136,83 @@ export default class OncoKbAPI {
         }): Promise < Array < IndicatorQueryResp >
         > {
             return this.annotateCopyNumberAlterationsPostUsingPOSTWithHttpInfo(parameters).then(function(response: request.Response) {
+                return response.body;
+            });
+        };
+    annotateEpicPostUsingPOSTURL(parameters: {
+        'body': GenomicData,
+        $queryParameters ? : any
+    }): string {
+        let queryParameters: any = {};
+        let path = '/annotate/epic';
+
+        if (parameters.$queryParameters) {
+            Object.keys(parameters.$queryParameters).forEach(function(parameterName) {
+                var parameter = parameters.$queryParameters[parameterName];
+                queryParameters[parameterName] = parameter;
+            });
+        }
+        let keys = Object.keys(queryParameters);
+        return this.domain + path + (keys.length > 0 ? '?' + (keys.map(key => key + '=' + encodeURIComponent(queryParameters[key])).join('&')) : '');
+    };
+
+    /**
+     * Annotate epic genomic data.
+     * @method
+     * @name OncoKbAPI#annotateEpicPostUsingPOST
+     * @param {} body - Epic genomic data in FHIR format
+     */
+    annotateEpicPostUsingPOSTWithHttpInfo(parameters: {
+        'body': GenomicData,
+        $queryParameters ? : any,
+        $domain ? : string
+    }): Promise < request.Response > {
+        const domain = parameters.$domain ? parameters.$domain : this.domain;
+        const errorHandlers = this.errorHandlers;
+        const request = this.request;
+        let path = '/annotate/epic';
+        let body: any;
+        let queryParameters: any = {};
+        let headers: any = {};
+        let form: any = {};
+        return new Promise(function(resolve, reject) {
+            headers['Accept'] = 'application/json';
+            headers['Content-Type'] = 'application/json';
+
+            if (parameters['body'] !== undefined) {
+                body = parameters['body'];
+            }
+
+            if (parameters['body'] === undefined) {
+                reject(new Error('Missing required  parameter: body'));
+                return;
+            }
+
+            if (parameters.$queryParameters) {
+                Object.keys(parameters.$queryParameters).forEach(function(parameterName) {
+                    var parameter = parameters.$queryParameters[parameterName];
+                    queryParameters[parameterName] = parameter;
+                });
+            }
+
+            request('POST', domain + path, body, headers, queryParameters, form, reject, resolve, errorHandlers);
+
+        });
+    };
+
+    /**
+     * Annotate epic genomic data.
+     * @method
+     * @name OncoKbAPI#annotateEpicPostUsingPOST
+     * @param {} body - Epic genomic data in FHIR format
+     */
+    annotateEpicPostUsingPOST(parameters: {
+            'body': GenomicData,
+            $queryParameters ? : any,
+            $domain ? : string
+        }): Promise < Array < SampleQueryResp >
+        > {
+            return this.annotateEpicPostUsingPOSTWithHttpInfo(parameters).then(function(response: request.Response) {
                 return response.body;
             });
         };
@@ -1588,6 +1861,82 @@ export default class OncoKbAPI {
                 return response.body;
             });
         };
+    annotateSamplePostUsingPOSTURL(parameters: {
+        'body': AnnotateSampleQuery,
+        $queryParameters ? : any
+    }): string {
+        let queryParameters: any = {};
+        let path = '/annotate/sample';
+
+        if (parameters.$queryParameters) {
+            Object.keys(parameters.$queryParameters).forEach(function(parameterName) {
+                var parameter = parameters.$queryParameters[parameterName];
+                queryParameters[parameterName] = parameter;
+            });
+        }
+        let keys = Object.keys(queryParameters);
+        return this.domain + path + (keys.length > 0 ? '?' + (keys.map(key => key + '=' + encodeURIComponent(queryParameters[key])).join('&')) : '');
+    };
+
+    /**
+     * Annotate a sample.
+     * @method
+     * @name OncoKbAPI#annotateSamplePostUsingPOST
+     * @param {} body - Lists of queries for each alteration type. Please see swagger.json for request body format.
+     */
+    annotateSamplePostUsingPOSTWithHttpInfo(parameters: {
+        'body': AnnotateSampleQuery,
+        $queryParameters ? : any,
+        $domain ? : string
+    }): Promise < request.Response > {
+        const domain = parameters.$domain ? parameters.$domain : this.domain;
+        const errorHandlers = this.errorHandlers;
+        const request = this.request;
+        let path = '/annotate/sample';
+        let body: any;
+        let queryParameters: any = {};
+        let headers: any = {};
+        let form: any = {};
+        return new Promise(function(resolve, reject) {
+            headers['Accept'] = 'application/json';
+            headers['Content-Type'] = 'application/json';
+
+            if (parameters['body'] !== undefined) {
+                body = parameters['body'];
+            }
+
+            if (parameters['body'] === undefined) {
+                reject(new Error('Missing required  parameter: body'));
+                return;
+            }
+
+            if (parameters.$queryParameters) {
+                Object.keys(parameters.$queryParameters).forEach(function(parameterName) {
+                    var parameter = parameters.$queryParameters[parameterName];
+                    queryParameters[parameterName] = parameter;
+                });
+            }
+
+            request('POST', domain + path, body, headers, queryParameters, form, reject, resolve, errorHandlers);
+
+        });
+    };
+
+    /**
+     * Annotate a sample.
+     * @method
+     * @name OncoKbAPI#annotateSamplePostUsingPOST
+     * @param {} body - Lists of queries for each alteration type. Please see swagger.json for request body format.
+     */
+    annotateSamplePostUsingPOST(parameters: {
+        'body': AnnotateSampleQuery,
+        $queryParameters ? : any,
+        $domain ? : string
+    }): Promise < SampleQueryResp > {
+        return this.annotateSamplePostUsingPOSTWithHttpInfo(parameters).then(function(response: request.Response) {
+            return response.body;
+        });
+    };
     annotateStructuralVariantsGetUsingGETURL(parameters: {
         'hugoSymbolA' ? : string,
         'entrezGeneIdA' ? : number,
@@ -1850,6 +2199,99 @@ export default class OncoKbAPI {
         }): Promise < Array < IndicatorQueryResp >
         > {
             return this.annotateStructuralVariantsPostUsingPOSTWithHttpInfo(parameters).then(function(response: request.Response) {
+                return response.body;
+            });
+        };
+    annotationSearchGetUsingGETURL(parameters: {
+        'query': string,
+        'limit' ? : number,
+        $queryParameters ? : any
+    }): string {
+        let queryParameters: any = {};
+        let path = '/annotation/search';
+        if (parameters['query'] !== undefined) {
+            queryParameters['query'] = parameters['query'];
+        }
+
+        if (parameters['limit'] !== undefined) {
+            queryParameters['limit'] = parameters['limit'];
+        }
+
+        if (parameters.$queryParameters) {
+            Object.keys(parameters.$queryParameters).forEach(function(parameterName) {
+                var parameter = parameters.$queryParameters[parameterName];
+                queryParameters[parameterName] = parameter;
+            });
+        }
+        let keys = Object.keys(queryParameters);
+        return this.domain + path + (keys.length > 0 ? '?' + (keys.map(key => key + '=' + encodeURIComponent(queryParameters[key])).join('&')) : '');
+    };
+
+    /**
+     * Get annotations based on search
+     * @method
+     * @name OncoKbAPI#annotationSearchGetUsingGET
+     * @param {string} query - The search query, it could be hugoSymbol, variant or cancer type. At least two characters. Maximum two keywords are supported, separated by space
+     * @param {integer} limit - The limit of returned result.
+     */
+    annotationSearchGetUsingGETWithHttpInfo(parameters: {
+        'query': string,
+        'limit' ? : number,
+        $queryParameters ? : any,
+        $domain ? : string
+    }): Promise < request.Response > {
+        const domain = parameters.$domain ? parameters.$domain : this.domain;
+        const errorHandlers = this.errorHandlers;
+        const request = this.request;
+        let path = '/annotation/search';
+        let body: any;
+        let queryParameters: any = {};
+        let headers: any = {};
+        let form: any = {};
+        return new Promise(function(resolve, reject) {
+            headers['Accept'] = 'application/json';
+            headers['Content-Type'] = 'application/json';
+
+            if (parameters['query'] !== undefined) {
+                queryParameters['query'] = parameters['query'];
+            }
+
+            if (parameters['query'] === undefined) {
+                reject(new Error('Missing required  parameter: query'));
+                return;
+            }
+
+            if (parameters['limit'] !== undefined) {
+                queryParameters['limit'] = parameters['limit'];
+            }
+
+            if (parameters.$queryParameters) {
+                Object.keys(parameters.$queryParameters).forEach(function(parameterName) {
+                    var parameter = parameters.$queryParameters[parameterName];
+                    queryParameters[parameterName] = parameter;
+                });
+            }
+
+            request('GET', domain + path, body, headers, queryParameters, form, reject, resolve, errorHandlers);
+
+        });
+    };
+
+    /**
+     * Get annotations based on search
+     * @method
+     * @name OncoKbAPI#annotationSearchGetUsingGET
+     * @param {string} query - The search query, it could be hugoSymbol, variant or cancer type. At least two characters. Maximum two keywords are supported, separated by space
+     * @param {integer} limit - The limit of returned result.
+     */
+    annotationSearchGetUsingGET(parameters: {
+            'query': string,
+            'limit' ? : number,
+            $queryParameters ? : any,
+            $domain ? : string
+        }): Promise < Array < AnnotationSearchResult >
+        > {
+            return this.annotationSearchGetUsingGETWithHttpInfo(parameters).then(function(response: request.Response) {
                 return response.body;
             });
         };
@@ -4534,6 +4976,131 @@ export default class OncoKbAPI {
             $domain ? : string
     }): Promise < string > {
         return this.utilsAllCuratedGenesTxtGetUsingGETWithHttpInfo(parameters).then(function(response: request.Response) {
+            return response.body;
+        });
+    };
+    utilsAllVariantsOfUnknownSignificanceGetUsingGETURL(parameters: {
+        $queryParameters ? : any
+    }): string {
+        let queryParameters: any = {};
+        let path = '/utils/allVariantsOfUnknownSignificance';
+
+        if (parameters.$queryParameters) {
+            Object.keys(parameters.$queryParameters).forEach(function(parameterName) {
+                var parameter = parameters.$queryParameters[parameterName];
+                queryParameters[parameterName] = parameter;
+            });
+        }
+        let keys = Object.keys(queryParameters);
+        return this.domain + path + (keys.length > 0 ? '?' + (keys.map(key => key + '=' + encodeURIComponent(queryParameters[key])).join('&')) : '');
+    };
+
+    /**
+     * Get All Variants of Unknown Significance.
+     * @method
+     * @name OncoKbAPI#utilsAllVariantsOfUnknownSignificanceGetUsingGET
+     */
+    utilsAllVariantsOfUnknownSignificanceGetUsingGETWithHttpInfo(parameters: {
+        $queryParameters ? : any,
+            $domain ? : string
+    }): Promise < request.Response > {
+        const domain = parameters.$domain ? parameters.$domain : this.domain;
+        const errorHandlers = this.errorHandlers;
+        const request = this.request;
+        let path = '/utils/allVariantsOfUnknownSignificance';
+        let body: any;
+        let queryParameters: any = {};
+        let headers: any = {};
+        let form: any = {};
+        return new Promise(function(resolve, reject) {
+            headers['Accept'] = 'application/json';
+            headers['Content-Type'] = 'application/json';
+
+            if (parameters.$queryParameters) {
+                Object.keys(parameters.$queryParameters).forEach(function(parameterName) {
+                    var parameter = parameters.$queryParameters[parameterName];
+                    queryParameters[parameterName] = parameter;
+                });
+            }
+
+            request('GET', domain + path, body, headers, queryParameters, form, reject, resolve, errorHandlers);
+
+        });
+    };
+
+    /**
+     * Get All Variants of Unknown Significance.
+     * @method
+     * @name OncoKbAPI#utilsAllVariantsOfUnknownSignificanceGetUsingGET
+     */
+    utilsAllVariantsOfUnknownSignificanceGetUsingGET(parameters: {
+            $queryParameters ? : any,
+                $domain ? : string
+        }): Promise < Array < VariantOfUnknownSignificance >
+        > {
+            return this.utilsAllVariantsOfUnknownSignificanceGetUsingGETWithHttpInfo(parameters).then(function(response: request.Response) {
+                return response.body;
+            });
+        };
+    utilsAllVariantsOfUnknownSignificanceTxtGetUsingGETURL(parameters: {
+        $queryParameters ? : any
+    }): string {
+        let queryParameters: any = {};
+        let path = '/utils/allVariantsOfUnknownSignificance.txt';
+
+        if (parameters.$queryParameters) {
+            Object.keys(parameters.$queryParameters).forEach(function(parameterName) {
+                var parameter = parameters.$queryParameters[parameterName];
+                queryParameters[parameterName] = parameter;
+            });
+        }
+        let keys = Object.keys(queryParameters);
+        return this.domain + path + (keys.length > 0 ? '?' + (keys.map(key => key + '=' + encodeURIComponent(queryParameters[key])).join('&')) : '');
+    };
+
+    /**
+     * Get All Variants of Unknown Significance in text file.
+     * @method
+     * @name OncoKbAPI#utilsAllVariantsOfUnknownSignificanceTxtGetUsingGET
+     */
+    utilsAllVariantsOfUnknownSignificanceTxtGetUsingGETWithHttpInfo(parameters: {
+        $queryParameters ? : any,
+            $domain ? : string
+    }): Promise < request.Response > {
+        const domain = parameters.$domain ? parameters.$domain : this.domain;
+        const errorHandlers = this.errorHandlers;
+        const request = this.request;
+        let path = '/utils/allVariantsOfUnknownSignificance.txt';
+        let body: any;
+        let queryParameters: any = {};
+        let headers: any = {};
+        let form: any = {};
+        return new Promise(function(resolve, reject) {
+            headers['Accept'] = 'text/plain';
+            headers['Content-Type'] = 'application/json';
+
+            if (parameters.$queryParameters) {
+                Object.keys(parameters.$queryParameters).forEach(function(parameterName) {
+                    var parameter = parameters.$queryParameters[parameterName];
+                    queryParameters[parameterName] = parameter;
+                });
+            }
+
+            request('GET', domain + path, body, headers, queryParameters, form, reject, resolve, errorHandlers);
+
+        });
+    };
+
+    /**
+     * Get All Variants of Unknown Significance in text file.
+     * @method
+     * @name OncoKbAPI#utilsAllVariantsOfUnknownSignificanceTxtGetUsingGET
+     */
+    utilsAllVariantsOfUnknownSignificanceTxtGetUsingGET(parameters: {
+        $queryParameters ? : any,
+            $domain ? : string
+    }): Promise < string > {
+        return this.utilsAllVariantsOfUnknownSignificanceTxtGetUsingGETWithHttpInfo(parameters).then(function(response: request.Response) {
             return response.body;
         });
     };
