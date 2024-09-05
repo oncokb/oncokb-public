@@ -86,11 +86,11 @@ public class ApiProxy {
         try {
             return restTemplate.exchange(uri, method, new HttpEntity<>(body, httpHeaders), String.class);
         } catch (HttpClientErrorException httpClientErrorException) {
-            if (httpClientErrorException.getStatusCode() != null && httpClientErrorException.getStatusCode().equals(HttpStatus.BAD_REQUEST)) {
-                throw new BadRequestAlertException(httpClientErrorException.getMessage(), "", "");
-            } else {
-                throw new ResponseStatusException(httpClientErrorException.getStatusCode(), httpClientErrorException.getMessage());
-            }
+            HttpHeaders responseHeaders = httpClientErrorException.getResponseHeaders();
+            return ResponseEntity
+                .status(httpClientErrorException.getStatusCode())
+                .headers(responseHeaders)
+                .body(httpClientErrorException.getResponseBodyAsString());
         }
     }
 
