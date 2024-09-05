@@ -6,6 +6,7 @@ import WindowStore from 'app/store/WindowStore';
 import { PAGE_ROUTE } from 'app/config/constants';
 import { useLocation } from 'react-router-dom';
 import axios from 'axios';
+import client from 'app/shared/api/oncokbClientInstance';
 
 interface IEpicAnnotateProps {
   windowStore: WindowStore;
@@ -45,10 +46,11 @@ const EpicAnnotate = ({ windowStore }: IEpicAnnotateProps) => {
 
       const token = epicResponse.data;
 
-      //Pass ISS and token to backend, so it can use Epic APIs.
-      const mskResponse = await axios.get(
-        `/api/token?iss=${iss}&accessToken=${token.access_token}&patientId=${token.patient}`
-      );
+      client.annotateEpicGetUsingGET({
+        accessToken: token.access_token,
+        iss,
+        patientId: token.patient,
+      });
     }
 
     fetchAccessToken().catch(console.error);
