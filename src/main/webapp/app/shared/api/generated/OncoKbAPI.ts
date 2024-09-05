@@ -45,6 +45,82 @@ export type Query = {
         'tumorType': string
 
 };
+export type Article = {
+    'abstract': string
+
+        'authors': string
+
+        'elocationId': string
+
+        'issue': string
+
+        'journal': string
+
+        'link': string
+
+        'pages': string
+
+        'pmid': string
+
+        'pubDate': string
+
+        'reference': string
+
+        'title': string
+
+        'volume': string
+
+};
+export type Alteration = {
+    'alteration': string
+
+        'consequence': VariantConsequence
+
+        'gene': Gene
+
+        'name': string
+
+        'proteinEnd': number
+
+        'proteinStart': number
+
+        'refResidues': string
+
+        'referenceGenomes': Array < "GRCh37" | "GRCh38" >
+
+        'variantResidues': string
+
+};
+export type AnnotatedVariant = {
+    'description': string
+
+        'entrezGeneId': number
+
+        'gene': string
+
+        'grch37Isoform': string
+
+        'grch37RefSeq': string
+
+        'grch38Isoform': string
+
+        'grch38RefSeq': string
+
+        'mutationEffect': string
+
+        'mutationEffectAbstracts': string
+
+        'mutationEffectPmids': string
+
+        'oncogenicity': string
+
+        'proteinChange': string
+
+        'referenceGenome': string
+
+        'variant': string
+
+};
 export type SemVer = {
     'major': number
 
@@ -83,10 +159,12 @@ export type MutationsQuery = {
         'proteinChange': Array < AnnotateMutationByProteinChangeQuery >
 
 };
-export type HasMember = {
-    'display': string
+export type AnnotateSampleQuery = {
+    'copyNumberAlterations': Array < AnnotateCopyNumberAlterationQuery >
 
-        'reference': string
+        'mutations': MutationsQuery
+
+        'structuralVariants': Array < AnnotateStructuralVariantQuery >
 
 };
 export type TumorType = {
@@ -133,22 +211,10 @@ export type Gene = {
         'tsg': boolean
 
 };
-export type Coding = {
-    'code': string
-
-        'display': string
-
-        'system': string
-
-};
 export type Version = {
     'date': string
 
         'version': string
-
-};
-export type Search = {
-    'mode': string
 
 };
 export type TreatmentDrugId = {
@@ -175,6 +241,52 @@ export type GeneEvidence = {
         'status': string
 
 };
+export type AnnotationSearchResult = {
+    'indicatorQueryResp': IndicatorQueryResp
+
+        'queryType': "GENE" | "VARIANT" | "DRUG" | "CANCER_TYPE"
+
+};
+export type Evidence = {
+    'additionalInfo': string
+
+        'alterations': Array < Alteration >
+
+        'articles': Array < Article >
+
+        'cancerTypes': Array < TumorType >
+
+        'description': string
+
+        'evidenceType': "GENE_SUMMARY" | "MUTATION_SUMMARY" | "TUMOR_TYPE_SUMMARY" | "GENE_TUMOR_TYPE_SUMMARY" | "PROGNOSTIC_SUMMARY" | "DIAGNOSTIC_SUMMARY" | "GENE_BACKGROUND" | "ONCOGENIC" | "MUTATION_EFFECT" | "VUS" | "PROGNOSTIC_IMPLICATION" | "DIAGNOSTIC_IMPLICATION" | "STANDARD_THERAPEUTIC_IMPLICATIONS_FOR_DRUG_SENSITIVITY" | "STANDARD_THERAPEUTIC_IMPLICATIONS_FOR_DRUG_RESISTANCE" | "INVESTIGATIONAL_THERAPEUTIC_IMPLICATIONS_DRUG_SENSITIVITY" | "INVESTIGATIONAL_THERAPEUTIC_IMPLICATIONS_DRUG_RESISTANCE"
+
+        'excludedCancerTypes': Array < TumorType >
+
+        'fdaLevel': "LEVEL_1" | "LEVEL_2" | "LEVEL_3A" | "LEVEL_3B" | "LEVEL_4" | "LEVEL_R1" | "LEVEL_R2" | "LEVEL_Px1" | "LEVEL_Px2" | "LEVEL_Px3" | "LEVEL_Dx1" | "LEVEL_Dx2" | "LEVEL_Dx3" | "LEVEL_Fda1" | "LEVEL_Fda2" | "LEVEL_Fda3" | "NO"
+
+        'gene': Gene
+
+        'id': number
+
+        'knownEffect': string
+
+        'lastEdit': string
+
+        'lastReview': string
+
+        'levelOfEvidence': "LEVEL_1" | "LEVEL_2" | "LEVEL_3A" | "LEVEL_3B" | "LEVEL_4" | "LEVEL_R1" | "LEVEL_R2" | "LEVEL_Px1" | "LEVEL_Px2" | "LEVEL_Px3" | "LEVEL_Dx1" | "LEVEL_Dx2" | "LEVEL_Dx3" | "LEVEL_Fda1" | "LEVEL_Fda2" | "LEVEL_Fda3" | "NO"
+
+        'liquidPropagationLevel': "LEVEL_1" | "LEVEL_2" | "LEVEL_3A" | "LEVEL_3B" | "LEVEL_4" | "LEVEL_R1" | "LEVEL_R2" | "LEVEL_Px1" | "LEVEL_Px2" | "LEVEL_Px3" | "LEVEL_Dx1" | "LEVEL_Dx2" | "LEVEL_Dx3" | "LEVEL_Fda1" | "LEVEL_Fda2" | "LEVEL_Fda3" | "NO"
+
+        'relevantCancerTypes': Array < TumorType >
+
+        'solidPropagationLevel': "LEVEL_1" | "LEVEL_2" | "LEVEL_3A" | "LEVEL_3B" | "LEVEL_4" | "LEVEL_R1" | "LEVEL_R2" | "LEVEL_Px1" | "LEVEL_Px2" | "LEVEL_Px3" | "LEVEL_Dx1" | "LEVEL_Dx2" | "LEVEL_Dx3" | "LEVEL_Fda1" | "LEVEL_Fda2" | "LEVEL_Fda3" | "NO"
+
+        'treatments': Array < Treatment >
+
+        'uuid': string
+
+};
 export type AnnotateStructuralVariantQuery = {
     'evidenceTypes': Array < "GENE_SUMMARY" | "MUTATION_SUMMARY" | "TUMOR_TYPE_SUMMARY" | "GENE_TUMOR_TYPE_SUMMARY" | "PROGNOSTIC_SUMMARY" | "DIAGNOSTIC_SUMMARY" | "GENE_BACKGROUND" | "ONCOGENIC" | "MUTATION_EFFECT" | "VUS" | "PROGNOSTIC_IMPLICATION" | "DIAGNOSTIC_IMPLICATION" | "STANDARD_THERAPEUTIC_IMPLICATIONS_FOR_DRUG_SENSITIVITY" | "STANDARD_THERAPEUTIC_IMPLICATIONS_FOR_DRUG_RESISTANCE" | "INVESTIGATIONAL_THERAPEUTIC_IMPLICATIONS_DRUG_SENSITIVITY" | "INVESTIGATIONAL_THERAPEUTIC_IMPLICATIONS_DRUG_RESISTANCE" >
 
@@ -191,6 +303,14 @@ export type AnnotateStructuralVariantQuery = {
         'structuralVariantType': "DELETION" | "TRANSLOCATION" | "DUPLICATION" | "INSERTION" | "INVERSION" | "FUSION" | "UNKNOWN"
 
         'tumorType': string
+
+};
+export type VariantOfUnknownSignificance = {
+    'entrezGeneId': number
+
+        'gene': string
+
+        'variant': string
 
 };
 export type IndicatorQueryResp = {
@@ -277,6 +397,12 @@ export type ActionableGene = {
         'variant': string
 
 };
+export type ArticleAbstract = {
+    'abstract': string
+
+        'link': string
+
+};
 export type InfoLevel = {
     'colorHex': string
 
@@ -287,324 +413,10 @@ export type InfoLevel = {
         'levelOfEvidence': "LEVEL_1" | "LEVEL_2" | "LEVEL_3A" | "LEVEL_3B" | "LEVEL_4" | "LEVEL_R1" | "LEVEL_R2" | "LEVEL_Px1" | "LEVEL_Px2" | "LEVEL_Px3" | "LEVEL_Dx1" | "LEVEL_Dx2" | "LEVEL_Dx3" | "LEVEL_Fda1" | "LEVEL_Fda2" | "LEVEL_Fda3" | "NO"
 
 };
-export type Trial = {
-    'arms': Array < Arms >
-
-        'briefTitle': string
-
-        'currentTrialStatus': string
-
-        'isUSTrial': boolean
-
-        'nctId': string
-
-        'principalInvestigator': string
-
-};
-export type Resource = {
-    'basedOn': Array < BasedOn >
-
-        'category': Array < Category >
-
-        'code': Code
-
-        'component': Array < Component >
-
-        'derivedFrom': Array < DerivedFrom >
-
-        'effectiveDateTime': string
-
-        'extension': Array < Extension >
-
-        'hasMember': Array < HasMember >
-
-        'id': string
-
-        'issued': string
-
-        'resourceType': string
-
-        'status': string
-
-        'subject': Subject
-
-        'valueCodeableConcept': ValueCodeableConcept
-
-};
-export type Arms = {
-    'armDescription': string
-
-        'drugs': Array < Drug >
-
-};
-export type OncoKBInfo = {
-    'apiVersion': SemVer
-
-        'appVersion': SemVer
-
-        'dataVersion': Version
-
-        'levels': Array < InfoLevel >
-
-        'ncitVersion': string
-
-        'oncoTreeVersion': string
-
-        'publicInstance': boolean
-
-};
-export type VariantConsequence = {
-    'description': string
-
-        'isGenerallyTruncating': boolean
-
-        'term': string
-
-};
-export type Code = {
-    'coding': Array < Coding >
-
-        'text': string
-
-};
-export type ValueRange = {
-    'high': High
-
-        'low': Low
-
-};
-export type EvidenceQueries = {
-    'evidenceTypes': string
-
-        'highestLevelOnly': boolean
-
-        'levels': Array < "LEVEL_1" | "LEVEL_2" | "LEVEL_3A" | "LEVEL_3B" | "LEVEL_4" | "LEVEL_R1" | "LEVEL_R2" | "LEVEL_Px1" | "LEVEL_Px2" | "LEVEL_Px3" | "LEVEL_Dx1" | "LEVEL_Dx2" | "LEVEL_Dx3" | "LEVEL_Fda1" | "LEVEL_Fda2" | "LEVEL_Fda3" | "NO" >
-
-        'queries': Array < Query >
-
-};
-export type AnnotateCopyNumberAlterationQuery = {
-    'copyNameAlterationType': "AMPLIFICATION" | "DELETION" | "GAIN" | "LOSS"
-
-        'evidenceTypes': Array < "GENE_SUMMARY" | "MUTATION_SUMMARY" | "TUMOR_TYPE_SUMMARY" | "GENE_TUMOR_TYPE_SUMMARY" | "PROGNOSTIC_SUMMARY" | "DIAGNOSTIC_SUMMARY" | "GENE_BACKGROUND" | "ONCOGENIC" | "MUTATION_EFFECT" | "VUS" | "PROGNOSTIC_IMPLICATION" | "DIAGNOSTIC_IMPLICATION" | "STANDARD_THERAPEUTIC_IMPLICATIONS_FOR_DRUG_SENSITIVITY" | "STANDARD_THERAPEUTIC_IMPLICATIONS_FOR_DRUG_RESISTANCE" | "INVESTIGATIONAL_THERAPEUTIC_IMPLICATIONS_DRUG_SENSITIVITY" | "INVESTIGATIONAL_THERAPEUTIC_IMPLICATIONS_DRUG_RESISTANCE" >
-
-        'gene': QueryGene
-
-        'id': string
-
-        'referenceGenome': "GRCh37" | "GRCh38"
-
-        'tumorType': string
-
-};
-export type Low = {
-    'value': number
-
-};
-export type BasedOn = {
-    'reference': string
-
-};
-export type Link = {
-    'relation': string
-
-        'url': string
-
-};
-export type Category = {
-    'coding': Array < Coding >
-
-        'text': string
-
-};
-export type Article = {
-    'abstract': string
-
-        'authors': string
-
-        'elocationId': string
-
-        'issue': string
-
-        'journal': string
-
-        'link': string
-
-        'pages': string
-
-        'pmid': string
-
-        'pubDate': string
-
-        'reference': string
-
-        'title': string
-
-        'volume': string
-
-};
-export type Alteration = {
-    'alteration': string
-
-        'consequence': VariantConsequence
-
-        'gene': Gene
-
-        'name': string
-
-        'proteinEnd': number
-
-        'proteinStart': number
-
-        'refResidues': string
-
-        'referenceGenomes': Array < "GRCh37" | "GRCh38" >
-
-        'variantResidues': string
-
-};
-export type GenomicData = {
-    'entry': Array < Entry >
-
-        'link': Array < Link >
-
-        'resourceType': string
-
-        'samples': Array < AnnotateSampleQuery >
-
-        'total': number
-
-        'type': string
-
-};
-export type AnnotatedVariant = {
-    'description': string
-
-        'entrezGeneId': number
-
-        'gene': string
-
-        'grch37Isoform': string
-
-        'grch37RefSeq': string
-
-        'grch38Isoform': string
-
-        'grch38RefSeq': string
-
-        'mutationEffect': string
-
-        'mutationEffectAbstracts': string
-
-        'mutationEffectPmids': string
-
-        'oncogenicity': string
-
-        'proteinChange': string
-
-        'referenceGenome': string
-
-        'variant': string
-
-};
-export type Entry = {
-    'fullUrl': string
-
-        'link': Array < Link >
-
-        'resource': Resource
-
-        'search': Search
-
-};
-export type AnnotateSampleQuery = {
-    'copyNumberAlterations': Array < AnnotateCopyNumberAlterationQuery >
-
-        'mutations': MutationsQuery
-
-        'structuralVariants': Array < AnnotateStructuralVariantQuery >
-
-};
-export type AnnotationSearchResult = {
-    'indicatorQueryResp': IndicatorQueryResp
-
-        'queryType': "GENE" | "VARIANT" | "DRUG" | "CANCER_TYPE"
-
-};
-export type Evidence = {
-    'additionalInfo': string
-
-        'alterations': Array < Alteration >
-
-        'articles': Array < Article >
-
-        'cancerTypes': Array < TumorType >
-
-        'description': string
-
-        'evidenceType': "GENE_SUMMARY" | "MUTATION_SUMMARY" | "TUMOR_TYPE_SUMMARY" | "GENE_TUMOR_TYPE_SUMMARY" | "PROGNOSTIC_SUMMARY" | "DIAGNOSTIC_SUMMARY" | "GENE_BACKGROUND" | "ONCOGENIC" | "MUTATION_EFFECT" | "VUS" | "PROGNOSTIC_IMPLICATION" | "DIAGNOSTIC_IMPLICATION" | "STANDARD_THERAPEUTIC_IMPLICATIONS_FOR_DRUG_SENSITIVITY" | "STANDARD_THERAPEUTIC_IMPLICATIONS_FOR_DRUG_RESISTANCE" | "INVESTIGATIONAL_THERAPEUTIC_IMPLICATIONS_DRUG_SENSITIVITY" | "INVESTIGATIONAL_THERAPEUTIC_IMPLICATIONS_DRUG_RESISTANCE"
-
-        'excludedCancerTypes': Array < TumorType >
-
-        'fdaLevel': "LEVEL_1" | "LEVEL_2" | "LEVEL_3A" | "LEVEL_3B" | "LEVEL_4" | "LEVEL_R1" | "LEVEL_R2" | "LEVEL_Px1" | "LEVEL_Px2" | "LEVEL_Px3" | "LEVEL_Dx1" | "LEVEL_Dx2" | "LEVEL_Dx3" | "LEVEL_Fda1" | "LEVEL_Fda2" | "LEVEL_Fda3" | "NO"
-
-        'gene': Gene
-
-        'id': number
-
-        'knownEffect': string
-
-        'lastEdit': string
-
-        'lastReview': string
-
-        'levelOfEvidence': "LEVEL_1" | "LEVEL_2" | "LEVEL_3A" | "LEVEL_3B" | "LEVEL_4" | "LEVEL_R1" | "LEVEL_R2" | "LEVEL_Px1" | "LEVEL_Px2" | "LEVEL_Px3" | "LEVEL_Dx1" | "LEVEL_Dx2" | "LEVEL_Dx3" | "LEVEL_Fda1" | "LEVEL_Fda2" | "LEVEL_Fda3" | "NO"
-
-        'liquidPropagationLevel': "LEVEL_1" | "LEVEL_2" | "LEVEL_3A" | "LEVEL_3B" | "LEVEL_4" | "LEVEL_R1" | "LEVEL_R2" | "LEVEL_Px1" | "LEVEL_Px2" | "LEVEL_Px3" | "LEVEL_Dx1" | "LEVEL_Dx2" | "LEVEL_Dx3" | "LEVEL_Fda1" | "LEVEL_Fda2" | "LEVEL_Fda3" | "NO"
-
-        'relevantCancerTypes': Array < TumorType >
-
-        'solidPropagationLevel': "LEVEL_1" | "LEVEL_2" | "LEVEL_3A" | "LEVEL_3B" | "LEVEL_4" | "LEVEL_R1" | "LEVEL_R2" | "LEVEL_Px1" | "LEVEL_Px2" | "LEVEL_Px3" | "LEVEL_Dx1" | "LEVEL_Dx2" | "LEVEL_Dx3" | "LEVEL_Fda1" | "LEVEL_Fda2" | "LEVEL_Fda3" | "NO"
-
-        'treatments': Array < Treatment >
-
-        'uuid': string
-
-};
-export type VariantOfUnknownSignificance = {
-    'entrezGeneId': number
-
-        'gene': string
-
-        'variant': string
-
-};
-export type Component = {
-    'code': Code
-
-        'extension': Array < Extension >
-
-        'valueCodeableConcept': ValueCodeableConcept
-
-        'valueRange': ValueRange
-
-        'valueString': string
-
-};
-export type ArticleAbstract = {
-    'abstract': string
-
-        'link': string
-
-};
 export type Drug = {
     'drugName': string
 
         'ncitCode': string
-
-};
-export type High = {
-    'value': number
 
 };
 export type CuratedGene = {
@@ -657,6 +469,20 @@ export type EvidenceQueryRes = {
         'query': Query
 
 };
+export type Trial = {
+    'arms': Array < Arms >
+
+        'briefTitle': string
+
+        'currentTrialStatus': string
+
+        'isUSTrial': boolean
+
+        'nctId': string
+
+        'principalInvestigator': string
+
+};
 export type QueryGene = {
     'entrezGeneId': number
 
@@ -703,6 +529,12 @@ export type CancerGene = {
         'vogelstein': boolean
 
 };
+export type Arms = {
+    'armDescription': string
+
+        'drugs': Array < Drug >
+
+};
 export type MainType = {
     'id': number
 
@@ -711,12 +543,36 @@ export type MainType = {
         'tumorForm': "SOLID" | "LIQUID" | "MIXED"
 
 };
+export type OncoKBInfo = {
+    'apiVersion': SemVer
+
+        'appVersion': SemVer
+
+        'dataVersion': Version
+
+        'levels': Array < InfoLevel >
+
+        'ncitVersion': string
+
+        'oncoTreeVersion': string
+
+        'publicInstance': boolean
+
+};
 export type SampleQueryResp = {
     'copyNumberAlterations': Array < IndicatorQueryResp >
 
         'mutations': Array < IndicatorQueryResp >
 
         'structuralVariants': Array < IndicatorQueryResp >
+
+};
+export type VariantConsequence = {
+    'description': string
+
+        'isGenerallyTruncating': boolean
+
+        'term': string
 
 };
 export type AnnotateMutationByProteinChangeQuery = {
@@ -761,30 +617,6 @@ export type IndicatorQueryTreatment = {
         'pmids': Array < string >
 
 };
-export type DerivedFrom = {
-    'display': string
-
-        'reference': string
-
-};
-export type Subject = {
-    'display': string
-
-        'reference': string
-
-};
-export type Extension = {
-    'extension': Array < Extension >
-
-        'url': string
-
-        'valueBoolean': boolean
-
-        'valueCodeableConcept': ValueCodeableConcept
-
-        'valueString': string
-
-};
 export type ResponseEntity = {
     'body': {}
 
@@ -799,6 +631,16 @@ export type Treatment = {
         'drugs': Array < TreatmentDrug >
 
         'priority': number
+
+};
+export type EvidenceQueries = {
+    'evidenceTypes': string
+
+        'highestLevelOnly': boolean
+
+        'levels': Array < "LEVEL_1" | "LEVEL_2" | "LEVEL_3A" | "LEVEL_3B" | "LEVEL_4" | "LEVEL_R1" | "LEVEL_R2" | "LEVEL_Px1" | "LEVEL_Px2" | "LEVEL_Px3" | "LEVEL_Dx1" | "LEVEL_Dx2" | "LEVEL_Dx3" | "LEVEL_Fda1" | "LEVEL_Fda2" | "LEVEL_Fda3" | "NO" >
+
+        'queries': Array < Query >
 
 };
 export type VariantSearchQuery = {
@@ -829,10 +671,18 @@ export type MutationEffectResp = {
         'knownEffect': string
 
 };
-export type ValueCodeableConcept = {
-    'coding': Array < Coding >
+export type AnnotateCopyNumberAlterationQuery = {
+    'copyNameAlterationType': "AMPLIFICATION" | "DELETION" | "GAIN" | "LOSS"
 
-        'text': string
+        'evidenceTypes': Array < "GENE_SUMMARY" | "MUTATION_SUMMARY" | "TUMOR_TYPE_SUMMARY" | "GENE_TUMOR_TYPE_SUMMARY" | "PROGNOSTIC_SUMMARY" | "DIAGNOSTIC_SUMMARY" | "GENE_BACKGROUND" | "ONCOGENIC" | "MUTATION_EFFECT" | "VUS" | "PROGNOSTIC_IMPLICATION" | "DIAGNOSTIC_IMPLICATION" | "STANDARD_THERAPEUTIC_IMPLICATIONS_FOR_DRUG_SENSITIVITY" | "STANDARD_THERAPEUTIC_IMPLICATIONS_FOR_DRUG_RESISTANCE" | "INVESTIGATIONAL_THERAPEUTIC_IMPLICATIONS_DRUG_SENSITIVITY" | "INVESTIGATIONAL_THERAPEUTIC_IMPLICATIONS_DRUG_RESISTANCE" >
+
+        'gene': QueryGene
+
+        'id': string
+
+        'referenceGenome': "GRCh37" | "GRCh38"
+
+        'tumorType': string
 
 };
 export type AnnotateMutationByHGVSgQuery = {
@@ -1139,12 +989,25 @@ export default class OncoKbAPI {
                 return response.body;
             });
         };
-    annotateEpicPostUsingPOSTURL(parameters: {
-        'body': GenomicData,
+    annotateEpicGetUsingGETURL(parameters: {
+        'iss': string,
+        'accessToken': string,
+        'patientId': string,
         $queryParameters ? : any
     }): string {
         let queryParameters: any = {};
         let path = '/annotate/epic';
+        if (parameters['iss'] !== undefined) {
+            queryParameters['iss'] = parameters['iss'];
+        }
+
+        if (parameters['accessToken'] !== undefined) {
+            queryParameters['accessToken'] = parameters['accessToken'];
+        }
+
+        if (parameters['patientId'] !== undefined) {
+            queryParameters['patientId'] = parameters['patientId'];
+        }
 
         if (parameters.$queryParameters) {
             Object.keys(parameters.$queryParameters).forEach(function(parameterName) {
@@ -1159,11 +1022,15 @@ export default class OncoKbAPI {
     /**
      * Annotate epic genomic data.
      * @method
-     * @name OncoKbAPI#annotateEpicPostUsingPOST
-     * @param {} body - Epic genomic data in FHIR format
+     * @name OncoKbAPI#annotateEpicGetUsingGET
+     * @param {string} iss - iss
+     * @param {string} accessToken - accessToken
+     * @param {string} patientId - patientId
      */
-    annotateEpicPostUsingPOSTWithHttpInfo(parameters: {
-        'body': GenomicData,
+    annotateEpicGetUsingGETWithHttpInfo(parameters: {
+        'iss': string,
+        'accessToken': string,
+        'patientId': string,
         $queryParameters ? : any,
         $domain ? : string
     }): Promise < request.Response > {
@@ -1179,12 +1046,30 @@ export default class OncoKbAPI {
             headers['Accept'] = 'application/json';
             headers['Content-Type'] = 'application/json';
 
-            if (parameters['body'] !== undefined) {
-                body = parameters['body'];
+            if (parameters['iss'] !== undefined) {
+                queryParameters['iss'] = parameters['iss'];
             }
 
-            if (parameters['body'] === undefined) {
-                reject(new Error('Missing required  parameter: body'));
+            if (parameters['iss'] === undefined) {
+                reject(new Error('Missing required  parameter: iss'));
+                return;
+            }
+
+            if (parameters['accessToken'] !== undefined) {
+                queryParameters['accessToken'] = parameters['accessToken'];
+            }
+
+            if (parameters['accessToken'] === undefined) {
+                reject(new Error('Missing required  parameter: accessToken'));
+                return;
+            }
+
+            if (parameters['patientId'] !== undefined) {
+                queryParameters['patientId'] = parameters['patientId'];
+            }
+
+            if (parameters['patientId'] === undefined) {
+                reject(new Error('Missing required  parameter: patientId'));
                 return;
             }
 
@@ -1195,7 +1080,7 @@ export default class OncoKbAPI {
                 });
             }
 
-            request('POST', domain + path, body, headers, queryParameters, form, reject, resolve, errorHandlers);
+            request('GET', domain + path, body, headers, queryParameters, form, reject, resolve, errorHandlers);
 
         });
     };
@@ -1203,16 +1088,20 @@ export default class OncoKbAPI {
     /**
      * Annotate epic genomic data.
      * @method
-     * @name OncoKbAPI#annotateEpicPostUsingPOST
-     * @param {} body - Epic genomic data in FHIR format
+     * @name OncoKbAPI#annotateEpicGetUsingGET
+     * @param {string} iss - iss
+     * @param {string} accessToken - accessToken
+     * @param {string} patientId - patientId
      */
-    annotateEpicPostUsingPOST(parameters: {
-            'body': GenomicData,
+    annotateEpicGetUsingGET(parameters: {
+            'iss': string,
+            'accessToken': string,
+            'patientId': string,
             $queryParameters ? : any,
             $domain ? : string
         }): Promise < Array < SampleQueryResp >
         > {
-            return this.annotateEpicPostUsingPOSTWithHttpInfo(parameters).then(function(response: request.Response) {
+            return this.annotateEpicGetUsingGETWithHttpInfo(parameters).then(function(response: request.Response) {
                 return response.body;
             });
         };

@@ -591,7 +591,7 @@ export enum PAGE_ROUTE {
   ACCOUNT_PASSWORD_RESET_FINISH = '/account/reset/finish',
   ACCOUNT_ACTIVE_TRIAL_FINISH = '/account/active-trial/finish',
   EPIC_AUTHENTICATE = '/epic/authenticate',
-  EPIC_ANNOTATE = 'epic/annotate',
+  EPIC_ANNOTATE = '/epic/annotate',
 }
 
 export enum TABLE_COLUMN_KEY {

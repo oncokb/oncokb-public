@@ -31,7 +31,7 @@ const EpicAnnotate = ({ windowStore }: IEpicAnnotateProps) => {
       params.append('grant_type', 'authorization_code');
       params.append(
         'redirect_uri',
-        `${windowStore.baseUrl}/${PAGE_ROUTE.EPIC_ANNOTATE}`
+        `${windowStore.baseUrl}${PAGE_ROUTE.EPIC_ANNOTATE}`
       );
       params.append('code', code);
       params.append('client_id', CLIENT_ID);

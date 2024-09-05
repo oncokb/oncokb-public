@@ -268,6 +268,16 @@ const AppRouts = (props: {
             path={PAGE_ROUTE.FDA_NGS}
             component={LevelOfEvidencePage}
           />
+          <OncokbRoute
+            exact
+            path={PAGE_ROUTE.EPIC_AUTHENTICATE}
+            component={EpicAuthenticate}
+          />
+          <OncokbRoute
+            exact
+            path={PAGE_ROUTE.EPIC_ANNOTATE}
+            component={EpicAnnotate}
+          />
 
           <RecaptchaBoundaryRoute
             exact
@@ -342,22 +352,6 @@ const AppRouts = (props: {
             authenticationStore={props.authenticationStore}
             routing={props.routing}
             render={ReadOnlyMode(CreateCompanyUsersPage)}
-            hasAnyAuthorities={[AUTHORITIES.ADMIN]}
-          />
-          <PrivateRoute
-            exact
-            path={PAGE_ROUTE.EPIC_AUTHENTICATE}
-            authenticationStore={props.authenticationStore}
-            routing={props.routing}
-            component={EpicAuthenticate}
-            hasAnyAuthorities={[AUTHORITIES.ADMIN]}
-          />
-          <PrivateRoute
-            exact
-            path={PAGE_ROUTE.EPIC_ANNOTATE}
-            authenticationStore={props.authenticationStore}
-            routing={props.routing}
-            component={EpicAnnotate}
             hasAnyAuthorities={[AUTHORITIES.ADMIN]}
           />
           <ErrorBoundaryRoute component={PageNotFound} />

@@ -36,7 +36,7 @@ const EpicAuthenticate = ({ windowStore }: IEpicAuthenticateProps) => {
 
       localStorage.setItem('tokenUrl', metadata.tokenUrl);
 
-      window.location.href = `${metadata.authUrl}?scope=launch&response_type=code&redirect_uri=${windowStore.baseUrl}/${PAGE_ROUTE.EPIC_ANNOTATE}&client_id=${CLIENT_ID}&launch=${launchCode}&state=98wrghuwuogerg97&aud=${iss}`;
+      window.location.href = `${metadata.authUrl}?scope=launch&response_type=code&redirect_uri=${windowStore.baseUrl}${PAGE_ROUTE.EPIC_ANNOTATE}&client_id=${CLIENT_ID}&launch=${launchCode}&state=98wrghuwuogerg97&aud=${iss}`;
     };
 
     if (iss) {
