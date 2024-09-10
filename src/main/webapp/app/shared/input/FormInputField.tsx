@@ -1,4 +1,5 @@
 import React from 'react';
+import InfoIcon from '../icons/InfoIcon';
 
 export type FormInputFieldProps = {
   id: string;
@@ -8,6 +9,7 @@ export type FormInputFieldProps = {
   disabled?: boolean;
   value?: string | string[] | number;
   boldLabel?: boolean;
+  infoIconOverlay?: Parameters<typeof InfoIcon>[0]['overlay'];
   type: string;
 };
 
@@ -20,6 +22,7 @@ export default function FormInputField({
   disabled,
   value,
   type,
+  infoIconOverlay,
 }: FormInputFieldProps) {
   return (
     <div className="form-group">
@@ -29,11 +32,14 @@ export default function FormInputField({
       >
         {label}
       </label>
+      {infoIconOverlay && (
+        <InfoIcon className="ml-2" overlay={infoIconOverlay} />
+      )}
       <input
         id={id}
         name={id}
         onChange={onChange}
-        style={style ?? { minHeight: '50px' }}
+        style={style}
         className="form-control"
         disabled={disabled ?? false}
         defaultValue={value}

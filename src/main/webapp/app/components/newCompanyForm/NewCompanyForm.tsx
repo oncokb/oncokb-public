@@ -35,7 +35,9 @@ import {
   debouncedCompanyNameValidator,
   fieldRequiredValidation,
 } from 'app/shared/utils/FormValidationUtils';
-import CompanyAdditionalInfo from 'app/pages/companyPage/CompanyAdditionalInfo';
+import CompanyAdditionalInfo, {
+  createDefaultAdditionalInfo,
+} from 'app/pages/companyPage/CompanyAdditionalInfo';
 
 const defaultInfo: CompanyAdditionalInfoDTO = {
   license: {
@@ -85,12 +87,8 @@ export const COMPANY_FORM_OPTIONS = {
 export class NewCompanyForm extends React.Component<INewCompanyFormProps> {
   @observable companyDescription = '';
   @observable companyDomains: string[] = [];
-  @observable companyAdditionalInfo: CompanyAdditionalInfoDTO = {
-    license: {
-      ...defaultInfo.license,
-      activation: new Date().toISOString().split('T')[0],
-    },
-  };
+  @observable
+  companyAdditionalInfo: CompanyAdditionalInfoDTO = createDefaultAdditionalInfo() as CompanyAdditionalInfoDTO;
   @observable selectedCompanyType: CompanyType = CompanyType.PARENT;
   @observable selectedLicenseModel: LicenseModel = LicenseModel.FULL;
   @observable selectedLicenseType: LicenseType = LicenseType.COMMERCIAL;
@@ -139,7 +137,10 @@ export class NewCompanyForm extends React.Component<INewCompanyFormProps> {
       licenseType: this.selectedLicenseType,
       name: values.companyName,
       companyDomains: this.companyDomains,
-      additionalInfo: this.companyAdditionalInfo,
+      additionalInfo:
+        this.selectedLicenseStatus !== 'TRIAL'
+          ? this.companyAdditionalInfo
+          : ((null as unknown) as CompanyAdditionalInfoDTO),
     };
     this.props.onValidSubmit(newCompany);
   }
@@ -269,20 +270,22 @@ export class NewCompanyForm extends React.Component<INewCompanyFormProps> {
             />
           </Col>
         </Row>
-        <Row className={getSectionClassName()}>
-          <Col md="3">
-            <h5>Additional Info</h5>
-          </Col>
-          <Col md="9">
-            <CompanyAdditionalInfo
-              mode="create"
-              additionalInfo={this.companyAdditionalInfo}
-              setAdditionalInfo={x => {
-                this.companyAdditionalInfo = x as CompanyAdditionalInfoDTO;
-              }}
-            />
-          </Col>
-        </Row>
+        {this.selectedLicenseStatus !== 'TRIAL' && (
+          <Row className={getSectionClassName()}>
+            <Col md="3">
+              <h5>Additional Info</h5>
+            </Col>
+            <Col md="9">
+              <CompanyAdditionalInfo
+                mode="create"
+                additionalInfo={this.companyAdditionalInfo}
+                setAdditionalInfo={x => {
+                  this.companyAdditionalInfo = x as CompanyAdditionalInfoDTO;
+                }}
+              />
+            </Col>
+          </Row>
+        )}
         <Row className={getSectionClassName()}>
           <Col md="3">
             <h5>Review Information</h5>

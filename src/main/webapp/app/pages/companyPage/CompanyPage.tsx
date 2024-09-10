@@ -70,7 +70,9 @@ import { DateSelector } from 'app/components/dateSelector/DateSelector';
 import { DownloadButton } from 'app/components/downloadButton/DownloadButton';
 import { RouterStore } from 'mobx-react-router';
 import { TEXT_VAL } from 'app/shared/utils/FormValidationUtils';
-import CompanyAdditionalInfo from './CompanyAdditionalInfo';
+import CompanyAdditionalInfo, {
+  createDefaultAdditionalInfo,
+} from './CompanyAdditionalInfo';
 
 interface MatchParams {
   id: string;
@@ -206,6 +208,9 @@ export default class CompanyPage extends React.Component<ICompanyPage> {
     const newCompanyUserEmails = this.selectedUsersOptions.map(
       selection => selection.value
     );
+    if (this.selectedLicenseStatus === 'TRIAL') {
+      this.company.additionalInfo = (null as unknown) as CompanyAdditionalInfoDTO;
+    }
     const updatedCompany: CompanyVM = {
       ...this.company,
       licenseStatus: this.selectedLicenseStatus,
@@ -676,25 +681,34 @@ export default class CompanyPage extends React.Component<ICompanyPage> {
                                 ],
                             }}
                             options={this.licenseStatusOptions}
-                            onSelection={(selectedOption: any) =>
-                              (this.selectedLicenseStatus =
-                                selectedOption.value)
-                            }
+                            onSelection={(selectedOption: any) => {
+                              const newValue: LicenseStatus =
+                                selectedOption.value;
+                              if (
+                                newValue !== 'TRIAL' &&
+                                !this.company.additionalInfo
+                              ) {
+                                this.company.additionalInfo = createDefaultAdditionalInfo() as CompanyAdditionalInfoDTO;
+                              }
+                              this.selectedLicenseStatus = selectedOption.value;
+                            }}
                             boldLabel
                           />
                         </Col>
                       </Row>
-                      <Row className={getSectionClassName()}>
-                        <Col>
-                          <CompanyAdditionalInfo
-                            mode="update"
-                            additionalInfo={this.company.additionalInfo}
-                            setAdditionalInfo={x => {
-                              this.company.additionalInfo = x as CompanyAdditionalInfoDTO;
-                            }}
-                          />
-                        </Col>
-                      </Row>
+                      {this.selectedLicenseStatus !== 'TRIAL' && (
+                        <Row className={getSectionClassName()}>
+                          <Col>
+                            <CompanyAdditionalInfo
+                              mode="update"
+                              additionalInfo={this.company.additionalInfo}
+                              setAdditionalInfo={x => {
+                                this.company.additionalInfo = x as CompanyAdditionalInfoDTO;
+                              }}
+                            />
+                          </Col>
+                        </Row>
+                      )}
                       <Row className={getSectionClassName()}>
                         <Col>
                           <div className="form-group">

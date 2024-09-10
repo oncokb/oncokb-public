@@ -1,18 +1,18 @@
 package org.mskcc.cbio.oncokb.service.dto.companyadditionalinfo;
 
 import java.io.Serializable;
-import java.time.LocalDate;
+import java.time.Instant;
 
 public class CompanyLicense implements Serializable {
-  private LocalDate activation;
+  private Instant activation;
   private boolean autoRenewal;
   private CompanyTermination termination;
 
-  public LocalDate getActivation() {
+  public Instant getActivation() {
     return activation;
   }
 
-  public void setActivation(LocalDate activation) {
+  public void setActivation(Instant activation) {
     this.activation = activation;
   }
 

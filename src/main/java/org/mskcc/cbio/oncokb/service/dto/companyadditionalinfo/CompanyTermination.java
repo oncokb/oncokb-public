@@ -1,11 +1,11 @@
 package org.mskcc.cbio.oncokb.service.dto.companyadditionalinfo;
 
 import java.io.Serializable;
-import java.time.LocalDate;
+import java.time.Instant;
 
 public class CompanyTermination implements Serializable {
   private Integer notificationDays;
-  private LocalDate date;
+  private Instant date;
   private String notes;
 
   public Integer getNotificationDays() {
@@ -16,11 +16,11 @@ public class CompanyTermination implements Serializable {
     this.notificationDays = notificationDays;
   }
 
-  public LocalDate getDate() {
+  public Instant getDate() {
     return date;
   }
 
-  public void setDate(LocalDate date) {
+  public void setDate(Instant date) {
     this.date = date;
   }
 
