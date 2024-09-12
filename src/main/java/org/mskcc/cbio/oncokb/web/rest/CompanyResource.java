@@ -16,6 +16,9 @@ import org.mskcc.cbio.oncokb.web.rest.vm.CompanyVM;
 import org.mskcc.cbio.oncokb.web.rest.vm.VerifyCompanyNameVM;
 import org.mskcc.cbio.oncokb.service.dto.CompanyDTO;
 import org.mskcc.cbio.oncokb.service.dto.UserDTO;
+import org.mskcc.cbio.oncokb.service.dto.companyadditionalinfo.CompanyAdditionalInfoDTO;
+import org.mskcc.cbio.oncokb.service.dto.companyadditionalinfo.CompanyLicense;
+import org.mskcc.cbio.oncokb.service.dto.companyadditionalinfo.CompanyTermination;
 
 import io.github.jhipster.web.util.ResponseUtil;
 import org.slf4j.Logger;
@@ -28,6 +31,9 @@ import org.springframework.web.bind.annotation.*;
 import javax.validation.Valid;
 import java.net.URI;
 import java.net.URISyntaxException;
+import java.time.Instant;
+import java.time.temporal.ChronoUnit;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 import java.util.Set;
@@ -194,5 +200,36 @@ public class CompanyResource {
         log.debug("REST request to delete Company : {}", id);
         companyService.delete(id);
         return ResponseEntity.ok().build();
+    }
+
+    @GetMapping("/companies/licenses-about-to-expire-pending-notification")
+    public List<Long> getLicensesAboutToExpirePendingNotification() {
+        log.debug("Request to get Company license is about to expire");
+        Instant now = Instant.now();
+        ArrayList<Long> companies = new ArrayList<>();
+        for (CompanyDTO company : companyService.findAll()) {
+           CompanyAdditionalInfoDTO additionalInfo = company.getAdditionalInfo();
+           if (additionalInfo != null) {
+               CompanyLicense license = additionalInfo.getLicense();
+               if (license != null) {
+                   CompanyTermination termination = license.getTermination();
+                   if (termination != null) {
+                       Boolean hasBeenNotified = termination.getHasBeenNotified();
+                       if (hasBeenNotified == null) {
+                           hasBeenNotified = false;
+                       }
+                       Integer notificationDays = termination.getNotificationDays();
+                       Instant terminationDate = termination.getDate();
+                       if (!hasBeenNotified && notificationDays != null && terminationDate != null) {
+                           Instant start = terminationDate.minus(notificationDays, ChronoUnit.DAYS);
+                           if (now.isAfter(start) && now.isBefore(terminationDate)) {
+                               companies.add(company.getId());
+                           }
+                       }
+                   }
+               }
+           }
+        }
+        return companies;
     }
 }
