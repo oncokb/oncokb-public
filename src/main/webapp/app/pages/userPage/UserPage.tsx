@@ -20,13 +20,10 @@ import {
   LicenseType,
   NOT_CHANGEABLE_AUTHORITIES,
   PAGE_ROUTE,
-  PAGE_TITLE,
   REDIRECT_TIMEOUT_MILLISECONDS,
   THRESHOLD_TRIAL_TOKEN_VALID_DEFAULT,
-  USAGE_ALL_TIME_KEY,
-  USAGE_ALL_TIME_VALUE,
   USAGE_DAY_DETAIL_TIME_KEY,
-  USAGE_DETAIL_TIME_KEY,
+  USAGE_MONTH_DETAIL_TIME_KEY,
   USER_AUTHORITIES,
 } from 'app/config/constants';
 import {
@@ -42,6 +39,7 @@ import {
   UserMailsDTO,
   UserUsage,
   UserCompany,
+  UsageSummary,
 } from 'app/shared/api/generated/API';
 import client from 'app/shared/api/clientInstance';
 import { DefaultTooltip, remoteData } from 'cbioportal-frontend-commons';
@@ -76,10 +74,7 @@ import {
 } from 'app/shared/utils/FormValidationUtils';
 import AuthenticationStore from 'app/store/AuthenticationStore';
 import ButtonWithTooltip from 'app/shared/button/ButtonWithTooltip';
-import {
-  ToggleValue,
-  UsageRecord,
-} from 'app/pages/usageAnalysisPage/UsageAnalysisPage';
+import { ToggleValue } from 'app/pages/usageAnalysisPage/UsageAnalysisPage';
 import UserUsageDetailsTable from 'app/pages/usageAnalysisPage/UserUsageDetailsTable';
 import { DateSelector } from 'app/components/dateSelector/DateSelector';
 import { KeyInputGroups } from 'app/pages/userPage/KeyInputGroups';
@@ -90,6 +85,13 @@ import {
 } from 'app/shared/utils/UrlUtils';
 import { sortBy } from 'app/shared/utils/LodashUtils';
 import { Helmet } from 'react-helmet-async';
+import {
+  UsageRecord,
+  mapUsageSummaryToTimeGroupedUsageRecords,
+  TimeGroupedUsageRecords,
+  mapUserUsageToTimeGroupedUsageRecords,
+} from '../usageAnalysisPage/usage-analysis-utils';
+import UsageAnalysisTable from '../usageAnalysisPage/UsageAnalysisTable';
 
 export enum AccountStatus {
   ACTIVATED = 'Activated',
@@ -179,56 +181,19 @@ export default class UserPage extends React.Component<IUserPage> {
     this.reactions.forEach(disposer => disposer());
   }
 
-  readonly usageDetail = remoteData<Map<string, UsageRecord[]>>({
+  readonly usageDetail = remoteData<UsageSummary>({
     await: () => [],
     invoke: async () => {
       this.userUsage = await client.userUsageGetUsingGET({
         userId: this.user.id,
       });
-      const result = new Map<string, UsageRecord[]>();
-      if (this.userUsage.summary !== null) {
-        const yearSummary = this.userUsage.summary.year;
-        const yearUsage: UsageRecord[] = [];
-        Object.keys(yearSummary).forEach(resourceEntry => {
-          yearUsage.push({
-            resource: resourceEntry,
-            usage: yearSummary[resourceEntry],
-            time: USAGE_ALL_TIME_VALUE,
-          });
-        });
-        result.set(USAGE_ALL_TIME_KEY, yearUsage);
-
-        const monthSummary = this.userUsage.summary.month;
-        const detailSummary: UsageRecord[] = [];
-        Object.keys(monthSummary).forEach(month => {
-          const monthUsage = monthSummary[month];
-          Object.keys(monthUsage).forEach(resourceEntry => {
-            detailSummary.push({
-              resource: resourceEntry,
-              usage: monthUsage[resourceEntry],
-              time: month,
-            });
-          });
-        });
-        result.set(USAGE_DETAIL_TIME_KEY, detailSummary);
-
-        const daySummary = this.userUsage.summary.day;
-        const dayDetailSummary: UsageRecord[] = [];
-        Object.keys(daySummary).forEach(day => {
-          const dayUsage = daySummary[day];
-          Object.keys(dayUsage).forEach(resourceEntry => {
-            dayDetailSummary.push({
-              resource: resourceEntry,
-              usage: dayUsage[resourceEntry],
-              time: day,
-            });
-          });
-        });
-        result.set(USAGE_DAY_DETAIL_TIME_KEY, dayDetailSummary);
-      }
-      return Promise.resolve(result);
+      return this.userUsage.summary;
     },
-    default: new Map(),
+    default: {
+      day: {},
+      month: {},
+      year: {},
+    },
   });
 
   readonly usersUserMails = remoteData<UserMailsDTO[]>({
@@ -1084,12 +1049,12 @@ export default class UserPage extends React.Component<IUserPage> {
                           <div className={'my-2 font-weight-bold'}>
                             Data usage
                           </div>
-                          <UserUsageDetailsTable
+
+                          <UsageAnalysisTable
                             data={this.usageDetail.result}
                             loadedData={this.usageDetail.isComplete}
-                            defaultResourcesType={ToggleValue.CUMULATIVE_USAGE}
-                            defaultTimeType={ToggleValue.RESULTS_BY_MONTH}
-                            defaultPageSize={this.defaultPageSize}
+                            defaultResourcesType={ToggleValue.PUBLIC_RESOURCES}
+                            defaultTimeType={ToggleValue.RESULTS_BY_DAY}
                           />
                         </Col>
                       </Row>

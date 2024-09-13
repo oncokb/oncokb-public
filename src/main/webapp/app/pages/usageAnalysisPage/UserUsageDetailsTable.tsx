@@ -8,16 +8,16 @@ import { Row } from 'react-bootstrap';
 import {
   getUsageTableColumnDefinition,
   ToggleValue,
-  UsageRecord,
   UsageTableColumnKey,
 } from 'app/pages/usageAnalysisPage/UsageAnalysisPage';
 import {
   PAGE_ROUTE,
   TABLE_DAY_FORMAT,
   TABLE_MONTH_FORMAT,
-  USAGE_ALL_TIME_KEY,
   USAGE_DAY_DETAIL_TIME_KEY,
-  USAGE_DETAIL_TIME_KEY,
+  USAGE_MONTH_DETAIL_TIME_KEY,
+  USAGE_YEAR_DETAIL_TIME_KEY,
+  TABLE_YEAR_FORMAT,
 } from 'app/config/constants';
 import { UsageToggleGroup } from './UsageToggleGroup';
 import { UsageAnalysisCalendarButton } from 'app/components/calendarButton/UsageAnalysisCalendarButton';
@@ -28,9 +28,10 @@ import {
 } from 'app/components/oncokbTable/HeaderConstants';
 import UsageText from 'app/shared/texts/UsageText';
 import { Link } from 'react-router-dom';
+import { TimeGroupedUsageRecords, UsageRecord } from './usage-analysis-utils';
 
 type IUserUsageDetailsTable = {
-  data: Map<string, UsageRecord[]>;
+  data: TimeGroupedUsageRecords;
   loadedData: boolean;
   defaultResourcesType: ToggleValue;
   defaultTimeType: ToggleValue;
@@ -63,23 +64,21 @@ export default class UserUsageDetailsTable extends React.Component<
   }
 
   @computed get calculateData(): UsageRecord[] {
-    let data = this.props.data.get(
-      this.timeTypeToggleValue === ToggleValue.RESULTS_IN_TOTAL
-        ? USAGE_ALL_TIME_KEY
+    let data = this.props.data[
+      this.timeTypeToggleValue === ToggleValue.RESULTS_BY_YEAR
+        ? USAGE_YEAR_DETAIL_TIME_KEY
         : this.timeTypeToggleValue === ToggleValue.RESULTS_BY_MONTH
-        ? USAGE_DETAIL_TIME_KEY
+        ? USAGE_MONTH_DETAIL_TIME_KEY
         : USAGE_DAY_DETAIL_TIME_KEY
-    );
-    if (
-      this.filterToggled &&
-      data &&
-      this.timeTypeToggleValue !== ToggleValue.RESULTS_IN_TOTAL
-    ) {
+    ];
+    if (this.filterToggled && data) {
       let tableFormat: string;
       if (this.timeTypeToggleValue === ToggleValue.RESULTS_BY_MONTH) {
         tableFormat = TABLE_MONTH_FORMAT;
       } else if (this.timeTypeToggleValue === ToggleValue.RESULTS_BY_DAY) {
         tableFormat = TABLE_DAY_FORMAT;
+      } else if (this.timeTypeToggleValue === ToggleValue.RESULTS_BY_YEAR) {
+        tableFormat = TABLE_YEAR_FORMAT;
       }
       data = data.filter(resource => {
         const fromTime = moment(this.fromDate).format(tableFormat);
@@ -91,7 +90,7 @@ export default class UserUsageDetailsTable extends React.Component<
       return data || [];
     } else if (this.resourcesTypeToggleValue === ToggleValue.PUBLIC_RESOURCES) {
       return (data || []).filter(function (usage) {
-        return !usage.resource.includes('/private/');
+        return !usage.userEmail.includes('/private/');
       });
     } else if (this.resourcesTypeToggleValue === ToggleValue.CUMULATIVE_USAGE) {
       if (data) {
@@ -102,9 +101,11 @@ export default class UserUsageDetailsTable extends React.Component<
         data.forEach(resource => {
           if (!cumulativeData.has(resource.time)) {
             cumulativeData.set(resource.time, {
-              resource: 'ALL',
+              userEmail: 'ALL',
               usage: 0,
               time: resource.time,
+              resource: '',
+              maxUsageProportion: 0,
             });
           }
           const resourceTimeRange = cumulativeData.get(resource.time);
@@ -130,17 +131,17 @@ export default class UserUsageDetailsTable extends React.Component<
               ...getUsageTableColumnDefinition(UsageTableColumnKey.RESOURCES),
               Header: filterDependentResourceHeader(this.timeTypeToggleValue),
               onFilter: (row: UsageRecord, keyword) =>
-                filterByKeyword(row.resource, keyword),
+                filterByKeyword(row.userEmail, keyword),
               Cell(props: { original: UsageRecord }) {
-                return props.original.resource === 'ALL' ? (
+                return props.original.userEmail === 'ALL' ? (
                   <div>ALL</div>
                 ) : (
                   <Link
                     to={`${
                       PAGE_ROUTE.ADMIN_RESOURCE_DETAILS_LINK
-                    }${props.original.resource.replace(/\//g, '!')}`}
+                    }${props.original.userEmail.replace(/\//g, '!')}`}
                   >
-                    {props.original.resource}
+                    {props.original.userEmail}
                   </Link>
                 );
               },
@@ -187,7 +188,7 @@ export default class UserUsageDetailsTable extends React.Component<
                 <UsageToggleGroup
                   defaultValue={this.timeTypeToggleValue}
                   toggleValues={[
-                    ToggleValue.RESULTS_IN_TOTAL,
+                    ToggleValue.RESULTS_BY_YEAR,
                     ToggleValue.RESULTS_BY_MONTH,
                     ToggleValue.RESULTS_BY_DAY,
                   ]}

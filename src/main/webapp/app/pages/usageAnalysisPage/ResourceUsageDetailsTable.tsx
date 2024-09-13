@@ -8,13 +8,12 @@ import { Row } from 'react-bootstrap';
 import {
   getUsageTableColumnDefinition,
   ToggleValue,
-  UsageRecord,
   UsageTableColumnKey,
 } from 'app/pages/usageAnalysisPage/UsageAnalysisPage';
 import {
-  USAGE_DETAIL_TIME_KEY,
-  USAGE_ALL_TIME_KEY,
+  USAGE_MONTH_DETAIL_TIME_KEY,
   PAGE_ROUTE,
+  USAGE_YEAR_DETAIL_TIME_KEY,
 } from 'app/config/constants';
 import { UsageToggleGroup } from './UsageToggleGroup';
 import {
@@ -23,9 +22,10 @@ import {
 } from 'app/components/oncokbTable/HeaderConstants';
 import UsageText from 'app/shared/texts/UsageText';
 import { Link } from 'react-router-dom';
+import { UsageRecord, TimeGroupedUsageRecords } from './usage-analysis-utils';
 
 type IResourceUsageDetailsTable = {
-  data: Map<string, UsageRecord[]>;
+  data: TimeGroupedUsageRecords;
   loadedData: boolean;
   defaultTimeType: ToggleValue;
 };
@@ -48,25 +48,25 @@ export default class ResourceUsageDetailsTable extends React.Component<
       <>
         <OncoKBTable
           data={
-            this.timeTypeToggleValue === ToggleValue.RESULTS_IN_TOTAL
-              ? this.props.data.get(USAGE_ALL_TIME_KEY) || []
-              : this.props.data.get(USAGE_DETAIL_TIME_KEY) || []
+            this.timeTypeToggleValue === ToggleValue.RESULTS_BY_YEAR
+              ? this.props.data[USAGE_YEAR_DETAIL_TIME_KEY]
+              : this.props.data[USAGE_MONTH_DETAIL_TIME_KEY]
           }
           columns={[
             {
               ...getUsageTableColumnDefinition(UsageTableColumnKey.RESOURCES),
               Header: emailHeader,
               onFilter: (row: UsageRecord, keyword) =>
-                filterByKeyword(row.resource, keyword),
+                filterByKeyword(row.userEmail, keyword),
               Cell(props: { original: UsageRecord }) {
                 return props.original.userId ? (
                   <Link
                     to={`${PAGE_ROUTE.ADMIN_USER_USAGE_DETAILS_LINK}${props.original.userId}`}
                   >
-                    {props.original.resource}
+                    {props.original.userEmail}
                   </Link>
                 ) : (
-                  <div>{props.original.resource}</div>
+                  <div>{props.original.userEmail}</div>
                 );
               },
             },
@@ -102,7 +102,7 @@ export default class ResourceUsageDetailsTable extends React.Component<
                 <UsageToggleGroup
                   defaultValue={this.timeTypeToggleValue}
                   toggleValues={[
-                    ToggleValue.RESULTS_IN_TOTAL,
+                    ToggleValue.RESULTS_BY_YEAR,
                     ToggleValue.RESULTS_BY_MONTH,
                   ]}
                   handleToggle={this.handleTimeTypeToggleChange}

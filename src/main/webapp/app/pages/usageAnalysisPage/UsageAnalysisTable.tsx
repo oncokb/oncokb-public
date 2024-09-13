@@ -1,4 +1,6 @@
-import OncoKBTable from 'app/components/oncokbTable/OncoKBTable';
+import OncoKBTable, {
+  SearchColumn,
+} from 'app/components/oncokbTable/OncoKBTable';
 import { filterByKeyword } from 'app/shared/utils/Utils';
 import autobind from 'autobind-decorator';
 import { action, computed, observable } from 'mobx';
@@ -8,7 +10,6 @@ import { Row } from 'react-bootstrap';
 import {
   getUsageTableColumnDefinition,
   ToggleValue,
-  UsageRecord,
   UsageTableColumnKey,
 } from 'app/pages/usageAnalysisPage/UsageAnalysisPage';
 import { UsageToggleGroup } from './UsageToggleGroup';
@@ -17,26 +18,24 @@ import {
   emailHeader,
   endpointHeader,
   filterDependentTimeHeader,
-  noPrivateEndpointHeader,
-  usageHeader,
 } from 'app/components/oncokbTable/HeaderConstants';
-import { UserOverviewUsage } from 'app/shared/api/generated/API';
 import UsageText from 'app/shared/texts/UsageText';
-import {
-  PAGE_ROUTE,
-  TABLE_DAY_FORMAT,
-  TABLE_MONTH_FORMAT,
-} from 'app/config/constants';
-import moment from 'moment';
+import { PAGE_ROUTE } from 'app/config/constants';
 import { Link } from 'react-router-dom';
 import { SortingRule } from 'react-table';
+import {
+  UsageSummaryWithUsageTypes,
+  UserOverviewUsageWithUsageTypes,
+  mapUserOrResourceUsageToUsageRecords,
+  UsageRecord,
+} from './usage-analysis-utils';
 
 type IUserUsageDetailsTable = {
-  data: UserOverviewUsage[];
   loadedData: boolean;
   defaultResourcesType: ToggleValue;
   defaultTimeType: ToggleValue;
   defaultPageSize?: number;
+  data: UsageSummaryWithUsageTypes | UserOverviewUsageWithUsageTypes[];
 };
 
 @observer
@@ -71,65 +70,27 @@ export default class UsageAnalysisTable extends React.Component<
   }
 
   @computed get calculateDateGroupedData(): UsageRecord[] {
-    let data: UsageRecord[] = [];
-    if (this.timeTypeToggleValue === ToggleValue.RESULTS_BY_MONTH) {
-      this.props.data.forEach((userOverviewUsage: UserOverviewUsage) => {
-        Object.keys(userOverviewUsage.monthUsage).forEach(month =>
-          data.push({
-            resource: userOverviewUsage.userEmail,
-            usage: userOverviewUsage.monthUsage[month],
-            time: month,
-            userId: userOverviewUsage.userId,
-          })
-        );
-      });
-    } else if (this.timeTypeToggleValue === ToggleValue.RESULTS_BY_DAY) {
-      this.props.data.forEach((userOverviewUsage: UserOverviewUsage) => {
-        Object.keys(userOverviewUsage.dayUsage).forEach(day =>
-          data.push({
-            resource: userOverviewUsage.userEmail,
-            usage: userOverviewUsage.dayUsage[day],
-            time: day,
-            userId: userOverviewUsage.userId,
-          })
-        );
-      });
-    }
-
-    if (this.filterToggled && data.length > 0) {
-      let tableFormat: string;
-      if (this.timeTypeToggleValue === ToggleValue.RESULTS_BY_MONTH) {
-        tableFormat = TABLE_MONTH_FORMAT;
-      } else if (this.timeTypeToggleValue === ToggleValue.RESULTS_BY_DAY) {
-        tableFormat = TABLE_DAY_FORMAT;
-      }
-      data = data.filter(resource => {
-        const fromTime = moment(this.fromDate).format(tableFormat);
-        const toTime = moment(this.toDate).format(tableFormat);
-        return resource.time >= fromTime && resource.time <= toTime;
-      });
-    }
-
-    if (this.resourcesTypeToggleValue === ToggleValue.ALL_RESOURCES) {
-      return data;
-    } else if (this.resourcesTypeToggleValue === ToggleValue.PUBLIC_RESOURCES) {
-      return data.filter(function (usage) {
-        return !usage.resource.includes('/private/');
-      });
-    } else {
-      return [];
-    }
+    return mapUserOrResourceUsageToUsageRecords(
+      this.props.data,
+      this.timeTypeToggleValue,
+      this.filterToggled,
+      this.fromDate,
+      this.toDate,
+      this.resourcesTypeToggleValue === ToggleValue.ALL_RESOURCES
+    );
   }
 
-  @computed get getAllTimeColumns() {
-    return [
-      {
+  @computed get dateGroupedColumns() {
+    const columns = [];
+    const isResources = Array.isArray(this.props.data);
+
+    if (isResources) {
+      columns.push({
         id: 'userEmail',
         Header: emailHeader,
-        accessor: 'userEmail',
-        onFilter: (row: UserOverviewUsage, keyword: string) =>
+        onFilter: (row: UsageRecord, keyword: string) =>
           filterByKeyword(row.userEmail, keyword),
-        Cell(props: { original: UserOverviewUsage }) {
+        Cell(props: { original: UsageRecord }) {
           return props.original.userId ? (
             <Link
               to={`${PAGE_ROUTE.ADMIN_USER_USAGE_DETAILS_LINK}${props.original.userId}`}
@@ -140,71 +101,49 @@ export default class UsageAnalysisTable extends React.Component<
             <div>{props.original.userEmail}</div>
           );
         },
+      });
+    }
+    columns.push({
+      ...getUsageTableColumnDefinition(UsageTableColumnKey.USAGE),
+      Cell(props: { original: UsageRecord }) {
+        return <UsageText usage={props.original.usage} />;
       },
-      {
-        id: 'totalUsage',
-        Header: usageHeader,
-        accessor: 'totalUsage',
-        Cell(props: { original: UserOverviewUsage }) {
-          return <UsageText usage={props.original.totalUsage} />;
-        },
+    });
+    columns.push({
+      id: 'endpoint',
+      Header: endpointHeader,
+      minWidth: 200,
+      onFilter: (row: UsageRecord, keyword: string) =>
+        filterByKeyword(row.resource, keyword),
+      Cell(props: { original: UsageRecord }) {
+        return props.original.resource ? (
+          <div>
+            <Link
+              to={`${
+                PAGE_ROUTE.ADMIN_RESOURCE_DETAILS_LINK
+              }${props.original.resource.replace(/\//g, '!')}`}
+            >
+              {props.original.resource}
+            </Link>{' '}
+            {isResources && <>({props.original.maxUsageProportion}%)</>}
+          </div>
+        ) : (
+          <div>N/A</div>
+        );
       },
-      this.resourcesTypeToggleValue === ToggleValue.ALL_RESOURCES
-        ? {
-            id: 'endpoint',
-            Header: endpointHeader,
-            minWidth: 200,
-            accessor: (row: UserOverviewUsage) =>
-              `${row.endpoint} (${row.maxUsageProportion}%)`,
-            onFilter: (row: UserOverviewUsage, keyword: string) =>
-              filterByKeyword(row.endpoint, keyword),
-            Cell(props: { original: UserOverviewUsage }) {
-              return props.original.endpoint ? (
-                <div>
-                  <Link
-                    to={`${
-                      PAGE_ROUTE.ADMIN_RESOURCE_DETAILS_LINK
-                    }${props.original.endpoint.replace(/\//g, '!')}`}
-                  >
-                    {props.original.endpoint}
-                  </Link>{' '}
-                  ({props.original.maxUsageProportion}%)
-                </div>
-              ) : (
-                <div>N/A</div>
-              );
-            },
-          }
-        : {
-            id: 'noPrivateEndpoint',
-            Header: noPrivateEndpointHeader,
-            minWidth: 200,
-            accessor: (row: UserOverviewUsage) =>
-              `${row.endpoint} (${row.noPrivateMaxUsageProportion}%)`,
-            onFilter: (row: UserOverviewUsage, keyword: string) =>
-              filterByKeyword(row.noPrivateEndpoint, keyword),
-            Cell(props: { original: UserOverviewUsage }) {
-              return props.original.endpoint ? (
-                <div>
-                  <Link
-                    to={`${
-                      PAGE_ROUTE.ADMIN_RESOURCE_DETAILS_LINK
-                    }${props.original.endpoint.replace(/\//g, '!')}`}
-                  >
-                    {props.original.endpoint}
-                  </Link>{' '}
-                  ({props.original.maxUsageProportion}%)
-                </div>
-              ) : (
-                <div>N/A</div>
-              );
-            },
-          },
-      {
+    });
+    columns.push({
+      ...getUsageTableColumnDefinition(UsageTableColumnKey.TIME),
+      Header: filterDependentTimeHeader(this.timeTypeToggleValue),
+      onFilter: (row: UsageRecord, keyword: string) =>
+        filterByKeyword(row.time, keyword),
+    });
+    if (isResources) {
+      columns.push({
         ...getUsageTableColumnDefinition(UsageTableColumnKey.OPERATION),
         sortable: false,
         className: 'd-flex justify-content-center',
-        Cell(props: { original: UserOverviewUsage }) {
+        Cell(props: { original: UsageRecord }) {
           return props.original.userId ? (
             <Link
               to={`${PAGE_ROUTE.ADMIN_USER_USAGE_DETAILS_LINK}${props.original.userId}`}
@@ -215,58 +154,10 @@ export default class UsageAnalysisTable extends React.Component<
             <i className="fa fa-info-circle" />
           );
         },
-      },
-    ];
+      });
+    }
+    return columns;
   }
-
-  readonly dateGroupedColumns = [
-    {
-      id: 'userEmail',
-      Header: emailHeader,
-      accessor: 'resource',
-      onFilter: (row: UsageRecord, keyword: string) =>
-        filterByKeyword(row.resource, keyword),
-      Cell(props: { original: UsageRecord }) {
-        return props.original.userId ? (
-          <Link
-            to={`${PAGE_ROUTE.ADMIN_USER_USAGE_DETAILS_LINK}${props.original.userId}`}
-          >
-            {props.original.resource}
-          </Link>
-        ) : (
-          <div>{props.original.resource}</div>
-        );
-      },
-    },
-    {
-      ...getUsageTableColumnDefinition(UsageTableColumnKey.USAGE),
-      Cell(props: { original: UsageRecord }) {
-        return <UsageText usage={props.original.usage} />;
-      },
-    },
-    {
-      ...getUsageTableColumnDefinition(UsageTableColumnKey.TIME),
-      Header: filterDependentTimeHeader(this.timeTypeToggleValue),
-      onFilter: (row: UsageRecord, keyword: string) =>
-        filterByKeyword(row.time, keyword),
-    },
-    {
-      ...getUsageTableColumnDefinition(UsageTableColumnKey.OPERATION),
-      sortable: false,
-      className: 'd-flex justify-content-center',
-      Cell(props: { original: UsageRecord }) {
-        return props.original.userId ? (
-          <Link
-            to={`${PAGE_ROUTE.ADMIN_USER_USAGE_DETAILS_LINK}${props.original.userId}`}
-          >
-            <i className="fa fa-info-circle" />
-          </Link>
-        ) : (
-          <i className="fa fa-info-circle" />
-        );
-      },
-    },
-  ];
 
   @computed get resetDefaultSort(): SortingRule[] {
     const sortingRules: SortingRule[] = [];
@@ -282,7 +173,7 @@ export default class UsageAnalysisTable extends React.Component<
       });
     }
 
-    if (this.timeTypeToggleValue === ToggleValue.RESULTS_IN_TOTAL) {
+    if (this.timeTypeToggleValue === ToggleValue.RESULTS_BY_YEAR) {
       sortingRules.push({
         id: 'totalUsage',
         desc: true,
@@ -328,7 +219,7 @@ export default class UsageAnalysisTable extends React.Component<
         <UsageToggleGroup
           defaultValue={this.timeTypeToggleValue}
           toggleValues={[
-            ToggleValue.RESULTS_IN_TOTAL,
+            ToggleValue.RESULTS_BY_YEAR,
             ToggleValue.RESULTS_BY_MONTH,
             ToggleValue.RESULTS_BY_DAY,
           ]}
@@ -354,35 +245,19 @@ export default class UsageAnalysisTable extends React.Component<
   };
 
   getTable() {
-    if (this.timeTypeToggleValue === ToggleValue.RESULTS_IN_TOTAL) {
-      return (
-        <OncoKBTable<UserOverviewUsage>
-          key={this.timeTypeToggleValue}
-          data={this.props.data}
-          columns={this.getAllTimeColumns}
-          loading={!this.props.loadedData}
-          defaultSorted={this.resetDefaultSort}
-          showPagination={true}
-          minRows={1}
-          defaultPageSize={this.props.defaultPageSize}
-          filters={this.filters}
-        />
-      );
-    } else {
-      return (
-        <OncoKBTable<UsageRecord>
-          key={this.timeTypeToggleValue}
-          data={this.calculateDateGroupedData}
-          columns={this.dateGroupedColumns}
-          loading={!this.props.loadedData}
-          defaultSorted={this.resetDefaultSort}
-          showPagination={true}
-          minRows={1}
-          defaultPageSize={this.props.defaultPageSize}
-          filters={this.filters}
-        />
-      );
-    }
+    return (
+      <OncoKBTable<UsageRecord>
+        key={this.timeTypeToggleValue}
+        data={this.calculateDateGroupedData}
+        columns={this.dateGroupedColumns}
+        loading={!this.props.loadedData}
+        defaultSorted={this.resetDefaultSort}
+        showPagination={true}
+        minRows={1}
+        defaultPageSize={this.props.defaultPageSize}
+        filters={this.filters}
+      />
+    );
   }
 
   render() {

@@ -1,42 +1,36 @@
 package org.mskcc.cbio.oncokb.web.rest.vm.usageAnalysis;
 
-import org.json.simple.JSONObject;
-
-import java.util.Map;
 import java.util.HashMap;
-
-/**
- * Created by Yifu Yao on 2020-10-28
- */
+import java.util.Map;
 
 public class UsageSummary {
-    private Map<String, JSONObject> day = new HashMap<>();
-    private Map<String, JSONObject> month = new HashMap<>();
-    private Map<String, Long> year = new HashMap<>();
+  private Map<String, Map<String, Long>> day = new HashMap<>();
 
-    public Map<String, JSONObject> getDay() {
-        return day;
-    }
+  private Map<String, Map<String, Long>> month = new HashMap<>();
 
-    public void setDay(Map<String, JSONObject> day) {
-        this.day = day;
-    }
+  private Map<String, Map<String, Long>> year = new HashMap<>();
 
-    public Map<String, JSONObject> getMonth() {
-        return month;
-    }
+  public Map<String, Map<String, Long>> getDay() {
+    return day;
+  }
 
-    public void setMonth(Map<String, JSONObject> month) {
-        this.month = month;
-    }
+  public void setDay(Map<String, Map<String, Long>> day) {
+    this.day = day;
+  }
 
-    public Map<String, Long> getYear() {
-        return year;
-    }
+  public Map<String, Map<String, Long>> getMonth() {
+    return month;
+  }
 
-    public void setYear(Map<String, Long> year) {
-        this.year = year;
-    }
+  public void setMonth(Map<String, Map<String, Long>> month) {
+    this.month = month;
+  }
 
+  public Map<String, Map<String, Long>> getYear() {
+    return year;
+  }
 
+  public void setYear(Map<String, Map<String, Long>> year) {
+    this.year = year;
+  }
 }
