@@ -4,7 +4,11 @@ import OncoKBTable, {
 } from 'app/components/oncokbTable/OncoKBTable';
 import fdaTxs from 'content/files/oncologyTherapies/fda_approved_oncology_therapies.json';
 import fdaTxsExcel from 'content/files/oncologyTherapies/fda_approved_oncology_therapies.xlsx';
-import { LG_TABLE_FIXED_HEIGHT } from 'app/config/constants';
+import {
+  LG_TABLE_FIXED_HEIGHT,
+  PAGE_DESCRIPTION,
+  PAGE_TITLE,
+} from 'app/config/constants';
 import { Button, ButtonProps, Col, FormCheck, Row } from 'react-bootstrap';
 import { DownloadButton } from 'app/components/downloadButton/DownloadButton';
 import InfoIcon from 'app/shared/icons/InfoIcon';
@@ -15,6 +19,8 @@ import { Input } from 'reactstrap';
 import Select from 'react-select';
 import pluralize from 'pluralize';
 import { sortByKey, uniq, uniqBy } from 'app/shared/utils/LodashUtils';
+import { getPageTitle } from 'app/shared/utils/Utils';
+import { Helmet } from 'react-helmet-async';
 
 type FdaApprovedOncologyTherapy = {
   year: string;
@@ -467,6 +473,10 @@ const OncologyTherapiesPage: React.FunctionComponent<{}> = props => {
 
   return (
     <>
+      <Helmet>
+        <title>{getPageTitle(PAGE_TITLE.ONCOLOGY_TX)}</title>
+        <meta name="description" content={PAGE_DESCRIPTION.ONCOLOGY_TX}></meta>
+      </Helmet>
       <Row>
         <Col>
           <h2 className={'mb-3'}>FDA-Approved Oncology Therapies</h2>

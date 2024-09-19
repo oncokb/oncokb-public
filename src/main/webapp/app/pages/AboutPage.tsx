@@ -9,11 +9,11 @@ import {
   BILIBILI_VIDEO_IDS,
   LEVEL_TYPES,
   ONCOKB_TM,
+  PAGE_DESCRIPTION,
   PAGE_ROUTE,
   PAGE_TITLE,
   YOUTUBE_VIDEO_IDS,
 } from 'app/config/constants';
-import DocumentTitle from 'react-document-title';
 import { IReactionDisposer, observable } from 'mobx';
 import Tabs from 'react-responsive-tabs';
 import Iframe from 'react-iframe';
@@ -25,6 +25,7 @@ import {
 } from 'app/shared/utils/Utils';
 import OptimizedImage from 'app/shared/image/OptimizedImage';
 import { LevelOfEvidencePageLink } from 'app/shared/links/LevelOfEvidencePageLink';
+import { Helmet } from 'react-helmet-async';
 
 type AboutPageProps = { appStore: AppStore; routing: RouterStore };
 
@@ -124,57 +125,59 @@ export class AboutPage extends React.Component<AboutPageProps> {
 
   render() {
     return (
-      <DocumentTitle title={getPageTitle(PAGE_TITLE.ABOUT)}>
-        <>
-          <Row>
-            <Col md={6} xs={12}>
-              <h2 className={'mt-1'}>About {ONCOKB_TM}</h2>
-              <p className={'mt-3'}>
-                {ONCOKB_TM} is a precision oncology knowledge base developed at
-                Memorial Sloan Kettering Cancer Center that contains biological
-                and clinical information about genomic alterations in cancer.
-              </p>
-              <p>
-                Alteration- and tumor type-specific therapeutic implications are
-                classified using the{' '}
-                <LevelOfEvidencePageLink levelType={LEVEL_TYPES.TX}>
-                  {ONCOKB_TM} Levels of Evidence
-                </LevelOfEvidencePageLink>{' '}
-                system, which assigns clinical actionability to individual
-                mutational events.
-              </p>
-              <p>
-                For additional details about the {ONCOKB_TM} curation process,
-                please refer to the version-controlled{' '}
-                <Link to={PAGE_ROUTE.SOP}>
-                  {ONCOKB_TM} Curation Standard Operating Procedure
-                </Link>
-                . <CitationText />
-              </p>
-            </Col>
-            <Col md={6} xs={12}>
-              <Tabs
-                transform={false}
-                items={this.getVideoTabs()}
-                selectedTabKey={this.selectedVideoTabKey}
-                onChange={(tabKey: VIDEO_TAB_EKY) => {
-                  this.selectedVideoTabKey = tabKey;
-                }}
-              />
-            </Col>
-          </Row>
-          <Row>
-            <Col>
-              <div className={'mt-2'}>
-                <OptimizedImage src={processImg} style={{ width: '100%' }} />
-                <div className={'text-center'}>
-                  <h5>Overview of {ONCOKB_TM} Process</h5>
-                </div>
+      <>
+        <Helmet>
+          <title>{getPageTitle(PAGE_TITLE.ABOUT)}</title>
+          <meta name="description" content={PAGE_DESCRIPTION.ABOUT}></meta>
+        </Helmet>
+        <Row>
+          <Col md={6} xs={12}>
+            <h2 className={'mt-1'}>About {ONCOKB_TM}</h2>
+            <p className={'mt-3'}>
+              {ONCOKB_TM} is a precision oncology knowledge base developed at
+              Memorial Sloan Kettering Cancer Center that contains biological
+              and clinical information about genomic alterations in cancer.
+            </p>
+            <p>
+              Alteration- and tumor type-specific therapeutic implications are
+              classified using the{' '}
+              <LevelOfEvidencePageLink levelType={LEVEL_TYPES.TX}>
+                {ONCOKB_TM} Levels of Evidence
+              </LevelOfEvidencePageLink>{' '}
+              system, which assigns clinical actionability to individual
+              mutational events.
+            </p>
+            <p>
+              For additional details about the {ONCOKB_TM} curation process,
+              please refer to the version-controlled{' '}
+              <Link to={PAGE_ROUTE.SOP}>
+                {ONCOKB_TM} Curation Standard Operating Procedure
+              </Link>
+              . <CitationText />
+            </p>
+          </Col>
+          <Col md={6} xs={12}>
+            <Tabs
+              transform={false}
+              items={this.getVideoTabs()}
+              selectedTabKey={this.selectedVideoTabKey}
+              onChange={(tabKey: VIDEO_TAB_EKY) => {
+                this.selectedVideoTabKey = tabKey;
+              }}
+            />
+          </Col>
+        </Row>
+        <Row>
+          <Col>
+            <div className={'mt-2'}>
+              <OptimizedImage src={processImg} style={{ width: '100%' }} />
+              <div className={'text-center'}>
+                <h5>Overview of {ONCOKB_TM} Process</h5>
               </div>
-            </Col>
-          </Row>
-        </>
-      </DocumentTitle>
+            </div>
+          </Col>
+        </Row>
+      </>
     );
   }
 }

@@ -28,10 +28,15 @@ import { YEAR_END_SUMMARY_RANGE } from 'app/pages/newsPage/NewsPageNavTab';
 import { ALTERNATIVE_ALLELES_REGEX } from 'app/config/constants/regex';
 import WithSeparator from 'react-with-separator';
 
+export const getHostLinkWithProtocol = (): string => {
+  return `${window.location.protocol}//${window.location.host}`;
+};
+
 export const getGenePageLink = (props: {
   hugoSymbol: string;
   searchQueries?: GenePageSearchQueries;
   hashQueries?: GenePageHashQueries;
+  withProtocolHostPrefix?: boolean;
 }): string => {
   let pageLink = `${PAGE_ROUTE.GENE_HEADER}/${props.hugoSymbol}`;
   if (props.searchQueries && Object.keys(props.searchQueries).length > 0) {
@@ -39,6 +44,9 @@ export const getGenePageLink = (props: {
   }
   if (props.hashQueries) {
     pageLink = `${pageLink}#${QueryString.stringify(props.hashQueries)}`;
+  }
+  if (props.withProtocolHostPrefix) {
+    pageLink = `${getHostLinkWithProtocol()}${pageLink}`;
   }
   return pageLink;
 };
@@ -75,6 +83,7 @@ export const getAlterationPageLink = (props: {
   cancerType?: string;
   searchQueries?: AlterationPageSearchQueries;
   hashQueries?: AlterationPageHashQueries;
+  withProtocolHostPrefix?: boolean;
 }): string => {
   const linkoutAltName = getCategoricalAlteration(
     typeof props.alteration === 'string'
@@ -99,6 +108,9 @@ export const getAlterationPageLink = (props: {
   }
   if (props.hashQueries) {
     pageLink = `${pageLink}#${QueryString.stringify(props.hashQueries)}`;
+  }
+  if (props.withProtocolHostPrefix) {
+    pageLink = `${getHostLinkWithProtocol()}${pageLink}`;
   }
   return pageLink;
 };

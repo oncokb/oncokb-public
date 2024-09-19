@@ -97,6 +97,7 @@ module.exports = options => ({
                 },
               ],
             ],
+            plugins: ['@babel/plugin-proposal-class-properties', '@babel/plugin-proposal-optional-chaining']
           },
         },
         exclude: /@babel(?:\/|\\{1,2})runtime|core-js/,

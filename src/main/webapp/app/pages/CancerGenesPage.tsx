@@ -1,5 +1,5 @@
 import React from 'react';
-import { DefaultTooltip, remoteData } from 'cbioportal-frontend-commons';
+import { remoteData } from 'cbioportal-frontend-commons';
 import { CancerGene, CuratedGene } from 'app/shared/api/generated/OncoKbAPI';
 import { inject, observer } from 'mobx-react';
 import { defaultSortMethod } from 'app/shared/utils/ReactTableUtils';
@@ -18,16 +18,17 @@ import {
   MSK_IMPACT_TM,
   ONCOKB_TM,
   TABLE_COLUMN_KEY,
+  PAGE_DESCRIPTION,
 } from 'app/config/constants';
 import AppStore from 'app/store/AppStore';
 import oncokbClient from 'app/shared/api/oncokbClientInstance';
-import DocumentTitle from 'react-document-title';
 import { DownloadButtonWithPromise } from 'app/components/downloadButtonWithPromise/DownloadButtonWithPromise';
 import { FeedbackIcon } from 'app/components/feedback/FeedbackIcon';
 import { FeedbackType } from 'app/components/feedback/types';
 import WithSeparator from 'react-with-separator';
 import GeneAliasesDescription from 'app/shared/texts/GeneAliasesDescription';
 import CommonInfoIcon from 'app/shared/icons/InfoIcon';
+import { Helmet } from 'react-helmet-async';
 
 const InfoIcon = (props: { overlay: string | JSX.Element }) => {
   return (
@@ -436,7 +437,11 @@ export default class CancerGenesPage extends React.Component<{
 
   render() {
     return (
-      <DocumentTitle title={getPageTitle(PAGE_TITLE.CANCER_GENES)}>
+      <>
+        <Helmet>
+          <title>{getPageTitle(PAGE_TITLE.CANCER_GENES)}</title>
+          <meta name="description" content={PAGE_DESCRIPTION.CANCER_GENES} />
+        </Helmet>
         <div className="cancerGenes">
           <Row>
             <Col className="col-auto mr-auto">
@@ -496,7 +501,7 @@ export default class CancerGenesPage extends React.Component<{
             </Col>
           </Row>
         </div>
-      </DocumentTitle>
+      </>
     );
   }
 }
