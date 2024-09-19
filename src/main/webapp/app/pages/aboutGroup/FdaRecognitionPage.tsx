@@ -2,11 +2,11 @@ import {
   FdaRecognitionDisclaimer,
   LEVEL_TYPES,
   ONCOKB_TM,
+  PAGE_DESCRIPTION,
   PAGE_ROUTE,
   PAGE_TITLE,
 } from 'app/config/constants';
 import React from 'react';
-import DocumentTitle from 'react-document-title';
 import { Col, Row } from 'react-bootstrap';
 import { Link } from 'react-router-dom';
 import { Linkout } from 'app/shared/links/Linkout';
@@ -17,10 +17,15 @@ import {
 import { getPageTitle } from 'app/shared/utils/Utils';
 import { LevelOfEvidencePageLink } from 'app/shared/links/LevelOfEvidencePageLink';
 import { Version } from 'app/pages/LevelOfEvidencePage';
+import { Helmet } from 'react-helmet-async';
 
 const FdaRecognitionPage = () => {
   return (
-    <DocumentTitle title={getPageTitle(PAGE_TITLE.FDA_RECOGNITION)}>
+    <>
+      <Helmet>
+        <title>{getPageTitle(PAGE_TITLE.FDA_RECOGNITION)}</title>
+        <meta name="description" content={PAGE_DESCRIPTION.FDA_RECOGNITION} />
+      </Helmet>
       <div className="fda-recognition">
         <Row>
           <Col>
@@ -183,7 +188,7 @@ const FdaRecognitionPage = () => {
           </Col>
         </Row>
       </div>
-    </DocumentTitle>
+    </>
   );
 };
 export default FdaRecognitionPage;

@@ -11,8 +11,8 @@ import Iframe from 'react-iframe';
 import FdaRecognitionPage from 'app/pages/aboutGroup/FdaRecognitionPage';
 import { LocationDescriptorObject } from 'history';
 import classnames from 'classnames';
-import DocumentTitle from 'react-document-title';
 import { getPageTitle } from 'app/shared/utils/Utils';
+import { Helmet } from 'react-helmet-async';
 
 type AboutPageNavTabProps = { appStore: AppStore; routing: RouterStore };
 
@@ -122,23 +122,24 @@ export class AboutPageNavTab extends React.Component<AboutPageNavTabProps> {
                   <FdaRecognitionPage />
                 </Tab.Pane>
                 <Tab.Pane eventKey={TabKey.SOP}>
-                  <DocumentTitle title={getPageTitle(PAGE_TITLE.SOP)}>
-                    <div>
-                      <div style={{ marginTop: '-5px' }}>
-                        <Iframe
-                          width="100%"
-                          height="1000px"
-                          url="https://sop.oncokb.org"
-                          frameBorder={0}
-                          allow="accelerometer; encrypted-media; gyroscope; picture-in-picture"
-                          allowFullScreen
-                        />
-                      </div>
-                      <h2 style={{ position: 'absolute', top: 0 }}>
-                        {ONCOKB_TM} Standard Operating Procedure
-                      </h2>
+                  <div>
+                    <Helmet>
+                      <title>{getPageTitle(PAGE_TITLE.SOP)}</title>
+                    </Helmet>
+                    <div style={{ marginTop: '-5px' }}>
+                      <Iframe
+                        width="100%"
+                        height="1000px"
+                        url="https://sop.oncokb.org"
+                        frameBorder={0}
+                        allow="accelerometer; encrypted-media; gyroscope; picture-in-picture"
+                        allowFullScreen
+                      />
                     </div>
-                  </DocumentTitle>
+                    <h2 style={{ position: 'absolute', top: 0 }}>
+                      {ONCOKB_TM} Standard Operating Procedure
+                    </h2>
+                  </div>
                 </Tab.Pane>
               </Tab.Content>
             </Col>

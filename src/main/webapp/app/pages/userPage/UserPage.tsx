@@ -20,6 +20,7 @@ import {
   LicenseType,
   NOT_CHANGEABLE_AUTHORITIES,
   PAGE_ROUTE,
+  PAGE_TITLE,
   REDIRECT_TIMEOUT_MILLISECONDS,
   THRESHOLD_TRIAL_TOKEN_VALID_DEFAULT,
   USAGE_ALL_TIME_KEY,
@@ -65,7 +66,6 @@ import { PromiseStatus } from 'app/shared/utils/PromiseUtils';
 import { QuickToolButton } from 'app/pages/userPage/QuickToolButton';
 import { TrialAccountModal } from './TrialAccountModal';
 import { SimpleConfirmModal } from 'app/shared/modal/SimpleConfirmModal';
-import DocumentTitle from 'react-document-title';
 import { Link } from 'react-router-dom';
 import { RouterStore } from 'mobx-react-router';
 import {
@@ -89,6 +89,7 @@ import {
   getPasswordResetLink,
 } from 'app/shared/utils/UrlUtils';
 import { sortBy } from 'app/shared/utils/LodashUtils';
+import { Helmet } from 'react-helmet-async';
 
 export enum AccountStatus {
   ACTIVATED = 'Activated',
@@ -626,11 +627,14 @@ export default class UserPage extends React.Component<IUserPage> {
             </Then>
             <Else>
               {this.user !== undefined && (
-                <DocumentTitle
-                  title={getPageTitle(
-                    `${this.user.firstName} ${this.user.lastName}`
-                  )}
-                >
+                <>
+                  <Helmet>
+                    <title>
+                      {getPageTitle(
+                        `${this.user.firstName} ${this.user.lastName}`
+                      )}
+                    </title>
+                  </Helmet>
                   <AvForm onValidSubmit={this.updateUser} model={this.user}>
                     <div>
                       <Row className={getSectionClassName()}>
@@ -1127,7 +1131,7 @@ export default class UserPage extends React.Component<IUserPage> {
                       </Row>
                     </div>
                   </AvForm>
-                </DocumentTitle>
+                </>
               )}
             </Else>
           </If>

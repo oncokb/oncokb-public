@@ -10,6 +10,7 @@ import {
   LicenseModel,
   LicenseStatus,
   PAGE_ROUTE,
+  PAGE_TITLE,
   REDIRECT_TIMEOUT_MILLISECONDS,
 } from 'app/config/constants';
 import { Alert, Button, Col, Row } from 'react-bootstrap';
@@ -33,7 +34,6 @@ import { COMPANY_FORM_OPTIONS } from 'app/components/newCompanyForm/NewCompanyFo
 import { FormListField } from 'app/shared/list/FormListField';
 import { UserTable } from 'app/shared/table/UserTable';
 import Select from 'react-select';
-import DocumentTitle from 'react-document-title';
 import { DefaultTooltip, remoteData } from 'cbioportal-frontend-commons';
 import { AdditionalInfoSelect } from 'app/shared/dropdown/AdditionalInfoSelect';
 import {
@@ -69,6 +69,7 @@ import { DateSelector } from 'app/components/dateSelector/DateSelector';
 import { DownloadButton } from 'app/components/downloadButton/DownloadButton';
 import { RouterStore } from 'mobx-react-router';
 import { TEXT_VAL } from 'app/shared/utils/FormValidationUtils';
+import { Helmet } from 'react-helmet-async';
 
 interface MatchParams {
   id: string;
@@ -505,472 +506,456 @@ export default class CompanyPage extends React.Component<ICompanyPage> {
             </Then>
             <Else>
               {this.getCompanyStatus === PromiseStatus.complete && (
-                <DocumentTitle title={getPageTitle(this.company.name)}>
-                  <>
+                <>
+                  <Helmet>
+                    <title>{getPageTitle(this.company.name)}</title>
+                  </Helmet>
+                  <Row className={getSectionClassName()}>
+                    <Col>
+                      <div>Quick Tools</div>
+                      <div>
+                        <Link
+                          className="btn btn-outline-primary m-2"
+                          to={`/companies/${this.company.id}/create-users`}
+                        >
+                          Create Company Users
+                        </Link>
+                        {this.companyHasTrialUsers && (
+                          <DefaultTooltip
+                            overlay={
+                              <DateSelector
+                                afterChangeDate={this.extendTrialAccess}
+                              />
+                            }
+                          >
+                            <QuickToolButton>
+                              Extend Trial Access
+                            </QuickToolButton>
+                          </DefaultTooltip>
+                        )}
+                      </div>
+                    </Col>
+                  </Row>
+                  <AvForm
+                    onValidSubmit={this.onValidFormSubmit}
+                    onKeyPress={(event: any) => {
+                      if (event.which === 13) {
+                        event.preventDefault();
+                      }
+                    }}
+                  >
                     <Row className={getSectionClassName()}>
                       <Col>
-                        <div>Quick Tools</div>
-                        <div>
-                          <Link
-                            className="btn btn-outline-primary m-2"
-                            to={`/companies/${this.company.id}/create-users`}
-                          >
-                            Create Company Users
-                          </Link>
-                          {this.companyHasTrialUsers && (
-                            <DefaultTooltip
-                              overlay={
-                                <DateSelector
-                                  afterChangeDate={this.extendTrialAccess}
-                                />
+                        <AvField
+                          name="companyId"
+                          value={this.company.id}
+                          label={
+                            <span className="font-weight-bold">Company ID</span>
+                          }
+                          disabled
+                        />
+                        <AvField
+                          name="companyName"
+                          value={this.company.name}
+                          label={
+                            <span className="font-weight-bold">
+                              Company Name
+                            </span>
+                          }
+                          validate={{
+                            ...fieldRequiredValidation('company name'),
+                            ...TEXT_VAL,
+                            async: (
+                              value: string,
+                              ctx: any,
+                              input: any,
+                              cb: (isValid: boolean | string) => void
+                            ) => {
+                              if (this.company.name !== value) {
+                                debouncedCompanyNameValidator(
+                                  value,
+                                  ctx,
+                                  input,
+                                  cb,
+                                  this.company.id
+                                );
+                              } else {
+                                cb(true);
                               }
+                            },
+                          }}
+                        />
+                        <FormTextAreaField
+                          label="Company Description"
+                          value={this.company.description}
+                          onTextAreaChange={(event: any) =>
+                            (this.company.description = event.target.value)
+                          }
+                          boldLabel
+                        />
+                        <FormSelectWithLabelField
+                          labelText={'Company Type'}
+                          name={'companyType'}
+                          defaultValue={{
+                            value: this.company.companyType,
+                            label:
+                              COMPANY_TYPE_TITLES[this.company.companyType],
+                          }}
+                          options={COMPANY_FORM_OPTIONS.companyType}
+                          onSelection={(selectedOption: any) =>
+                            (this.company.companyType = selectedOption.value)
+                          }
+                          boldLabel
+                        />
+                      </Col>
+                    </Row>
+                    <Row className={getSectionClassName()}>
+                      <Col>
+                        <AvField
+                          name="businessContact"
+                          value={this.company.businessContact}
+                          label={
+                            <span className="font-weight-bold">
+                              Business Contact
+                            </span>
+                          }
+                          validate={{ ...OPTIONAL_TEXT_VAL }}
+                        />
+                        <AvField
+                          name="legalContact"
+                          value={this.company.legalContact}
+                          label={
+                            <span className="font-weight-bold">
+                              Legal Contact
+                            </span>
+                          }
+                          validate={{ ...OPTIONAL_TEXT_VAL }}
+                        />
+                        <div className="form-group">
+                          <div className={'font-weight-bold'}>
+                            License Model
+                          </div>
+                          <AdditionalInfoSelect
+                            name={'licenseModel'}
+                            defaultValue={{
+                              value: this.company.licenseModel,
+                              label:
+                                LICENSE_MODEL_TITLES[this.company.licenseModel],
+                            }}
+                            options={COMPANY_FORM_OPTIONS.licenseModel}
+                            onSelection={(selectedOption: any) => {
+                              this.company.licenseModel = selectedOption.value;
+                            }}
+                          />
+                        </div>
+                        <FormSelectWithLabelField
+                          labelText={'License Type'}
+                          name={'licenseType'}
+                          defaultValue={{
+                            value: this.company.licenseType,
+                            label: LICENSE_TITLES[this.company.licenseType],
+                          }}
+                          options={COMPANY_FORM_OPTIONS.licenseType}
+                          onSelection={(selectedOption: any) =>
+                            (this.company.licenseType = selectedOption.value)
+                          }
+                          boldLabel
+                        />
+                        <FormSelectWithLabelField
+                          labelText={'License Status'}
+                          name={'licenseStatus'}
+                          defaultValue={{
+                            value: this.selectedLicenseStatus,
+                            label:
+                              LICENSE_STATUS_TITLES[this.selectedLicenseStatus],
+                          }}
+                          options={this.licenseStatusOptions}
+                          onSelection={(selectedOption: any) =>
+                            (this.selectedLicenseStatus = selectedOption.value)
+                          }
+                          boldLabel
+                        />
+                      </Col>
+                    </Row>
+                    <Row className={getSectionClassName()}>
+                      <Col>
+                        <div className="form-group">
+                          <div>
+                            <span className={'font-weight-bold'}>
+                              Company Users
+                            </span>
+                            {this.companyUsers.length > 0 ? (
+                              <DownloadButton
+                                className={'ml-2 btn-sm'}
+                                href={window.URL.createObjectURL(
+                                  this.companyUserDownloadData
+                                )}
+                                download={`${this.company.name
+                                  .toLowerCase()
+                                  .split(' ')
+                                  .join('_')}_users.tsv`}
+                              >
+                                Users
+                              </DownloadButton>
+                            ) : undefined}
+                          </div>
+                          <UserTable
+                            data={this.companyUsers}
+                            usersTokens={this.companyUserTokens}
+                            onRemoveUser={this.removeUserFromCompany}
+                            onUpdateUser={this.updateCompanyUser}
+                            onVerifyUserEmail={this.verifyUserEmail}
+                            licenseStatus={
+                              this.company.licenseStatus as LicenseStatus
+                            }
+                            loading={
+                              this.getCompanyUsersStatus !==
+                              PromiseStatus.complete
+                            }
+                          />
+                        </div>
+                        <div className="form-group">
+                          <div className={'mb-2 font-weight-bold'}>
+                            License Model
+                          </div>
+                          <AdditionalInfoSelect
+                            name={'licenseModel'}
+                            defaultValue={{
+                              value: this.company.licenseModel,
+                              label:
+                                LICENSE_MODEL_TITLES[this.company.licenseModel],
+                            }}
+                            options={COMPANY_FORM_OPTIONS.licenseModel}
+                            onSelection={(selectedOption: any) => {
+                              this.company.licenseModel = selectedOption.value;
+                              this.verifyCompanyDomains();
+                            }}
+                          />
+                        </div>
+                        <FormListField
+                          list={this.company.companyDomains}
+                          addItem={(domain: string) => {
+                            this.company.companyDomains.push(domain);
+                            this.verifyCompanyDomains();
+                          }}
+                          deleteItem={(domain: string) => {
+                            this.company.companyDomains = this.company.companyDomains.filter(
+                              domainName => domainName !== domain
+                            );
+                            this.conflictingDomains = this.conflictingDomains.filter(
+                              domainName => domainName !== domain
+                            );
+                          }}
+                          labelText={'Company Domains'}
+                          placeholder={
+                            'Include at least one domain. ie) oncokb.org'
+                          }
+                          conflictingItems={this.conflictingDomains}
+                          boldLabel
+                        />
+                        {this.conflictingDomains.length > 0 ? (
+                          <Alert variant="warning">
+                            <i className={'mr-2 fa fa-exclamation-triangle'} />
+                            <span>
+                              The domains highlighted in yellow are associated
+                              with another regular tiered company.
+                            </span>
+                          </Alert>
+                        ) : null}
+                        <div className="form-group">
+                          <div className={'font-weight-bold mb-2'}>
+                            Add Users to Company
+                          </div>
+                          <div style={{ display: 'flex' }}>
+                            <div style={{ flex: '1' }}>
+                              <Select
+                                isMulti
+                                closeMenuOnSelect={false}
+                                hideSelectedOptions
+                                value={this.selectedUsersOptions.map(u => u)}
+                                options={this.dropDownUsers.map(u => u)}
+                                onChange={(selectedOptions: any) => {
+                                  this.selectedUsersOptions = selectedOptions
+                                    ? selectedOptions
+                                    : [];
+                                }}
+                                maxMenuHeight={200}
+                                isLoading={
+                                  this.getDropdownUsersStatus !==
+                                  PromiseStatus.complete
+                                }
+                              />
+                            </div>
+                            <div
+                              style={{
+                                display: 'flex',
+                                justifyContent: 'center',
+                                alignItems: 'center',
+                                margin: '0 20px',
+                              }}
+                              className="font-weight-bold"
                             >
-                              <QuickToolButton>
-                                Extend Trial Access
-                              </QuickToolButton>
-                            </DefaultTooltip>
-                          )}
+                              or
+                            </div>
+                            <div>
+                              <DefaultTooltip
+                                placement={'top'}
+                                overlay={`Select all users whose email addresses matches the company's domain(s).`}
+                              >
+                                <Button onClick={this.selectRelatedUsers}>
+                                  Add All Related Users
+                                </Button>
+                              </DefaultTooltip>
+                            </div>
+                          </div>
                         </div>
                       </Col>
                     </Row>
-                    <AvForm
-                      onValidSubmit={this.onValidFormSubmit}
-                      onKeyPress={(event: any) => {
-                        if (event.which === 13) {
-                          event.preventDefault();
-                        }
-                      }}
-                    >
-                      <Row className={getSectionClassName()}>
-                        <Col>
-                          <AvField
-                            name="companyId"
-                            value={this.company.id}
-                            label={
-                              <span className="font-weight-bold">
-                                Company ID
-                              </span>
-                            }
-                            disabled
-                          />
-                          <AvField
-                            name="companyName"
-                            value={this.company.name}
-                            label={
-                              <span className="font-weight-bold">
-                                Company Name
-                              </span>
-                            }
-                            validate={{
-                              ...fieldRequiredValidation('company name'),
-                              ...TEXT_VAL,
-                              async: (
-                                value: string,
-                                ctx: any,
-                                input: any,
-                                cb: (isValid: boolean | string) => void
-                              ) => {
-                                if (this.company.name !== value) {
-                                  debouncedCompanyNameValidator(
-                                    value,
-                                    ctx,
-                                    input,
-                                    cb,
-                                    this.company.id
-                                  );
-                                } else {
-                                  cb(true);
-                                }
+                    <Row className={getSectionClassName()}>
+                      <Col>
+                        <div className={'font-weight-bold'}>
+                          Company Data Usage
+                        </div>
+                        <div className="mt-2">
+                          <OncoKBTable
+                            data={this.users.result}
+                            columns={[
+                              {
+                                id: 'userEmail',
+                                Header: emailHeader,
+                                accessor: 'userEmail',
+                                minWidth: 200,
+                                onFilter: (data: UserOverviewUsage, keyword) =>
+                                  filterByKeyword(data.userEmail, keyword),
                               },
-                            }}
-                          />
-                          <FormTextAreaField
-                            label="Company Description"
-                            value={this.company.description}
-                            onTextAreaChange={(event: any) =>
-                              (this.company.description = event.target.value)
-                            }
-                            boldLabel
-                          />
-                          <FormSelectWithLabelField
-                            labelText={'Company Type'}
-                            name={'companyType'}
-                            defaultValue={{
-                              value: this.company.companyType,
-                              label:
-                                COMPANY_TYPE_TITLES[this.company.companyType],
-                            }}
-                            options={COMPANY_FORM_OPTIONS.companyType}
-                            onSelection={(selectedOption: any) =>
-                              (this.company.companyType = selectedOption.value)
-                            }
-                            boldLabel
-                          />
-                        </Col>
-                      </Row>
-                      <Row className={getSectionClassName()}>
-                        <Col>
-                          <AvField
-                            name="businessContact"
-                            value={this.company.businessContact}
-                            label={
-                              <span className="font-weight-bold">
-                                Business Contact
-                              </span>
-                            }
-                            validate={{ ...OPTIONAL_TEXT_VAL }}
-                          />
-                          <AvField
-                            name="legalContact"
-                            value={this.company.legalContact}
-                            label={
-                              <span className="font-weight-bold">
-                                Legal Contact
-                              </span>
-                            }
-                            validate={{ ...OPTIONAL_TEXT_VAL }}
-                          />
-                          <div className="form-group">
-                            <div className={'font-weight-bold'}>
-                              License Model
-                            </div>
-                            <AdditionalInfoSelect
-                              name={'licenseModel'}
-                              defaultValue={{
-                                value: this.company.licenseModel,
-                                label:
-                                  LICENSE_MODEL_TITLES[
-                                    this.company.licenseModel
-                                  ],
-                              }}
-                              options={COMPANY_FORM_OPTIONS.licenseModel}
-                              onSelection={(selectedOption: any) => {
-                                this.company.licenseModel =
-                                  selectedOption.value;
-                              }}
-                            />
-                          </div>
-                          <FormSelectWithLabelField
-                            labelText={'License Type'}
-                            name={'licenseType'}
-                            defaultValue={{
-                              value: this.company.licenseType,
-                              label: LICENSE_TITLES[this.company.licenseType],
-                            }}
-                            options={COMPANY_FORM_OPTIONS.licenseType}
-                            onSelection={(selectedOption: any) =>
-                              (this.company.licenseType = selectedOption.value)
-                            }
-                            boldLabel
-                          />
-                          <FormSelectWithLabelField
-                            labelText={'License Status'}
-                            name={'licenseStatus'}
-                            defaultValue={{
-                              value: this.selectedLicenseStatus,
-                              label:
-                                LICENSE_STATUS_TITLES[
-                                  this.selectedLicenseStatus
-                                ],
-                            }}
-                            options={this.licenseStatusOptions}
-                            onSelection={(selectedOption: any) =>
-                              (this.selectedLicenseStatus =
-                                selectedOption.value)
-                            }
-                            boldLabel
-                          />
-                        </Col>
-                      </Row>
-                      <Row className={getSectionClassName()}>
-                        <Col>
-                          <div className="form-group">
-                            <div>
-                              <span className={'font-weight-bold'}>
-                                Company Users
-                              </span>
-                              {this.companyUsers.length > 0 ? (
-                                <DownloadButton
-                                  className={'ml-2 btn-sm'}
-                                  href={window.URL.createObjectURL(
-                                    this.companyUserDownloadData
-                                  )}
-                                  download={`${this.company.name
-                                    .toLowerCase()
-                                    .split(' ')
-                                    .join('_')}_users.tsv`}
-                                >
-                                  Users
-                                </DownloadButton>
-                              ) : undefined}
-                            </div>
-                            <UserTable
-                              data={this.companyUsers}
-                              usersTokens={this.companyUserTokens}
-                              onRemoveUser={this.removeUserFromCompany}
-                              onUpdateUser={this.updateCompanyUser}
-                              onVerifyUserEmail={this.verifyUserEmail}
-                              licenseStatus={
-                                this.company.licenseStatus as LicenseStatus
-                              }
-                              loading={
-                                this.getCompanyUsersStatus !==
-                                PromiseStatus.complete
-                              }
-                            />
-                          </div>
-                          <div className="form-group">
-                            <div className={'mb-2 font-weight-bold'}>
-                              License Model
-                            </div>
-                            <AdditionalInfoSelect
-                              name={'licenseModel'}
-                              defaultValue={{
-                                value: this.company.licenseModel,
-                                label:
-                                  LICENSE_MODEL_TITLES[
-                                    this.company.licenseModel
-                                  ],
-                              }}
-                              options={COMPANY_FORM_OPTIONS.licenseModel}
-                              onSelection={(selectedOption: any) => {
-                                this.company.licenseModel =
-                                  selectedOption.value;
-                                this.verifyCompanyDomains();
-                              }}
-                            />
-                          </div>
-                          <FormListField
-                            list={this.company.companyDomains}
-                            addItem={(domain: string) => {
-                              this.company.companyDomains.push(domain);
-                              this.verifyCompanyDomains();
-                            }}
-                            deleteItem={(domain: string) => {
-                              this.company.companyDomains = this.company.companyDomains.filter(
-                                domainName => domainName !== domain
-                              );
-                              this.conflictingDomains = this.conflictingDomains.filter(
-                                domainName => domainName !== domain
-                              );
-                            }}
-                            labelText={'Company Domains'}
-                            placeholder={
-                              'Include at least one domain. ie) oncokb.org'
-                            }
-                            conflictingItems={this.conflictingDomains}
-                            boldLabel
-                          />
-                          {this.conflictingDomains.length > 0 ? (
-                            <Alert variant="warning">
-                              <i
-                                className={'mr-2 fa fa-exclamation-triangle'}
-                              />
-                              <span>
-                                The domains highlighted in yellow are associated
-                                with another regular tiered company.
-                              </span>
-                            </Alert>
-                          ) : null}
-                          <div className="form-group">
-                            <div className={'font-weight-bold mb-2'}>
-                              Add Users to Company
-                            </div>
-                            <div style={{ display: 'flex' }}>
-                              <div style={{ flex: '1' }}>
-                                <Select
-                                  isMulti
-                                  closeMenuOnSelect={false}
-                                  hideSelectedOptions
-                                  value={this.selectedUsersOptions.map(u => u)}
-                                  options={this.dropDownUsers.map(u => u)}
-                                  onChange={(selectedOptions: any) => {
-                                    this.selectedUsersOptions = selectedOptions
-                                      ? selectedOptions
-                                      : [];
-                                  }}
-                                  maxMenuHeight={200}
-                                  isLoading={
-                                    this.getDropdownUsersStatus !==
-                                    PromiseStatus.complete
-                                  }
-                                />
-                              </div>
-                              <div
-                                style={{
-                                  display: 'flex',
-                                  justifyContent: 'center',
-                                  alignItems: 'center',
-                                  margin: '0 20px',
-                                }}
-                                className="font-weight-bold"
-                              >
-                                or
-                              </div>
-                              <div>
-                                <DefaultTooltip
-                                  placement={'top'}
-                                  overlay={`Select all users whose email addresses matches the company's domain(s).`}
-                                >
-                                  <Button onClick={this.selectRelatedUsers}>
-                                    Add All Related Users
-                                  </Button>
-                                </DefaultTooltip>
-                              </div>
-                            </div>
-                          </div>
-                        </Col>
-                      </Row>
-                      <Row className={getSectionClassName()}>
-                        <Col>
-                          <div className={'font-weight-bold'}>
-                            Company Data Usage
-                          </div>
-                          <div className="mt-2">
-                            <OncoKBTable
-                              data={this.users.result}
-                              columns={[
-                                {
-                                  id: 'userEmail',
-                                  Header: emailHeader,
-                                  accessor: 'userEmail',
-                                  minWidth: 200,
-                                  onFilter: (
-                                    data: UserOverviewUsage,
-                                    keyword
-                                  ) => filterByKeyword(data.userEmail, keyword),
-                                },
-                                {
-                                  id: 'totalUsage',
-                                  Header: usageHeader,
-                                  minWidth: 100,
-                                  accessor: 'totalUsage',
-                                  Cell(props: { original: UserOverviewUsage }) {
-                                    return (
-                                      <UsageText
-                                        usage={props.original.totalUsage}
-                                      />
-                                    );
-                                  },
-                                },
-                                this.resourcesTypeToggleValue ===
-                                ToggleValue.ALL_RESOURCES
-                                  ? {
-                                      id: 'endpoint',
-                                      Header: endpointHeader,
-                                      minWidth: 200,
-                                      accessor: 'endpoint',
-                                      onFilter: (
-                                        data: UserOverviewUsage,
-                                        keyword
-                                      ) =>
-                                        filterByKeyword(data.endpoint, keyword),
-                                    }
-                                  : {
-                                      id: 'noPrivateEndpoint',
-                                      Header: noPrivateEndpointHeader,
-                                      minWidth: 200,
-                                      accessor: 'noPrivateEndpoint',
-                                      onFilter: (
-                                        data: UserOverviewUsage,
-                                        keyword
-                                      ) =>
-                                        filterByKeyword(
-                                          data.noPrivateEndpoint,
-                                          keyword
-                                        ),
-                                    },
-                                {
-                                  ...getUsageTableColumnDefinition(
-                                    UsageTableColumnKey.OPERATION
-                                  ),
-                                  sortable: false,
-                                  className: 'd-flex justify-content-center',
-                                  Cell(props: { original: UserOverviewUsage }) {
-                                    return (
-                                      <Link
-                                        to={`${PAGE_ROUTE.ADMIN_USER_USAGE_DETAILS_LINK}${props.original.userId}`}
-                                      >
-                                        <i className="fa fa-info-circle"></i>
-                                      </Link>
-                                    );
-                                  },
-                                },
-                              ]}
-                              loading={this.users.isPending}
-                              defaultSorted={[
-                                {
-                                  id: 'totalUsage',
-                                  desc: true,
-                                },
-                              ]}
-                              showPagination={true}
-                              minRows={1}
-                              defaultPageSize={5}
-                              filters={() => {
-                                return (
-                                  <Row>
-                                    <UsageToggleGroup
-                                      defaultValue={
-                                        this.resourcesTypeToggleValue
-                                      }
-                                      toggleValues={[
-                                        ToggleValue.ALL_RESOURCES,
-                                        ToggleValue.PUBLIC_RESOURCES,
-                                      ]}
-                                      handleToggle={
-                                        this.handleResourcesTypeToggleChange
-                                      }
+                              {
+                                id: 'totalUsage',
+                                Header: usageHeader,
+                                minWidth: 100,
+                                accessor: 'totalUsage',
+                                Cell(props: { original: UserOverviewUsage }) {
+                                  return (
+                                    <UsageText
+                                      usage={props.original.totalUsage}
                                     />
-                                  </Row>
-                                );
-                              }}
-                            />
-                          </div>
-                        </Col>
-                      </Row>
-                      <Row className={getSectionClassName()}>
-                        <Col>
+                                  );
+                                },
+                              },
+                              this.resourcesTypeToggleValue ===
+                              ToggleValue.ALL_RESOURCES
+                                ? {
+                                    id: 'endpoint',
+                                    Header: endpointHeader,
+                                    minWidth: 200,
+                                    accessor: 'endpoint',
+                                    onFilter: (
+                                      data: UserOverviewUsage,
+                                      keyword
+                                    ) =>
+                                      filterByKeyword(data.endpoint, keyword),
+                                  }
+                                : {
+                                    id: 'noPrivateEndpoint',
+                                    Header: noPrivateEndpointHeader,
+                                    minWidth: 200,
+                                    accessor: 'noPrivateEndpoint',
+                                    onFilter: (
+                                      data: UserOverviewUsage,
+                                      keyword
+                                    ) =>
+                                      filterByKeyword(
+                                        data.noPrivateEndpoint,
+                                        keyword
+                                      ),
+                                  },
+                              {
+                                ...getUsageTableColumnDefinition(
+                                  UsageTableColumnKey.OPERATION
+                                ),
+                                sortable: false,
+                                className: 'd-flex justify-content-center',
+                                Cell(props: { original: UserOverviewUsage }) {
+                                  return (
+                                    <Link
+                                      to={`${PAGE_ROUTE.ADMIN_USER_USAGE_DETAILS_LINK}${props.original.userId}`}
+                                    >
+                                      <i className="fa fa-info-circle"></i>
+                                    </Link>
+                                  );
+                                },
+                              },
+                            ]}
+                            loading={this.users.isPending}
+                            defaultSorted={[
+                              {
+                                id: 'totalUsage',
+                                desc: true,
+                              },
+                            ]}
+                            showPagination={true}
+                            minRows={1}
+                            defaultPageSize={5}
+                            filters={() => {
+                              return (
+                                <Row>
+                                  <UsageToggleGroup
+                                    defaultValue={this.resourcesTypeToggleValue}
+                                    toggleValues={[
+                                      ToggleValue.ALL_RESOURCES,
+                                      ToggleValue.PUBLIC_RESOURCES,
+                                    ]}
+                                    handleToggle={
+                                      this.handleResourcesTypeToggleChange
+                                    }
+                                  />
+                                </Row>
+                              );
+                            }}
+                          />
+                        </div>
+                      </Col>
+                    </Row>
+                    <Row className={getSectionClassName()}>
+                      <Col>
+                        <Button
+                          id="update-company"
+                          variant="primary"
+                          type="submit"
+                        >
+                          Update Company
+                        </Button>
+                      </Col>
+                    </Row>
+                    <Row>
+                      <Col className={getSectionClassName()}>
+                        <div className={'my-2 text-danger'}>Danger Zone</div>
+                        <div>
                           <Button
-                            id="update-company"
-                            variant="primary"
-                            type="submit"
+                            variant="danger"
+                            onClick={() => {
+                              this.showModal = true;
+                              this.simpleConfirmModalType =
+                                SimpleConfirmModalType.DELETE_COMPANY;
+                            }}
                           >
-                            Update Company
+                            Delete Company
                           </Button>
-                        </Col>
-                      </Row>
-                      <Row>
-                        <Col className={getSectionClassName()}>
-                          <div className={'my-2 text-danger'}>Danger Zone</div>
-                          <div>
-                            <Button
-                              variant="danger"
-                              onClick={() => {
-                                this.showModal = true;
-                                this.simpleConfirmModalType =
-                                  SimpleConfirmModalType.DELETE_COMPANY;
-                              }}
-                            >
-                              Delete Company
-                            </Button>
-                          </div>
-                        </Col>
-                      </Row>
-                    </AvForm>
-                    <SimpleConfirmModal
-                      key="company-page-simple-confirm-modal"
-                      show={this.showModal}
-                      title={this.licenseChangeModalTitle}
-                      body={this.licenseChangeModalBody}
-                      onCancel={() => {
-                        this.showModal = false;
-                        this.simpleConfirmModalType = SimpleConfirmModalType.NA;
-                      }}
-                      onConfirm={this.onConfirmSimpleConfirmModal}
-                    />
-                  </>
-                </DocumentTitle>
+                        </div>
+                      </Col>
+                    </Row>
+                  </AvForm>
+                  <SimpleConfirmModal
+                    key="company-page-simple-confirm-modal"
+                    show={this.showModal}
+                    title={this.licenseChangeModalTitle}
+                    body={this.licenseChangeModalBody}
+                    onCancel={() => {
+                      this.showModal = false;
+                      this.simpleConfirmModalType = SimpleConfirmModalType.NA;
+                    }}
+                    onConfirm={this.onConfirmSimpleConfirmModal}
+                  />
+                </>
               )}
             </Else>
           </If>

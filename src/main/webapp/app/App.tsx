@@ -10,13 +10,12 @@ import { RouterStore, SynchronizedHistory } from 'mobx-react-router';
 import { Router } from 'react-router';
 import { syncHistoryWithStore } from 'mobx-react-router';
 import { createBrowserHistory } from 'history';
-import DocumentTitle from 'react-document-title';
-import { PAGE_TITLE, PAGE_ROUTE } from 'app/config/constants';
+import { PAGE_ROUTE } from 'app/config/constants';
 import { action } from 'mobx';
 import autobind from 'autobind-decorator';
-import { getPageTitle } from 'app/shared/utils/Utils';
 import { setRecaptchaToken } from './indexUtils';
 import { AppConfig } from 'app/appConfig';
+import { HelmetProvider } from 'react-helmet-async';
 
 export type Stores = {
   appStore: AppStore;
@@ -101,7 +100,7 @@ class App extends React.Component {
     }
 
     return (
-      <DocumentTitle title={getPageTitle(PAGE_TITLE.HOME, false)}>
+      <HelmetProvider>
         <>
           {
             <Provider {...this.stores}>
@@ -111,7 +110,7 @@ class App extends React.Component {
             </Provider>
           }
         </>
-      </DocumentTitle>
+      </HelmetProvider>
     );
   }
 }

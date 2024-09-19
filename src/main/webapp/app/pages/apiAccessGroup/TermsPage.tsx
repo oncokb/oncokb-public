@@ -5,10 +5,14 @@ import { Link } from 'react-router-dom';
 import {
   ONCOKB_CONTACT_EMAIL,
   ONCOKB_TM,
+  PAGE_DESCRIPTION,
   PAGE_ROUTE,
+  PAGE_TITLE,
 } from 'app/config/constants';
 import { OncoKBLink } from 'app/shared/links/OncoKBLink';
 import { ContactLink } from 'app/shared/links/ContactLink';
+import { Helmet } from 'react-helmet-async';
+import { getPageTitle } from 'app/shared/utils/Utils';
 
 enum TabKey {
   ACADEMIC = 'ACADEMIC',
@@ -17,6 +21,10 @@ enum TabKey {
 export const TermsPage = () => {
   return (
     <div className="terms">
+      <Helmet>
+        <title>{getPageTitle(PAGE_TITLE.TERMS)}</title>
+        <meta name="description" content={PAGE_DESCRIPTION.TERMS} />
+      </Helmet>
       <Row>
         <Col>
           <Tabs defaultActiveKey={TabKey.ACADEMIC} id="terms-tabs">

@@ -4,7 +4,6 @@ import { AnnotationStore, IAnnotationStore } from 'app/store/AnnotationStore';
 import { computed, IReactionDisposer, observable, reaction } from 'mobx';
 import AppStore from 'app/store/AppStore';
 import { RouterStore } from 'mobx-react-router';
-import DocumentTitle from 'react-document-title';
 import { RouteComponentProps } from 'react-router';
 import AnnotationPage, {
   AnnotationType,
@@ -23,6 +22,7 @@ import {
 } from 'app/shared/route/types';
 import WindowStore from 'app/store/WindowStore';
 import AuthenticationStore from 'app/store/AuthenticationStore';
+import { Helmet } from 'react-helmet-async';
 
 interface MatchParams {
   query: string;
@@ -180,7 +180,10 @@ export default class GenomicPage extends React.Component<GenomicPageProps> {
 
   render() {
     return (
-      <DocumentTitle title={this.documentTitle}>
+      <>
+        <Helmet>
+          <title>{this.documentTitle}</title>
+        </Helmet>
         <AnnotationPage
           appStore={this.props.appStore}
           windowStore={this.props.windowStore}
@@ -192,7 +195,7 @@ export default class GenomicPage extends React.Component<GenomicPageProps> {
           defaultSelectedTab={this.selectedTab}
           onChangeTab={this.onChangeTab}
         />
-      </DocumentTitle>
+      </>
     );
   }
 }
