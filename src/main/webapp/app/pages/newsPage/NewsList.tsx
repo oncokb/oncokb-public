@@ -6,7 +6,7 @@ import {
   NewlyAddedGenesListItem,
   NewlyAddedGenesListItemProps,
 } from 'app/pages/newsPage/NewlyAddedGenesListItem';
-import { ChangedAnnotationListItem } from 'app/pages/newsPage/ChangedAnnotatonListItem';
+import { ChangedAnnotationListItem } from 'app/pages/newsPage/ChangedAnnotationListItem';
 import { UpdatedTxImplOldFormatListItem } from 'app/pages/newsPage/UpdatedTxImplOldFormatListItem';
 import { ElementType, SimpleTableCell } from 'app/components/SimpleTable';
 import {

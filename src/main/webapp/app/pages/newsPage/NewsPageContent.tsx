@@ -42,7 +42,7 @@ import WithSeparator from 'react-with-separator';
 import mainstyle from 'app/pages/newsPage/main.module.scss';
 import { PMALink } from 'app/shared/links/PMALink';
 import OptimizedImage from 'app/shared/image/OptimizedImage';
-import { AnnotationColumnHeaderType } from './ChangedAnnotatonListItem';
+import { AnnotationColumnHeaderType } from './ChangedAnnotationListItem';
 import { linkableMutationName, convertGeneInputToLinks } from './Util';
 
 export type ChangedAnnotation = {
