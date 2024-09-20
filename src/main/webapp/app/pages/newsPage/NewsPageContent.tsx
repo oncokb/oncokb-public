@@ -84,6 +84,7 @@ export const LEVEL_OF_EVIDENCE = 'Level of Evidence';
 export const CURRENT_LEVEL_OF_EVIDENCE = 'Current Level of Evidence';
 export const PREVIOUS_LEVEL_OF_EVIDENCE = 'Previous Level of Evidence';
 export const DRUGS_ADDED_TO_ONCOKB = `Drug(s) added to ${ONCOKB_TM}`;
+export const DRUGS_UPDATE_IN_ONCOKB = `Drug(s) updated in ${ONCOKB_TM}`;
 export const DRUGS_CURRENTLY_IN_ONCOKB = `Drug(s) currently in ${ONCOKB_TM}`;
 export const DRUGS_REMOVED_FROM_ONCOKB = `Drug(s) removed from ${ONCOKB_TM}`;
 export const DRUGS_DEMOTED_IN_ONCOKB = `Drug(s) demoted in ${ONCOKB_TM}`;
@@ -233,6 +234,16 @@ export const CHANGED_ANNOTATION_ADDITIONAL_DRUG_SAME_HIGHEST_LEVEL_COLUMNS = [
   { name: EVIDENCE },
 ];
 
+export const CHANGED_ANNOTATION_UPDATED_DRUG_SAME_HIGHEST_LEVEL_COLUMNS = [
+  { name: LEVEL },
+  { name: GENE },
+  { name: MUTATION },
+  { name: CANCER_TYPE },
+  { name: LEVEL_ASSOCIATED_DRUGS_IN_ONCOKB },
+  { name: DRUGS_UPDATE_IN_ONCOKB },
+  { name: EVIDENCE },
+];
+
 export const CDX_COLUMNS = [
   { name: LEVEL },
   { name: GENE },
@@ -289,7 +300,7 @@ const EVIDENCE_COLUMN_SEPARATOR = '; ';
 // https://stackoverflow.com/questions/41947168/is-it-possible-to-use-keyof-operator-on-literals-instead-of-interfaces
 
 export const NEWS_BY_DATE: { [date: string]: NewsData } = {
-  '09202024': {
+  '09242024': {
     changedAnnotations: [
       {
         columnHeaderType: AnnotationColumnHeaderType.NEW_ALTERATION_WITH_LEVEL,
@@ -332,7 +343,7 @@ export const NEWS_BY_DATE: { [date: string]: NewsData } = {
               {getAlternativeAllelesPageLinks('MET', 'M1250T')}
             </WithSeparator>,
             'Non-Small Cell Lung Cancer',
-            'Type Ib MET Inhibitors: Elzovantinib, Capmatinib, Tepotinib',
+            'Elzovantinib, Capmatinib, Tepotinib',
             <WithSeparator separator={EVIDENCE_COLUMN_SEPARATOR}>
               <PMIDLink pmids="38564707" />
             </WithSeparator>,
@@ -340,8 +351,7 @@ export const NEWS_BY_DATE: { [date: string]: NewsData } = {
         ],
       },
       {
-        title:
-          "Addition of drug(s) associated with a tumor type-specific leveled alteration(s) currently in OncoKB™ (without changing the alteration's highest level of evidence)",
+        columnHeaderType: AnnotationColumnHeaderType.UPDATED_SAME_LEVEL_DRUG,
         content: [
           [
             '1',
