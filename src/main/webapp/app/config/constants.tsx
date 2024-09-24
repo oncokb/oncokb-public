@@ -609,6 +609,10 @@ export enum PAGE_ROUTE {
   ACCOUNT_ACTIVE_TRIAL_FINISH = '/account/active-trial/finish',
 }
 
+export enum API_ROUTE {
+  AUTHENTICATE = '/api/authenticate',
+}
+
 export enum TABLE_COLUMN_KEY {
   HUGO_SYMBOL = 'HUGO_SYMBOL',
   ALTERATION = 'ALTERATION',
