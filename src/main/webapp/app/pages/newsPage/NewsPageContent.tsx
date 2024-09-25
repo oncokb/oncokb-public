@@ -42,7 +42,7 @@ import WithSeparator from 'react-with-separator';
 import mainstyle from 'app/pages/newsPage/main.module.scss';
 import { PMALink } from 'app/shared/links/PMALink';
 import OptimizedImage from 'app/shared/image/OptimizedImage';
-import { AnnotationColumnHeaderType } from './ChangedAnnotatonListItem';
+import { AnnotationColumnHeaderType } from './ChangedAnnotationListItem';
 import { linkableMutationName, convertGeneInputToLinks } from './Util';
 
 export type ChangedAnnotation = {
@@ -84,6 +84,7 @@ export const LEVEL_OF_EVIDENCE = 'Level of Evidence';
 export const CURRENT_LEVEL_OF_EVIDENCE = 'Current Level of Evidence';
 export const PREVIOUS_LEVEL_OF_EVIDENCE = 'Previous Level of Evidence';
 export const DRUGS_ADDED_TO_ONCOKB = `Drug(s) added to ${ONCOKB_TM}`;
+export const DRUGS_UPDATE_IN_ONCOKB = `Drug(s) updated in ${ONCOKB_TM}`;
 export const DRUGS_CURRENTLY_IN_ONCOKB = `Drug(s) currently in ${ONCOKB_TM}`;
 export const DRUGS_REMOVED_FROM_ONCOKB = `Drug(s) removed from ${ONCOKB_TM}`;
 export const DRUGS_DEMOTED_IN_ONCOKB = `Drug(s) demoted in ${ONCOKB_TM}`;
@@ -233,6 +234,16 @@ export const CHANGED_ANNOTATION_ADDITIONAL_DRUG_SAME_HIGHEST_LEVEL_COLUMNS = [
   { name: EVIDENCE },
 ];
 
+export const CHANGED_ANNOTATION_UPDATED_DRUG_SAME_HIGHEST_LEVEL_COLUMNS = [
+  { name: LEVEL },
+  { name: GENE },
+  { name: MUTATION },
+  { name: CANCER_TYPE },
+  { name: LEVEL_ASSOCIATED_DRUGS_IN_ONCOKB },
+  { name: DRUGS_UPDATE_IN_ONCOKB },
+  { name: EVIDENCE },
+];
+
 export const CDX_COLUMNS = [
   { name: LEVEL },
   { name: GENE },
@@ -289,6 +300,88 @@ const EVIDENCE_COLUMN_SEPARATOR = '; ';
 // https://stackoverflow.com/questions/41947168/is-it-possible-to-use-keyof-operator-on-literals-instead-of-interfaces
 
 export const NEWS_BY_DATE: { [date: string]: NewsData } = {
+  '09252024': {
+    changedAnnotations: [
+      {
+        columnHeaderType: AnnotationColumnHeaderType.NEW_ALTERATION_WITH_LEVEL,
+        content: [
+          [
+            '3A',
+            'ALK',
+            <WithSeparator separator={', '}>
+              {getAlternativeAllelesPageLinks('ALK', 'F1174L/C')}
+              {getAlternativeAllelesPageLinks('ALK', 'F1245Y/V')}
+              {getAlternativeAllelesPageLinks('ALK', 'R1275Q/L')}
+            </WithSeparator>,
+            'Neuroblastoma',
+            'Lorlatinib',
+            <WithSeparator separator={EVIDENCE_COLUMN_SEPARATOR}>
+              <PMIDLink pmids="37012551, 26554404, 38032104, 27483357" />
+            </WithSeparator>,
+          ],
+          [
+            '3A',
+            'MET',
+            <WithSeparator separator={', '}>
+              {getAlternativeAllelesPageLinks('MET', 'H1094Y')}
+              {getAlternativeAllelesPageLinks('MET', 'F1200I')}
+            </WithSeparator>,
+            'Non-Small Cell Lung Cancer',
+            'Elzovantinib',
+            <WithSeparator separator={EVIDENCE_COLUMN_SEPARATOR}>
+              <PMIDLink pmids="38564707" />
+            </WithSeparator>,
+          ],
+          [
+            '4',
+            'MET',
+            <WithSeparator separator={', '}>
+              {getAlternativeAllelesPageLinks('MET', 'N1100S')}
+              {getAlternativeAllelesPageLinks('MET', 'V1092I')}
+              {getAlternativeAllelesPageLinks('MET', 'H1106D')}
+              {getAlternativeAllelesPageLinks('MET', 'R1170Q')}
+              {getAlternativeAllelesPageLinks('MET', 'M1250T')}
+            </WithSeparator>,
+            'Non-Small Cell Lung Cancer',
+            'Elzovantinib, Capmatinib, Tepotinib',
+            <WithSeparator separator={EVIDENCE_COLUMN_SEPARATOR}>
+              <PMIDLink pmids="38564707" />
+            </WithSeparator>,
+          ],
+        ],
+      },
+      {
+        columnHeaderType: AnnotationColumnHeaderType.UPDATED_SAME_LEVEL_DRUG,
+        content: [
+          [
+            '1',
+            'EGFR',
+            'Exon 19 in-frame deletions, L858R',
+            'Non-Small Cell Lung Cancer',
+            'Afatinib, Dacomitinib, Erlotinib, Erlotinib + Ramucirumab, Gefitinib, Osimertinib, Osimertinib + Chemotherapy (Level 1); Amivantamab + Chemotherapy (Level 2); Amivantamab + Lazertinib, Patritumab Deruxtecan (Level 3A)',
+            'Amivantamab + Lazertinib (Level 1; Promoted from Level 3A)',
+            <WithSeparator separator={EVIDENCE_COLUMN_SEPARATOR}>
+              <FdaApprovalLink
+                approval="Amivantamab + Lazertinib"
+                link="https://www.fda.gov/drugs/resources-information-approved-drugs/fda-approves-lazertinib-amivantamab-vmjw-non-small-lung-cancer"
+              />
+              <PMIDLink pmids="38924756" />
+            </WithSeparator>,
+          ],
+        ],
+      },
+    ],
+    newlyAddedGenes: [
+      'ABCB1',
+      'ACVR2A',
+      'ADGRA2',
+      'BCL2L2',
+      'ELL2',
+      'FANCI',
+      'USP1',
+      'XPA',
+    ],
+  },
   '08152024': {
     changedAnnotations: [
       {
