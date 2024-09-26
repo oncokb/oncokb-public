@@ -39,18 +39,6 @@ import CompanyAdditionalInfo, {
   createDefaultAdditionalInfo,
 } from 'app/pages/companyPage/CompanyAdditionalInfo';
 
-const defaultInfo: CompanyAdditionalInfoDTO = {
-  license: {
-    autoRenewal: false,
-    activation: '',
-    termination: {
-      date: '',
-      notificationDays: 60,
-      notes: '',
-    },
-  },
-};
-
 type INewCompanyFormProps = {
   onValidSubmit: (newCompany: Partial<CompanyVM>) => void;
 };
