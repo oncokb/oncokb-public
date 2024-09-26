@@ -126,6 +126,7 @@ export default class CompanyPage extends React.Component<ICompanyPage> {
 
   @observable showModal = false;
   @observable confirmLicenseChangeModalText = '';
+  @observable confirmTerminationNotificationChangeText = '';
   @observable formValues: any;
 
   @observable company: CompanyDTO;
@@ -296,16 +297,50 @@ export default class CompanyPage extends React.Component<ICompanyPage> {
   @action.bound
   onValidFormSubmit(event: any, value: any) {
     this.formValues = value;
+    const termination = this.company.additionalInfo?.license?.termination;
+    this.confirmTerminationNotificationChangeText = '';
+    let terminationDate: Date | undefined = undefined;
+    let shouldWarnAboutTerminationEmail = false;
+    if (
+      this.selectedLicenseStatus !== LicenseStatus.TRIAL &&
+      termination !== undefined &&
+      termination.date !== undefined &&
+      termination.notificationDays !== undefined &&
+      termination.notificationDays !== null
+    ) {
+      const notificationDays = +termination.notificationDays;
+      terminationDate = new Date(termination.date);
+      if (!isNaN(terminationDate.getTime())) {
+        const today = new Date();
+        today.setUTCHours(0, 0, 0, 0);
+        const future = new Date();
+        future.setDate(today.getDate() + notificationDays);
+        if (future >= terminationDate && terminationDate >= today) {
+          this.confirmTerminationNotificationChangeText = `The termination date is within the notification window of ${notificationDays} days.
+            An email will be sent to the OncoKB admins, notifying them of the upcoming company license expiration.
+            To prevent this email from being sent, either adjust the termination date or modify the notification days.`;
+          shouldWarnAboutTerminationEmail = true;
+        }
+      }
+    }
+
     // Show warnings when license status is being changed and there are company users
+    let shouldWarnAboutLicenseStatus = false;
     if (
       this.company.licenseStatus !== this.selectedLicenseStatus &&
       this.companyUsers.length > 0
     ) {
-      this.showModal = true;
       this.confirmLicenseChangeModalText =
         LICENSE_STATUS_UPDATE_MESSAGES[this.company.licenseStatus][
           this.selectedLicenseStatus
         ];
+      shouldWarnAboutLicenseStatus = true;
+    } else {
+      this.confirmLicenseChangeModalText = '';
+    }
+
+    if (shouldWarnAboutLicenseStatus || shouldWarnAboutTerminationEmail) {
+      this.showModal = true;
       this.simpleConfirmModalType = SimpleConfirmModalType.UPDATE_COMPANY;
     } else {
       this.onConfirmUpdateCompany();
@@ -405,9 +440,16 @@ export default class CompanyPage extends React.Component<ICompanyPage> {
             </span>
             ?
           </div>
-          <Alert variant={'warning'} style={{ marginTop: '20px' }}>
-            Warning: {this.confirmLicenseChangeModalText}
-          </Alert>
+          {this.confirmLicenseChangeModalText && (
+            <Alert variant={'warning'} style={{ marginTop: '20px' }}>
+              Warning: {this.confirmLicenseChangeModalText}
+            </Alert>
+          )}
+          {this.confirmTerminationNotificationChangeText && (
+            <Alert variant={'warning'} style={{ marginTop: '20px' }}>
+              Warning: {this.confirmTerminationNotificationChangeText}
+            </Alert>
+          )}
         </>
       );
     } else {
