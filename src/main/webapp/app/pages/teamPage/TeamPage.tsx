@@ -1,7 +1,6 @@
 import * as React from 'react';
 import { Col, Row } from 'react-bootstrap';
-import DocumentTitle from 'react-document-title';
-import { PAGE_TITLE, ONCOKB_TM } from 'app/config/constants';
+import { PAGE_TITLE, ONCOKB_TM, PAGE_DESCRIPTION } from 'app/config/constants';
 import {
   INSTITUTION,
   IPastMember,
@@ -14,6 +13,7 @@ import { getPageTitle } from 'app/shared/utils/Utils';
 import { useState } from 'react';
 import Select from 'react-select';
 import { sortBy, sortByKey } from 'app/shared/utils/LodashUtils';
+import { Helmet } from 'react-helmet-async';
 
 export const TeamPage = () => {
   const teamMembers: ITeamMember[] = [
@@ -857,7 +857,11 @@ export const TeamPage = () => {
   const [selectedPcType, setSelectedPcType] = useState('');
 
   return (
-    <DocumentTitle title={getPageTitle(PAGE_TITLE.TEAM)}>
+    <>
+      <Helmet>
+        <title>{getPageTitle(PAGE_TITLE.TEAM)}</title>
+        <meta name="description" content={PAGE_DESCRIPTION.TEAM} />
+      </Helmet>
       <div className="team">
         <Row>
           <Col>
@@ -952,6 +956,6 @@ export const TeamPage = () => {
           </Col>
         </Row>
       </div>
-    </DocumentTitle>
+    </>
   );
 };

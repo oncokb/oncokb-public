@@ -19,10 +19,12 @@ import {
   LEVEL_TYPE_NAMES,
   LEVEL_TYPES,
   LEVELS,
+  PAGE_DESCRIPTION,
   PAGE_ROUTE,
+  PAGE_TITLE,
 } from 'app/config/constants';
 import { LevelButton } from 'app/components/levelButton/LevelButton';
-import { levelOfEvidence2Level } from 'app/shared/utils/Utils';
+import { getPageTitle, levelOfEvidence2Level } from 'app/shared/utils/Utils';
 import { RouterStore } from 'mobx-react-router';
 import { CitationText } from 'app/components/CitationText';
 import AppStore from 'app/store/AppStore';
@@ -33,6 +35,8 @@ import { FDA_L1_DISABLED_BTN_TOOLTIP } from 'app/pages/genePage/FdaUtils';
 import { COLOR_DARK_BLUE } from 'app/config/theme';
 import WindowStore from 'app/store/WindowStore';
 import { uniq } from 'app/shared/utils/LodashUtils';
+import { Helmet } from 'react-helmet-async';
+import { getAlterationPageLink } from 'app/shared/utils/UrlUtils';
 
 interface IHomeProps {
   content: string;
@@ -188,6 +192,10 @@ class HomePage extends React.Component<IHomeProps, {}> {
     }
     return (
       <div className="home">
+        <Helmet>
+          <title>{getPageTitle(PAGE_TITLE.HOME, false)}</title>
+          <meta name="description" content={PAGE_DESCRIPTION.HOME} />
+        </Helmet>
         <Row className="mb-5">
           <Col
             md={8}

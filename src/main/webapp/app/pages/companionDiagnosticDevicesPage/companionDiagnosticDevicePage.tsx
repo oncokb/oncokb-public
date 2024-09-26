@@ -7,8 +7,14 @@ import {
   COMPONENT_PADDING,
   LG_TABLE_FIXED_HEIGHT,
   ONCOKB_TM,
+  PAGE_DESCRIPTION,
+  PAGE_TITLE,
 } from 'app/config/constants';
-import { filterByKeyword, getAllTumorTypesName } from 'app/shared/utils/Utils';
+import {
+  filterByKeyword,
+  getAllTumorTypesName,
+  getPageTitle,
+} from 'app/shared/utils/Utils';
 import React, { useEffect, useState, useMemo } from 'react';
 import { Button, Col, Row } from 'react-bootstrap';
 import classnames from 'classnames';
@@ -27,6 +33,7 @@ import { FdaSubmissionLink } from 'app/shared/links/FdaSubmissionLink';
 import { Linkout } from 'app/shared/links/Linkout';
 import InfoIcon from 'app/shared/icons/InfoIcon';
 import { sortByKey, uniq, uniqBy } from 'app/shared/utils/LodashUtils';
+import { Helmet } from 'react-helmet-async';
 
 export interface ICompanionDiagnosticDevice {
   name: string;
@@ -468,6 +475,10 @@ const CompanionDiagnosticDevicePage: React.FunctionComponent<{}> = () => {
 
   return (
     <>
+      <Helmet>
+        <title>{getPageTitle(PAGE_TITLE.CDX)}</title>
+        <meta name="description" content={PAGE_DESCRIPTION.CDX}></meta>
+      </Helmet>
       <Row>
         <Col>
           <h2 className={'mb-3'}>

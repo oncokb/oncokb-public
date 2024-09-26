@@ -60,6 +60,9 @@ describe('Regex constants test', () => {
       'Test ÿ',
       "Test !@#$%^&*()_+[]{}|;:',.<>?",
       '1234567890',
+      'test\ntest',
+      'test\rtest',
+      'test\r\ntest',
     ])('Truthy text: %s', text => {
       expect(VALID_LATIN_TEXT.test(text)).toBeTruthy();
     });

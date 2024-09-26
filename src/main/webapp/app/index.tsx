@@ -23,7 +23,7 @@ import {
   getPublicWebsiteToken,
   getStoredRecaptchaToken,
 } from 'app/indexUtils';
-import { UNAUTHORIZED_ALLOWED_PATH } from 'app/config/constants';
+import { API_ROUTE, UNAUTHORIZED_ALLOWED_PATH } from 'app/config/constants';
 import { AppConfig, AppProfile } from 'app/appConfig';
 
 assignPublicToken();
@@ -79,6 +79,8 @@ superagent.Request.prototype.end = function (callback) {
       AppConfig.serverConfig.token &&
       AppConfig.serverConfig.appProfile === AppProfile.PROD &&
       response.req &&
+      // we do not reload the page when the /api/authenticate failed
+      response.req.url !== API_ROUTE.AUTHENTICATE &&
       UNAUTHORIZED_ALLOWED_PATH.some(path =>
         window.location.pathname.endsWith(path)
       )

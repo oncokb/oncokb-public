@@ -36,13 +36,12 @@ import {
   REFERENCE_GENOME,
 } from 'app/config/constants';
 import { ClinicalVariant } from 'app/shared/api/generated/OncoKbPrivateAPI';
-import { AlterationPageLink } from 'app/shared/utils/UrlUtils';
+import { AlterationPageLink, getGenePageLink } from 'app/shared/utils/UrlUtils';
 import AppStore from 'app/store/AppStore';
 import { MskimpactLink } from 'app/components/MskimpactLink';
 import WindowStore from 'app/store/WindowStore';
 import { DataFilterType, onFilterOptionSelect } from 'react-mutation-mapper';
 import { CANCER_TYPE_FILTER_ID } from 'app/components/oncokbMutationMapper/FilterUtils';
-import DocumentTitle from 'react-document-title';
 import { UnknownGeneAlert } from 'app/shared/alert/UnknownGeneAlert';
 import WithSeparator from 'react-with-separator';
 import { FeedbackIcon } from 'app/components/feedback/FeedbackIcon';
@@ -62,6 +61,8 @@ import ShowHideText from 'app/shared/texts/ShowHideText';
 import { AnnotationType } from 'app/pages/annotationPage/AnnotationPage';
 import SummaryWithRefs from 'app/oncokb-frontend-commons/src/components/SummaryWithRefs';
 import { findLast } from 'app/shared/utils/LodashUtils';
+import { Helmet, HelmetProvider } from 'react-helmet-async';
+import windowStore from 'app/store/WindowStore';
 
 interface MatchParams {
   hugoSymbol: string;
@@ -430,7 +431,19 @@ export default class GenePage extends React.Component<GenePageProps, any> {
 
   render() {
     return (
-      <DocumentTitle title={getPageTitle(`${this.store.hugoSymbol}`)}>
+      <>
+        <Helmet>
+          <title>{getPageTitle(`${this.store.hugoSymbol}`)}</title>
+          <meta name="description" content={this.store.geneSummary.result} />
+          <link
+            id="canonical"
+            rel="canonical"
+            href={getGenePageLink({
+              hugoSymbol: this.store.hugoSymbol,
+              withProtocolHostPrefix: true,
+            })}
+          />
+        </Helmet>
         <If condition={!!this.hugoSymbolQuery}>
           <Then>
             <If condition={this.store.gene.isComplete}>
@@ -638,7 +651,7 @@ export default class GenePage extends React.Component<GenePageProps, any> {
             <Redirect to={PAGE_ROUTE.HOME} />
           </Else>
         </If>
-      </DocumentTitle>
+      </>
     );
   }
 }

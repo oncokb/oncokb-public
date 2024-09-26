@@ -510,6 +510,7 @@ export enum PAGE_TITLE {
   ADMIN_COMPANY_DETAILS = 'Companies',
   API_ACCESS = 'API Access',
   CANCER_GENES = 'OncoKB™ Cancer Gene List',
+  CDX = 'FDA Cleared or Approved Companion Diagnostic Devices',
   FAQ = 'Frequently Asked Question',
   FDA_RECOGNITION = 'OncoKB™ is now an FDA-recognized Public Human Genetic Variant Database*',
   HOME = "OncoKB™ - MSK's Precision Oncology Knowledge Base",
@@ -524,11 +525,27 @@ export enum PAGE_TITLE {
   LOGOUT = 'Log out',
   LOGIN = 'Log in',
   NEWS = 'Latest News',
+  ONCOLOGY_TX = 'FDA-Approved Oncology Therapies',
   REGISTER = 'Register',
   TEAM = 'OncoKB™ Team',
   TERMS = 'Terms of Use',
   SOP = 'OncoKB™ Standard Operating Procedure',
   YEAR_END_SUMMARY = 'Year End Summary',
+}
+
+export enum PAGE_DESCRIPTION {
+  ABOUT = 'Learn about OncoKB, a precision oncology knowledge base dedicated to providing curated, evidence-based information on cancer gene mutations. Explore how our expert-driven insights empower clinicians, researchers, and patients in advancing cancer treatment.',
+  ACTIONABLE_GENES = 'OncoKB™ Actionable Genes includes therapeutic, diagnostic and prognostic clinical implications. We also list the FDA-Recognized Content.',
+  API_ACCESS = 'Access OncoKB™ content through standard REST API. The API is defined and organized using swagger annotation. MAF file annotation is also possible by using OncoKB™ Annotator which is fully supported by using OncoKB™ REST APIs.',
+  CANCER_GENES = 'OncoKB™ Cancer Gene List consists with more than one thousand genes based on their inclusion in various different sequencing panels, the Sanger Cancer Gene Census, or Vogelstein et al. (2013).',
+  CDX = 'Companion diagnostic devices (CDx) that are US- Food and Drug Administration (FDA) approved or cleared to guide treatment decisions in cancer for the safe and efficient use of oncology drugs (per the FDA’s List of Cleared or Approved Companion Diagnostic Devices (In Vitro and Imaging Tools)). Only the companion diagnostics that are included in the FDA-drug labels of OncoKB™ level 1 precision oncology drugs and determine the list of OncoKB™ level 1 biomarkers are listed below.',
+  FAQ = 'Most frequently asked questions compiled by OncoKB™ team members.',
+  FDA_RECOGNITION = 'As the first somatic human variant database to be recognized by the FDA, OncoKB™ is dedicated to providing curated, evidence-based information on cancer gene mutations.',
+  HOME = 'OncoKB™ is a precision oncology knowledge base developed at Memorial Sloan Kettering Cancer Center that contains biological and clinical information about genomic alterations in cancer.',
+  LEVELS = 'To communicate the clinical utility of individual mutant alleles consistently, OncoKB developed a levels of evidence classification system. It takes into account the site of tumor origin, by recognizing that the effects of targeted inhibitors vary by tumor lineage, even in cancers that share the same mutant allele',
+  ONCOLOGY_TX = 'OncoKB™ Oncology Therapies list includes US Food and Drug Administration (FDA)-approved oncology drugs post June 1998 which are categorized by drug class and mechanism of action. Each drug is further classified as to whether it qualifies as a targeted therapy or precision oncology therapy based on Suehnholz et al., Cancer Discovery 2023.',
+  TEAM = 'OncoKB™ is developed and maintained by the Knowledge Systems group in the Marie Josée and Henry R. Kravis Center for Molecular Oncology at Memorial Sloan Kettering Cancer Center.',
+  TERMS = 'OncoKB™ provides different license models for academic research and commercial usages.',
 }
 
 export enum PAGE_ROUTE {
@@ -590,6 +607,10 @@ export enum PAGE_ROUTE {
   ACCOUNT_PASSWORD_RESET_REQUEST = '/account/reset/request',
   ACCOUNT_PASSWORD_RESET_FINISH = '/account/reset/finish',
   ACCOUNT_ACTIVE_TRIAL_FINISH = '/account/active-trial/finish',
+}
+
+export enum API_ROUTE {
+  AUTHENTICATE = '/api/authenticate',
 }
 
 export enum TABLE_COLUMN_KEY {
@@ -800,6 +821,7 @@ export type DataRelease = {
 };
 
 export const DATA_RELEASES: DataRelease[] = [
+  { date: '09192024', version: 'v4.21' },
   { date: '08152024', version: 'v4.20' },
   { date: '07042024', version: 'v4.19' },
   { date: '07022024', version: 'v4.18' },
