@@ -89,12 +89,6 @@ export default function CompanyAdditionalInfo({
                   start: {
                     value: additionalInfo?.license?.activation?.split('T')[0],
                   },
-                  end: {
-                    // max date
-                    value: new Date(8640000000000000)
-                      .toISOString()
-                      .split('T')[0],
-                  },
                 },
               }}
               value={additionalInfo?.license?.termination?.date?.split('T')[0]}
