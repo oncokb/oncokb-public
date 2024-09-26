@@ -30,6 +30,11 @@ export default class CompanyDetailsPage extends React.Component {
 
   private columns: SearchColumn<CompanyDTO>[] = [
     {
+      id: 'id',
+      Header: <span className={styles.tableHeader}>ID</span>,
+      accessor: 'id',
+    },
+    {
       id: 'companyUserCount',
       Header: <span className={styles.tableHeader}>Users</span>,
       minWidth: 60,
@@ -136,7 +141,7 @@ export default class CompanyDetailsPage extends React.Component {
                   minRows={1}
                   defaultSorted={[
                     {
-                      id: 'companyName',
+                      id: 'id',
                       desc: true,
                     },
                   ]}
