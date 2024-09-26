@@ -48,6 +48,7 @@ export default function CompanyAdditionalInfo({
           setAdditionalInfo({
             license: {
               ...additionalInfo?.license,
+              autoRenewal: !!event.target.value,
               activation: event.target.value
                 ? new Date(event.target.value).toISOString()
                 : undefined,
@@ -59,7 +60,7 @@ export default function CompanyAdditionalInfo({
         labelText="Auto-Renewal"
         name="auto-renewal"
         boldLabel={boldLabel}
-        defaultValue={{
+        value={{
           value: additionalInfo?.license?.autoRenewal ?? false,
           label: additionalInfo?.license?.autoRenewal ? 'Yes' : 'No',
         }}
@@ -79,88 +80,99 @@ export default function CompanyAdditionalInfo({
       {mode === 'update' && (
         <>
           {additionalInfo?.license?.activation && (
-            <FormInputField
-              id="termination.date"
-              label="Termination Date"
-              type="date"
-              validate={{
-                dateRange: {
-                  format: 'YYYY-MM-DD',
-                  start: {
-                    value: additionalInfo?.license?.activation?.split('T')[0],
-                  },
-                },
-              }}
-              value={additionalInfo?.license?.termination?.date?.split('T')[0]}
-              boldLabel={boldLabel}
-              onChange={event => {
-                const terminationDate = event.target.value
-                  ? new Date(event.target.value)
-                  : undefined;
-                setAdditionalInfo({
-                  license: {
-                    ...additionalInfo?.license,
-                    termination: {
-                      ...additionalInfo?.license?.termination,
-                      date: terminationDate?.toISOString(),
-                      notificationDays:
-                        additionalInfo?.license?.termination
-                          ?.notificationDays !== undefined
-                          ? additionalInfo?.license?.termination
-                              ?.notificationDays
-                          : 90,
-                    },
-                  },
-                });
-              }}
-            />
-          )}
-          {additionalInfo?.license?.termination?.date && (
             <>
               <FormInputField
-                id="termination.notification-days"
-                label="Termination Notification Days"
-                type="number"
-                value={additionalInfo?.license?.termination?.notificationDays}
+                id="termination.date"
+                label="Termination Date"
+                type="date"
+                validate={{
+                  dateRange: {
+                    format: 'YYYY-MM-DD',
+                    start: {
+                      value: additionalInfo?.license?.activation?.split('T')[0],
+                    },
+                    end: {
+                      value: new Date(8640000000000000)
+                        .toISOString()
+                        .split('T')[0],
+                    },
+                  },
+                }}
+                value={
+                  additionalInfo?.license?.termination?.date?.split('T')[0]
+                }
                 boldLabel={boldLabel}
-                infoIconOverlay={`Specify the number of days before the OncoKB
+                onChange={event => {
+                  const terminationDate = event.target.value
+                    ? new Date(event.target.value)
+                    : undefined;
+                  setAdditionalInfo({
+                    license: {
+                      ...additionalInfo?.license,
+                      termination: {
+                        ...additionalInfo?.license?.termination,
+                        date: terminationDate?.toISOString(),
+                        notificationDays:
+                          additionalInfo?.license?.termination
+                            ?.notificationDays !== undefined
+                            ? additionalInfo?.license?.termination
+                                ?.notificationDays
+                            : 90,
+                      },
+                    },
+                  });
+                }}
+              />
+              {additionalInfo?.license?.termination?.date && (
+                <>
+                  <FormInputField
+                    id="termination.notification-days"
+                    label="Termination Notification Days"
+                    type="number"
+                    value={
+                      additionalInfo?.license?.termination?.notificationDays
+                    }
+                    boldLabel={boldLabel}
+                    infoIconOverlay={`Specify the number of days before the OncoKB
               license termination date when an email notification will be sent
               to the OncoKB team. Only one email will be sent.
               If the notification days are updated within this period,
               the email will be sent during the next daily notification job.`}
-                onChange={event => {
-                  const value = event?.target?.value;
-                  setAdditionalInfo({
-                    license: {
-                      ...additionalInfo?.license,
-                      termination: {
-                        ...additionalInfo?.license?.termination,
-                        notificationDays: value
-                          ? +value
-                          : ((undefined as unknown) as number),
-                      },
-                    },
-                  });
-                }}
-              />
+                    onChange={event => {
+                      const value = event?.target?.value;
+                      setAdditionalInfo({
+                        license: {
+                          ...additionalInfo?.license,
+                          termination: {
+                            ...additionalInfo?.license?.termination,
+                            notificationDays: value
+                              ? +value
+                              : ((undefined as unknown) as number),
+                          },
+                        },
+                      });
+                    }}
+                  />
 
-              <FormTextAreaField
-                id="termination.notes"
-                label="Termination Notes"
-                value={additionalInfo?.license?.termination?.notes}
-                boldLabel={boldLabel}
-                onTextAreaChange={e => {
-                  setAdditionalInfo({
-                    license: {
-                      ...additionalInfo?.license,
-                      termination: {
-                        ...additionalInfo?.license?.termination,
-                        notes: e.target.value,
-                      },
-                    },
-                  });
-                }}
-              />
+                  <FormTextAreaField
+                    id="termination.notes"
+                    label="Termination Notes"
+                    value={additionalInfo?.license?.termination?.notes}
+                    boldLabel={boldLabel}
+                    onTextAreaChange={e => {
+                      setAdditionalInfo({
+                        license: {
+                          ...additionalInfo?.license,
+                          termination: {
+                            ...additionalInfo?.license?.termination,
+                            notes: e.target.value,
+                          },
+                        },
+                      });
+                    }}
+                  />
+                </>
+              )}
             </>
           )}
         </>

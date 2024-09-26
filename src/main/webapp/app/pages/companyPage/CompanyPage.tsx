@@ -21,6 +21,7 @@ import {
   UserDTO,
   UserOverviewUsage,
   CompanyAdditionalInfoDTO,
+  CompanyTermination,
 } from 'app/shared/api/generated/API';
 import client from 'app/shared/api/clientInstance';
 import { action, computed, observable } from 'mobx';
@@ -211,6 +212,15 @@ export default class CompanyPage extends React.Component<ICompanyPage> {
     );
     if (this.selectedLicenseStatus === 'TRIAL') {
       this.company.additionalInfo = (null as unknown) as CompanyAdditionalInfoDTO;
+    } else if (this.company.additionalInfo?.license) {
+      const license = this.company.additionalInfo?.license;
+      if (!license.activation) {
+        license.autoRenewal = false;
+        license.termination = (undefined as unknown) as CompanyTermination;
+      } else if (license.termination && !license.termination.date) {
+        license.termination.notes = (undefined as unknown) as string;
+        license.termination.notificationDays = (undefined as unknown) as number;
+      }
     }
     const updatedCompany: CompanyVM = {
       ...this.company,
