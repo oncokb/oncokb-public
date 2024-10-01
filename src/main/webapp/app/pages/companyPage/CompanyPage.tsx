@@ -20,6 +20,8 @@ import {
   Token,
   UserDTO,
   UserOverviewUsage,
+  CompanyAdditionalInfoDTO,
+  CompanyTermination,
 } from 'app/shared/api/generated/API';
 import client from 'app/shared/api/clientInstance';
 import { action, computed, observable } from 'mobx';
@@ -29,7 +31,7 @@ import { RouteComponentProps } from 'react-router';
 import { notifyError, notifySuccess } from 'app/shared/utils/NotificationUtils';
 import { PromiseStatus } from 'app/shared/utils/PromiseUtils';
 import { FormTextAreaField } from 'app/shared/textarea/FormTextAreaField';
-import { FormSelectWithLabelField } from 'app/shared/select/FormSelectWithLabelField';
+import FormSelectWithLabelField from 'app/shared/select/FormSelectWithLabelField';
 import { COMPANY_FORM_OPTIONS } from 'app/components/newCompanyForm/NewCompanyForm';
 import { FormListField } from 'app/shared/list/FormListField';
 import { UserTable } from 'app/shared/table/UserTable';
@@ -70,6 +72,9 @@ import { DownloadButton } from 'app/components/downloadButton/DownloadButton';
 import { RouterStore } from 'mobx-react-router';
 import { TEXT_VAL } from 'app/shared/utils/FormValidationUtils';
 import { Helmet } from 'react-helmet-async';
+import CompanyAdditionalInfo, {
+  createDefaultAdditionalInfo,
+} from './CompanyAdditionalInfo';
 
 interface MatchParams {
   id: string;
@@ -205,6 +210,18 @@ export default class CompanyPage extends React.Component<ICompanyPage> {
     const newCompanyUserEmails = this.selectedUsersOptions.map(
       selection => selection.value
     );
+    if (this.selectedLicenseStatus === 'TRIAL') {
+      this.company.additionalInfo = (null as unknown) as CompanyAdditionalInfoDTO;
+    } else if (this.company.additionalInfo?.license) {
+      const license = this.company.additionalInfo?.license;
+      if (!license.activation) {
+        license.autoRenewal = false;
+        license.termination = (undefined as unknown) as CompanyTermination;
+      } else if (license.termination && !license.termination.date) {
+        license.termination.notes = (undefined as unknown) as string;
+        license.termination.notificationDays = (undefined as unknown) as number;
+      }
+    }
     const updatedCompany: CompanyVM = {
       ...this.company,
       licenseStatus: this.selectedLicenseStatus,
@@ -670,13 +687,34 @@ export default class CompanyPage extends React.Component<ICompanyPage> {
                               LICENSE_STATUS_TITLES[this.selectedLicenseStatus],
                           }}
                           options={this.licenseStatusOptions}
-                          onSelection={(selectedOption: any) =>
-                            (this.selectedLicenseStatus = selectedOption.value)
-                          }
+                          onSelection={(selectedOption: any) => {
+                            const newValue: LicenseStatus =
+                              selectedOption.value;
+                            if (
+                              newValue !== 'TRIAL' &&
+                              !this.company.additionalInfo
+                            ) {
+                              this.company.additionalInfo = createDefaultAdditionalInfo() as CompanyAdditionalInfoDTO;
+                            }
+                            this.selectedLicenseStatus = selectedOption.value;
+                          }}
                           boldLabel
                         />
                       </Col>
                     </Row>
+                    {this.selectedLicenseStatus !== 'TRIAL' && (
+                      <Row className={getSectionClassName()}>
+                        <Col>
+                          <CompanyAdditionalInfo
+                            mode="update"
+                            additionalInfo={this.company.additionalInfo}
+                            setAdditionalInfo={x => {
+                              this.company.additionalInfo = x as CompanyAdditionalInfoDTO;
+                            }}
+                          />
+                        </Col>
+                      </Row>
+                    )}
                     <Row className={getSectionClassName()}>
                       <Col>
                         <div className="form-group">

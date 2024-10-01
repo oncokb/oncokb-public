@@ -2,11 +2,14 @@ import React from 'react';
 import { observer } from 'mobx-react';
 import { Alert, Button, Col, Row } from 'react-bootstrap';
 import { observable, action, computed } from 'mobx';
-import { CompanyVM } from 'app/shared/api/generated/API';
+import {
+  CompanyVM,
+  CompanyAdditionalInfoDTO,
+} from 'app/shared/api/generated/API';
 import { FormListField } from 'app/shared/list/FormListField';
 import { getSectionClassName } from 'app/pages/account/AccountUtils';
 import { FormTextAreaField } from '../../shared/textarea/FormTextAreaField';
-import { FormSelectWithLabelField } from '../../shared/select/FormSelectWithLabelField';
+import FormSelectWithLabelField from '../../shared/select/FormSelectWithLabelField';
 import { AvField, AvForm } from 'availity-reactstrap-validation';
 import {
   LONG_TEXT_VAL,
@@ -31,8 +34,10 @@ import { AdditionalInfoSelect } from 'app/shared/dropdown/AdditionalInfoSelect';
 import {
   debouncedCompanyNameValidator,
   fieldRequiredValidation,
-  textValidation,
 } from 'app/shared/utils/FormValidationUtils';
+import CompanyAdditionalInfo, {
+  createDefaultAdditionalInfo,
+} from 'app/pages/companyPage/CompanyAdditionalInfo';
 
 type INewCompanyFormProps = {
   onValidSubmit: (newCompany: Partial<CompanyVM>) => void;
@@ -70,6 +75,8 @@ export const COMPANY_FORM_OPTIONS = {
 export class NewCompanyForm extends React.Component<INewCompanyFormProps> {
   @observable companyDescription = '';
   @observable companyDomains: string[] = [];
+  @observable
+  companyAdditionalInfo: CompanyAdditionalInfoDTO = createDefaultAdditionalInfo() as CompanyAdditionalInfoDTO;
   @observable selectedCompanyType: CompanyType = CompanyType.PARENT;
   @observable selectedLicenseModel: LicenseModel = LicenseModel.FULL;
   @observable selectedLicenseType: LicenseType = LicenseType.COMMERCIAL;
@@ -118,6 +125,10 @@ export class NewCompanyForm extends React.Component<INewCompanyFormProps> {
       licenseType: this.selectedLicenseType,
       name: values.companyName,
       companyDomains: this.companyDomains,
+      additionalInfo:
+        this.selectedLicenseStatus !== 'TRIAL'
+          ? this.companyAdditionalInfo
+          : ((null as unknown) as CompanyAdditionalInfoDTO),
     };
     this.props.onValidSubmit(newCompany);
   }
@@ -247,6 +258,22 @@ export class NewCompanyForm extends React.Component<INewCompanyFormProps> {
             />
           </Col>
         </Row>
+        {this.selectedLicenseStatus !== 'TRIAL' && (
+          <Row className={getSectionClassName()}>
+            <Col md="3">
+              <h5>Additional Info</h5>
+            </Col>
+            <Col md="9">
+              <CompanyAdditionalInfo
+                mode="create"
+                additionalInfo={this.companyAdditionalInfo}
+                setAdditionalInfo={x => {
+                  this.companyAdditionalInfo = x as CompanyAdditionalInfoDTO;
+                }}
+              />
+            </Col>
+          </Row>
+        )}
         <Row className={getSectionClassName()}>
           <Col md="3">
             <h5>Review Information</h5>

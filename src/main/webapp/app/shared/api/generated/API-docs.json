@@ -2963,9 +2963,6 @@
         "apiAccessRequest": {
           "$ref": "#/definitions/ApiAccessRequest"
         },
-        "sentToRocReview": {
-          "type": "boolean"
-        },
         "trialAccount": {
           "$ref": "#/definitions/TrialAccount"
         },
@@ -2987,6 +2984,15 @@
       },
       "title": "ApiAccessRequest"
     },
+    "CompanyAdditionalInfoDTO": {
+      "type": "object",
+      "properties": {
+        "license": {
+          "$ref": "#/definitions/CompanyLicense"
+        }
+      },
+      "title": "CompanyAdditionalInfoDTO"
+    },
     "CompanyDTO": {
       "type": "object",
       "required": [
@@ -2997,6 +3003,9 @@
         "name"
       ],
       "properties": {
+        "additionalInfo": {
+          "$ref": "#/definitions/CompanyAdditionalInfoDTO"
+        },
         "businessContact": {
           "type": "string"
         },
@@ -3076,6 +3085,39 @@
       },
       "title": "CompanyDomainDTO"
     },
+    "CompanyLicense": {
+      "type": "object",
+      "properties": {
+        "activation": {
+          "type": "string",
+          "format": "date-time"
+        },
+        "autoRenewal": {
+          "type": "boolean"
+        },
+        "termination": {
+          "$ref": "#/definitions/CompanyTermination"
+        }
+      },
+      "title": "CompanyLicense"
+    },
+    "CompanyTermination": {
+      "type": "object",
+      "properties": {
+        "date": {
+          "type": "string",
+          "format": "date-time"
+        },
+        "notes": {
+          "type": "string"
+        },
+        "notificationDays": {
+          "type": "integer",
+          "format": "int32"
+        }
+      },
+      "title": "CompanyTermination"
+    },
     "CompanyVM": {
       "type": "object",
       "required": [
@@ -3086,6 +3128,9 @@
         "name"
       ],
       "properties": {
+        "additionalInfo": {
+          "$ref": "#/definitions/CompanyAdditionalInfoDTO"
+        },
         "businessContact": {
           "type": "string"
         },
@@ -3378,9 +3423,6 @@
           "minLength": 1,
           "maxLength": 50,
           "pattern": "^[_.\\-\\+@A-Za-z0-9]*$"
-        },
-        "needsMskRocReview": {
-          "type": "boolean"
         },
         "notifyUserOnTrialCreation": {
           "type": "boolean"
@@ -3798,19 +3840,33 @@
     "UserOverviewUsage": {
       "type": "object",
       "properties": {
+        "dayUsage": {
+          "type": "object",
+          "additionalProperties": {
+            "type": "integer",
+            "format": "int64"
+          }
+        },
         "endpoint": {
           "type": "string"
         },
-        "maxUsage": {
-          "type": "integer",
-          "format": "int64"
+        "maxUsageProportion": {
+          "type": "number",
+          "format": "float"
+        },
+        "monthUsage": {
+          "type": "object",
+          "additionalProperties": {
+            "type": "integer",
+            "format": "int64"
+          }
         },
         "noPrivateEndpoint": {
           "type": "string"
         },
-        "noPrivateMaxUsage": {
-          "type": "integer",
-          "format": "int64"
+        "noPrivateMaxUsageProportion": {
+          "type": "number",
+          "format": "float"
         },
         "totalUsage": {
           "type": "integer",
