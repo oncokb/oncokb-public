@@ -2,7 +2,7 @@
   "swagger": "2.0",
   "info": {
     "description": "These endpoints are for private use only.",
-    "version": "v1.4.0",
+    "version": "v1.4.1",
     "title": "OncoKB Private APIs",
     "contact": {
       "name": "OncoKB",
@@ -180,6 +180,62 @@
               "type": "array",
               "items": {
                 "$ref": "#/definitions/IndicatorQueryResp"
+              }
+            }
+          },
+          "400": {
+            "description": "Error, error message will be given.",
+            "schema": {
+              "type": "string"
+            }
+          }
+        }
+      }
+    },
+    "/annotate/epic": {
+      "get": {
+        "tags": [
+          "Annotations"
+        ],
+        "summary": "annotateEpicGet",
+        "description": "Annotate epic genomic data.",
+        "operationId": "annotateEpicGetUsingGET",
+        "consumes": [
+          "application/json"
+        ],
+        "produces": [
+          "application/json"
+        ],
+        "parameters": [
+          {
+            "name": "iss",
+            "in": "query",
+            "description": "iss",
+            "required": true,
+            "type": "string"
+          },
+          {
+            "name": "accessToken",
+            "in": "query",
+            "description": "accessToken",
+            "required": true,
+            "type": "string"
+          },
+          {
+            "name": "patientId",
+            "in": "query",
+            "description": "patientId",
+            "required": true,
+            "type": "string"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "schema": {
+              "type": "array",
+              "items": {
+                "$ref": "#/definitions/SampleQueryResp"
               }
             }
           },
@@ -560,6 +616,47 @@
         }
       }
     },
+    "/annotate/sample": {
+      "post": {
+        "tags": [
+          "Annotations"
+        ],
+        "summary": "annotateSamplePost",
+        "description": "Annotate a sample.",
+        "operationId": "annotateSamplePostUsingPOST",
+        "consumes": [
+          "application/json"
+        ],
+        "produces": [
+          "application/json"
+        ],
+        "parameters": [
+          {
+            "in": "body",
+            "name": "body",
+            "description": "Lists of queries for each alteration type. Please see swagger.json for request body format.",
+            "required": true,
+            "schema": {
+              "$ref": "#/definitions/AnnotateSampleQuery"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "schema": {
+              "$ref": "#/definitions/SampleQueryResp"
+            }
+          },
+          "400": {
+            "description": "Error, error message will be given.",
+            "schema": {
+              "type": "string"
+            }
+          }
+        }
+      }
+    },
     "/annotate/structuralVariants": {
       "get": {
         "tags": [
@@ -708,6 +805,51 @@
             "description": "Error, error message will be given.",
             "schema": {
               "type": "string"
+            }
+          }
+        }
+      }
+    },
+    "/annotation/search": {
+      "get": {
+        "tags": [
+          "Annotations"
+        ],
+        "summary": "annotationSearchGet",
+        "description": "Get annotations based on search",
+        "operationId": "annotationSearchGetUsingGET",
+        "consumes": [
+          "application/json"
+        ],
+        "produces": [
+          "application/json"
+        ],
+        "parameters": [
+          {
+            "name": "query",
+            "in": "query",
+            "description": "The search query, it could be hugoSymbol, variant or cancer type. At least two characters. Maximum two keywords are supported, separated by space",
+            "required": true,
+            "type": "string"
+          },
+          {
+            "name": "limit",
+            "in": "query",
+            "description": "The limit of returned result.",
+            "required": false,
+            "type": "integer",
+            "default": 10,
+            "format": "int32"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "schema": {
+              "type": "array",
+              "items": {
+                "$ref": "#/definitions/AnnotationSearchResult"
+              }
             }
           }
         }
@@ -2058,6 +2200,71 @@
         }
       }
     },
+    "/utils/allVariantsOfUnknownSignificance": {
+      "get": {
+        "tags": [
+          "Variants",
+          "Cancer Genes"
+        ],
+        "summary": "utilsAllVariantsOfUnknownSignificanceGet",
+        "description": "Get All Variants of Unknown Significance.",
+        "operationId": "utilsAllVariantsOfUnknownSignificanceGetUsingGET",
+        "consumes": [
+          "application/json"
+        ],
+        "produces": [
+          "application/json"
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "schema": {
+              "type": "array",
+              "items": {
+                "$ref": "#/definitions/VariantOfUnknownSignificance"
+              }
+            }
+          },
+          "404": {
+            "description": "Not Found"
+          },
+          "503": {
+            "description": "Service Unavailable"
+          }
+        }
+      }
+    },
+    "/utils/allVariantsOfUnknownSignificance.txt": {
+      "get": {
+        "tags": [
+          "Variants",
+          "Cancer Genes"
+        ],
+        "summary": "utilsAllVariantsOfUnknownSignificanceTxtGet",
+        "description": "Get All Variants of Unknown Significance in text file.",
+        "operationId": "utilsAllVariantsOfUnknownSignificanceTxtGetUsingGET",
+        "consumes": [
+          "application/json"
+        ],
+        "produces": [
+          "text/plain"
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "schema": {
+              "type": "string"
+            }
+          },
+          "404": {
+            "description": "Not Found"
+          },
+          "503": {
+            "description": "Service Unavailable"
+          }
+        }
+      }
+    },
     "/utils/cancerGeneList": {
       "get": {
         "tags": [
@@ -2455,6 +2662,9 @@
     "AnnotatedVariant": {
       "type": "object",
       "properties": {
+        "description": {
+          "type": "string"
+        },
         "entrezGeneId": {
           "type": "integer",
           "format": "int32"
@@ -2574,6 +2784,55 @@
         },
         "tumorType": {
           "$ref": "#/definitions/TumorType"
+        }
+      }
+    },
+    "MutationsQuery": {
+      "type": "object",
+      "properties": {
+        "cDnaChange": {
+          "type": "array",
+          "items": {
+            "type": "object"
+          }
+        },
+        "genomicChange": {
+          "type": "array",
+          "items": {
+            "$ref": "#/definitions/AnnotateMutationByGenomicChangeQuery"
+          }
+        },
+        "hgvsg": {
+          "type": "array",
+          "items": {
+            "$ref": "#/definitions/AnnotateMutationByHGVSgQuery"
+          }
+        },
+        "proteinChange": {
+          "type": "array",
+          "items": {
+            "$ref": "#/definitions/AnnotateMutationByProteinChangeQuery"
+          }
+        }
+      }
+    },
+    "AnnotateSampleQuery": {
+      "type": "object",
+      "properties": {
+        "copyNumberAlterations": {
+          "type": "array",
+          "items": {
+            "$ref": "#/definitions/AnnotateCopyNumberAlterationQuery"
+          }
+        },
+        "mutations": {
+          "$ref": "#/definitions/MutationsQuery"
+        },
+        "structuralVariants": {
+          "type": "array",
+          "items": {
+            "$ref": "#/definitions/AnnotateStructuralVariantQuery"
+          }
         }
       }
     },
@@ -2740,6 +2999,23 @@
         },
         "status": {
           "type": "string"
+        }
+      }
+    },
+    "AnnotationSearchResult": {
+      "type": "object",
+      "properties": {
+        "indicatorQueryResp": {
+          "$ref": "#/definitions/IndicatorQueryResp"
+        },
+        "queryType": {
+          "type": "string",
+          "enum": [
+            "GENE",
+            "VARIANT",
+            "DRUG",
+            "CANCER_TYPE"
+          ]
         }
       }
     },
@@ -2983,6 +3259,21 @@
         }
       }
     },
+    "VariantOfUnknownSignificance": {
+      "type": "object",
+      "properties": {
+        "entrezGeneId": {
+          "type": "integer",
+          "format": "int32"
+        },
+        "gene": {
+          "type": "string"
+        },
+        "variant": {
+          "type": "string"
+        }
+      }
+    },
     "IndicatorQueryResp": {
       "type": "object",
       "properties": {
@@ -3218,6 +3509,9 @@
           "type": "string"
         },
         "cancerType": {
+          "type": "string"
+        },
+        "description": {
           "type": "string"
         },
         "drugs": {
@@ -3605,6 +3899,29 @@
         }
       }
     },
+    "SampleQueryResp": {
+      "type": "object",
+      "properties": {
+        "copyNumberAlterations": {
+          "type": "array",
+          "items": {
+            "$ref": "#/definitions/IndicatorQueryResp"
+          }
+        },
+        "mutations": {
+          "type": "array",
+          "items": {
+            "$ref": "#/definitions/IndicatorQueryResp"
+          }
+        },
+        "structuralVariants": {
+          "type": "array",
+          "items": {
+            "$ref": "#/definitions/IndicatorQueryResp"
+          }
+        }
+      }
+    },
     "VariantConsequence": {
       "type": "object",
       "properties": {
@@ -3832,6 +4149,7 @@
             "428",
             "429",
             "431",
+            "451",
             "500",
             "501",
             "502",
@@ -3845,6 +4163,10 @@
             "510",
             "511"
           ]
+        },
+        "statusCodeValue": {
+          "type": "integer",
+          "format": "int32"
         }
       }
     },

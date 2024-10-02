@@ -200,7 +200,9 @@ export type VariantAnnotation = {
 
 };
 export type AnnotatedVariant = {
-    'entrezGeneId': number
+    'description': string
+
+        'entrezGeneId': number
 
         'gene': string
 
@@ -489,10 +491,6 @@ export type Drug = {
     'drugName': string
 
         'ncitCode': string
-
-        'synonyms': Array < string >
-
-        'uuid': string
 
 };
 export type RelevantCancerTypeQuery = {

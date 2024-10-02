@@ -214,6 +214,7 @@ export enum LEVELS {
   Fda1 = 'Fda1',
   Fda2 = 'Fda2',
   Fda3 = 'Fda3',
+  NA = 'NA',
 }
 
 export const FDA_LEVELS = [LEVELS.Fda1, LEVELS.Fda2, LEVELS.Fda3];
@@ -290,6 +291,7 @@ export const LEVEL_BUTTON_DESCRIPTION: { [key in LEVELS]: string } = {
   [LEVELS.Fda1]: 'With CDx',
   [LEVELS.Fda2]: 'Clinical Significance',
   [LEVELS.Fda3]: 'Potential Clinical Significance',
+  [LEVELS.NA]: 'NA',
 };
 
 export const LEVEL_CLASSIFICATION: { [key in LEVELS]: LEVEL_TYPES } = {
@@ -311,6 +313,7 @@ export const LEVEL_CLASSIFICATION: { [key in LEVELS]: LEVEL_TYPES } = {
   [LEVELS.Fda1]: LEVEL_TYPES.FDA,
   [LEVELS.Fda2]: LEVEL_TYPES.FDA,
   [LEVELS.Fda3]: LEVEL_TYPES.FDA,
+  [LEVELS.NA]: LEVEL_TYPES.TX,
 };
 
 export const ONCOGENICITY_CLASS_NAMES: { [key in ONCOGENICITY]: string } = {
@@ -607,6 +610,8 @@ export enum PAGE_ROUTE {
   ACCOUNT_PASSWORD_RESET_REQUEST = '/account/reset/request',
   ACCOUNT_PASSWORD_RESET_FINISH = '/account/reset/finish',
   ACCOUNT_ACTIVE_TRIAL_FINISH = '/account/active-trial/finish',
+  EPIC_AUTHENTICATE = '/epic/authenticate',
+  EPIC_ANNOTATE = '/epic/annotate',
 }
 
 export enum API_ROUTE {

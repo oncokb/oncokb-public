@@ -92,7 +92,9 @@ export type Alteration = {
 
 };
 export type AnnotatedVariant = {
-    'entrezGeneId': number
+    'description': string
+
+        'entrezGeneId': number
 
         'gene': string
 
@@ -145,6 +147,24 @@ export type Implication = {
         'pmids': Array < string >
 
         'tumorType': TumorType
+
+};
+export type MutationsQuery = {
+    'cDnaChange': Array < {} >
+
+        'genomicChange': Array < AnnotateMutationByGenomicChangeQuery >
+
+        'hgvsg': Array < AnnotateMutationByHGVSgQuery >
+
+        'proteinChange': Array < AnnotateMutationByProteinChangeQuery >
+
+};
+export type AnnotateSampleQuery = {
+    'copyNumberAlterations': Array < AnnotateCopyNumberAlterationQuery >
+
+        'mutations': MutationsQuery
+
+        'structuralVariants': Array < AnnotateStructuralVariantQuery >
 
 };
 export type TumorType = {
@@ -221,6 +241,12 @@ export type GeneEvidence = {
         'status': string
 
 };
+export type AnnotationSearchResult = {
+    'indicatorQueryResp': IndicatorQueryResp
+
+        'queryType': "GENE" | "VARIANT" | "DRUG" | "CANCER_TYPE"
+
+};
 export type Evidence = {
     'additionalInfo': string
 
@@ -279,6 +305,14 @@ export type AnnotateStructuralVariantQuery = {
         'tumorType': string
 
 };
+export type VariantOfUnknownSignificance = {
+    'entrezGeneId': number
+
+        'gene': string
+
+        'variant': string
+
+};
 export type IndicatorQueryResp = {
     'alleleExist': boolean
 
@@ -335,6 +369,8 @@ export type ActionableGene = {
     'abstracts': string
 
         'cancerType': string
+
+        'description': string
 
         'drugs': string
 
@@ -523,6 +559,14 @@ export type OncoKBInfo = {
         'publicInstance': boolean
 
 };
+export type SampleQueryResp = {
+    'copyNumberAlterations': Array < IndicatorQueryResp >
+
+        'mutations': Array < IndicatorQueryResp >
+
+        'structuralVariants': Array < IndicatorQueryResp >
+
+};
 export type VariantConsequence = {
     'description': string
 
@@ -576,7 +620,9 @@ export type IndicatorQueryTreatment = {
 export type ResponseEntity = {
     'body': {}
 
-    'statusCode': "100" | "101" | "102" | "103" | "200" | "201" | "202" | "203" | "204" | "205" | "206" | "207" | "208" | "226" | "300" | "301" | "302" | "302" | "303" | "304" | "305" | "307" | "308" | "400" | "401" | "402" | "403" | "404" | "405" | "406" | "407" | "408" | "409" | "410" | "411" | "412" | "413" | "413" | "414" | "414" | "415" | "416" | "417" | "418" | "419" | "420" | "421" | "422" | "423" | "424" | "426" | "428" | "429" | "431" | "500" | "501" | "502" | "503" | "504" | "505" | "506" | "507" | "508" | "509" | "510" | "511"
+    'statusCode': "100" | "101" | "102" | "103" | "200" | "201" | "202" | "203" | "204" | "205" | "206" | "207" | "208" | "226" | "300" | "301" | "302" | "302" | "303" | "304" | "305" | "307" | "308" | "400" | "401" | "402" | "403" | "404" | "405" | "406" | "407" | "408" | "409" | "410" | "411" | "412" | "413" | "413" | "414" | "414" | "415" | "416" | "417" | "418" | "419" | "420" | "421" | "422" | "423" | "424" | "426" | "428" | "429" | "431" | "451" | "500" | "501" | "502" | "503" | "504" | "505" | "506" | "507" | "508" | "509" | "510" | "511"
+
+        'statusCodeValue': number
 
 };
 export type Treatment = {
@@ -940,6 +986,122 @@ export default class OncoKbAPI {
         }): Promise < Array < IndicatorQueryResp >
         > {
             return this.annotateCopyNumberAlterationsPostUsingPOSTWithHttpInfo(parameters).then(function(response: request.Response) {
+                return response.body;
+            });
+        };
+    annotateEpicGetUsingGETURL(parameters: {
+        'iss': string,
+        'accessToken': string,
+        'patientId': string,
+        $queryParameters ? : any
+    }): string {
+        let queryParameters: any = {};
+        let path = '/annotate/epic';
+        if (parameters['iss'] !== undefined) {
+            queryParameters['iss'] = parameters['iss'];
+        }
+
+        if (parameters['accessToken'] !== undefined) {
+            queryParameters['accessToken'] = parameters['accessToken'];
+        }
+
+        if (parameters['patientId'] !== undefined) {
+            queryParameters['patientId'] = parameters['patientId'];
+        }
+
+        if (parameters.$queryParameters) {
+            Object.keys(parameters.$queryParameters).forEach(function(parameterName) {
+                var parameter = parameters.$queryParameters[parameterName];
+                queryParameters[parameterName] = parameter;
+            });
+        }
+        let keys = Object.keys(queryParameters);
+        return this.domain + path + (keys.length > 0 ? '?' + (keys.map(key => key + '=' + encodeURIComponent(queryParameters[key])).join('&')) : '');
+    };
+
+    /**
+     * Annotate epic genomic data.
+     * @method
+     * @name OncoKbAPI#annotateEpicGetUsingGET
+     * @param {string} iss - iss
+     * @param {string} accessToken - accessToken
+     * @param {string} patientId - patientId
+     */
+    annotateEpicGetUsingGETWithHttpInfo(parameters: {
+        'iss': string,
+        'accessToken': string,
+        'patientId': string,
+        $queryParameters ? : any,
+        $domain ? : string
+    }): Promise < request.Response > {
+        const domain = parameters.$domain ? parameters.$domain : this.domain;
+        const errorHandlers = this.errorHandlers;
+        const request = this.request;
+        let path = '/annotate/epic';
+        let body: any;
+        let queryParameters: any = {};
+        let headers: any = {};
+        let form: any = {};
+        return new Promise(function(resolve, reject) {
+            headers['Accept'] = 'application/json';
+            headers['Content-Type'] = 'application/json';
+
+            if (parameters['iss'] !== undefined) {
+                queryParameters['iss'] = parameters['iss'];
+            }
+
+            if (parameters['iss'] === undefined) {
+                reject(new Error('Missing required  parameter: iss'));
+                return;
+            }
+
+            if (parameters['accessToken'] !== undefined) {
+                queryParameters['accessToken'] = parameters['accessToken'];
+            }
+
+            if (parameters['accessToken'] === undefined) {
+                reject(new Error('Missing required  parameter: accessToken'));
+                return;
+            }
+
+            if (parameters['patientId'] !== undefined) {
+                queryParameters['patientId'] = parameters['patientId'];
+            }
+
+            if (parameters['patientId'] === undefined) {
+                reject(new Error('Missing required  parameter: patientId'));
+                return;
+            }
+
+            if (parameters.$queryParameters) {
+                Object.keys(parameters.$queryParameters).forEach(function(parameterName) {
+                    var parameter = parameters.$queryParameters[parameterName];
+                    queryParameters[parameterName] = parameter;
+                });
+            }
+
+            request('GET', domain + path, body, headers, queryParameters, form, reject, resolve, errorHandlers);
+
+        });
+    };
+
+    /**
+     * Annotate epic genomic data.
+     * @method
+     * @name OncoKbAPI#annotateEpicGetUsingGET
+     * @param {string} iss - iss
+     * @param {string} accessToken - accessToken
+     * @param {string} patientId - patientId
+     */
+    annotateEpicGetUsingGET(parameters: {
+            'iss': string,
+            'accessToken': string,
+            'patientId': string,
+            $queryParameters ? : any,
+            $domain ? : string
+        }): Promise < Array < SampleQueryResp >
+        > {
+            return this.annotateEpicGetUsingGETWithHttpInfo(parameters).then(function(response: request.Response) {
                 return response.body;
             });
         };
@@ -1588,6 +1750,82 @@ export default class OncoKbAPI {
                 return response.body;
             });
         };
+    annotateSamplePostUsingPOSTURL(parameters: {
+        'body': AnnotateSampleQuery,
+        $queryParameters ? : any
+    }): string {
+        let queryParameters: any = {};
+        let path = '/annotate/sample';
+
+        if (parameters.$queryParameters) {
+            Object.keys(parameters.$queryParameters).forEach(function(parameterName) {
+                var parameter = parameters.$queryParameters[parameterName];
+                queryParameters[parameterName] = parameter;
+            });
+        }
+        let keys = Object.keys(queryParameters);
+        return this.domain + path + (keys.length > 0 ? '?' + (keys.map(key => key + '=' + encodeURIComponent(queryParameters[key])).join('&')) : '');
+    };
+
+    /**
+     * Annotate a sample.
+     * @method
+     * @name OncoKbAPI#annotateSamplePostUsingPOST
+     * @param {} body - Lists of queries for each alteration type. Please see swagger.json for request body format.
+     */
+    annotateSamplePostUsingPOSTWithHttpInfo(parameters: {
+        'body': AnnotateSampleQuery,
+        $queryParameters ? : any,
+        $domain ? : string
+    }): Promise < request.Response > {
+        const domain = parameters.$domain ? parameters.$domain : this.domain;
+        const errorHandlers = this.errorHandlers;
+        const request = this.request;
+        let path = '/annotate/sample';
+        let body: any;
+        let queryParameters: any = {};
+        let headers: any = {};
+        let form: any = {};
+        return new Promise(function(resolve, reject) {
+            headers['Accept'] = 'application/json';
+            headers['Content-Type'] = 'application/json';
+
+            if (parameters['body'] !== undefined) {
+                body = parameters['body'];
+            }
+
+            if (parameters['body'] === undefined) {
+                reject(new Error('Missing required  parameter: body'));
+                return;
+            }
+
+            if (parameters.$queryParameters) {
+                Object.keys(parameters.$queryParameters).forEach(function(parameterName) {
+                    var parameter = parameters.$queryParameters[parameterName];
+                    queryParameters[parameterName] = parameter;
+                });
+            }
+
+            request('POST', domain + path, body, headers, queryParameters, form, reject, resolve, errorHandlers);
+
+        });
+    };
+
+    /**
+     * Annotate a sample.
+     * @method
+     * @name OncoKbAPI#annotateSamplePostUsingPOST
+     * @param {} body - Lists of queries for each alteration type. Please see swagger.json for request body format.
+     */
+    annotateSamplePostUsingPOST(parameters: {
+        'body': AnnotateSampleQuery,
+        $queryParameters ? : any,
+        $domain ? : string
+    }): Promise < SampleQueryResp > {
+        return this.annotateSamplePostUsingPOSTWithHttpInfo(parameters).then(function(response: request.Response) {
+            return response.body;
+        });
+    };
     annotateStructuralVariantsGetUsingGETURL(parameters: {
         'hugoSymbolA' ? : string,
         'entrezGeneIdA' ? : number,
@@ -1850,6 +2088,99 @@ export default class OncoKbAPI {
         }): Promise < Array < IndicatorQueryResp >
         > {
             return this.annotateStructuralVariantsPostUsingPOSTWithHttpInfo(parameters).then(function(response: request.Response) {
+                return response.body;
+            });
+        };
+    annotationSearchGetUsingGETURL(parameters: {
+        'query': string,
+        'limit' ? : number,
+        $queryParameters ? : any
+    }): string {
+        let queryParameters: any = {};
+        let path = '/annotation/search';
+        if (parameters['query'] !== undefined) {
+            queryParameters['query'] = parameters['query'];
+        }
+
+        if (parameters['limit'] !== undefined) {
+            queryParameters['limit'] = parameters['limit'];
+        }
+
+        if (parameters.$queryParameters) {
+            Object.keys(parameters.$queryParameters).forEach(function(parameterName) {
+                var parameter = parameters.$queryParameters[parameterName];
+                queryParameters[parameterName] = parameter;
+            });
+        }
+        let keys = Object.keys(queryParameters);
+        return this.domain + path + (keys.length > 0 ? '?' + (keys.map(key => key + '=' + encodeURIComponent(queryParameters[key])).join('&')) : '');
+    };
+
+    /**
+     * Get annotations based on search
+     * @method
+     * @name OncoKbAPI#annotationSearchGetUsingGET
+     * @param {string} query - The search query, it could be hugoSymbol, variant or cancer type. At least two characters. Maximum two keywords are supported, separated by space
+     * @param {integer} limit - The limit of returned result.
+     */
+    annotationSearchGetUsingGETWithHttpInfo(parameters: {
+        'query': string,
+        'limit' ? : number,
+        $queryParameters ? : any,
+        $domain ? : string
+    }): Promise < request.Response > {
+        const domain = parameters.$domain ? parameters.$domain : this.domain;
+        const errorHandlers = this.errorHandlers;
+        const request = this.request;
+        let path = '/annotation/search';
+        let body: any;
+        let queryParameters: any = {};
+        let headers: any = {};
+        let form: any = {};
+        return new Promise(function(resolve, reject) {
+            headers['Accept'] = 'application/json';
+            headers['Content-Type'] = 'application/json';
+
+            if (parameters['query'] !== undefined) {
+                queryParameters['query'] = parameters['query'];
+            }
+
+            if (parameters['query'] === undefined) {
+                reject(new Error('Missing required  parameter: query'));
+                return;
+            }
+
+            if (parameters['limit'] !== undefined) {
+                queryParameters['limit'] = parameters['limit'];
+            }
+
+            if (parameters.$queryParameters) {
+                Object.keys(parameters.$queryParameters).forEach(function(parameterName) {
+                    var parameter = parameters.$queryParameters[parameterName];
+                    queryParameters[parameterName] = parameter;
+                });
+            }
+
+            request('GET', domain + path, body, headers, queryParameters, form, reject, resolve, errorHandlers);
+
+        });
+    };
+
+    /**
+     * Get annotations based on search
+     * @method
+     * @name OncoKbAPI#annotationSearchGetUsingGET
+     * @param {string} query - The search query, it could be hugoSymbol, variant or cancer type. At least two characters. Maximum two keywords are supported, separated by space
+     * @param {integer} limit - The limit of returned result.
+     */
+    annotationSearchGetUsingGET(parameters: {
+            'query': string,
+            'limit' ? : number,
+            $queryParameters ? : any,
+            $domain ? : string
+        }): Promise < Array < AnnotationSearchResult >
+        > {
+            return this.annotationSearchGetUsingGETWithHttpInfo(parameters).then(function(response: request.Response) {
                 return response.body;
             });
         };
@@ -4534,6 +4865,131 @@ export default class OncoKbAPI {
             $domain ? : string
     }): Promise < string > {
         return this.utilsAllCuratedGenesTxtGetUsingGETWithHttpInfo(parameters).then(function(response: request.Response) {
+            return response.body;
+        });
+    };
+    utilsAllVariantsOfUnknownSignificanceGetUsingGETURL(parameters: {
+        $queryParameters ? : any
+    }): string {
+        let queryParameters: any = {};
+        let path = '/utils/allVariantsOfUnknownSignificance';
+
+        if (parameters.$queryParameters) {
+            Object.keys(parameters.$queryParameters).forEach(function(parameterName) {
+                var parameter = parameters.$queryParameters[parameterName];
+                queryParameters[parameterName] = parameter;
+            });
+        }
+        let keys = Object.keys(queryParameters);
+        return this.domain + path + (keys.length > 0 ? '?' + (keys.map(key => key + '=' + encodeURIComponent(queryParameters[key])).join('&')) : '');
+    };
+
+    /**
+     * Get All Variants of Unknown Significance.
+     * @method
+     * @name OncoKbAPI#utilsAllVariantsOfUnknownSignificanceGetUsingGET
+     */
+    utilsAllVariantsOfUnknownSignificanceGetUsingGETWithHttpInfo(parameters: {
+        $queryParameters ? : any,
+            $domain ? : string
+    }): Promise < request.Response > {
+        const domain = parameters.$domain ? parameters.$domain : this.domain;
+        const errorHandlers = this.errorHandlers;
+        const request = this.request;
+        let path = '/utils/allVariantsOfUnknownSignificance';
+        let body: any;
+        let queryParameters: any = {};
+        let headers: any = {};
+        let form: any = {};
+        return new Promise(function(resolve, reject) {
+            headers['Accept'] = 'application/json';
+            headers['Content-Type'] = 'application/json';
+
+            if (parameters.$queryParameters) {
+                Object.keys(parameters.$queryParameters).forEach(function(parameterName) {
+                    var parameter = parameters.$queryParameters[parameterName];
+                    queryParameters[parameterName] = parameter;
+                });
+            }
+
+            request('GET', domain + path, body, headers, queryParameters, form, reject, resolve, errorHandlers);
+
+        });
+    };
+
+    /**
+     * Get All Variants of Unknown Significance.
+     * @method
+     * @name OncoKbAPI#utilsAllVariantsOfUnknownSignificanceGetUsingGET
+     */
+    utilsAllVariantsOfUnknownSignificanceGetUsingGET(parameters: {
+            $queryParameters ? : any,
+                $domain ? : string
+        }): Promise < Array < VariantOfUnknownSignificance >
+        > {
+            return this.utilsAllVariantsOfUnknownSignificanceGetUsingGETWithHttpInfo(parameters).then(function(response: request.Response) {
+                return response.body;
+            });
+        };
+    utilsAllVariantsOfUnknownSignificanceTxtGetUsingGETURL(parameters: {
+        $queryParameters ? : any
+    }): string {
+        let queryParameters: any = {};
+        let path = '/utils/allVariantsOfUnknownSignificance.txt';
+
+        if (parameters.$queryParameters) {
+            Object.keys(parameters.$queryParameters).forEach(function(parameterName) {
+                var parameter = parameters.$queryParameters[parameterName];
+                queryParameters[parameterName] = parameter;
+            });
+        }
+        let keys = Object.keys(queryParameters);
+        return this.domain + path + (keys.length > 0 ? '?' + (keys.map(key => key + '=' + encodeURIComponent(queryParameters[key])).join('&')) : '');
+    };
+
+    /**
+     * Get All Variants of Unknown Significance in text file.
+     * @method
+     * @name OncoKbAPI#utilsAllVariantsOfUnknownSignificanceTxtGetUsingGET
+     */
+    utilsAllVariantsOfUnknownSignificanceTxtGetUsingGETWithHttpInfo(parameters: {
+        $queryParameters ? : any,
+            $domain ? : string
+    }): Promise < request.Response > {
+        const domain = parameters.$domain ? parameters.$domain : this.domain;
+        const errorHandlers = this.errorHandlers;
+        const request = this.request;
+        let path = '/utils/allVariantsOfUnknownSignificance.txt';
+        let body: any;
+        let queryParameters: any = {};
+        let headers: any = {};
+        let form: any = {};
+        return new Promise(function(resolve, reject) {
+            headers['Accept'] = 'text/plain';
+            headers['Content-Type'] = 'application/json';
+
+            if (parameters.$queryParameters) {
+                Object.keys(parameters.$queryParameters).forEach(function(parameterName) {
+                    var parameter = parameters.$queryParameters[parameterName];
+                    queryParameters[parameterName] = parameter;
+                });
+            }
+
+            request('GET', domain + path, body, headers, queryParameters, form, reject, resolve, errorHandlers);
+
+        });
+    };
+
+    /**
+     * Get All Variants of Unknown Significance in text file.
+     * @method
+     * @name OncoKbAPI#utilsAllVariantsOfUnknownSignificanceTxtGetUsingGET
+     */
+    utilsAllVariantsOfUnknownSignificanceTxtGetUsingGET(parameters: {
+        $queryParameters ? : any,
+            $domain ? : string
+    }): Promise < string > {
+        return this.utilsAllVariantsOfUnknownSignificanceTxtGetUsingGETWithHttpInfo(parameters).then(function(response: request.Response) {
             return response.body;
         });
     };
