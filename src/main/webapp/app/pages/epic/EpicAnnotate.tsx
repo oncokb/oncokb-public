@@ -7,6 +7,7 @@ import { PAGE_ROUTE } from 'app/config/constants';
 import { useLocation } from 'react-router-dom';
 import axios from 'axios';
 import client from 'app/shared/api/oncokbClientInstance';
+import { AnnotationVisualisation } from 'app/components/annotationVisualization/AnnotationVisualisation';
 
 interface IEpicAnnotateProps {
   windowStore: WindowStore;
@@ -14,7 +15,9 @@ interface IEpicAnnotateProps {
 
 const EpicAnnotate = ({ windowStore }: IEpicAnnotateProps) => {
   const url = useLocation();
-  const [samples, setSamples] = useState<SampleQueryResp[] | undefined>();
+  const [mutations, setMutations] = useState<any[]>([]);
+  const [copyNumberAlterations, setCopyNumberAlterations] = useState<any[]>([]);
+  const [structuralVariants, setStructuralVariants] = useState<any[]>([]);
 
   useEffect(() => {
     const tokenUrl = localStorage.getItem('tokenUrl');
@@ -46,17 +49,55 @@ const EpicAnnotate = ({ windowStore }: IEpicAnnotateProps) => {
 
       const token = epicResponse.data;
 
-      client.annotateEpicGetUsingGET({
+      const response = await client.annotateEpicGetUsingGET({
         accessToken: token.access_token,
         iss,
         patientId: token.patient,
       });
+
+      let newMutations: any[] = [];
+      let newCopyNumberAlterations: any[] = [];
+      let newStructuralVariants: any[] = [];
+      for (const sample of response || []) {
+        newMutations = newMutations.concat(sample.mutations);
+        newCopyNumberAlterations = newCopyNumberAlterations.concat(
+          sample.copyNumberAlterations
+        );
+        newStructuralVariants = newStructuralVariants.concat(
+          sample.structuralVariants
+        );
+      }
+
+      /* eslint-disable no-console */
+      console.log({
+        newMutations,
+        newCopyNumberAlterations,
+        newStructuralVariants,
+      });
+
+      setMutations(newMutations);
+      setCopyNumberAlterations(newCopyNumberAlterations);
+      setStructuralVariants(newStructuralVariants);
     }
 
     fetchAccessToken().catch(console.error);
   }, [url]);
 
-  return <></>;
+  return (
+    <AnnotationVisualisation
+      data={{
+        mutationData: mutations,
+        copyNumberAlterationData: copyNumberAlterations,
+        structuralVariantData: structuralVariants,
+      }}
+      patientInfo={{
+        patientId: '1',
+        age: '24',
+        gender: 'Male',
+      }}
+      notifications={[]}
+    />
+  );
 };
 
 export default inject('windowStore')(EpicAnnotate);
