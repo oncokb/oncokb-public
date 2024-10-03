@@ -124,8 +124,8 @@ enum SimpleConfirmModalType {
 
 const defaultPayload: TerminationEmailDTO = {
   subject: '',
-  from: 'admin@oncokb.org',
-  cc: 'licenses@oncokb.org',
+  from: '',
+  cc: '',
   bcc: '',
   content: '',
   companyId: 0,

@@ -141,10 +141,10 @@ public class MailsController {
         return mailTypeInfos;
     }
 
-    @GetMapping("mails/termination-warning/{id}")
-    public TerminationEmailDTO getTerminationWarningEmail(@PathVariable Long id) {
-        CompanyDTO company = this.companyService.findOne(id).orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND));
-        List<UserDTO> users = this.userService.getCompanyUsers(id);
+    @GetMapping("mails/termination-warning/{companyId}")
+    public TerminationEmailDTO getTerminationWarningEmail(@PathVariable Long companyId) {
+        CompanyDTO company = this.companyService.findOne(companyId).orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND));
+        List<UserDTO> users = this.userService.getCompanyUsers(companyId);
 
         String formattedDate;
 
@@ -165,8 +165,7 @@ public class MailsController {
         String subject = "Urgent: OncoKB API License Expiration on " + formattedDate + " - Action Required";
         String content = "Dear " + company.getName() + ",\n\n" +
                 "We are writing to inform you that your API license for OncoKB is set to expire on " + formattedDate + ".\n\n" +
-                "To ensure uninterrupted access to the OncoKB database and its valuable resources, it is essential to initiate the renewal process as soon as possible.\n\n" +
-                "To renew the license, please reply to this email.\n\n" +
+                "If you would like to continue using OncoKB, please let us know, and we will work with your company’s representative to facilitate the license renewal.\n\n" +
                 "Regards,\n" +
                 "The OncoKB Team";
 
@@ -175,7 +174,7 @@ public class MailsController {
         dto.setFrom(from);
         dto.setCc(cc);
         dto.setBcc(bcc);
-        dto.setCompanyId(id);
+        dto.setCompanyId(companyId);
         dto.setContent(content);
         return dto;
     }
