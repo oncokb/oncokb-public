@@ -30,7 +30,6 @@ import AuthenticationStore from 'app/store/AuthenticationStore';
 import { Linkout } from 'app/shared/links/Linkout';
 import { If, Then, Else } from 'react-if';
 import { getPageTitle } from 'app/shared/utils/Utils';
-import { has } from 'app/shared/utils/LodashUtils';
 import { Helmet } from 'react-helmet-async';
 
 type DownloadAvailabilityWithDate = DataRelease & DownloadAvailability;
@@ -109,7 +108,7 @@ export default class APIAccessPage extends React.Component<{
       // do not provide data on version 1
       return DATA_RELEASES.filter(
         release =>
-          has(availableVersions, release.version) &&
+          availableVersions[release.version] &&
           !release.version.startsWith('v1')
       ).reduce((acc, next) => {
         const currentVersionData: DownloadAvailability =
