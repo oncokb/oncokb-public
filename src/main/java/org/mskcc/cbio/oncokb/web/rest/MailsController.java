@@ -159,8 +159,7 @@ public class MailsController {
 
         EmailAddresses addresses = this.applicationProperties.getEmailAddresses();
 
-        String from = addresses.getTechDevAddress();
-        String cc = addresses.getLicenseAddress();
+        String from = addresses.getLicenseAddress();
         String bcc = users.stream().map(UserDTO::getEmail).collect(Collectors.joining(";"));
         String subject = "Urgent: OncoKB API License Expiration on " + formattedDate + " - Action Required";
         String content = "Dear " + company.getName() + ",\n\n" +
