@@ -8,6 +8,8 @@ export type IFormTextAreaProps = {
   disabled?: boolean;
   value?: string;
   boldLabel?: boolean;
+  rows?: number;
+  readOnly?: boolean;
 };
 
 export const FormTextAreaField: React.FunctionComponent<IFormTextAreaProps> = props => {
@@ -26,6 +28,8 @@ export const FormTextAreaField: React.FunctionComponent<IFormTextAreaProps> = pr
         className="form-control"
         disabled={props.disabled || false}
         defaultValue={props.value}
+        rows={props.rows}
+        readOnly={props.readOnly}
       />
     </div>
   );
