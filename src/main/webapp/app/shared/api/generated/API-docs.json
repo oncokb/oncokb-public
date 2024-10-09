@@ -1656,6 +1656,90 @@
         "deprecated": false
       }
     },
+    "/api/mails/termination-warning": {
+      "post": {
+        "tags": [
+          "mails-controller"
+        ],
+        "summary": "sendTerminationWarningEmail",
+        "operationId": "sendTerminationWarningEmailUsingPOST",
+        "consumes": [
+          "application/json"
+        ],
+        "produces": [
+          "*/*"
+        ],
+        "parameters": [
+          {
+            "in": "body",
+            "name": "terminationEmailDTO",
+            "description": "terminationEmailDTO",
+            "required": true,
+            "schema": {
+              "$ref": "#/definitions/TerminationEmailDTO"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK"
+          },
+          "201": {
+            "description": "Created"
+          },
+          "401": {
+            "description": "Unauthorized"
+          },
+          "403": {
+            "description": "Forbidden"
+          },
+          "404": {
+            "description": "Not Found"
+          }
+        },
+        "deprecated": false
+      }
+    },
+    "/api/mails/termination-warning/{id}": {
+      "get": {
+        "tags": [
+          "mails-controller"
+        ],
+        "summary": "getTerminationWarningEmail",
+        "operationId": "getTerminationWarningEmailUsingGET",
+        "produces": [
+          "*/*"
+        ],
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "description": "id",
+            "required": true,
+            "type": "integer",
+            "format": "int64"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "schema": {
+              "$ref": "#/definitions/TerminationEmailDTO"
+            }
+          },
+          "401": {
+            "description": "Unauthorized"
+          },
+          "403": {
+            "description": "Forbidden"
+          },
+          "404": {
+            "description": "Not Found"
+          }
+        },
+        "deprecated": false
+      }
+    },
     "/api/mails/types": {
       "get": {
         "tags": [
@@ -2963,9 +3047,6 @@
         "apiAccessRequest": {
           "$ref": "#/definitions/ApiAccessRequest"
         },
-        "sentToRocReview": {
-          "type": "boolean"
-        },
         "trialAccount": {
           "$ref": "#/definitions/TrialAccount"
         },
@@ -2987,6 +3068,15 @@
       },
       "title": "ApiAccessRequest"
     },
+    "CompanyAdditionalInfoDTO": {
+      "type": "object",
+      "properties": {
+        "license": {
+          "$ref": "#/definitions/CompanyLicense"
+        }
+      },
+      "title": "CompanyAdditionalInfoDTO"
+    },
     "CompanyDTO": {
       "type": "object",
       "required": [
@@ -2997,6 +3087,9 @@
         "name"
       ],
       "properties": {
+        "additionalInfo": {
+          "$ref": "#/definitions/CompanyAdditionalInfoDTO"
+        },
         "businessContact": {
           "type": "string"
         },
@@ -3076,6 +3169,39 @@
       },
       "title": "CompanyDomainDTO"
     },
+    "CompanyLicense": {
+      "type": "object",
+      "properties": {
+        "activation": {
+          "type": "string",
+          "format": "date"
+        },
+        "autoRenewal": {
+          "type": "boolean"
+        },
+        "termination": {
+          "$ref": "#/definitions/CompanyTermination"
+        }
+      },
+      "title": "CompanyLicense"
+    },
+    "CompanyTermination": {
+      "type": "object",
+      "properties": {
+        "date": {
+          "type": "string",
+          "format": "date"
+        },
+        "notes": {
+          "type": "string"
+        },
+        "notificationDays": {
+          "type": "integer",
+          "format": "int32"
+        }
+      },
+      "title": "CompanyTermination"
+    },
     "CompanyVM": {
       "type": "object",
       "required": [
@@ -3086,6 +3212,9 @@
         "name"
       ],
       "properties": {
+        "additionalInfo": {
+          "$ref": "#/definitions/CompanyAdditionalInfoDTO"
+        },
         "businessContact": {
           "type": "string"
         },
@@ -3379,9 +3508,6 @@
           "maxLength": 50,
           "pattern": "^[_.\\-\\+@A-Za-z0-9]*$"
         },
-        "needsMskRocReview": {
-          "type": "boolean"
-        },
         "notifyUserOnTrialCreation": {
           "type": "boolean"
         },
@@ -3418,6 +3544,31 @@
         }
       },
       "title": "PasswordChangeDTO"
+    },
+    "TerminationEmailDTO": {
+      "type": "object",
+      "properties": {
+        "bcc": {
+          "type": "string"
+        },
+        "cc": {
+          "type": "string"
+        },
+        "companyId": {
+          "type": "integer",
+          "format": "int64"
+        },
+        "content": {
+          "type": "string"
+        },
+        "from": {
+          "type": "string"
+        },
+        "subject": {
+          "type": "string"
+        }
+      },
+      "title": "TerminationEmailDTO"
     },
     "Token": {
       "type": "object",
@@ -3798,19 +3949,33 @@
     "UserOverviewUsage": {
       "type": "object",
       "properties": {
+        "dayUsage": {
+          "type": "object",
+          "additionalProperties": {
+            "type": "integer",
+            "format": "int64"
+          }
+        },
         "endpoint": {
           "type": "string"
         },
-        "maxUsage": {
-          "type": "integer",
-          "format": "int64"
+        "maxUsageProportion": {
+          "type": "number",
+          "format": "float"
+        },
+        "monthUsage": {
+          "type": "object",
+          "additionalProperties": {
+            "type": "integer",
+            "format": "int64"
+          }
         },
         "noPrivateEndpoint": {
           "type": "string"
         },
-        "noPrivateMaxUsage": {
-          "type": "integer",
-          "format": "int64"
+        "noPrivateMaxUsageProportion": {
+          "type": "number",
+          "format": "float"
         },
         "totalUsage": {
           "type": "integer",

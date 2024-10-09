@@ -66,6 +66,10 @@ public class Company implements Serializable {
     @Column(name = "legal_contact", length = 255)
     private String legalContact;
 
+    @Lob
+    @Column(name = "additional_info")
+    private String additionalInfo;
+
     @ManyToMany(fetch = FetchType.EAGER, cascade = {CascadeType.PERSIST, CascadeType.MERGE})
     @JoinTable(name = "company_company_domain",
                joinColumns = @JoinColumn(name = "company_id", referencedColumnName = "id"),
@@ -185,6 +189,19 @@ public class Company implements Serializable {
         this.legalContact = legalContact;
     }
 
+    public String getAdditionalInfo() {
+        return additionalInfo;
+    }
+
+    public Company additionalInfo(String additionalInfo) {
+        this.additionalInfo = additionalInfo;
+        return this;
+    }
+
+    public void setAdditionalInfo(String additionalInfo) {
+        this.additionalInfo = additionalInfo;
+    }
+
     public Set<CompanyDomain> getCompanyDomains() {
         return companyDomains;
     }
@@ -240,6 +257,7 @@ public class Company implements Serializable {
             ", licenseStatus='" + getLicenseStatus() + "'" +
             ", businessContact='" + getBusinessContact() + "'" +
             ", legalContact='" + getLegalContact() + "'" +
+            ", additionalInfo='" + getAdditionalInfo() + "'" +
             "}";
     }
 }
