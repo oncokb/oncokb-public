@@ -111,6 +111,7 @@ export default function CompanyAdditionalInfo({
                       ...additionalInfo?.license,
                       termination: {
                         ...additionalInfo?.license?.termination,
+                        hasBeenNotified: false,
                         date: terminationDate?.toISOString(),
                         notificationDays:
                           additionalInfo?.license?.termination
@@ -145,6 +146,7 @@ export default function CompanyAdditionalInfo({
                           ...additionalInfo?.license,
                           termination: {
                             ...additionalInfo?.license?.termination,
+                            hasBeenNotified: false,
                             notificationDays: value
                               ? +value
                               : ((undefined as unknown) as number),

@@ -208,24 +208,21 @@ public class CompanyResource {
         Instant now = Instant.now();
         ArrayList<Long> companies = new ArrayList<>();
         for (CompanyDTO company : companyService.findAll()) {
-           CompanyAdditionalInfoDTO additionalInfo = company.getAdditionalInfo();
-           if (additionalInfo != null) {
-               CompanyLicense license = additionalInfo.getLicense();
-               if (license != null) {
-                   CompanyTermination termination = license.getTermination();
-                   if (termination != null) {
-                       Boolean hasBeenNotified = termination.getHasBeenNotified();
-                       if (hasBeenNotified == null) {
-                           hasBeenNotified = false;
-                       }
-                       Integer notificationDays = termination.getNotificationDays();
-                       Instant terminationDate = termination.getDate();
-                       if (!hasBeenNotified && notificationDays != null && terminationDate != null) {
-                           Instant start = terminationDate.minus(notificationDays, ChronoUnit.DAYS);
-                           if (now.isAfter(start) && now.isBefore(terminationDate)) {
-                               companies.add(company.getId());
-                           }
-                       }
+           Optional<CompanyTermination> optionalTermination = Optional.ofNullable(company.getAdditionalInfo())
+               .map(CompanyAdditionalInfoDTO::getLicense)
+               .map(CompanyLicense::getTermination);
+           if (optionalTermination.isPresent()) {
+               CompanyTermination termination = optionalTermination.get();
+               Boolean hasBeenNotified = termination.getHasBeenNotified();
+               if (hasBeenNotified == null) {
+                   hasBeenNotified = false;
+               }
+               Integer notificationDays = termination.getNotificationDays();
+               Instant terminationDate = termination.getDate();
+               if (!hasBeenNotified && notificationDays != null && terminationDate != null) {
+                   Instant start = terminationDate.minus(notificationDays, ChronoUnit.DAYS);
+                   if (now.isAfter(start) && now.isBefore(terminationDate)) {
+                       companies.add(company.getId());
                    }
                }
            }

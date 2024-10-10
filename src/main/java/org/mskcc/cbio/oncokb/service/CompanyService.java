@@ -1,5 +1,6 @@
 package org.mskcc.cbio.oncokb.service;
 
+import org.mskcc.cbio.oncokb.domain.Company;
 import org.mskcc.cbio.oncokb.domain.enumeration.LicenseStatus;
 import org.mskcc.cbio.oncokb.service.dto.CompanyDTO;
 import org.mskcc.cbio.oncokb.web.rest.vm.CompanyVM;
@@ -58,4 +59,7 @@ public interface CompanyService {
      * @param id the id of the entity.
      */
     void delete(Long id);
+
+
+    List<CompanyDTO> findCompaniesByIds(List<Long> ids);
 }

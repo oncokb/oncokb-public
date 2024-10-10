@@ -670,7 +670,7 @@ export default class CompanyPage extends React.Component<ICompanyPage> {
                             this.editAllModeEnabled = false;
                             client
                               .getTerminationWarningEmailUsingGET({
-                                id: this.company.id,
+                                companyId: this.company.id,
                               })
                               .then(x => {
                                 this.sendTerminationNoticePayload = x;

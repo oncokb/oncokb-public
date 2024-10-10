@@ -185,20 +185,14 @@ public class MailsController {
         return dto;
     }
 
-    @PostMapping("mails/termination-warning")
+    @PostMapping("mails/company-termination-warning")
     public void sendTerminationWarningEmail(@Valid @RequestBody TerminationEmailDTO terminationEmailDTO) throws MessagingException {
         this.mailService.sendEmail(terminationEmailDTO);
     }
 
-    @PostMapping("mails/termination-notification")
+    @PostMapping("mails/company-termination-notification")
     public void sendTerminationNotificationEmail(@Valid @RequestBody List<Long> companyIds) throws MessagingException {
-        List<CompanyDTO> allCompanies =  companyService.findAll();
-        List<CompanyDTO> companiesToNotify = new ArrayList<>();
-        for (CompanyDTO company : allCompanies) {
-            if (companyIds.contains(company.getId())) {
-                companiesToNotify.add(company);
-            }
-        }
+        List<CompanyDTO> companiesToNotify =  companyService.findCompaniesByIds(companyIds);
         EmailAddresses addresses = this.applicationProperties.getEmailAddresses();
         Context context = new Context();
         final String baseUrl = ServletUriComponentsBuilder.fromCurrentContextPath().build().toUriString();
