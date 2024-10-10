@@ -1055,6 +1055,7 @@ export default class UserPage extends React.Component<IUserPage> {
                             loadedData={this.usageDetail.isComplete}
                             defaultResourcesType={ToggleValue.PUBLIC_RESOURCES}
                             defaultTimeType={ToggleValue.RESULTS_BY_DAY}
+                            defaultPageSize={5}
                           />
                         </Col>
                       </Row>

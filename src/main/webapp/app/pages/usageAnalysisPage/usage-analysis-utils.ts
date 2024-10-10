@@ -42,6 +42,10 @@ export type UsageSummaryWithUsageTypes = UsageSummary & {
   day: Record<string, Record<string, number>>;
 };
 
+export function isPrivateResource(resource: string) {
+  return resource.startsWith('/api/private/');
+}
+
 function checkIfUserUsage(
   incomingData: UsageSummaryWithUsageTypes | UserOverviewUsageWithUsageTypes[]
 ): incomingData is UserOverviewUsageWithUsageTypes[] {
@@ -55,7 +59,7 @@ function createResourceTableRecord(
   isAllUsage: boolean
 ): UsageRecord[] {
   return Object.entries(usageSummary)
-    .filter(([key]) => isAllUsage || !key.startsWith('/api/private/'))
+    .filter(([key]) => isAllUsage || !isPrivateResource(key))
     .map(
       ([key, usage]): UsageRecord => {
         return {

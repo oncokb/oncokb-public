@@ -853,7 +853,7 @@ export default class CompanyPage extends React.Component<ICompanyPage> {
                                           usage={
                                             props.original.yearUsage[
                                               currentYearStr
-                                            ].totalUsage
+                                            ]?.totalUsage
                                           }
                                         />
                                       );
@@ -871,7 +871,7 @@ export default class CompanyPage extends React.Component<ICompanyPage> {
                                           usage={
                                             props.original.yearUsage[
                                               currentYearStr
-                                            ].totalPublicUsage
+                                            ]?.totalPublicUsage
                                           }
                                         />
                                       );
@@ -886,12 +886,12 @@ export default class CompanyPage extends React.Component<ICompanyPage> {
                                     onFilter: (data, keyword) =>
                                       filterByKeyword(
                                         data.yearUsage[currentYearStr]
-                                          .mostUsedEndpoint,
+                                          ?.mostUsedEndpoint,
                                         keyword
                                       ),
                                     accessor: x =>
                                       x.yearUsage[currentYearStr]
-                                        .mostUsedEndpoint,
+                                        ?.mostUsedEndpoint,
                                   }
                                 : {
                                     id: 'mostUsedPublicEndpoint',
@@ -899,11 +899,11 @@ export default class CompanyPage extends React.Component<ICompanyPage> {
                                     minWidth: 200,
                                     accessor: x =>
                                       x.yearUsage[currentYearStr]
-                                        .mostUsedPublicEndpoint,
+                                        ?.mostUsedPublicEndpoint,
                                     onFilter: (data, keyword) =>
                                       filterByKeyword(
                                         data.yearUsage[currentYearStr]
-                                          .mostUsedPublicEndpoint,
+                                          ?.mostUsedPublicEndpoint,
                                         keyword
                                       ),
                                   },

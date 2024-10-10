@@ -1,6 +1,6 @@
 import React from 'react';
 
-function getUsageTextClassName(usage: number) {
+function getUsageTextClassName(usage: number | undefined) {
   if (usage >= 1000000000) {
     return 'text-danger';
   } else if (usage >= 1000000) {
@@ -11,11 +11,11 @@ function getUsageTextClassName(usage: number) {
 }
 
 const UsageText: React.FunctionComponent<{
-  usage: number;
+  usage: number | undefined;
 }> = ({ usage }) => {
   return (
     <span className={getUsageTextClassName(usage)}>
-      {usage.toLocaleString()}
+      {usage?.toLocaleString() ?? 'N/A'}
     </span>
   );
 };

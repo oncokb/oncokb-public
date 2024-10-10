@@ -28,7 +28,11 @@ import {
 } from 'app/components/oncokbTable/HeaderConstants';
 import UsageText from 'app/shared/texts/UsageText';
 import { Link } from 'react-router-dom';
-import { TimeGroupedUsageRecords, UsageRecord } from './usage-analysis-utils';
+import {
+  TimeGroupedUsageRecords,
+  UsageRecord,
+  isPrivateResource,
+} from './usage-analysis-utils';
 
 type IUserUsageDetailsTable = {
   data: TimeGroupedUsageRecords;
@@ -90,7 +94,7 @@ export default class UserUsageDetailsTable extends React.Component<
       return data || [];
     } else if (this.resourcesTypeToggleValue === ToggleValue.PUBLIC_RESOURCES) {
       return (data || []).filter(function (usage) {
-        return !usage.userEmail.includes('/private/');
+        return !isPrivateResource(usage.resource);
       });
     } else if (this.resourcesTypeToggleValue === ToggleValue.CUMULATIVE_USAGE) {
       if (data) {
@@ -104,7 +108,7 @@ export default class UserUsageDetailsTable extends React.Component<
               userEmail: 'ALL',
               usage: 0,
               time: resource.time,
-              resource: '',
+              resource: resource.resource,
               maxUsageProportion: 0,
             });
           }
@@ -131,17 +135,17 @@ export default class UserUsageDetailsTable extends React.Component<
               ...getUsageTableColumnDefinition(UsageTableColumnKey.RESOURCES),
               Header: filterDependentResourceHeader(this.timeTypeToggleValue),
               onFilter: (row: UsageRecord, keyword) =>
-                filterByKeyword(row.userEmail, keyword),
+                filterByKeyword(row.resource, keyword),
               Cell(props: { original: UsageRecord }) {
-                return props.original.userEmail === 'ALL' ? (
+                return props.original.resource === 'ALL' ? (
                   <div>ALL</div>
                 ) : (
                   <Link
                     to={`${
                       PAGE_ROUTE.ADMIN_RESOURCE_DETAILS_LINK
-                    }${props.original.userEmail.replace(/\//g, '!')}`}
+                    }${props.original.resource.replace(/\//g, '!')}`}
                   >
-                    {props.original.userEmail}
+                    {props.original.resource}
                   </Link>
                 );
               },

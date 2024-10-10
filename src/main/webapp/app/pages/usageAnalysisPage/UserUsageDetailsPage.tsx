@@ -50,10 +50,10 @@ export default class UserUsageDetailsPage extends React.Component<{
             const yearUsage = yearSummary[year];
             Object.keys(yearUsage).forEach(resourceEntry => {
               yearDetailSummary.push({
-                userEmail: resourceEntry,
+                userEmail: this.user.userEmail,
                 usage: yearUsage[resourceEntry],
                 time: year,
-                resource: '',
+                resource: resourceEntry,
                 maxUsageProportion: 0,
               });
             });
@@ -66,10 +66,10 @@ export default class UserUsageDetailsPage extends React.Component<{
             const monthUsage = monthSummary[month];
             Object.keys(monthUsage).forEach(resourceEntry => {
               monthDetailSummary.push({
-                userEmail: resourceEntry,
+                userEmail: this.user.userEmail,
                 usage: monthUsage[resourceEntry],
                 time: month,
-                resource: '',
+                resource: resourceEntry,
                 maxUsageProportion: 0,
               });
             });
@@ -82,10 +82,10 @@ export default class UserUsageDetailsPage extends React.Component<{
             const dayUsage = daySummary[day];
             Object.keys(dayUsage).forEach(resourceEntry => {
               dayDetailSummary.push({
-                userEmail: resourceEntry,
+                userEmail: this.user.userEmail,
                 usage: dayUsage[resourceEntry],
                 time: day,
-                resource: '',
+                resource: resourceEntry,
                 maxUsageProportion: 0,
               });
             });
