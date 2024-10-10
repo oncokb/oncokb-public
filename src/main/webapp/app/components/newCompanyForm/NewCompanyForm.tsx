@@ -138,7 +138,7 @@ export class NewCompanyForm extends React.Component<INewCompanyFormProps> {
       <AvForm
         onValidSubmit={this.handleValidSubmit}
         onKeyPress={(event: any) => {
-          if (event.which === 13) {
+          if (event.which === 13 && event.target.type !== 'textarea') {
             event.preventDefault();
           }
         }}
