@@ -2,91 +2,50 @@ package org.mskcc.cbio.oncokb.web.rest.vm.usageAnalysis;
 
 import java.util.Map;
 
-/**
- * Created by Yifu Yao on 2020-11-2
- */
-
 public class UserOverviewUsage {
-    private String userId;
-    private String userEmail;
-    private String endpoint;
-    private String noPrivateEndpoint;
-    private float maxUsageProportion;
-    private float noPrivateMaxUsageProportion;
-    private long totalUsage;
-    private Map<String, Long> dayUsage;
-    private Map<String, Long> monthUsage;
+  private String userId;
+  private String userEmail;
+  private Map<String, UserStats> dayUsage;
+  private Map<String, UserStats> monthUsage;
+  private Map<String, UserStats> yearUsage;
 
-    public String getEndpoint() {
-        return endpoint;
-    }
+  public String getUserId() {
+    return userId;
+  }
 
-    public void setEndpoint(String endpoint) {
-        this.endpoint = endpoint;
-    }
+  public void setUserId(String userId) {
+    this.userId = userId;
+  }
 
-    public String getUserEmail() {
-        return userEmail;
-    }
+  public String getUserEmail() {
+    return userEmail;
+  }
 
-    public void setUserEmail(String userEmail) {
-        this.userEmail = userEmail;
-    }
+  public void setUserEmail(String userEmail) {
+    this.userEmail = userEmail;
+  }
 
-    public float getMaxUsageProportion() {
-        return maxUsageProportion;
-    }
+  public Map<String, UserStats> getDayUsage() {
+    return dayUsage;
+  }
 
-    public void setMaxUsageProportion(float maxUsageProportion) {
-        this.maxUsageProportion = maxUsageProportion;
-    }
+  public void setDayUsage(Map<String, UserStats> dayUsage) {
+    this.dayUsage = dayUsage;
+  }
 
-    public long getTotalUsage() {
-        return totalUsage;
-    }
+  public Map<String, UserStats> getMonthUsage() {
+    return monthUsage;
+  }
 
-    public void setTotalUsage(long totalUsage) {
-        this.totalUsage = totalUsage;
-    }
+  public void setMonthUsage(Map<String, UserStats> monthUsage) {
+    this.monthUsage = monthUsage;
+  }
 
-    public String getUserId() {
-        return userId;
-    }
+  public Map<String, UserStats> getYearUsage() {
+    return yearUsage;
+  }
 
-    public void setUserId(String userId) {
-        this.userId = userId;
-    }
-
-    public String getNoPrivateEndpoint() {
-        return noPrivateEndpoint;
-    }
-
-    public void setNoPrivateEndpoint(String noPrivateEndpoint) {
-        this.noPrivateEndpoint = noPrivateEndpoint;
-    }
-
-    public float getNoPrivateMaxUsageProportion() {
-        return noPrivateMaxUsageProportion;
-    }
-
-    public void setNoPrivateMaxUsageProportion(float noPrivateMaxUsageProportion) {
-        this.noPrivateMaxUsageProportion = noPrivateMaxUsageProportion;
-    }
-
-    public Map<String, Long> getDayUsage() {
-        return dayUsage;
-    }
-
-    public void setDayUsage(Map<String, Long> dayUsage) {
-        this.dayUsage = dayUsage;
-    }
-
-    public Map<String, Long> getMonthUsage() {
-        return monthUsage;
-    }
-
-    public void setMonthUsage(Map<String, Long> monthUsage) {
-        this.monthUsage = monthUsage;
-    }
+  public void setYearUsage(Map<String, UserStats> yearUsage) {
+    this.yearUsage = yearUsage;
+  }
 }
-

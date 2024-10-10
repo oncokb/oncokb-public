@@ -20,6 +20,7 @@ import java.time.ZoneId;
 import java.time.ZonedDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.*;
+import java.util.AbstractMap.SimpleEntry;
 import java.util.Map.Entry;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -27,7 +28,6 @@ import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.Mockito;
 import org.mockito.MockitoAnnotations;
-import org.mockito.Spy;
 import org.mskcc.cbio.oncokb.config.Constants;
 import org.mskcc.cbio.oncokb.domain.User;
 import org.mskcc.cbio.oncokb.domain.enumeration.FileExtension;
@@ -465,43 +465,15 @@ public class UsageAnalysisControllerIT {
       obj.addProperty(lastKey, value);
     }
 
-    /**
-     * Set an empty object to the value found in the files JSON object based on the JSON path created by the
-     * keys. If an object is missing in the JSON path then it's created.
-     * @param value The value that is going to be added to value located in the JSON path.
-     * @param firstKey First key in the files object.
-     * @param index Array index of the array the {@code firstKey} parameter points to.
-     * @param keys The remaining JSON path keys.
-     */
-    private void safeSetNestedEmptyObjectInFilesObject(
-      String firstKey,
-      String... keys
-    ) {
-      KeyValuePair<String, JsonObject> pair = safeFetchJsonObjectFromFilesObject(
-        firstKey,
-        keys
-      );
-      String lastKey = pair.key;
-      JsonObject obj = pair.value;
-      if (!obj.has(lastKey)) {
-        obj.add(lastKey, new JsonObject());
-      }
-    }
-
     private void addUsers(String[] userNames) throws Exception {
       LocalDate today = TimeUtil.getCurrentNYTime(this.clock).toLocalDate();
       int currentYear = today.getYear();
       int userId = -1;
       for (String userName : userNames) {
-        int totalUsage = 0;
         userId++;
         // force ordering to consistent since we are doing strict checks on
         // asserts for json
         userName = userId + userName;
-        HashMap<String, Integer> userResourceUsage = new HashMap<>();
-        for (String oncokbEndpoint : sampleOncokbEndpoints) {
-          userResourceUsage.put(oncokbEndpoint, 0);
-        }
 
         int companyIndex = userId % fakeCompanies.length;
         String companyName = fakeCompanies[companyIndex];
@@ -520,9 +492,12 @@ public class UsageAnalysisControllerIT {
           "/api/usage/summary/users?companyId=" + companyDTO.getId(),
         };
 
-        for (int yearIndex = 0; yearIndex < 4; yearIndex++) {
+        for (int yearIndex = 0; yearIndex < 6; yearIndex++) {
+          boolean yearShouldBeRecorded = false;
+          Map<String, Integer> yearUserResourceUsage = createUserResourceUsageMap();
+          int yearTotalUsage = 0;
+          int yearTotalPublicUsage = 0;
           int year = currentYear - yearIndex;
-          Boolean isThisYear = yearIndex == 0;
 
           DateTimeFormatter dayFormatter = DateTimeFormatter.ofPattern(
             "yyyy-MM-dd"
@@ -534,6 +509,10 @@ public class UsageAnalysisControllerIT {
           String yearKey = String.valueOf(year);
 
           for (int month = 1; month <= 12; month++) {
+            boolean monthShouldBeRecorded = false;
+            Map<String, Integer> monthUserResourceUsage = createUserResourceUsageMap();
+            int monthTotalUsage = 0;
+            int monthTotalPublicUsage = 0;
             YearMonth yearMonth = YearMonth.of(year, month);
             String monthKey = yearMonth.format(monthFormatter);
             LocalDate start = yearMonth.atDay(1).atStartOfDay().toLocalDate();
@@ -547,12 +526,16 @@ public class UsageAnalysisControllerIT {
               !date.isAfter(end) && !date.isAfter(today);
               date = date.plusDays(1)
             ) {
+              boolean dayShouldBeRecorded = false;
+              Map<String, Integer> dayUserResourceUsage = createUserResourceUsageMap();
+              int dayTotalUsage = 0;
+              int dayTotalPublicUsage = 0;
               int j = 0;
               String dayKey = date.format(dayFormatter);
               while (random.nextInt() % 5 == 0 && j < 5) {
                 j++;
                 String oncokbEndpoint = getNextOncokbEndpoint();
-                int value = random.nextInt(100);
+                int value = random.nextInt(100) + 1;
 
                 updateResourceYearFile(
                   value,
@@ -584,33 +567,29 @@ public class UsageAnalysisControllerIT {
                   dayKey
                 );
 
-                boolean isAfterOrEqualToPast12Months = date.isAfter(
-                  today.minusMonths(11).withDayOfMonth(1).minusDays(1)
+                boolean isAfterOrEqualToPast3FullYears = date.isAfter(
+                  today.minusYears(3).withDayOfYear(1).minusDays(1)
                 );
                 boolean isBeforeOrEqualToToday = date.isBefore(
                   today.plusMonths(1).withDayOfMonth(1)
                 );
 
-                // update expected response for monthly resource summary
-                if (isThisYear) {
+                if (isAfterOrEqualToPast3FullYears && isBeforeOrEqualToToday) {
                   updateResourceSummaryExpectedResponse(
                     value,
                     oncokbEndpoint,
-                    monthKey
+                    yearKey,
+                    monthKey,
+                    dayKey
                   );
-                }
-
-                // update expected response for user usage endpoint
-                if (isThisYear) {
                   safeAddNestedValueInFilesObject(
                     value,
                     usageUserEndpoint,
                     "summary",
                     "year",
+                    yearKey,
                     oncokbEndpoint
                   );
-                }
-                if (isAfterOrEqualToPast12Months && isBeforeOrEqualToToday) {
                   safeAddNestedValueInFilesObject(
                     value,
                     usageUserEndpoint,
@@ -627,86 +606,97 @@ public class UsageAnalysisControllerIT {
                     dayKey,
                     oncokbEndpoint
                   );
-                }
-
-                if (isThisYear) {
                   updateSpecificEndpointUserUsageExpectedResponse(
                     value,
                     user,
                     oncokbEndpoint,
-                    monthKey
+                    yearKey,
+                    monthKey,
+                    dayKey
                   );
-                }
 
-                // update user endpoint usage endpoint
-                if (isAfterOrEqualToPast12Months && isBeforeOrEqualToToday) {
-                  for (String usageSummaryEndpoint : userUsageSummaryEndpoints) {
-                    safeAddNestedValueInFilesObject(
-                      value,
-                      usageSummaryEndpoint,
-                      userId,
-                      "dayUsage",
-                      dayKey
-                    );
-
-                    safeAddNestedValueInFilesObject(
-                      value,
-                      usageSummaryEndpoint,
-                      userId,
-                      "monthUsage",
-                      monthKey
-                    );
-                  }
-                }
-
-                if (isThisYear) {
-                  userResourceUsage.put(
+                  // track for user endpoint usage endpoint
+                  dayUserResourceUsage.put(
                     oncokbEndpoint,
-                    userResourceUsage.get(oncokbEndpoint) + value
+                    dayUserResourceUsage.get(oncokbEndpoint) + value
                   );
-                  for (String usageSummaryEndpoint : userUsageSummaryEndpoints) {
-                    safeAddNestedValueInFilesObject(
-                      value,
-                      usageSummaryEndpoint,
-                      userId,
-                      "totalUsage"
-                    );
+                  monthUserResourceUsage.put(
+                    oncokbEndpoint,
+                    monthUserResourceUsage.get(oncokbEndpoint) + value
+                  );
+                  yearUserResourceUsage.put(
+                    oncokbEndpoint,
+                    yearUserResourceUsage.get(oncokbEndpoint) + value
+                  );
+                  if (!oncokbEndpoint.startsWith("/api/private/")) {
+                    dayTotalPublicUsage += value;
+                    monthTotalPublicUsage += value;
+                    yearTotalPublicUsage += value;
                   }
-                  totalUsage += value;
+                  dayTotalUsage += value;
+                  monthTotalUsage += value;
+                  yearTotalUsage += value;
+                  dayShouldBeRecorded = true;
+                  monthShouldBeRecorded = true;
+                  yearShouldBeRecorded = true;
                 }
               }
+              if (dayShouldBeRecorded) {
+                updateUserSummaryUsageExpectedResponse(
+                  "dayUsage",
+                  dayKey,
+                  user,
+                  dayTotalUsage,
+                  dayTotalPublicUsage,
+                  userUsageSummaryEndpoints,
+                  dayUserResourceUsage
+                );
+              }
+            }
+            if (monthShouldBeRecorded) {
+              updateUserSummaryUsageExpectedResponse(
+                "monthUsage",
+                monthKey,
+                user,
+                monthTotalUsage,
+                monthTotalPublicUsage,
+                userUsageSummaryEndpoints,
+                monthUserResourceUsage
+              );
             }
           }
+          if (yearShouldBeRecorded) {
+            updateUserSummaryUsageExpectedResponse(
+              "yearUsage",
+              yearKey,
+              user,
+              yearTotalUsage,
+              yearTotalPublicUsage,
+              userUsageSummaryEndpoints,
+              yearUserResourceUsage
+            );
+          }
         }
-        Entry<String, Integer> maxResourceEntry = userResourceUsage
-          .entrySet()
-          .stream()
-          .max(Map.Entry.comparingByValue())
-          .orElseThrow(Exception::new);
-        Entry<String, Integer> maxNoPrivateResourceEntry = userResourceUsage
-          .entrySet()
-          .stream()
-          .filter(x -> !x.getKey().startsWith("/api/private/"))
-          .max(Map.Entry.comparingByValue())
-          .orElseThrow(Exception::new);
-
-        updateUserSummaryUsageExpectedResponse(
-          user,
-          totalUsage,
-          userUsageSummaryEndpoints,
-          maxResourceEntry,
-          maxNoPrivateResourceEntry
-        );
 
         updateUserUsageExpectedResponse(user, userDto, usageUserEndpoint);
       }
+    }
+
+    private HashMap<String, Integer> createUserResourceUsageMap() {
+      HashMap<String, Integer> userResourceUsage = new HashMap<>();
+      for (String oncokbEndpoint : sampleOncokbEndpoints) {
+        userResourceUsage.put(oncokbEndpoint, 0);
+      }
+      return userResourceUsage;
     }
 
     private void updateSpecificEndpointUserUsageExpectedResponse(
       int value,
       User user,
       String oncokbEndpoint,
-      String monthKey
+      String yearKey,
+      String monthKey,
+      String dayKey
     ) {
       String usageResourcesEndpoint =
         "/api/usage/resources?endpoint=" + oncokbEndpoint;
@@ -714,6 +704,7 @@ public class UsageAnalysisControllerIT {
         value,
         usageResourcesEndpoint,
         "year",
+        yearKey,
         user.getEmail()
       );
       safeAddNestedValueInFilesObject(
@@ -723,16 +714,40 @@ public class UsageAnalysisControllerIT {
         monthKey,
         user.getEmail()
       );
-      safeSetNestedEmptyObjectInFilesObject(usageResourcesEndpoint, "day");
+      safeAddNestedValueInFilesObject(
+        value,
+        usageResourcesEndpoint,
+        "day",
+        dayKey,
+        user.getEmail()
+      );
     }
 
     private void updateUserSummaryUsageExpectedResponse(
+      String timePeriodKey,
+      String timePeriodValue,
       User user,
       int totalUsage,
+      int totalPublicUsage,
       String[] userUsageSummaryEndpoints,
-      Entry<String, Integer> maxResourceEntry,
-      Entry<String, Integer> maxNoPrivateResourceEntry
-    ) {
+      Map<String, Integer> userResourceUsage
+    )
+      throws Exception {
+      Entry<String, Integer> maxResourceEntry = userResourceUsage
+        .entrySet()
+        .stream()
+        .filter(x -> x.getValue() > 0)
+        .max(Map.Entry.comparingByValue())
+        .orElse(new SimpleEntry<String, Integer>("", 0));
+
+      Entry<String, Integer> maxPublicResourceEntry = userResourceUsage
+        .entrySet()
+        .stream()
+        .filter(
+          x -> !x.getKey().startsWith("/api/private/") && x.getValue() > 0
+        )
+        .max(Map.Entry.comparingByValue())
+        .orElse(new SimpleEntry<String, Integer>("", 0));
       int userId = user.getId().intValue();
       for (String usageSummaryUrl : userUsageSummaryEndpoints) {
         safeSetNestedValueInFilesObject(
@@ -748,32 +763,57 @@ public class UsageAnalysisControllerIT {
           "userEmail"
         );
         safeSetNestedValueInFilesObject(
+          totalUsage,
+          usageSummaryUrl,
+          userId,
+          timePeriodKey,
+          timePeriodValue,
+          "totalUsage"
+        );
+        safeSetNestedValueInFilesObject(
+          totalPublicUsage,
+          usageSummaryUrl,
+          userId,
+          timePeriodKey,
+          timePeriodValue,
+          "totalPublicUsage"
+        );
+        safeSetNestedValueInFilesObject(
           maxResourceEntry.getKey(),
           usageSummaryUrl,
           userId,
-          "endpoint"
+          timePeriodKey,
+          timePeriodValue,
+          "mostUsedEndpoint"
         );
         safeSetNestedValueInFilesObject(
-          maxNoPrivateResourceEntry.getKey(),
+          maxPublicResourceEntry.getKey(),
           usageSummaryUrl,
           userId,
-          "noPrivateEndpoint"
+          timePeriodKey,
+          timePeriodValue,
+          "mostUsedPublicEndpoint"
         );
         safeSetNestedValueInFilesObject(
           (int) (1000 * ((float) maxResourceEntry.getValue() / totalUsage)) /
           10f,
           usageSummaryUrl,
           userId,
+          timePeriodKey,
+          timePeriodValue,
           "maxUsageProportion"
         );
         safeSetNestedValueInFilesObject(
           (int) (
-            1000 * ((float) maxNoPrivateResourceEntry.getValue() / totalUsage)
+            1000 *
+            ((float) maxPublicResourceEntry.getValue() / totalPublicUsage)
           ) /
           10f,
           usageSummaryUrl,
           userId,
-          "noPrivateMaxUsageProportion"
+          timePeriodKey,
+          timePeriodValue,
+          "publicMaxUsageProportion"
         );
       }
     }
@@ -818,13 +858,16 @@ public class UsageAnalysisControllerIT {
     private void updateResourceSummaryExpectedResponse(
       int value,
       String oncokbEndpoint,
-      String monthKey
+      String yearKey,
+      String monthKey,
+      String dayKey
     ) {
       String usageSummaryResources = "/api/usage/summary/resources";
       safeAddNestedValueInFilesObject(
         value,
         usageSummaryResources,
         "year",
+        yearKey,
         oncokbEndpoint
       );
       safeAddNestedValueInFilesObject(
@@ -834,8 +877,13 @@ public class UsageAnalysisControllerIT {
         monthKey,
         oncokbEndpoint
       );
-
-      safeSetNestedEmptyObjectInFilesObject(usageSummaryResources, "day");
+      safeAddNestedValueInFilesObject(
+        value,
+        usageSummaryResources,
+        "day",
+        dayKey,
+        oncokbEndpoint
+      );
     }
 
     private void updateResourceYearFile(

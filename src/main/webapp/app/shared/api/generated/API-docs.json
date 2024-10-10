@@ -2963,9 +2963,6 @@
         "apiAccessRequest": {
           "$ref": "#/definitions/ApiAccessRequest"
         },
-        "sentToRocReview": {
-          "type": "boolean"
-        },
         "trialAccount": {
           "$ref": "#/definitions/TrialAccount"
         },
@@ -3166,13 +3163,6 @@
         }
       },
       "title": "Contact"
-    },
-    "JSONObject": {
-      "type": "object",
-      "title": "JSONObject",
-      "additionalProperties": {
-        "type": "object"
-      }
     },
     "KeyAndPasswordVM": {
       "type": "object",
@@ -3379,9 +3369,6 @@
           "maxLength": 50,
           "pattern": "^[_.\\-\\+@A-Za-z0-9]*$"
         },
-        "needsMskRocReview": {
-          "type": "boolean"
-        },
         "notifyUserOnTrialCreation": {
           "type": "boolean"
         },
@@ -3406,6 +3393,14 @@
         }
       },
       "title": "ManagedUserVM"
+    },
+    "MapOfstringAndlong": {
+      "type": "object",
+      "title": "MapOfstringAndlong",
+      "additionalProperties": {
+        "type": "integer",
+        "format": "int64"
+      }
     },
     "PasswordChangeDTO": {
       "type": "object",
@@ -3479,7 +3474,8 @@
           "additionalProperties": {
             "type": "object",
             "additionalProperties": {
-              "type": "object"
+              "type": "integer",
+              "format": "int64"
             }
           }
         },
@@ -3488,15 +3484,19 @@
           "additionalProperties": {
             "type": "object",
             "additionalProperties": {
-              "type": "object"
+              "type": "integer",
+              "format": "int64"
             }
           }
         },
         "year": {
           "type": "object",
           "additionalProperties": {
-            "type": "integer",
-            "format": "int64"
+            "type": "object",
+            "additionalProperties": {
+              "type": "integer",
+              "format": "int64"
+            }
           }
         }
       },
@@ -3798,32 +3798,60 @@
     "UserOverviewUsage": {
       "type": "object",
       "properties": {
-        "endpoint": {
-          "type": "string"
+        "dayUsage": {
+          "type": "object",
+          "additionalProperties": {
+            "$ref": "#/definitions/UserStats"
+          }
         },
-        "maxUsage": {
-          "type": "integer",
-          "format": "int64"
-        },
-        "noPrivateEndpoint": {
-          "type": "string"
-        },
-        "noPrivateMaxUsage": {
-          "type": "integer",
-          "format": "int64"
-        },
-        "totalUsage": {
-          "type": "integer",
-          "format": "int64"
+        "monthUsage": {
+          "type": "object",
+          "additionalProperties": {
+            "$ref": "#/definitions/UserStats"
+          }
         },
         "userEmail": {
           "type": "string"
         },
         "userId": {
           "type": "string"
+        },
+        "yearUsage": {
+          "type": "object",
+          "additionalProperties": {
+            "$ref": "#/definitions/UserStats"
+          }
         }
       },
       "title": "UserOverviewUsage"
+    },
+    "UserStats": {
+      "type": "object",
+      "properties": {
+        "maxUsageProportion": {
+          "type": "number",
+          "format": "float"
+        },
+        "mostUsedEndpoint": {
+          "type": "string"
+        },
+        "mostUsedPublicEndpoint": {
+          "type": "string"
+        },
+        "publicMaxUsageProportion": {
+          "type": "number",
+          "format": "float"
+        },
+        "totalPublicUsage": {
+          "type": "integer",
+          "format": "int64"
+        },
+        "totalUsage": {
+          "type": "integer",
+          "format": "int64"
+        }
+      },
+      "title": "UserStats"
     },
     "UserUsage": {
       "type": "object",

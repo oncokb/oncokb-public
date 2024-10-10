@@ -34,6 +34,7 @@ public class Swagger2Config {
     @Bean
     public Docket swaggerSpringfoxApiDocket() {
         return new Docket(DocumentationType.SWAGGER_2)
+            .forCodeGeneration(true)
             .groupName("default")
             .select()
             .apis(RequestHandlerSelectors

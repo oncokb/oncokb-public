@@ -187,19 +187,6 @@ public class CronJobController {
         log.info("Finished the cronjob to move token stats to s3.");
     }
 
-    private void calculateUsageSummary(UsageSummary usageSummary, String key, int count, String time) {
-        // Deal with year summary
-        usageSummary.getYear().put(key, usageSummary.getYear().getOrDefault(key, Long.valueOf(0)) + count);
-        // Deal with month summary
-        if (!usageSummary.getMonth().containsKey(time)) {
-            usageSummary.getMonth().put(time, new JSONObject());
-        }
-        if (!usageSummary.getMonth().get(time).containsKey(key)) {
-            usageSummary.getMonth().get(time).put(key, new Integer(0));
-        }
-        usageSummary.getMonth().get(time).put(key, (Integer) usageSummary.getMonth().get(time).get(key) + (Integer) count);
-    }
-
     /**
      * {@code GET  /check-trial-accounts} : Check the status of trial accounts
      */

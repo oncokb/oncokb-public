@@ -54,6 +54,7 @@ export const YEAR_END_SUMMARY_DATE_FORMAT = 'YYYY';
 export const YEAR_END_SUMMARY_TITLE_DATE_FORMAT = 'YYYY';
 export const TABLE_MONTH_FORMAT = 'YYYY-MM';
 export const TABLE_DAY_FORMAT = 'YYYY-MM-DD';
+export const TABLE_YEAR_FORMAT = 'YYYY';
 
 export const ONCOKB_NEWS_GROUP_SUBSCRIPTION_LINK =
   'http://groups.google.com/group/oncokb-news/boxsubscribe';
@@ -103,9 +104,8 @@ export const NOTIFICATION_TIMEOUT_MILLISECONDS = 5000;
 export const SHORTEN_TEXT_FROM_LIST_THRESHOLD = 5;
 export const TOKEN_ABOUT_2_EXPIRE_NOTICE_IN_DAYS = 14;
 export const USAGE_TOP_USERS_LIMIT = 10000;
-export const USAGE_ALL_TIME_KEY = 'All';
-export const USAGE_ALL_TIME_VALUE = 'Year To Date';
-export const USAGE_DETAIL_TIME_KEY = 'Detail';
+export const USAGE_YEAR_DETAIL_TIME_KEY = 'Year Detail';
+export const USAGE_MONTH_DETAIL_TIME_KEY = 'Month Detail';
 export const USAGE_DAY_DETAIL_TIME_KEY = 'Day Detail';
 
 export const LONG_TEXT_CUTOFF = 200;

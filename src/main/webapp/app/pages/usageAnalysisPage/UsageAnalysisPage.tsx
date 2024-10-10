@@ -17,11 +17,11 @@ import {
   encodeResourceUsageDetailPageURL,
   filterByKeyword,
 } from 'app/shared/utils/Utils';
-import { UserOverviewUsage } from 'app/shared/api/generated/API';
+import { UserOverviewUsage, UsageSummary } from 'app/shared/api/generated/API';
 import { Link } from 'react-router-dom';
 import autobind from 'autobind-decorator';
 import { Row, Dropdown, DropdownButton } from 'react-bootstrap';
-import { PAGE_ROUTE, USAGE_ALL_TIME_KEY } from 'app/config/constants';
+import { PAGE_ROUTE, USAGE_YEAR_DETAIL_TIME_KEY } from 'app/config/constants';
 import { remoteData } from 'cbioportal-frontend-commons';
 import * as QueryString from 'query-string';
 import { UsageToggleGroup } from './UsageToggleGroup';
@@ -36,14 +36,7 @@ import {
 import UsageText from 'app/shared/texts/UsageText';
 import UsageAnalysisTable from 'app/pages/usageAnalysisPage/UsageAnalysisTable';
 
-export type UsageRecord = {
-  resource: string; // used for email in dateGroupedColumns
-  usage: number;
-  time: string;
-  userId?: string;
-};
-
-enum UsageType {
+export enum UsageType {
   USER = 'USER',
   RESOURCE = 'RESOURCE',
 }
@@ -52,7 +45,7 @@ export enum ToggleValue {
   ALL_RESOURCES = 'All Resources',
   PUBLIC_RESOURCES = 'Only Public Resources',
   CUMULATIVE_USAGE = 'Cumulative Usage',
-  RESULTS_IN_TOTAL = 'Year To Date',
+  RESULTS_BY_YEAR = 'By Year',
   RESULTS_BY_MONTH = 'By Month',
   RESULTS_BY_DAY = 'By Day',
 }
@@ -122,7 +115,7 @@ export default class UsageAnalysisPage extends React.Component<{
   @observable resourceTabResourcesTypeToggleValue: ToggleValue =
     ToggleValue.PUBLIC_RESOURCES;
   @observable dropdownList: string[] = [];
-  @observable dropdownValue = 'All';
+  @observable dropdownValue = USAGE_YEAR_DETAIL_TIME_KEY;
   @observable usageType: UsageType = UsageType.USER;
 
   readonly reactions: IReactionDisposer[] = [];
@@ -161,41 +154,16 @@ export default class UsageAnalysisPage extends React.Component<{
     default: [],
   });
 
-  readonly usageDetail = remoteData<Map<string, UsageRecord[]>>({
+  readonly usageDetail = remoteData<UsageSummary>({
     await: () => [],
-    invoke: async () => {
-      const resource = await client.resourceUsageGetUsingGET({});
-      const result = new Map<string, UsageRecord[]>();
-      const yearSummary = resource.year;
-      const yearUsage: UsageRecord[] = [];
-      Object.keys(yearSummary).forEach(resourceEntry => {
-        yearUsage.push({
-          resource: resourceEntry,
-          usage: yearSummary[resourceEntry],
-          time: '',
-        });
-      });
-      result.set(USAGE_ALL_TIME_KEY, yearUsage);
-      this.dropdownList.push(USAGE_ALL_TIME_KEY);
-
-      const monthSummary = resource.month;
-      Object.keys(monthSummary).forEach(month => {
-        const monthUsage = monthSummary[month];
-        const usageArray: UsageRecord[] = [];
-        Object.keys(monthUsage).forEach(resourceEntry => {
-          usageArray.push({
-            resource: resourceEntry,
-            usage: monthUsage[resourceEntry],
-            time: month,
-          });
-        });
-        result.set(month, usageArray);
-        this.dropdownList.push(month);
-      });
-
-      return Promise.resolve(result);
+    async invoke() {
+      return await client.resourceUsageGetUsingGET({});
     },
-    default: new Map(),
+    default: {
+      day: {},
+      month: {},
+      year: {},
+    },
   });
 
   @autobind
@@ -214,20 +182,6 @@ export default class UsageAnalysisPage extends React.Component<{
   @action
   toggleType(usageType: UsageType) {
     this.usageType = usageType;
-  }
-
-  @computed get calculateResourcesTabData(): UsageRecord[] {
-    if (
-      this.resourceTabResourcesTypeToggleValue === ToggleValue.ALL_RESOURCES
-    ) {
-      return this.usageDetail.result.get(this.dropdownValue) || [];
-    } else {
-      return (this.usageDetail.result.get(this.dropdownValue) || []).filter(
-        function (usage) {
-          return !usage.resource.includes('/private/');
-        }
-      );
-    }
   }
 
   render() {
@@ -250,112 +204,11 @@ export default class UsageAnalysisPage extends React.Component<{
           </Tab>
           <Tab eventKey={UsageType.RESOURCE} title="Resources">
             <div className="mt-2">
-              <OncoKBTable
-                data={this.calculateResourcesTabData}
-                columns={[
-                  {
-                    ...getUsageTableColumnDefinition(
-                      UsageTableColumnKey.RESOURCES
-                    ),
-                    Header: filterDependentResourceHeader(
-                      this.resourceTabResourcesTypeToggleValue
-                    ),
-                    onFilter: (row: UsageRecord, keyword) =>
-                      filterByKeyword(row.resource, keyword),
-                    Cell(props: { original: UsageRecord }) {
-                      return props.original.resource ? (
-                        <Link
-                          to={`${
-                            PAGE_ROUTE.ADMIN_RESOURCE_DETAILS_LINK
-                          }${props.original.resource.replace(/\//g, '!')}`}
-                        >
-                          {props.original.resource}
-                        </Link>
-                      ) : (
-                        <div>{props.original.resource}</div>
-                      );
-                    },
-                  },
-                  {
-                    ...getUsageTableColumnDefinition(UsageTableColumnKey.USAGE),
-                    Cell(props: { original: UsageRecord }) {
-                      return <UsageText usage={props.original.usage} />;
-                    },
-                  },
-                  {
-                    ...getUsageTableColumnDefinition(
-                      UsageTableColumnKey.OPERATION
-                    ),
-                    sortable: false,
-                    className: 'd-flex justify-content-center',
-                    Cell(props: { original: UsageRecord }) {
-                      return (
-                        <Link
-                          to={`${
-                            PAGE_ROUTE.ADMIN_RESOURCE_DETAILS_LINK
-                          }${encodeResourceUsageDetailPageURL(
-                            props.original.resource
-                          )}`}
-                        >
-                          <i className="fa fa-info-circle" />
-                        </Link>
-                      );
-                    },
-                  },
-                ]}
-                loading={!this.usageDetail.isComplete}
-                defaultSorted={[
-                  {
-                    id: UsageTableColumnKey.USAGE,
-                    desc: true,
-                  },
-                ]}
-                showPagination={true}
-                minRows={1}
-                filters={() => {
-                  const monthDropdown: any = [];
-                  if (this.usageDetail.isComplete) {
-                    this.dropdownList
-                      .sort()
-                      .reverse()
-                      .forEach(key => {
-                        monthDropdown.push(
-                          <Dropdown.Item key={key.toString()} eventKey={key}>
-                            {key}
-                          </Dropdown.Item>
-                        );
-                      });
-                  }
-                  return this.usageDetail.isComplete ? (
-                    <Row>
-                      <DropdownButton
-                        className="ml-3"
-                        id="dropdown-basic-button"
-                        title={this.dropdownValue}
-                        onSelect={(evt: any) => (this.dropdownValue = evt)}
-                      >
-                        {monthDropdown}
-                      </DropdownButton>
-                      <UsageToggleGroup
-                        defaultValue={this.resourceTabResourcesTypeToggleValue}
-                        toggleValues={[
-                          ToggleValue.ALL_RESOURCES,
-                          ToggleValue.PUBLIC_RESOURCES,
-                        ]}
-                        handleToggle={
-                          this.handleResourceTabResourcesTypeToggleChange
-                        }
-                      />
-                    </Row>
-                  ) : (
-                    <DropdownButton
-                      className="mt-2"
-                      id="dropdown-basic-button"
-                      title={this.dropdownValue}
-                      disabled
-                    ></DropdownButton>
-                  );
-                }}
+              <UsageAnalysisTable
+                data={this.usageDetail.result}
+                loadedData={this.users.isComplete}
+                defaultResourcesType={ToggleValue.PUBLIC_RESOURCES}
+                defaultTimeType={ToggleValue.RESULTS_BY_DAY}
               />
             </div>
           </Tab>

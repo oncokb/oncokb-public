@@ -1,52 +1,1279 @@
 {
-    "month" : {
-      "2020-06" : {
-      },
-      "2020-05" : {
-      },
-      "2020-04" : {
-      },
-      "2020-03" : {
-      },
-      "2020-02" : {
-      },
-      "2020-12" : {
-      },
-      "2020-11" : {
-      },
-      "2021-01" : {
-      },
-      "2020-10" : {
-      },
-      "2020-09" : {
-      }
+  "year": {
+    "2020": {
+      "/api/v1/annotate/structuralVariants": 1924,
+      "/api/private/search/typeahead": 1868,
+      "/api/private/utils/numbers/levels/": 1713,
+      "/api/v1/annotate/mutations/byProteinChange": 1731,
+      "/api/private/utils/numbers/main/": 1081,
+      "/api/v1/annotate/copyNumberAlterations": 1035
     },
-    "year" : {
-      "/api/v2/screenshot/resource1/" : 100,
-      "/api/v2/screenshot/resource2/" : 100,
-      "/api/v2/screenshot/resource3/" : 100,
-      "/api/v2/screenshot/resource4/" : 100,
-      "/api/v2/screenshot/resource5/" : 1000,
-      "/api/v2/screenshot/resource6/" : 100,
-      "/api/v2/screenshot/resource7/" : 10000,
-      "/api/v2/screenshot/resource8/" : 100,
-      "/api/v2/screenshot/resource9/" : 10,
-      "/api/v2/screenshot/resource10/" : 1000000,
-      "/api/v2/screenshot/resource11/" : 1000,
-      "/api/v2/screenshot/resource12/" : 1000,
-      "/api/v2/screenshot/resource13/" : 100,
-      "/api/v2/screenshot/resource14/" : 100,
-      "/api/v2/screenshot/resource15/" : 10000,
-      "/api/v2/screenshot/resource16/" : 100,
-      "/api/v2/screenshot/resource17/" : 10000,
-      "/api/v2/screenshot/resource18/" : 100,
-      "/api/v2/screenshot/resource19/" : 100,
-      "/api/v2/screenshot/resource20/" : 100,
-      "/api/v2/screenshot/resource21/" : 100,
-      "/api/v2/screenshot/resource22/" : 100,
-      "/api/v2/screenshot/resource23/" : 100,
-      "/api/v2/screenshot/resource24/" : 100,
-      "/api/v2/screenshot/resource25/" : 100,
-      "/api/v2/screenshot/resource26/" : 100
+    "2019": {
+      "/api/v1/annotate/copyNumberAlterations": 1516,
+      "/api/private/utils/numbers/levels/": 1742,
+      "/api/private/search/typeahead": 1607,
+      "/api/private/utils/numbers/main/": 1676,
+      "/api/v1/annotate/mutations/byProteinChange": 1377,
+      "/api/v1/annotate/structuralVariants": 800
+    },
+    "2018": {
+      "/api/v1/annotate/mutations/byProteinChange": 1618,
+      "/api/v1/annotate/structuralVariants": 1407,
+      "/api/v1/annotate/copyNumberAlterations": 1262,
+      "/api/private/utils/numbers/main/": 1703,
+      "/api/private/search/typeahead": 1361,
+      "/api/private/utils/numbers/levels/": 1184
+    },
+    "2017": {
+      "/api/v1/annotate/structuralVariants": 1461,
+      "/api/v1/annotate/copyNumberAlterations": 1356,
+      "/api/v1/annotate/mutations/byProteinChange": 1032,
+      "/api/private/utils/numbers/main/": 982,
+      "/api/private/utils/numbers/levels/": 1450,
+      "/api/private/search/typeahead": 1437
+    }
+  },
+  "month": {
+    "2020-01": {
+      "/api/v1/annotate/structuralVariants": 265,
+      "/api/private/search/typeahead": 230,
+      "/api/private/utils/numbers/levels/": 21,
+      "/api/v1/annotate/mutations/byProteinChange": 115
+    },
+    "2020-02": {
+      "/api/v1/annotate/mutations/byProteinChange": 105,
+      "/api/private/utils/numbers/levels/": 185,
+      "/api/v1/annotate/structuralVariants": 103,
+      "/api/private/search/typeahead": 111,
+      "/api/v1/annotate/copyNumberAlterations": 15
+    },
+    "2020-03": {
+      "/api/v1/annotate/mutations/byProteinChange": 84,
+      "/api/v1/annotate/structuralVariants": 256,
+      "/api/private/utils/numbers/main/": 92,
+      "/api/private/search/typeahead": 134,
+      "/api/v1/annotate/copyNumberAlterations": 88,
+      "/api/private/utils/numbers/levels/": 98
+    },
+    "2020-04": {
+      "/api/private/utils/numbers/main/": 119,
+      "/api/private/search/typeahead": 133,
+      "/api/private/utils/numbers/levels/": 95,
+      "/api/v1/annotate/copyNumberAlterations": 254,
+      "/api/v1/annotate/mutations/byProteinChange": 130,
+      "/api/v1/annotate/structuralVariants": 253
+    },
+    "2020-05": {
+      "/api/private/search/typeahead": 247,
+      "/api/v1/annotate/copyNumberAlterations": 211,
+      "/api/private/utils/numbers/main/": 108,
+      "/api/v1/annotate/mutations/byProteinChange": 121,
+      "/api/v1/annotate/structuralVariants": 14,
+      "/api/private/utils/numbers/levels/": 103
+    },
+    "2020-06": {
+      "/api/private/search/typeahead": 178,
+      "/api/private/utils/numbers/main/": 252,
+      "/api/v1/annotate/copyNumberAlterations": 22,
+      "/api/v1/annotate/mutations/byProteinChange": 132,
+      "/api/v1/annotate/structuralVariants": 105,
+      "/api/private/utils/numbers/levels/": 62
+    },
+    "2020-07": {
+      "/api/v1/annotate/copyNumberAlterations": 220,
+      "/api/v1/annotate/mutations/byProteinChange": 287,
+      "/api/private/search/typeahead": 90,
+      "/api/private/utils/numbers/main/": 82
+    },
+    "2020-08": {
+      "/api/private/search/typeahead": 140,
+      "/api/private/utils/numbers/main/": 137,
+      "/api/private/utils/numbers/levels/": 88,
+      "/api/v1/annotate/mutations/byProteinChange": 91,
+      "/api/v1/annotate/structuralVariants": 148
+    },
+    "2020-09": {
+      "/api/v1/annotate/mutations/byProteinChange": 132,
+      "/api/v1/annotate/structuralVariants": 41,
+      "/api/private/search/typeahead": 253,
+      "/api/private/utils/numbers/levels/": 225,
+      "/api/private/utils/numbers/main/": 66,
+      "/api/v1/annotate/copyNumberAlterations": 52
+    },
+    "2020-10": {
+      "/api/v1/annotate/structuralVariants": 263,
+      "/api/v1/annotate/mutations/byProteinChange": 233,
+      "/api/private/utils/numbers/main/": 148,
+      "/api/private/utils/numbers/levels/": 173,
+      "/api/private/search/typeahead": 1,
+      "/api/v1/annotate/copyNumberAlterations": 116
+    },
+    "2020-11": {
+      "/api/private/utils/numbers/levels/": 493,
+      "/api/v1/annotate/mutations/byProteinChange": 301,
+      "/api/private/search/typeahead": 202,
+      "/api/v1/annotate/copyNumberAlterations": 29,
+      "/api/v1/annotate/structuralVariants": 96
+    },
+    "2020-12": {
+      "/api/v1/annotate/structuralVariants": 380,
+      "/api/private/utils/numbers/main/": 77,
+      "/api/private/utils/numbers/levels/": 170,
+      "/api/private/search/typeahead": 149,
+      "/api/v1/annotate/copyNumberAlterations": 28
+    },
+    "2019-01": {
+      "/api/v1/annotate/copyNumberAlterations": 177,
+      "/api/private/utils/numbers/levels/": 64,
+      "/api/private/search/typeahead": 152,
+      "/api/private/utils/numbers/main/": 255,
+      "/api/v1/annotate/mutations/byProteinChange": 21,
+      "/api/v1/annotate/structuralVariants": 51
+    },
+    "2019-02": {
+      "/api/v1/annotate/structuralVariants": 224,
+      "/api/private/utils/numbers/levels/": 7,
+      "/api/v1/annotate/mutations/byProteinChange": 39,
+      "/api/private/utils/numbers/main/": 110,
+      "/api/v1/annotate/copyNumberAlterations": 71,
+      "/api/private/search/typeahead": 142
+    },
+    "2019-03": {
+      "/api/private/utils/numbers/main/": 175,
+      "/api/v1/annotate/copyNumberAlterations": 181,
+      "/api/v1/annotate/structuralVariants": 125,
+      "/api/private/search/typeahead": 351,
+      "/api/private/utils/numbers/levels/": 187,
+      "/api/v1/annotate/mutations/byProteinChange": 88
+    },
+    "2019-04": {
+      "/api/private/search/typeahead": 194,
+      "/api/private/utils/numbers/levels/": 141,
+      "/api/private/utils/numbers/main/": 246,
+      "/api/v1/annotate/mutations/byProteinChange": 202,
+      "/api/v1/annotate/copyNumberAlterations": 27,
+      "/api/v1/annotate/structuralVariants": 25
+    },
+    "2019-05": {
+      "/api/private/utils/numbers/main/": 133,
+      "/api/private/utils/numbers/levels/": 258,
+      "/api/v1/annotate/copyNumberAlterations": 338,
+      "/api/v1/annotate/mutations/byProteinChange": 26,
+      "/api/private/search/typeahead": 88
+    },
+    "2019-06": {
+      "/api/v1/annotate/copyNumberAlterations": 94,
+      "/api/v1/annotate/mutations/byProteinChange": 92,
+      "/api/v1/annotate/structuralVariants": 91,
+      "/api/private/search/typeahead": 148,
+      "/api/private/utils/numbers/levels/": 98
+    },
+    "2019-07": {
+      "/api/v1/annotate/mutations/byProteinChange": 84,
+      "/api/private/search/typeahead": 86,
+      "/api/v1/annotate/copyNumberAlterations": 72,
+      "/api/private/utils/numbers/levels/": 191
+    },
+    "2019-08": {
+      "/api/v1/annotate/copyNumberAlterations": 133,
+      "/api/private/search/typeahead": 46,
+      "/api/private/utils/numbers/levels/": 222,
+      "/api/v1/annotate/structuralVariants": 47,
+      "/api/private/utils/numbers/main/": 273,
+      "/api/v1/annotate/mutations/byProteinChange": 149
+    },
+    "2019-09": {
+      "/api/v1/annotate/mutations/byProteinChange": 81,
+      "/api/v1/annotate/copyNumberAlterations": 17,
+      "/api/private/utils/numbers/levels/": 62
+    },
+    "2019-10": {
+      "/api/private/search/typeahead": 38,
+      "/api/private/utils/numbers/levels/": 248,
+      "/api/v1/annotate/mutations/byProteinChange": 213,
+      "/api/v1/annotate/copyNumberAlterations": 80
+    },
+    "2019-11": {
+      "/api/v1/annotate/mutations/byProteinChange": 135,
+      "/api/private/utils/numbers/levels/": 123,
+      "/api/private/search/typeahead": 359,
+      "/api/v1/annotate/structuralVariants": 173,
+      "/api/v1/annotate/copyNumberAlterations": 12,
+      "/api/private/utils/numbers/main/": 201
+    },
+    "2019-12": {
+      "/api/private/utils/numbers/main/": 283,
+      "/api/v1/annotate/mutations/byProteinChange": 247,
+      "/api/v1/annotate/structuralVariants": 64,
+      "/api/private/utils/numbers/levels/": 141,
+      "/api/v1/annotate/copyNumberAlterations": 314,
+      "/api/private/search/typeahead": 3
+    },
+    "2018-01": {
+      "/api/v1/annotate/mutations/byProteinChange": 176,
+      "/api/v1/annotate/structuralVariants": 251,
+      "/api/v1/annotate/copyNumberAlterations": 395,
+      "/api/private/utils/numbers/main/": 201,
+      "/api/private/utils/numbers/levels/": 110
+    },
+    "2018-02": {
+      "/api/v1/annotate/structuralVariants": 100,
+      "/api/private/search/typeahead": 226,
+      "/api/private/utils/numbers/main/": 201,
+      "/api/private/utils/numbers/levels/": 27,
+      "/api/v1/annotate/mutations/byProteinChange": 11
+    },
+    "2018-03": {
+      "/api/v1/annotate/structuralVariants": 58,
+      "/api/private/utils/numbers/levels/": 271,
+      "/api/private/utils/numbers/main/": 268,
+      "/api/private/search/typeahead": 164,
+      "/api/v1/annotate/mutations/byProteinChange": 60,
+      "/api/v1/annotate/copyNumberAlterations": 33
+    },
+    "2018-04": {
+      "/api/v1/annotate/structuralVariants": 103,
+      "/api/v1/annotate/copyNumberAlterations": 187,
+      "/api/private/utils/numbers/main/": 109,
+      "/api/private/utils/numbers/levels/": 69,
+      "/api/v1/annotate/mutations/byProteinChange": 183
+    },
+    "2018-05": {
+      "/api/v1/annotate/copyNumberAlterations": 98,
+      "/api/v1/annotate/structuralVariants": 16,
+      "/api/private/search/typeahead": 70,
+      "/api/v1/annotate/mutations/byProteinChange": 89,
+      "/api/private/utils/numbers/main/": 60,
+      "/api/private/utils/numbers/levels/": 64
+    },
+    "2018-06": {
+      "/api/private/utils/numbers/levels/": 169,
+      "/api/private/search/typeahead": 159,
+      "/api/v1/annotate/mutations/byProteinChange": 405,
+      "/api/v1/annotate/structuralVariants": 125,
+      "/api/private/utils/numbers/main/": 74,
+      "/api/v1/annotate/copyNumberAlterations": 64
+    },
+    "2018-07": {
+      "/api/private/utils/numbers/main/": 299,
+      "/api/v1/annotate/structuralVariants": 201,
+      "/api/private/search/typeahead": 99,
+      "/api/private/utils/numbers/levels/": 197,
+      "/api/v1/annotate/mutations/byProteinChange": 67
+    },
+    "2018-08": {
+      "/api/private/utils/numbers/levels/": 65,
+      "/api/v1/annotate/copyNumberAlterations": 42,
+      "/api/private/search/typeahead": 55,
+      "/api/private/utils/numbers/main/": 89,
+      "/api/v1/annotate/structuralVariants": 60,
+      "/api/v1/annotate/mutations/byProteinChange": 13
+    },
+    "2018-09": {
+      "/api/v1/annotate/copyNumberAlterations": 98,
+      "/api/private/utils/numbers/main/": 141,
+      "/api/v1/annotate/structuralVariants": 87,
+      "/api/private/search/typeahead": 124,
+      "/api/v1/annotate/mutations/byProteinChange": 226,
+      "/api/private/utils/numbers/levels/": 93
+    },
+    "2018-10": {
+      "/api/v1/annotate/structuralVariants": 232,
+      "/api/private/search/typeahead": 136,
+      "/api/private/utils/numbers/main/": 53,
+      "/api/v1/annotate/mutations/byProteinChange": 166,
+      "/api/v1/annotate/copyNumberAlterations": 139
+    },
+    "2018-11": {
+      "/api/private/utils/numbers/levels/": 95,
+      "/api/private/utils/numbers/main/": 95,
+      "/api/v1/annotate/structuralVariants": 2,
+      "/api/v1/annotate/copyNumberAlterations": 125,
+      "/api/private/search/typeahead": 159,
+      "/api/v1/annotate/mutations/byProteinChange": 124
+    },
+    "2018-12": {
+      "/api/private/utils/numbers/levels/": 24,
+      "/api/v1/annotate/copyNumberAlterations": 81,
+      "/api/private/search/typeahead": 169,
+      "/api/v1/annotate/structuralVariants": 172,
+      "/api/private/utils/numbers/main/": 113,
+      "/api/v1/annotate/mutations/byProteinChange": 98
+    },
+    "2017-01": {
+      "/api/v1/annotate/structuralVariants": 128,
+      "/api/v1/annotate/copyNumberAlterations": 71,
+      "/api/v1/annotate/mutations/byProteinChange": 264,
+      "/api/private/utils/numbers/levels/": 107,
+      "/api/private/utils/numbers/main/": 75
+    },
+    "2017-02": {
+      "/api/private/utils/numbers/main/": 98,
+      "/api/v1/annotate/mutations/byProteinChange": 25,
+      "/api/private/utils/numbers/levels/": 21,
+      "/api/private/search/typeahead": 333,
+      "/api/v1/annotate/structuralVariants": 102,
+      "/api/v1/annotate/copyNumberAlterations": 51
+    },
+    "2017-03": {
+      "/api/v1/annotate/structuralVariants": 187,
+      "/api/v1/annotate/copyNumberAlterations": 159,
+      "/api/private/utils/numbers/levels/": 161,
+      "/api/v1/annotate/mutations/byProteinChange": 37,
+      "/api/private/search/typeahead": 23
+    },
+    "2017-04": {
+      "/api/v1/annotate/structuralVariants": 136,
+      "/api/private/utils/numbers/levels/": 13,
+      "/api/private/search/typeahead": 109,
+      "/api/private/utils/numbers/main/": 39,
+      "/api/v1/annotate/mutations/byProteinChange": 67,
+      "/api/v1/annotate/copyNumberAlterations": 50
+    },
+    "2017-05": {
+      "/api/private/utils/numbers/levels/": 266,
+      "/api/private/search/typeahead": 75,
+      "/api/v1/annotate/mutations/byProteinChange": 138,
+      "/api/v1/annotate/copyNumberAlterations": 134,
+      "/api/private/utils/numbers/main/": 11,
+      "/api/v1/annotate/structuralVariants": 74
+    },
+    "2017-06": {
+      "/api/v1/annotate/structuralVariants": 192,
+      "/api/private/search/typeahead": 203,
+      "/api/private/utils/numbers/main/": 218,
+      "/api/v1/annotate/mutations/byProteinChange": 227,
+      "/api/v1/annotate/copyNumberAlterations": 86,
+      "/api/private/utils/numbers/levels/": 23
+    },
+    "2017-07": {
+      "/api/private/utils/numbers/main/": 136,
+      "/api/v1/annotate/mutations/byProteinChange": 113,
+      "/api/v1/annotate/copyNumberAlterations": 142,
+      "/api/private/search/typeahead": 100,
+      "/api/private/utils/numbers/levels/": 90,
+      "/api/v1/annotate/structuralVariants": 171
+    },
+    "2017-08": {
+      "/api/v1/annotate/copyNumberAlterations": 75,
+      "/api/private/utils/numbers/main/": 7,
+      "/api/private/search/typeahead": 28,
+      "/api/v1/annotate/structuralVariants": 222,
+      "/api/private/utils/numbers/levels/": 64,
+      "/api/v1/annotate/mutations/byProteinChange": 81
+    },
+    "2017-09": {
+      "/api/private/search/typeahead": 197,
+      "/api/private/utils/numbers/levels/": 215,
+      "/api/private/utils/numbers/main/": 86,
+      "/api/v1/annotate/mutations/byProteinChange": 45,
+      "/api/v1/annotate/copyNumberAlterations": 93,
+      "/api/v1/annotate/structuralVariants": 50
+    },
+    "2017-10": {
+      "/api/v1/annotate/copyNumberAlterations": 79,
+      "/api/private/utils/numbers/levels/": 253,
+      "/api/private/search/typeahead": 169,
+      "/api/v1/annotate/structuralVariants": 113,
+      "/api/private/utils/numbers/main/": 78
+    },
+    "2017-11": {
+      "/api/v1/annotate/copyNumberAlterations": 290,
+      "/api/private/search/typeahead": 183,
+      "/api/private/utils/numbers/main/": 82,
+      "/api/v1/annotate/structuralVariants": 10,
+      "/api/private/utils/numbers/levels/": 52,
+      "/api/v1/annotate/mutations/byProteinChange": 35
+    },
+    "2017-12": {
+      "/api/private/utils/numbers/levels/": 185,
+      "/api/v1/annotate/copyNumberAlterations": 126,
+      "/api/v1/annotate/structuralVariants": 76,
+      "/api/private/utils/numbers/main/": 152,
+      "/api/private/search/typeahead": 17
+    }
+  },
+  "day": {
+    "2020-01-01": { "/api/v1/annotate/structuralVariants": 127 },
+    "2020-01-07": { "/api/v1/annotate/structuralVariants": 74 },
+    "2020-01-21": { "/api/private/search/typeahead": 38 },
+    "2020-01-24": { "/api/v1/annotate/structuralVariants": 64 },
+    "2020-01-29": { "/api/private/search/typeahead": 78 },
+    "2020-01-30": { "/api/private/utils/numbers/levels/": 21 },
+    "2020-01-31": { "/api/private/search/typeahead": 53 },
+    "2020-02-04": {
+      "/api/v1/annotate/mutations/byProteinChange": 30,
+      "/api/v1/annotate/copyNumberAlterations": 15
+    },
+    "2020-02-06": { "/api/private/utils/numbers/levels/": 87 },
+    "2020-02-15": { "/api/v1/annotate/structuralVariants": 23 },
+    "2020-02-24": { "/api/private/search/typeahead": 80 },
+    "2020-03-01": { "/api/v1/annotate/mutations/byProteinChange": 26 },
+    "2020-03-04": { "/api/v1/annotate/mutations/byProteinChange": 33 },
+    "2020-03-05": { "/api/v1/annotate/mutations/byProteinChange": 25 },
+    "2020-03-08": { "/api/v1/annotate/structuralVariants": 81 },
+    "2020-03-18": {
+      "/api/private/utils/numbers/main/": 17,
+      "/api/v1/annotate/copyNumberAlterations": 3
+    },
+    "2020-03-25": { "/api/v1/annotate/structuralVariants": 96 },
+    "2020-03-30": { "/api/private/search/typeahead": 12 },
+    "2020-04-01": { "/api/private/utils/numbers/main/": 96 },
+    "2020-04-05": {
+      "/api/private/search/typeahead": 2,
+      "/api/private/utils/numbers/levels/": 65
+    },
+    "2020-04-06": { "/api/v1/annotate/copyNumberAlterations": 57 },
+    "2020-04-19": {
+      "/api/private/utils/numbers/levels/": 30,
+      "/api/v1/annotate/copyNumberAlterations": 48
+    },
+    "2020-04-26": {
+      "/api/v1/annotate/mutations/byProteinChange": 34,
+      "/api/v1/annotate/copyNumberAlterations": 149
+    },
+    "2020-05-10": { "/api/private/search/typeahead": 84 },
+    "2020-05-12": { "/api/v1/annotate/copyNumberAlterations": 90 },
+    "2020-05-14": { "/api/v1/annotate/copyNumberAlterations": 51 },
+    "2020-05-19": { "/api/private/search/typeahead": 104 },
+    "2020-05-28": { "/api/private/search/typeahead": 59 },
+    "2020-06-03": { "/api/private/search/typeahead": 85 },
+    "2020-06-06": { "/api/private/utils/numbers/main/": 35 },
+    "2020-06-16": { "/api/private/utils/numbers/main/": 54 },
+    "2020-06-17": { "/api/private/search/typeahead": 93 },
+    "2020-06-19": {
+      "/api/v1/annotate/copyNumberAlterations": 22,
+      "/api/v1/annotate/mutations/byProteinChange": 86,
+      "/api/private/utils/numbers/main/": 76
+    },
+    "2020-06-23": { "/api/v1/annotate/structuralVariants": 29 },
+    "2020-07-03": { "/api/v1/annotate/copyNumberAlterations": 66 },
+    "2020-07-05": { "/api/v1/annotate/copyNumberAlterations": 67 },
+    "2020-07-09": { "/api/v1/annotate/mutations/byProteinChange": 64 },
+    "2020-07-24": { "/api/private/search/typeahead": 24 },
+    "2020-07-25": { "/api/v1/annotate/copyNumberAlterations": 87 },
+    "2020-07-26": {
+      "/api/v1/annotate/mutations/byProteinChange": 75,
+      "/api/private/utils/numbers/main/": 23
+    },
+    "2020-08-01": { "/api/private/search/typeahead": 58 },
+    "2020-08-15": { "/api/private/search/typeahead": 82 },
+    "2020-09-09": {
+      "/api/v1/annotate/mutations/byProteinChange": 74,
+      "/api/private/utils/numbers/main/": 66
+    },
+    "2020-09-14": { "/api/v1/annotate/structuralVariants": 41 },
+    "2020-09-21": { "/api/private/search/typeahead": 62 },
+    "2020-10-02": { "/api/v1/annotate/structuralVariants": 79 },
+    "2020-10-05": {
+      "/api/v1/annotate/structuralVariants": 88,
+      "/api/v1/annotate/mutations/byProteinChange": 10,
+      "/api/private/search/typeahead": 1
+    },
+    "2020-10-14": { "/api/v1/annotate/structuralVariants": 32 },
+    "2020-10-18": { "/api/v1/annotate/mutations/byProteinChange": 6 },
+    "2020-10-21": {
+      "/api/v1/annotate/mutations/byProteinChange": 52,
+      "/api/private/utils/numbers/main/": 77
+    },
+    "2020-10-23": { "/api/private/utils/numbers/levels/": 69 },
+    "2020-10-28": {
+      "/api/v1/annotate/structuralVariants": 64,
+      "/api/private/utils/numbers/levels/": 72
+    },
+    "2020-11-02": {
+      "/api/private/utils/numbers/levels/": 129,
+      "/api/private/search/typeahead": 6
+    },
+    "2020-11-03": { "/api/v1/annotate/mutations/byProteinChange": 73 },
+    "2020-11-07": {
+      "/api/private/search/typeahead": 66,
+      "/api/private/utils/numbers/levels/": 74
+    },
+    "2020-11-12": { "/api/private/utils/numbers/levels/": 10 },
+    "2020-11-16": { "/api/v1/annotate/mutations/byProteinChange": 91 },
+    "2020-11-19": {
+      "/api/private/search/typeahead": 90,
+      "/api/v1/annotate/mutations/byProteinChange": 4
+    },
+    "2020-11-24": {
+      "/api/private/utils/numbers/levels/": 34,
+      "/api/v1/annotate/mutations/byProteinChange": 33,
+      "/api/private/search/typeahead": 32
+    },
+    "2020-11-26": { "/api/v1/annotate/copyNumberAlterations": 29 },
+    "2020-11-30": { "/api/private/utils/numbers/levels/": 130 },
+    "2020-12-07": { "/api/v1/annotate/structuralVariants": 52 },
+    "2020-12-08": { "/api/private/utils/numbers/main/": 19 },
+    "2020-12-09": {
+      "/api/private/utils/numbers/levels/": 105,
+      "/api/v1/annotate/copyNumberAlterations": 28
+    },
+    "2020-12-18": {
+      "/api/private/utils/numbers/main/": 58,
+      "/api/v1/annotate/structuralVariants": 44
+    },
+    "2020-12-19": { "/api/v1/annotate/structuralVariants": 42 },
+    "2020-12-26": { "/api/v1/annotate/structuralVariants": 64 },
+    "2020-12-31": { "/api/private/search/typeahead": 79 },
+    "2019-01-04": { "/api/v1/annotate/copyNumberAlterations": 77 },
+    "2019-01-06": { "/api/private/utils/numbers/levels/": 26 },
+    "2019-01-14": { "/api/private/search/typeahead": 49 },
+    "2019-01-15": {
+      "/api/private/search/typeahead": 10,
+      "/api/private/utils/numbers/main/": 161
+    },
+    "2019-01-17": { "/api/private/utils/numbers/main/": 94 },
+    "2019-01-27": { "/api/v1/annotate/mutations/byProteinChange": 21 },
+    "2019-02-08": { "/api/v1/annotate/structuralVariants": 44 },
+    "2019-02-11": { "/api/v1/annotate/structuralVariants": 132 },
+    "2019-02-13": { "/api/private/utils/numbers/levels/": 7 },
+    "2019-02-19": { "/api/v1/annotate/mutations/byProteinChange": 39 },
+    "2019-02-23": {
+      "/api/private/utils/numbers/main/": 48,
+      "/api/private/search/typeahead": 69
+    },
+    "2019-03-01": { "/api/private/utils/numbers/main/": 86 },
+    "2019-03-03": { "/api/v1/annotate/copyNumberAlterations": 86 },
+    "2019-03-09": { "/api/private/utils/numbers/main/": 30 },
+    "2019-03-10": {
+      "/api/v1/annotate/structuralVariants": 25,
+      "/api/private/search/typeahead": 93
+    },
+    "2019-03-12": { "/api/private/utils/numbers/main/": 36 },
+    "2019-03-16": { "/api/private/search/typeahead": 85 },
+    "2019-03-19": { "/api/private/utils/numbers/levels/": 93 },
+    "2019-03-21": {
+      "/api/v1/annotate/structuralVariants": 100,
+      "/api/private/utils/numbers/levels/": 94
+    },
+    "2019-03-26": { "/api/private/search/typeahead": 19 },
+    "2019-03-28": {
+      "/api/private/utils/numbers/main/": 6,
+      "/api/private/search/typeahead": 7,
+      "/api/v1/annotate/mutations/byProteinChange": 88
+    },
+    "2019-03-30": { "/api/v1/annotate/copyNumberAlterations": 9 },
+    "2019-04-03": {
+      "/api/private/search/typeahead": 20,
+      "/api/private/utils/numbers/levels/": 60,
+      "/api/private/utils/numbers/main/": 30
+    },
+    "2019-04-04": { "/api/private/utils/numbers/main/": 4 },
+    "2019-04-06": { "/api/private/utils/numbers/levels/": 20 },
+    "2019-04-09": { "/api/v1/annotate/mutations/byProteinChange": 71 },
+    "2019-04-11": { "/api/private/utils/numbers/main/": 5 },
+    "2019-04-19": { "/api/private/search/typeahead": 3 },
+    "2019-04-30": { "/api/v1/annotate/mutations/byProteinChange": 65 },
+    "2019-05-01": { "/api/private/utils/numbers/main/": 3 },
+    "2019-05-02": { "/api/private/utils/numbers/levels/": 74 },
+    "2019-05-19": {
+      "/api/private/utils/numbers/main/": 47,
+      "/api/v1/annotate/copyNumberAlterations": 87,
+      "/api/private/utils/numbers/levels/": 184
+    },
+    "2019-05-21": {
+      "/api/v1/annotate/copyNumberAlterations": 92,
+      "/api/private/utils/numbers/main/": 83
+    },
+    "2019-05-22": { "/api/v1/annotate/copyNumberAlterations": 67 },
+    "2019-06-22": { "/api/v1/annotate/copyNumberAlterations": 29 },
+    "2019-06-23": { "/api/v1/annotate/mutations/byProteinChange": 4 },
+    "2019-07-05": { "/api/v1/annotate/mutations/byProteinChange": 84 },
+    "2019-07-08": { "/api/private/search/typeahead": 10 },
+    "2019-07-13": {
+      "/api/private/search/typeahead": 76,
+      "/api/v1/annotate/copyNumberAlterations": 23
+    },
+    "2019-07-25": { "/api/private/utils/numbers/levels/": 101 },
+    "2019-08-01": { "/api/v1/annotate/copyNumberAlterations": 14 },
+    "2019-08-03": {
+      "/api/private/search/typeahead": 46,
+      "/api/private/utils/numbers/main/": 82
+    },
+    "2019-08-20": { "/api/private/utils/numbers/levels/": 10 },
+    "2019-08-22": {
+      "/api/v1/annotate/structuralVariants": 37,
+      "/api/private/utils/numbers/main/": 88
+    },
+    "2019-09-07": { "/api/v1/annotate/mutations/byProteinChange": 56 },
+    "2019-09-13": { "/api/v1/annotate/mutations/byProteinChange": 25 },
+    "2019-09-28": { "/api/v1/annotate/copyNumberAlterations": 17 },
+    "2019-10-07": { "/api/private/search/typeahead": 25 },
+    "2019-10-12": {
+      "/api/private/utils/numbers/levels/": 54,
+      "/api/v1/annotate/mutations/byProteinChange": 81
+    },
+    "2019-10-26": { "/api/v1/annotate/copyNumberAlterations": 80 },
+    "2019-11-01": { "/api/v1/annotate/mutations/byProteinChange": 1 },
+    "2019-11-03": { "/api/private/utils/numbers/levels/": 77 },
+    "2019-11-06": {
+      "/api/private/search/typeahead": 26,
+      "/api/v1/annotate/structuralVariants": 82
+    },
+    "2019-11-08": { "/api/v1/annotate/structuralVariants": 47 },
+    "2019-11-14": { "/api/private/utils/numbers/levels/": 46 },
+    "2019-11-17": { "/api/v1/annotate/mutations/byProteinChange": 72 },
+    "2019-11-18": { "/api/private/search/typeahead": 76 },
+    "2019-11-27": { "/api/v1/annotate/copyNumberAlterations": 12 },
+    "2019-11-29": { "/api/v1/annotate/mutations/byProteinChange": 62 },
+    "2019-11-30": { "/api/private/utils/numbers/main/": 73 },
+    "2019-12-01": { "/api/private/utils/numbers/main/": 7 },
+    "2019-12-07": {
+      "/api/v1/annotate/mutations/byProteinChange": 79,
+      "/api/v1/annotate/structuralVariants": 13
+    },
+    "2019-12-08": {
+      "/api/private/utils/numbers/levels/": 24,
+      "/api/v1/annotate/copyNumberAlterations": 98,
+      "/api/v1/annotate/mutations/byProteinChange": 1,
+      "/api/private/search/typeahead": 3
+    },
+    "2019-12-17": { "/api/private/utils/numbers/main/": 1 },
+    "2019-12-19": {
+      "/api/v1/annotate/structuralVariants": 27,
+      "/api/v1/annotate/copyNumberAlterations": 39
+    },
+    "2019-12-20": { "/api/private/utils/numbers/main/": 22 },
+    "2019-12-23": {
+      "/api/private/utils/numbers/levels/": 32,
+      "/api/v1/annotate/mutations/byProteinChange": 15
+    },
+    "2019-12-25": {
+      "/api/private/utils/numbers/levels/": 46,
+      "/api/private/utils/numbers/main/": 81
+    },
+    "2019-12-26": {
+      "/api/private/utils/numbers/levels/": 39,
+      "/api/private/utils/numbers/main/": 35
+    },
+    "2019-12-27": {
+      "/api/v1/annotate/copyNumberAlterations": 100,
+      "/api/v1/annotate/mutations/byProteinChange": 78
+    },
+    "2018-01-05": {
+      "/api/v1/annotate/mutations/byProteinChange": 50,
+      "/api/v1/annotate/structuralVariants": 28
+    },
+    "2018-01-09": {
+      "/api/v1/annotate/structuralVariants": 62,
+      "/api/private/utils/numbers/levels/": 79
+    },
+    "2018-01-11": {
+      "/api/v1/annotate/mutations/byProteinChange": 63,
+      "/api/v1/annotate/copyNumberAlterations": 94
+    },
+    "2018-01-15": { "/api/private/utils/numbers/main/": 63 },
+    "2018-01-16": {
+      "/api/private/utils/numbers/main/": 88,
+      "/api/private/utils/numbers/levels/": 27
+    },
+    "2018-01-17": { "/api/v1/annotate/structuralVariants": 79 },
+    "2018-01-19": { "/api/v1/annotate/mutations/byProteinChange": 48 },
+    "2018-01-21": { "/api/v1/annotate/structuralVariants": 82 },
+    "2018-01-23": { "/api/v1/annotate/copyNumberAlterations": 99 },
+    "2018-01-24": { "/api/v1/annotate/copyNumberAlterations": 14 },
+    "2018-01-26": { "/api/private/utils/numbers/main/": 9 },
+    "2018-02-02": {
+      "/api/v1/annotate/structuralVariants": 80,
+      "/api/private/utils/numbers/main/": 22,
+      "/api/v1/annotate/mutations/byProteinChange": 6
+    },
+    "2018-02-05": { "/api/private/search/typeahead": 66 },
+    "2018-02-07": { "/api/v1/annotate/structuralVariants": 3 },
+    "2018-02-15": { "/api/private/utils/numbers/main/": 64 },
+    "2018-02-22": {
+      "/api/v1/annotate/structuralVariants": 17,
+      "/api/private/utils/numbers/levels/": 23
+    },
+    "2018-02-27": { "/api/private/search/typeahead": 77 },
+    "2018-03-05": {
+      "/api/v1/annotate/structuralVariants": 42,
+      "/api/private/utils/numbers/levels/": 76
+    },
+    "2018-03-15": {
+      "/api/private/utils/numbers/levels/": 49,
+      "/api/private/search/typeahead": 92
+    },
+    "2018-03-17": { "/api/private/utils/numbers/levels/": 67 },
+    "2018-03-19": {
+      "/api/private/utils/numbers/main/": 74,
+      "/api/v1/annotate/structuralVariants": 16
+    },
+    "2018-03-26": { "/api/private/search/typeahead": 47 },
+    "2018-03-29": { "/api/private/utils/numbers/main/": 80 },
+    "2018-04-08": {
+      "/api/v1/annotate/structuralVariants": 37,
+      "/api/v1/annotate/mutations/byProteinChange": 35
+    },
+    "2018-04-10": { "/api/v1/annotate/copyNumberAlterations": 37 },
+    "2018-04-15": {
+      "/api/private/utils/numbers/main/": 10,
+      "/api/v1/annotate/structuralVariants": 66
+    },
+    "2018-04-20": {
+      "/api/private/utils/numbers/levels/": 67,
+      "/api/v1/annotate/copyNumberAlterations": 36
+    },
+    "2018-04-24": { "/api/v1/annotate/copyNumberAlterations": 48 },
+    "2018-05-03": { "/api/v1/annotate/copyNumberAlterations": 31 },
+    "2018-05-08": { "/api/v1/annotate/structuralVariants": 6 },
+    "2018-05-15": { "/api/v1/annotate/structuralVariants": 10 },
+    "2018-05-29": { "/api/private/search/typeahead": 44 },
+    "2018-05-31": { "/api/v1/annotate/mutations/byProteinChange": 89 },
+    "2018-06-05": { "/api/private/utils/numbers/levels/": 73 },
+    "2018-06-12": {
+      "/api/private/utils/numbers/levels/": 96,
+      "/api/v1/annotate/structuralVariants": 71
+    },
+    "2018-06-20": { "/api/private/search/typeahead": 49 },
+    "2018-06-24": { "/api/v1/annotate/mutations/byProteinChange": 45 },
+    "2018-06-27": { "/api/v1/annotate/mutations/byProteinChange": 100 },
+    "2018-07-02": { "/api/private/utils/numbers/main/": 11 },
+    "2018-07-17": { "/api/v1/annotate/structuralVariants": 22 },
+    "2018-07-18": { "/api/private/search/typeahead": 49 },
+    "2018-07-22": { "/api/private/search/typeahead": 39 },
+    "2018-07-24": {
+      "/api/v1/annotate/structuralVariants": 58,
+      "/api/private/search/typeahead": 11
+    },
+    "2018-07-29": { "/api/private/utils/numbers/main/": 49 },
+    "2018-08-17": {
+      "/api/private/utils/numbers/levels/": 65,
+      "/api/v1/annotate/copyNumberAlterations": 10
+    },
+    "2018-08-21": { "/api/v1/annotate/copyNumberAlterations": 32 },
+    "2018-08-29": { "/api/private/search/typeahead": 3 },
+    "2018-09-01": {
+      "/api/v1/annotate/copyNumberAlterations": 48,
+      "/api/private/utils/numbers/main/": 18
+    },
+    "2018-09-06": { "/api/private/utils/numbers/main/": 18 },
+    "2018-09-28": { "/api/private/utils/numbers/main/": 78 },
+    "2018-10-01": {
+      "/api/v1/annotate/structuralVariants": 45,
+      "/api/v1/annotate/copyNumberAlterations": 71
+    },
+    "2018-10-05": {
+      "/api/private/search/typeahead": 55,
+      "/api/v1/annotate/structuralVariants": 67
+    },
+    "2018-10-17": { "/api/private/search/typeahead": 81 },
+    "2018-10-20": { "/api/v1/annotate/structuralVariants": 1 },
+    "2018-10-22": {
+      "/api/private/utils/numbers/main/": 32,
+      "/api/v1/annotate/mutations/byProteinChange": 48
+    },
+    "2018-10-29": { "/api/v1/annotate/mutations/byProteinChange": 99 },
+    "2018-11-05": { "/api/private/utils/numbers/levels/": 25 },
+    "2018-11-11": { "/api/private/utils/numbers/main/": 95 },
+    "2018-11-13": { "/api/v1/annotate/structuralVariants": 2 },
+    "2018-11-18": { "/api/v1/annotate/copyNumberAlterations": 25 },
+    "2018-11-26": { "/api/private/search/typeahead": 96 },
+    "2018-12-02": {
+      "/api/private/utils/numbers/levels/": 10,
+      "/api/private/search/typeahead": 87,
+      "/api/v1/annotate/copyNumberAlterations": 62
+    },
+    "2018-12-14": { "/api/v1/annotate/copyNumberAlterations": 19 },
+    "2018-12-18": { "/api/private/search/typeahead": 15 },
+    "2018-12-22": { "/api/private/search/typeahead": 7 },
+    "2018-12-24": { "/api/v1/annotate/structuralVariants": 96 },
+    "2018-12-26": { "/api/private/utils/numbers/main/": 83 },
+    "2017-01-05": {
+      "/api/v1/annotate/structuralVariants": 10,
+      "/api/private/utils/numbers/levels/": 21,
+      "/api/private/utils/numbers/main/": 33
+    },
+    "2017-01-08": { "/api/v1/annotate/copyNumberAlterations": 24 },
+    "2017-01-10": { "/api/v1/annotate/copyNumberAlterations": 2 },
+    "2017-01-29": { "/api/v1/annotate/mutations/byProteinChange": 54 },
+    "2017-01-31": { "/api/v1/annotate/copyNumberAlterations": 45 },
+    "2017-02-15": { "/api/private/utils/numbers/main/": 10 },
+    "2017-02-17": { "/api/v1/annotate/mutations/byProteinChange": 25 },
+    "2017-02-20": { "/api/private/utils/numbers/main/": 88 },
+    "2017-02-21": {
+      "/api/private/utils/numbers/levels/": 21,
+      "/api/private/search/typeahead": 147
+    },
+    "2017-02-22": {
+      "/api/private/search/typeahead": 99,
+      "/api/v1/annotate/structuralVariants": 102
+    },
+    "2017-03-07": {
+      "/api/v1/annotate/structuralVariants": 14,
+      "/api/v1/annotate/copyNumberAlterations": 12,
+      "/api/private/search/typeahead": 23
+    },
+    "2017-03-20": {
+      "/api/v1/annotate/copyNumberAlterations": 37,
+      "/api/v1/annotate/structuralVariants": 67
+    },
+    "2017-03-28": {
+      "/api/v1/annotate/structuralVariants": 2,
+      "/api/v1/annotate/copyNumberAlterations": 99,
+      "/api/private/utils/numbers/levels/": 63
+    },
+    "2017-04-02": { "/api/v1/annotate/structuralVariants": 5 },
+    "2017-04-07": {
+      "/api/private/utils/numbers/levels/": 13,
+      "/api/v1/annotate/structuralVariants": 83
+    },
+    "2017-04-09": { "/api/v1/annotate/structuralVariants": 16 },
+    "2017-04-11": {
+      "/api/private/search/typeahead": 31,
+      "/api/v1/annotate/structuralVariants": 32,
+      "/api/private/utils/numbers/main/": 39
+    },
+    "2017-05-01": { "/api/private/utils/numbers/levels/": 42 },
+    "2017-05-02": { "/api/private/search/typeahead": 7 },
+    "2017-05-06": { "/api/v1/annotate/mutations/byProteinChange": 55 },
+    "2017-05-08": { "/api/v1/annotate/mutations/byProteinChange": 68 },
+    "2017-05-10": { "/api/private/utils/numbers/levels/": 57 },
+    "2017-05-11": { "/api/v1/annotate/copyNumberAlterations": 85 },
+    "2017-05-15": {
+      "/api/v1/annotate/mutations/byProteinChange": 15,
+      "/api/private/utils/numbers/levels/": 51
+    },
+    "2017-05-20": {
+      "/api/private/utils/numbers/levels/": 21,
+      "/api/v1/annotate/structuralVariants": 74
+    },
+    "2017-05-29": { "/api/private/utils/numbers/main/": 11 },
+    "2017-06-06": { "/api/v1/annotate/structuralVariants": 62 },
+    "2017-06-09": { "/api/private/search/typeahead": 44 },
+    "2017-06-13": {
+      "/api/private/utils/numbers/main/": 44,
+      "/api/v1/annotate/mutations/byProteinChange": 88
+    },
+    "2017-06-18": {
+      "/api/v1/annotate/mutations/byProteinChange": 46,
+      "/api/private/utils/numbers/main/": 94,
+      "/api/private/search/typeahead": 60
+    },
+    "2017-06-20": { "/api/v1/annotate/structuralVariants": 65 },
+    "2017-06-28": {
+      "/api/v1/annotate/structuralVariants": 28,
+      "/api/v1/annotate/mutations/byProteinChange": 93
+    },
+    "2017-07-02": {
+      "/api/private/utils/numbers/main/": 36,
+      "/api/private/utils/numbers/levels/": 41
+    },
+    "2017-07-08": { "/api/v1/annotate/mutations/byProteinChange": 32 },
+    "2017-07-09": {
+      "/api/v1/annotate/mutations/byProteinChange": 81,
+      "/api/private/utils/numbers/levels/": 9
+    },
+    "2017-07-27": {
+      "/api/v1/annotate/copyNumberAlterations": 113,
+      "/api/private/utils/numbers/levels/": 1
+    },
+    "2017-07-30": { "/api/private/search/typeahead": 100 },
+    "2017-08-03": { "/api/v1/annotate/copyNumberAlterations": 50 },
+    "2017-08-04": { "/api/private/utils/numbers/main/": 7 },
+    "2017-08-05": { "/api/private/search/typeahead": 28 },
+    "2017-08-08": { "/api/v1/annotate/structuralVariants": 96 },
+    "2017-09-19": {
+      "/api/private/search/typeahead": 80,
+      "/api/private/utils/numbers/levels/": 19
+    },
+    "2017-09-23": {
+      "/api/private/utils/numbers/levels/": 41,
+      "/api/private/search/typeahead": 64
+    },
+    "2017-09-24": {
+      "/api/private/utils/numbers/main/": 75,
+      "/api/private/utils/numbers/levels/": 62,
+      "/api/v1/annotate/mutations/byProteinChange": 10
+    },
+    "2017-09-28": {
+      "/api/v1/annotate/copyNumberAlterations": 3,
+      "/api/v1/annotate/structuralVariants": 50,
+      "/api/private/utils/numbers/main/": 9
+    },
+    "2017-10-01": {
+      "/api/v1/annotate/copyNumberAlterations": 79,
+      "/api/private/utils/numbers/levels/": 64
+    },
+    "2017-10-06": { "/api/private/search/typeahead": 68 },
+    "2017-10-10": { "/api/private/utils/numbers/levels/": 34 },
+    "2017-10-17": {
+      "/api/v1/annotate/structuralVariants": 35,
+      "/api/private/utils/numbers/levels/": 59
+    },
+    "2017-10-21": { "/api/private/utils/numbers/levels/": 96 },
+    "2017-11-07": { "/api/v1/annotate/copyNumberAlterations": 133 },
+    "2017-11-09": { "/api/private/search/typeahead": 83 },
+    "2017-11-15": {
+      "/api/private/utils/numbers/main/": 42,
+      "/api/v1/annotate/copyNumberAlterations": 63
+    },
+    "2017-11-29": { "/api/v1/annotate/structuralVariants": 10 },
+    "2017-12-06": { "/api/private/utils/numbers/levels/": 56 },
+    "2017-12-22": {
+      "/api/v1/annotate/copyNumberAlterations": 6,
+      "/api/private/utils/numbers/main/": 98
+    },
+    "2020-01-02": { "/api/private/search/typeahead": 61 },
+    "2020-01-13": { "/api/v1/annotate/mutations/byProteinChange": 86 },
+    "2020-01-14": { "/api/v1/annotate/mutations/byProteinChange": 29 },
+    "2020-02-07": { "/api/private/utils/numbers/levels/": 98 },
+    "2020-02-14": { "/api/private/search/typeahead": 31 },
+    "2020-02-18": { "/api/v1/annotate/mutations/byProteinChange": 75 },
+    "2020-02-25": { "/api/v1/annotate/structuralVariants": 80 },
+    "2020-03-07": {
+      "/api/private/utils/numbers/main/": 73,
+      "/api/private/search/typeahead": 45
+    },
+    "2020-03-11": { "/api/private/utils/numbers/main/": 1 },
+    "2020-03-17": {
+      "/api/private/search/typeahead": 77,
+      "/api/v1/annotate/copyNumberAlterations": 85
+    },
+    "2020-03-22": { "/api/v1/annotate/structuralVariants": 79 },
+    "2020-03-26": { "/api/private/utils/numbers/levels/": 98 },
+    "2020-03-27": { "/api/private/utils/numbers/main/": 1 },
+    "2020-04-02": {
+      "/api/v1/annotate/mutations/byProteinChange": 96,
+      "/api/v1/annotate/structuralVariants": 49
+    },
+    "2020-04-12": { "/api/private/search/typeahead": 84 },
+    "2020-04-13": { "/api/private/search/typeahead": 47 },
+    "2020-04-15": { "/api/private/utils/numbers/main/": 23 },
+    "2020-04-17": { "/api/v1/annotate/structuralVariants": 42 },
+    "2020-04-23": { "/api/v1/annotate/structuralVariants": 86 },
+    "2020-04-30": { "/api/v1/annotate/structuralVariants": 76 },
+    "2020-05-03": {
+      "/api/private/utils/numbers/main/": 88,
+      "/api/v1/annotate/copyNumberAlterations": 25
+    },
+    "2020-05-06": {
+      "/api/v1/annotate/mutations/byProteinChange": 89,
+      "/api/v1/annotate/structuralVariants": 14
+    },
+    "2020-05-07": {
+      "/api/private/utils/numbers/main/": 20,
+      "/api/v1/annotate/mutations/byProteinChange": 32
+    },
+    "2020-05-13": { "/api/private/utils/numbers/levels/": 26 },
+    "2020-05-18": { "/api/v1/annotate/copyNumberAlterations": 45 },
+    "2020-05-30": { "/api/private/utils/numbers/levels/": 77 },
+    "2020-06-10": { "/api/v1/annotate/mutations/byProteinChange": 45 },
+    "2020-06-25": {
+      "/api/v1/annotate/structuralVariants": 76,
+      "/api/private/utils/numbers/levels/": 62
+    },
+    "2020-06-27": { "/api/v1/annotate/mutations/byProteinChange": 1 },
+    "2020-06-28": { "/api/private/utils/numbers/main/": 87 },
+    "2020-07-19": { "/api/private/search/typeahead": 57 },
+    "2020-07-20": { "/api/v1/annotate/mutations/byProteinChange": 81 },
+    "2020-07-22": { "/api/private/search/typeahead": 9 },
+    "2020-07-27": {
+      "/api/v1/annotate/mutations/byProteinChange": 67,
+      "/api/private/utils/numbers/main/": 17
+    },
+    "2020-07-28": { "/api/private/utils/numbers/main/": 42 },
+    "2020-08-02": { "/api/private/utils/numbers/main/": 37 },
+    "2020-08-04": { "/api/private/utils/numbers/levels/": 88 },
+    "2020-08-06": { "/api/v1/annotate/mutations/byProteinChange": 91 },
+    "2020-08-13": { "/api/v1/annotate/structuralVariants": 53 },
+    "2020-08-20": { "/api/v1/annotate/structuralVariants": 95 },
+    "2020-08-31": { "/api/private/utils/numbers/main/": 100 },
+    "2020-09-04": { "/api/private/utils/numbers/levels/": 36 },
+    "2020-09-10": { "/api/v1/annotate/copyNumberAlterations": 52 },
+    "2020-09-16": { "/api/v1/annotate/mutations/byProteinChange": 58 },
+    "2020-09-17": { "/api/private/utils/numbers/levels/": 46 },
+    "2020-09-19": { "/api/private/search/typeahead": 94 },
+    "2020-09-22": { "/api/private/utils/numbers/levels/": 95 },
+    "2020-09-25": { "/api/private/search/typeahead": 97 },
+    "2020-09-26": { "/api/private/utils/numbers/levels/": 48 },
+    "2020-10-01": { "/api/private/utils/numbers/main/": 5 },
+    "2020-10-03": { "/api/private/utils/numbers/main/": 66 },
+    "2020-10-11": { "/api/v1/annotate/mutations/byProteinChange": 32 },
+    "2020-10-12": { "/api/private/utils/numbers/levels/": 32 },
+    "2020-10-17": { "/api/v1/annotate/copyNumberAlterations": 28 },
+    "2020-10-26": { "/api/v1/annotate/mutations/byProteinChange": 80 },
+    "2020-10-30": { "/api/v1/annotate/copyNumberAlterations": 88 },
+    "2020-10-31": { "/api/v1/annotate/mutations/byProteinChange": 53 },
+    "2020-11-13": {
+      "/api/v1/annotate/mutations/byProteinChange": 17,
+      "/api/private/utils/numbers/levels/": 24
+    },
+    "2020-11-20": { "/api/v1/annotate/mutations/byProteinChange": 83 },
+    "2020-11-22": { "/api/private/utils/numbers/levels/": 87 },
+    "2020-11-23": { "/api/v1/annotate/structuralVariants": 96 },
+    "2020-11-27": { "/api/private/search/typeahead": 8 },
+    "2020-11-28": { "/api/private/utils/numbers/levels/": 5 },
+    "2020-12-10": { "/api/private/search/typeahead": 70 },
+    "2020-12-16": { "/api/v1/annotate/structuralVariants": 96 },
+    "2020-12-25": {
+      "/api/v1/annotate/structuralVariants": 82,
+      "/api/private/utils/numbers/levels/": 65
+    },
+    "2019-01-01": {
+      "/api/private/utils/numbers/levels/": 38,
+      "/api/v1/annotate/copyNumberAlterations": 100
+    },
+    "2019-01-03": { "/api/v1/annotate/structuralVariants": 51 },
+    "2019-01-12": { "/api/private/search/typeahead": 93 },
+    "2019-02-03": { "/api/private/utils/numbers/main/": 62 },
+    "2019-02-10": { "/api/v1/annotate/structuralVariants": 48 },
+    "2019-02-16": { "/api/v1/annotate/copyNumberAlterations": 39 },
+    "2019-02-25": { "/api/v1/annotate/copyNumberAlterations": 32 },
+    "2019-02-27": { "/api/private/search/typeahead": 73 },
+    "2019-03-02": { "/api/private/search/typeahead": 55 },
+    "2019-03-08": { "/api/v1/annotate/copyNumberAlterations": 86 },
+    "2019-03-17": { "/api/private/search/typeahead": 92 },
+    "2019-03-22": { "/api/private/utils/numbers/main/": 17 },
+    "2019-04-15": { "/api/v1/annotate/copyNumberAlterations": 27 },
+    "2019-04-18": {
+      "/api/private/utils/numbers/main/": 70,
+      "/api/v1/annotate/mutations/byProteinChange": 66
+    },
+    "2019-04-21": {
+      "/api/v1/annotate/structuralVariants": 25,
+      "/api/private/utils/numbers/main/": 69,
+      "/api/private/search/typeahead": 91
+    },
+    "2019-04-22": { "/api/private/utils/numbers/main/": 68 },
+    "2019-04-26": {
+      "/api/private/search/typeahead": 80,
+      "/api/private/utils/numbers/levels/": 44
+    },
+    "2019-04-29": { "/api/private/utils/numbers/levels/": 17 },
+    "2019-05-08": { "/api/v1/annotate/copyNumberAlterations": 15 },
+    "2019-05-10": { "/api/v1/annotate/mutations/byProteinChange": 26 },
+    "2019-05-14": { "/api/private/search/typeahead": 88 },
+    "2019-05-26": { "/api/v1/annotate/copyNumberAlterations": 77 },
+    "2019-06-07": { "/api/v1/annotate/copyNumberAlterations": 39 },
+    "2019-06-08": { "/api/v1/annotate/structuralVariants": 91 },
+    "2019-06-17": { "/api/private/search/typeahead": 50 },
+    "2019-06-18": { "/api/private/search/typeahead": 97 },
+    "2019-06-21": { "/api/v1/annotate/mutations/byProteinChange": 88 },
+    "2019-06-25": { "/api/private/search/typeahead": 1 },
+    "2019-06-26": {
+      "/api/v1/annotate/copyNumberAlterations": 26,
+      "/api/private/utils/numbers/levels/": 98
+    },
+    "2019-07-07": { "/api/v1/annotate/copyNumberAlterations": 49 },
+    "2019-07-14": { "/api/private/utils/numbers/levels/": 90 },
+    "2019-08-06": { "/api/private/utils/numbers/levels/": 48 },
+    "2019-08-08": { "/api/private/utils/numbers/levels/": 99 },
+    "2019-08-11": { "/api/v1/annotate/copyNumberAlterations": 87 },
+    "2019-08-13": { "/api/v1/annotate/mutations/byProteinChange": 58 },
+    "2019-08-24": { "/api/private/utils/numbers/levels/": 65 },
+    "2019-08-26": { "/api/private/utils/numbers/main/": 25 },
+    "2019-08-28": { "/api/v1/annotate/mutations/byProteinChange": 91 },
+    "2019-08-30": {
+      "/api/private/utils/numbers/main/": 78,
+      "/api/v1/annotate/structuralVariants": 10,
+      "/api/v1/annotate/copyNumberAlterations": 32
+    },
+    "2019-09-12": { "/api/private/utils/numbers/levels/": 62 },
+    "2019-10-03": {
+      "/api/v1/annotate/mutations/byProteinChange": 88,
+      "/api/private/search/typeahead": 13,
+      "/api/private/utils/numbers/levels/": 59
+    },
+    "2019-10-13": { "/api/private/utils/numbers/levels/": 72 },
+    "2019-10-24": {
+      "/api/v1/annotate/mutations/byProteinChange": 44,
+      "/api/private/utils/numbers/levels/": 63
+    },
+    "2019-11-12": { "/api/private/utils/numbers/main/": 44 },
+    "2019-11-13": { "/api/private/search/typeahead": 86 },
+    "2019-11-15": { "/api/private/search/typeahead": 56 },
+    "2019-11-20": {
+      "/api/private/search/typeahead": 115,
+      "/api/v1/annotate/structuralVariants": 44,
+      "/api/private/utils/numbers/main/": 84
+    },
+    "2019-12-02": {
+      "/api/private/utils/numbers/main/": 91,
+      "/api/v1/annotate/mutations/byProteinChange": 9
+    },
+    "2019-12-03": { "/api/v1/annotate/structuralVariants": 24 },
+    "2019-12-11": { "/api/v1/annotate/mutations/byProteinChange": 65 },
+    "2019-12-14": { "/api/v1/annotate/copyNumberAlterations": 77 },
+    "2019-12-24": { "/api/private/utils/numbers/main/": 46 },
+    "2018-01-03": { "/api/v1/annotate/mutations/byProteinChange": 15 },
+    "2018-01-07": { "/api/v1/annotate/copyNumberAlterations": 91 },
+    "2018-01-14": { "/api/private/utils/numbers/levels/": 4 },
+    "2018-01-25": { "/api/v1/annotate/copyNumberAlterations": 97 },
+    "2018-01-31": { "/api/private/utils/numbers/main/": 41 },
+    "2018-02-04": { "/api/private/search/typeahead": 8 },
+    "2018-02-06": { "/api/private/utils/numbers/main/": 33 },
+    "2018-02-09": { "/api/private/utils/numbers/main/": 82 },
+    "2018-02-19": { "/api/private/utils/numbers/levels/": 4 },
+    "2018-02-20": { "/api/v1/annotate/mutations/byProteinChange": 5 },
+    "2018-02-24": { "/api/private/search/typeahead": 75 },
+    "2018-03-09": { "/api/v1/annotate/mutations/byProteinChange": 60 },
+    "2018-03-11": { "/api/private/search/typeahead": 25 },
+    "2018-03-13": { "/api/private/utils/numbers/main/": 23 },
+    "2018-03-23": { "/api/v1/annotate/copyNumberAlterations": 33 },
+    "2018-03-24": { "/api/private/utils/numbers/main/": 91 },
+    "2018-03-27": { "/api/private/utils/numbers/levels/": 79 },
+    "2018-04-06": { "/api/private/utils/numbers/main/": 94 },
+    "2018-04-09": {
+      "/api/private/utils/numbers/levels/": 2,
+      "/api/v1/annotate/mutations/byProteinChange": 84
+    },
+    "2018-04-12": { "/api/v1/annotate/copyNumberAlterations": 24 },
+    "2018-04-16": { "/api/v1/annotate/copyNumberAlterations": 42 },
+    "2018-04-21": { "/api/private/utils/numbers/main/": 5 },
+    "2018-04-27": { "/api/v1/annotate/mutations/byProteinChange": 64 },
+    "2018-05-07": { "/api/private/utils/numbers/main/": 36 },
+    "2018-05-16": { "/api/private/utils/numbers/main/": 24 },
+    "2018-05-17": { "/api/private/search/typeahead": 26 },
+    "2018-05-22": { "/api/private/utils/numbers/levels/": 64 },
+    "2018-05-27": { "/api/v1/annotate/copyNumberAlterations": 67 },
+    "2018-06-01": {
+      "/api/v1/annotate/mutations/byProteinChange": 74,
+      "/api/private/search/typeahead": 73,
+      "/api/v1/annotate/structuralVariants": 41,
+      "/api/private/utils/numbers/main/": 74
+    },
+    "2018-06-15": { "/api/private/search/typeahead": 37 },
+    "2018-06-16": { "/api/v1/annotate/mutations/byProteinChange": 79 },
+    "2018-06-17": { "/api/v1/annotate/structuralVariants": 13 },
+    "2018-06-19": { "/api/v1/annotate/mutations/byProteinChange": 75 },
+    "2018-06-23": { "/api/v1/annotate/mutations/byProteinChange": 32 },
+    "2018-06-28": { "/api/v1/annotate/copyNumberAlterations": 64 },
+    "2018-07-01": { "/api/private/utils/numbers/main/": 20 },
+    "2018-07-07": { "/api/v1/annotate/structuralVariants": 79 },
+    "2018-07-11": { "/api/private/utils/numbers/main/": 132 },
+    "2018-07-23": { "/api/private/utils/numbers/levels/": 40 },
+    "2018-07-26": {
+      "/api/v1/annotate/mutations/byProteinChange": 67,
+      "/api/v1/annotate/structuralVariants": 42
+    },
+    "2018-07-30": { "/api/private/utils/numbers/main/": 87 },
+    "2018-07-31": { "/api/private/utils/numbers/levels/": 157 },
+    "2018-08-01": { "/api/private/utils/numbers/main/": 89 },
+    "2018-08-07": { "/api/private/search/typeahead": 52 },
+    "2018-08-25": { "/api/v1/annotate/structuralVariants": 60 },
+    "2018-08-31": { "/api/v1/annotate/mutations/byProteinChange": 13 },
+    "2018-09-02": { "/api/v1/annotate/structuralVariants": 87 },
+    "2018-09-03": {
+      "/api/private/search/typeahead": 76,
+      "/api/v1/annotate/copyNumberAlterations": 50
+    },
+    "2018-09-08": {
+      "/api/v1/annotate/mutations/byProteinChange": 13,
+      "/api/private/utils/numbers/levels/": 49
+    },
+    "2018-09-11": { "/api/v1/annotate/mutations/byProteinChange": 41 },
+    "2018-09-12": { "/api/v1/annotate/mutations/byProteinChange": 28 },
+    "2018-09-13": { "/api/v1/annotate/mutations/byProteinChange": 83 },
+    "2018-09-16": { "/api/private/search/typeahead": 48 },
+    "2018-09-18": { "/api/v1/annotate/mutations/byProteinChange": 61 },
+    "2018-09-26": { "/api/private/utils/numbers/levels/": 44 },
+    "2018-09-29": { "/api/private/utils/numbers/main/": 27 },
+    "2018-10-03": { "/api/v1/annotate/mutations/byProteinChange": 19 },
+    "2018-10-04": {
+      "/api/v1/annotate/structuralVariants": 20,
+      "/api/private/utils/numbers/main/": 21
+    },
+    "2018-10-07": { "/api/v1/annotate/copyNumberAlterations": 42 },
+    "2018-10-11": { "/api/v1/annotate/structuralVariants": 99 },
+    "2018-10-30": { "/api/v1/annotate/copyNumberAlterations": 26 },
+    "2018-11-01": { "/api/v1/annotate/mutations/byProteinChange": 56 },
+    "2018-11-02": { "/api/private/utils/numbers/levels/": 70 },
+    "2018-11-04": { "/api/private/search/typeahead": 6 },
+    "2018-11-07": { "/api/v1/annotate/copyNumberAlterations": 100 },
+    "2018-11-17": {
+      "/api/v1/annotate/mutations/byProteinChange": 68,
+      "/api/private/search/typeahead": 57
+    },
+    "2018-12-09": { "/api/private/utils/numbers/levels/": 14 },
+    "2018-12-15": { "/api/private/utils/numbers/main/": 30 },
+    "2018-12-21": {
+      "/api/private/search/typeahead": 60,
+      "/api/v1/annotate/structuralVariants": 76
+    },
+    "2018-12-28": { "/api/v1/annotate/mutations/byProteinChange": 98 },
+    "2017-01-01": { "/api/v1/annotate/mutations/byProteinChange": 37 },
+    "2017-01-20": {
+      "/api/v1/annotate/mutations/byProteinChange": 67,
+      "/api/private/utils/numbers/levels/": 86,
+      "/api/v1/annotate/structuralVariants": 85
+    },
+    "2017-01-22": {
+      "/api/v1/annotate/mutations/byProteinChange": 61,
+      "/api/private/utils/numbers/main/": 42
+    },
+    "2017-01-23": { "/api/v1/annotate/structuralVariants": 33 },
+    "2017-01-27": { "/api/v1/annotate/mutations/byProteinChange": 45 },
+    "2017-02-08": { "/api/private/search/typeahead": 87 },
+    "2017-02-18": { "/api/v1/annotate/copyNumberAlterations": 51 },
+    "2017-03-01": { "/api/private/utils/numbers/levels/": 98 },
+    "2017-03-03": { "/api/v1/annotate/mutations/byProteinChange": 37 },
+    "2017-03-14": { "/api/v1/annotate/structuralVariants": 66 },
+    "2017-03-17": { "/api/v1/annotate/copyNumberAlterations": 11 },
+    "2017-03-31": { "/api/v1/annotate/structuralVariants": 38 },
+    "2017-04-19": { "/api/v1/annotate/mutations/byProteinChange": 67 },
+    "2017-04-24": { "/api/private/search/typeahead": 78 },
+    "2017-04-28": { "/api/v1/annotate/copyNumberAlterations": 50 },
+    "2017-05-12": { "/api/v1/annotate/copyNumberAlterations": 49 },
+    "2017-05-16": { "/api/private/search/typeahead": 68 },
+    "2017-05-19": { "/api/private/utils/numbers/levels/": 95 },
+    "2017-06-04": { "/api/private/search/typeahead": 83 },
+    "2017-06-07": { "/api/v1/annotate/structuralVariants": 8 },
+    "2017-06-11": { "/api/v1/annotate/copyNumberAlterations": 86 },
+    "2017-06-14": { "/api/private/utils/numbers/main/": 80 },
+    "2017-06-23": { "/api/private/utils/numbers/levels/": 23 },
+    "2017-06-26": {
+      "/api/v1/annotate/structuralVariants": 29,
+      "/api/private/search/typeahead": 16
+    },
+    "2017-07-10": { "/api/private/utils/numbers/levels/": 39 },
+    "2017-07-12": { "/api/v1/annotate/copyNumberAlterations": 22 },
+    "2017-07-13": { "/api/private/utils/numbers/main/": 100 },
+    "2017-07-15": { "/api/v1/annotate/structuralVariants": 78 },
+    "2017-07-19": { "/api/v1/annotate/copyNumberAlterations": 7 },
+    "2017-07-24": { "/api/v1/annotate/structuralVariants": 67 },
+    "2017-07-25": { "/api/v1/annotate/structuralVariants": 26 },
+    "2017-08-02": {
+      "/api/private/utils/numbers/levels/": 64,
+      "/api/v1/annotate/copyNumberAlterations": 20
+    },
+    "2017-08-06": {
+      "/api/v1/annotate/copyNumberAlterations": 5,
+      "/api/v1/annotate/mutations/byProteinChange": 81
+    },
+    "2017-08-20": { "/api/v1/annotate/structuralVariants": 44 },
+    "2017-08-31": { "/api/v1/annotate/structuralVariants": 82 },
+    "2017-09-01": { "/api/v1/annotate/mutations/byProteinChange": 35 },
+    "2017-09-14": { "/api/private/utils/numbers/main/": 2 },
+    "2017-09-20": { "/api/v1/annotate/copyNumberAlterations": 90 },
+    "2017-09-29": {
+      "/api/private/search/typeahead": 53,
+      "/api/private/utils/numbers/levels/": 93
+    },
+    "2017-10-03": { "/api/v1/annotate/structuralVariants": 14 },
+    "2017-10-04": { "/api/private/utils/numbers/main/": 78 },
+    "2017-10-08": { "/api/private/search/typeahead": 90 },
+    "2017-10-16": { "/api/v1/annotate/structuralVariants": 41 },
+    "2017-10-29": { "/api/v1/annotate/structuralVariants": 23 },
+    "2017-10-31": { "/api/private/search/typeahead": 11 },
+    "2017-11-03": { "/api/private/search/typeahead": 68 },
+    "2017-11-04": { "/api/private/utils/numbers/levels/": 52 },
+    "2017-11-06": { "/api/v1/annotate/copyNumberAlterations": 35 },
+    "2017-11-13": { "/api/v1/annotate/mutations/byProteinChange": 35 },
+    "2017-11-14": { "/api/private/utils/numbers/main/": 40 },
+    "2017-11-23": { "/api/private/search/typeahead": 32 },
+    "2017-11-25": { "/api/v1/annotate/copyNumberAlterations": 59 },
+    "2017-12-03": { "/api/v1/annotate/copyNumberAlterations": 63 },
+    "2017-12-09": { "/api/v1/annotate/structuralVariants": 76 },
+    "2017-12-13": { "/api/private/utils/numbers/levels/": 92 },
+    "2017-12-19": {
+      "/api/private/utils/numbers/main/": 54,
+      "/api/private/search/typeahead": 17
+    },
+    "2017-12-31": {
+      "/api/v1/annotate/copyNumberAlterations": 57,
+      "/api/private/utils/numbers/levels/": 37
     }
   }
+}
