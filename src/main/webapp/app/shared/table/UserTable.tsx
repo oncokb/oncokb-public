@@ -71,7 +71,7 @@ export class UserTable extends React.Component<IUserTableProps> {
   }
 
   @action
-  updateActiveStatus(sendEmail = true) {
+  updateActiveStatus(sendEmail: boolean) {
     if (this.currentSelectedUser) {
       const userToUpdate: UserDTO = {
         ...this.currentSelectedUser,
@@ -314,7 +314,7 @@ export class UserTable extends React.Component<IUserTableProps> {
           show={this.showUserStatusModal}
           user={this.currentSelectedUser}
           onCancel={this.cancelUpdateActiveStatus}
-          onConfirm={(sendEmail: boolean) => this.updateActiveStatus(sendEmail)}
+          onConfirm={this.updateActiveStatus.bind(this)}
         />
       </>
     );

@@ -113,7 +113,7 @@ export default class UserDetailsPage extends React.Component<{
   }
 
   @action
-  updateActiveStatus(sendEmail = true) {
+  updateActiveStatus(sendEmail: boolean, authorities: string[]) {
     this.showUpdateStatusModal = false;
     if (this.currentSelected.user === undefined) {
       notifyError(new Error('No user specified'));
@@ -122,6 +122,7 @@ export default class UserDetailsPage extends React.Component<{
     const userToUpdate: UserDTO = {
       ...this.currentSelected.user,
       activated: !this.currentSelected.user.activated,
+      authorities,
     };
     this.updateUser(userToUpdate, sendEmail);
   }
@@ -399,7 +400,7 @@ export default class UserDetailsPage extends React.Component<{
           show={this.showUpdateStatusModal}
           user={this.currentSelected.user}
           onCancel={() => this.cancelUpdateActiveStatus()}
-          onConfirm={(sendEmail: boolean) => this.updateActiveStatus(sendEmail)}
+          onConfirm={this.updateActiveStatus.bind(this)}
         />
       </>
     );

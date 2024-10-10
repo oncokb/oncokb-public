@@ -251,6 +251,21 @@ public class MailService {
         }
     }
 
+    public void sendInternalEmailFromTemplate(MailType mailType, String subject, String to, Context additionalContext) {
+        Context context = new Context(Locale.ENGLISH);
+
+        if (additionalContext != null)
+            additionalContext.getVariableNames().forEach(name -> context.setVariable(name, additionalContext.getVariable(name)));
+
+        String from = jHipsterProperties.getMail().getFrom();
+        String content = templateEngine.process("mail/" + mailType.getTemplateName(), context);
+        try {
+            sendEmail(to, from, null, subject, content, null, false, true);
+        } catch (MailException | MessagingException e) {
+            log.warn("Internal email could not be sent to '{}'", to, e);
+        }
+    }
+
     @Async
     public void sendActivationEmail(UserDTO user) {
         log.debug("Sending activation email to '{}'", user.getEmail());

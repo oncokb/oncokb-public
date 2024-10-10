@@ -670,7 +670,7 @@ export default class CompanyPage extends React.Component<ICompanyPage> {
                             this.editAllModeEnabled = false;
                             client
                               .getTerminationWarningEmailUsingGET({
-                                id: this.company.id,
+                                companyId: this.company.id,
                               })
                               .then(x => {
                                 this.sendTerminationNoticePayload = x;
@@ -698,7 +698,10 @@ export default class CompanyPage extends React.Component<ICompanyPage> {
                   <AvForm
                     onValidSubmit={this.onValidFormSubmit}
                     onKeyPress={(event: any) => {
-                      if (event.which === 13) {
+                      if (
+                        event.which === 13 &&
+                        event.target.type !== 'textarea'
+                      ) {
                         event.preventDefault();
                       }
                     }}
