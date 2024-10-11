@@ -15,7 +15,7 @@ const userOverviewUsageWithUsageTypes: UserOverviewUsageWithUsageTypes[] = [
       '2020-01-01': {
         totalUsage: 48.0,
         totalPublicUsage: 48.0,
-        mostUsedEndpoint: '/api/v1/annotate/structuralVariants',
+        mostUsedEndpoint: '/api/private/search/typeahead',
         mostUsedPublicEndpoint: '/api/v1/annotate/structuralVariants',
         maxUsageProportion: 100.0,
         publicMaxUsageProportion: 100.0,
@@ -25,7 +25,7 @@ const userOverviewUsageWithUsageTypes: UserOverviewUsageWithUsageTypes[] = [
       '2020-01': {
         totalUsage: 376.0,
         totalPublicUsage: 186.0,
-        mostUsedEndpoint: '/api/v1/annotate/structuralVariants',
+        mostUsedEndpoint: '/api/private/search/typeahead',
         mostUsedPublicEndpoint: '/api/v1/annotate/structuralVariants',
         maxUsageProportion: 49.4,
         publicMaxUsageProportion: 100.0,
@@ -116,6 +116,106 @@ describe('usage-analysis-utils', () => {
           resource: '/api/private/search/typeahead',
           time: '2020',
           usage: 4436,
+          userEmail: '0doej@FakeCo.com',
+          userId: '0',
+        },
+      ],
+    ],
+    [
+      [
+        userOverviewUsageWithUsageTypes,
+        ToggleValue.RESULTS_BY_YEAR,
+        true,
+        '2020-01-01',
+        '2020-12-31',
+        false,
+      ],
+      [
+        {
+          maxUsageProportion: 40,
+          resource: '/api/v1/annotate/structuralVariants',
+          time: '2020',
+          usage: 2299,
+          userEmail: '0doej@FakeCo.com',
+          userId: '0',
+        },
+      ],
+    ],
+    [
+      [
+        userOverviewUsageWithUsageTypes,
+        ToggleValue.RESULTS_BY_MONTH,
+        true,
+        '2020-01-01',
+        '2020-12-31',
+        true,
+      ],
+      [
+        {
+          maxUsageProportion: 49.4,
+          resource: '/api/private/search/typeahead',
+          time: '2020-01',
+          usage: 376,
+          userEmail: '0doej@FakeCo.com',
+          userId: '0',
+        },
+      ],
+    ],
+    [
+      [
+        userOverviewUsageWithUsageTypes,
+        ToggleValue.RESULTS_BY_MONTH,
+        true,
+        '2020-01-01',
+        '2020-12-31',
+        false,
+      ],
+      [
+        {
+          maxUsageProportion: 100,
+          resource: '/api/v1/annotate/structuralVariants',
+          time: '2020-01',
+          usage: 186,
+          userEmail: '0doej@FakeCo.com',
+          userId: '0',
+        },
+      ],
+    ],
+    [
+      [
+        userOverviewUsageWithUsageTypes,
+        ToggleValue.RESULTS_BY_DAY,
+        true,
+        '2020-01-01',
+        '2020-12-31',
+        true,
+      ],
+      [
+        {
+          maxUsageProportion: 100,
+          resource: '/api/private/search/typeahead',
+          time: '2020-01-01',
+          usage: 48,
+          userEmail: '0doej@FakeCo.com',
+          userId: '0',
+        },
+      ],
+    ],
+    [
+      [
+        userOverviewUsageWithUsageTypes,
+        ToggleValue.RESULTS_BY_DAY,
+        true,
+        '2020-01-01',
+        '2020-12-31',
+        false,
+      ],
+      [
+        {
+          maxUsageProportion: 100,
+          resource: '/api/v1/annotate/structuralVariants',
+          time: '2020-01-01',
+          usage: 48,
           userEmail: '0doej@FakeCo.com',
           userId: '0',
         },
