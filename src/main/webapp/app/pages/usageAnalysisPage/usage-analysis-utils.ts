@@ -118,6 +118,7 @@ export function mapUserOrResourceUsageToUsageRecords(
   const isByYear = timeTypeToggleValue === ToggleValue.RESULTS_BY_YEAR;
   const isByMonth = timeTypeToggleValue === ToggleValue.RESULTS_BY_MONTH;
   const isByDay = timeTypeToggleValue === ToggleValue.RESULTS_BY_DAY;
+
   if (isByYear && checkIfUserUsage(incomingData)) {
     data = incomingData.flatMap(({ userId, userEmail, yearUsage }) => {
       return createUserTableRecord(userId, userEmail, yearUsage, isAllUsage);
@@ -180,39 +181,6 @@ export function mapUserOrResourceUsageToUsageRecords(
   }
 
   return data;
-}
-
-export function mapUserUsageToTimeGroupedUsageRecords(
-  userUsage: UserUsage
-): TimeGroupedUsageRecords {
-  if (userUsage.summary === null) {
-    return {
-      [USAGE_YEAR_DETAIL_TIME_KEY]: [],
-      [USAGE_MONTH_DETAIL_TIME_KEY]: [],
-      [USAGE_DAY_DETAIL_TIME_KEY]: [],
-    };
-  }
-  const userEmail = userUsage.userEmail;
-  return {
-    [USAGE_YEAR_DETAIL_TIME_KEY]: createUserTableRecord(
-      undefined,
-      userEmail,
-      userUsage.summary.year,
-      true
-    ),
-    [USAGE_MONTH_DETAIL_TIME_KEY]: createUserTableRecord(
-      undefined,
-      userEmail,
-      userUsage.summary.month,
-      true
-    ),
-    [USAGE_DAY_DETAIL_TIME_KEY]: createUserTableRecord(
-      undefined,
-      userEmail,
-      userUsage.summary.day,
-      true
-    ),
-  };
 }
 
 export function mapUsageSummaryToTimeGroupedUsageRecords(
