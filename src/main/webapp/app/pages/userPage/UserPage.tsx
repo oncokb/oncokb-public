@@ -22,8 +22,6 @@ import {
   PAGE_ROUTE,
   REDIRECT_TIMEOUT_MILLISECONDS,
   THRESHOLD_TRIAL_TOKEN_VALID_DEFAULT,
-  USAGE_DAY_DETAIL_TIME_KEY,
-  USAGE_MONTH_DETAIL_TIME_KEY,
   USER_AUTHORITIES,
 } from 'app/config/constants';
 import {
@@ -74,8 +72,6 @@ import {
 } from 'app/shared/utils/FormValidationUtils';
 import AuthenticationStore from 'app/store/AuthenticationStore';
 import ButtonWithTooltip from 'app/shared/button/ButtonWithTooltip';
-import { ToggleValue } from 'app/pages/usageAnalysisPage/UsageAnalysisPage';
-import UserUsageDetailsTable from 'app/pages/usageAnalysisPage/UserUsageDetailsTable';
 import { DateSelector } from 'app/components/dateSelector/DateSelector';
 import { KeyInputGroups } from 'app/pages/userPage/KeyInputGroups';
 import { Label } from 'reactstrap';
@@ -85,12 +81,7 @@ import {
 } from 'app/shared/utils/UrlUtils';
 import { sortBy } from 'app/shared/utils/LodashUtils';
 import { Helmet } from 'react-helmet-async';
-import {
-  UsageRecord,
-  mapUsageSummaryToTimeGroupedUsageRecords,
-  TimeGroupedUsageRecords,
-  mapUserUsageToTimeGroupedUsageRecords,
-} from '../usageAnalysisPage/usage-analysis-utils';
+import { ToggleValue } from '../usageAnalysisPage/usage-analysis-utils';
 import UsageAnalysisTable from '../usageAnalysisPage/UsageAnalysisTable';
 
 export enum AccountStatus {

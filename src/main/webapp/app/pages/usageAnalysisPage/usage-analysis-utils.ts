@@ -4,7 +4,6 @@ import {
   UserOverviewUsage,
   UserUsage,
 } from 'app/shared/api/generated/API';
-import { ToggleValue } from './UsageAnalysisPage';
 import {
   TABLE_MONTH_FORMAT,
   TABLE_DAY_FORMAT,
@@ -14,6 +13,15 @@ import {
   USAGE_DAY_DETAIL_TIME_KEY,
 } from 'app/config/constants';
 import moment from 'moment';
+
+export enum ToggleValue {
+  ALL_RESOURCES = 'All Resources',
+  PUBLIC_RESOURCES = 'Only Public Resources',
+  CUMULATIVE_USAGE = 'Cumulative Usage',
+  RESULTS_BY_YEAR = 'By Year',
+  RESULTS_BY_MONTH = 'By Month',
+  RESULTS_BY_DAY = 'By Day',
+}
 
 export type TimeGroupedUsageRecords = {
   [USAGE_YEAR_DETAIL_TIME_KEY]: UsageRecord[];

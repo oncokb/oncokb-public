@@ -15,9 +15,12 @@ import {
   USAGE_DAY_DETAIL_TIME_KEY,
 } from 'app/config/constants';
 import { remoteData } from 'cbioportal-frontend-commons';
-import { ToggleValue } from 'app/pages/usageAnalysisPage/UsageAnalysisPage';
 import { notifyError } from 'app/shared/utils/NotificationUtils';
-import { UsageRecord, TimeGroupedUsageRecords } from './usage-analysis-utils';
+import {
+  UsageRecord,
+  TimeGroupedUsageRecords,
+  ToggleValue,
+} from './usage-analysis-utils';
 
 @inject('routing')
 @observer

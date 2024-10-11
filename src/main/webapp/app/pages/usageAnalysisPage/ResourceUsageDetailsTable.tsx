@@ -7,7 +7,6 @@ import React from 'react';
 import { Row } from 'react-bootstrap';
 import {
   getUsageTableColumnDefinition,
-  ToggleValue,
   UsageTableColumnKey,
 } from 'app/pages/usageAnalysisPage/UsageAnalysisPage';
 import {
@@ -22,7 +21,11 @@ import {
 } from 'app/components/oncokbTable/HeaderConstants';
 import UsageText from 'app/shared/texts/UsageText';
 import { Link } from 'react-router-dom';
-import { UsageRecord, TimeGroupedUsageRecords } from './usage-analysis-utils';
+import {
+  UsageRecord,
+  TimeGroupedUsageRecords,
+  ToggleValue,
+} from './usage-analysis-utils';
 
 type IResourceUsageDetailsTable = {
   data: TimeGroupedUsageRecords;

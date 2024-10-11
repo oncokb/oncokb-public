@@ -12,42 +12,24 @@ import client from 'app/shared/api/clientInstance';
 import { match } from 'react-router';
 import Tabs from 'react-bootstrap/Tabs';
 import Tab from 'react-bootstrap/Tab';
-import OncoKBTable from 'app/components/oncokbTable/OncoKBTable';
-import {
-  encodeResourceUsageDetailPageURL,
-  filterByKeyword,
-} from 'app/shared/utils/Utils';
 import { UserOverviewUsage, UsageSummary } from 'app/shared/api/generated/API';
-import { Link } from 'react-router-dom';
 import autobind from 'autobind-decorator';
-import { Row, Dropdown, DropdownButton } from 'react-bootstrap';
-import { PAGE_ROUTE, USAGE_YEAR_DETAIL_TIME_KEY } from 'app/config/constants';
+import { USAGE_YEAR_DETAIL_TIME_KEY } from 'app/config/constants';
 import { remoteData } from 'cbioportal-frontend-commons';
 import * as QueryString from 'query-string';
-import { UsageToggleGroup } from './UsageToggleGroup';
 import { TableCellRenderer } from 'react-table';
 import {
   operationHeader,
   resourceHeader,
   timeHeader,
   usageHeader,
-  filterDependentResourceHeader,
 } from 'app/components/oncokbTable/HeaderConstants';
-import UsageText from 'app/shared/texts/UsageText';
 import UsageAnalysisTable from 'app/pages/usageAnalysisPage/UsageAnalysisTable';
+import { ToggleValue } from './usage-analysis-utils';
 
 export enum UsageType {
   USER = 'USER',
   RESOURCE = 'RESOURCE',
-}
-
-export enum ToggleValue {
-  ALL_RESOURCES = 'All Resources',
-  PUBLIC_RESOURCES = 'Only Public Resources',
-  CUMULATIVE_USAGE = 'Cumulative Usage',
-  RESULTS_BY_YEAR = 'By Year',
-  RESULTS_BY_MONTH = 'By Month',
-  RESULTS_BY_DAY = 'By Day',
 }
 
 const ALLOWED_USAGETYPE: string[] = [UsageType.USER, UsageType.RESOURCE];

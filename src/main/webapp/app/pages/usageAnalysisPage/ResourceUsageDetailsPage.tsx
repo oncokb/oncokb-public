@@ -5,13 +5,13 @@ import { inject, observer } from 'mobx-react';
 import { RouterStore } from 'mobx-react-router';
 import React from 'react';
 import { match } from 'react-router-dom';
-import { ToggleValue } from './UsageAnalysisPage';
 import Client from 'app/shared/api/clientInstance';
 import ResourceUsageDetailsTable from './ResourceUsageDetailsTable';
 import { decodeResourceUsageDetailPageURL } from 'app/shared/utils/Utils';
 import {
   TimeGroupedUsageRecords,
   mapUsageSummaryToTimeGroupedUsageRecords,
+  ToggleValue,
 } from './usage-analysis-utils';
 
 @inject('routing')

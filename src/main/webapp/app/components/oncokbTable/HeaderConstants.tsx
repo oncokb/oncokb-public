@@ -1,5 +1,5 @@
 import React from 'react';
-import { ToggleValue } from 'app/pages/usageAnalysisPage/UsageAnalysisPage';
+import { ToggleValue } from 'app/pages/usageAnalysisPage/usage-analysis-utils';
 
 export const emailHeader = 'Email';
 export const usageHeader = 'Usage';

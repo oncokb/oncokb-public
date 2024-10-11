@@ -9,7 +9,6 @@ import React from 'react';
 import { Row } from 'react-bootstrap';
 import {
   getUsageTableColumnDefinition,
-  ToggleValue,
   UsageTableColumnKey,
 } from 'app/pages/usageAnalysisPage/UsageAnalysisPage';
 import { UsageToggleGroup } from './UsageToggleGroup';
@@ -28,6 +27,7 @@ import {
   UserOverviewUsageWithUsageTypes,
   mapUserOrResourceUsageToUsageRecords,
   UsageRecord,
+  ToggleValue,
 } from './usage-analysis-utils';
 
 type IUserUsageDetailsTable = {
