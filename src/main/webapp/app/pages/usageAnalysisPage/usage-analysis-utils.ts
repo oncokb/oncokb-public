@@ -2,7 +2,6 @@ import {
   UserStats,
   UsageSummary,
   UserOverviewUsage,
-  UserUsage,
 } from 'app/shared/api/generated/API';
 import {
   TABLE_MONTH_FORMAT,
@@ -132,7 +131,7 @@ export function mapUserOrResourceUsageToUsageRecords(
       return createUserTableRecord(userId, userEmail, dayUsage, isAllUsage);
     });
   } else if (isByYear && !checkIfUserUsage(incomingData)) {
-    data = Object.entries(incomingData.day).flatMap(([time, usageSummary]) => {
+    data = Object.entries(incomingData.year).flatMap(([time, usageSummary]) => {
       return createResourceTableRecord(
         time,
         usageSummary,
