@@ -1,9 +1,9 @@
 import React from 'react';
 
 function getUsageTextClassName(usage: number | undefined) {
-  if (usage >= 1000000000) {
+  if (usage !== undefined && usage >= 1000000000) {
     return 'text-danger';
-  } else if (usage >= 1000000) {
+  } else if (usage !== undefined && usage >= 1000000) {
     return 'text-warning';
   } else {
     return '';
