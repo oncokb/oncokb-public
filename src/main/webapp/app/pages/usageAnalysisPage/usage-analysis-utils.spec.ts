@@ -106,6 +106,37 @@ describe('usage-analysis-utils', () => {
         userOverviewUsageWithUsageTypes,
         ToggleValue.RESULTS_BY_YEAR,
         true,
+        '2019-01-01',
+        '2019-12-31',
+        true,
+      ],
+      [],
+    ],
+    [
+      [
+        userOverviewUsageWithUsageTypes,
+        ToggleValue.RESULTS_BY_YEAR,
+        false,
+        '2019-01-01',
+        '2019-12-31',
+        true,
+      ],
+      [
+        {
+          maxUsageProportion: 25.3,
+          resource: '/api/private/search/typeahead',
+          time: '2020',
+          usage: 4436,
+          userEmail: '0doej@FakeCo.com',
+          userId: '0',
+        },
+      ],
+    ],
+    [
+      [
+        userOverviewUsageWithUsageTypes,
+        ToggleValue.RESULTS_BY_YEAR,
+        true,
         '2020-01-01',
         '2020-12-31',
         true,
