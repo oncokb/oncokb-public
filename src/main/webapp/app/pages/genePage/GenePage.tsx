@@ -53,7 +53,7 @@ import {
   GenePageSearchQueries,
 } from 'app/shared/route/types';
 import AlterationTableTabs from 'app/pages/annotationPage/AlterationTableTabs';
-import GeneInfo from './GeneInfo';
+import GeneInfo, { getGeneTypeSentence } from './GeneInfo';
 import GeneAdditionalInfoTable from 'app/pages/genePage/GeneAdditionalInfoTable';
 import OncokbLollipopPlot from './OncokbLollipopPlot';
 import { getUniqueFdaImplications } from 'app/pages/annotationPage/Utils';
@@ -63,6 +63,9 @@ import SummaryWithRefs from 'app/oncokb-frontend-commons/src/components/SummaryW
 import { findLast } from 'app/shared/utils/LodashUtils';
 import { Helmet, HelmetProvider } from 'react-helmet-async';
 import windowStore from 'app/store/WindowStore';
+import { NcbiLink } from 'app/shared/links/NcbiLink';
+import GeneAliasesDescription from 'app/shared/texts/GeneAliasesDescription';
+import { COLOR_GREY } from 'app/config/theme';
 
 interface MatchParams {
   hugoSymbol: string;
@@ -79,6 +82,7 @@ interface GenePageProps extends RouteComponentProps<MatchParams> {
 export default class GenePage extends React.Component<GenePageProps, any> {
   @observable hugoSymbolQuery: string;
   @observable showGeneBackground: boolean;
+  @observable showAdditionalGeneInfo = true;
   @observable selectedTab: ANNOTATION_PAGE_TAB_KEYS;
   @observable defaultSelectedTab: ANNOTATION_PAGE_TAB_KEYS;
 
@@ -368,6 +372,12 @@ export default class GenePage extends React.Component<GenePageProps, any> {
 
   @autobind
   @action
+  toggleAdditionalGeneInfo() {
+    this.showAdditionalGeneInfo = !this.showAdditionalGeneInfo;
+  }
+
+  @autobind
+  @action
   onChangeTab(
     selectedTab: ANNOTATION_PAGE_TAB_KEYS,
     newTabKey: ANNOTATION_PAGE_TAB_KEYS
@@ -454,9 +464,16 @@ export default class GenePage extends React.Component<GenePageProps, any> {
                 ) : (
                   <If condition={this.pageShouldBeRendered}>
                     <Then>
-                      <h2>
-                        {this.store.hugoSymbol}
-                        <span style={{ fontSize: '0.5em' }} className={'ml-2'}>
+                      <div>
+                        <span className={'h2'}>{this.store.hugoSymbol}</span>
+                        {this.store.gene.result.geneAliases.length > 0 && (
+                          <GeneAliasesDescription
+                            geneAliases={this.store.gene.result.geneAliases}
+                            className={'ml-2'}
+                            style={{ color: COLOR_GREY }}
+                          />
+                        )}
+                        <span className={'ml-2'}>
                           <FeedbackIcon
                             feedback={{
                               type: FeedbackType.ANNOTATION,
@@ -467,10 +484,51 @@ export default class GenePage extends React.Component<GenePageProps, any> {
                             appStore={this.props.appStore}
                           />
                         </span>
-                      </h2>
+                      </div>
+                      <h5 className={'mt-2'}>
+                        {getGeneTypeSentence(
+                          this.store.gene.result.oncogene,
+                          this.store.gene.result.tsg
+                        )}
+                      </h5>
                       <Row>
-                        <Col md={8}>
-                          <div className="">
+                        <Col className={'d-flex flex-wrap'}>
+                          <NcbiLink
+                            entrezGeneId={this.store.gene.result.entrezGeneId}
+                          />
+                          <span className={'mx-2'}>|</span>
+                          <ShowHideText
+                            show={this.showAdditionalGeneInfo}
+                            title={'additional gene information'}
+                            content={''}
+                            onClick={this.toggleAdditionalGeneInfo}
+                          />
+                        </Col>
+                      </Row>
+                      {this.showAdditionalGeneInfo && (
+                        <Row className={'mt-2'}>
+                          <Col md={6}>
+                            <GeneAdditionalInfoTable
+                              gene={this.store.gene.result}
+                              grch37ensemblGene={findLast(
+                                this.store.ensemblGenes.result,
+                                item =>
+                                  item.referenceGenome ===
+                                  REFERENCE_GENOME.GRCh37
+                              )}
+                              grch38ensemblGene={findLast(
+                                this.store.ensemblGenes.result,
+                                item =>
+                                  item.referenceGenome ===
+                                  REFERENCE_GENOME.GRCh38
+                              )}
+                            />
+                          </Col>
+                        </Row>
+                      )}
+                      <Row>
+                        <Col>
+                          <div className="mt-2">
                             <GeneInfo
                               gene={this.store.gene.result}
                               ensemblGenes={this.store.ensemblGenes.result}
@@ -516,21 +574,6 @@ export default class GenePage extends React.Component<GenePageProps, any> {
                               />
                             )}
                           </div>
-                        </Col>
-                        <Col md={4} style={{ fontSize: '0.8rem' }}>
-                          <GeneAdditionalInfoTable
-                            gene={this.store.gene.result}
-                            grch37ensemblGene={findLast(
-                              this.store.ensemblGenes.result,
-                              item =>
-                                item.referenceGenome === REFERENCE_GENOME.GRCh37
-                            )}
-                            grch38ensemblGene={findLast(
-                              this.store.ensemblGenes.result,
-                              item =>
-                                item.referenceGenome === REFERENCE_GENOME.GRCh38
-                            )}
-                          />
                         </Col>
                       </Row>
                       <If

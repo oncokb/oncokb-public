@@ -2,28 +2,29 @@ import React from 'react';
 import { Table } from 'react-bootstrap';
 import { EnsemblGene, Gene } from 'app/shared/api/generated/OncoKbPrivateAPI';
 import { Linkout } from 'app/shared/links/Linkout';
-import styles from 'app/pages/genePage/GenePage.module.scss';
 import { REFERENCE_GENOME } from 'app/config/constants';
+import ExternalLinkIcon from 'app/shared/icons/ExternalLinkIcon';
 
 const EnsemblIdLinkout: React.FunctionComponent<{
   ensemblId: string;
   referenceGenome: REFERENCE_GENOME;
+  className?: string;
 }> = props => {
   return (
-    <Linkout
-      className={styles.lowKeyLinkout}
+    <ExternalLinkIcon
       link={`https://${
         props.referenceGenome === REFERENCE_GENOME.GRCh37 ? 'grch37' : 'www'
       }.ensembl.org/id/${props.ensemblId}`}
+      className={props.className}
     >
       {props.children ? props.children : props.ensemblId}
-    </Linkout>
+    </ExternalLinkIcon>
   );
 };
 const getEnsemblText = (grch37: string, grch38: string) => {
   if (grch37 === grch38) {
     return (
-      <span>
+      <span className={'d-flex'}>
         {grch37} (
         <EnsemblIdLinkout
           ensemblId={grch37}
@@ -43,23 +44,29 @@ const getEnsemblText = (grch37: string, grch38: string) => {
     );
   } else {
     return (
-      <div>
+      <div className={'d-flex flex-column'}>
         {grch37 && (
-          <div>
+          <div className={'d-flex'}>
+            {grch37} (
             <EnsemblIdLinkout
               ensemblId={grch37}
               referenceGenome={REFERENCE_GENOME.GRCh37}
-            />{' '}
-            ({REFERENCE_GENOME.GRCh37})
+            >
+              {REFERENCE_GENOME.GRCh37}
+            </EnsemblIdLinkout>
+            )
           </div>
         )}
         {grch38 && (
-          <div>
+          <div className={'d-flex'}>
+            {grch38} (
             <EnsemblIdLinkout
               ensemblId={grch38}
               referenceGenome={REFERENCE_GENOME.GRCh38}
-            />{' '}
-            ({REFERENCE_GENOME.GRCh38})
+            >
+              {REFERENCE_GENOME.GRCh38}
+            </EnsemblIdLinkout>
+            )
           </div>
         )}
       </div>
@@ -71,18 +78,17 @@ const RefSeqLinkout: React.FunctionComponent<{
   referenceGenome: REFERENCE_GENOME;
 }> = props => {
   return (
-    <Linkout
-      className={styles.lowKeyLinkout}
+    <ExternalLinkIcon
       link={`https://www.ncbi.nlm.nih.gov/nuccore/${props.refSeq}`}
     >
       {props.children ? props.children : props.refSeq}
-    </Linkout>
+    </ExternalLinkIcon>
   );
 };
 const getRefSeqText = (grch37: string, grch38: string) => {
   if (grch37 === grch38) {
     return (
-      <span>
+      <span className={'d-flex'}>
         {grch37} (
         <RefSeqLinkout
           refSeq={grch37}
@@ -126,23 +132,22 @@ const getRefSeqText = (grch37: string, grch38: string) => {
   }
 };
 
+const getTableDataStyle = (row: number, col: number) => {
+  const style: Partial<React.CSSProperties> = {};
+  if (row === 0) {
+    style.borderTop = 0;
+  }
+  if (col === 0) {
+    style.width = 160;
+  }
+  return style;
+};
 const GeneAdditionalInfoTable: React.FunctionComponent<{
   gene: Gene;
   grch37ensemblGene?: EnsemblGene;
   grch38ensemblGene?: EnsemblGene;
 }> = props => {
   const content = [];
-  if (props.gene.entrezGeneId > 0) {
-    content.push([
-      'NCBI Gene',
-      <Linkout
-        className={styles.lowKeyLinkout}
-        link={`https://www.ncbi.nlm.nih.gov/gene/${props.gene.entrezGeneId}`}
-      >
-        {props.gene.entrezGeneId}
-      </Linkout>,
-    ]);
-  }
   if (props.grch37ensemblGene || props.grch38ensemblGene) {
     content.push([
       'Ensembl Gene',
@@ -155,10 +160,10 @@ const GeneAdditionalInfoTable: React.FunctionComponent<{
       'Location',
       <div>
         {props.grch37ensemblGene && (
-          <div>{`Chr${props.grch37ensemblGene?.chromosome}:${props.grch37ensemblGene?.start}-${props.grch37ensemblGene?.end} (GRch37)`}</div>
+          <div>{`Chr${props.grch37ensemblGene?.chromosome}:${props.grch37ensemblGene?.start}-${props.grch37ensemblGene?.end} (GRCh37)`}</div>
         )}
         {props.grch38ensemblGene && (
-          <div>{`Chr${props.grch38ensemblGene?.chromosome}:${props.grch38ensemblGene?.start}-${props.grch38ensemblGene?.end} (GRch38)`}</div>
+          <div>{`Chr${props.grch38ensemblGene?.chromosome}:${props.grch38ensemblGene?.start}-${props.grch38ensemblGene?.end} (GRCh38)`}</div>
         )}
       </div>,
     ]);
@@ -176,14 +181,15 @@ const GeneAdditionalInfoTable: React.FunctionComponent<{
     ]);
   }
 
-  const firstRowTdStyle = { borderTop: 0 };
   return (
     <Table size={'sm'}>
       <tbody>
         {content.map((item, index) => (
           <tr key={`key-${item[0]}`}>
-            <td style={index === 0 ? firstRowTdStyle : undefined}>{item[0]}</td>
-            <td style={index === 0 ? firstRowTdStyle : undefined}>{item[1]}</td>
+            <td style={getTableDataStyle(index, 0)}>
+              <b>{item[0]}</b>
+            </td>
+            <td style={getTableDataStyle(index, 1)}>{item[1]}</td>
           </tr>
         ))}
       </tbody>

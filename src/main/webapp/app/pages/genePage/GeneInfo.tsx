@@ -119,7 +119,7 @@ export const getHighestLevelStrings = (
   );
 };
 
-const getGeneTypeSentence = (oncogene: boolean, tsg: boolean) => {
+export const getGeneTypeSentence = (oncogene: boolean, tsg: boolean) => {
   const geneTypes = [];
   if (oncogene) {
     geneTypes.push(GENE_TYPE_DESC.ONCOGENE);
@@ -133,18 +133,6 @@ const getGeneTypeSentence = (oncogene: boolean, tsg: boolean) => {
 const GeneInfo: React.FunctionComponent<GeneInfoProps> = props => {
   const gene = props.gene;
   const info: GeneInfoItem[] = [];
-
-  // gene type
-  if (gene.oncogene || gene.tsg) {
-    info.push({
-      key: 'geneType',
-      element: (
-        <div>
-          <h5>{getGeneTypeSentence(gene.oncogene, gene.tsg)}</h5>
-        </div>
-      ),
-    });
-  }
 
   // highest LoE
   if (
@@ -168,17 +156,6 @@ const GeneInfo: React.FunctionComponent<GeneInfoProps> = props => {
               props.highestFdaLevel
             )}
           </h5>
-        </div>
-      ),
-    });
-  }
-
-  if (gene.geneAliases.length > 0) {
-    info.push({
-      key: 'aliases',
-      element: (
-        <div>
-          <GeneAliasesDescription geneAliases={gene.geneAliases} />
         </div>
       ),
     });

@@ -11,14 +11,20 @@ body,
 }
 
 h1,
-h2 {
+h2,
+.h1,
+.h2 {
   @include font-gotham('bold');
 }
 
 h3,
 h4,
 h5,
-h6 {
+h6,
+.h3,
+.h4,
+.h5,
+.h6 {
   @include font-gotham('medium');
 }
 
