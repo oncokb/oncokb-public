@@ -12,6 +12,11 @@ export type Oncogenicity = {
   counts: number;
 };
 
+export type Pathogenicity = {
+  pathogenicity: string;
+  counts: number;
+};
+
 export interface IOncokbMutationMapperProps extends MutationMapperProps {
   oncogenicities: Oncogenicity[];
 }

@@ -2,9 +2,13 @@ import * as request from "superagent";
 
 type CallbackHandler = (err: any, res ? : request.Response) => void;
 export type AnnotateMutationByGenomicChangeQuery = {
-    'evidenceTypes': Array < "GENE_SUMMARY" | "MUTATION_SUMMARY" | "TUMOR_TYPE_SUMMARY" | "GENE_TUMOR_TYPE_SUMMARY" | "PROGNOSTIC_SUMMARY" | "DIAGNOSTIC_SUMMARY" | "GENE_BACKGROUND" | "ONCOGENIC" | "MUTATION_EFFECT" | "VUS" | "PROGNOSTIC_IMPLICATION" | "DIAGNOSTIC_IMPLICATION" | "STANDARD_THERAPEUTIC_IMPLICATIONS_FOR_DRUG_SENSITIVITY" | "STANDARD_THERAPEUTIC_IMPLICATIONS_FOR_DRUG_RESISTANCE" | "INVESTIGATIONAL_THERAPEUTIC_IMPLICATIONS_DRUG_SENSITIVITY" | "INVESTIGATIONAL_THERAPEUTIC_IMPLICATIONS_DRUG_RESISTANCE" >
+    'alleleState': string
+
+        'evidenceTypes': Array < "GENE_SUMMARY" | "MUTATION_SUMMARY" | "TUMOR_TYPE_SUMMARY" | "GENE_TUMOR_TYPE_SUMMARY" | "PROGNOSTIC_SUMMARY" | "DIAGNOSTIC_SUMMARY" | "GENE_BACKGROUND" | "ONCOGENIC" | "MUTATION_EFFECT" | "VUS" | "PROGNOSTIC_IMPLICATION" | "DIAGNOSTIC_IMPLICATION" | "STANDARD_THERAPEUTIC_IMPLICATIONS_FOR_DRUG_SENSITIVITY" | "STANDARD_THERAPEUTIC_IMPLICATIONS_FOR_DRUG_RESISTANCE" | "INVESTIGATIONAL_THERAPEUTIC_IMPLICATIONS_DRUG_SENSITIVITY" | "INVESTIGATIONAL_THERAPEUTIC_IMPLICATIONS_DRUG_RESISTANCE" | "PATHOGENIC" | "GENOMIC_INDICATOR" | "GENOMIC_INDICATOR_ALLELE_STATE" | "GENE_PENETRANCE" | "GENE_INHERITANCE_MECHANISM" | "GENE_CANCER_RISK" | "VARIANT_PENETRANCE" | "VARIANT_INHERITANCE_MECHANISM" | "VARIANT_CANCER_RISK" >
 
         'genomicLocation': string
+
+        'germline': boolean
 
         'id': string
 
@@ -20,13 +24,17 @@ export type TreatmentDrug = {
 
 };
 export type Query = {
-    'alteration': string
+    'alleleState': string
+
+        'alteration': string
 
         'alterationType': string
 
         'consequence': string
 
         'entrezGeneId': number
+
+        'germline': boolean
 
         'hgvs': string
 
@@ -208,7 +216,7 @@ export type GeneEvidence = {
 
         'evidenceId': number
 
-        'evidenceType': "GENE_SUMMARY" | "MUTATION_SUMMARY" | "TUMOR_TYPE_SUMMARY" | "GENE_TUMOR_TYPE_SUMMARY" | "PROGNOSTIC_SUMMARY" | "DIAGNOSTIC_SUMMARY" | "GENE_BACKGROUND" | "ONCOGENIC" | "MUTATION_EFFECT" | "VUS" | "PROGNOSTIC_IMPLICATION" | "DIAGNOSTIC_IMPLICATION" | "STANDARD_THERAPEUTIC_IMPLICATIONS_FOR_DRUG_SENSITIVITY" | "STANDARD_THERAPEUTIC_IMPLICATIONS_FOR_DRUG_RESISTANCE" | "INVESTIGATIONAL_THERAPEUTIC_IMPLICATIONS_DRUG_SENSITIVITY" | "INVESTIGATIONAL_THERAPEUTIC_IMPLICATIONS_DRUG_RESISTANCE"
+        'evidenceType': "GENE_SUMMARY" | "MUTATION_SUMMARY" | "TUMOR_TYPE_SUMMARY" | "GENE_TUMOR_TYPE_SUMMARY" | "PROGNOSTIC_SUMMARY" | "DIAGNOSTIC_SUMMARY" | "GENE_BACKGROUND" | "ONCOGENIC" | "MUTATION_EFFECT" | "VUS" | "PROGNOSTIC_IMPLICATION" | "DIAGNOSTIC_IMPLICATION" | "STANDARD_THERAPEUTIC_IMPLICATIONS_FOR_DRUG_SENSITIVITY" | "STANDARD_THERAPEUTIC_IMPLICATIONS_FOR_DRUG_RESISTANCE" | "INVESTIGATIONAL_THERAPEUTIC_IMPLICATIONS_DRUG_SENSITIVITY" | "INVESTIGATIONAL_THERAPEUTIC_IMPLICATIONS_DRUG_RESISTANCE" | "PATHOGENIC" | "GENOMIC_INDICATOR" | "GENOMIC_INDICATOR_ALLELE_STATE" | "GENE_PENETRANCE" | "GENE_INHERITANCE_MECHANISM" | "GENE_CANCER_RISK" | "VARIANT_PENETRANCE" | "VARIANT_INHERITANCE_MECHANISM" | "VARIANT_CANCER_RISK"
 
         'gene': Gene
 
@@ -232,7 +240,7 @@ export type Evidence = {
 
         'description': string
 
-        'evidenceType': "GENE_SUMMARY" | "MUTATION_SUMMARY" | "TUMOR_TYPE_SUMMARY" | "GENE_TUMOR_TYPE_SUMMARY" | "PROGNOSTIC_SUMMARY" | "DIAGNOSTIC_SUMMARY" | "GENE_BACKGROUND" | "ONCOGENIC" | "MUTATION_EFFECT" | "VUS" | "PROGNOSTIC_IMPLICATION" | "DIAGNOSTIC_IMPLICATION" | "STANDARD_THERAPEUTIC_IMPLICATIONS_FOR_DRUG_SENSITIVITY" | "STANDARD_THERAPEUTIC_IMPLICATIONS_FOR_DRUG_RESISTANCE" | "INVESTIGATIONAL_THERAPEUTIC_IMPLICATIONS_DRUG_SENSITIVITY" | "INVESTIGATIONAL_THERAPEUTIC_IMPLICATIONS_DRUG_RESISTANCE"
+        'evidenceType': "GENE_SUMMARY" | "MUTATION_SUMMARY" | "TUMOR_TYPE_SUMMARY" | "GENE_TUMOR_TYPE_SUMMARY" | "PROGNOSTIC_SUMMARY" | "DIAGNOSTIC_SUMMARY" | "GENE_BACKGROUND" | "ONCOGENIC" | "MUTATION_EFFECT" | "VUS" | "PROGNOSTIC_IMPLICATION" | "DIAGNOSTIC_IMPLICATION" | "STANDARD_THERAPEUTIC_IMPLICATIONS_FOR_DRUG_SENSITIVITY" | "STANDARD_THERAPEUTIC_IMPLICATIONS_FOR_DRUG_RESISTANCE" | "INVESTIGATIONAL_THERAPEUTIC_IMPLICATIONS_DRUG_SENSITIVITY" | "INVESTIGATIONAL_THERAPEUTIC_IMPLICATIONS_DRUG_RESISTANCE" | "PATHOGENIC" | "GENOMIC_INDICATOR" | "GENOMIC_INDICATOR_ALLELE_STATE" | "GENE_PENETRANCE" | "GENE_INHERITANCE_MECHANISM" | "GENE_CANCER_RISK" | "VARIANT_PENETRANCE" | "VARIANT_INHERITANCE_MECHANISM" | "VARIANT_CANCER_RISK"
 
         'excludedCancerTypes': Array < TumorType >
 
@@ -262,13 +270,17 @@ export type Evidence = {
 
 };
 export type AnnotateStructuralVariantQuery = {
-    'evidenceTypes': Array < "GENE_SUMMARY" | "MUTATION_SUMMARY" | "TUMOR_TYPE_SUMMARY" | "GENE_TUMOR_TYPE_SUMMARY" | "PROGNOSTIC_SUMMARY" | "DIAGNOSTIC_SUMMARY" | "GENE_BACKGROUND" | "ONCOGENIC" | "MUTATION_EFFECT" | "VUS" | "PROGNOSTIC_IMPLICATION" | "DIAGNOSTIC_IMPLICATION" | "STANDARD_THERAPEUTIC_IMPLICATIONS_FOR_DRUG_SENSITIVITY" | "STANDARD_THERAPEUTIC_IMPLICATIONS_FOR_DRUG_RESISTANCE" | "INVESTIGATIONAL_THERAPEUTIC_IMPLICATIONS_DRUG_SENSITIVITY" | "INVESTIGATIONAL_THERAPEUTIC_IMPLICATIONS_DRUG_RESISTANCE" >
+    'alleleState': string
+
+        'evidenceTypes': Array < "GENE_SUMMARY" | "MUTATION_SUMMARY" | "TUMOR_TYPE_SUMMARY" | "GENE_TUMOR_TYPE_SUMMARY" | "PROGNOSTIC_SUMMARY" | "DIAGNOSTIC_SUMMARY" | "GENE_BACKGROUND" | "ONCOGENIC" | "MUTATION_EFFECT" | "VUS" | "PROGNOSTIC_IMPLICATION" | "DIAGNOSTIC_IMPLICATION" | "STANDARD_THERAPEUTIC_IMPLICATIONS_FOR_DRUG_SENSITIVITY" | "STANDARD_THERAPEUTIC_IMPLICATIONS_FOR_DRUG_RESISTANCE" | "INVESTIGATIONAL_THERAPEUTIC_IMPLICATIONS_DRUG_SENSITIVITY" | "INVESTIGATIONAL_THERAPEUTIC_IMPLICATIONS_DRUG_RESISTANCE" | "PATHOGENIC" | "GENOMIC_INDICATOR" | "GENOMIC_INDICATOR_ALLELE_STATE" | "GENE_PENETRANCE" | "GENE_INHERITANCE_MECHANISM" | "GENE_CANCER_RISK" | "VARIANT_PENETRANCE" | "VARIANT_INHERITANCE_MECHANISM" | "VARIANT_CANCER_RISK" >
 
         'functionalFusion': boolean
 
         'geneA': QueryGene
 
         'geneB': QueryGene
+
+        'germline': boolean
 
         'id': string
 
@@ -291,6 +303,8 @@ export type IndicatorQueryResp = {
         'geneExist': boolean
 
         'geneSummary': string
+
+        'germline': GermlineVariant
 
         'highestDiagnosticImplicationLevel': "LEVEL_1" | "LEVEL_2" | "LEVEL_3A" | "LEVEL_3B" | "LEVEL_4" | "LEVEL_R1" | "LEVEL_R2" | "LEVEL_Px1" | "LEVEL_Px2" | "LEVEL_Px3" | "LEVEL_Dx1" | "LEVEL_Dx2" | "LEVEL_Dx3" | "LEVEL_Fda1" | "LEVEL_Fda2" | "LEVEL_Fda3" | "NO"
 
@@ -365,6 +379,26 @@ export type ArticleAbstract = {
     'abstract': string
 
         'link': string
+
+};
+export type GermlineVariant = {
+    'cancerRisk': string
+
+        'clinVarId': string
+
+        'description': string
+
+        'genomicIndicators': Array < string >
+
+        'inheritanceMechanism': string
+
+        'inheritanceMechanismDescription': string
+
+        'pathogenic': string
+
+        'penetrance': string
+
+        'penetranceDescription': string
 
 };
 export type InfoLevel = {
@@ -532,13 +566,17 @@ export type VariantConsequence = {
 
 };
 export type AnnotateMutationByProteinChangeQuery = {
-    'alteration': string
+    'alleleState': string
+
+        'alteration': string
 
         'consequence': string
 
-        'evidenceTypes': Array < "GENE_SUMMARY" | "MUTATION_SUMMARY" | "TUMOR_TYPE_SUMMARY" | "GENE_TUMOR_TYPE_SUMMARY" | "PROGNOSTIC_SUMMARY" | "DIAGNOSTIC_SUMMARY" | "GENE_BACKGROUND" | "ONCOGENIC" | "MUTATION_EFFECT" | "VUS" | "PROGNOSTIC_IMPLICATION" | "DIAGNOSTIC_IMPLICATION" | "STANDARD_THERAPEUTIC_IMPLICATIONS_FOR_DRUG_SENSITIVITY" | "STANDARD_THERAPEUTIC_IMPLICATIONS_FOR_DRUG_RESISTANCE" | "INVESTIGATIONAL_THERAPEUTIC_IMPLICATIONS_DRUG_SENSITIVITY" | "INVESTIGATIONAL_THERAPEUTIC_IMPLICATIONS_DRUG_RESISTANCE" >
+        'evidenceTypes': Array < "GENE_SUMMARY" | "MUTATION_SUMMARY" | "TUMOR_TYPE_SUMMARY" | "GENE_TUMOR_TYPE_SUMMARY" | "PROGNOSTIC_SUMMARY" | "DIAGNOSTIC_SUMMARY" | "GENE_BACKGROUND" | "ONCOGENIC" | "MUTATION_EFFECT" | "VUS" | "PROGNOSTIC_IMPLICATION" | "DIAGNOSTIC_IMPLICATION" | "STANDARD_THERAPEUTIC_IMPLICATIONS_FOR_DRUG_SENSITIVITY" | "STANDARD_THERAPEUTIC_IMPLICATIONS_FOR_DRUG_RESISTANCE" | "INVESTIGATIONAL_THERAPEUTIC_IMPLICATIONS_DRUG_SENSITIVITY" | "INVESTIGATIONAL_THERAPEUTIC_IMPLICATIONS_DRUG_RESISTANCE" | "PATHOGENIC" | "GENOMIC_INDICATOR" | "GENOMIC_INDICATOR_ALLELE_STATE" | "GENE_PENETRANCE" | "GENE_INHERITANCE_MECHANISM" | "GENE_CANCER_RISK" | "VARIANT_PENETRANCE" | "VARIANT_INHERITANCE_MECHANISM" | "VARIANT_CANCER_RISK" >
 
         'gene': QueryGene
+
+        'germline': boolean
 
         'id': string
 
@@ -626,11 +664,15 @@ export type MutationEffectResp = {
 
 };
 export type AnnotateCopyNumberAlterationQuery = {
-    'copyNameAlterationType': "AMPLIFICATION" | "DELETION" | "GAIN" | "LOSS"
+    'alleleState': string
 
-        'evidenceTypes': Array < "GENE_SUMMARY" | "MUTATION_SUMMARY" | "TUMOR_TYPE_SUMMARY" | "GENE_TUMOR_TYPE_SUMMARY" | "PROGNOSTIC_SUMMARY" | "DIAGNOSTIC_SUMMARY" | "GENE_BACKGROUND" | "ONCOGENIC" | "MUTATION_EFFECT" | "VUS" | "PROGNOSTIC_IMPLICATION" | "DIAGNOSTIC_IMPLICATION" | "STANDARD_THERAPEUTIC_IMPLICATIONS_FOR_DRUG_SENSITIVITY" | "STANDARD_THERAPEUTIC_IMPLICATIONS_FOR_DRUG_RESISTANCE" | "INVESTIGATIONAL_THERAPEUTIC_IMPLICATIONS_DRUG_SENSITIVITY" | "INVESTIGATIONAL_THERAPEUTIC_IMPLICATIONS_DRUG_RESISTANCE" >
+        'copyNameAlterationType': "AMPLIFICATION" | "DELETION" | "GAIN" | "LOSS"
+
+        'evidenceTypes': Array < "GENE_SUMMARY" | "MUTATION_SUMMARY" | "TUMOR_TYPE_SUMMARY" | "GENE_TUMOR_TYPE_SUMMARY" | "PROGNOSTIC_SUMMARY" | "DIAGNOSTIC_SUMMARY" | "GENE_BACKGROUND" | "ONCOGENIC" | "MUTATION_EFFECT" | "VUS" | "PROGNOSTIC_IMPLICATION" | "DIAGNOSTIC_IMPLICATION" | "STANDARD_THERAPEUTIC_IMPLICATIONS_FOR_DRUG_SENSITIVITY" | "STANDARD_THERAPEUTIC_IMPLICATIONS_FOR_DRUG_RESISTANCE" | "INVESTIGATIONAL_THERAPEUTIC_IMPLICATIONS_DRUG_SENSITIVITY" | "INVESTIGATIONAL_THERAPEUTIC_IMPLICATIONS_DRUG_RESISTANCE" | "PATHOGENIC" | "GENOMIC_INDICATOR" | "GENOMIC_INDICATOR_ALLELE_STATE" | "GENE_PENETRANCE" | "GENE_INHERITANCE_MECHANISM" | "GENE_CANCER_RISK" | "VARIANT_PENETRANCE" | "VARIANT_INHERITANCE_MECHANISM" | "VARIANT_CANCER_RISK" >
 
         'gene': QueryGene
+
+        'germline': boolean
 
         'id': string
 
@@ -640,7 +682,11 @@ export type AnnotateCopyNumberAlterationQuery = {
 
 };
 export type AnnotateMutationByHGVSgQuery = {
-    'evidenceTypes': Array < "GENE_SUMMARY" | "MUTATION_SUMMARY" | "TUMOR_TYPE_SUMMARY" | "GENE_TUMOR_TYPE_SUMMARY" | "PROGNOSTIC_SUMMARY" | "DIAGNOSTIC_SUMMARY" | "GENE_BACKGROUND" | "ONCOGENIC" | "MUTATION_EFFECT" | "VUS" | "PROGNOSTIC_IMPLICATION" | "DIAGNOSTIC_IMPLICATION" | "STANDARD_THERAPEUTIC_IMPLICATIONS_FOR_DRUG_SENSITIVITY" | "STANDARD_THERAPEUTIC_IMPLICATIONS_FOR_DRUG_RESISTANCE" | "INVESTIGATIONAL_THERAPEUTIC_IMPLICATIONS_DRUG_SENSITIVITY" | "INVESTIGATIONAL_THERAPEUTIC_IMPLICATIONS_DRUG_RESISTANCE" >
+    'alleleState': string
+
+        'evidenceTypes': Array < "GENE_SUMMARY" | "MUTATION_SUMMARY" | "TUMOR_TYPE_SUMMARY" | "GENE_TUMOR_TYPE_SUMMARY" | "PROGNOSTIC_SUMMARY" | "DIAGNOSTIC_SUMMARY" | "GENE_BACKGROUND" | "ONCOGENIC" | "MUTATION_EFFECT" | "VUS" | "PROGNOSTIC_IMPLICATION" | "DIAGNOSTIC_IMPLICATION" | "STANDARD_THERAPEUTIC_IMPLICATIONS_FOR_DRUG_SENSITIVITY" | "STANDARD_THERAPEUTIC_IMPLICATIONS_FOR_DRUG_RESISTANCE" | "INVESTIGATIONAL_THERAPEUTIC_IMPLICATIONS_DRUG_SENSITIVITY" | "INVESTIGATIONAL_THERAPEUTIC_IMPLICATIONS_DRUG_RESISTANCE" | "PATHOGENIC" | "GENOMIC_INDICATOR" | "GENOMIC_INDICATOR_ALLELE_STATE" | "GENE_PENETRANCE" | "GENE_INHERITANCE_MECHANISM" | "GENE_CANCER_RISK" | "VARIANT_PENETRANCE" | "VARIANT_INHERITANCE_MECHANISM" | "VARIANT_CANCER_RISK" >
+
+        'germline': boolean
 
         'hgvsg': string
 
@@ -728,6 +774,8 @@ export default class OncoKbAPI {
         'copyNameAlterationType': "AMPLIFICATION" | "DELETION" | "GAIN" | "LOSS",
         'referenceGenome' ? : string,
         'tumorType' ? : string,
+        'germline' ? : boolean,
+        'alleleState' ? : string,
         'evidenceType' ? : string,
         $queryParameters ? : any
     }): string {
@@ -753,6 +801,14 @@ export default class OncoKbAPI {
             queryParameters['tumorType'] = parameters['tumorType'];
         }
 
+        if (parameters['germline'] !== undefined) {
+            queryParameters['germline'] = parameters['germline'];
+        }
+
+        if (parameters['alleleState'] !== undefined) {
+            queryParameters['alleleState'] = parameters['alleleState'];
+        }
+
         if (parameters['evidenceType'] !== undefined) {
             queryParameters['evidenceType'] = parameters['evidenceType'];
         }
@@ -776,6 +832,8 @@ export default class OncoKbAPI {
      * @param {string} copyNameAlterationType - Copy number alteration type
      * @param {string} referenceGenome - Reference genome, either GRCh37 or GRCh38. The default is GRCh37
      * @param {string} tumorType - OncoTree(http://oncotree.info) tumor type name. The field supports OncoTree Code, OncoTree Name and OncoTree Main type. Example: Melanoma
+     * @param {boolean} germline - Whether is germline variant
+     * @param {string} alleleState - Germline variant allele state(monoallelic vs biallelic)
      * @param {string} evidenceType - Evidence type to compute. This could help to improve the performance if you only look for sub-content. Example: ONCOGENIC. All available evidence type are GENE_SUMMARY, MUTATION_SUMMARY, TUMOR_TYPE_SUMMARY, PROGNOSTIC_SUMMARY, DIAGNOSTIC_SUMMARY, ONCOGENIC, MUTATION_EFFECT, PROGNOSTIC_IMPLICATION, DIAGNOSTIC_IMPLICATION, STANDARD_THERAPEUTIC_IMPLICATIONS_FOR_DRUG_SENSITIVITY, STANDARD_THERAPEUTIC_IMPLICATIONS_FOR_DRUG_RESISTANCE, INVESTIGATIONAL_THERAPEUTIC_IMPLICATIONS_DRUG_SENSITIVITY, INVESTIGATIONAL_THERAPEUTIC_IMPLICATIONS_DRUG_RESISTANCE. For multiple evidence types query, use ',' as separator.
      */
     annotateCopyNumberAlterationsGetUsingGETWithHttpInfo(parameters: {
@@ -784,6 +842,8 @@ export default class OncoKbAPI {
         'copyNameAlterationType': "AMPLIFICATION" | "DELETION" | "GAIN" | "LOSS",
         'referenceGenome' ? : string,
         'tumorType' ? : string,
+        'germline' ? : boolean,
+        'alleleState' ? : string,
         'evidenceType' ? : string,
         $queryParameters ? : any,
             $domain ? : string
@@ -825,6 +885,14 @@ export default class OncoKbAPI {
                 queryParameters['tumorType'] = parameters['tumorType'];
             }
 
+            if (parameters['germline'] !== undefined) {
+                queryParameters['germline'] = parameters['germline'];
+            }
+
+            if (parameters['alleleState'] !== undefined) {
+                queryParameters['alleleState'] = parameters['alleleState'];
+            }
+
             if (parameters['evidenceType'] !== undefined) {
                 queryParameters['evidenceType'] = parameters['evidenceType'];
             }
@@ -850,6 +918,8 @@ export default class OncoKbAPI {
      * @param {string} copyNameAlterationType - Copy number alteration type
      * @param {string} referenceGenome - Reference genome, either GRCh37 or GRCh38. The default is GRCh37
      * @param {string} tumorType - OncoTree(http://oncotree.info) tumor type name. The field supports OncoTree Code, OncoTree Name and OncoTree Main type. Example: Melanoma
+     * @param {boolean} germline - Whether is germline variant
+     * @param {string} alleleState - Germline variant allele state(monoallelic vs biallelic)
      * @param {string} evidenceType - Evidence type to compute. This could help to improve the performance if you only look for sub-content. Example: ONCOGENIC. All available evidence type are GENE_SUMMARY, MUTATION_SUMMARY, TUMOR_TYPE_SUMMARY, PROGNOSTIC_SUMMARY, DIAGNOSTIC_SUMMARY, ONCOGENIC, MUTATION_EFFECT, PROGNOSTIC_IMPLICATION, DIAGNOSTIC_IMPLICATION, STANDARD_THERAPEUTIC_IMPLICATIONS_FOR_DRUG_SENSITIVITY, STANDARD_THERAPEUTIC_IMPLICATIONS_FOR_DRUG_RESISTANCE, INVESTIGATIONAL_THERAPEUTIC_IMPLICATIONS_DRUG_SENSITIVITY, INVESTIGATIONAL_THERAPEUTIC_IMPLICATIONS_DRUG_RESISTANCE. For multiple evidence types query, use ',' as separator.
      */
     annotateCopyNumberAlterationsGetUsingGET(parameters: {
@@ -858,6 +928,8 @@ export default class OncoKbAPI {
         'copyNameAlterationType': "AMPLIFICATION" | "DELETION" | "GAIN" | "LOSS",
         'referenceGenome' ? : string,
         'tumorType' ? : string,
+        'germline' ? : boolean,
+        'alleleState' ? : string,
         'evidenceType' ? : string,
         $queryParameters ? : any,
             $domain ? : string
@@ -946,6 +1018,8 @@ export default class OncoKbAPI {
     annotateMutationsByGenomicChangeGetUsingGETURL(parameters: {
         'genomicLocation': string,
         'referenceGenome' ? : string,
+        'germline' ? : boolean,
+        'alleleState' ? : string,
         'tumorType' ? : string,
         'evidenceType' ? : string,
         $queryParameters ? : any
@@ -958,6 +1032,14 @@ export default class OncoKbAPI {
 
         if (parameters['referenceGenome'] !== undefined) {
             queryParameters['referenceGenome'] = parameters['referenceGenome'];
+        }
+
+        if (parameters['germline'] !== undefined) {
+            queryParameters['germline'] = parameters['germline'];
+        }
+
+        if (parameters['alleleState'] !== undefined) {
+            queryParameters['alleleState'] = parameters['alleleState'];
         }
 
         if (parameters['tumorType'] !== undefined) {
@@ -984,12 +1066,16 @@ export default class OncoKbAPI {
      * @name OncoKbAPI#annotateMutationsByGenomicChangeGetUsingGET
      * @param {string} genomicLocation - Genomic location. Example: 7,140453136,140453136,A,T
      * @param {string} referenceGenome - Reference genome, either GRCh37 or GRCh38. The default is GRCh37
+     * @param {boolean} germline - Whether is germline variant
+     * @param {string} alleleState - Germline variant allele state(monoallelic vs biallelic)
      * @param {string} tumorType - OncoTree(http://oncotree.info) tumor type name. The field supports OncoTree Code, OncoTree Name and OncoTree Main type. Example: Melanoma
      * @param {string} evidenceType - Evidence type to compute. This could help to improve the performance if you only look for sub-content. Example: ONCOGENIC. All available evidence type are GENE_SUMMARY, MUTATION_SUMMARY, TUMOR_TYPE_SUMMARY, PROGNOSTIC_SUMMARY, DIAGNOSTIC_SUMMARY, ONCOGENIC, MUTATION_EFFECT, PROGNOSTIC_IMPLICATION, DIAGNOSTIC_IMPLICATION, STANDARD_THERAPEUTIC_IMPLICATIONS_FOR_DRUG_SENSITIVITY, STANDARD_THERAPEUTIC_IMPLICATIONS_FOR_DRUG_RESISTANCE, INVESTIGATIONAL_THERAPEUTIC_IMPLICATIONS_DRUG_SENSITIVITY, INVESTIGATIONAL_THERAPEUTIC_IMPLICATIONS_DRUG_RESISTANCE. For multiple evidence types query, use ',' as separator.
      */
     annotateMutationsByGenomicChangeGetUsingGETWithHttpInfo(parameters: {
         'genomicLocation': string,
         'referenceGenome' ? : string,
+        'germline' ? : boolean,
+        'alleleState' ? : string,
         'tumorType' ? : string,
         'evidenceType' ? : string,
         $queryParameters ? : any,
@@ -1020,6 +1106,14 @@ export default class OncoKbAPI {
                 queryParameters['referenceGenome'] = parameters['referenceGenome'];
             }
 
+            if (parameters['germline'] !== undefined) {
+                queryParameters['germline'] = parameters['germline'];
+            }
+
+            if (parameters['alleleState'] !== undefined) {
+                queryParameters['alleleState'] = parameters['alleleState'];
+            }
+
             if (parameters['tumorType'] !== undefined) {
                 queryParameters['tumorType'] = parameters['tumorType'];
             }
@@ -1046,12 +1140,16 @@ export default class OncoKbAPI {
      * @name OncoKbAPI#annotateMutationsByGenomicChangeGetUsingGET
      * @param {string} genomicLocation - Genomic location. Example: 7,140453136,140453136,A,T
      * @param {string} referenceGenome - Reference genome, either GRCh37 or GRCh38. The default is GRCh37
+     * @param {boolean} germline - Whether is germline variant
+     * @param {string} alleleState - Germline variant allele state(monoallelic vs biallelic)
      * @param {string} tumorType - OncoTree(http://oncotree.info) tumor type name. The field supports OncoTree Code, OncoTree Name and OncoTree Main type. Example: Melanoma
      * @param {string} evidenceType - Evidence type to compute. This could help to improve the performance if you only look for sub-content. Example: ONCOGENIC. All available evidence type are GENE_SUMMARY, MUTATION_SUMMARY, TUMOR_TYPE_SUMMARY, PROGNOSTIC_SUMMARY, DIAGNOSTIC_SUMMARY, ONCOGENIC, MUTATION_EFFECT, PROGNOSTIC_IMPLICATION, DIAGNOSTIC_IMPLICATION, STANDARD_THERAPEUTIC_IMPLICATIONS_FOR_DRUG_SENSITIVITY, STANDARD_THERAPEUTIC_IMPLICATIONS_FOR_DRUG_RESISTANCE, INVESTIGATIONAL_THERAPEUTIC_IMPLICATIONS_DRUG_SENSITIVITY, INVESTIGATIONAL_THERAPEUTIC_IMPLICATIONS_DRUG_RESISTANCE. For multiple evidence types query, use ',' as separator.
      */
     annotateMutationsByGenomicChangeGetUsingGET(parameters: {
         'genomicLocation': string,
         'referenceGenome' ? : string,
+        'germline' ? : boolean,
+        'alleleState' ? : string,
         'tumorType' ? : string,
         'evidenceType' ? : string,
         $queryParameters ? : any,
@@ -1142,6 +1240,8 @@ export default class OncoKbAPI {
         'hgvsg': string,
         'referenceGenome' ? : string,
         'tumorType' ? : string,
+        'germline' ? : boolean,
+        'alleleState' ? : string,
         'evidenceType' ? : string,
         $queryParameters ? : any
     }): string {
@@ -1157,6 +1257,14 @@ export default class OncoKbAPI {
 
         if (parameters['tumorType'] !== undefined) {
             queryParameters['tumorType'] = parameters['tumorType'];
+        }
+
+        if (parameters['germline'] !== undefined) {
+            queryParameters['germline'] = parameters['germline'];
+        }
+
+        if (parameters['alleleState'] !== undefined) {
+            queryParameters['alleleState'] = parameters['alleleState'];
         }
 
         if (parameters['evidenceType'] !== undefined) {
@@ -1180,12 +1288,16 @@ export default class OncoKbAPI {
      * @param {string} hgvsg - HGVS genomic format. Example: 7:g.140453136A>T
      * @param {string} referenceGenome - Reference genome, either GRCh37 or GRCh38. The default is GRCh37
      * @param {string} tumorType - OncoTree(http://oncotree.info) tumor type name. The field supports OncoTree Code, OncoTree Name and OncoTree Main type. Example: Melanoma
+     * @param {boolean} germline - Whether is germline variant
+     * @param {string} alleleState - Germline variant allele state(monoallelic vs biallelic)
      * @param {string} evidenceType - Evidence type to compute. This could help to improve the performance if you only look for sub-content. Example: ONCOGENIC. All available evidence type are GENE_SUMMARY, MUTATION_SUMMARY, TUMOR_TYPE_SUMMARY, PROGNOSTIC_SUMMARY, DIAGNOSTIC_SUMMARY, ONCOGENIC, MUTATION_EFFECT, PROGNOSTIC_IMPLICATION, DIAGNOSTIC_IMPLICATION, STANDARD_THERAPEUTIC_IMPLICATIONS_FOR_DRUG_SENSITIVITY, STANDARD_THERAPEUTIC_IMPLICATIONS_FOR_DRUG_RESISTANCE, INVESTIGATIONAL_THERAPEUTIC_IMPLICATIONS_DRUG_SENSITIVITY, INVESTIGATIONAL_THERAPEUTIC_IMPLICATIONS_DRUG_RESISTANCE. For multiple evidence types query, use ',' as separator.
      */
     annotateMutationsByHGVSgGetUsingGETWithHttpInfo(parameters: {
         'hgvsg': string,
         'referenceGenome' ? : string,
         'tumorType' ? : string,
+        'germline' ? : boolean,
+        'alleleState' ? : string,
         'evidenceType' ? : string,
         $queryParameters ? : any,
         $domain ? : string
@@ -1219,6 +1331,14 @@ export default class OncoKbAPI {
                 queryParameters['tumorType'] = parameters['tumorType'];
             }
 
+            if (parameters['germline'] !== undefined) {
+                queryParameters['germline'] = parameters['germline'];
+            }
+
+            if (parameters['alleleState'] !== undefined) {
+                queryParameters['alleleState'] = parameters['alleleState'];
+            }
+
             if (parameters['evidenceType'] !== undefined) {
                 queryParameters['evidenceType'] = parameters['evidenceType'];
             }
@@ -1242,12 +1362,16 @@ export default class OncoKbAPI {
      * @param {string} hgvsg - HGVS genomic format. Example: 7:g.140453136A>T
      * @param {string} referenceGenome - Reference genome, either GRCh37 or GRCh38. The default is GRCh37
      * @param {string} tumorType - OncoTree(http://oncotree.info) tumor type name. The field supports OncoTree Code, OncoTree Name and OncoTree Main type. Example: Melanoma
+     * @param {boolean} germline - Whether is germline variant
+     * @param {string} alleleState - Germline variant allele state(monoallelic vs biallelic)
      * @param {string} evidenceType - Evidence type to compute. This could help to improve the performance if you only look for sub-content. Example: ONCOGENIC. All available evidence type are GENE_SUMMARY, MUTATION_SUMMARY, TUMOR_TYPE_SUMMARY, PROGNOSTIC_SUMMARY, DIAGNOSTIC_SUMMARY, ONCOGENIC, MUTATION_EFFECT, PROGNOSTIC_IMPLICATION, DIAGNOSTIC_IMPLICATION, STANDARD_THERAPEUTIC_IMPLICATIONS_FOR_DRUG_SENSITIVITY, STANDARD_THERAPEUTIC_IMPLICATIONS_FOR_DRUG_RESISTANCE, INVESTIGATIONAL_THERAPEUTIC_IMPLICATIONS_DRUG_SENSITIVITY, INVESTIGATIONAL_THERAPEUTIC_IMPLICATIONS_DRUG_RESISTANCE. For multiple evidence types query, use ',' as separator.
      */
     annotateMutationsByHGVSgGetUsingGET(parameters: {
         'hgvsg': string,
         'referenceGenome' ? : string,
         'tumorType' ? : string,
+        'germline' ? : boolean,
+        'alleleState' ? : string,
         'evidenceType' ? : string,
         $queryParameters ? : any,
         $domain ? : string
@@ -1341,6 +1465,8 @@ export default class OncoKbAPI {
         'consequence' ? : "feature_truncation" | "frameshift_variant" | "inframe_deletion" | "inframe_insertion" | "start_lost" | "missense_variant" | "splice_region_variant" | "stop_gained" | "synonymous_variant" | "intron_variant",
         'proteinStart' ? : number,
         'proteinEnd' ? : number,
+        'isGermline' ? : boolean,
+        'alleleState' ? : string,
         'tumorType' ? : string,
         'evidenceType' ? : string,
         $queryParameters ? : any
@@ -1375,6 +1501,14 @@ export default class OncoKbAPI {
             queryParameters['proteinEnd'] = parameters['proteinEnd'];
         }
 
+        if (parameters['isGermline'] !== undefined) {
+            queryParameters['isGermline'] = parameters['isGermline'];
+        }
+
+        if (parameters['alleleState'] !== undefined) {
+            queryParameters['alleleState'] = parameters['alleleState'];
+        }
+
         if (parameters['tumorType'] !== undefined) {
             queryParameters['tumorType'] = parameters['tumorType'];
         }
@@ -1404,6 +1538,8 @@ export default class OncoKbAPI {
      * @param {string} consequence - Consequence. Exacmple: missense_variant
      * @param {integer} proteinStart - Protein Start. Example: 600
      * @param {integer} proteinEnd - Protein End. Example: 600
+     * @param {boolean} isGermline - Whether is germline variant
+     * @param {string} alleleState - Germline variant allele state(monoallelic vs biallelic)
      * @param {string} tumorType - OncoTree(http://oncotree.info) tumor type name. The field supports OncoTree Code, OncoTree Name and OncoTree Main type. Example: Melanoma
      * @param {string} evidenceType - Evidence type to compute. This could help to improve the performance if you only look for sub-content. Example: ONCOGENIC. All available evidence type are GENE_SUMMARY, MUTATION_SUMMARY, TUMOR_TYPE_SUMMARY, PROGNOSTIC_SUMMARY, DIAGNOSTIC_SUMMARY, ONCOGENIC, MUTATION_EFFECT, PROGNOSTIC_IMPLICATION, DIAGNOSTIC_IMPLICATION, STANDARD_THERAPEUTIC_IMPLICATIONS_FOR_DRUG_SENSITIVITY, STANDARD_THERAPEUTIC_IMPLICATIONS_FOR_DRUG_RESISTANCE, INVESTIGATIONAL_THERAPEUTIC_IMPLICATIONS_DRUG_SENSITIVITY, INVESTIGATIONAL_THERAPEUTIC_IMPLICATIONS_DRUG_RESISTANCE. For multiple evidence types query, use ',' as separator.
      */
@@ -1415,6 +1551,8 @@ export default class OncoKbAPI {
         'consequence' ? : "feature_truncation" | "frameshift_variant" | "inframe_deletion" | "inframe_insertion" | "start_lost" | "missense_variant" | "splice_region_variant" | "stop_gained" | "synonymous_variant" | "intron_variant",
         'proteinStart' ? : number,
         'proteinEnd' ? : number,
+        'isGermline' ? : boolean,
+        'alleleState' ? : string,
         'tumorType' ? : string,
         'evidenceType' ? : string,
         $queryParameters ? : any,
@@ -1460,6 +1598,14 @@ export default class OncoKbAPI {
                 queryParameters['proteinEnd'] = parameters['proteinEnd'];
             }
 
+            if (parameters['isGermline'] !== undefined) {
+                queryParameters['isGermline'] = parameters['isGermline'];
+            }
+
+            if (parameters['alleleState'] !== undefined) {
+                queryParameters['alleleState'] = parameters['alleleState'];
+            }
+
             if (parameters['tumorType'] !== undefined) {
                 queryParameters['tumorType'] = parameters['tumorType'];
             }
@@ -1491,6 +1637,8 @@ export default class OncoKbAPI {
      * @param {string} consequence - Consequence. Exacmple: missense_variant
      * @param {integer} proteinStart - Protein Start. Example: 600
      * @param {integer} proteinEnd - Protein End. Example: 600
+     * @param {boolean} isGermline - Whether is germline variant
+     * @param {string} alleleState - Germline variant allele state(monoallelic vs biallelic)
      * @param {string} tumorType - OncoTree(http://oncotree.info) tumor type name. The field supports OncoTree Code, OncoTree Name and OncoTree Main type. Example: Melanoma
      * @param {string} evidenceType - Evidence type to compute. This could help to improve the performance if you only look for sub-content. Example: ONCOGENIC. All available evidence type are GENE_SUMMARY, MUTATION_SUMMARY, TUMOR_TYPE_SUMMARY, PROGNOSTIC_SUMMARY, DIAGNOSTIC_SUMMARY, ONCOGENIC, MUTATION_EFFECT, PROGNOSTIC_IMPLICATION, DIAGNOSTIC_IMPLICATION, STANDARD_THERAPEUTIC_IMPLICATIONS_FOR_DRUG_SENSITIVITY, STANDARD_THERAPEUTIC_IMPLICATIONS_FOR_DRUG_RESISTANCE, INVESTIGATIONAL_THERAPEUTIC_IMPLICATIONS_DRUG_SENSITIVITY, INVESTIGATIONAL_THERAPEUTIC_IMPLICATIONS_DRUG_RESISTANCE. For multiple evidence types query, use ',' as separator.
      */
@@ -1502,6 +1650,8 @@ export default class OncoKbAPI {
         'consequence' ? : "feature_truncation" | "frameshift_variant" | "inframe_deletion" | "inframe_insertion" | "start_lost" | "missense_variant" | "splice_region_variant" | "stop_gained" | "synonymous_variant" | "intron_variant",
         'proteinStart' ? : number,
         'proteinEnd' ? : number,
+        'isGermline' ? : boolean,
+        'alleleState' ? : string,
         'tumorType' ? : string,
         'evidenceType' ? : string,
         $queryParameters ? : any,
@@ -1595,6 +1745,8 @@ export default class OncoKbAPI {
         'entrezGeneIdB' ? : number,
         'structuralVariantType': "DELETION" | "TRANSLOCATION" | "DUPLICATION" | "INSERTION" | "INVERSION" | "FUSION" | "UNKNOWN",
         'isFunctionalFusion': boolean,
+        'germline' ? : boolean,
+        'alleleState' ? : string,
         'referenceGenome' ? : string,
         'tumorType' ? : string,
         'evidenceType' ? : string,
@@ -1624,6 +1776,14 @@ export default class OncoKbAPI {
 
         if (parameters['isFunctionalFusion'] !== undefined) {
             queryParameters['isFunctionalFusion'] = parameters['isFunctionalFusion'];
+        }
+
+        if (parameters['germline'] !== undefined) {
+            queryParameters['germline'] = parameters['germline'];
+        }
+
+        if (parameters['alleleState'] !== undefined) {
+            queryParameters['alleleState'] = parameters['alleleState'];
         }
 
         if (parameters['referenceGenome'] !== undefined) {
@@ -1658,6 +1818,8 @@ export default class OncoKbAPI {
      * @param {integer} entrezGeneIdB - The entrez gene ID B. (Higher priority than hugoSymbolB) Example: 613
      * @param {string} structuralVariantType - Structural variant type
      * @param {boolean} isFunctionalFusion - Whether is functional fusion
+     * @param {boolean} germline - Whether is germline variant
+     * @param {string} alleleState - Germline variant allele state(monoallelic vs biallelic)
      * @param {string} referenceGenome - Reference genome, either GRCh37 or GRCh38. The default is GRCh37
      * @param {string} tumorType - OncoTree(http://oncotree.info) tumor type name. The field supports OncoTree Code, OncoTree Name and OncoTree Main type. Example: Melanoma
      * @param {string} evidenceType - Evidence type to compute. This could help to improve the performance if you only look for sub-content. Example: ONCOGENIC. All available evidence type are GENE_SUMMARY, MUTATION_SUMMARY, TUMOR_TYPE_SUMMARY, PROGNOSTIC_SUMMARY, DIAGNOSTIC_SUMMARY, ONCOGENIC, MUTATION_EFFECT, PROGNOSTIC_IMPLICATION, DIAGNOSTIC_IMPLICATION, STANDARD_THERAPEUTIC_IMPLICATIONS_FOR_DRUG_SENSITIVITY, STANDARD_THERAPEUTIC_IMPLICATIONS_FOR_DRUG_RESISTANCE, INVESTIGATIONAL_THERAPEUTIC_IMPLICATIONS_DRUG_SENSITIVITY, INVESTIGATIONAL_THERAPEUTIC_IMPLICATIONS_DRUG_RESISTANCE. For multiple evidence types query, use ',' as separator.
@@ -1669,6 +1831,8 @@ export default class OncoKbAPI {
         'entrezGeneIdB' ? : number,
         'structuralVariantType': "DELETION" | "TRANSLOCATION" | "DUPLICATION" | "INSERTION" | "INVERSION" | "FUSION" | "UNKNOWN",
         'isFunctionalFusion': boolean,
+        'germline' ? : boolean,
+        'alleleState' ? : string,
         'referenceGenome' ? : string,
         'tumorType' ? : string,
         'evidenceType' ? : string,
@@ -1721,6 +1885,14 @@ export default class OncoKbAPI {
                 return;
             }
 
+            if (parameters['germline'] !== undefined) {
+                queryParameters['germline'] = parameters['germline'];
+            }
+
+            if (parameters['alleleState'] !== undefined) {
+                queryParameters['alleleState'] = parameters['alleleState'];
+            }
+
             if (parameters['referenceGenome'] !== undefined) {
                 queryParameters['referenceGenome'] = parameters['referenceGenome'];
             }
@@ -1755,6 +1927,8 @@ export default class OncoKbAPI {
      * @param {integer} entrezGeneIdB - The entrez gene ID B. (Higher priority than hugoSymbolB) Example: 613
      * @param {string} structuralVariantType - Structural variant type
      * @param {boolean} isFunctionalFusion - Whether is functional fusion
+     * @param {boolean} germline - Whether is germline variant
+     * @param {string} alleleState - Germline variant allele state(monoallelic vs biallelic)
      * @param {string} referenceGenome - Reference genome, either GRCh37 or GRCh38. The default is GRCh37
      * @param {string} tumorType - OncoTree(http://oncotree.info) tumor type name. The field supports OncoTree Code, OncoTree Name and OncoTree Main type. Example: Melanoma
      * @param {string} evidenceType - Evidence type to compute. This could help to improve the performance if you only look for sub-content. Example: ONCOGENIC. All available evidence type are GENE_SUMMARY, MUTATION_SUMMARY, TUMOR_TYPE_SUMMARY, PROGNOSTIC_SUMMARY, DIAGNOSTIC_SUMMARY, ONCOGENIC, MUTATION_EFFECT, PROGNOSTIC_IMPLICATION, DIAGNOSTIC_IMPLICATION, STANDARD_THERAPEUTIC_IMPLICATIONS_FOR_DRUG_SENSITIVITY, STANDARD_THERAPEUTIC_IMPLICATIONS_FOR_DRUG_RESISTANCE, INVESTIGATIONAL_THERAPEUTIC_IMPLICATIONS_DRUG_SENSITIVITY, INVESTIGATIONAL_THERAPEUTIC_IMPLICATIONS_DRUG_RESISTANCE. For multiple evidence types query, use ',' as separator.
@@ -1766,6 +1940,8 @@ export default class OncoKbAPI {
         'entrezGeneIdB' ? : number,
         'structuralVariantType': "DELETION" | "TRANSLOCATION" | "DUPLICATION" | "INSERTION" | "INVERSION" | "FUSION" | "UNKNOWN",
         'isFunctionalFusion': boolean,
+        'germline' ? : boolean,
+        'alleleState' ? : string,
         'referenceGenome' ? : string,
         'tumorType' ? : string,
         'evidenceType' ? : string,
@@ -2199,6 +2375,7 @@ export default class OncoKbAPI {
         'levelOfEvidence' ? : string,
         'evidenceTypes' ? : string,
         'fields' ? : string,
+        'germline' ? : boolean,
         $queryParameters ? : any
     }): string {
         let queryParameters: any = {};
@@ -2247,6 +2424,10 @@ export default class OncoKbAPI {
             queryParameters['fields'] = parameters['fields'];
         }
 
+        if (parameters['germline'] !== undefined) {
+            queryParameters['germline'] = parameters['germline'];
+        }
+
         if (parameters.$queryParameters) {
             Object.keys(parameters.$queryParameters).forEach(function(parameterName) {
                 var parameter = parameters.$queryParameters[parameterName];
@@ -2272,6 +2453,7 @@ export default class OncoKbAPI {
      * @param {string} levelOfEvidence - Separate by comma. LEVEL_1, LEVEL_2A, LEVEL_2B, LEVEL_3A, LEVEL_3B, LEVEL_4, LEVEL_R1, LEVEL_R2, LEVEL_R3
      * @param {string} evidenceTypes - Separate by comma. Evidence type includes GENE_SUMMARY, GENE_BACKGROUND, MUTATION_SUMMARY, ONCOGENIC, MUTATION_EFFECT, VUS, PROGNOSTIC_IMPLICATION, DIAGNOSTIC_IMPLICATION, TUMOR_TYPE_SUMMARY, DIAGNOSTIC_SUMMARY, PROGNOSTIC_SUMMARY, STANDARD_THERAPEUTIC_IMPLICATIONS_FOR_DRUG_SENSITIVITY, STANDARD_THERAPEUTIC_IMPLICATIONS_FOR_DRUG_RESISTANCE, INVESTIGATIONAL_THERAPEUTIC_IMPLICATIONS_DRUG_SENSITIVITY, INVESTIGATIONAL_THERAPEUTIC_IMPLICATIONS_DRUG_RESISTANCE
      * @param {string} fields - The fields to be returned.
+     * @param {boolean} germline - false
      */
     evidencesLookupGetUsingGETWithHttpInfo(parameters: {
         'entrezGeneId' ? : number,
@@ -2285,6 +2467,7 @@ export default class OncoKbAPI {
         'levelOfEvidence' ? : string,
         'evidenceTypes' ? : string,
         'fields' ? : string,
+        'germline' ? : boolean,
         $queryParameters ? : any,
             $domain ? : string
     }): Promise < request.Response > {
@@ -2344,6 +2527,10 @@ export default class OncoKbAPI {
                 queryParameters['fields'] = parameters['fields'];
             }
 
+            if (parameters['germline'] !== undefined) {
+                queryParameters['germline'] = parameters['germline'];
+            }
+
             if (parameters.$queryParameters) {
                 Object.keys(parameters.$queryParameters).forEach(function(parameterName) {
                     var parameter = parameters.$queryParameters[parameterName];
@@ -2371,6 +2558,7 @@ export default class OncoKbAPI {
      * @param {string} levelOfEvidence - Separate by comma. LEVEL_1, LEVEL_2A, LEVEL_2B, LEVEL_3A, LEVEL_3B, LEVEL_4, LEVEL_R1, LEVEL_R2, LEVEL_R3
      * @param {string} evidenceTypes - Separate by comma. Evidence type includes GENE_SUMMARY, GENE_BACKGROUND, MUTATION_SUMMARY, ONCOGENIC, MUTATION_EFFECT, VUS, PROGNOSTIC_IMPLICATION, DIAGNOSTIC_IMPLICATION, TUMOR_TYPE_SUMMARY, DIAGNOSTIC_SUMMARY, PROGNOSTIC_SUMMARY, STANDARD_THERAPEUTIC_IMPLICATIONS_FOR_DRUG_SENSITIVITY, STANDARD_THERAPEUTIC_IMPLICATIONS_FOR_DRUG_RESISTANCE, INVESTIGATIONAL_THERAPEUTIC_IMPLICATIONS_DRUG_SENSITIVITY, INVESTIGATIONAL_THERAPEUTIC_IMPLICATIONS_DRUG_RESISTANCE
      * @param {string} fields - The fields to be returned.
+     * @param {boolean} germline - false
      */
     evidencesLookupGetUsingGET(parameters: {
             'entrezGeneId' ? : number,
@@ -2384,6 +2572,7 @@ export default class OncoKbAPI {
             'levelOfEvidence' ? : string,
             'evidenceTypes' ? : string,
             'fields' ? : string,
+            'germline' ? : boolean,
             $queryParameters ? : any,
                 $domain ? : string
         }): Promise < Array < Evidence >

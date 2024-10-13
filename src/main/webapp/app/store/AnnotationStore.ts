@@ -39,9 +39,16 @@ import {
   getCancerTypeNameFromOncoTreeType,
   isOncogenic,
   shortenOncogenicity,
+  shortenPathogenicity,
 } from 'app/shared/utils/Utils';
-import { oncogenicitySortMethod } from 'app/shared/utils/ReactTableUtils';
-import { Oncogenicity } from 'app/components/oncokbMutationMapper/OncokbMutationMapper';
+import {
+  oncogenicitySortMethod,
+  pathogenicitySortMethod,
+} from 'app/shared/utils/ReactTableUtils';
+import {
+  Oncogenicity,
+  Pathogenicity,
+} from 'app/components/oncokbMutationMapper/OncokbMutationMapper';
 import { OncokbMutation } from 'app/components/oncokbMutationMapper/OncokbMutation';
 import {
   applyCancerTypeFilter,
@@ -62,6 +69,7 @@ import {
 
 export interface IAnnotationStore {
   type: AnnotationType;
+  germline?: boolean;
   hugoSymbolQuery?: string;
   alterationQuery?: string;
   tumorTypeQuery?: string;
@@ -98,6 +106,7 @@ export function getCustomFilterAppliers() {
 }
 
 export class AnnotationStore {
+  @observable germline: boolean;
   @observable hugoSymbolQuery: string;
   @observable alterationQuery: string;
   @observable tumorTypeQuery: string;
@@ -142,6 +151,7 @@ export class AnnotationStore {
 
   constructor(props: IAnnotationStore) {
     this.annotationType = props.type;
+    if (props.germline !== undefined) this.germline = props.germline;
     if (props.hugoSymbolQuery) this.hugoSymbolQuery = props.hugoSymbolQuery;
     if (props.alterationQuery) this.alterationQuery = props.alterationQuery;
     if (props.tumorTypeQuery) this.tumorTypeQuery = props.tumorTypeQuery;
@@ -252,6 +262,7 @@ export class AnnotationStore {
       try {
         return await privateClient.utilsNumbersGeneGetUsingGET({
           hugoSymbol: this.gene.result.hugoSymbol,
+          germline: this.germline,
         });
       } catch (e) {
         return DEFAULT_GENE_NUMBER;
@@ -266,6 +277,7 @@ export class AnnotationStore {
       return apiClient.evidencesLookupGetUsingGET({
         hugoSymbol: this.gene.result.hugoSymbol,
         variant: this.alterationQuery,
+        germline: this.germline,
         evidenceTypes: EVIDENCE_TYPES.MUTATION_EFFECT,
       });
     },
@@ -279,6 +291,7 @@ export class AnnotationStore {
         const clinicalVariants = await privateClient.searchVariantsClinicalGetUsingGET(
           {
             hugoSymbol: this.gene.result.hugoSymbol,
+            germline: this.germline,
           }
         );
         return clinicalVariants.filter(clinicalVariant =>
@@ -299,23 +312,7 @@ export class AnnotationStore {
     invoke: async () => {
       return privateClient.searchVariantsBiologicalGetUsingGET({
         hugoSymbol: this.gene.result.hugoSymbol,
-      });
-    },
-    default: [],
-  });
-
-  readonly relevantAlterations = remoteData<Alteration[]>({
-    await: () => [this.gene, this.alteration],
-    invoke: async () => {
-      if (!this.gene.result.entrezGeneId || !this.alteration.result) {
-        return [];
-      }
-      return privateClient.utilRelevantAlterationsGetUsingGET({
-        entrezGeneId: this.gene.result.entrezGeneId,
-        alteration: this.alteration.result
-          ? this.alteration.result.alteration
-          : this.alterationQuery,
-        referenceGenome: this.referenceGenomeQuery,
+        germline: this.germline,
       });
     },
     default: [],
@@ -359,6 +356,7 @@ export class AnnotationStore {
         alteration: this.alterationQuery,
         tumorType: this.tumorTypeQuery,
         referenceGenome: this.referenceGenomeQuery,
+        germline: this.germline,
       });
     },
     default: DEFAULT_ANNOTATION,
@@ -476,6 +474,28 @@ export class AnnotationStore {
       });
       return acc;
     }, [] as Oncogenicity[]);
+  }
+
+  calculatePathogenicities(biologicalAlterations: BiologicalVariant[]) {
+    const pathogenicities = biologicalAlterations.reduce((acc, item) => {
+      const pathogenic = shortenPathogenicity(item.pathogenic);
+      const variant = {
+        ...item,
+        pathogenic,
+      };
+      if (!acc[pathogenic]) acc[pathogenic] = [];
+      acc[pathogenic].push(variant);
+      return acc;
+    }, {});
+    const keys = Object.keys(pathogenicities).sort(pathogenicitySortMethod);
+    return keys.reduce((acc, pathogenicity) => {
+      const datum = pathogenicities[pathogenicity];
+      acc.push({
+        pathogenicity,
+        counts: datum.length,
+      });
+      return acc;
+    }, [] as Pathogenicity[]);
   }
 
   @computed
@@ -665,6 +685,11 @@ export class AnnotationStore {
   @computed
   get uniqOncogenicity() {
     return this.calculateOncogenicities(this.biologicalAlterations.result);
+  }
+
+  @computed
+  get uniqPathogenicity() {
+    return this.calculatePathogenicities(this.biologicalAlterations.result);
   }
 
   @computed

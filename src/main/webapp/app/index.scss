@@ -10,15 +10,31 @@ body,
   height: 100%;
 }
 
+body {
+  background-color: $pale-warm-grey !important;
+}
+
+#root {
+  max-width: 1500px;
+  margin: 0 auto;
+  background-color: #fff;
+}
+
 h1,
-h2 {
+h2,
+.h1,
+.h2 {
   @include font-gotham('bold');
 }
 
 h3,
 h4,
 h5,
-h6 {
+h6,
+.h3,
+.h4,
+.h5,
+.h6 {
   @include font-gotham('medium');
 }
 
@@ -29,6 +45,7 @@ b {
 .Main {
   min-height: 100%;
   position: relative;
+  background-color: #fff;
 }
 @import '~bootstrap/scss/bootstrap';
 @import 'font';
@@ -279,6 +296,22 @@ input[type='radio']:checked {
       }
     }
   }
+}
+
+// Overwrite react-responsive-tabs
+.RRT__tab.RRT__tab--selected {
+  border: solid $primary !important;
+  border-radius: 5px 5px 0 0;
+  border-width: 3px 1px 1px 1px !important;
+  border-bottom-color: #ffffff !important;
+}
+.RRT__tab {
+  border: 0 !important;
+  background-color: transparent !important;
+  border-bottom: 1px solid $primary !important;
+}
+.RRT__panel {
+  border-top: 1px solid $primary !important;
 }
 
 .oncokbReactTable.ReactTable.fixedHeight {

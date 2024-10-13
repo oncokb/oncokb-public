@@ -32,28 +32,19 @@ class Footer extends React.Component<{ lastDataUpdate: string }> {
         <div className={'mb-2'}>
           <CitationText highlightLinkout={true} boldLinkout />
         </div>
-        <div className={classnames(styles.footerAList, 'mb-2')}>
-          <a
-            href="https://www.mskcc.org"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            MSK <ExternalLinkIcon />
-          </a>
-          <a
-            href="https://www.mskcc.org/research-areas/programs-centers/molecular-oncology"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            CMO <ExternalLinkIcon />
-          </a>
-          <a
-            href="https://www.cbioportal.org"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            cBioPortal <ExternalLinkIcon />
-          </a>
+        <div
+          className={classnames(
+            styles.footerAList,
+            'mb-2 d-flex justify-content-center'
+          )}
+        >
+          <ExternalLinkIcon link="https://www.mskcc.org">MSK</ExternalLinkIcon>
+          <ExternalLinkIcon link="https://www.mskcc.org/research-areas/programs-centers/molecular-oncology">
+            CMO
+          </ExternalLinkIcon>
+          <ExternalLinkIcon link="https://www.cbioportal.org">
+            cBioPortal
+          </ExternalLinkIcon>
           <OncoTreeLink />
         </div>
       </>
