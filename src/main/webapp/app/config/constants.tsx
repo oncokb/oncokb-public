@@ -446,6 +446,18 @@ export const DEFAULT_MUTATION_EFFECT = {
   knownEffect: '',
 };
 
+export const DEFAULT_GERMLINE_VARIANT = {
+  cancerRisk: '',
+  clinVarId: '',
+  description: '',
+  genomicIndicators: [],
+  inheritanceMechanism: '',
+  inheritanceMechanismDescription: '',
+  pathogenic: '',
+  penetrance: '',
+  penetranceDescription: '',
+};
+
 export const DEFAULT_QUERY = {
   alteration: '',
   alterationType: '',
@@ -460,6 +472,8 @@ export const DEFAULT_QUERY = {
   svType: 'UNKNOWN' as 'UNKNOWN',
   tumorType: '',
   type: '',
+  germline: false,
+  alleleState: '',
 };
 
 export const DEFAULT_ANNOTATION: VariantAnnotation = {
@@ -494,6 +508,7 @@ export const DEFAULT_ANNOTATION: VariantAnnotation = {
 
   vue: false,
   vus: false,
+  germline: DEFAULT_GERMLINE_VARIANT,
 };
 
 export enum PAGE_TITLE {
@@ -564,6 +579,8 @@ export enum PAGE_ROUTE {
   CDX = '/companion-diagnostic-devices',
   GENE_HEADER = '/gene',
   GENE = '/gene/:hugoSymbol',
+  SOMATIC_GENE = '/gene/:hugoSymbol/somatic',
+  GERMLINE_GENE = '/gene/:hugoSymbol/germline',
   ALTERATION = '/gene/:hugoSymbol/:alteration',
   HGVSG = '/hgvsg',
   HGVSG_WITH_QUERY = '/hgvsg/:query',

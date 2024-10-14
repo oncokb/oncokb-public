@@ -10,6 +10,16 @@ body,
   height: 100%;
 }
 
+body {
+  background-color: #fbf9f7 !important;
+}
+
+#root {
+  max-width: 1920px;
+  margin: 0 auto;
+  background-color: #fff;
+}
+
 h1,
 h2,
 .h1,
@@ -35,6 +45,7 @@ b {
 .Main {
   min-height: 100%;
   position: relative;
+  background-color: #fff;
 }
 @import '~bootstrap/scss/bootstrap';
 @import 'font';

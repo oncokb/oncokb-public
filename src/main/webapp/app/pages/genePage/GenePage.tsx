@@ -82,7 +82,7 @@ interface GenePageProps extends RouteComponentProps<MatchParams> {
 export default class GenePage extends React.Component<GenePageProps, any> {
   @observable hugoSymbolQuery: string;
   @observable showGeneBackground: boolean;
-  @observable showAdditionalGeneInfo = true;
+  @observable showAdditionalGeneInfo = false;
   @observable selectedTab: ANNOTATION_PAGE_TAB_KEYS;
   @observable defaultSelectedTab: ANNOTATION_PAGE_TAB_KEYS;
 
@@ -507,7 +507,7 @@ export default class GenePage extends React.Component<GenePageProps, any> {
                       </Row>
                       {this.showAdditionalGeneInfo && (
                         <Row className={'mt-2'}>
-                          <Col md={6}>
+                          <Col lg={6} md={8} xs={12}>
                             <GeneAdditionalInfoTable
                               gene={this.store.gene.result}
                               grch37ensemblGene={findLast(

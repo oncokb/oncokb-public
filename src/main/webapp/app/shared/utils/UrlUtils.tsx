@@ -231,9 +231,7 @@ export const MSILink: React.FunctionComponent<{}> = () => {
 
 export const OncoTreeLink: React.FunctionComponent<{}> = props => {
   return (
-    <Linkout link={'http://oncotree.info'}>
-      OncoTree <ExternalLinkIcon />
-    </Linkout>
+    <ExternalLinkIcon link="https://oncotree.info">OncoTree</ExternalLinkIcon>
   );
 };
 
