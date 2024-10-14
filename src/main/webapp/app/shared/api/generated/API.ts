@@ -14,8 +14,6 @@ export type Activation = {
 export type AdditionalInfoDTO = {
     'apiAccessRequest': ApiAccessRequest
 
-        'sentToRocReview': boolean
-
         'trialAccount': TrialAccount
 
         'userCompany': UserCompany
@@ -89,7 +87,6 @@ export type Contact = {
         'phone': string
 
 };
-export type JSONObject = {};
 export type KeyAndPasswordVM = {
     'key': string
 
@@ -169,8 +166,6 @@ export type ManagedUserVM = {
 
         'login': string
 
-        'needsMskRocReview': boolean
-
         'notifyUserOnTrialCreation': boolean
 
         'password': string
@@ -184,6 +179,7 @@ export type ManagedUserVM = {
         'tokenValidDays': number
 
 };
+export type MapOfstringAndlong = {};
 export type PasswordChangeDTO = {
     'currentPassword': string
 
@@ -343,23 +339,29 @@ export type UserMailsDTO = {
 
 };
 export type UserOverviewUsage = {
-    'endpoint': string
+    'dayUsage': {}
 
-        'noPrivateEndpoint': string
+    'monthUsage': {}
 
-        'maxUsageProportion': number
-
-        'noPrivateMaxUsageProportion': number
-
-        'totalUsage': number
-
-        'userEmail': string
+    'userEmail': string
 
         'userId': string
 
-        'dayUsage': {}
+        'yearUsage': {}
 
-        'monthUsage': {}
+};
+export type UserStats = {
+    'maxUsageProportion': number
+
+        'mostUsedEndpoint': string
+
+        'mostUsedPublicEndpoint': string
+
+        'publicMaxUsageProportion': number
+
+        'totalPublicUsage': number
+
+        'totalUsage': number
 
 };
 export type UserUsage = {

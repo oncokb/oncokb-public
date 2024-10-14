@@ -1,7 +1,7 @@
 import { observer } from 'mobx-react';
 import React from 'react';
 import { ToggleButton, ToggleButtonGroup } from 'react-bootstrap';
-import { ToggleValue } from './UsageAnalysisPage';
+import { ToggleValue } from './usage-analysis-utils';
 
 type IUsageToggleGroupProps = {
   defaultValue: ToggleValue;

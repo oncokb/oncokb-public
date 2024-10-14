@@ -10,7 +10,6 @@ import {
   LicenseModel,
   LicenseStatus,
   PAGE_ROUTE,
-  PAGE_TITLE,
   REDIRECT_TIMEOUT_MILLISECONDS,
 } from 'app/config/constants';
 import { Alert, Button, Col, Row } from 'react-bootstrap';
@@ -20,6 +19,7 @@ import {
   Token,
   UserDTO,
   UserOverviewUsage,
+  UserStats,
 } from 'app/shared/api/generated/API';
 import client from 'app/shared/api/clientInstance';
 import { action, computed, observable } from 'mobx';
@@ -54,14 +54,13 @@ import { UsageToggleGroup } from 'app/pages/usageAnalysisPage/UsageToggleGroup';
 import OncoKBTable from 'app/components/oncokbTable/OncoKBTable';
 import {
   getUsageTableColumnDefinition,
-  ToggleValue,
   UsageTableColumnKey,
 } from 'app/pages/usageAnalysisPage/UsageAnalysisPage';
 import autobind from 'autobind-decorator';
 import {
   emailHeader,
   endpointHeader,
-  noPrivateEndpointHeader,
+  publicEndpointHeader,
   usageHeader,
 } from 'app/components/oncokbTable/HeaderConstants';
 import UsageText from 'app/shared/texts/UsageText';
@@ -70,6 +69,7 @@ import { DownloadButton } from 'app/components/downloadButton/DownloadButton';
 import { RouterStore } from 'mobx-react-router';
 import { TEXT_VAL } from 'app/shared/utils/FormValidationUtils';
 import { Helmet } from 'react-helmet-async';
+import { ToggleValue } from '../usageAnalysisPage/usage-analysis-utils';
 
 interface MatchParams {
   id: string;
@@ -492,6 +492,7 @@ export default class CompanyPage extends React.Component<ICompanyPage> {
   }
 
   render() {
+    const currentYearStr = new Date().getFullYear().toString();
     return (
       <If condition={this.getCompanyStatus === PromiseStatus.pending}>
         <Then>
@@ -820,7 +821,13 @@ export default class CompanyPage extends React.Component<ICompanyPage> {
                           Company Data Usage
                         </div>
                         <div className="mt-2">
-                          <OncoKBTable
+                          <OncoKBTable<
+                            UserOverviewUsage & {
+                              dayUsage: Record<string, UserStats>;
+                              monthUsage: Record<string, UserStats>;
+                              yearUsage: Record<string, UserStats>;
+                            }
+                          >
                             data={this.users.result}
                             columns={[
                               {
@@ -828,46 +835,74 @@ export default class CompanyPage extends React.Component<ICompanyPage> {
                                 Header: emailHeader,
                                 accessor: 'userEmail',
                                 minWidth: 200,
-                                onFilter: (data: UserOverviewUsage, keyword) =>
+                                onFilter: (data, keyword) =>
                                   filterByKeyword(data.userEmail, keyword),
-                              },
-                              {
-                                id: 'totalUsage',
-                                Header: usageHeader,
-                                minWidth: 100,
-                                accessor: 'totalUsage',
-                                Cell(props: { original: UserOverviewUsage }) {
-                                  return (
-                                    <UsageText
-                                      usage={props.original.totalUsage}
-                                    />
-                                  );
-                                },
                               },
                               this.resourcesTypeToggleValue ===
                               ToggleValue.ALL_RESOURCES
                                 ? {
-                                    id: 'endpoint',
-                                    Header: endpointHeader,
-                                    minWidth: 200,
-                                    accessor: 'endpoint',
-                                    onFilter: (
-                                      data: UserOverviewUsage,
-                                      keyword
-                                    ) =>
-                                      filterByKeyword(data.endpoint, keyword),
+                                    id: 'totalUsage',
+                                    Header: usageHeader,
+                                    minWidth: 100,
+                                    Cell(props: {
+                                      original: UserOverviewUsage;
+                                    }) {
+                                      return (
+                                        <UsageText
+                                          usage={
+                                            props.original.yearUsage[
+                                              currentYearStr
+                                            ]?.totalUsage
+                                          }
+                                        />
+                                      );
+                                    },
                                   }
                                 : {
-                                    id: 'noPrivateEndpoint',
-                                    Header: noPrivateEndpointHeader,
+                                    id: 'totalUsage',
+                                    Header: usageHeader,
+                                    minWidth: 100,
+                                    Cell(props: {
+                                      original: UserOverviewUsage;
+                                    }) {
+                                      return (
+                                        <UsageText
+                                          usage={
+                                            props.original.yearUsage[
+                                              currentYearStr
+                                            ]?.totalPublicUsage
+                                          }
+                                        />
+                                      );
+                                    },
+                                  },
+                              this.resourcesTypeToggleValue ===
+                              ToggleValue.ALL_RESOURCES
+                                ? {
+                                    id: 'mostUsedEndpoint',
+                                    Header: endpointHeader,
                                     minWidth: 200,
-                                    accessor: 'noPrivateEndpoint',
-                                    onFilter: (
-                                      data: UserOverviewUsage,
-                                      keyword
-                                    ) =>
+                                    onFilter: (data, keyword) =>
                                       filterByKeyword(
-                                        data.noPrivateEndpoint,
+                                        data.yearUsage[currentYearStr]
+                                          ?.mostUsedEndpoint,
+                                        keyword
+                                      ),
+                                    accessor: x =>
+                                      x.yearUsage[currentYearStr]
+                                        ?.mostUsedEndpoint,
+                                  }
+                                : {
+                                    id: 'mostUsedPublicEndpoint',
+                                    Header: publicEndpointHeader,
+                                    minWidth: 200,
+                                    accessor: x =>
+                                      x.yearUsage[currentYearStr]
+                                        ?.mostUsedPublicEndpoint,
+                                    onFilter: (data, keyword) =>
+                                      filterByKeyword(
+                                        data.yearUsage[currentYearStr]
+                                          ?.mostUsedPublicEndpoint,
                                         keyword
                                       ),
                                   },
