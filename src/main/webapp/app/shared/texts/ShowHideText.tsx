@@ -1,5 +1,6 @@
 import React from 'react';
 import ShowHideToggleIcon from '../icons/ShowHideToggleIcon';
+import { COLOR_GREY, COLOR_PRIMARY } from 'app/config/theme';
 
 const ShowHideText: React.FunctionComponent<{
   show: boolean;
@@ -11,7 +12,7 @@ const ShowHideText: React.FunctionComponent<{
   return (
     <div className={props.className}>
       <div
-        style={{ cursor: 'pointer', color: 'grey' }}
+        style={{ cursor: 'pointer', color: COLOR_PRIMARY }}
         onClick={() => props.onClick()}
       >
         <span>{`${props.show ? 'Hide' : 'Show'} ${props.title}`}</span>{' '}

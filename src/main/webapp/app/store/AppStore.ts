@@ -1,16 +1,14 @@
-import { action, observable } from 'mobx';
+import { IReactionDisposer, observable, reaction } from 'mobx';
 import { remoteData } from 'cbioportal-frontend-commons';
 import apiClient from 'app/shared/api/oncokbClientInstance';
 import { OncoKBInfo } from 'app/shared/api/generated/OncoKbAPI';
 import { MainNumber } from 'app/shared/api/generated/OncoKbPrivateAPI';
 import oncokbPrivateClient from 'app/shared/api/oncokbPrivateClientInstance';
 import {
-  DEFAULT_FEEDBACK_ANNOTATION,
   DEFAULT_MAIN_NUMBERS,
   DEFAULT_ONCOKB_INFO,
 } from 'app/config/constants';
 import { Feedback } from 'app/components/feedback/types';
-import autobind from 'autobind-decorator';
 import { Location } from 'history';
 
 export interface IAppConfig {

@@ -124,6 +124,21 @@
             "type": "string"
           },
           {
+            "name": "germline",
+            "in": "query",
+            "description": "Whether is germline variant",
+            "required": false,
+            "type": "boolean",
+            "default": false
+          },
+          {
+            "name": "alleleState",
+            "in": "query",
+            "description": "Germline variant allele state(monoallelic vs biallelic)",
+            "required": false,
+            "type": "string"
+          },
+          {
             "name": "evidenceType",
             "in": "query",
             "description": "Evidence type to compute. This could help to improve the performance if you only look for sub-content. Example: ONCOGENIC. All available evidence type are GENE_SUMMARY, MUTATION_SUMMARY, TUMOR_TYPE_SUMMARY, PROGNOSTIC_SUMMARY, DIAGNOSTIC_SUMMARY, ONCOGENIC, MUTATION_EFFECT, PROGNOSTIC_IMPLICATION, DIAGNOSTIC_IMPLICATION, STANDARD_THERAPEUTIC_IMPLICATIONS_FOR_DRUG_SENSITIVITY, STANDARD_THERAPEUTIC_IMPLICATIONS_FOR_DRUG_RESISTANCE, INVESTIGATIONAL_THERAPEUTIC_IMPLICATIONS_DRUG_SENSITIVITY, INVESTIGATIONAL_THERAPEUTIC_IMPLICATIONS_DRUG_RESISTANCE. For multiple evidence types query, use ',' as separator.",
@@ -221,6 +236,21 @@
             "required": false,
             "type": "string",
             "default": "GRCh37"
+          },
+          {
+            "name": "germline",
+            "in": "query",
+            "description": "Whether is germline variant",
+            "required": false,
+            "type": "boolean",
+            "default": false
+          },
+          {
+            "name": "alleleState",
+            "in": "query",
+            "description": "Germline variant allele state(monoallelic vs biallelic)",
+            "required": false,
+            "type": "string"
           },
           {
             "name": "tumorType",
@@ -332,6 +362,21 @@
             "name": "tumorType",
             "in": "query",
             "description": "OncoTree(http://oncotree.info) tumor type name. The field supports OncoTree Code, OncoTree Name and OncoTree Main type. Example: Melanoma",
+            "required": false,
+            "type": "string"
+          },
+          {
+            "name": "germline",
+            "in": "query",
+            "description": "Whether is germline variant",
+            "required": false,
+            "type": "boolean",
+            "default": false
+          },
+          {
+            "name": "alleleState",
+            "in": "query",
+            "description": "Germline variant allele state(monoallelic vs biallelic)",
             "required": false,
             "type": "string"
           },
@@ -485,6 +530,21 @@
             "format": "int32"
           },
           {
+            "name": "isGermline",
+            "in": "query",
+            "description": "Whether is germline variant",
+            "required": false,
+            "type": "boolean",
+            "default": false
+          },
+          {
+            "name": "alleleState",
+            "in": "query",
+            "description": "Germline variant allele state(monoallelic vs biallelic)",
+            "required": false,
+            "type": "string"
+          },
+          {
             "name": "tumorType",
             "in": "query",
             "description": "OncoTree(http://oncotree.info) tumor type name. The field supports OncoTree Code, OncoTree Name and OncoTree Main type. Example: Melanoma",
@@ -628,6 +688,21 @@
             "required": true,
             "type": "boolean",
             "default": false
+          },
+          {
+            "name": "germline",
+            "in": "query",
+            "description": "Whether is germline variant",
+            "required": false,
+            "type": "boolean",
+            "default": false
+          },
+          {
+            "name": "alleleState",
+            "in": "query",
+            "description": "Germline variant allele state(monoallelic vs biallelic)",
+            "required": false,
+            "type": "string"
           },
           {
             "name": "referenceGenome",
@@ -967,6 +1042,13 @@
             "description": "The fields to be returned.",
             "required": false,
             "type": "string"
+          },
+          {
+            "name": "germline",
+            "in": "query",
+            "description": "false",
+            "required": false,
+            "type": "boolean"
           }
         ],
         "responses": {
@@ -2259,6 +2341,9 @@
     "AnnotateMutationByGenomicChangeQuery": {
       "type": "object",
       "properties": {
+        "alleleState": {
+          "type": "string"
+        },
         "evidenceTypes": {
           "type": "array",
           "items": {
@@ -2279,12 +2364,24 @@
               "STANDARD_THERAPEUTIC_IMPLICATIONS_FOR_DRUG_SENSITIVITY",
               "STANDARD_THERAPEUTIC_IMPLICATIONS_FOR_DRUG_RESISTANCE",
               "INVESTIGATIONAL_THERAPEUTIC_IMPLICATIONS_DRUG_SENSITIVITY",
-              "INVESTIGATIONAL_THERAPEUTIC_IMPLICATIONS_DRUG_RESISTANCE"
+              "INVESTIGATIONAL_THERAPEUTIC_IMPLICATIONS_DRUG_RESISTANCE",
+              "PATHOGENIC",
+              "GENOMIC_INDICATOR",
+              "GENOMIC_INDICATOR_ALLELE_STATE",
+              "GENE_PENETRANCE",
+              "GENE_INHERITANCE_MECHANISM",
+              "GENE_CANCER_RISK",
+              "VARIANT_PENETRANCE",
+              "VARIANT_INHERITANCE_MECHANISM",
+              "VARIANT_CANCER_RISK"
             ]
           }
         },
         "genomicLocation": {
           "type": "string"
+        },
+        "germline": {
+          "type": "boolean"
         },
         "id": {
           "type": "string"
@@ -2316,6 +2413,9 @@
     "Query": {
       "type": "object",
       "properties": {
+        "alleleState": {
+          "type": "string"
+        },
         "alteration": {
           "type": "string"
         },
@@ -2328,6 +2428,9 @@
         "entrezGeneId": {
           "type": "integer",
           "format": "int32"
+        },
+        "germline": {
+          "type": "boolean"
         },
         "hgvs": {
           "type": "string"
@@ -2722,7 +2825,16 @@
             "STANDARD_THERAPEUTIC_IMPLICATIONS_FOR_DRUG_SENSITIVITY",
             "STANDARD_THERAPEUTIC_IMPLICATIONS_FOR_DRUG_RESISTANCE",
             "INVESTIGATIONAL_THERAPEUTIC_IMPLICATIONS_DRUG_SENSITIVITY",
-            "INVESTIGATIONAL_THERAPEUTIC_IMPLICATIONS_DRUG_RESISTANCE"
+            "INVESTIGATIONAL_THERAPEUTIC_IMPLICATIONS_DRUG_RESISTANCE",
+            "PATHOGENIC",
+            "GENOMIC_INDICATOR",
+            "GENOMIC_INDICATOR_ALLELE_STATE",
+            "GENE_PENETRANCE",
+            "GENE_INHERITANCE_MECHANISM",
+            "GENE_CANCER_RISK",
+            "VARIANT_PENETRANCE",
+            "VARIANT_INHERITANCE_MECHANISM",
+            "VARIANT_CANCER_RISK"
           ]
         },
         "gene": {
@@ -2788,7 +2900,16 @@
             "STANDARD_THERAPEUTIC_IMPLICATIONS_FOR_DRUG_SENSITIVITY",
             "STANDARD_THERAPEUTIC_IMPLICATIONS_FOR_DRUG_RESISTANCE",
             "INVESTIGATIONAL_THERAPEUTIC_IMPLICATIONS_DRUG_SENSITIVITY",
-            "INVESTIGATIONAL_THERAPEUTIC_IMPLICATIONS_DRUG_RESISTANCE"
+            "INVESTIGATIONAL_THERAPEUTIC_IMPLICATIONS_DRUG_RESISTANCE",
+            "PATHOGENIC",
+            "GENOMIC_INDICATOR",
+            "GENOMIC_INDICATOR_ALLELE_STATE",
+            "GENE_PENETRANCE",
+            "GENE_INHERITANCE_MECHANISM",
+            "GENE_CANCER_RISK",
+            "VARIANT_PENETRANCE",
+            "VARIANT_INHERITANCE_MECHANISM",
+            "VARIANT_CANCER_RISK"
           ]
         },
         "excludedCancerTypes": {
@@ -2923,6 +3044,9 @@
     "AnnotateStructuralVariantQuery": {
       "type": "object",
       "properties": {
+        "alleleState": {
+          "type": "string"
+        },
         "evidenceTypes": {
           "type": "array",
           "items": {
@@ -2943,7 +3067,16 @@
               "STANDARD_THERAPEUTIC_IMPLICATIONS_FOR_DRUG_SENSITIVITY",
               "STANDARD_THERAPEUTIC_IMPLICATIONS_FOR_DRUG_RESISTANCE",
               "INVESTIGATIONAL_THERAPEUTIC_IMPLICATIONS_DRUG_SENSITIVITY",
-              "INVESTIGATIONAL_THERAPEUTIC_IMPLICATIONS_DRUG_RESISTANCE"
+              "INVESTIGATIONAL_THERAPEUTIC_IMPLICATIONS_DRUG_RESISTANCE",
+              "PATHOGENIC",
+              "GENOMIC_INDICATOR",
+              "GENOMIC_INDICATOR_ALLELE_STATE",
+              "GENE_PENETRANCE",
+              "GENE_INHERITANCE_MECHANISM",
+              "GENE_CANCER_RISK",
+              "VARIANT_PENETRANCE",
+              "VARIANT_INHERITANCE_MECHANISM",
+              "VARIANT_CANCER_RISK"
             ]
           }
         },
@@ -2955,6 +3088,9 @@
         },
         "geneB": {
           "$ref": "#/definitions/QueryGene"
+        },
+        "germline": {
+          "type": "boolean"
         },
         "id": {
           "type": "string"
@@ -3006,6 +3142,9 @@
         },
         "geneSummary": {
           "type": "string"
+        },
+        "germline": {
+          "$ref": "#/definitions/GermlineVariant"
         },
         "highestDiagnosticImplicationLevel": {
           "type": "string",
@@ -3266,6 +3405,41 @@
           "type": "string"
         },
         "link": {
+          "type": "string"
+        }
+      }
+    },
+    "GermlineVariant": {
+      "type": "object",
+      "properties": {
+        "cancerRisk": {
+          "type": "string"
+        },
+        "clinVarId": {
+          "type": "string"
+        },
+        "description": {
+          "type": "string"
+        },
+        "genomicIndicators": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
+        },
+        "inheritanceMechanism": {
+          "type": "string"
+        },
+        "inheritanceMechanismDescription": {
+          "type": "string"
+        },
+        "pathogenic": {
+          "type": "string"
+        },
+        "penetrance": {
+          "type": "string"
+        },
+        "penetranceDescription": {
           "type": "string"
         }
       }
@@ -3622,6 +3796,9 @@
     "AnnotateMutationByProteinChangeQuery": {
       "type": "object",
       "properties": {
+        "alleleState": {
+          "type": "string"
+        },
         "alteration": {
           "type": "string"
         },
@@ -3648,12 +3825,24 @@
               "STANDARD_THERAPEUTIC_IMPLICATIONS_FOR_DRUG_SENSITIVITY",
               "STANDARD_THERAPEUTIC_IMPLICATIONS_FOR_DRUG_RESISTANCE",
               "INVESTIGATIONAL_THERAPEUTIC_IMPLICATIONS_DRUG_SENSITIVITY",
-              "INVESTIGATIONAL_THERAPEUTIC_IMPLICATIONS_DRUG_RESISTANCE"
+              "INVESTIGATIONAL_THERAPEUTIC_IMPLICATIONS_DRUG_RESISTANCE",
+              "PATHOGENIC",
+              "GENOMIC_INDICATOR",
+              "GENOMIC_INDICATOR_ALLELE_STATE",
+              "GENE_PENETRANCE",
+              "GENE_INHERITANCE_MECHANISM",
+              "GENE_CANCER_RISK",
+              "VARIANT_PENETRANCE",
+              "VARIANT_INHERITANCE_MECHANISM",
+              "VARIANT_CANCER_RISK"
             ]
           }
         },
         "gene": {
           "$ref": "#/definitions/QueryGene"
+        },
+        "germline": {
+          "type": "boolean"
         },
         "id": {
           "type": "string"
@@ -3967,6 +4156,9 @@
     "AnnotateCopyNumberAlterationQuery": {
       "type": "object",
       "properties": {
+        "alleleState": {
+          "type": "string"
+        },
         "copyNameAlterationType": {
           "type": "string",
           "enum": [
@@ -3996,12 +4188,24 @@
               "STANDARD_THERAPEUTIC_IMPLICATIONS_FOR_DRUG_SENSITIVITY",
               "STANDARD_THERAPEUTIC_IMPLICATIONS_FOR_DRUG_RESISTANCE",
               "INVESTIGATIONAL_THERAPEUTIC_IMPLICATIONS_DRUG_SENSITIVITY",
-              "INVESTIGATIONAL_THERAPEUTIC_IMPLICATIONS_DRUG_RESISTANCE"
+              "INVESTIGATIONAL_THERAPEUTIC_IMPLICATIONS_DRUG_RESISTANCE",
+              "PATHOGENIC",
+              "GENOMIC_INDICATOR",
+              "GENOMIC_INDICATOR_ALLELE_STATE",
+              "GENE_PENETRANCE",
+              "GENE_INHERITANCE_MECHANISM",
+              "GENE_CANCER_RISK",
+              "VARIANT_PENETRANCE",
+              "VARIANT_INHERITANCE_MECHANISM",
+              "VARIANT_CANCER_RISK"
             ]
           }
         },
         "gene": {
           "$ref": "#/definitions/QueryGene"
+        },
+        "germline": {
+          "type": "boolean"
         },
         "id": {
           "type": "string"
@@ -4021,6 +4225,9 @@
     "AnnotateMutationByHGVSgQuery": {
       "type": "object",
       "properties": {
+        "alleleState": {
+          "type": "string"
+        },
         "evidenceTypes": {
           "type": "array",
           "items": {
@@ -4041,9 +4248,21 @@
               "STANDARD_THERAPEUTIC_IMPLICATIONS_FOR_DRUG_SENSITIVITY",
               "STANDARD_THERAPEUTIC_IMPLICATIONS_FOR_DRUG_RESISTANCE",
               "INVESTIGATIONAL_THERAPEUTIC_IMPLICATIONS_DRUG_SENSITIVITY",
-              "INVESTIGATIONAL_THERAPEUTIC_IMPLICATIONS_DRUG_RESISTANCE"
+              "INVESTIGATIONAL_THERAPEUTIC_IMPLICATIONS_DRUG_RESISTANCE",
+              "PATHOGENIC",
+              "GENOMIC_INDICATOR",
+              "GENOMIC_INDICATOR_ALLELE_STATE",
+              "GENE_PENETRANCE",
+              "GENE_INHERITANCE_MECHANISM",
+              "GENE_CANCER_RISK",
+              "VARIANT_PENETRANCE",
+              "VARIANT_INHERITANCE_MECHANISM",
+              "VARIANT_CANCER_RISK"
             ]
           }
+        },
+        "germline": {
+          "type": "boolean"
         },
         "hgvsg": {
           "type": "string"

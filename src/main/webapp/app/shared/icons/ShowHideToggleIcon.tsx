@@ -7,7 +7,7 @@ const ShowHideToggleIcon: React.FunctionComponent<{
   return (
     <i
       onClick={props.onToggle}
-      className={`fa fa-arrow-circle-o-${props.show ? 'up' : 'down'}`}
+      className={`fa fa-chevron-circle-${props.show ? 'up' : 'down'}`}
     ></i>
   );
 };

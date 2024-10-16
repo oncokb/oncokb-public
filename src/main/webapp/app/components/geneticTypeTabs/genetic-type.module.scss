@@ -1,0 +1,33 @@
+@import '../../variables';
+
+.tabs {
+  display: flex;
+  margin: 1.5rem 0;
+}
+
+.tab {
+  text-align: center;
+  padding: 0.75rem 0;
+  border: 1px solid $primary;
+  cursor: pointer;
+}
+
+.tab:first-child {
+  border-left: 0;
+  border-top-right-radius: 3px;
+}
+
+.tab:last-child {
+  border-right: 0;
+  border-top-left-radius: 3px;
+}
+
+.selectedTab {
+  padding-top: 0.5rem;
+  border-width: 3px 1px 0 1px;
+}
+
+.unselectedTab {
+  background-color: $inactive;
+  border-width: 0 0 1px 0;
+}

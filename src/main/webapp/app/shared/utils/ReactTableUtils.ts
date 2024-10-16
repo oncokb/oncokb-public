@@ -3,6 +3,7 @@ import {
   LEVELS,
   MUTATION_EFFECT,
   ONCOGENICITY,
+  PATHOGENICITY,
 } from 'app/config/constants';
 import { Alteration, Citations } from '../api/generated/OncoKbAPI';
 import {
@@ -117,6 +118,16 @@ const oncogenicityOrder = [
   ONCOGENICITY.INCONCLUSIVE,
   ONCOGENICITY.UNKNOWN,
 ];
+
+const pathogenicityOrder = [
+  PATHOGENICITY.PATHOGENIC,
+  PATHOGENICITY.LIKELY_PATHOGENIC,
+  PATHOGENICITY.UNKNOWN,
+  PATHOGENICITY.LIKELY_BENIGN,
+  PATHOGENICITY.BENIGN,
+  PATHOGENICITY.VUS_WITH_SPECIAL_INTERPRETATION,
+];
+
 const mutationEffectOrder = [
   MUTATION_EFFECT.GAIN_OF_FUNCTION,
   MUTATION_EFFECT.LIKELY_GAIN_OF_FUNCTION,
@@ -151,6 +162,13 @@ export function oncogenicitySortMethod(a: ONCOGENICITY, b: ONCOGENICITY) {
   return sortByArrayIndexAsc(
     oncogenicityOrder.indexOf(a),
     oncogenicityOrder.indexOf(b)
+  );
+}
+
+export function pathogenicitySortMethod(a: PATHOGENICITY, b: PATHOGENICITY) {
+  return sortByArrayIndexAsc(
+    pathogenicityOrder.indexOf(a),
+    pathogenicityOrder.indexOf(b)
   );
 }
 

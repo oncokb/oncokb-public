@@ -2,9 +2,13 @@ import * as request from "superagent";
 
 type CallbackHandler = (err: any, res ? : request.Response) => void;
 export type AnnotateMutationByGenomicChangeQuery = {
-    'evidenceTypes': Array < "GENE_SUMMARY" | "MUTATION_SUMMARY" | "TUMOR_TYPE_SUMMARY" | "GENE_TUMOR_TYPE_SUMMARY" | "PROGNOSTIC_SUMMARY" | "DIAGNOSTIC_SUMMARY" | "GENE_BACKGROUND" | "ONCOGENIC" | "MUTATION_EFFECT" | "VUS" | "PROGNOSTIC_IMPLICATION" | "DIAGNOSTIC_IMPLICATION" | "STANDARD_THERAPEUTIC_IMPLICATIONS_FOR_DRUG_SENSITIVITY" | "STANDARD_THERAPEUTIC_IMPLICATIONS_FOR_DRUG_RESISTANCE" | "INVESTIGATIONAL_THERAPEUTIC_IMPLICATIONS_DRUG_SENSITIVITY" | "INVESTIGATIONAL_THERAPEUTIC_IMPLICATIONS_DRUG_RESISTANCE" >
+    'alleleState': string
+
+        'evidenceTypes': Array < "GENE_SUMMARY" | "MUTATION_SUMMARY" | "TUMOR_TYPE_SUMMARY" | "GENE_TUMOR_TYPE_SUMMARY" | "PROGNOSTIC_SUMMARY" | "DIAGNOSTIC_SUMMARY" | "GENE_BACKGROUND" | "ONCOGENIC" | "MUTATION_EFFECT" | "VUS" | "PROGNOSTIC_IMPLICATION" | "DIAGNOSTIC_IMPLICATION" | "STANDARD_THERAPEUTIC_IMPLICATIONS_FOR_DRUG_SENSITIVITY" | "STANDARD_THERAPEUTIC_IMPLICATIONS_FOR_DRUG_RESISTANCE" | "INVESTIGATIONAL_THERAPEUTIC_IMPLICATIONS_DRUG_SENSITIVITY" | "INVESTIGATIONAL_THERAPEUTIC_IMPLICATIONS_DRUG_RESISTANCE" | "PATHOGENIC" | "GENOMIC_INDICATOR" | "GENOMIC_INDICATOR_ALLELE_STATE" | "GENE_PENETRANCE" | "GENE_INHERITANCE_MECHANISM" | "GENE_CANCER_RISK" | "VARIANT_PENETRANCE" | "VARIANT_INHERITANCE_MECHANISM" | "VARIANT_CANCER_RISK" >
 
         'genomicLocation': string
+
+        'germline': boolean
 
         'id': string
 
@@ -30,13 +34,17 @@ export type TreatmentDrug = {
 
 };
 export type Query = {
-    'alteration': string
+    'alleleState': string
+
+        'alteration': string
 
         'alterationType': string
 
         'consequence': string
 
         'entrezGeneId': number
+
+        'germline': boolean
 
         'hgvs': string
 
@@ -155,6 +163,8 @@ export type VariantAnnotation = {
         'geneExist': boolean
 
         'geneSummary': string
+
+        'germline': GermlineVariant
 
         'highestDiagnosticImplicationLevel': "LEVEL_1" | "LEVEL_2" | "LEVEL_3A" | "LEVEL_3B" | "LEVEL_4" | "LEVEL_R1" | "LEVEL_R2" | "LEVEL_Px1" | "LEVEL_Px2" | "LEVEL_Px3" | "LEVEL_Dx1" | "LEVEL_Dx2" | "LEVEL_Dx3" | "LEVEL_Fda1" | "LEVEL_Fda2" | "LEVEL_Fda3" | "NO"
 
@@ -392,7 +402,7 @@ export type Evidence = {
 
         'description': string
 
-        'evidenceType': "GENE_SUMMARY" | "MUTATION_SUMMARY" | "TUMOR_TYPE_SUMMARY" | "GENE_TUMOR_TYPE_SUMMARY" | "PROGNOSTIC_SUMMARY" | "DIAGNOSTIC_SUMMARY" | "GENE_BACKGROUND" | "ONCOGENIC" | "MUTATION_EFFECT" | "VUS" | "PROGNOSTIC_IMPLICATION" | "DIAGNOSTIC_IMPLICATION" | "STANDARD_THERAPEUTIC_IMPLICATIONS_FOR_DRUG_SENSITIVITY" | "STANDARD_THERAPEUTIC_IMPLICATIONS_FOR_DRUG_RESISTANCE" | "INVESTIGATIONAL_THERAPEUTIC_IMPLICATIONS_DRUG_SENSITIVITY" | "INVESTIGATIONAL_THERAPEUTIC_IMPLICATIONS_DRUG_RESISTANCE"
+        'evidenceType': "GENE_SUMMARY" | "MUTATION_SUMMARY" | "TUMOR_TYPE_SUMMARY" | "GENE_TUMOR_TYPE_SUMMARY" | "PROGNOSTIC_SUMMARY" | "DIAGNOSTIC_SUMMARY" | "GENE_BACKGROUND" | "ONCOGENIC" | "MUTATION_EFFECT" | "VUS" | "PROGNOSTIC_IMPLICATION" | "DIAGNOSTIC_IMPLICATION" | "STANDARD_THERAPEUTIC_IMPLICATIONS_FOR_DRUG_SENSITIVITY" | "STANDARD_THERAPEUTIC_IMPLICATIONS_FOR_DRUG_RESISTANCE" | "INVESTIGATIONAL_THERAPEUTIC_IMPLICATIONS_DRUG_SENSITIVITY" | "INVESTIGATIONAL_THERAPEUTIC_IMPLICATIONS_DRUG_RESISTANCE" | "PATHOGENIC" | "GENOMIC_INDICATOR" | "GENOMIC_INDICATOR_ALLELE_STATE" | "GENE_PENETRANCE" | "GENE_INHERITANCE_MECHANISM" | "GENE_CANCER_RISK" | "VARIANT_PENETRANCE" | "VARIANT_INHERITANCE_MECHANISM" | "VARIANT_CANCER_RISK"
 
         'excludedCancerTypes': Array < TumorType >
 
@@ -485,6 +495,26 @@ export type ArticleAbstract = {
         'link': string
 
 };
+export type GermlineVariant = {
+    'cancerRisk': string
+
+        'clinVarId': string
+
+        'description': string
+
+        'genomicIndicators': Array < string >
+
+        'inheritanceMechanism': string
+
+        'inheritanceMechanismDescription': string
+
+        'pathogenic': string
+
+        'penetrance': string
+
+        'penetranceDescription': string
+
+};
 export type Drug = {
     'drugName': string
 
@@ -568,6 +598,10 @@ export type GeneNumber = {
 
         'highestSensitiveLevel': string
 
+        'inheritanceMechanism': string
+
+        'penetrance': string
+
         'tumorType': number
 
 };
@@ -626,7 +660,11 @@ export type MutationEffectResp = {
 
 };
 export type AnnotateMutationByHGVSgQuery = {
-    'evidenceTypes': Array < "GENE_SUMMARY" | "MUTATION_SUMMARY" | "TUMOR_TYPE_SUMMARY" | "GENE_TUMOR_TYPE_SUMMARY" | "PROGNOSTIC_SUMMARY" | "DIAGNOSTIC_SUMMARY" | "GENE_BACKGROUND" | "ONCOGENIC" | "MUTATION_EFFECT" | "VUS" | "PROGNOSTIC_IMPLICATION" | "DIAGNOSTIC_IMPLICATION" | "STANDARD_THERAPEUTIC_IMPLICATIONS_FOR_DRUG_SENSITIVITY" | "STANDARD_THERAPEUTIC_IMPLICATIONS_FOR_DRUG_RESISTANCE" | "INVESTIGATIONAL_THERAPEUTIC_IMPLICATIONS_DRUG_SENSITIVITY" | "INVESTIGATIONAL_THERAPEUTIC_IMPLICATIONS_DRUG_RESISTANCE" >
+    'alleleState': string
+
+        'evidenceTypes': Array < "GENE_SUMMARY" | "MUTATION_SUMMARY" | "TUMOR_TYPE_SUMMARY" | "GENE_TUMOR_TYPE_SUMMARY" | "PROGNOSTIC_SUMMARY" | "DIAGNOSTIC_SUMMARY" | "GENE_BACKGROUND" | "ONCOGENIC" | "MUTATION_EFFECT" | "VUS" | "PROGNOSTIC_IMPLICATION" | "DIAGNOSTIC_IMPLICATION" | "STANDARD_THERAPEUTIC_IMPLICATIONS_FOR_DRUG_SENSITIVITY" | "STANDARD_THERAPEUTIC_IMPLICATIONS_FOR_DRUG_RESISTANCE" | "INVESTIGATIONAL_THERAPEUTIC_IMPLICATIONS_DRUG_SENSITIVITY" | "INVESTIGATIONAL_THERAPEUTIC_IMPLICATIONS_DRUG_RESISTANCE" | "PATHOGENIC" | "GENOMIC_INDICATOR" | "GENOMIC_INDICATOR_ALLELE_STATE" | "GENE_PENETRANCE" | "GENE_INHERITANCE_MECHANISM" | "GENE_CANCER_RISK" | "VARIANT_PENETRANCE" | "VARIANT_INHERITANCE_MECHANISM" | "VARIANT_CANCER_RISK" >
+
+        'germline': boolean
 
         'hgvsg': string
 
@@ -638,7 +676,11 @@ export type AnnotateMutationByHGVSgQuery = {
 
 };
 export type BiologicalVariant = {
-    'mutationEffect': string
+    'cancerRisk': string
+
+        'inheritanceMechanism': string
+
+        'mutationEffect': string
 
         'mutationEffectAbstracts': Array < ArticleAbstract >
 
@@ -651,6 +693,14 @@ export type BiologicalVariant = {
         'oncogenicAbstracts': Array < ArticleAbstract >
 
         'oncogenicPmids': Array < string >
+
+        'pathogenic': string
+
+        'pathogenicAbstracts': Array < ArticleAbstract >
+
+        'pathogenicPmids': Array < string >
+
+        'penetrance': string
 
         'variant': Alteration
 
@@ -1052,6 +1102,7 @@ export default class OncoKbPrivateAPI {
     searchTreatmentsGetUsingGETURL(parameters: {
         'gene': string,
         'level' ? : string,
+        'germline' ? : boolean,
         $queryParameters ? : any
     }): string {
         let queryParameters: any = {};
@@ -1062,6 +1113,10 @@ export default class OncoKbPrivateAPI {
 
         if (parameters['level'] !== undefined) {
             queryParameters['level'] = parameters['level'];
+        }
+
+        if (parameters['germline'] !== undefined) {
+            queryParameters['germline'] = parameters['germline'];
         }
 
         if (parameters.$queryParameters) {
@@ -1080,10 +1135,12 @@ export default class OncoKbPrivateAPI {
      * @name OncoKbPrivateAPI#searchTreatmentsGetUsingGET
      * @param {string} gene - The search query, it could be hugoSymbol or entrezGeneId.
      * @param {string} level - The level of evidence.
+     * @param {boolean} germline - false
      */
     searchTreatmentsGetUsingGETWithHttpInfo(parameters: {
         'gene': string,
         'level' ? : string,
+        'germline' ? : boolean,
         $queryParameters ? : any,
         $domain ? : string
     }): Promise < request.Response > {
@@ -1112,6 +1169,10 @@ export default class OncoKbPrivateAPI {
                 queryParameters['level'] = parameters['level'];
             }
 
+            if (parameters['germline'] !== undefined) {
+                queryParameters['germline'] = parameters['germline'];
+            }
+
             if (parameters.$queryParameters) {
                 Object.keys(parameters.$queryParameters).forEach(function(parameterName) {
                     var parameter = parameters.$queryParameters[parameterName];
@@ -1130,10 +1191,12 @@ export default class OncoKbPrivateAPI {
      * @name OncoKbPrivateAPI#searchTreatmentsGetUsingGET
      * @param {string} gene - The search query, it could be hugoSymbol or entrezGeneId.
      * @param {string} level - The level of evidence.
+     * @param {boolean} germline - false
      */
     searchTreatmentsGetUsingGET(parameters: {
             'gene': string,
             'level' ? : string,
+            'germline' ? : boolean,
             $queryParameters ? : any,
             $domain ? : string
         }): Promise < Array < Treatment >
@@ -1237,12 +1300,17 @@ export default class OncoKbPrivateAPI {
         };
     searchVariantsBiologicalGetUsingGETURL(parameters: {
         'hugoSymbol' ? : string,
+        'germline' ? : boolean,
         $queryParameters ? : any
     }): string {
         let queryParameters: any = {};
         let path = '/search/variants/biological';
         if (parameters['hugoSymbol'] !== undefined) {
             queryParameters['hugoSymbol'] = parameters['hugoSymbol'];
+        }
+
+        if (parameters['germline'] !== undefined) {
+            queryParameters['germline'] = parameters['germline'];
         }
 
         if (parameters.$queryParameters) {
@@ -1260,9 +1328,11 @@ export default class OncoKbPrivateAPI {
      * @method
      * @name OncoKbPrivateAPI#searchVariantsBiologicalGetUsingGET
      * @param {string} hugoSymbol - hugoSymbol
+     * @param {boolean} germline - false
      */
     searchVariantsBiologicalGetUsingGETWithHttpInfo(parameters: {
         'hugoSymbol' ? : string,
+        'germline' ? : boolean,
         $queryParameters ? : any,
             $domain ? : string
     }): Promise < request.Response > {
@@ -1282,6 +1352,10 @@ export default class OncoKbPrivateAPI {
                 queryParameters['hugoSymbol'] = parameters['hugoSymbol'];
             }
 
+            if (parameters['germline'] !== undefined) {
+                queryParameters['germline'] = parameters['germline'];
+            }
+
             if (parameters.$queryParameters) {
                 Object.keys(parameters.$queryParameters).forEach(function(parameterName) {
                     var parameter = parameters.$queryParameters[parameterName];
@@ -1299,9 +1373,11 @@ export default class OncoKbPrivateAPI {
      * @method
      * @name OncoKbPrivateAPI#searchVariantsBiologicalGetUsingGET
      * @param {string} hugoSymbol - hugoSymbol
+     * @param {boolean} germline - false
      */
     searchVariantsBiologicalGetUsingGET(parameters: {
             'hugoSymbol' ? : string,
+            'germline' ? : boolean,
             $queryParameters ? : any,
                 $domain ? : string
         }): Promise < Array < BiologicalVariant >
@@ -1312,12 +1388,17 @@ export default class OncoKbPrivateAPI {
         };
     searchVariantsClinicalGetUsingGETURL(parameters: {
         'hugoSymbol' ? : string,
+        'germline' ? : boolean,
         $queryParameters ? : any
     }): string {
         let queryParameters: any = {};
         let path = '/search/variants/clinical';
         if (parameters['hugoSymbol'] !== undefined) {
             queryParameters['hugoSymbol'] = parameters['hugoSymbol'];
+        }
+
+        if (parameters['germline'] !== undefined) {
+            queryParameters['germline'] = parameters['germline'];
         }
 
         if (parameters.$queryParameters) {
@@ -1335,9 +1416,11 @@ export default class OncoKbPrivateAPI {
      * @method
      * @name OncoKbPrivateAPI#searchVariantsClinicalGetUsingGET
      * @param {string} hugoSymbol - hugoSymbol
+     * @param {boolean} germline - false
      */
     searchVariantsClinicalGetUsingGETWithHttpInfo(parameters: {
         'hugoSymbol' ? : string,
+        'germline' ? : boolean,
         $queryParameters ? : any,
             $domain ? : string
     }): Promise < request.Response > {
@@ -1357,6 +1440,10 @@ export default class OncoKbPrivateAPI {
                 queryParameters['hugoSymbol'] = parameters['hugoSymbol'];
             }
 
+            if (parameters['germline'] !== undefined) {
+                queryParameters['germline'] = parameters['germline'];
+            }
+
             if (parameters.$queryParameters) {
                 Object.keys(parameters.$queryParameters).forEach(function(parameterName) {
                     var parameter = parameters.$queryParameters[parameterName];
@@ -1374,9 +1461,11 @@ export default class OncoKbPrivateAPI {
      * @method
      * @name OncoKbPrivateAPI#searchVariantsClinicalGetUsingGET
      * @param {string} hugoSymbol - hugoSymbol
+     * @param {boolean} germline - false
      */
     searchVariantsClinicalGetUsingGET(parameters: {
             'hugoSymbol' ? : string,
+            'germline' ? : boolean,
             $queryParameters ? : any,
                 $domain ? : string
         }): Promise < Array < ClinicalVariant >
@@ -2308,12 +2397,16 @@ export default class OncoKbPrivateAPI {
         };
     utilsNumbersGeneGetUsingGETURL(parameters: {
         'hugoSymbol': string,
+        'germline' ? : boolean,
         $queryParameters ? : any
     }): string {
         let queryParameters: any = {};
         let path = '/utils/numbers/gene/{hugoSymbol}';
 
         path = path.replace('{hugoSymbol}', parameters['hugoSymbol'] + '');
+        if (parameters['germline'] !== undefined) {
+            queryParameters['germline'] = parameters['germline'];
+        }
 
         if (parameters.$queryParameters) {
             Object.keys(parameters.$queryParameters).forEach(function(parameterName) {
@@ -2330,9 +2423,11 @@ export default class OncoKbPrivateAPI {
      * @method
      * @name OncoKbPrivateAPI#utilsNumbersGeneGetUsingGET
      * @param {string} hugoSymbol - The gene symbol used in Human Genome Organisation.
+     * @param {boolean} germline - false
      */
     utilsNumbersGeneGetUsingGETWithHttpInfo(parameters: {
         'hugoSymbol': string,
+        'germline' ? : boolean,
         $queryParameters ? : any,
         $domain ? : string
     }): Promise < request.Response > {
@@ -2355,6 +2450,10 @@ export default class OncoKbPrivateAPI {
                 return;
             }
 
+            if (parameters['germline'] !== undefined) {
+                queryParameters['germline'] = parameters['germline'];
+            }
+
             if (parameters.$queryParameters) {
                 Object.keys(parameters.$queryParameters).forEach(function(parameterName) {
                     var parameter = parameters.$queryParameters[parameterName];
@@ -2372,9 +2471,11 @@ export default class OncoKbPrivateAPI {
      * @method
      * @name OncoKbPrivateAPI#utilsNumbersGeneGetUsingGET
      * @param {string} hugoSymbol - The gene symbol used in Human Genome Organisation.
+     * @param {boolean} germline - false
      */
     utilsNumbersGeneGetUsingGET(parameters: {
         'hugoSymbol': string,
+        'germline' ? : boolean,
         $queryParameters ? : any,
         $domain ? : string
     }): Promise < GeneNumber > {
@@ -3370,6 +3471,7 @@ export default class OncoKbPrivateAPI {
         'hgvsg' ? : string,
         'genomicChange' ? : string,
         'tumorType' ? : string,
+        'germline' ? : boolean,
         $queryParameters ? : any
     }): string {
         let queryParameters: any = {};
@@ -3402,6 +3504,10 @@ export default class OncoKbPrivateAPI {
             queryParameters['tumorType'] = parameters['tumorType'];
         }
 
+        if (parameters['germline'] !== undefined) {
+            queryParameters['germline'] = parameters['germline'];
+        }
+
         if (parameters.$queryParameters) {
             Object.keys(parameters.$queryParameters).forEach(function(parameterName) {
                 var parameter = parameters.$queryParameters[parameterName];
@@ -3423,6 +3529,7 @@ export default class OncoKbPrivateAPI {
      * @param {string} hgvsg - HGVS genomic format. Example: 7:g.140453136A>T
      * @param {string} genomicChange - Genomic change format. Example: 7,140453136,140453136,A,T
      * @param {string} tumorType - OncoTree tumor type name/main type/code
+     * @param {boolean} germline - false
      */
     utilVariantAnnotationGetUsingGETWithHttpInfo(parameters: {
         'hugoSymbol' ? : string,
@@ -3432,6 +3539,7 @@ export default class OncoKbPrivateAPI {
         'hgvsg' ? : string,
         'genomicChange' ? : string,
         'tumorType' ? : string,
+        'germline' ? : boolean,
         $queryParameters ? : any,
             $domain ? : string
     }): Promise < request.Response > {
@@ -3475,6 +3583,10 @@ export default class OncoKbPrivateAPI {
                 queryParameters['tumorType'] = parameters['tumorType'];
             }
 
+            if (parameters['germline'] !== undefined) {
+                queryParameters['germline'] = parameters['germline'];
+            }
+
             if (parameters.$queryParameters) {
                 Object.keys(parameters.$queryParameters).forEach(function(parameterName) {
                     var parameter = parameters.$queryParameters[parameterName];
@@ -3498,6 +3610,7 @@ export default class OncoKbPrivateAPI {
      * @param {string} hgvsg - HGVS genomic format. Example: 7:g.140453136A>T
      * @param {string} genomicChange - Genomic change format. Example: 7,140453136,140453136,A,T
      * @param {string} tumorType - OncoTree tumor type name/main type/code
+     * @param {boolean} germline - false
      */
     utilVariantAnnotationGetUsingGET(parameters: {
         'hugoSymbol' ? : string,
@@ -3507,6 +3620,7 @@ export default class OncoKbPrivateAPI {
         'hgvsg' ? : string,
         'genomicChange' ? : string,
         'tumorType' ? : string,
+        'germline' ? : boolean,
         $queryParameters ? : any,
             $domain ? : string
     }): Promise < VariantAnnotation > {
