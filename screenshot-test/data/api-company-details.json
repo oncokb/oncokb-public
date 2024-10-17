@@ -9,5 +9,16 @@
   "businessContact": "Representative",
   "legalContact": "override orchid reboot",
   "companyDomains": ["oncokb.org"],
-  "numberOfUsers": 0
+  "numberOfUsers": 0,
+  "additionalInfo": {
+    "license": {
+      "termination": {
+        "date": "2024-09-21",
+        "notes": "notes",
+        "notificationDays": 3433
+      },
+      "autoRenewal": false,
+      "activation": "2024-09-28"
+    }
+  }
 }
