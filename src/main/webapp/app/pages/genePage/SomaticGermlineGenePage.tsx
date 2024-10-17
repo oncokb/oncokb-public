@@ -83,6 +83,7 @@ import {
   UserGoogleGroupLink,
 } from 'app/shared/links/SocialMediaLinks';
 import styles from './GenePage.module.scss';
+import { GenomicIndicatorTable } from 'app/pages/genePage/GenomicIndicatorTable';
 
 interface MatchParams {
   hugoSymbol: string;
@@ -100,12 +101,11 @@ const NoContent: FunctionComponent<{
   return (
     <div>
       <h4>
-        There are no known {props.geneticType} mutations associated with this
-        gene.
+        There are no {props.geneticType} mutations annotated in this gene.
       </h4>
       <p>Data will be updated as new findings emerge.</p>
       <p className={'d-flex flex-column'}>
-        <div>Don't miss out on the latest data releases and new features. </div>
+        <div>Don’t miss out on the latest data releases and new features.</div>
         <div>
           Follow us on <LinkedInLink /> and <TwitterLink />, or subscribe to our
           low-volume email list!
@@ -838,6 +838,19 @@ export default class SomaticGermlineGenePage extends React.Component<
                                     )}
                                   </div>
                                 </If>
+                                {this.isGermline && (
+                                  <>
+                                    <h4 className={'mt-4'}>
+                                      Genomic Indicators
+                                    </h4>
+                                    <GenomicIndicatorTable
+                                      data={this.store.genomicIndicators.result}
+                                      isPending={
+                                        this.store.genomicIndicators.isPending
+                                      }
+                                    />
+                                  </>
+                                )}
                                 {this.hasClinicalImplications && (
                                   <>
                                     <h4 className={'mt-4'}>

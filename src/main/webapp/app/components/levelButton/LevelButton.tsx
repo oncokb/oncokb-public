@@ -63,7 +63,7 @@ export const LevelButton = inject('routing')((props: LevelButtonProps) => {
         >
           <div
             className={classnames(
-              `oncokb level-${props.level} d-flex justify-content-center align-items-center`,
+              `oncokb level-${props.level} d-flex justify-content-center align-items-center text-nowrap`,
               styles.levelName
             )}
           >
