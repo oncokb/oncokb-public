@@ -256,6 +256,28 @@ export class AnnotationStore {
     },
   });
 
+  readonly genomicIndicators = remoteData<Evidence[]>({
+    await: () => [this.gene],
+    invoke: async () => {
+      try {
+        const evidences = await apiClient.evidencesLookupGetUsingGET({
+          hugoSymbol: this.gene.result.hugoSymbol,
+          evidenceTypes: EVIDENCE_TYPES.GENOMIC_INDICATOR,
+          germline: true,
+        });
+        if (evidences.length > 0) {
+          return evidences;
+        } else {
+          return [];
+        }
+      } catch (e) {
+        notifyError(e, 'Error loading genomic indicators');
+        return [];
+      }
+    },
+    default: [],
+  });
+
   readonly geneNumber = remoteData<GeneNumber>({
     await: () => [this.gene],
     invoke: async () => {

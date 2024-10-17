@@ -194,6 +194,7 @@ export default class AlterationView extends React.Component<
                     }
               }
               cancerType={this.props.tumorType}
+              biological={[]}
               tx={this.props.therapeuticImplications}
               dx={this.props.diagnosticImplications}
               px={this.props.prognosticImplications}

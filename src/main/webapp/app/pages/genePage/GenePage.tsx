@@ -469,7 +469,7 @@ export default class GenePage extends React.Component<GenePageProps, any> {
                         </span>
                       </h2>
                       <Row>
-                        <Col md={8}>
+                        <Col md={7}>
                           <div className="">
                             <GeneInfo
                               gene={this.store.gene.result}
@@ -517,7 +517,7 @@ export default class GenePage extends React.Component<GenePageProps, any> {
                             )}
                           </div>
                         </Col>
-                        <Col md={4} style={{ fontSize: '0.8rem' }}>
+                        <Col md={5} style={{ fontSize: '0.8rem' }}>
                           <GeneAdditionalInfoTable
                             gene={this.store.gene.result}
                             grch37ensemblGene={findLast(
