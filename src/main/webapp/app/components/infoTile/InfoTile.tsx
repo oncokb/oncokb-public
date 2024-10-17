@@ -39,8 +39,8 @@ const InfoTile: React.FunctionComponent<InfoTile> = props => {
     <div className={classnames(styles.tile, 'mr-2', props.className)}>
       <div className={'h6 font-bold mb-2'}>{props.title}</div>
       <div className={'d-flex'}>
-        {props.categories.map(category => (
-          <Category {...category} className={styles.category} />
+        {props.categories.map((category, idx) => (
+          <Category key={idx} {...category} className={styles.category} />
         ))}
       </div>
     </div>

@@ -83,6 +83,8 @@ import {
   UserGoogleGroupLink,
 } from 'app/shared/links/SocialMediaLinks';
 import styles from './GenePage.module.scss';
+import StickyMiniNavBar from 'app/shared/nav/StickyMiniNavBar';
+import MiniNavBarHeader from 'app/shared/nav/MiniNavBarHeader';
 import { GenomicIndicatorTable } from 'app/pages/genePage/GenomicIndicatorTable';
 
 interface MatchParams {
@@ -659,6 +661,17 @@ export default class SomaticGermlineGenePage extends React.Component<
                         geneticType={this.selectedGeneticType}
                       />
                       <Container>
+                        <StickyMiniNavBar
+                          title={`${this.store.hugoSymbol} (${
+                            this.isGermline ? 'Germline' : 'Somatic'
+                          })`}
+                          linkUnderlineColor={
+                            this.isGermline ? '#D2A106' : '#0968C3'
+                          }
+                          stickyBackgroundColor={
+                            this.isGermline ? '#FCF4D6' : '#F0F5FF'
+                          }
+                        />
                         <Row className={`justify-content-center`}>
                           <Col md={11}>
                             {!this.hasContent && (
@@ -840,9 +853,9 @@ export default class SomaticGermlineGenePage extends React.Component<
                                 </If>
                                 {this.isGermline && (
                                   <>
-                                    <h4 className={'mt-4'}>
+                                    <MiniNavBarHeader id="genomic-indicators">
                                       Genomic Indicators
-                                    </h4>
+                                    </MiniNavBarHeader>
                                     <GenomicIndicatorTable
                                       data={this.store.genomicIndicators.result}
                                       isPending={
@@ -853,9 +866,9 @@ export default class SomaticGermlineGenePage extends React.Component<
                                 )}
                                 {this.hasClinicalImplications && (
                                   <>
-                                    <h4 className={'mt-4'}>
+                                    <MiniNavBarHeader id="clinical-implications">
                                       Clinical Implications
-                                    </h4>
+                                    </MiniNavBarHeader>
                                     <AlterationTableTabs
                                       selectedTab={this.defaultSelectedTab}
                                       hugoSymbol={this.store.hugoSymbol}
@@ -879,12 +892,12 @@ export default class SomaticGermlineGenePage extends React.Component<
                                 {this.store.filteredBiologicalAlterations
                                   .length > 0 && (
                                   <>
-                                    <h4 className={'mt-4'}>
+                                    <MiniNavBarHeader id="annotated">
                                       Annotated{' '}
                                       {this.isGermline
                                         ? 'Variants'
                                         : 'Alterations'}
-                                    </h4>
+                                    </MiniNavBarHeader>
                                     <AnnotatedAlterations
                                       germline={this.isGermline}
                                       hugoSymbol={this.store.hugoSymbol}
