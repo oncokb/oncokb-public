@@ -26,8 +26,9 @@ const GeneticTypeTabs: FunctionComponent<{
 
   return (
     <div className={styles.tabs}>
-      {[GENETIC_TYPE.SOMATIC, GENETIC_TYPE.GERMLINE].map(geneOrigin => (
+      {[GENETIC_TYPE.SOMATIC, GENETIC_TYPE.GERMLINE].map((geneOrigin, idx) => (
         <div
+          key={idx}
           style={{ width: '50%' }}
           className={
             selected === geneOrigin
