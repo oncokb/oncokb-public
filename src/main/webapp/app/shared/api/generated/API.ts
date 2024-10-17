@@ -113,7 +113,6 @@ export type Contact = {
         'phone': string
 
 };
-export type JSONObject = {};
 export type KeyAndPasswordVM = {
     'key': string
 
@@ -206,6 +205,7 @@ export type ManagedUserVM = {
         'tokenValidDays': number
 
 };
+export type MapOfstringAndlong = {};
 export type PasswordChangeDTO = {
     'currentPassword': string
 
@@ -381,21 +381,27 @@ export type UserMailsDTO = {
 export type UserOverviewUsage = {
     'dayUsage': {}
 
-    'endpoint': string
+    'monthUsage': {}
 
-        'maxUsageProportion': number
-
-        'monthUsage': {}
-
-        'noPrivateEndpoint': string
-
-        'noPrivateMaxUsageProportion': number
-
-        'totalUsage': number
-
-        'userEmail': string
+    'userEmail': string
 
         'userId': string
+
+        'yearUsage': {}
+
+};
+export type UserStats = {
+    'maxUsageProportion': number
+
+        'mostUsedEndpoint': string
+
+        'mostUsedPublicEndpoint': string
+
+        'publicMaxUsageProportion': number
+
+        'totalPublicUsage': number
+
+        'totalUsage': number
 
 };
 export type UserUsage = {
