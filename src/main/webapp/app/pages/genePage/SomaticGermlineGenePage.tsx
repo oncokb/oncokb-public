@@ -70,7 +70,7 @@ import { findLast } from 'app/shared/utils/LodashUtils';
 import { Helmet } from 'react-helmet-async';
 import { NcbiLink } from 'app/shared/links/NcbiLink';
 import GeneAliasesDescription from 'app/shared/texts/GeneAliasesDescription';
-import { COLOR_GREY } from 'app/config/theme';
+import { COLOR_GERMLINE, COLOR_GERMLINE_SHADE, COLOR_GREY, COLOR_SOMATIC, COLOR_SOMATIC_SHADE } from 'app/config/theme';
 import LoETile from 'app/components/infoTile/LoETile';
 import GeneticTypeTabs, {
   GENETIC_TYPE,
@@ -101,7 +101,7 @@ const NoContent: FunctionComponent<{
   geneticType: GENETIC_TYPE;
 }> = props => {
   return (
-    <div>
+    <div className={'my-5'}>
       <h4>
         There are no {props.geneticType} mutations annotated in this gene.
       </h4>
@@ -660,20 +660,20 @@ export default class SomaticGermlineGenePage extends React.Component<
                         hugoSymbol={this.store.hugoSymbol}
                         geneticType={this.selectedGeneticType}
                       />
-                      {this.hasContent ? (
+                      {this.hasContent && (
                         <StickyMiniNavBar
                           title={`${this.store.hugoSymbol} (${
                             this.isGermline ? 'Germline' : 'Somatic'
                           })`}
                           linkUnderlineColor={
-                            this.isGermline ? '#D2A106' : '#0968C3'
+                            this.isGermline ? COLOR_GERMLINE : COLOR_SOMATIC
                           }
                           stickyBackgroundColor={
-                            this.isGermline ? '#FCF4D6' : '#F0F5FF'
+                            this.isGermline
+                              ? COLOR_GERMLINE_SHADE
+                              : COLOR_SOMATIC_SHADE
                           }
                         />
-                      ) : (
-                        <div style={{ marginTop: '1rem' }}></div>
                       )}
                       <Container>
                         <Row className={`justify-content-center`}>

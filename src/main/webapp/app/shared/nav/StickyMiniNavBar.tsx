@@ -229,7 +229,7 @@ export default function StickyMiniNavBar({
                       borderBottomStyle: 'solid',
                       borderBottomWidth: '4px',
                       fontFamily: isInSection ? 'Gotham Bold' : 'Gotham Book',
-                      padding: '7px 0px',
+                      padding: '7px 0px 3px 0',
                     }}
                   >
                     {label}

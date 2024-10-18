@@ -10,3 +10,8 @@ export const COLOR_ERROR = '#dc3545';
 
 export const COLOR_ICON_WITH_INFO = COLOR_BLACK;
 export const COLOR_ICON_WITHOUT_INFO = COLOR_LIGHT_GREY;
+
+export const COLOR_SOMATIC = COLOR_BLUE;
+export const COLOR_SOMATIC_SHADE = "#F0F5FF"
+export const COLOR_GERMLINE = "#D2A106"
+export const COLOR_GERMLINE_SHADE = "#FCF4D6"
