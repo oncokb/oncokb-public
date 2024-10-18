@@ -1,15 +1,15 @@
 import React from 'react';
 import Select from 'react-select';
 
-export type IFormSelectWithLabelProps = {
-  onSelection: (selectedOption: any) => void;
+export type IFormSelectWithLabelProps<Label, Value> = {
+  onSelection: (selectedOption: { label: Label; value: Value }) => void;
   labelText: string;
   name: string;
-  defaultValue?: { value: any; label: any };
-  options: { value: any; label: any }[];
+  defaultValue?: { label: Label; value: Value };
+  options: { label: Label; value: Value }[];
   boldLabel?: boolean;
   isClearable?: boolean;
-  value?: { value: any; label: any } | null;
+  value?: { label: Label; value: Value } | null;
 };
 
 export type Option = {
@@ -17,7 +17,9 @@ export type Option = {
   value: string;
 };
 
-export const FormSelectWithLabelField: React.FunctionComponent<IFormSelectWithLabelProps> = props => {
+export default function FormSelectWithLabelField<Label, Value>(
+  props: IFormSelectWithLabelProps<Label, Value>
+) {
   return (
     <div className="form-group">
       <div className={`mb-2 ${props.boldLabel ? 'font-weight-bold' : ''}`}>
@@ -33,4 +35,4 @@ export const FormSelectWithLabelField: React.FunctionComponent<IFormSelectWithLa
       />
     </div>
   );
-};
+}
