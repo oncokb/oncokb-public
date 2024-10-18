@@ -1,6 +1,8 @@
 import React, { useEffect, useRef, useState, useCallback } from 'react';
 import { Link, useLocation } from 'react-router-dom';
-import { Row, Col } from 'react-bootstrap';
+import { Row, Col, Container } from 'react-bootstrap';
+import styles from './StickyMiniNavBar.module.scss';
+import classNames from 'classnames';
 
 function getNavBarSectionElements() {
   return document.querySelectorAll('[mini-nav-bar-header]');
@@ -28,6 +30,7 @@ function useScrollToHash({ stickyHeight }: { stickyHeight: number }) {
       }
     }
   }, [location]);
+  return location.hash;
 }
 
 type IStickyMiniNavBar = {
@@ -46,11 +49,11 @@ export default function StickyMiniNavBar({
   const [sections, setSections] = useState<
     { id: string; label: string | null }[]
   >([]);
-  const [passedElements, setPassedElements] = useState<Record<string, boolean>>(
-    {}
-  );
+  const [passedElements, setPassedElements] = useState<
+    Record<string, { isPassed: boolean; isInView: boolean }>
+  >({});
   const stickyDivRef = useRef<HTMLDivElement | null>(null);
-  useScrollToHash({
+  const hash = useScrollToHash({
     stickyHeight:
       headerHeight +
       (stickyDivRef.current?.getBoundingClientRect().height ?? 0),
@@ -99,9 +102,12 @@ export default function StickyMiniNavBar({
       entries.forEach(entry => {
         const targetId = entry.target.getAttribute('id') ?? '';
         const hasId = sections.find(x => x.id === targetId);
-        newPassedElements[targetId] =
-          hasId !== undefined &&
-          (entry.isIntersecting || entry.boundingClientRect.y < 0);
+        newPassedElements[targetId] = {
+          isPassed:
+            hasId !== undefined &&
+            (entry.isIntersecting || entry.boundingClientRect.y < 0),
+          isInView: hasId !== undefined && entry.isIntersecting,
+        };
       });
       setPassedElements(x => {
         return {
@@ -131,88 +137,109 @@ export default function StickyMiniNavBar({
     };
   }, [headerHeight]);
 
-  let currentSectionId = sections[0]?.id;
-  for (let i = sections.length - 1; i >= 0; i--) {
-    const id = sections[i].id;
-    if (passedElements[id]) {
-      currentSectionId = id;
-      break;
+  const currentSectionId = [...sections].sort(
+    ({ id: leftId }, { id: rightId }) => {
+      const leftPassedInfo = passedElements[leftId] ?? {};
+      const rightPassedInfo = passedElements[rightId] ?? {};
+      if (`#${leftId}` === hash && leftPassedInfo.isInView) {
+        return -1;
+      } else if (`#${rightId}` === hash && rightPassedInfo.isInView) {
+        return 1;
+      } else if (leftPassedInfo.isInView && !rightPassedInfo.isInView) {
+        return -1;
+      } else if (rightPassedInfo.isInView && !leftPassedInfo.isInView) {
+        return 1;
+      } else if (rightPassedInfo.isPassed) {
+        return 1;
+      } else if (leftPassedInfo.isPassed) {
+        return -1;
+      } else {
+        return 0;
+      }
     }
-  }
+  )[0]?.id;
 
   return (
-    <Row
-      className="justify-content-center"
+    <Container
+      className={classNames('container', styles.container)}
       style={{
         position: 'sticky',
         top: headerHeight,
         zIndex: 100,
+        borderBottom: '1px',
+        borderBottomStyle: 'solid',
+        borderBottomColor: '#E3E5EC',
         backgroundColor: isSticky ? stickyBackgroundColor : undefined,
       }}
     >
-      <Col md={11}>
-        <nav
-          ref={stickyDivRef}
-          className="d-flex flex-row"
-          style={{
-            gap: '40px',
-            height: '49px',
-          }}
-        >
-          {isSticky && (
-            <Link
-              className="font-weight-bold d-flex align-items-center justify-content-center"
-              // # is removed from link so we have to use onclick to scroll to the top
-              to="#"
-              style={{
-                color: '#000000',
-                fontFamily: 'Gotham Bold',
-                padding: '7px 0px',
-              }}
-              onClick={e => {
-                e.preventDefault();
-                window.scrollTo({
-                  top: 0,
-                  behavior: 'smooth',
-                });
-              }}
-            >
-              {title}
-            </Link>
-          )}
-          <div
+      <Row className="justify-content-center">
+        <Col md={11}>
+          <nav
+            ref={stickyDivRef}
             className="d-flex flex-row"
             style={{
-              gap: '10px',
+              gap: '40px',
+              height: '49px',
             }}
           >
-            {sections.map(({ id, label }) => {
-              const isInSection = currentSectionId === id;
-              return (
-                <Link
-                  key={id}
-                  to={`#${id}`}
-                  className={`
-                    d-flex align-items-center justify-content-center
-                    ${isInSection ? 'font-weight-bold' : 'font-weight-normal'}`}
-                  style={{
-                    color: '#000000',
-                    borderColor: isInSection
-                      ? linkUnderlineColor
-                      : 'transparent',
-                    borderBottomStyle: 'solid',
-                    borderBottomWidth: '4px',
-                    fontFamily: isInSection ? 'Gotham Bold' : 'Gotham Book',
-                    padding: '7px 0px',
-                  }}
-                >
-                  {label}
-                </Link>
-              );
-            })}
-          </div>
-        </nav>
-      </Col>
-    </Row>
+            {isSticky && (
+              <Link
+                className="font-weight-bold d-flex align-items-center justify-content-center"
+                // # is removed from link so we have to use onclick to scroll to the top
+                to="#"
+                style={{
+                  color: '#000000',
+                  fontFamily: 'Gotham Bold',
+                  padding: '7px 0px',
+                }}
+                onClick={e => {
+                  e.preventDefault();
+                  window.scrollTo({
+                    top: 0,
+                    behavior: 'smooth',
+                  });
+                }}
+              >
+                {title}
+              </Link>
+            )}
+            <div
+              className="d-flex flex-row"
+              style={{
+                gap: '10px',
+              }}
+            >
+              {sections.map(({ id, label }) => {
+                const isInSection = currentSectionId === id;
+                return (
+                  <Link
+                    key={id}
+                    to={`#${id}`}
+                    className={classNames(
+                      'd-flex',
+                      'align-items-center',
+                      'justify-content-center',
+                      isInSection ? 'font-weight-bold' : 'font-weight-normal'
+                    )}
+                    style={{
+                      color: '#000000',
+                      borderColor: isInSection
+                        ? linkUnderlineColor
+                        : 'transparent',
+                      borderBottomStyle: 'solid',
+                      borderBottomWidth: '4px',
+                      fontFamily: isInSection ? 'Gotham Bold' : 'Gotham Book',
+                      padding: '7px 0px',
+                    }}
+                  >
+                    {label}
+                  </Link>
+                );
+              })}
+            </div>
+          </nav>
+        </Col>
+      </Row>
+    </Container>
   );
 }
