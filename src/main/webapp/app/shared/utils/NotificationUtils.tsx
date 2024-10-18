@@ -5,11 +5,7 @@ import { upperFirst } from 'app/shared/utils/LodashUtils';
 const getFormattedMessage = (message: string) => {
   return upperFirst(message);
 };
-const getErrorMessage = (
-  error: OncoKBError,
-  additionalInfo?: string,
-  includeDetails?: boolean
-) => {
+const getErrorMessage = (error: OncoKBError, additionalInfo?: string) => {
   const content: string[] = [];
   if (additionalInfo) {
     content.push(additionalInfo);
@@ -20,9 +16,6 @@ const getErrorMessage = (
     }
     if (error.response.body.message) {
       content.push(error.response.body.message);
-    }
-    if (includeDetails && error.response.body.detail) {
-      content.push(error.response.body.detail);
     }
   } else {
     content.push(error.message);
@@ -41,21 +34,16 @@ export const notifySuccess = (message: string) => {
     className: 'bg-success',
   });
 };
-export const notifyWarning = (
-  error: OncoKBError,
-  additionalInfo?: string,
-  includeDetails?: boolean
-) => {
-  return toast.warn(getErrorMessage(error, additionalInfo, includeDetails), {
+export const notifyWarning = (error: OncoKBError, additionalInfo?: string) => {
+  return toast.warn(getErrorMessage(error, additionalInfo), {
     className: 'bg-warning',
   });
 };
 export const notifyError = (
   error: Error | OncoKBError,
-  additionalInfo?: string,
-  includeDetails?: boolean
+  additionalInfo?: string
 ) => {
-  return toast.error(getErrorMessage(error, additionalInfo, includeDetails), {
+  return toast.error(getErrorMessage(error, additionalInfo), {
     className: 'bg-danger',
   });
 };

@@ -10,7 +10,6 @@ import org.mskcc.cbio.oncokb.domain.enumeration.LicenseType;
 import org.mskcc.cbio.oncokb.domain.Company;
 import org.mskcc.cbio.oncokb.domain.UserMessagePair;
 import org.mskcc.cbio.oncokb.domain.enumeration.MailType;
-import org.mskcc.cbio.oncokb.service.dto.TerminationEmailDTO;
 import org.mskcc.cbio.oncokb.service.dto.UserDTO;
 import org.mskcc.cbio.oncokb.service.dto.UserMailsDTO;
 import org.mskcc.cbio.oncokb.web.rest.vm.ExposedToken;
@@ -84,20 +83,6 @@ public class MailService {
         private UnknownMailTypeException() {
             super("Cannot identify the MailType.");
         }
-    }
-
-    public void sendEmail(TerminationEmailDTO dto) throws MessagingException {
-        log.debug("Send email to company ID '{}' with subject '{}' and content={}",
-            dto.getCompanyId(),  dto.getSubject(), dto.getContent());
-
-        MimeMessage mimeMessage = javaMailSender.createMimeMessage();
-        MimeMessageHelper message = new MimeMessageHelper(mimeMessage, false, StandardCharsets.UTF_8.name());
-        message.setFrom(dto.getFrom());
-        message.setBcc(dto.getBcc().split(";"));
-        message.setCc(dto.getCc().split(";"));
-        message.setSubject(dto.getSubject());
-        message.setText(dto.getContent(), false);
-        javaMailSender.send(mimeMessage);
     }
 
     @Async
@@ -248,21 +233,6 @@ public class MailService {
             }
         } catch (MailException | MessagingException e) {
             log.warn("Email could not be sent to user '{}'", user.getEmail(), e);
-        }
-    }
-
-    public void sendInternalEmailFromTemplate(MailType mailType, String subject, String to, Context additionalContext) {
-        Context context = new Context(Locale.ENGLISH);
-
-        if (additionalContext != null)
-            additionalContext.getVariableNames().forEach(name -> context.setVariable(name, additionalContext.getVariable(name)));
-
-        String from = jHipsterProperties.getMail().getFrom();
-        String content = templateEngine.process("mail/" + mailType.getTemplateName(), context);
-        try {
-            sendEmail(to, from, null, subject, content, null, false, true);
-        } catch (MailException | MessagingException e) {
-            log.warn("Internal email could not be sent to '{}'", to, e);
         }
     }
 

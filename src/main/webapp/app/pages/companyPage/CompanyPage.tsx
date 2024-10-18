@@ -19,9 +19,6 @@ import {
   Token,
   UserDTO,
   UserOverviewUsage,
-  CompanyAdditionalInfoDTO,
-  TerminationEmailDTO,
-  CompanyTermination,
   UserStats,
 } from 'app/shared/api/generated/API';
 import client from 'app/shared/api/clientInstance';
@@ -29,14 +26,10 @@ import { action, computed, observable } from 'mobx';
 import { Else, If, Then } from 'react-if';
 import LoadingIndicator from 'app/components/loadingIndicator/LoadingIndicator';
 import { RouteComponentProps } from 'react-router';
-import {
-  notifyError,
-  notifySuccess,
-  notifyInfo,
-} from 'app/shared/utils/NotificationUtils';
+import { notifyError, notifySuccess } from 'app/shared/utils/NotificationUtils';
 import { PromiseStatus } from 'app/shared/utils/PromiseUtils';
 import { FormTextAreaField } from 'app/shared/textarea/FormTextAreaField';
-import FormSelectWithLabelField from 'app/shared/select/FormSelectWithLabelField';
+import { FormSelectWithLabelField } from 'app/shared/select/FormSelectWithLabelField';
 import { COMPANY_FORM_OPTIONS } from 'app/components/newCompanyForm/NewCompanyForm';
 import { FormListField } from 'app/shared/list/FormListField';
 import { UserTable } from 'app/shared/table/UserTable';
@@ -76,10 +69,6 @@ import { DownloadButton } from 'app/components/downloadButton/DownloadButton';
 import { RouterStore } from 'mobx-react-router';
 import { TEXT_VAL } from 'app/shared/utils/FormValidationUtils';
 import { Helmet } from 'react-helmet-async';
-import CompanyAdditionalInfo, {
-  createDefaultAdditionalInfo,
-} from './CompanyAdditionalInfo';
-import FormInputField from 'app/shared/input/FormInputField';
 import { ToggleValue } from '../usageAnalysisPage/usage-analysis-utils';
 
 interface MatchParams {
@@ -119,17 +108,7 @@ enum SimpleConfirmModalType {
   NA,
   DELETE_COMPANY,
   UPDATE_COMPANY,
-  SEND_TERMINATION_NOTICE,
 }
-
-const defaultPayload: TerminationEmailDTO = {
-  subject: '',
-  from: '',
-  cc: '',
-  bcc: '',
-  content: '',
-  companyId: 0,
-};
 
 @inject('routing')
 @observer
@@ -153,9 +132,6 @@ export default class CompanyPage extends React.Component<ICompanyPage> {
 
   @observable simpleConfirmModalType: SimpleConfirmModalType =
     SimpleConfirmModalType.NA;
-
-  sendTerminationNoticePayload: TerminationEmailDTO = defaultPayload;
-  @observable editAllModeEnabled = false;
 
   @observable resourcesTypeToggleValue: ToggleValue =
     ToggleValue.PUBLIC_RESOURCES;
@@ -229,18 +205,6 @@ export default class CompanyPage extends React.Component<ICompanyPage> {
     const newCompanyUserEmails = this.selectedUsersOptions.map(
       selection => selection.value
     );
-    if (this.selectedLicenseStatus === 'TRIAL') {
-      this.company.additionalInfo = (null as unknown) as CompanyAdditionalInfoDTO;
-    } else if (this.company.additionalInfo?.license) {
-      const license = this.company.additionalInfo?.license;
-      if (!license.activation) {
-        license.autoRenewal = false;
-        license.termination = (undefined as unknown) as CompanyTermination;
-      } else if (license.termination && !license.termination.date) {
-        license.termination.notes = (undefined as unknown) as string;
-        license.termination.notificationDays = (undefined as unknown) as number;
-      }
-    }
     const updatedCompany: CompanyVM = {
       ...this.company,
       licenseStatus: this.selectedLicenseStatus,
@@ -286,17 +250,6 @@ export default class CompanyPage extends React.Component<ICompanyPage> {
   }
 
   @autobind
-  onConfirmSendTerminationNoticeButton() {
-    this.showModal = false;
-    client
-      .sendTerminationWarningEmailUsingPOST({
-        terminationEmailDto: this.sendTerminationNoticePayload,
-      })
-      .then(() => notifySuccess('Email sent successfully!'))
-      .catch(notifyError);
-  }
-
-  @autobind
   onConfirmSimpleConfirmModal() {
     switch (this.simpleConfirmModalType) {
       case SimpleConfirmModalType.UPDATE_COMPANY:
@@ -304,9 +257,6 @@ export default class CompanyPage extends React.Component<ICompanyPage> {
         break;
       case SimpleConfirmModalType.DELETE_COMPANY:
         this.onConfirmDeleteAccountButton();
-        break;
-      case SimpleConfirmModalType.SEND_TERMINATION_NOTICE:
-        this.onConfirmSendTerminationNoticeButton();
         break;
       case SimpleConfirmModalType.NA:
       default:
@@ -429,11 +379,6 @@ export default class CompanyPage extends React.Component<ICompanyPage> {
       this.simpleConfirmModalType === SimpleConfirmModalType.DELETE_COMPANY
     ) {
       return 'Confirm Deleting Company';
-    } else if (
-      this.simpleConfirmModalType ===
-      SimpleConfirmModalType.SEND_TERMINATION_NOTICE
-    ) {
-      return 'Send Termination Notice';
     }
   }
 
@@ -457,75 +402,6 @@ export default class CompanyPage extends React.Component<ICompanyPage> {
             Warning: {this.confirmLicenseChangeModalText}
           </Alert>
         </>
-      );
-    } else if (
-      this.simpleConfirmModalType ===
-      SimpleConfirmModalType.SEND_TERMINATION_NOTICE
-    ) {
-      const isReadonly = !this.editAllModeEnabled;
-      return (
-        <AvForm>
-          <div className="form-group">
-            <Button
-              variant="outline-primary"
-              onClick={() =>
-                (this.editAllModeEnabled = !this.editAllModeEnabled)
-              }
-            >
-              Toggle Edit All
-              <i className="ml-2 fa fa-pencil-square-o" />
-            </Button>
-          </div>
-          <FormInputField
-            id="from"
-            type="text"
-            label="From"
-            disabled={true}
-            value={this.sendTerminationNoticePayload.from}
-            onChange={e =>
-              (this.sendTerminationNoticePayload.from = e.target.value)
-            }
-          />
-          <FormInputField
-            id="subject"
-            type="text"
-            label="Subject"
-            disabled={isReadonly}
-            value={this.sendTerminationNoticePayload.subject}
-            onChange={e =>
-              (this.sendTerminationNoticePayload.subject = e.target.value)
-            }
-          />
-          <FormInputField
-            id="cc"
-            type="text"
-            label="CC"
-            disabled={isReadonly}
-            value={this.sendTerminationNoticePayload.cc}
-            onChange={e =>
-              (this.sendTerminationNoticePayload.cc = e.target.value)
-            }
-          />
-          <FormTextAreaField
-            id="bcc"
-            label="BCC"
-            rows={1}
-            readOnly={isReadonly}
-            value={this.sendTerminationNoticePayload.bcc}
-            onTextAreaChange={e =>
-              (this.sendTerminationNoticePayload.bcc = e.target.value)
-            }
-          />
-          <FormTextAreaField
-            id="content"
-            label="Content"
-            rows={10}
-            value={this.sendTerminationNoticePayload.content}
-            onTextAreaChange={e =>
-              (this.sendTerminationNoticePayload.content = e.target.value)
-            }
-          />
-        </AvForm>
       );
     } else {
       return undefined;
@@ -638,61 +514,26 @@ export default class CompanyPage extends React.Component<ICompanyPage> {
                   <Row className={getSectionClassName()}>
                     <Col>
                       <div>Quick Tools</div>
-                      <div
-                        className="d-flex flex-row flex-wrap"
-                        style={{ gap: '2rem' }}
-                      >
-                        <div>
-                          <Link
-                            className="btn btn-outline-primary m-2"
-                            to={`/companies/${this.company.id}/create-users`}
-                          >
-                            Create Company Users
-                          </Link>
-                          {this.companyHasTrialUsers && (
-                            <DefaultTooltip
-                              overlay={
-                                <DateSelector
-                                  afterChangeDate={this.extendTrialAccess}
-                                />
-                              }
-                            >
-                              <QuickToolButton>
-                                Extend Trial Access
-                              </QuickToolButton>
-                            </DefaultTooltip>
-                          )}
-                        </div>
-
-                        <Button
-                          variant="outline-primary"
-                          className="m-2"
-                          onClick={() => {
-                            this.editAllModeEnabled = false;
-                            client
-                              .getTerminationWarningEmailUsingGET({
-                                companyId: this.company.id,
-                              })
-                              .then(x => {
-                                this.sendTerminationNoticePayload = x;
-                                this.showModal = true;
-                                this.simpleConfirmModalType =
-                                  SimpleConfirmModalType.SEND_TERMINATION_NOTICE;
-                              })
-                              .catch(e => {
-                                notifyError(e, undefined, true);
-                                this.sendTerminationNoticePayload = {
-                                  ...defaultPayload,
-                                  companyId: this.company.id,
-                                };
-                                this.showModal = true;
-                                this.simpleConfirmModalType =
-                                  SimpleConfirmModalType.SEND_TERMINATION_NOTICE;
-                              });
-                          }}
+                      <div>
+                        <Link
+                          className="btn btn-outline-primary m-2"
+                          to={`/companies/${this.company.id}/create-users`}
                         >
-                          Send Termination Warning Email
-                        </Button>
+                          Create Company Users
+                        </Link>
+                        {this.companyHasTrialUsers && (
+                          <DefaultTooltip
+                            overlay={
+                              <DateSelector
+                                afterChangeDate={this.extendTrialAccess}
+                              />
+                            }
+                          >
+                            <QuickToolButton>
+                              Extend Trial Access
+                            </QuickToolButton>
+                          </DefaultTooltip>
+                        )}
                       </div>
                     </Col>
                   </Row>
@@ -833,34 +674,13 @@ export default class CompanyPage extends React.Component<ICompanyPage> {
                               LICENSE_STATUS_TITLES[this.selectedLicenseStatus],
                           }}
                           options={this.licenseStatusOptions}
-                          onSelection={(selectedOption: any) => {
-                            const newValue: LicenseStatus =
-                              selectedOption.value;
-                            if (
-                              newValue !== 'TRIAL' &&
-                              !this.company.additionalInfo
-                            ) {
-                              this.company.additionalInfo = createDefaultAdditionalInfo() as CompanyAdditionalInfoDTO;
-                            }
-                            this.selectedLicenseStatus = selectedOption.value;
-                          }}
+                          onSelection={(selectedOption: any) =>
+                            (this.selectedLicenseStatus = selectedOption.value)
+                          }
                           boldLabel
                         />
                       </Col>
                     </Row>
-                    {this.selectedLicenseStatus !== 'TRIAL' && (
-                      <Row className={getSectionClassName()}>
-                        <Col>
-                          <CompanyAdditionalInfo
-                            mode="update"
-                            additionalInfo={this.company.additionalInfo}
-                            setAdditionalInfo={x => {
-                              this.company.additionalInfo = x as CompanyAdditionalInfoDTO;
-                            }}
-                          />
-                        </Col>
-                      </Row>
-                    )}
                     <Row className={getSectionClassName()}>
                       <Col>
                         <div className="form-group">

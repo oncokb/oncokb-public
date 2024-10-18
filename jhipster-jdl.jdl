@@ -40,7 +40,6 @@ entity Company {
     licenseStatus LicenseStatus required,
     businessContact String,
     legalContact String,
-    additionalInfo TextBlob
 }
 
 entity CompanyDomain {

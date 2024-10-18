@@ -188,4 +188,5 @@ public class ApplicationProperties {
     public void setRecaptcha(RecaptchaProperties recaptcha) {
         this.recaptcha = recaptcha;
     }
+
 }

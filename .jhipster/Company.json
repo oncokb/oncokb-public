@@ -42,11 +42,6 @@
     {
       "fieldName": "legalContact",
       "fieldType": "String"
-    },
-    {
-      "fieldName": "additionalInfo",
-      "fieldType": "byte[]",
-      "fieldTypeBlobContent": "text"
     }
   ],
   "relationships": [
