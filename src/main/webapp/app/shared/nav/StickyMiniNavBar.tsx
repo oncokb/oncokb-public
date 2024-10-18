@@ -156,11 +156,12 @@ export default function StickyMiniNavBar({
           className="d-flex flex-row"
           style={{
             gap: '40px',
+            height: '49px',
           }}
         >
           {isSticky && (
             <Link
-              className="h6 font-weight-bold"
+              className="font-weight-bold d-flex align-items-center justify-content-center"
               // # is removed from link so we have to use onclick to scroll to the top
               to="#"
               style={{
@@ -191,9 +192,9 @@ export default function StickyMiniNavBar({
                 <Link
                   key={id}
                   to={`#${id}`}
-                  className={`h6 ${
-                    isInSection ? 'font-weight-bold' : 'font-weight-normal'
-                  }`}
+                  className={`
+                    d-flex align-items-center justify-content-center
+                    ${isInSection ? 'font-weight-bold' : 'font-weight-normal'}`}
                   style={{
                     color: '#000000',
                     borderColor: isInSection
