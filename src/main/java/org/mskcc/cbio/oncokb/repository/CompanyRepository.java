@@ -24,7 +24,4 @@ public interface CompanyRepository extends JpaRepository<Company, Long> {
 
     @Cacheable(cacheResolver = "companyCacheResolver")
     Optional<Company> findOneByNameIgnoreCase(String name);
-
-    @Query("select c from Company c where c.id in ?1")
-    List<Company> findCompaniesByIds(List<Long> ids);
 }

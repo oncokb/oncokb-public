@@ -12,10 +12,7 @@ import org.mapstruct.MappingTarget;
 import org.mskcc.cbio.oncokb.domain.*;
 import org.mskcc.cbio.oncokb.repository.CompanyDomainRepository;
 import org.mskcc.cbio.oncokb.service.dto.CompanyDTO;
-import org.mskcc.cbio.oncokb.service.dto.companyadditionalinfo.CompanyAdditionalInfoDTO;
 import org.springframework.beans.factory.annotation.Autowired;
-
-import com.google.gson.Gson;
 
 /**
  * Mapper for the entity {@link Company} and its DTO {@link CompanyDTO}.
@@ -50,14 +47,6 @@ public abstract class CompanyMapper implements EntityMapper<CompanyDTO, Company>
             .collect(Collectors.toCollection(HashSet::new));
     }
 
-    protected String fromAdditionalInfo(CompanyAdditionalInfoDTO additionalInfo) {
-        return new Gson().toJson(additionalInfo);
-    }
-
-    protected CompanyAdditionalInfoDTO toAdditionalInfo(String additionalInfo) {
-        return new Gson().fromJson(additionalInfo, CompanyAdditionalInfoDTO.class);
-    }
-
     // Ensure that both sides of the relationship is updated. Company will have a list of CompanyDomains
     // and CompanyDomain will contain a list of companies.
     @AfterMapping
@@ -77,4 +66,5 @@ public abstract class CompanyMapper implements EntityMapper<CompanyDTO, Company>
         company.setId(id);
         return company;
     }
+
 }

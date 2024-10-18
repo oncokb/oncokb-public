@@ -1,13 +1,10 @@
 package org.mskcc.cbio.oncokb.web.rest;
 
-import com.google.gson.Gson;
-import org.mskcc.cbio.oncokb.RedisTestContainerExtension;
 import org.mskcc.cbio.oncokb.OncokbPublicApp;
 import org.mskcc.cbio.oncokb.domain.Company;
 import org.mskcc.cbio.oncokb.repository.CompanyRepository;
 import org.mskcc.cbio.oncokb.service.CompanyService;
 import org.mskcc.cbio.oncokb.service.dto.CompanyDTO;
-import org.mskcc.cbio.oncokb.service.dto.companyadditionalinfo.CompanyAdditionalInfoDTO;
 import org.mskcc.cbio.oncokb.service.mapper.CompanyMapper;
 import org.mskcc.cbio.oncokb.web.rest.vm.CompanyVM;
 import org.mskcc.cbio.oncokb.security.AuthoritiesConstants;
@@ -81,8 +78,6 @@ public class CompanyResourceIT {
     private static final String[] UPDATED_COMPANY_DOMAIN_NAMES = new String[] {"oncokb.org, mskcc.org"};
 
     private static final Set<String> UPDATED_COMPANY_DOMAINS = new HashSet<>(Arrays.asList(UPDATED_COMPANY_DOMAIN_NAMES));
-    private static final CompanyAdditionalInfoDTO DEFAULT_ADDITIONAL_INFO = new CompanyAdditionalInfoDTO();
-    private static final CompanyAdditionalInfoDTO UPDATED_ADDITIONAL_INFO = new CompanyAdditionalInfoDTO();
 
     @Autowired
     private CompanyRepository companyRepository;
@@ -119,8 +114,7 @@ public class CompanyResourceIT {
             .licenseModel(DEFAULT_LICENSE_MODEL)
             .licenseStatus(DEFAULT_LICENSE_STATUS)
             .businessContact(DEFAULT_BUSINESS_CONTACT)
-            .legalContact(DEFAULT_LEGAL_CONTACT)
-            .additionalInfo(new Gson().toJson(DEFAULT_ADDITIONAL_INFO));
+            .legalContact(DEFAULT_LEGAL_CONTACT);
         return company;
     }
     /**
@@ -138,8 +132,7 @@ public class CompanyResourceIT {
             .licenseModel(UPDATED_LICENSE_MODEL)
             .licenseStatus(UPDATED_LICENSE_STATUS)
             .businessContact(UPDATED_BUSINESS_CONTACT)
-            .legalContact(UPDATED_LEGAL_CONTACT)
-            .additionalInfo(new Gson().toJson(UPDATED_ADDITIONAL_INFO));
+            .legalContact(UPDATED_LEGAL_CONTACT);
         return company;
     }
 
@@ -177,7 +170,7 @@ public class CompanyResourceIT {
         assertThat(testCompany.getCompanyDomains())
             .extracting(companyDomain -> companyDomain.getName())
             .containsExactlyInAnyOrderElementsOf(DEFAULT_COMPANY_DOMAINS);
-
+        
     }
 
     @Test
@@ -337,7 +330,7 @@ public class CompanyResourceIT {
     @Transactional
     public void checkCompanyDomainIsNotEmpty() throws Exception {
         int databaseSizeBeforeTest = companyRepository.findAll().size();
-
+        
         // Create the companyDTO with empty domain list
         CompanyDTO companyDTO = companyMapper.toDto(company);
         companyDTO.setCompanyDomains(new HashSet<String>());
@@ -474,7 +467,7 @@ public class CompanyResourceIT {
             .contentType(MediaType.APPLICATION_JSON)
             .content(TestUtil.convertObjectToJsonBytes(companyVM)))
             .andExpect(status().isBadRequest());
-
+    
         // Validate the Company in the database
         List<Company> companyList = companyRepository.findAll();
         assertThat(companyList).hasSize(databaseSizeBeforeUpdate);

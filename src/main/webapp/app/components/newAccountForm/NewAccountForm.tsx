@@ -34,7 +34,7 @@ import {
   getSectionClassName,
 } from 'app/pages/account/AccountUtils';
 import { If, Then } from 'react-if';
-import FormSelectWithLabelField from 'app/shared/select/FormSelectWithLabelField';
+import { FormSelectWithLabelField } from 'app/shared/select/FormSelectWithLabelField';
 import client from 'app/shared/api/clientInstance';
 import { notifyError } from 'app/shared/utils/NotificationUtils';
 import {
