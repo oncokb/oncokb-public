@@ -18,6 +18,7 @@ import {
   sortByLevelWithLevels,
 } from 'app/shared/utils/ReactTableUtils';
 import WithSeparator from 'react-with-separator';
+import { COLOR_GERMLINE, COLOR_SOMATIC } from 'app/config/theme';
 
 export enum SearchOptionType {
   GENE = 'GENE',
@@ -50,6 +51,18 @@ const GeneSearchOption: React.FunctionComponent<{
   return (
     <>
       <div className={'d-flex'}>
+        {props.data.annotation && (
+          <b
+            style={{
+              color:
+                props.data.annotation.toLowerCase() === 'germline'
+                  ? COLOR_GERMLINE
+                  : COLOR_SOMATIC,
+            }}
+          >
+            {props.data.annotation}:{' '}
+          </b>
+        )}
         <Highlighter
           searchWords={[props.search]}
           textToHighlight={`${props.data.gene.hugoSymbol} (Entrez Gene: ${props.data.gene.entrezGeneId})`}

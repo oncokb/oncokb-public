@@ -8,6 +8,7 @@ import {
 import React from 'react';
 import { Evidence } from 'app/shared/api/generated/OncoKbAPI';
 import { getAlterationName } from 'app/shared/utils/Utils';
+import { LongText } from 'app/oncokb-frontend-commons/src/components/LongText';
 
 export const GenomicIndicatorTable: React.FunctionComponent<{
   data: Evidence[];
@@ -17,13 +18,20 @@ export const GenomicIndicatorTable: React.FunctionComponent<{
     {
       Header: <span>Name</span>,
       accessor: 'knownEffect',
+      width: 400,
     },
     {
       Header: <span>Description</span>,
       accessor: 'description',
+      Cell(row: { original: Evidence }) {
+        return (
+          <LongText text={row.original.description} cutoff={180}/>
+        );
+      },
     },
     {
       Header: <span>Associated Variants</span>,
+      width: 200,
       Cell(row: { original: Evidence }) {
         return (
           <span>
