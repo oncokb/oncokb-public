@@ -660,7 +660,7 @@ export default class SomaticGermlineGenePage extends React.Component<
                         hugoSymbol={this.store.hugoSymbol}
                         geneticType={this.selectedGeneticType}
                       />
-                      <Container>
+                      {this.hasContent ? (
                         <StickyMiniNavBar
                           title={`${this.store.hugoSymbol} (${
                             this.isGermline ? 'Germline' : 'Somatic'
@@ -672,6 +672,10 @@ export default class SomaticGermlineGenePage extends React.Component<
                             this.isGermline ? '#FCF4D6' : '#F0F5FF'
                           }
                         />
+                      ) : (
+                        <div style={{ marginTop: '1rem' }}></div>
+                      )}
+                      <Container>
                         <Row className={`justify-content-center`}>
                           <Col md={11}>
                             {!this.hasContent && (
