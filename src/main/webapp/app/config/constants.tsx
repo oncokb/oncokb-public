@@ -948,6 +948,7 @@ export const DEFAULT_FEEDBACK_ANNOTATION: Feedback = {
   type: FeedbackType.ANNOTATION,
 };
 
+export type FdaSubmissionType = 'PMA' | 'PMN' | 'HDE' | 'DEN'
 export const FDA_SUBMISSION_URL_SUFFIX = {
   PMA: 'cfpma/pma.cfm',
   PMN: 'cfpmn/pmn.cfm',
