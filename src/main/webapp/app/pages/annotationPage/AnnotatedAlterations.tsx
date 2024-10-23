@@ -82,6 +82,12 @@ const getColumns = (germline: boolean, hugoSymbol: string) => {
   const germlineColumns = [
     altColumn,
     {
+      Header: <span>Protein Change</span>,
+      accessor: 'variant.proteinChange',
+      onFilter: (data: BiologicalVariant, keyword: string) =>
+        filterByKeyword(data.variant.proteinChange, keyword),
+    },
+    {
       Header: <span>Pathogenicity</span>,
       accessor: 'pathogenic',
       onFilter: (data: BiologicalVariant, keyword: string) =>

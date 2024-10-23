@@ -17,8 +17,12 @@ export const GenomicIndicatorTable: React.FunctionComponent<{
   const columns: SearchColumn<Evidence>[] = [
     {
       Header: <span>Name</span>,
-      accessor: 'knownEffect',
+      accessor: 'name',
       width: 400,
+    },
+    {
+      Header: <span>Allele State</span>,
+      accessor: 'knownEffect',
     },
     {
       Header: <span>Description</span>,
