@@ -138,22 +138,13 @@ if (
       id: '2021-fda-recognition',
     },
     {
-      dateEnd: 1717560000000,
+      dateEnd: 1732406400000,
       content: (
         <div>
-          Join us May 31-June 4 at ASCO 2024! Visit our booth (
-          <Linkout
-            link={
-              'https://events.jspargo.com/ASCO24/Public/Eventmap.aspx?EventId=776&MapID=990&MapItBoothID=960826&MapItBooth=37106'
-            }
-          >
-            #37106
-          </Linkout>
-          ) to meet our team and explore the latest developments from OncoKB™.
-          See you there!
+          Join us November 19-23 at AMP 2024! Visit our poster (#I033) or stop by our booth (#1421) to meet our team and explore the latest developments from OncoKB™. See you there!
         </div>
       ),
-      id: '2024_asco',
+      id: '2024_amp',
     },
     {
       dateStart: 1709337600000,
