@@ -10,17 +10,17 @@ import { Col, Row } from 'react-bootstrap';
 import UserUsageDetailsTable from './UserUsageDetailsTable';
 import { InfoRow } from '../AccountPage';
 import {
-  USAGE_DETAIL_TIME_KEY,
-  USAGE_ALL_TIME_KEY,
-  USAGE_ALL_TIME_VALUE,
+  USAGE_MONTH_DETAIL_TIME_KEY,
+  USAGE_YEAR_DETAIL_TIME_KEY,
   USAGE_DAY_DETAIL_TIME_KEY,
 } from 'app/config/constants';
 import { remoteData } from 'cbioportal-frontend-commons';
-import {
-  ToggleValue,
-  UsageRecord,
-} from 'app/pages/usageAnalysisPage/UsageAnalysisPage';
 import { notifyError } from 'app/shared/utils/NotificationUtils';
+import {
+  UsageRecord,
+  TimeGroupedUsageRecords,
+  ToggleValue,
+} from './usage-analysis-utils';
 
 @inject('routing')
 @observer
@@ -36,37 +36,48 @@ export default class UserUsageDetailsPage extends React.Component<{
     super(props);
   }
 
-  readonly usageDetail = remoteData<Map<string, UsageRecord[]>>({
+  readonly usageDetail = remoteData<TimeGroupedUsageRecords>({
     await: () => [],
     invoke: async () => {
-      const result = new Map<string, UsageRecord[]>();
+      const result: TimeGroupedUsageRecords = {
+        [USAGE_YEAR_DETAIL_TIME_KEY]: [],
+        [USAGE_MONTH_DETAIL_TIME_KEY]: [],
+        [USAGE_DAY_DETAIL_TIME_KEY]: [],
+      };
       try {
         this.user = await client.userUsageGetUsingGET({ userId: this.userId });
         if (this.user.summary !== null) {
           const yearSummary = this.user.summary.year;
-          const yearUsage: UsageRecord[] = [];
-          Object.keys(yearSummary).forEach(resourceEntry => {
-            yearUsage.push({
-              resource: resourceEntry,
-              usage: yearSummary[resourceEntry],
-              time: USAGE_ALL_TIME_VALUE,
-            });
-          });
-          result.set(USAGE_ALL_TIME_KEY, yearUsage);
-
-          const monthSummary = this.user.summary.month;
-          const detailSummary: UsageRecord[] = [];
-          Object.keys(monthSummary).forEach(month => {
-            const monthUsage = monthSummary[month];
-            Object.keys(monthUsage).forEach(resourceEntry => {
-              detailSummary.push({
+          const yearDetailSummary: UsageRecord[] = [];
+          Object.keys(yearSummary).forEach(year => {
+            const yearUsage = yearSummary[year];
+            Object.keys(yearUsage).forEach(resourceEntry => {
+              yearDetailSummary.push({
+                userEmail: this.user.userEmail,
+                usage: yearUsage[resourceEntry],
+                time: year,
                 resource: resourceEntry,
-                usage: monthUsage[resourceEntry],
-                time: month,
+                maxUsageProportion: 0,
               });
             });
           });
-          result.set(USAGE_DETAIL_TIME_KEY, detailSummary);
+          result[USAGE_YEAR_DETAIL_TIME_KEY] = yearDetailSummary;
+
+          const monthSummary = this.user.summary.month;
+          const monthDetailSummary: UsageRecord[] = [];
+          Object.keys(monthSummary).forEach(month => {
+            const monthUsage = monthSummary[month];
+            Object.keys(monthUsage).forEach(resourceEntry => {
+              monthDetailSummary.push({
+                userEmail: this.user.userEmail,
+                usage: monthUsage[resourceEntry],
+                time: month,
+                resource: resourceEntry,
+                maxUsageProportion: 0,
+              });
+            });
+          });
+          result[USAGE_MONTH_DETAIL_TIME_KEY] = monthDetailSummary;
 
           const daySummary = this.user.summary.day;
           const dayDetailSummary: UsageRecord[] = [];
@@ -74,20 +85,26 @@ export default class UserUsageDetailsPage extends React.Component<{
             const dayUsage = daySummary[day];
             Object.keys(dayUsage).forEach(resourceEntry => {
               dayDetailSummary.push({
-                resource: resourceEntry,
+                userEmail: this.user.userEmail,
                 usage: dayUsage[resourceEntry],
                 time: day,
+                resource: resourceEntry,
+                maxUsageProportion: 0,
               });
             });
           });
-          result.set(USAGE_DAY_DETAIL_TIME_KEY, dayDetailSummary);
+          result[USAGE_DAY_DETAIL_TIME_KEY] = dayDetailSummary;
         }
       } catch (error) {
         notifyError(error, 'Failed to load user data usage with error: ');
       }
       return Promise.resolve(result);
     },
-    default: new Map(),
+    default: {
+      [USAGE_YEAR_DETAIL_TIME_KEY]: [],
+      [USAGE_MONTH_DETAIL_TIME_KEY]: [],
+      [USAGE_DAY_DETAIL_TIME_KEY]: [],
+    },
   });
 
   render() {
