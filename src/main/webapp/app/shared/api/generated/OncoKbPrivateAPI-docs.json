@@ -2018,6 +2018,9 @@
         "name": {
           "type": "string"
         },
+        "proteinChange": {
+          "type": "string"
+        },
         "proteinEnd": {
           "type": "integer",
           "format": "int32"
@@ -2929,6 +2932,9 @@
             "LEVEL_Fda3",
             "NO"
           ]
+        },
+        "name": {
+          "type": "string"
         },
         "relevantCancerTypes": {
           "type": "array",
