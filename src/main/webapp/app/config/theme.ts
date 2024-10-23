@@ -5,6 +5,7 @@ export const COLOR_PRIMARY = COLOR_BLUE;
 export const COLOR_GREY = '#808080';
 export const COLOR_LIGHT_GREY = '#D3D3D3';
 export const COLOR_BLACK = '#000';
+export const COLOR_WHITE = '#fff';
 export const COLOR_WARNING = '#ffc107';
 export const COLOR_ERROR = '#dc3545';
 

@@ -3,6 +3,7 @@ import { Link, useLocation } from 'react-router-dom';
 import { Row, Col, Container } from 'react-bootstrap';
 import styles from './StickyMiniNavBar.module.scss';
 import classNames from 'classnames';
+import { COLOR_WHITE } from 'app/config/theme';
 
 function getNavBarSectionElements() {
   return document.querySelectorAll('[mini-nav-bar-header]');
@@ -34,9 +35,9 @@ function useScrollToHash({ stickyHeight }: { stickyHeight: number }) {
 }
 
 type IStickyMiniNavBar = {
-  title: string;
+  title: string | JSX.Element
   linkUnderlineColor: string;
-  stickyBackgroundColor: string;
+  stickyBackgroundColor?: string;
 };
 
 export default function StickyMiniNavBar({
@@ -169,7 +170,8 @@ export default function StickyMiniNavBar({
         borderBottom: '1px',
         borderBottomStyle: 'solid',
         borderBottomColor: '#E3E5EC',
-        backgroundColor: isSticky ? stickyBackgroundColor : undefined,
+        boxShadow: isSticky ? '0px 0.75px 2px 0px rgba(0, 22, 65, 0.10), 0px 1.5px 4px 0px rgba(0, 22, 65, 0.10), 0px 3px 8px 0px rgba(0, 22, 65, 0.10)' : undefined,
+        backgroundColor: isSticky ? (stickyBackgroundColor ? stickyBackgroundColor : COLOR_WHITE) : undefined,
       }}
     >
       <Row className="justify-content-center">

@@ -1,8 +1,7 @@
 import React, { FunctionComponent, useState } from 'react';
-import styles from './genetic-type.module.scss';
+import styles from './genetic-type-tabs.module.scss';
 import classnames from 'classnames';
 import { RouterStore } from 'mobx-react-router';
-import { getGenePageLink } from 'app/shared/utils/UrlUtils';
 
 export enum GENETIC_TYPE {
   SOMATIC = 'somatic',

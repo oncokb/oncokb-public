@@ -25,7 +25,7 @@ import LoadingIndicator, {
 } from 'app/components/loadingIndicator/LoadingIndicator';
 import autobind from 'autobind-decorator';
 import BarChart from 'app/components/barChart/BarChart';
-import { DefaultTooltip } from 'cbioportal-frontend-commons';
+import { capitalize, DefaultTooltip } from 'cbioportal-frontend-commons';
 import {
   ANNOTATION_PAGE_TAB_KEYS,
   ANNOTATION_PAGE_TAB_NAMES,
@@ -70,7 +70,7 @@ import { findLast } from 'app/shared/utils/LodashUtils';
 import { Helmet } from 'react-helmet-async';
 import { NcbiLink } from 'app/shared/links/NcbiLink';
 import GeneAliasesDescription from 'app/shared/texts/GeneAliasesDescription';
-import { COLOR_GERMLINE, COLOR_GERMLINE_SHADE, COLOR_GREY, COLOR_SOMATIC, COLOR_SOMATIC_SHADE } from 'app/config/theme';
+import { COLOR_GREY, COLOR_SOMATIC } from 'app/config/theme';
 import LoETile from 'app/components/infoTile/LoETile';
 import GeneticTypeTabs, {
   GENETIC_TYPE,
@@ -80,12 +80,12 @@ import AnnotatedAlterations from 'app/pages/annotationPage/AnnotatedAlterations'
 import {
   LinkedInLink,
   TwitterLink,
-  UserGoogleGroupLink,
 } from 'app/shared/links/SocialMediaLinks';
 import styles from './GenePage.module.scss';
 import StickyMiniNavBar from 'app/shared/nav/StickyMiniNavBar';
 import MiniNavBarHeader from 'app/shared/nav/MiniNavBarHeader';
 import { GenomicIndicatorTable } from 'app/pages/genePage/GenomicIndicatorTable';
+import GeneticTypeTag from 'app/components/geneticTypeTag/GeneticTypeTag';
 
 interface MatchParams {
   hugoSymbol: string;
@@ -662,17 +662,16 @@ export default class SomaticGermlineGenePage extends React.Component<
                       />
                       {this.hasContent && (
                         <StickyMiniNavBar
-                          title={`${this.store.hugoSymbol} (${
-                            this.isGermline ? 'Germline' : 'Somatic'
-                          })`}
-                          linkUnderlineColor={
-                            this.isGermline ? COLOR_GERMLINE : COLOR_SOMATIC
+                          title={
+                            <span>
+                              <span>{this.store.hugoSymbol}</span>
+                              <GeneticTypeTag
+                                className={'ml-2'}
+                                geneticType={this.selectedGeneticType}
+                              />
+                            </span>
                           }
-                          stickyBackgroundColor={
-                            this.isGermline
-                              ? COLOR_GERMLINE_SHADE
-                              : COLOR_SOMATIC_SHADE
-                          }
+                          linkUnderlineColor={COLOR_SOMATIC}
                         />
                       )}
                       <Container>
@@ -770,7 +769,7 @@ export default class SomaticGermlineGenePage extends React.Component<
                                       className={'text-right'}
                                       show={this.showPrevalenceData}
                                       content={<></>}
-                                      title={'Show prevalence data'}
+                                      title={'prevalence data'}
                                       onClick={() =>
                                         (this.showPrevalenceData = !this
                                           .showPrevalenceData)
