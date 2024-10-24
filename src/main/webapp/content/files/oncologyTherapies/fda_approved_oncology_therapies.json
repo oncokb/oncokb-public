@@ -90,11 +90,11 @@
     "ngsTest": "N"
   },
   {
-    "year": "1998-2001*",
-    "tx": "Imatinib",
-    "biomarker": "Ph+ (BCR-ABL1 Fusion)\nKIT+\nPDGFRA, PDGFRB Fusions\nPDGFB Fusions\nFIP1L1-PDGFRA Fusion",
-    "agentClass": "Multikinase inhibitor",
-    "drugTarget": "Multi-targeted kinase inhibitor (targets include BCR-ABL, KIT, PDGFRA)",
+    "year": "2018",
+    "tx": "Lorlatinib",
+    "biomarker": "ALK+ (ALK Fusions)",
+    "agentClass": "Small molecule kinase inhibitor",
+    "drugTarget": "Multi-targeted kinase inhibitor (targets include ALK and ROS1 among others)",
     "targetedTx": "Y",
     "pxTx": "Y",
     "ngsTest": "Y"
@@ -211,9 +211,9 @@
   },
   {
     "year": "2003",
-    "tx": "Tositumomab and Iodine I 131 Tositumomab*",
+    "tx": "Tositumomab and Iodine I 131 Tositumomab",
     "biomarker": "CD20+",
-    "agentClass": "Hematopoietic protein binding antibody, ADC* or cytotoxin",
+    "agentClass": "Hematopoietic protein binding antibody, ADC or cytotoxin",
     "drugTarget": "Anti-CD20 antibody",
     "targetedTx": "Y",
     "pxTx": "Y",
@@ -290,24 +290,24 @@
     "ngsTest": "NA"
   },
   {
-    "year": "2005",
-    "tx": "Sorafenib",
-    "biomarker": "",
+    "year": "1998-2001*",
+    "tx": "Imatinib",
+    "biomarker": "*Ph+ (BCR-ABL1 Fusion)\n*KIT+\n*PDGFRA, PDGFRB Fusions\n*PDGFB Fusions\n*FIP1L1-PDGFRA fusion",
     "agentClass": "Multikinase inhibitor",
-    "drugTarget": "Multi-targeted kinase inhibitor (targets include VEGFR1/2/3, BRAF, KIT, FLT3 and PDGFRβ among others)",
-    "targetedTx": "Y",
-    "pxTx": "N",
-    "ngsTest": "NA"
-  },
-  {
-    "year": "2006",
-    "tx": "Dasatinib",
-    "biomarker": "Ph+ (BCR-ABL1 Fusion)",
-    "agentClass": "Multikinase inhibitor",
-    "drugTarget": "Multi-targeted kinase inhibitor (targets include SRC, BCR-ABL1, KIT and PDGFRβ among others)",
+    "drugTarget": "Multi-targeted kinase inhibitor (targets include BCR-ABL, KIT, PDGFRA)",
     "targetedTx": "Y",
     "pxTx": "Y",
     "ngsTest": "Y"
+  },
+  {
+    "year": "2019",
+    "tx": "Pexidartinib",
+    "biomarker": "",
+    "agentClass": "Multikinase inhibitor",
+    "drugTarget": "Multi-targeted kinase inhibitor (targets include CSF1R, KIT and FLT3)",
+    "targetedTx": "Y",
+    "pxTx": "N",
+    "ngsTest": "NA"
   },
   {
     "year": "2006",
@@ -340,11 +340,11 @@
     "ngsTest": "Y"
   },
   {
-    "year": "2006",
-    "tx": "Sunitinib",
-    "biomarker": "KIT+",
-    "agentClass": "Multikinase inhibitor",
-    "drugTarget": "Multi-targeted receptor tyrosine kinase inhibitor (targets include VEGFR1/2/3, KIT, FLT3, CSF1R and PDGFRɑ/β among others)",
+    "year": "2019",
+    "tx": "Erdafitinib",
+    "biomarker": "FGFR3-TACC3 Fusion, FGFR3-BAIAP2L1 Fusion, FGFR3 S249C, R248C, G370C, Y373C",
+    "agentClass": "Small molecule kinase inhibitor",
+    "drugTarget": "Multi-targeted kinase inhibitor (targets include FGFR1/2/3/4 among others)",
     "targetedTx": "Y",
     "pxTx": "Y",
     "ngsTest": "Y"
@@ -380,11 +380,11 @@
     "ngsTest": "Y"
   },
   {
-    "year": "2007",
-    "tx": "Nilotinib",
-    "biomarker": "Ph+ (BCR-ABL1 Fusion)",
+    "year": "2017",
+    "tx": "Midostaurin",
+    "biomarker": "FLT3 ITD Mutations, TKD Mutations I836 and D835",
     "agentClass": "Multikinase inhibitor",
-    "drugTarget": "Multi-targeted tyrosine kinase inhibitor (targets include BCR-ABL1, PDGFR and KIT among others)",
+    "drugTarget": "Multi-targeted kinase inhibitor (targets include FLT3, VEGFR2, KIT and PDGFR)",
     "targetedTx": "Y",
     "pxTx": "Y",
     "ngsTest": "Y"
@@ -422,7 +422,7 @@
   {
     "year": "2009",
     "tx": "Everolimus",
-    "biomarker": "TSC1, TSC2 Oncogenic Mutations",
+    "biomarker": "TSC1, TSC2 Oncogenic Mutations",
     "agentClass": "Large molecule inhibitor",
     "drugTarget": "mTOR inhibitor",
     "targetedTx": "Y",
@@ -440,11 +440,11 @@
     "ngsTest": "NA"
   },
   {
-    "year": "2009",
-    "tx": "Pazopanib",
+    "year": "2019",
+    "tx": "Fedratinib",
     "biomarker": "",
     "agentClass": "Multikinase inhibitor",
-    "drugTarget": "Multi-targeted tyrosine kinase inhibitor (targets include VEGFR1/2/3, PDGFRɑ/β, KIT, FGFR1/3 among others)",
+    "drugTarget": "Multi-targeted kinase inhibitor (targets include JAK2 and FLT3)",
     "targetedTx": "Y",
     "pxTx": "N",
     "ngsTest": "NA"
@@ -530,11 +530,11 @@
     "ngsTest": "N"
   },
   {
-    "year": "2011",
-    "tx": "Crizotinib",
-    "biomarker": "ALK+ (ALK Fusions)\nROS1+ (ROS1 Fusions)",
-    "agentClass": "Multikinase inhibitor",
-    "drugTarget": "Multi-targeted receptor tyrosine kinase inhibitor (targets include ALK, ROS1 and MET)",
+    "year": "2020",
+    "tx": "Avapritinib",
+    "biomarker": "*PDGFRA Exon 18 Mutations\n*KIT D816",
+    "agentClass": "Small molecule kinase inhibitor",
+    "drugTarget": "Multi-targeted kinase inhibitor (targets include KIT D816V, PDGFRA, PDGFRA D842, KIT exon 11, 11/17 and 17 mutants)",
     "targetedTx": "Y",
     "pxTx": "Y",
     "ngsTest": "Y"
@@ -570,14 +570,14 @@
     "ngsTest": "NA"
   },
   {
-    "year": "2011",
-    "tx": "Vandetanib",
-    "biomarker": "",
-    "agentClass": "Multikinase inhibitor",
-    "drugTarget": "Multi-targeted receptor tyrosine kinase inhibitor (targets include VEGFR, EGFR and RET)",
+    "year": "2019",
+    "tx": "Entrectinib",
+    "biomarker": "*NTRK1, NTRK2, NTRK3 Fusions\n*ROS1 Fusions",
+    "agentClass": "Small molecule kinase inhibitor",
+    "drugTarget": "Multi-targeted kinase inhibitor (targets include NTRK1/2/3, ROS1 and ALK among others)",
     "targetedTx": "Y",
-    "pxTx": "N",
-    "ngsTest": "NA"
+    "pxTx": "Y",
+    "ngsTest": "Y"
   },
   {
     "year": "2011",
@@ -610,24 +610,24 @@
     "ngsTest": "NA"
   },
   {
-    "year": "2012",
-    "tx": "Bosutinib",
-    "biomarker": "Ph+ (BCR-ABL1 Fusion)",
-    "agentClass": "Multikinase inhibitor",
-    "drugTarget": "Multi-targeted tyrosine kinase inhibitor (targets include BCR-ABL1 and SRC family kinases)",
-    "targetedTx": "Y",
-    "pxTx": "Y",
-    "ngsTest": "Y"
-  },
-  {
-    "year": "2012",
-    "tx": "Cabozantinib",
+    "year": "2021",
+    "tx": "Umbralisib",
     "biomarker": "",
     "agentClass": "Multikinase inhibitor",
-    "drugTarget": "Multi-targeted receptor tyrosine kinase inhibitor (targets include VEGFR1/2/3, AXL, KIT, RET and ROS1 among others)",
+    "drugTarget": "Multi-targeted kinase inhibitor (targets include PI3Kδ and CK1ε among others)",
     "targetedTx": "Y",
     "pxTx": "N",
     "ngsTest": "NA"
+  },
+  {
+    "year": "2023",
+    "tx": "Repotrectinib",
+    "biomarker": "*ROS1 Fusions \n*NTRK Fusions",
+    "agentClass": "Small molecule kinase inhibitor",
+    "drugTarget": "Multi-targeted kinase inhibitor (targets include ROS1 and NTRK1/2/3)",
+    "targetedTx": "Y",
+    "pxTx": "Y",
+    "ngsTest": "Y"
   },
   {
     "year": "2012",
@@ -670,24 +670,24 @@
     "ngsTest": "Y"
   },
   {
-    "year": "2012",
-    "tx": "Ponatinib",
-    "biomarker": "Ph+ (BCR-ABL1 Fusion) or ABL1 T315I",
+    "year": "2006",
+    "tx": "Dasatinib",
+    "biomarker": "Ph+ (BCR-ABL1 Fusion)",
     "agentClass": "Multikinase inhibitor",
-    "drugTarget": "Multi-targeted tyrosine kinase inhibitor (targets include BCR-ABL1, VEGFR, PDGFR, FGFR and SRC family members among others)",
+    "drugTarget": "Multi-targeted kinase inhibitor (targets include SRC, BCR-ABL1, KIT and PDGFRβ among others)",
     "targetedTx": "Y",
     "pxTx": "Y",
     "ngsTest": "Y"
   },
   {
-    "year": "2012",
-    "tx": "Regorafenib",
-    "biomarker": "KIT+",
+    "year": "2005",
+    "tx": "Sorafenib",
+    "biomarker": "",
     "agentClass": "Multikinase inhibitor",
-    "drugTarget": "Multi-targeted tyrosine kinase inhibitor (targets include KIT, RET, VEGFR1/2/3, FGFR1/2, PDGFRβ among others)",
+    "drugTarget": "Multi-targeted kinase inhibitor (targets include VEGFR1/2/3, BRAF, KIT, FLT3 and PDGFRβ among others)",
     "targetedTx": "Y",
-    "pxTx": "Y",
-    "ngsTest": "Y"
+    "pxTx": "N",
+    "ngsTest": "NA"
   },
   {
     "year": "2012",
@@ -743,7 +743,7 @@
     "year": "2013",
     "tx": "Obinutuzumab",
     "biomarker": "",
-    "agentClass": "Hematopoietic protein binding antibody, ADC* or cytotoxin",
+    "agentClass": "Hematopoietic protein binding antibody, ADC or cytotoxin",
     "drugTarget": "Anti-CD20 antibody",
     "targetedTx": "Y",
     "pxTx": "N",
@@ -862,7 +862,7 @@
   {
     "year": "2014",
     "tx": "Olaparib",
-    "biomarker": "BRCA1, BRCA2 Oncogenic Mutations\nATM, BARD1, BRCA1, BRCA2, BRIP1, CDK12, CHEK1/2, FANCL, PALB2, RAD51B, RAD51C, RAD51D, RAD54 Oncogenic Mutations",
+    "biomarker": "*BRCA1, BRCA2 Oncogenic Mutations  *ATM, BARD1, BRCA1, BRCA2, BRIP1, CDK12, CHEK1, CHEK2, FANCL, PALB2, RAD51B, RAD51C, RAD51D, RAD54 Oncogenic Mutations",
     "agentClass": "Small molecule inhibitor",
     "drugTarget": "PARP inhibitor",
     "targetedTx": "Y",
@@ -872,7 +872,7 @@
   {
     "year": "2014",
     "tx": "Pembrolizumab",
-    "biomarker": "MSI-H or dMMR\nTMB-H\nPD-L1-expression\npMMR",
+    "biomarker": "*MSI-H or dMMR\n*TMB-H\n*PD-L1-expressing\n*pMMR",
     "agentClass": "Immune checkpoint inhibitor",
     "drugTarget": "Anti-PD-1 antibody",
     "targetedTx": "Y",
@@ -911,10 +911,10 @@
   },
   {
     "year": "2015",
-    "tx": "Cobimetinib + Vemurafenib",
+    "tx": "Vemurafenib + Cobimetinib ",
     "biomarker": "BRAF V600E/K",
-    "agentClass": "Small molecule inhibitor combination",
-    "drugTarget": "MEK1/2 inhibitor + BRAF inhibitor",
+    "agentClass": "Small molecule kinase inhibitor combination",
+    "drugTarget": "BRAF inhibitor + MEK1/2 inhibitor",
     "targetedTx": "Y",
     "pxTx": "Y",
     "ngsTest": "Y"
@@ -952,7 +952,7 @@
   {
     "year": "2015",
     "tx": "Ipilimumab + Nivolumab",
-    "biomarker": "MSI-H or dMMR\nPD-L1-expressing",
+    "biomarker": "*MSI-H or dMMR\n*PD-L1-expressing",
     "agentClass": "Immune checkpoint inhibitor",
     "drugTarget": "Anti-CTLA-4 antibody + Anti-PD1 antibody",
     "targetedTx": "Y",
@@ -970,11 +970,11 @@
     "ngsTest": "NA"
   },
   {
-    "year": "2015",
-    "tx": "Lenvatinib",
+    "year": "2021",
+    "tx": "Tivozanib",
     "biomarker": "",
     "agentClass": "Multikinase inhibitor",
-    "drugTarget": "Multi-targeted receptor tyrosine kinase inhibitor (targets include VEGFR1/2/3, FGFR1/2/3/4, KIT, RET and PDGFRβ among others)",
+    "drugTarget": "Multi-targeted kinase inhibitor (targets include VEGFR1/2/3, KIT and PDGFRβ)",
     "targetedTx": "Y",
     "pxTx": "N",
     "ngsTest": "NA"
@@ -1011,7 +1011,7 @@
   },
   {
     "year": "2015",
-    "tx": "Panobinostat*",
+    "tx": "Panobinostat",
     "biomarker": "",
     "agentClass": "HDAC inhibitor",
     "drugTarget": "Histone deacetylase (HDAC) inhibitor",
@@ -1071,7 +1071,7 @@
   },
   {
     "year": "2016",
-    "tx": "Olaratumab*",
+    "tx": "Olaratumab",
     "biomarker": "",
     "agentClass": "Monoclonal antibody",
     "drugTarget": "Anti-PDGFRɑ antibody",
@@ -1172,12 +1172,12 @@
   {
     "year": "2017",
     "tx": "Durvalumab",
-    "biomarker": "",
+    "biomarker": "dMMR",
     "agentClass": "Immune checkpoint inhibitor",
     "drugTarget": "Anti-PDL-1 antibody",
     "targetedTx": "Y",
-    "pxTx": "N",
-    "ngsTest": "NA"
+    "pxTx": "Y",
+    "ngsTest": "N"
   },
   {
     "year": "2017",
@@ -1192,7 +1192,7 @@
   {
     "year": "2017",
     "tx": "Inotuzumab Ozogamicin",
-    "biomarker": "CD22",
+    "biomarker": "CD22+",
     "agentClass": "Hematopoietic protein binding antibody, ADC or cytotoxin",
     "drugTarget": "CD22-directed antibody-drug conjugate",
     "targetedTx": "Y",
@@ -1200,11 +1200,11 @@
     "ngsTest": "N"
   },
   {
-    "year": "2017",
-    "tx": "Midostaurin",
-    "biomarker": "FLT3 ITD Mutations, TKD Mutations I836 and D835",
+    "year": "2011",
+    "tx": "Crizotinib",
+    "biomarker": "*ALK+ (ALK Fusions)\n*ROS1+ (ROS1 Fusions)",
     "agentClass": "Multikinase inhibitor",
-    "drugTarget": "Multi-targeted kinase inhibitor (targets include FLT3, VEGFR2, KIT and PDGFR)",
+    "drugTarget": "Multi-targeted receptor tyrosine kinase inhibitor (targets include ALK, ROS1 and MET)",
     "targetedTx": "Y",
     "pxTx": "Y",
     "ngsTest": "Y"
@@ -1214,7 +1214,7 @@
     "tx": "Neratinib",
     "biomarker": "HER2+ (ERBB2 Amplification)",
     "agentClass": "Small molecule kinase inhibitor",
-    "drugTarget": "EGFR/HER2 (ERBB2)/HER4 (ERBB4) inhibitor",
+    "drugTarget": "EGFR//HER2 (ERBB2)/HER4 (ERBB4) inhibitor",
     "targetedTx": "Y",
     "pxTx": "Y",
     "ngsTest": "Y"
@@ -1261,10 +1261,10 @@
   },
   {
     "year": "2018",
-    "tx": "Binimetinib + Encorafenib",
+    "tx": "Encorafenib + Binimetinib",
     "biomarker": "BRAF V600E/K",
-    "agentClass": "Small molecule inhibitor combination",
-    "drugTarget": "MEK1/2 inhibitor + BRAF inhibitor",
+    "agentClass": "Small molecule kinase inhibitor combination",
+    "drugTarget": "BRAF inhibitor + MEK1/2 inhibitor",
     "targetedTx": "Y",
     "pxTx": "Y",
     "ngsTest": "Y"
@@ -1310,14 +1310,14 @@
     "ngsTest": "NA"
   },
   {
-    "year": "2018",
-    "tx": "Gilteritinib",
-    "biomarker": "FLT3 ITD Mutations, TKD Mutations I836 and D835",
-    "agentClass": "Small molecule kinase inhibitor",
-    "drugTarget": "Multi-targeted tyrosine kinase inhibitor (targets include mutant and WT FLT3, AXL and ALK)",
+    "year": "2011",
+    "tx": "Vandetanib",
+    "biomarker": "",
+    "agentClass": "Multikinase inhibitor",
+    "drugTarget": "Multi-targeted receptor tyrosine kinase inhibitor (targets include VEGFR, EGFR and RET)",
     "targetedTx": "Y",
-    "pxTx": "Y",
-    "ngsTest": "Y"
+    "pxTx": "N",
+    "ngsTest": "NA"
   },
   {
     "year": "2018",
@@ -1360,14 +1360,14 @@
     "ngsTest": "Y"
   },
   {
-    "year": "2018",
-    "tx": "Lorlatinib",
-    "biomarker": "ALK+ (ALK Fusions)",
-    "agentClass": "Small molecule kinase inhibitor",
-    "drugTarget": "Multi-targeted kinase inhibitor (targets include ALK and ROS1 among others)",
+    "year": "2012",
+    "tx": "Cabozantinib",
+    "biomarker": "",
+    "agentClass": "Multikinase inhibitor",
+    "drugTarget": "Multi-targeted receptor tyrosine kinase inhibitor (targets include VEGFR1/2/3, AXL, KIT, RET and ROS1 among others)",
     "targetedTx": "Y",
-    "pxTx": "Y",
-    "ngsTest": "Y"
+    "pxTx": "N",
+    "ngsTest": "NA"
   },
   {
     "year": "2018",
@@ -1412,7 +1412,7 @@
   {
     "year": "2018",
     "tx": "Talazoparib",
-    "biomarker": "BRCA1, BRCA2 Oncogenic Mutations\nATM, ATR, BRCA1, BRCA2, CDK12, CHEK2, FANCA, MLH1, MRE11, NBN, PALB2, RAD51C Oncogenic Mutations",
+    "biomarker": "*BRCA1, BRCA2 Oncogenic Mutations\n*ATM, ATR, BRCA1, BRCA2, CDK12, CHEK2, FANCA, MLH1, MRE11, NBN, PALB2, RAD51C\nOncogenic Mutations",
     "agentClass": "Small molecule inhibitor",
     "drugTarget": "PARP inhibitor",
     "targetedTx": "Y",
@@ -1450,44 +1450,44 @@
     "ngsTest": "NA"
   },
   {
-    "year": "2019",
-    "tx": "Entrectinib",
-    "biomarker": "NTRK1, NTRK2, NTRK3 Fusions\nROS1 Fusions",
-    "agentClass": "Small molecule kinase inhibitor",
-    "drugTarget": "Multi-targeted kinase inhibitor (targets include NTRK1/2/3, ROS1 and ALK among others)",
-    "targetedTx": "Y",
-    "pxTx": "Y",
-    "ngsTest": "Y"
-  },
-  {
-    "year": "2019",
-    "tx": "Erdafitinib",
-    "biomarker": "FGFR3-TACC3 Fusion, FGFR3-BAIAP2L1 Fusion, FGFR3 S249C, R248C, G370C, Y373C",
-    "agentClass": "Small molecule kinase inhibitor",
-    "drugTarget": "Multi-targeted kinase inhibitor (targets include FGFR1/2/3/4 among others)",
-    "targetedTx": "Y",
-    "pxTx": "Y",
-    "ngsTest": "Y"
-  },
-  {
-    "year": "2019",
-    "tx": "Fedratinib",
+    "year": "2015",
+    "tx": "Lenvatinib",
     "biomarker": "",
     "agentClass": "Multikinase inhibitor",
-    "drugTarget": "Multi-targeted kinase inhibitor (targets include JAK2 and FLT3)",
+    "drugTarget": "Multi-targeted receptor tyrosine kinase inhibitor (targets include VEGFR1/2/3, FGFR1/2/3/4, KIT, RET and PDGFRβ among others)",
     "targetedTx": "Y",
     "pxTx": "N",
     "ngsTest": "NA"
   },
   {
-    "year": "2019",
-    "tx": "Pexidartinib",
-    "biomarker": "",
+    "year": "2006",
+    "tx": "Sunitinib",
+    "biomarker": "KIT+",
     "agentClass": "Multikinase inhibitor",
-    "drugTarget": "Multi-targeted kinase inhibitor (targets include CSF1R, KIT and FLT3)",
+    "drugTarget": "Multi-targeted receptor tyrosine kinase inhibitor (targets include VEGFR1/2/3, KIT, FLT3, CSF1R and PDGFRɑ/β among others)",
     "targetedTx": "Y",
-    "pxTx": "N",
-    "ngsTest": "NA"
+    "pxTx": "Y",
+    "ngsTest": "Y"
+  },
+  {
+    "year": "2012",
+    "tx": "Bosutinib",
+    "biomarker": "Ph+ (BCR-ABL1 Fusion)",
+    "agentClass": "Multikinase inhibitor",
+    "drugTarget": "Multi-targeted tyrosine kinase inhibitor (targets include BCR-ABL1 and SRC family kinases)",
+    "targetedTx": "Y",
+    "pxTx": "Y",
+    "ngsTest": "Y"
+  },
+  {
+    "year": "2007",
+    "tx": "Nilotinib",
+    "biomarker": "Ph+ (BCR-ABL1 Fusion)",
+    "agentClass": "Multikinase inhibitor",
+    "drugTarget": "Multi-targeted tyrosine kinase inhibitor (targets include BCR-ABL1, PDGFR and KIT among others)",
+    "targetedTx": "Y",
+    "pxTx": "Y",
+    "ngsTest": "Y"
   },
   {
     "year": "2019",
@@ -1512,7 +1512,7 @@
   {
     "year": "2019",
     "tx": "Trastuzumab deruxtecan",
-    "biomarker": "HER2+ (ERBB2 Amplification)\nHER2-low\nERBB2 Oncogenic Mutations",
+    "biomarker": "*HER2+ (ERBB2 Amplification)\n*HER2-low\n*ERBB2 Oncogenic Mutations",
     "agentClass": "Antibody drug conjugate",
     "drugTarget": "HER2 (ERBB2)-directed antibody and topoisomerase inhibitor conjugate",
     "targetedTx": "Y",
@@ -1540,18 +1540,18 @@
     "ngsTest": "Y"
   },
   {
-    "year": "2020",
-    "tx": "Avapritinib",
-    "biomarker": "PDGFRA Exon 18 Mutations\nKIT D816",
-    "agentClass": "Small molecule kinase inhibitor",
-    "drugTarget": "Multi-targeted kinase inhibitor (targets include KIT D816V, PDGFRA, PDGFRA D842, KIT exon 11, 11/17 and 17 mutants)",
+    "year": "2012",
+    "tx": "Ponatinib",
+    "biomarker": "Ph+ (BCR-ABL1 Fusion) or\nABL1 T315I",
+    "agentClass": "Multikinase inhibitor",
+    "drugTarget": "Multi-targeted tyrosine kinase inhibitor (targets include BCR-ABL1, VEGFR, PDGFR, FGFR and SRC family members among others)",
     "targetedTx": "Y",
     "pxTx": "Y",
     "ngsTest": "Y"
   },
   {
     "year": "2020",
-    "tx": "Belantamab mafodotin*",
+    "tx": "Belantamab mafodotin",
     "biomarker": "",
     "agentClass": "Hematopoietic protein binding antibody, ADC or cytotoxin",
     "drugTarget": "BCMA-directed antibody-drug conjugate",
@@ -1594,7 +1594,7 @@
     "tx": "Encorafenib + Cetuximab",
     "biomarker": "BRAF V600E",
     "agentClass": "Small molecule inhibitor and monoclonal antibody combination",
-    "drugTarget": "BRAF inhibitor + Anti-EGFR monoclonal antibody",
+    "drugTarget": "BRAF inhibitor + Anti-EGFR antibody",
     "targetedTx": "Y",
     "pxTx": "Y",
     "ngsTest": "Y"
@@ -1637,12 +1637,12 @@
     "drugTarget": "Anti-GD2 antibody",
     "targetedTx": "Y",
     "pxTx": "N",
-    "ngsTest": "NA"
+    "ngsTest": ""
   },
   {
     "year": "2020",
     "tx": "Pemigatinib",
-    "biomarker": "FGFR2 Fusions\nFGFR1 Fusions",
+    "biomarker": "*FGFR2 Fusions\n*FGFR1 Fusions",
     "agentClass": "Small molecule kinase inhibitor",
     "drugTarget": "FGFR1/2/3 inhibitor",
     "targetedTx": "Y",
@@ -1672,9 +1672,9 @@
   {
     "year": "2020",
     "tx": "Ripretinib",
-    "biomarker": "KIT+",
+    "biomarker": "KIT/PDGFRA inhibitor",
     "agentClass": "Small molecule kinase inhibitor",
-    "drugTarget": "KIT/PDGFRA inhibitor",
+    "drugTarget": "KIT/PDGFRA D816",
     "targetedTx": "Y",
     "pxTx": "Y",
     "ngsTest": "Y"
@@ -1722,7 +1722,7 @@
   {
     "year": "2020",
     "tx": "Tazemetostat",
-    "biomarker": "EZH2 Y646F, A692V, Y646C, Y646S, Y646N, Y646H, A682G\nSMARCB1 Deletion",
+    "biomarker": "*EZH2 Y646F, A692V, Y646C, Y646S, Y646N, Y646H, A682G\n*SMARCB1 Deletion",
     "agentClass": "Small molecule inhibitor",
     "drugTarget": "EZH2 inhibitor (methyltransferase inhibitor)",
     "targetedTx": "Y",
@@ -1732,7 +1732,7 @@
   {
     "year": "2020",
     "tx": "Tucatinib + Trastuzumab",
-    "biomarker": "HER2+ (ERBB2 Amplifiaction)\nKRAS and NRAS  Wildtype, and HER2+ (ERBB2 Amplifiaction)",
+    "biomarker": "*HER2+ (ERBB2 Amplifiaction)\n*KRAS and NRAS Wildtype and HER2+ (ERBB2 Amplification)",
     "agentClass": "Small molecule inhibitor and monoclonal antibody combination",
     "drugTarget": "HER2 (ERBB2) inhibitor + Anti-HER2 (ERBB2) antibody",
     "targetedTx": "Y",
@@ -1742,7 +1742,7 @@
   {
     "year": "2021",
     "tx": "Amivantamab",
-    "biomarker": "EGFR Exon 20 Insertions",
+    "biomarker": "*EGFR Exon 20 Insertions \n*EGFR Exon 19 Deletions, L858R",
     "agentClass": "Monoclonal antibody",
     "drugTarget": "EGFR-MET bispecific antibody",
     "targetedTx": "Y",
@@ -1752,7 +1752,7 @@
   {
     "year": "2021",
     "tx": "Asciminib",
-    "biomarker": "Ph+ (BCR-ABL1 Fusion) or ABL1 T315I",
+    "biomarker": "Ph+ (BCR-ABL1 Fusion)\nor ABL1 T315I",
     "agentClass": "Small molecule kinase inhibitor",
     "drugTarget": "ABL/BCR-ABL1 tyrosine kinase inhibitor",
     "targetedTx": "Y",
@@ -1772,7 +1772,7 @@
   {
     "year": "2021",
     "tx": "Dostarlimab",
-    "biomarker": "dMMR\ndMMR or MSI-H",
+    "biomarker": "*dMMR                                                     *dMMR or MSI-H",
     "agentClass": "Immune checkpoint inhibitor",
     "drugTarget": "Anti PD-1 antibody",
     "targetedTx": "Y",
@@ -1791,7 +1791,7 @@
   },
   {
     "year": "2021",
-    "tx": "Infigratinib*",
+    "tx": "Infigratinib",
     "biomarker": "FGFR2 Fusions",
     "agentClass": "Small molecule kinase inhibitor",
     "drugTarget": "FGFR1/2/3 inhibitor",
@@ -1880,14 +1880,14 @@
     "ngsTest": "NA"
   },
   {
-    "year": "2021",
-    "tx": "Tivozanib",
-    "biomarker": "",
+    "year": "2012",
+    "tx": "Regorafenib",
+    "biomarker": "KIT+",
     "agentClass": "Multikinase inhibitor",
-    "drugTarget": "Multi-targeted kinase inhibitor (targets include VEGFR1/2/3, KIT and PDGFRβ)",
+    "drugTarget": "Multi-targeted tyrosine kinase inhibitor (targets include KIT, RET, VEGFR1/2/3, FGFR1/2, PDGFRβ among others)",
     "targetedTx": "Y",
-    "pxTx": "N",
-    "ngsTest": "NA"
+    "pxTx": "Y",
+    "ngsTest": "Y"
   },
   {
     "year": "2021",
@@ -1900,14 +1900,14 @@
     "ngsTest": "Y"
   },
   {
-    "year": "2021",
-    "tx": "Umbralisib*",
-    "biomarker": "",
-    "agentClass": "Multikinase inhibitor",
-    "drugTarget": "Multi-targeted kinase inhibitor (targets include PI3Kδ and CK1ε among others)",
+    "year": "2018",
+    "tx": "Gilteritinib",
+    "biomarker": "FLT3 ITD Mutations, TKD Mutations I836 and D835",
+    "agentClass": "Small molecule kinase inhibitor",
+    "drugTarget": "Multi-targeted tyrosine kinase inhibitor (targets include mutant and WT FLT3, AXL and ALK)",
     "targetedTx": "Y",
-    "pxTx": "N",
-    "ngsTest": "NA"
+    "pxTx": "Y",
+    "ngsTest": "Y"
   },
   {
     "year": "2022",
@@ -1965,7 +1965,7 @@
     "biomarker": "",
     "agentClass": "Gene therapy",
     "drugTarget": "Adenoviral vector-based gene therapy carrying IFNɑ2b",
-    "targetedTx": "N",
+    "targetedTx": "Y",
     "pxTx": "N",
     "ngsTest": "NA"
   },
@@ -2042,7 +2042,7 @@
   {
     "year": "2023",
     "tx": "Elacestrant",
-    "biomarker": "ESR1 Ligand-binding domain missense mutations and ER+/HER2-",
+    "biomarker": "ESR1 Ligand-binding domain missense mutations and\nER+/HER2-",
     "agentClass": "Hormone therapy",
     "drugTarget": "Selective estrogen receptor degrader (SERD)",
     "targetedTx": "Y",
@@ -2063,7 +2063,7 @@
     "year": "2023",
     "tx": "Enfortumab vedotin + Pembrolizumab",
     "biomarker": "",
-    "agentClass": "Antibody drug conjugate and immune checkpoint inhibitor combination",
+    "agentClass": "Antibody drug conjugate and immune checkpoint inhibitor combination ",
     "drugTarget": "Nectin-4-directed antibody and microtubule inhibitor conjugate + Anti-PD-1 antibody",
     "targetedTx": "Y",
     "pxTx": "N",
@@ -2071,7 +2071,7 @@
   },
   {
     "year": "2023",
-    "tx": "Epcoritamab",
+    "tx": "Epcoritamab ",
     "biomarker": "",
     "agentClass": "Bispecific T-cell engager",
     "drugTarget": "Bispecific CD20-directed CD3 T-cell engager",
@@ -2120,14 +2120,14 @@
     "ngsTest": "Y"
   },
   {
-    "year": "2023",
-    "tx": "Repotrectinib",
-    "biomarker": "ROS1 Fusions",
-    "agentClass": "Small molecule kinase inhibitor",
-    "drugTarget": "Multi-targeted kinase inhibitor (targets include ROS1 and NTRK1/2/3)",
+    "year": "2009",
+    "tx": "Pazopanib",
+    "biomarker": "",
+    "agentClass": "Multikinase inhibitor",
+    "drugTarget": "Multi-targeted tyrosine kinase inhibitor (targets include VEGFR1/2/3, PDGFRɑ/β, KIT, FGFR1/3 among others)",
     "targetedTx": "Y",
-    "pxTx": "Y",
-    "ngsTest": "Y"
+    "pxTx": "N",
+    "ngsTest": "NA"
   },
   {
     "year": "2023",
@@ -2164,14 +2164,14 @@
     "tx": "Eflornithine",
     "biomarker": "",
     "agentClass": "Small molecule inhibitor",
-    "drugTarget": "Ornithine decarboxylase inhibitor",
+    "drugTarget": "Ornithine decarboxylase inhibitor ",
     "targetedTx": "Y",
     "pxTx": "N",
     "ngsTest": "NA"
   },
   {
     "year": "2024",
-    "tx": "Lifileucel",
+    "tx": "Lifileucel ",
     "biomarker": "",
     "agentClass": "Other Immunotherapy",
     "drugTarget": "Tumor-infiltrating lymphocyte therapy",
@@ -2192,7 +2192,7 @@
   {
     "year": "2024",
     "tx": "Tovorafenib",
-    "biomarker": "BRAF Fusions, BRAF Rearrangement, BRAF V600",
+    "biomarker": "BRAF Fusions, BRAF Rearrangement, BRAF V600 ",
     "agentClass": "Small molecule kinase inhibitor",
     "drugTarget": "RAF inhibitor",
     "targetedTx": "Y",
@@ -2238,5 +2238,45 @@
     "targetedTx": "Y",
     "pxTx": "Y",
     "ngsTest": "Y"
+  },
+  {
+    "year": "2024",
+    "tx": "Lazertinib + Amivantamab",
+    "biomarker": "EGFR L858R, Exon 19 Deletions",
+    "agentClass": "Small molecule kinase inhibitor and monoclonal antibody combination",
+    "drugTarget": "EGFR tyrosine kinase inhibitor + EGFR-MET bispecific antibody",
+    "targetedTx": "Y",
+    "pxTx": "Y",
+    "ngsTest": "Y"
+  },
+  {
+    "year": "2024",
+    "tx": "Inavolisib + Fulvestrant + Palbociclib",
+    "biomarker": "PIK3CA Oncogenic Mutations, HR+/HER2-",
+    "agentClass": "Small molecule inhibitor and hormone therapy combination",
+    "drugTarget": "α-specific PI3K inhibitor + selective estrogen receptor degrader + CDK4/6 inhibitor",
+    "targetedTx": "Y",
+    "pxTx": "Y",
+    "ngsTest": "Y"
+  },
+  {
+    "year": "2024",
+    "tx": "Adagrasib + Cetuximab",
+    "biomarker": "KRAS G12C",
+    "agentClass": "Small molecule inhibitor and monoclonal antibody combination",
+    "drugTarget": "KRAS G12C inhibitor + Anti-EGFR antibody",
+    "targetedTx": "Y",
+    "pxTx": "Y",
+    "ngsTest": "Y"
+  },
+  {
+    "year": "2024",
+    "tx": "Zolbetuximab",
+    "biomarker": "HER2- and CLDN18.2+",
+    "agentClass": "Monoclonal antibody",
+    "drugTarget": "CDLN18.2-directed cytolytic antibody",
+    "targetedTx": "Y",
+    "pxTx": "Y",
+    "ngsTest": "N"
   }
 ]

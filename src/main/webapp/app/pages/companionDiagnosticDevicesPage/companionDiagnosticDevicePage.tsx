@@ -87,6 +87,52 @@ interface ICancerType {
   tumorForm: 'SOLID' | 'LIQUID' | 'MIXED';
 }
 
+interface IRule {
+  id: number;
+  entity: string;
+  rule: string;
+  name: string | null;
+  association: IAssociation | null;
+}
+
+interface IAssociation {
+  id: number;
+  name: string | null;
+  rules: IRule[] | null;
+  alterations: IAlteration[] | null;
+  cancerTypes: ICancerType[] | null;
+  drugs: IDrug[] | null;
+  fdaSubmissions: IFdaSubmission[] | null;
+}
+
+interface IDrug {
+  id: number;
+  uuid: string;
+  name: string;
+  associations: IAssociation[] | null;
+}
+
+interface IAlteration {
+  id: number;
+  name: string;
+  alteration: string;
+  proteinChange: string;
+  start: number | null;
+  end: number | null;
+  refResidues: string | null;
+  variantResidues: string | null;
+  genes: IGene[] | null;
+  associations: IAssociation[] | null;
+}
+
+interface IGene {
+  id: number;
+  entrezGeneId: number;
+  hugoSymbol: string;
+  hgncId: string | null;
+  alterations: IAlteration[] | null;
+}
+
 type SelectOption = {
   value: string;
   label: string;
@@ -98,6 +144,27 @@ const referenceColumnInfo = (
     Humanitarian Device Exemption (HDE) (Approval/Clearance or Grant Date)
   </div>
 );
+
+const getDrugName = (drugs: IDrug[], rules: IRule[]) => {
+  // Create a map of drug ids to drug names for quick lookup
+  const drugMap = new Map();
+  drugs.forEach((drug: any) => {
+    drugMap.set(drug.id, drug.name);
+  });
+
+  const drugRule = rules.filter((rule: IRule) => rule.entity === 'DRUG')[0];
+
+  if (!drugRule) {
+    return drugs[0].name;
+  }
+  return drugRule.rule
+    .split(/([+,])/)
+    .map((part: any) => {
+      const id = parseInt(part, 10);
+      return isNaN(id) ? part : drugMap.get(id) || part;
+    })
+    .join('');
+};
 
 const parseCDx = () => {
   const parsedCompanionDiagnosticDevices: ICompanionDiagnosticDevice[] = [];
@@ -131,18 +198,8 @@ const parseCDx = () => {
         ).map((gene: any) => ({
           gene,
           alterations: uniq(assoc.alterations.map((a: any) => a.name)).sort(),
-          drugs: assoc.treatments
-            .map((treatment: any) =>
-              treatment.drugs.map((drug: any) => drug.name).join(' + ')
-            )
-            .join(', '),
-          cancerTypes: assoc.associationCancerTypes.reduce(
-            (ctAcc: any[], act: any) => {
-              ctAcc.push(act.cancerType);
-              return ctAcc;
-            },
-            []
-          ),
+          drugs: getDrugName(assoc.drugs, assoc.rules),
+          cancerTypes: assoc.cancerTypes,
           fdaSubmissions: assoc.fdaSubmissions,
         }));
       })

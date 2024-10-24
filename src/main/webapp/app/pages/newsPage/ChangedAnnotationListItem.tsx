@@ -117,7 +117,7 @@ export const ChangedAnnotationListItem = (props: {
     case AnnotationColumnHeaderType.UPDATED_SAME_LEVEL_DRUG:
       annotationColumnHeader = CHANGED_ANNOTATION_UPDATED_DRUG_SAME_HIGHEST_LEVEL_COLUMNS;
       defaultTitle =
-        "Addition of drug(s) associated with a tumor type-specific leveled alteration(s) currently in OncoKB™ (without changing the alteration's highest level of evidence)";
+        "Updated therapeutic implications - Addition of drug(s) associated with a tumor type-specific leveled alteration(s) currently in OncoKB™ (without changing the alteration's highest level of evidence)";
       useOneLineRowClass = true;
       break;
     case AnnotationColumnHeaderType.LEVEL:

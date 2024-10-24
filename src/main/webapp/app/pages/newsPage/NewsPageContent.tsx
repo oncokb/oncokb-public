@@ -46,7 +46,7 @@ import { AnnotationColumnHeaderType } from './ChangedAnnotationListItem';
 import { linkableMutationName, convertGeneInputToLinks } from './Util';
 
 export type ChangedAnnotation = {
-  content: ElementType[][];
+  content: (ElementType | ElementType[])[][];
   title?: string;
   columnHeaderType?: AnnotationColumnHeaderType;
   headers?: { name: string }[];
@@ -300,6 +300,270 @@ const EVIDENCE_COLUMN_SEPARATOR = '; ';
 // https://stackoverflow.com/questions/41947168/is-it-possible-to-use-keyof-operator-on-literals-instead-of-interfaces
 
 export const NEWS_BY_DATE: { [date: string]: NewsData } = {
+  '10242024': {
+    priorityNews: [
+      <span>
+        Update to our{' '}
+        <Link to={PAGE_ROUTE.CDX}>
+          FDA Cleared or Approved Companion Diagnostic Devices
+        </Link>{' '}
+        (CDx) page
+      </span>,
+      <span>
+        Update to our{' '}
+        <Link to={PAGE_ROUTE.ONCOLOGY_TX}>FDA-Approved Oncology Therapies</Link>{' '}
+        page
+      </span>,
+    ],
+    changedAnnotations: [
+      {
+        columnHeaderType: AnnotationColumnHeaderType.NEW_ALTERATION_WITH_LEVEL,
+        content: [
+          [
+            ['3A', 'R2'],
+            'ROS1',
+            <WithSeparator separator={', '}>
+              {getAlternativeAllelesPageLinks('ROS1', 'G2032R')}
+            </WithSeparator>,
+            'Non-Small Cell Lung Cancer',
+
+            ['Taletrectinib', 'Crizotinib, Lorlatinib'],
+            [
+              <WithSeparator separator={EVIDENCE_COLUMN_SEPARATOR}>
+                <PMIDLink pmids="38822758, 31399568" />
+              </WithSeparator>,
+              <WithSeparator separator={EVIDENCE_COLUMN_SEPARATOR}>
+                <PMIDLink
+                  wrapText
+                  pmids="33685866, 29333528, 23724914, 36135089, 36135089, 32918045"
+                />
+              </WithSeparator>,
+            ],
+          ],
+          [
+            ['3A', 'R2'],
+            'ROS1',
+            <WithSeparator separator={', '}>
+              {getAlternativeAllelesPageLinks('ROS1', 'L2086F')}
+            </WithSeparator>,
+            'Non-Small Cell Lung Cancer',
+            ['Cabozantinib', 'Lorlatinib, Repotrectinib'],
+            [
+              <WithSeparator separator={EVIDENCE_COLUMN_SEPARATOR}>
+                <PMIDLink pmids="33685866, 37291202, 39117775, 39091594" />
+              </WithSeparator>,
+              <WithSeparator separator={EVIDENCE_COLUMN_SEPARATOR}>
+                <PMIDLink pmids="37291202, 33685866, 39091594" />
+              </WithSeparator>,
+            ],
+          ],
+          [
+            '3A',
+            'SMARCA4',
+            'Oncogenic Mutations',
+            'Non-Small Cell Lung Cancer, Esophageal Adenocarcinoma',
+            'PRT3789',
+            <WithSeparator separator={EVIDENCE_COLUMN_SEPARATOR}>
+              <AbstractLink
+                abstract="Guo, R. et al., Abstract# 603O, ESMO 2024"
+                link="https://www.annalsofoncology.org/article/S0923-7534(24)02189-6/fulltext"
+              />
+              <AbstractLink
+                abstract="Hulse, M. et al., Abstract# 3263, AACR 2022"
+                link="https://aacrjournals.org/cancerres/article/82/12_Supplement/3263/703325/Abstract-3263-Preclinical-characterization-of"
+              />
+            </WithSeparator>,
+          ],
+        ],
+      },
+      {
+        useOneLineRowClass: false,
+        title:
+          'Updated therapeutic implications - Promotion of tumor type-specific level of evidence for an alteration(s)',
+        headers: CHANGED_ANNOTATION_LEVEL_WITH_EVIDENCE_COLUMNS,
+        content: [
+          [
+            'PIK3CA',
+            <>
+              <AlterationPageLink
+                hugoSymbol="PIK3CA"
+                alteration="Oncogenic Mutations"
+              />{' '}
+              <span>
+                (excluding R88Q, N345K, C420R, E542K, E545A/D/G/K/Q,
+                Q546E/K/R/P, M1043V/I, H1047Y/R/L, G1049R which are already
+                Level 1)
+              </span>
+            </>,
+            'Breast Cancer',
+            <div>
+              <div style={{ fontStyle: 'italic' }}>
+                {DRUGS_CURRENTLY_IN_ONCOKB}:
+              </div>
+              <div>
+                Alpelisib + Fulvestrant, Capivasertib + Fulvestrant (Level 2)
+              </div>
+              <br></br>
+              <div>Inavolisib + Palbociclib + Fulvestrant (Level 3A)</div>
+              <br></br>
+              <div style={{ fontStyle: 'italic' }}>
+                {DRUGS_PROMOTED_IN_ONCOKB}:
+              </div>
+              <div>Inavolisib + Palbociclib + Fulvestrant (Level 1)</div>
+            </div>,
+            '2',
+            '1',
+            <WithSeparator separator={EVIDENCE_COLUMN_SEPARATOR}>
+              <FdaApprovalLink
+                approval="Inavolisib + Palbociclib + Fulvestrant"
+                link="https://www.fda.gov/drugs/resources-information-approved-drugs/fda-approves-inavolisib-palbociclib-and-fulvestrant-endocrine-resistant-pik3ca-mutated-hr-positive"
+              />
+              <AbstractLink
+                abstract="Jhaveri, K. et al., Abstract# GS03-13, SABCS 2023"
+                link="https://medically.gene.com/global/en/unrestricted/oncology/SABCS-2023/sabcs-2023-presentation-jhaveri-inavolisib-or-placebo-i.html"
+              />
+            </WithSeparator>,
+          ],
+        ],
+      },
+      {
+        columnHeaderType: AnnotationColumnHeaderType.UPDATED_SAME_LEVEL_DRUG,
+        content: [
+          [
+            '1',
+            'EGFR',
+            <>
+              <AlterationPageLink
+                hugoSymbol="EGFR"
+                alteration={'Exon 19 in-frame deletions'}
+              />
+              , <AlterationPageLink hugoSymbol="EGFR" alteration={'L858R'} />
+            </>,
+            'Non-Small Cell Lung Cancer',
+            <>
+              <div>
+                Afatinib, Dacomitinib, Erlotinib, Erlotinib + Ramucirumab,
+                Gefitinib, Osimertinib, Osimertinib + Chemotherapy, Amivantamab
+                + Lazertinib (Level 1)
+              </div>
+              <br></br>
+              <div>Amivantamab + Chemotherapy (Level 2)</div>
+              <br></br>
+              <div>Patritumab Deruxtecan (Level 3A)</div>
+            </>,
+
+            'Amivantamab + Chemotherapy (Level 1)',
+            <WithSeparator separator={EVIDENCE_COLUMN_SEPARATOR}>
+              <FdaApprovalLink
+                approval="Amivantamab with Chemotherapy"
+                link="https://www.fda.gov/drugs/resources-information-approved-drugs/fda-approves-amivantamab-vmjw-carboplatin-and-pemetrexed-non-small-cell-lung-cancer-egfr-exon-19"
+              />
+              <PMIDLink pmids="37879444" />
+            </WithSeparator>,
+          ],
+          [
+            '1',
+            'PIK3CA',
+            <WithSeparator separator={', '}>
+              {getAlternativeAllelesPageLinks('PIK3CA', 'R88Q')}
+              {getAlternativeAllelesPageLinks('PIK3CA', 'N345K')}
+              {getAlternativeAllelesPageLinks('PIK3CA', 'C420R')}
+              {getAlternativeAllelesPageLinks('PIK3CA', 'E542K')}
+              {getAlternativeAllelesPageLinks('PIK3CA', 'E545A/D/G/K/Q')}
+              {getAlternativeAllelesPageLinks('PIK3CA', 'Q546E/K/R/P')}
+              {getAlternativeAllelesPageLinks('PIK3CA', 'M1043V/I')}
+              {getAlternativeAllelesPageLinks('PIK3CA', 'H1047Y/R/L')}
+              {getAlternativeAllelesPageLinks('PIK3CA', 'G1049R')}
+            </WithSeparator>,
+            'Breast Cancer',
+            <>
+              <div>Capivasertib + Fulvestrant (Level 1)</div>
+              <br></br>
+              <div>
+                Alpelisib + Fulvestrant (Level 1 for PIK3CA C420R, E542K,
+                E545A/D/G/K, H1047Y/R/L, Q546E/R only)
+              </div>
+            </>,
+            'Inavolisib + Palbociclib + Fulvestrant (Level 1; Promoted from Level 3A)',
+            <WithSeparator separator={EVIDENCE_COLUMN_SEPARATOR}>
+              <FdaApprovalLink
+                approval="Inavolisib with Palbociclib + Fulvestrant"
+                link="https://www.fda.gov/drugs/resources-information-approved-drugs/fda-approves-inavolisib-palbociclib-and-fulvestrant-endocrine-resistant-pik3ca-mutated-hr-positive"
+              />
+              <AbstractLink
+                abstract="Jhaveri, K. et al., Abstract# GS03-13, SABCS 2023"
+                link="https://medically.gene.com/global/en/unrestricted/oncology/SABCS-2023/sabcs-2023-presentation-jhaveri-inavolisib-or-placebo-i.html"
+              />
+            </WithSeparator>,
+          ],
+          [
+            '1',
+            'ALK',
+            'Fusions',
+            'Non-Small Cell Lung Cancer',
+            'Alectinib, Brigatinib, Certinib, Crizotinib, Lorlatinib (Level 1)',
+            'NVL-655 (Level 3A)',
+            <WithSeparator separator={EVIDENCE_COLUMN_SEPARATOR}>
+              <PMIDLink pmids="39269178" />
+              <AbstractLink
+                abstract="Drilon, A. et al., Abstract# 1253O, ESMO 2024 "
+                link="https://www.annalsofoncology.org/article/S0923-7534(24)02829-1/fulltext"
+              />
+            </WithSeparator>,
+          ],
+          [
+            '1',
+            'ROS1',
+            'Fusions',
+            'Non-Small Cell Lung Cancer',
+            <>
+              <div>Crizotinib, Entrectinib, Repotrectinib (Level 1)</div>
+              <br></br>
+              <div>Ceritinib, Lorlatinib (Level 2)</div>
+            </>,
+            'Taletrectinib (Level 3A)',
+            <WithSeparator separator={EVIDENCE_COLUMN_SEPARATOR}>
+              <PMIDLink pmids="38822758, 36877099, 31399568" />
+            </WithSeparator>,
+          ],
+          [
+            '2',
+            'ALK',
+            'G1202R',
+            'Non-Small Cell Lung Cancer',
+            'Lorlatinib (Level 2)',
+            'NVL-655 (Level 3A)',
+            <WithSeparator separator={EVIDENCE_COLUMN_SEPARATOR}>
+              <PMIDLink pmids="39269178" />
+              <AbstractLink
+                abstract="Drilon, A. et al., Abstract# 1253O, ESMO 2024"
+                link="https://www.annalsofoncology.org/article/S0923-7534(24)02829-1/fulltext"
+              />
+            </WithSeparator>,
+          ],
+          [
+            '3A',
+            'KRAS',
+            'G12D',
+            'Non-Small Cell Lung Cancer, Pancreatic Adenocarcinoma',
+            'RMC-6236 (Level 3A)',
+            'ASP3082 (Level 3A; Promoted from Level 4)',
+            <WithSeparator separator={EVIDENCE_COLUMN_SEPARATOR}>
+              <AbstractLink
+                abstract="Park, W. et al., Abstract# 608O, ESMO 2024"
+                link="https://www.annalsofoncology.org/article/S0923-7534(24)02194-X/fulltext"
+              />
+              <AbstractLink
+                abstract="Nagashima, T. et al., Abstract# 5735, AACR 2023"
+                link="https://aacrjournals.org/cancerres/article/83/7_Supplement/5735/722276"
+              />
+            </WithSeparator>,
+          ],
+        ],
+      },
+    ],
+    newlyAddedGenes: ['ADARB2', 'BUB1B', 'CCN6', 'CDKN1C', 'EGR2'],
+  },
   '09252024': {
     changedAnnotations: [
       {

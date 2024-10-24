@@ -821,6 +821,7 @@ export type DataRelease = {
 };
 
 export const DATA_RELEASES: DataRelease[] = [
+  { date: '10242024', version: 'v4.22' },
   { date: '09252024', version: 'v4.21' },
   { date: '08152024', version: 'v4.20' },
   { date: '07042024', version: 'v4.19' },
@@ -948,6 +949,7 @@ export const DEFAULT_FEEDBACK_ANNOTATION: Feedback = {
   type: FeedbackType.ANNOTATION,
 };
 
+export type FdaSubmissionType = 'PMA' | 'PMN' | 'HDE' | 'DEN';
 export const FDA_SUBMISSION_URL_SUFFIX = {
   PMA: 'cfpma/pma.cfm',
   PMN: 'cfpmn/pmn.cfm',

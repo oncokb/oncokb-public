@@ -2,7 +2,10 @@ import * as React from 'react';
 import { Table } from 'react-bootstrap';
 
 export type ElementType = JSX.Element | string;
-export type SimpleTableCell = { key: string; content: ElementType };
+export type SimpleTableCell = {
+  key: string;
+  content: ElementType | ElementType[];
+};
 export type SimpleTableRow = { key: string; content: SimpleTableCell[] };
 export type SimpleTableRows = SimpleTableRow[];
 export type SimpleTableColumn = {
@@ -21,8 +24,8 @@ export type SimpleTableProps = {
 export const SimpleTable = (props: SimpleTableProps) => {
   const getRow = (row: SimpleTableRow) => {
     return row.content
-      ? row.content.map(cell => {
-          return <td key={cell.key}>{cell.content}</td>;
+      ? row.content.map(({ key, content }) => {
+          return <td key={key}>{content}</td>;
         })
       : null;
   };
@@ -44,9 +47,41 @@ export const SimpleTable = (props: SimpleTableProps) => {
           </thead>
         )}
         <tbody className={props.tbodyClassName}>
-          {props.rows.map(row => (
-            <tr key={row.key}>{getRow(row)}</tr>
-          ))}
+          {props.rows.flatMap(({ key, content }) => {
+            let maxContentSize = 1;
+            for (const cur of content) {
+              maxContentSize = Array.isArray(cur.content)
+                ? Math.max(cur.content.length, maxContentSize)
+                : maxContentSize;
+            }
+            const elements: JSX.Element[] = [];
+            for (let i = 0; i < maxContentSize; i++) {
+              const element = (
+                <tr key={`${key}_${i}`}>
+                  {content.map(({ content: innerContent, key: innerKey }) => {
+                    if (Array.isArray(innerContent)) {
+                      return <td key={innerKey}>{innerContent[i]}</td>;
+                    } else if (i === 0) {
+                      return (
+                        <td
+                          key={innerKey}
+                          rowSpan={
+                            maxContentSize > 1 ? maxContentSize : undefined
+                          }
+                        >
+                          {innerContent}
+                        </td>
+                      );
+                    } else {
+                      return <></>;
+                    }
+                  })}
+                </tr>
+              );
+              elements.push(element);
+            }
+            return elements;
+          })}
         </tbody>
       </Table>
     </div>
