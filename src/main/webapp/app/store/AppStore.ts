@@ -1,4 +1,4 @@
-import { IReactionDisposer, observable, reaction } from 'mobx';
+import { observable } from 'mobx';
 import { remoteData } from 'cbioportal-frontend-commons';
 import apiClient from 'app/shared/api/oncokbClientInstance';
 import { OncoKBInfo } from 'app/shared/api/generated/OncoKbAPI';

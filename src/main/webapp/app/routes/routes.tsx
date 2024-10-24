@@ -65,7 +65,7 @@ const getOldLevelsRedirectRoute = (hash: string) => {
   return <Redirect to={redirectPath} />;
 };
 
-const AppRouts = (props: {
+const AppRoutes = (props: {
   authenticationStore: AuthenticationStore;
   appStore: AppStore;
   routing: RouterStore;
@@ -340,4 +340,4 @@ const AppRouts = (props: {
     </Switch>
   );
 };
-export default AppRouts;
+export default AppRoutes;

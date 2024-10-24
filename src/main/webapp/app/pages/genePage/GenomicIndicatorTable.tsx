@@ -23,6 +23,7 @@ export const GenomicIndicatorTable: React.FunctionComponent<{
     {
       Header: <span>Allele State</span>,
       accessor: 'knownEffect',
+      width: 150,
     },
     {
       Header: <span>Description</span>,
