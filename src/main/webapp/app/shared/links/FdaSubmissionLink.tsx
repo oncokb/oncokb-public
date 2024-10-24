@@ -1,6 +1,9 @@
 import React from 'react';
-import { getFdaSubmissionNumber, toAppLocalDateFormat } from '../utils/Utils';
-import { FDA_SUBMISSION_URL_SUFFIX } from 'app/config/constants';
+import { getFdaSubmissionNumber, toUtcDateFormat } from '../utils/Utils';
+import {
+  FDA_SUBMISSION_URL_SUFFIX,
+  FdaSubmissionType,
+} from 'app/config/constants';
 import { Linkout } from './Linkout';
 import { IFdaSubmission } from 'app/pages/companionDiagnosticDevicesPage/companionDiagnosticDevicePage';
 
@@ -14,10 +17,11 @@ export const FdaSubmissionLink: React.FunctionComponent<{
     props.fdaSubmission.number,
     props.fdaSubmission.supplementNumber
   );
-  const date = toAppLocalDateFormat(props.fdaSubmission.decisionDate);
+  const date = toUtcDateFormat(props.fdaSubmission.decisionDate);
+  const type = props.fdaSubmission.type.type.split('_')[1] as FdaSubmissionType;
   const link =
     FDA_SUBMISSION_BASE_URL +
-    FDA_SUBMISSION_URL_SUFFIX[props.fdaSubmission.type.type] +
+    FDA_SUBMISSION_URL_SUFFIX[type] +
     '?id=' +
     submissionNumber.replace('/', '');
   return (
