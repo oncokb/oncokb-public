@@ -12,7 +12,6 @@ import { LEVEL_PRIORITY_BY_TYPE, ONCOKB_TM } from 'app/config/constants';
 import { Alteration } from 'app/shared/api/generated/OncoKbPrivateAPI';
 import { sortByLevelWithLevels } from 'app/shared/utils/ReactTableUtils';
 import WithSeparator from 'react-with-separator';
-import { COLOR_GERMLINE, COLOR_SOMATIC } from 'app/config/theme';
 import GeneticTypeTag from 'app/components/geneticTypeTag/GeneticTypeTag';
 import { GENETIC_TYPE } from 'app/components/geneticTypeTabs/GeneticTypeTabs';
 
@@ -51,7 +50,7 @@ const GeneSearchOption: React.FunctionComponent<{
           searchWords={[props.search]}
           textToHighlight={`${props.data.gene.hugoSymbol} (Entrez Gene: ${props.data.gene.entrezGeneId})`}
         />
-        {props.data.annotation && (
+        {props.data.annotation && Object.values(GENETIC_TYPE).includes(props.data.annotation.toLowerCase() as GENETIC_TYPE) && (
           <GeneticTypeTag geneticType={props.data.annotation.toLowerCase() === 'germline' ? GENETIC_TYPE.GERMLINE : GENETIC_TYPE.SOMATIC} className={'ml-2'}/>
         )}
         {props.data.highestSensitiveLevel ||

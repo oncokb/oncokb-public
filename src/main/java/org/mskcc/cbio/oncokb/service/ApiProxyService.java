@@ -1,5 +1,6 @@
 package org.mskcc.cbio.oncokb.service;
 
+import org.apache.commons.lang3.StringUtils;
 import org.mskcc.cbio.oncokb.config.application.ApplicationProperties;
 import org.mskcc.cbio.oncokb.security.SecurityUtils;
 import org.slf4j.Logger;
@@ -30,7 +31,8 @@ public class ApiProxyService {
         String queryString = request.getQueryString();
         String defaultApiProxyUrl = applicationProperties.getApiProxyUrl();
         String germlineParam = request.getParameter("germline");
-        if (germlineParam != null && Boolean.TRUE.equals(Boolean.parseBoolean(germlineParam)) && SecurityUtils.isAuthenticated()) {
+        if (germlineParam != null && Boolean.TRUE.equals(Boolean.parseBoolean(germlineParam))
+            && SecurityUtils.isAuthenticated() && StringUtils.isNotEmpty(applicationProperties.getApiProxyGermlineUrl())) {
             defaultApiProxyUrl = applicationProperties.getApiProxyGermlineUrl();
         }
         return new URI(defaultApiProxyUrl + request.getRequestURI() + (queryString == null ? "" : "?" + queryString));

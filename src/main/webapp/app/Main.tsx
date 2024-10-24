@@ -2,7 +2,7 @@ import * as React from 'react';
 import Footer from './components/Footer';
 import Header from './components/Header';
 import { observer } from 'mobx-react';
-import AppRouts from 'app/routes/routes';
+import AppRoutes from 'app/routes/routes';
 import { isAuthorized } from 'app/shared/auth/AuthUtils';
 import { Stores } from 'app/App';
 import { Prompt, withRouter } from 'react-router';
@@ -108,7 +108,7 @@ class Main extends React.Component<IMainPage> {
           routing={this.props.routing}
           windowStore={this.props.windowStore}
         >
-          <AppRouts
+          <AppRoutes
             authenticationStore={this.props.authenticationStore}
             appStore={this.props.appStore}
             routing={this.props.routing}

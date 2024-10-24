@@ -1,9 +1,9 @@
-import React, { useEffect, useRef, useState, useCallback } from 'react';
+import React, { useEffect, useRef, useState } from 'react';
 import { Link, useLocation } from 'react-router-dom';
 import { Row, Col, Container } from 'react-bootstrap';
 import styles from './StickyMiniNavBar.module.scss';
 import classNames from 'classnames';
-import { COLOR_WHITE } from 'app/config/theme';
+import classnames from 'classnames';
 
 function getNavBarSectionElements() {
   return document.querySelectorAll('[mini-nav-bar-header]');
@@ -35,7 +35,7 @@ function useScrollToHash({ stickyHeight }: { stickyHeight: number }) {
 }
 
 type IStickyMiniNavBar = {
-  title: string | JSX.Element
+  title: string | JSX.Element;
   linkUnderlineColor: string;
   stickyBackgroundColor?: string;
 };
@@ -162,16 +162,15 @@ export default function StickyMiniNavBar({
 
   return (
     <Container
-      className={classNames('container', styles.container)}
+      className={classNames(
+        'container',
+        styles.container,
+        isSticky ? styles.containerSticky : ''
+      )}
       style={{
-        position: 'sticky',
         top: headerHeight,
-        zIndex: 100,
-        borderBottom: '1px',
-        borderBottomStyle: 'solid',
-        borderBottomColor: '#E3E5EC',
-        boxShadow: isSticky ? '0px 0.75px 2px 0px rgba(0, 22, 65, 0.10), 0px 1.5px 4px 0px rgba(0, 22, 65, 0.10), 0px 3px 8px 0px rgba(0, 22, 65, 0.10)' : undefined,
-        backgroundColor: isSticky ? (stickyBackgroundColor ? stickyBackgroundColor : COLOR_WHITE) : undefined,
+        backgroundColor:
+          isSticky && stickyBackgroundColor ? stickyBackgroundColor : undefined,
       }}
     >
       <Row className="justify-content-center">
@@ -186,14 +185,9 @@ export default function StickyMiniNavBar({
           >
             {isSticky && (
               <Link
-                className="font-weight-bold d-flex align-items-center justify-content-center"
+                className={classnames(styles.stickyHeader)}
                 // # is removed from link so we have to use onclick to scroll to the top
                 to="#"
-                style={{
-                  color: '#000000',
-                  fontFamily: 'Gotham Bold',
-                  padding: '7px 0px',
-                }}
                 onClick={e => {
                   e.preventDefault();
                   window.scrollTo({
@@ -218,21 +212,9 @@ export default function StickyMiniNavBar({
                     key={id}
                     to={`#${id}`}
                     className={classNames(
-                      'd-flex',
-                      'align-items-center',
-                      'justify-content-center',
-                      isInSection ? 'font-weight-bold' : 'font-weight-normal'
+                      styles.stickySection,
+                      isInSection ? styles.stickySectionSelected : ''
                     )}
-                    style={{
-                      color: '#000000',
-                      borderColor: isInSection
-                        ? linkUnderlineColor
-                        : 'transparent',
-                      borderBottomStyle: 'solid',
-                      borderBottomWidth: '4px',
-                      fontFamily: isInSection ? 'Gotham Bold' : 'Gotham Book',
-                      padding: '7px 0px 3px 0',
-                    }}
                   >
                     {label}
                   </Link>
