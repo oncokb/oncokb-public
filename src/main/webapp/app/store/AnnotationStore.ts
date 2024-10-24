@@ -340,6 +340,23 @@ export class AnnotationStore {
     default: [],
   });
 
+  readonly relevantAlterations = remoteData<Alteration[]>({
+    await: () => [this.gene, this.alteration],
+    invoke: async () => {
+      if (!this.gene.result.entrezGeneId || !this.alteration.result) {
+        return [];
+      }
+      return privateClient.utilRelevantAlterationsGetUsingGET({
+        entrezGeneId: this.gene.result.entrezGeneId,
+        alteration: this.alteration.result
+          ? this.alteration.result.alteration
+          : this.alterationQuery,
+        referenceGenome: this.referenceGenomeQuery,
+      });
+    },
+    default: [],
+  });
+
   readonly mutationMapperDataExternal = remoteData<OncokbMutation[]>({
     await: () => [this.gene, this.biologicalAlterations],
     invoke: () => {
