@@ -8,10 +8,13 @@ $font-family-sans-serif: 'Gotham Book', serif;
 $blue: $oncokb-blue;
 $grey: #808080; // grey
 $light-grey: #d3d3d3; // light grey
+$pale-blue-grey: #f0f7ff; // msk pale blue grey
+$pale-warm-grey: #fbf9f7; // msk pale warm grey
 $primary: $oncokb-blue;
 $secondary: $grey;
 $warning: #ffc107;
 $danger: #dc3545;
+$inactive: #f2f4f8; // from design team
 
 $link-hover-color: $oncokb-darker-blue;
 $nav-bg-color: $oncokb-blue;
@@ -40,3 +43,5 @@ $container-max-widths: (
 ) !default;
 
 $bigger-default-font-size: 1.2rem;
+
+$default-box-shadow: 0px 0.75px 2px 0px rgba(0, 22, 65, 0.10), 0px 1.5px 4px 0px rgba(0, 22, 65, 0.10), 0px 3px 8px 0px rgba(0, 22, 65, 0.10);

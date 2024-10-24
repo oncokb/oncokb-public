@@ -306,7 +306,9 @@ export default class AnnotationPage extends React.Component<
         // convert all alterations to matchedAlteration/alteration query if not positional variant
         let mappedAlteration = {} as Alteration;
         if (
-          this.props.store.relevantAlterations.result.map(relevantAlt => relevantAlt.alteration).includes(alt.alteration)
+          this.props.store.relevantAlterations.result
+            .map(relevantAlt => relevantAlt.alteration)
+            .includes(alt.alteration)
         ) {
           mappedAlteration = alt;
         } else {

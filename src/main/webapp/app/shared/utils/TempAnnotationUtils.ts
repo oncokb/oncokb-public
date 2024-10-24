@@ -7,7 +7,7 @@ export function getTabDefaultActiveKey(
   hasFdaData: boolean,
   defaultSelectedTab?: ANNOTATION_PAGE_TAB_KEYS
 ) {
-  let defaultTabBasedOnData = ANNOTATION_PAGE_TAB_KEYS.BIOLOGICAL;
+  let defaultTabBasedOnData;
   if (hasTxData) {
     defaultTabBasedOnData = ANNOTATION_PAGE_TAB_KEYS.TX;
   } else if (hasDxData) {

@@ -14,7 +14,7 @@
     "suppressImplicitAnyIndexErrors": true,
     "outDir": "target/classes/static/app",
     "lib": ["dom", "es2020"],
-    "types": ["jest", "webpack-env"],
+    "types": ["jest", "webpack-env", "resize-observer-browser"],
     "allowJs": true,
     "checkJs": false,
     "baseUrl": "./",

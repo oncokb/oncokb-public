@@ -2,9 +2,8 @@ import * as React from 'react';
 import Footer from './components/Footer';
 import Header from './components/Header';
 import { observer } from 'mobx-react';
-import AppRouts from 'app/routes/routes';
+import AppRoutes from 'app/routes/routes';
 import { isAuthorized } from 'app/shared/auth/AuthUtils';
-import { Container, Row, Col, Modal, Button } from 'react-bootstrap';
 import { Stores } from 'app/App';
 import { Prompt, withRouter } from 'react-router';
 import {
@@ -19,6 +18,7 @@ import { FeedbackModal } from './components/feedback/FeedbackModal';
 import { FdaModal } from 'app/components/fdaModal/FdaModal';
 import { Location } from 'history';
 import autobind from 'autobind-decorator';
+import PageContainer from 'app/components/PageContainer';
 
 export type IMainPage = Stores;
 
@@ -104,15 +104,16 @@ class Main extends React.Component<IMainPage> {
           routing={this.props.routing}
           appStore={this.props.appStore}
         />
-        <div className={'view-wrapper'}>
-          <Container fluid={!this.props.windowStore.isXLscreen}>
-            <AppRouts
-              authenticationStore={this.props.authenticationStore}
-              appStore={this.props.appStore}
-              routing={this.props.routing}
-            />
-          </Container>
-        </div>
+        <PageContainer
+          routing={this.props.routing}
+          windowStore={this.props.windowStore}
+        >
+          <AppRoutes
+            authenticationStore={this.props.authenticationStore}
+            appStore={this.props.appStore}
+            routing={this.props.routing}
+          />
+        </PageContainer>
         <FeedbackModal
           showModal={this.props.appStore.showFeedbackFormModal}
           feedback={this.feedbackAnnotation}

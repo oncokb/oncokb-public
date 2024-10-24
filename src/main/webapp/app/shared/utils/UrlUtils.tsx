@@ -27,6 +27,7 @@ import * as QueryString from 'querystring';
 import { YEAR_END_SUMMARY_RANGE } from 'app/pages/newsPage/NewsPageNavTab';
 import { ALTERNATIVE_ALLELES_REGEX } from 'app/config/constants/regex';
 import WithSeparator from 'react-with-separator';
+import { GENETIC_TYPE } from 'app/components/geneticTypeTabs/GeneticTypeTabs';
 
 export const getHostLinkWithProtocol = (): string => {
   return `${window.location.protocol}//${window.location.host}`;
@@ -34,11 +35,15 @@ export const getHostLinkWithProtocol = (): string => {
 
 export const getGenePageLink = (props: {
   hugoSymbol: string;
+  geneticType?: GENETIC_TYPE;
   searchQueries?: GenePageSearchQueries;
   hashQueries?: GenePageHashQueries;
   withProtocolHostPrefix?: boolean;
 }): string => {
   let pageLink = `${PAGE_ROUTE.GENE_HEADER}/${props.hugoSymbol}`;
+  if (props.geneticType) {
+    pageLink += `/${props.geneticType}`;
+  }
   if (props.searchQueries && Object.keys(props.searchQueries).length > 0) {
     pageLink = `${pageLink}?${QueryString.stringify(props.searchQueries)}`;
   }
@@ -171,6 +176,32 @@ export const getAlternativeAllelesPageLinks = (
   }
 };
 
+export type GenePagePath = {
+  hugoSymbol?: string;
+  geneticType?: GENETIC_TYPE;
+};
+
+export const parseGenePagePath = (pathname: string) => {
+  const startsWithGene = pathname.startsWith(PAGE_ROUTE.GENE_HEADER);
+  const inBasicGenePage = (pathname.match(/\//g) || []).length === 2;
+  const inExtendedGenePage =
+    (pathname.match(/\//g) || []).length === 3 &&
+    (pathname.endsWith(GENETIC_TYPE.SOMATIC) ||
+      pathname.endsWith(GENETIC_TYPE.GERMLINE));
+  if (startsWithGene && (inBasicGenePage || inExtendedGenePage)) {
+    const segments = pathname.split('/') || [];
+    const result: GenePagePath = {
+      hugoSymbol: segments[1],
+    };
+    if (segments.length > 3) {
+      result.geneticType = segments[3] as GENETIC_TYPE;
+    }
+    return result;
+  } else {
+    return {};
+  }
+};
+
 export const getGenomicPageLocation = (props: {
   rootRoute: PAGE_ROUTE.GENOMIC_CHANGE | PAGE_ROUTE.HGVSG;
   query: string;
@@ -231,9 +262,7 @@ export const MSILink: React.FunctionComponent<{}> = () => {
 
 export const OncoTreeLink: React.FunctionComponent<{}> = props => {
   return (
-    <Linkout link={'http://oncotree.info'}>
-      OncoTree <ExternalLinkIcon />
-    </Linkout>
+    <ExternalLinkIcon link="https://oncotree.info">OncoTree</ExternalLinkIcon>
   );
 };
 

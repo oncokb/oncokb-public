@@ -122,6 +122,15 @@ export enum ONCOGENICITY {
   UNKNOWN = 'Unknown',
 }
 
+export enum PATHOGENICITY {
+  PATHOGENIC = 'Pathogenic',
+  LIKELY_PATHOGENIC = 'Likely Pathogenic',
+  BENIGN = 'Benign',
+  LIKELY_BENIGN = 'Likely Benign',
+  UNKNOWN = 'Unknown',
+  VUS_WITH_SPECIAL_INTERPRETATION = 'VUS with Special Interpretation',
+}
+
 export const GENERAL_ONCOGENICITY: { [key: string]: ONCOGENICITY } = {
   [ONCOGENICITY.ONCOGENIC]: ONCOGENICITY.ONCOGENIC,
   [ONCOGENICITY.LIKELY_ONCOGENIC]: ONCOGENICITY.ONCOGENIC,
@@ -131,6 +140,16 @@ export const GENERAL_ONCOGENICITY: { [key: string]: ONCOGENICITY } = {
   [ONCOGENICITY.LIKELY_NEUTRAL]: ONCOGENICITY.NEUTRAL,
   [ONCOGENICITY.INCONCLUSIVE]: ONCOGENICITY.INCONCLUSIVE,
   [ONCOGENICITY.UNKNOWN]: ONCOGENICITY.UNKNOWN,
+};
+
+export const GENERAL_PATHOGENICITY: { [key: string]: PATHOGENICITY } = {
+  [PATHOGENICITY.PATHOGENIC]: PATHOGENICITY.PATHOGENIC,
+  [PATHOGENICITY.LIKELY_PATHOGENIC]: PATHOGENICITY.LIKELY_PATHOGENIC,
+  [PATHOGENICITY.UNKNOWN]: PATHOGENICITY.UNKNOWN,
+  [PATHOGENICITY.LIKELY_BENIGN]: PATHOGENICITY.LIKELY_BENIGN,
+  [PATHOGENICITY.BENIGN]: PATHOGENICITY.BENIGN,
+  [PATHOGENICITY.VUS_WITH_SPECIAL_INTERPRETATION]:
+    PATHOGENICITY.VUS_WITH_SPECIAL_INTERPRETATION,
 };
 
 export enum MUTATION_EFFECT {
@@ -346,6 +365,7 @@ export enum EVIDENCE_TYPES {
   STANDARD_THERAPEUTIC_IMPLICATIONS_FOR_DRUG_RESISTANCE = 'STANDARD_THERAPEUTIC_IMPLICATIONS_FOR_DRUG_RESISTANCE',
   INVESTIGATIONAL_THERAPEUTIC_IMPLICATIONS_DRUG_SENSITIVITY = 'INVESTIGATIONAL_THERAPEUTIC_IMPLICATIONS_DRUG_SENSITIVITY',
   INVESTIGATIONAL_THERAPEUTIC_IMPLICATIONS_DRUG_RESISTANCE = 'INVESTIGATIONAL_THERAPEUTIC_IMPLICATIONS_DRUG_RESISTANCE',
+  GENOMIC_INDICATOR = 'GENOMIC_INDICATOR',
 }
 
 export const TREATMENT_EVIDENCE_TYPES: EVIDENCE_TYPES[] = [
@@ -432,6 +452,8 @@ export const DEFAULT_GENE_NUMBER: GeneNumber = {
   highestDiagnosticImplicationLevel: '',
   highestPrognosticImplicationLevel: '',
   highestFdaLevel: '',
+  penetrance: '',
+  inheritanceMechanism: '',
   tumorType: 0,
 };
 
@@ -444,6 +466,18 @@ export const DEFAULT_MUTATION_EFFECT = {
   description: '',
 
   knownEffect: '',
+};
+
+export const DEFAULT_GERMLINE_VARIANT = {
+  cancerRisk: '',
+  clinVarId: '',
+  description: '',
+  genomicIndicators: [],
+  inheritanceMechanism: '',
+  inheritanceMechanismDescription: '',
+  pathogenic: '',
+  penetrance: '',
+  penetranceDescription: '',
 };
 
 export const DEFAULT_QUERY = {
@@ -460,6 +494,8 @@ export const DEFAULT_QUERY = {
   svType: 'UNKNOWN' as 'UNKNOWN',
   tumorType: '',
   type: '',
+  germline: false,
+  alleleState: '',
 };
 
 export const DEFAULT_ANNOTATION: VariantAnnotation = {
@@ -494,6 +530,7 @@ export const DEFAULT_ANNOTATION: VariantAnnotation = {
 
   vue: false,
   vus: false,
+  germline: DEFAULT_GERMLINE_VARIANT,
 };
 
 export enum PAGE_TITLE {
@@ -564,6 +601,8 @@ export enum PAGE_ROUTE {
   CDX = '/companion-diagnostic-devices',
   GENE_HEADER = '/gene',
   GENE = '/gene/:hugoSymbol',
+  SOMATIC_GENE = '/gene/:hugoSymbol/somatic',
+  GERMLINE_GENE = '/gene/:hugoSymbol/germline',
   ALTERATION = '/gene/:hugoSymbol/:alteration',
   HGVSG = '/hgvsg',
   HGVSG_WITH_QUERY = '/hgvsg/:query',
@@ -626,6 +665,10 @@ export enum TABLE_COLUMN_KEY {
   ONCOGENICITY = 'ONCOGENICITY',
   MUTATION_EFFECT = 'MUTATION_EFFECT',
   DESCRIPTION = 'DESCRIPTION',
+  PATHOGENICITY = 'PATHOGENICITY',
+  PENETRANCE = 'PENETRANCE',
+  INHERITANCE_MECHANISM = 'INHERITANCE_MECHANISM',
+  CANCER_RISK = 'CANCER_RISK',
 }
 
 export const ONCOGENIC_MUTATIONS = 'Oncogenic Mutations';

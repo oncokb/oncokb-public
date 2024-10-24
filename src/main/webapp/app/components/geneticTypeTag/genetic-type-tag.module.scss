@@ -1,0 +1,25 @@
+@import '../../variables';
+
+.geneticTypeTag {
+  font-weight: 500 !important;
+  font-family: "Gotham Book";
+  display: inline-flex;
+  padding: 0 var(--radius-8, 8px);
+  justify-content: center;
+  align-items: center;
+  gap: var(--radius-8, 8px);
+  border-radius: 56px;
+}
+
+.germlineTag {
+  @extend .geneticTypeTag;
+  color: $primary;
+  border: var(--radius-2, 2px) solid var(--Color-11, $primary);
+  background: #F0F5FF;
+}
+
+.somaticTag {
+  @extend .geneticTypeTag;
+  color: #FFFFFF;
+  background: $primary;
+}

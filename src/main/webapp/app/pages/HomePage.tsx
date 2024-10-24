@@ -225,7 +225,7 @@ class HomePage extends React.Component<IHomeProps, {}> {
           </Col>
         </Row>
         <Row className="mb-5">
-          <Col md={8} className={'mx-auto'}>
+          <Col md={9} className={'mx-auto'}>
             <Row>
               <Col xs={12} md={6} lg={3}>
                 <HomePageNumber
@@ -275,13 +275,13 @@ class HomePage extends React.Component<IHomeProps, {}> {
           </Col>
         </Row>
         <Row className="mb-5">
-          <Col md={8} className={'mx-auto'}>
+          <Col md={9} className={'mx-auto'}>
             <OncoKBSearch />
           </Col>
         </Row>
-        <Row className="mb-2">
-          <Col xs={0} lg={2}></Col>
-          <Col xs={12} lg={8}>
+        <Row className="mb-3">
+          <Col xs={0} lg={1}></Col>
+          <Col xs={12} lg={10}>
             <div
               className={classnames(
                 'd-flex justify-content-around',
@@ -292,13 +292,9 @@ class HomePage extends React.Component<IHomeProps, {}> {
               {levelTypeButtons}
             </div>
           </Col>
-          <Col xs={0} lg={2}></Col>
+          <Col xs={0} lg={1}></Col>
         </Row>
-        <Row className="my-3 d-flex d-flex justify-content-between">
-          <Col
-            xs={0}
-            lg={this.levelTypeSelected === LEVEL_TYPES.TX ? 1 : 1}
-          ></Col>
+        <Row className="mb-5 d-flex d-flex justify-content-around">
           {this.levelGadgets.map(
             levelGadget =>
               ((this.levelTypeSelected === LEVEL_TYPES.DX &&
@@ -310,48 +306,35 @@ class HomePage extends React.Component<IHomeProps, {}> {
                 (this.levelTypeSelected === LEVEL_TYPES.FDA &&
                   LEVEL_CLASSIFICATION[levelGadget.level] ===
                     LEVEL_TYPES.FDA)) && (
-                <Col
-                  xs={12}
-                  sm={6}
-                  lg={this.levelTypeSelected === LEVEL_TYPES.TX ? 2 : 3}
-                  key={levelGadget.level}
-                  style={{ minHeight: 125 }}
-                >
-                  <LevelButton
-                    key={`${levelGadget.level}-button`}
-                    level={levelGadget.level}
-                    disabledTooltip={
-                      levelGadget.level === LEVELS.Fda1
-                        ? FDA_L1_DISABLED_BTN_TOOLTIP
-                        : ''
-                    }
-                    numOfGenes={this.getLevelNumber(levelGadget.combinedLevels)}
-                    description={levelGadget.description}
-                    title={
-                      LEVEL_CLASSIFICATION[levelGadget.level] ===
-                      LEVEL_TYPES.FDA
-                        ? `FDA Level ${levelGadget.level
-                            .toString()
-                            .replace('Fda', '')}`
-                        : levelGadget.title
-                    }
-                    className="mb-2"
-                    style={{
-                      lineHeight:
-                        levelGadget.level === LEVELS.Px3 ? '35px' : undefined,
-                    }}
-                    href={`${PAGE_ROUTE.ACTIONABLE_GENE}#levels=${
-                      levelGadget.linkoutLevel
-                    }&sections=${LEVEL_CLASSIFICATION[levelGadget.level]}`}
-                    isLoading={this.levelNumbers.isPending}
-                  />
-                </Col>
+                <LevelButton
+                  key={`${levelGadget.level}-button`}
+                  level={levelGadget.level}
+                  disabledTooltip={
+                    levelGadget.level === LEVELS.Fda1
+                      ? FDA_L1_DISABLED_BTN_TOOLTIP
+                      : ''
+                  }
+                  numOfGenes={this.getLevelNumber(levelGadget.combinedLevels)}
+                  description={levelGadget.description}
+                  title={
+                    LEVEL_CLASSIFICATION[levelGadget.level] === LEVEL_TYPES.FDA
+                      ? `FDA Level ${levelGadget.level
+                          .toString()
+                          .replace('Fda', '')}`
+                      : levelGadget.title
+                  }
+                  className="mb-2"
+                  style={{
+                    lineHeight:
+                      levelGadget.level === LEVELS.Px3 ? '35px' : undefined,
+                  }}
+                  href={`${PAGE_ROUTE.ACTIONABLE_GENE}#levels=${
+                    levelGadget.linkoutLevel
+                  }&sections=${LEVEL_CLASSIFICATION[levelGadget.level]}`}
+                  isLoading={this.levelNumbers.isPending}
+                />
               )
           )}
-          <Col
-            xs={0}
-            lg={this.levelTypeSelected === LEVEL_TYPES.TX ? 1 : 1}
-          ></Col>
         </Row>
         <Row className="mb-3">
           <Col className={'text-center'}>

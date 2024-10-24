@@ -119,7 +119,7 @@ export const getHighestLevelStrings = (
   );
 };
 
-const getGeneTypeSentence = (oncogene: boolean, tsg: boolean) => {
+export const getGeneTypeSentence = (oncogene: boolean, tsg: boolean) => {
   const geneTypes = [];
   if (oncogene) {
     geneTypes.push(GENE_TYPE_DESC.ONCOGENE);
