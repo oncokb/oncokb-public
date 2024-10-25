@@ -36,17 +36,20 @@ function useScrollToHash({ stickyHeight }: { stickyHeight: number }) {
 
 type IStickyMiniNavBar = {
   title: string | JSX.Element;
-  linkUnderlineColor: string;
   stickyBackgroundColor?: string;
 };
 
+function getHeader() {
+  return document.querySelector('header');
+}
+
 export default function StickyMiniNavBar({
   title,
-  linkUnderlineColor,
   stickyBackgroundColor,
 }: IStickyMiniNavBar) {
   const [headerHeight, setHeaderHeight] = useState(0);
   const [isSticky, setIsSticky] = useState(false);
+  const [isScrollingUp, setIsScrollingUp] = useState(false);
   const [sections, setSections] = useState<
     { id: string; label: string | null }[]
   >([]);
@@ -71,7 +74,7 @@ export default function StickyMiniNavBar({
     });
     setSections(newSections);
 
-    const headerElement = document.querySelector('header');
+    const headerElement = getHeader();
 
     const updateHeaderHeight = () => {
       if (headerElement) {
@@ -123,14 +126,34 @@ export default function StickyMiniNavBar({
     };
   }, [sections]);
 
-  const handleScroll = () => {
-    if (stickyDivRef.current) {
-      const stickyOffset = stickyDivRef.current.getBoundingClientRect().top;
-      setIsSticky(stickyOffset <= headerHeight);
-    }
-  };
-
   useEffect(() => {
+    return () => {
+      const headerElement = getHeader();
+      if (headerElement) {
+        headerElement.setAttribute('style', '');
+      }
+    };
+  }, []);
+  useEffect(() => {
+    let lastScrollY = 0;
+    const handleScroll = () => {
+      if (stickyDivRef.current) {
+        const stickyOffset = stickyDivRef.current.getBoundingClientRect().top;
+        setIsSticky(stickyOffset <= headerHeight);
+      }
+      const headerElement = getHeader();
+      const currentScrollY = window.scrollY;
+      const newIsScrollingUp = currentScrollY < lastScrollY;
+      lastScrollY = currentScrollY;
+      if (headerElement) {
+        if (newIsScrollingUp) {
+          headerElement.setAttribute('style', '');
+        } else {
+          headerElement.setAttribute('style', 'position: static;');
+        }
+      }
+      setIsScrollingUp(newIsScrollingUp);
+    };
     window.addEventListener('scroll', handleScroll);
 
     return () => {
@@ -138,27 +161,27 @@ export default function StickyMiniNavBar({
     };
   }, [headerHeight]);
 
-  const currentSectionId = [...sections].sort(
-    ({ id: leftId }, { id: rightId }) => {
-      const leftPassedInfo = passedElements[leftId] ?? {};
-      const rightPassedInfo = passedElements[rightId] ?? {};
-      if (`#${leftId}` === hash && leftPassedInfo.isInView) {
-        return -1;
-      } else if (`#${rightId}` === hash && rightPassedInfo.isInView) {
-        return 1;
-      } else if (leftPassedInfo.isInView && !rightPassedInfo.isInView) {
-        return -1;
-      } else if (rightPassedInfo.isInView && !leftPassedInfo.isInView) {
-        return 1;
-      } else if (rightPassedInfo.isPassed) {
-        return 1;
-      } else if (leftPassedInfo.isPassed) {
-        return -1;
-      } else {
-        return 0;
+  let currentSectionId: string | undefined = undefined;
+
+  // If a section header is visible then the header at the top of the page wins
+  for (const section of sections) {
+    const passedInfo = passedElements[section.id] ?? {};
+    if (passedInfo.isInView) {
+      currentSectionId = section.id;
+      break;
+    }
+  }
+
+  // If no section header is in view then pick the last section header
+  // that was scrolled passed
+  if (currentSectionId === undefined) {
+    for (const section of sections) {
+      const passedInfo = passedElements[section.id] ?? {};
+      if (passedInfo.isPassed) {
+        currentSectionId = section.id;
       }
     }
-  )[0]?.id;
+  }
 
   return (
     <Container
@@ -168,7 +191,7 @@ export default function StickyMiniNavBar({
         isSticky ? styles.containerSticky : ''
       )}
       style={{
-        top: headerHeight,
+        top: isScrollingUp ? headerHeight : '0px',
         backgroundColor:
           isSticky && stickyBackgroundColor ? stickyBackgroundColor : undefined,
       }}

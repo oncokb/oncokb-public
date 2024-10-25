@@ -77,10 +77,7 @@ import GeneticTypeTabs, {
 } from 'app/components/geneticTypeTabs/GeneticTypeTabs';
 import InfoTile from 'app/components/infoTile/InfoTile';
 import AnnotatedAlterations from 'app/pages/annotationPage/AnnotatedAlterations';
-import {
-  LinkedInLink,
-  TwitterLink,
-} from 'app/shared/links/SocialMediaLinks';
+import { LinkedInLink, TwitterLink } from 'app/shared/links/SocialMediaLinks';
 import styles from './GenePage.module.scss';
 import StickyMiniNavBar from 'app/shared/nav/StickyMiniNavBar';
 import MiniNavBarHeader from 'app/shared/nav/MiniNavBarHeader';
@@ -671,7 +668,6 @@ export default class SomaticGermlineGenePage extends React.Component<
                               />
                             </span>
                           }
-                          linkUnderlineColor={COLOR_SOMATIC}
                         />
                       )}
                       <Container>
