@@ -1,0 +1,44 @@
+@import '../../variables.scss';
+@import '../../font.scss';
+
+$sticky-border: #E3E5EC;
+.container {
+  a:hover {
+    text-decoration: none;
+  }
+
+  position: sticky;
+  top: 50px;
+  z-index: 100;
+  border-bottom: 1px solid $sticky-border;
+  background-color: white;
+}
+
+.containerSticky {
+  box-shadow: $default-box-shadow;
+}
+
+.stickyHeader {
+  @extend .font-bold;
+  color: #000;
+  font-weight: bold;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 7px 0;
+}
+
+.stickySection {
+  color: #000;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-bottom: 4px solid transparent;
+  padding: 7px 0 3px 0;
+}
+
+.stickySectionSelected {
+  @extend .font-bold;
+  font-weight: bold;
+  border-bottom-color: $primary;
+}

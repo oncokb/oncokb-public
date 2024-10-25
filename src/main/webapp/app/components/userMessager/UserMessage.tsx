@@ -141,7 +141,9 @@ if (
       dateEnd: 1732406400000,
       content: (
         <div>
-          Join us November 19-23 at AMP 2024! Visit our poster (#I033) or stop by our booth (#1421) to meet our team and explore the latest developments from OncoKB™. See you there!
+          Join us November 19-23 at AMP 2024! Visit our poster (#I033) or stop
+          by our booth (#1421) to meet our team and explore the latest
+          developments from OncoKB™. See you there!
         </div>
       ),
       id: '2024_amp',

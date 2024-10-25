@@ -15,6 +15,7 @@ import {
   FUSIONS,
   GAIN_OF_FUNCTION_MUTATIONS,
   GENERAL_ONCOGENICITY,
+  GENERAL_PATHOGENICITY,
   LEVEL_PRIORITY,
   LEVEL_TYPES,
   LEVELS,
@@ -68,6 +69,10 @@ import { sortBy, sortByKey } from 'app/shared/utils/LodashUtils';
 // Likely Neutral will be converted to Neutral
 export function shortenOncogenicity(oncogenicity: string): string {
   return GENERAL_ONCOGENICITY[oncogenicity];
+}
+
+export function shortenPathogenicity(pathogenicity: string): string {
+  return GENERAL_PATHOGENICITY[pathogenicity];
 }
 
 export function shortenTextByCharacters(text: string, cutoff: number) {
@@ -296,8 +301,11 @@ export const OncoKBOncogenicityIcon: React.FunctionComponent<{
 export const OncoKBLevelIcon: React.FunctionComponent<{
   level: LEVELS;
   withDescription?: boolean;
-}> = ({ level, withDescription = true }) => {
-  const oncokbIcon = <i className={`oncokb icon level-${level}`} />;
+  size?: 's1' | 's2' | 's3';
+}> = ({ level, withDescription = true, size = 's1' }) => {
+  const oncokbIcon = (
+    <i className={`oncokb icon ${size === 's1' ? '' : size} level-${level}`} />
+  );
   return withDescription ? (
     <LevelWithDescription level={level}>{oncokbIcon}</LevelWithDescription>
   ) : (
@@ -308,14 +316,18 @@ export const OncoKBLevelIcon: React.FunctionComponent<{
 export const FdaLevelIcon: React.FunctionComponent<{
   level: LEVELS;
   withDescription?: boolean;
-}> = ({ level, withDescription = true }) => {
+  size?: 's1' | 's2' | 's3';
+}> = ({ level, withDescription = true, size = 's1' }) => {
+  const scale = parseInt(size.slice(1), 0);
+  const style = {
+    fontSize: 9 * scale,
+    lineHeight: `${18 * scale}px`,
+    margin: '0 3px',
+  };
   const fdaIcon = (
-    <span
-      className="fa-stack"
-      style={{ fontSize: 9, lineHeight: '18px', margin: '0 3px' }}
-    >
+    <span className="fa-stack" style={style}>
       <span className="fa fa-circle-thin fa-stack-2x"></span>
-      <strong className="fa-stack-1x" style={{ fontSize: '1.2em' }}>
+      <strong className="fa-stack-1x" style={{ fontSize: '1em' }}>
         {level.toString().replace('Fda', '')}
       </strong>
     </span>

@@ -9,7 +9,7 @@ import AuthenticationStore from 'app/store/AuthenticationStore';
 import CancerGenesPage from 'app/pages/CancerGenesPage';
 import ActionableGenesPage from 'app/pages/actionableGenesPage/ActionableGenesPage';
 import { RouterStore } from 'mobx-react-router';
-import GenePage from 'app/pages/genePage/GenePage';
+import SomaticGermlineGenePage from 'app/pages/genePage/SomaticGermlineGenePage';
 import AlterationPage from 'app/pages/alterationPage/AlterationPage';
 import { AccountPage } from 'app/pages/AccountPage';
 import ActivateAccount from 'app/components/account/ActivateAccount';
@@ -18,10 +18,8 @@ import PasswordResetFinish from 'app/components/account/PasswordResetFinish';
 import PageNotFound from 'app/shared/error/page-not-found';
 import AccountPassword from 'app/components/account/AccountPassword';
 import AdminRoutes from 'app/routes/AdminRoutes';
-import PageContainer from 'app/components/PageContainer';
 import React from 'react';
 import LevelOfEvidencePage, { Version } from 'app/pages/LevelOfEvidencePage';
-import NewsPage from 'app/pages/newsPage/NewsPage';
 import { RecaptchaBoundaryRoute } from '../shared/auth/RecaptchaBoundaryRoute';
 import GenomicPage from 'app/pages/genomicPage/GenomicPage';
 import UserPage from 'app/pages/userPage/UserPage';
@@ -38,6 +36,7 @@ import OncologyTherapiesPage from 'app/pages/oncologyTherapiesPage/oncologyThera
 import { NewsPageNavTab } from 'app/pages/newsPage/NewsPageNavTab';
 import CompanionDiagnosticDevicePage from 'app/pages/companionDiagnosticDevicesPage/companionDiagnosticDevicePage';
 import OncokbRoute from 'app/shared/route/OncokbRoute';
+import GenePage from 'app/pages/genePage/GenePage';
 
 const getOldLevelsRedirectRoute = (hash: string) => {
   const queryStrings = QueryString.parse(hash) as {
@@ -66,7 +65,7 @@ const getOldLevelsRedirectRoute = (hash: string) => {
   return <Redirect to={redirectPath} />;
 };
 
-const AppRouts = (props: {
+const AppRoutes = (props: {
   authenticationStore: AuthenticationStore;
   appStore: AppStore;
   routing: RouterStore;
@@ -111,238 +110,234 @@ const AppRouts = (props: {
         to={PAGE_ROUTE.ALTERATION}
       />
       <Redirect exact from={PAGE_ROUTE.PO_TX} to={PAGE_ROUTE.ONCOLOGY_TX} />
-      <PageContainer>
-        <Switch>
-          <RecaptchaBoundaryRoute
-            exact
-            isUserAuthenticated={props.authenticationStore.isUserAuthenticated}
-            appStore={props.appStore}
-            path={PAGE_ROUTE.LOGIN}
-            component={Login}
-          />
-          <ErrorBoundaryRoute
-            exact
-            path={PAGE_ROUTE.LOGOUT}
-            component={Logout}
-          />
-          <RecaptchaBoundaryRoute
-            exact
-            isUserAuthenticated={props.authenticationStore.isUserAuthenticated}
-            appStore={props.appStore}
-            path={PAGE_ROUTE.REGISTER}
-            component={ApiAccessPageNavTab}
-          />
-          <ErrorBoundaryRoute
-            exact
-            path={PAGE_ROUTE.API_ACCESS}
-            component={ApiAccessPageNavTab}
-          />
-          <ErrorBoundaryRoute
-            exact
-            path={PAGE_ROUTE.FAQ_ACCESS}
-            component={FAQPage}
-          />
-          <RecaptchaBoundaryRoute
-            exact
-            isUserAuthenticated={props.authenticationStore.isUserAuthenticated}
-            appStore={props.appStore}
-            path={PAGE_ROUTE.CANCER_GENES}
-            component={CancerGenesPage}
-          />
-          <RecaptchaBoundaryRoute
-            exact
-            isUserAuthenticated={props.authenticationStore.isUserAuthenticated}
-            appStore={props.appStore}
-            path={PAGE_ROUTE.ACTIONABLE_GENE}
-            component={ActionableGenesPage}
-          />
-          <RecaptchaBoundaryRoute
-            exact
-            isUserAuthenticated={props.authenticationStore.isUserAuthenticated}
-            appStore={props.appStore}
-            path={PAGE_ROUTE.ONCOLOGY_TX}
-            component={OncologyTherapiesPage}
-          />
-          <RecaptchaBoundaryRoute
-            exact
-            isUserAuthenticated={props.authenticationStore.isUserAuthenticated}
-            appStore={props.appStore}
-            path={PAGE_ROUTE.CDX}
-            component={CompanionDiagnosticDevicePage}
-          />
-          <RecaptchaBoundaryRoute
-            exact
-            isUserAuthenticated={props.authenticationStore.isUserAuthenticated}
-            appStore={props.appStore}
-            path={PAGE_ROUTE.GENE}
-            component={GenePage}
-          />
-          <RecaptchaBoundaryRoute
-            exact
-            isUserAuthenticated={props.authenticationStore.isUserAuthenticated}
-            appStore={props.appStore}
-            path={PAGE_ROUTE.ALTERATION}
-            component={AlterationPage}
-          />
-          <RecaptchaBoundaryRoute
-            exact
-            isUserAuthenticated={props.authenticationStore.isUserAuthenticated}
-            appStore={props.appStore}
-            path={PAGE_ROUTE.HGVSG_WITH_QUERY}
-            component={GenomicPage}
-          />
-          <RecaptchaBoundaryRoute
-            exact
-            isUserAuthenticated={props.authenticationStore.isUserAuthenticated}
-            appStore={props.appStore}
-            path={PAGE_ROUTE.GENOMIC_CHANGE_WITH_QUERY}
-            component={GenomicPage}
-          />
-          <RecaptchaBoundaryRoute
-            exact
-            isUserAuthenticated={props.authenticationStore.isUserAuthenticated}
-            appStore={props.appStore}
-            path={PAGE_ROUTE.ALTERATION_TUMOR_TYPE}
-            component={AlterationPage}
-          />
-          <OncokbRoute
-            exact
-            path={PAGE_ROUTE.ABOUT}
-            component={AboutPageNavTab}
-          />
-          <OncokbRoute
-            exact
-            path={PAGE_ROUTE.TEAM}
-            component={AboutPageNavTab}
-          />
-          <OncokbRoute
-            exact
-            path={PAGE_ROUTE.SOP}
-            component={AboutPageNavTab}
-          />
-          <OncokbRoute
-            exact
-            path={PAGE_ROUTE.YEAR_END_SUMMARY}
-            component={NewsPageNavTab}
-          />
-          <OncokbRoute
-            exact
-            path={PAGE_ROUTE.NEWS}
-            component={NewsPageNavTab}
-          />
-          <OncokbRoute
-            exact
-            path={PAGE_ROUTE.FDA_RECOGNITION}
-            component={AboutPageNavTab}
-          />
-          <OncokbRoute
-            exact
-            path={PAGE_ROUTE.TERMS}
-            component={ApiAccessPageNavTab}
-          />
-          <OncokbRoute exact path={PAGE_ROUTE.LEVELS}>
-            {getOldLevelsRedirectRoute(window.location.hash)}
-          </OncokbRoute>
-          <OncokbRoute
-            exact
-            path={PAGE_ROUTE.DX}
-            component={LevelOfEvidencePage}
-          />
-          <OncokbRoute
-            exact
-            path={PAGE_ROUTE.PX}
-            component={LevelOfEvidencePage}
-          />
-          <OncokbRoute
-            exact
-            path={PAGE_ROUTE.V2}
-            component={LevelOfEvidencePage}
-          />
-          <OncokbRoute
-            exact
-            path={PAGE_ROUTE.FDA_NGS}
-            component={LevelOfEvidencePage}
-          />
+      <Switch>
+        <RecaptchaBoundaryRoute
+          exact
+          isUserAuthenticated={props.authenticationStore.isUserAuthenticated}
+          appStore={props.appStore}
+          path={PAGE_ROUTE.LOGIN}
+          component={Login}
+        />
+        <ErrorBoundaryRoute exact path={PAGE_ROUTE.LOGOUT} component={Logout} />
+        <RecaptchaBoundaryRoute
+          exact
+          isUserAuthenticated={props.authenticationStore.isUserAuthenticated}
+          appStore={props.appStore}
+          path={PAGE_ROUTE.REGISTER}
+          component={ApiAccessPageNavTab}
+        />
+        <ErrorBoundaryRoute
+          exact
+          path={PAGE_ROUTE.API_ACCESS}
+          component={ApiAccessPageNavTab}
+        />
+        <ErrorBoundaryRoute
+          exact
+          path={PAGE_ROUTE.FAQ_ACCESS}
+          component={FAQPage}
+        />
+        <RecaptchaBoundaryRoute
+          exact
+          isUserAuthenticated={props.authenticationStore.isUserAuthenticated}
+          appStore={props.appStore}
+          path={PAGE_ROUTE.CANCER_GENES}
+          component={CancerGenesPage}
+        />
+        <RecaptchaBoundaryRoute
+          exact
+          isUserAuthenticated={props.authenticationStore.isUserAuthenticated}
+          appStore={props.appStore}
+          path={PAGE_ROUTE.ACTIONABLE_GENE}
+          component={ActionableGenesPage}
+        />
+        <RecaptchaBoundaryRoute
+          exact
+          isUserAuthenticated={props.authenticationStore.isUserAuthenticated}
+          appStore={props.appStore}
+          path={PAGE_ROUTE.ONCOLOGY_TX}
+          component={OncologyTherapiesPage}
+        />
+        <RecaptchaBoundaryRoute
+          exact
+          isUserAuthenticated={props.authenticationStore.isUserAuthenticated}
+          appStore={props.appStore}
+          path={PAGE_ROUTE.CDX}
+          component={CompanionDiagnosticDevicePage}
+        />
+        <RecaptchaBoundaryRoute
+          exact
+          isUserAuthenticated={props.authenticationStore.isUserAuthenticated}
+          appStore={props.appStore}
+          path={PAGE_ROUTE.GENE}
+          component={GenePage}
+        />
+        <RecaptchaBoundaryRoute
+          exact
+          isUserAuthenticated={props.authenticationStore.isUserAuthenticated}
+          appStore={props.appStore}
+          path={PAGE_ROUTE.SOMATIC_GENE}
+          component={SomaticGermlineGenePage}
+        />
+        <RecaptchaBoundaryRoute
+          exact
+          isUserAuthenticated={props.authenticationStore.isUserAuthenticated}
+          appStore={props.appStore}
+          path={PAGE_ROUTE.GERMLINE_GENE}
+          component={SomaticGermlineGenePage}
+        />
+        <RecaptchaBoundaryRoute
+          exact
+          isUserAuthenticated={props.authenticationStore.isUserAuthenticated}
+          appStore={props.appStore}
+          path={PAGE_ROUTE.ALTERATION}
+          component={AlterationPage}
+        />
+        <RecaptchaBoundaryRoute
+          exact
+          isUserAuthenticated={props.authenticationStore.isUserAuthenticated}
+          appStore={props.appStore}
+          path={PAGE_ROUTE.HGVSG_WITH_QUERY}
+          component={GenomicPage}
+        />
+        <RecaptchaBoundaryRoute
+          exact
+          isUserAuthenticated={props.authenticationStore.isUserAuthenticated}
+          appStore={props.appStore}
+          path={PAGE_ROUTE.GENOMIC_CHANGE_WITH_QUERY}
+          component={GenomicPage}
+        />
+        <RecaptchaBoundaryRoute
+          exact
+          isUserAuthenticated={props.authenticationStore.isUserAuthenticated}
+          appStore={props.appStore}
+          path={PAGE_ROUTE.ALTERATION_TUMOR_TYPE}
+          component={AlterationPage}
+        />
+        <OncokbRoute
+          exact
+          path={PAGE_ROUTE.ABOUT}
+          component={AboutPageNavTab}
+        />
+        <OncokbRoute exact path={PAGE_ROUTE.TEAM} component={AboutPageNavTab} />
+        <OncokbRoute exact path={PAGE_ROUTE.SOP} component={AboutPageNavTab} />
+        <OncokbRoute
+          exact
+          path={PAGE_ROUTE.YEAR_END_SUMMARY}
+          component={NewsPageNavTab}
+        />
+        <OncokbRoute exact path={PAGE_ROUTE.NEWS} component={NewsPageNavTab} />
+        <OncokbRoute
+          exact
+          path={PAGE_ROUTE.FDA_RECOGNITION}
+          component={AboutPageNavTab}
+        />
+        <OncokbRoute
+          exact
+          path={PAGE_ROUTE.TERMS}
+          component={ApiAccessPageNavTab}
+        />
+        <OncokbRoute exact path={PAGE_ROUTE.LEVELS}>
+          {getOldLevelsRedirectRoute(window.location.hash)}
+        </OncokbRoute>
+        <OncokbRoute
+          exact
+          path={PAGE_ROUTE.DX}
+          component={LevelOfEvidencePage}
+        />
+        <OncokbRoute
+          exact
+          path={PAGE_ROUTE.PX}
+          component={LevelOfEvidencePage}
+        />
+        <OncokbRoute
+          exact
+          path={PAGE_ROUTE.V2}
+          component={LevelOfEvidencePage}
+        />
+        <OncokbRoute
+          exact
+          path={PAGE_ROUTE.FDA_NGS}
+          component={LevelOfEvidencePage}
+        />
 
-          <RecaptchaBoundaryRoute
-            exact
-            isUserAuthenticated={props.authenticationStore.isUserAuthenticated}
-            appStore={props.appStore}
-            path={PAGE_ROUTE.ACCOUNT_VERIFY}
-            render={ReadOnlyMode(ActivateAccount)}
-          />
-          <RecaptchaBoundaryRoute
-            exact
-            isUserAuthenticated={props.authenticationStore.isUserAuthenticated}
-            appStore={props.appStore}
-            path={PAGE_ROUTE.ACCOUNT_PASSWORD_RESET_REQUEST}
-            render={ReadOnlyMode(PasswordResetInit)}
-          />
-          <RecaptchaBoundaryRoute
-            exact
-            isUserAuthenticated={props.authenticationStore.isUserAuthenticated}
-            appStore={props.appStore}
-            path={PAGE_ROUTE.ACCOUNT_PASSWORD_RESET_FINISH}
-            render={ReadOnlyMode(PasswordResetFinish)}
-          />
-          <RecaptchaBoundaryRoute
-            exact
-            isUserAuthenticated={false}
-            appStore={props.appStore}
-            path={PAGE_ROUTE.ACCOUNT_ACTIVE_TRIAL_FINISH}
-            render={ReadOnlyMode(ActivateTrialFinish)}
-          />
-          <PrivateRoute
-            authenticationStore={props.authenticationStore}
-            routing={props.routing}
-            path={PAGE_ROUTE.ADMIN}
-            component={AdminRoutes}
-            hasAnyAuthorities={[AUTHORITIES.ADMIN]}
-          />
-          <PrivateRoute
-            exact
-            authenticationStore={props.authenticationStore}
-            routing={props.routing}
-            path={PAGE_ROUTE.ACCOUNT_PASSWORD}
-            render={ReadOnlyMode(AccountPassword)}
-            hasAnyAuthorities={[AUTHORITIES.ADMIN, AUTHORITIES.USER]}
-          />
-          <PrivateRoute
-            exact
-            path={PAGE_ROUTE.ACCOUNT_SETTINGS}
-            authenticationStore={props.authenticationStore}
-            routing={props.routing}
-            component={AccountPage}
-            hasAnyAuthorities={[AUTHORITIES.ADMIN, AUTHORITIES.USER]}
-          />
-          <PrivateRoute
-            exact
-            path={PAGE_ROUTE.USER}
-            authenticationStore={props.authenticationStore}
-            routing={props.routing}
-            render={ReadOnlyMode(UserPage, true)}
-            hasAnyAuthorities={[AUTHORITIES.ADMIN]}
-          />
-          <PrivateRoute
-            exact
-            path={PAGE_ROUTE.COMPANY}
-            authenticationStore={props.authenticationStore}
-            routing={props.routing}
-            render={ReadOnlyMode(CompanyPage, true)}
-            hasAnyAuthorities={[AUTHORITIES.ADMIN]}
-          />
-          <PrivateRoute
-            exact
-            path={PAGE_ROUTE.CREATE_COMPANY_USERS}
-            authenticationStore={props.authenticationStore}
-            routing={props.routing}
-            render={ReadOnlyMode(CreateCompanyUsersPage)}
-            hasAnyAuthorities={[AUTHORITIES.ADMIN]}
-          />
-          <ErrorBoundaryRoute component={PageNotFound} />
-        </Switch>
-      </PageContainer>
+        <RecaptchaBoundaryRoute
+          exact
+          isUserAuthenticated={props.authenticationStore.isUserAuthenticated}
+          appStore={props.appStore}
+          path={PAGE_ROUTE.ACCOUNT_VERIFY}
+          render={ReadOnlyMode(ActivateAccount)}
+        />
+        <RecaptchaBoundaryRoute
+          exact
+          isUserAuthenticated={props.authenticationStore.isUserAuthenticated}
+          appStore={props.appStore}
+          path={PAGE_ROUTE.ACCOUNT_PASSWORD_RESET_REQUEST}
+          render={ReadOnlyMode(PasswordResetInit)}
+        />
+        <RecaptchaBoundaryRoute
+          exact
+          isUserAuthenticated={props.authenticationStore.isUserAuthenticated}
+          appStore={props.appStore}
+          path={PAGE_ROUTE.ACCOUNT_PASSWORD_RESET_FINISH}
+          render={ReadOnlyMode(PasswordResetFinish)}
+        />
+        <RecaptchaBoundaryRoute
+          exact
+          isUserAuthenticated={false}
+          appStore={props.appStore}
+          path={PAGE_ROUTE.ACCOUNT_ACTIVE_TRIAL_FINISH}
+          render={ReadOnlyMode(ActivateTrialFinish)}
+        />
+        <PrivateRoute
+          authenticationStore={props.authenticationStore}
+          routing={props.routing}
+          path={PAGE_ROUTE.ADMIN}
+          component={AdminRoutes}
+          hasAnyAuthorities={[AUTHORITIES.ADMIN]}
+        />
+        <PrivateRoute
+          exact
+          authenticationStore={props.authenticationStore}
+          routing={props.routing}
+          path={PAGE_ROUTE.ACCOUNT_PASSWORD}
+          render={ReadOnlyMode(AccountPassword)}
+          hasAnyAuthorities={[AUTHORITIES.ADMIN, AUTHORITIES.USER]}
+        />
+        <PrivateRoute
+          exact
+          path={PAGE_ROUTE.ACCOUNT_SETTINGS}
+          authenticationStore={props.authenticationStore}
+          routing={props.routing}
+          component={AccountPage}
+          hasAnyAuthorities={[AUTHORITIES.ADMIN, AUTHORITIES.USER]}
+        />
+        <PrivateRoute
+          exact
+          path={PAGE_ROUTE.USER}
+          authenticationStore={props.authenticationStore}
+          routing={props.routing}
+          render={ReadOnlyMode(UserPage, true)}
+          hasAnyAuthorities={[AUTHORITIES.ADMIN]}
+        />
+        <PrivateRoute
+          exact
+          path={PAGE_ROUTE.COMPANY}
+          authenticationStore={props.authenticationStore}
+          routing={props.routing}
+          render={ReadOnlyMode(CompanyPage, true)}
+          hasAnyAuthorities={[AUTHORITIES.ADMIN]}
+        />
+        <PrivateRoute
+          exact
+          path={PAGE_ROUTE.CREATE_COMPANY_USERS}
+          authenticationStore={props.authenticationStore}
+          routing={props.routing}
+          render={ReadOnlyMode(CreateCompanyUsersPage)}
+          hasAnyAuthorities={[AUTHORITIES.ADMIN]}
+        />
+        <ErrorBoundaryRoute component={PageNotFound} />
+      </Switch>
     </Switch>
   );
 };
-export default AppRouts;
+export default AppRoutes;

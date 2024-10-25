@@ -1,0 +1,26 @@
+.externalLinkContainer {
+  display: flex;
+  justify-content: center;
+  align-items: baseline;
+}
+
+.externalLinkContainer:hover {
+  text-decoration: none;
+}
+
+.externalLinkContent:hover {
+  text-decoration: underline;
+}
+
+.icon {
+  opacity: 0;
+  max-width: 0;
+  transition: transform 0.3s ease-in-out, max-width 0.3s ease-in-out,
+    opacity 0.3s linear, margin-left 0.3s ease-in-out;
+}
+
+.externalLinkContainer:hover .icon {
+  opacity: 1;
+  max-width: 15px;
+  margin-left: 0.5rem;
+}

@@ -1,8 +1,5 @@
 import React from 'react';
-import {
-  levelOfEvidence2Level,
-  OncoKBAnnotationIcon,
-} from 'app/shared/utils/Utils';
+import { levelOfEvidence2Level, OncoKBAnnotationIcon } from 'app/shared/utils/Utils';
 import { Else, If, Then } from 'react-if';
 import Highlighter from 'react-highlight-words';
 import styles from './SearchOption.module.scss';
@@ -13,11 +10,10 @@ import { FeedbackIcon } from 'app/components/feedback/FeedbackIcon';
 import { FeedbackType } from 'app/components/feedback/types';
 import { LEVEL_PRIORITY_BY_TYPE, ONCOKB_TM } from 'app/config/constants';
 import { Alteration } from 'app/shared/api/generated/OncoKbPrivateAPI';
-import {
-  sortByLevel,
-  sortByLevelWithLevels,
-} from 'app/shared/utils/ReactTableUtils';
+import { sortByLevelWithLevels } from 'app/shared/utils/ReactTableUtils';
 import WithSeparator from 'react-with-separator';
+import GeneticTypeTag from 'app/components/geneticTypeTag/GeneticTypeTag';
+import { GENETIC_TYPE } from 'app/components/geneticTypeTabs/GeneticTypeTabs';
 
 export enum SearchOptionType {
   GENE = 'GENE',
@@ -54,6 +50,9 @@ const GeneSearchOption: React.FunctionComponent<{
           searchWords={[props.search]}
           textToHighlight={`${props.data.gene.hugoSymbol} (Entrez Gene: ${props.data.gene.entrezGeneId})`}
         />
+        {props.data.annotation && Object.values(GENETIC_TYPE).includes(props.data.annotation.toLowerCase() as GENETIC_TYPE) && (
+          <GeneticTypeTag geneticType={props.data.annotation.toLowerCase() === 'germline' ? GENETIC_TYPE.GERMLINE : GENETIC_TYPE.SOMATIC} className={'ml-2'}/>
+        )}
         {props.data.highestSensitiveLevel ||
         props.data.highestResistanceLevel ? (
           <span className={classnames(styles.subTitle, 'ml-2')}>

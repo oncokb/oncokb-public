@@ -284,6 +284,13 @@
             "required": false,
             "type": "string",
             "default": "false"
+          },
+          {
+            "name": "germline",
+            "in": "query",
+            "description": "false",
+            "required": false,
+            "type": "boolean"
           }
         ],
         "responses": {
@@ -383,6 +390,13 @@
             "description": "hugoSymbol",
             "required": false,
             "type": "string"
+          },
+          {
+            "name": "germline",
+            "in": "query",
+            "description": "false",
+            "required": false,
+            "type": "boolean"
           }
         ],
         "responses": {
@@ -428,6 +442,13 @@
             "description": "hugoSymbol",
             "required": false,
             "type": "string"
+          },
+          {
+            "name": "germline",
+            "in": "query",
+            "description": "false",
+            "required": false,
+            "type": "boolean"
           }
         ],
         "responses": {
@@ -1053,6 +1074,13 @@
             "description": "The gene symbol used in Human Genome Organisation.",
             "required": true,
             "type": "string"
+          },
+          {
+            "name": "germline",
+            "in": "query",
+            "description": "false",
+            "required": false,
+            "type": "boolean"
           }
         ],
         "responses": {
@@ -1728,6 +1756,13 @@
             "description": "OncoTree tumor type name/main type/code",
             "required": false,
             "type": "string"
+          },
+          {
+            "name": "germline",
+            "in": "query",
+            "description": "false",
+            "required": false,
+            "type": "boolean"
           }
         ],
         "responses": {
@@ -1754,6 +1789,9 @@
     "AnnotateMutationByGenomicChangeQuery": {
       "type": "object",
       "properties": {
+        "alleleState": {
+          "type": "string"
+        },
         "evidenceTypes": {
           "type": "array",
           "items": {
@@ -1774,12 +1812,24 @@
               "STANDARD_THERAPEUTIC_IMPLICATIONS_FOR_DRUG_SENSITIVITY",
               "STANDARD_THERAPEUTIC_IMPLICATIONS_FOR_DRUG_RESISTANCE",
               "INVESTIGATIONAL_THERAPEUTIC_IMPLICATIONS_DRUG_SENSITIVITY",
-              "INVESTIGATIONAL_THERAPEUTIC_IMPLICATIONS_DRUG_RESISTANCE"
+              "INVESTIGATIONAL_THERAPEUTIC_IMPLICATIONS_DRUG_RESISTANCE",
+              "PATHOGENIC",
+              "GENOMIC_INDICATOR",
+              "GENOMIC_INDICATOR_ALLELE_STATE",
+              "GENE_PENETRANCE",
+              "GENE_INHERITANCE_MECHANISM",
+              "GENE_CANCER_RISK",
+              "VARIANT_PENETRANCE",
+              "VARIANT_INHERITANCE_MECHANISM",
+              "VARIANT_CANCER_RISK"
             ]
           }
         },
         "genomicLocation": {
           "type": "string"
+        },
+        "germline": {
+          "type": "boolean"
         },
         "id": {
           "type": "string"
@@ -1841,6 +1891,9 @@
     "Query": {
       "type": "object",
       "properties": {
+        "alleleState": {
+          "type": "string"
+        },
         "alteration": {
           "type": "string"
         },
@@ -1853,6 +1906,9 @@
         "entrezGeneId": {
           "type": "integer",
           "format": "int32"
+        },
+        "germline": {
+          "type": "boolean"
         },
         "hgvs": {
           "type": "string"
@@ -1960,6 +2016,9 @@
           "$ref": "#/definitions/Gene"
         },
         "name": {
+          "type": "string"
+        },
+        "proteinChange": {
           "type": "string"
         },
         "proteinEnd": {
@@ -2079,6 +2138,9 @@
         },
         "geneSummary": {
           "type": "string"
+        },
+        "germline": {
+          "$ref": "#/definitions/GermlineVariant"
         },
         "highestDiagnosticImplicationLevel": {
           "type": "string",
@@ -2769,7 +2831,16 @@
             "STANDARD_THERAPEUTIC_IMPLICATIONS_FOR_DRUG_SENSITIVITY",
             "STANDARD_THERAPEUTIC_IMPLICATIONS_FOR_DRUG_RESISTANCE",
             "INVESTIGATIONAL_THERAPEUTIC_IMPLICATIONS_DRUG_SENSITIVITY",
-            "INVESTIGATIONAL_THERAPEUTIC_IMPLICATIONS_DRUG_RESISTANCE"
+            "INVESTIGATIONAL_THERAPEUTIC_IMPLICATIONS_DRUG_RESISTANCE",
+            "PATHOGENIC",
+            "GENOMIC_INDICATOR",
+            "GENOMIC_INDICATOR_ALLELE_STATE",
+            "GENE_PENETRANCE",
+            "GENE_INHERITANCE_MECHANISM",
+            "GENE_CANCER_RISK",
+            "VARIANT_PENETRANCE",
+            "VARIANT_INHERITANCE_MECHANISM",
+            "VARIANT_CANCER_RISK"
           ]
         },
         "excludedCancerTypes": {
@@ -2861,6 +2932,9 @@
             "LEVEL_Fda3",
             "NO"
           ]
+        },
+        "name": {
+          "type": "string"
         },
         "relevantCancerTypes": {
           "type": "array",
@@ -3032,6 +3106,41 @@
         }
       }
     },
+    "GermlineVariant": {
+      "type": "object",
+      "properties": {
+        "cancerRisk": {
+          "type": "string"
+        },
+        "clinVarId": {
+          "type": "string"
+        },
+        "description": {
+          "type": "string"
+        },
+        "genomicIndicators": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
+        },
+        "inheritanceMechanism": {
+          "type": "string"
+        },
+        "inheritanceMechanismDescription": {
+          "type": "string"
+        },
+        "pathogenic": {
+          "type": "string"
+        },
+        "penetrance": {
+          "type": "string"
+        },
+        "penetranceDescription": {
+          "type": "string"
+        }
+      }
+    },
     "Drug": {
       "type": "object",
       "properties": {
@@ -3192,6 +3301,12 @@
           "type": "string"
         },
         "highestSensitiveLevel": {
+          "type": "string"
+        },
+        "inheritanceMechanism": {
+          "type": "string"
+        },
+        "penetrance": {
           "type": "string"
         },
         "tumorType": {
@@ -3368,6 +3483,9 @@
     "AnnotateMutationByHGVSgQuery": {
       "type": "object",
       "properties": {
+        "alleleState": {
+          "type": "string"
+        },
         "evidenceTypes": {
           "type": "array",
           "items": {
@@ -3388,9 +3506,21 @@
               "STANDARD_THERAPEUTIC_IMPLICATIONS_FOR_DRUG_SENSITIVITY",
               "STANDARD_THERAPEUTIC_IMPLICATIONS_FOR_DRUG_RESISTANCE",
               "INVESTIGATIONAL_THERAPEUTIC_IMPLICATIONS_DRUG_SENSITIVITY",
-              "INVESTIGATIONAL_THERAPEUTIC_IMPLICATIONS_DRUG_RESISTANCE"
+              "INVESTIGATIONAL_THERAPEUTIC_IMPLICATIONS_DRUG_RESISTANCE",
+              "PATHOGENIC",
+              "GENOMIC_INDICATOR",
+              "GENOMIC_INDICATOR_ALLELE_STATE",
+              "GENE_PENETRANCE",
+              "GENE_INHERITANCE_MECHANISM",
+              "GENE_CANCER_RISK",
+              "VARIANT_PENETRANCE",
+              "VARIANT_INHERITANCE_MECHANISM",
+              "VARIANT_CANCER_RISK"
             ]
           }
+        },
+        "germline": {
+          "type": "boolean"
         },
         "hgvsg": {
           "type": "string"
@@ -3413,6 +3543,12 @@
     "BiologicalVariant": {
       "type": "object",
       "properties": {
+        "cancerRisk": {
+          "type": "string"
+        },
+        "inheritanceMechanism": {
+          "type": "string"
+        },
         "mutationEffect": {
           "type": "string"
         },
@@ -3445,6 +3581,24 @@
           "items": {
             "type": "string"
           }
+        },
+        "pathogenic": {
+          "type": "string"
+        },
+        "pathogenicAbstracts": {
+          "type": "array",
+          "items": {
+            "$ref": "#/definitions/ArticleAbstract"
+          }
+        },
+        "pathogenicPmids": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
+        },
+        "penetrance": {
+          "type": "string"
         },
         "variant": {
           "$ref": "#/definitions/Alteration"
