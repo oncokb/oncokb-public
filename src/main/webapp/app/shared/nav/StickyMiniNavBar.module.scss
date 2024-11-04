@@ -1,7 +1,7 @@
 @import '../../variables.scss';
 @import '../../font.scss';
 
-$sticky-border: #E3E5EC;
+$sticky-border: #e3e5ec;
 .container {
   a:hover {
     text-decoration: none;
@@ -10,8 +10,11 @@ $sticky-border: #E3E5EC;
   position: sticky;
   top: 50px;
   z-index: 100;
-  border-bottom: 1px solid $sticky-border;
   background-color: white;
+}
+
+.nav {
+  border-bottom: 1px solid $sticky-border;
 }
 
 .containerSticky {
@@ -25,7 +28,7 @@ $sticky-border: #E3E5EC;
   display: flex;
   align-items: center;
   justify-content: center;
-  padding: 7px 0;
+  padding: 0.5rem 0;
 }
 
 .stickySection {
@@ -34,7 +37,7 @@ $sticky-border: #E3E5EC;
   align-items: center;
   justify-content: center;
   border-bottom: 4px solid transparent;
-  padding: 7px 0 3px 0;
+  padding: 0.5rem 0.5rem 0.25rem 0.5rem;
 }
 
 .stickySectionSelected {

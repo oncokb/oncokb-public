@@ -13185,10 +13185,10 @@ oncokb-styles@~0.1.2:
   resolved "https://registry.yarnpkg.com/oncokb-styles/-/oncokb-styles-0.1.2.tgz#8b26c0a0829787cdc1b595d3a021b3266607102b"
   integrity sha512-tuy5s3qFxgf1ogMATQSRPNgLlAMrvOOTCAN1dm/wJ+VZoStbJ7g36/qHwc99UPfh3vrB05broLodF+k58p5tUw==
 
-oncokb-styles@~1.4.0-alpha.0:
-  version "1.4.2"
-  resolved "https://registry.yarnpkg.com/oncokb-styles/-/oncokb-styles-1.4.2.tgz#ad601699636875abe425d80b25c050d28d47c2bc"
-  integrity sha512-dq/w/OZv7oTjQzyXRo54ldC3PiHHu36eVuFmS0U5PGlk3Qx8XfB9XSwELHKTgmuen5H8YKQJxc/h3cBlFBF7Xw==
+oncokb-styles@~1.6.0-alpha.1:
+  version "1.6.0-alpha.1"
+  resolved "https://registry.yarnpkg.com/oncokb-styles/-/oncokb-styles-1.6.0-alpha.1.tgz#f14f11acda733e5d6a2053df1dd74264b31d1de6"
+  integrity sha512-TdZZQ1058xPaILkmNlizgV9dZeSzezTlwm5M+OMcM8U5outEurlNy2HALakFHIUCnlhUkUSZk7+x+MuDc6kMbw==
 
 oncokb-ts-api-client@^1.0.4:
   version "1.0.4"

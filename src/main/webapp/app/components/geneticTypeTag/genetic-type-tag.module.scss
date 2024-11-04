@@ -2,9 +2,11 @@
 
 .geneticTypeTag {
   font-weight: 500 !important;
-  font-family: "Gotham Book";
+  font-family: 'Gotham Book';
+  font-size: 12px;
+  line-height: 18px;
   display: inline-flex;
-  padding: 0 var(--radius-8, 8px);
+  padding: 0 var(--radius-8, 0.5rem);
   justify-content: center;
   align-items: center;
   gap: var(--radius-8, 8px);
@@ -15,11 +17,11 @@
   @extend .geneticTypeTag;
   color: $primary;
   border: var(--radius-2, 2px) solid var(--Color-11, $primary);
-  background: #F0F5FF;
+  background: #f0f5ff;
 }
 
 .somaticTag {
   @extend .geneticTypeTag;
-  color: #FFFFFF;
+  color: #ffffff;
   background: $primary;
 }

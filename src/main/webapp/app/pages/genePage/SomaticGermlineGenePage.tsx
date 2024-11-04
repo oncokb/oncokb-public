@@ -25,10 +25,9 @@ import LoadingIndicator, {
 } from 'app/components/loadingIndicator/LoadingIndicator';
 import autobind from 'autobind-decorator';
 import BarChart from 'app/components/barChart/BarChart';
-import { capitalize, DefaultTooltip } from 'cbioportal-frontend-commons';
+import { DefaultTooltip } from 'cbioportal-frontend-commons';
 import {
   ANNOTATION_PAGE_TAB_KEYS,
-  ANNOTATION_PAGE_TAB_NAMES,
   DEFAULT_GENE,
   LEVEL_CLASSIFICATION,
   LEVEL_TYPES,
@@ -77,10 +76,7 @@ import GeneticTypeTabs, {
 } from 'app/components/geneticTypeTabs/GeneticTypeTabs';
 import InfoTile from 'app/components/infoTile/InfoTile';
 import AnnotatedAlterations from 'app/pages/annotationPage/AnnotatedAlterations';
-import {
-  LinkedInLink,
-  TwitterLink,
-} from 'app/shared/links/SocialMediaLinks';
+import { LinkedInLink, TwitterLink } from 'app/shared/links/SocialMediaLinks';
 import styles from './GenePage.module.scss';
 import StickyMiniNavBar from 'app/shared/nav/StickyMiniNavBar';
 import MiniNavBarHeader from 'app/shared/nav/MiniNavBarHeader';
@@ -651,19 +647,23 @@ export default class SomaticGermlineGenePage extends React.Component<
                             )}
                           </Col>
                         </Row>
+                        <Row className={'justify-content-center'}>
+                          <Col md={11}>
+                            <GeneticTypeTabs
+                              onChange={(status: GENETIC_TYPE) =>
+                                (this.selectedGeneticType = status)
+                              }
+                              routing={this.props.routing}
+                              hugoSymbol={this.store.hugoSymbol}
+                              geneticType={this.selectedGeneticType}
+                            />
+                          </Col>
+                        </Row>
                       </Container>
-                      <GeneticTypeTabs
-                        onChange={(status: GENETIC_TYPE) =>
-                          (this.selectedGeneticType = status)
-                        }
-                        routing={this.props.routing}
-                        hugoSymbol={this.store.hugoSymbol}
-                        geneticType={this.selectedGeneticType}
-                      />
                       {this.hasContent && (
                         <StickyMiniNavBar
                           title={
-                            <span>
+                            <span className={'d-flex align-items-center'}>
                               <span>{this.store.hugoSymbol}</span>
                               <GeneticTypeTag
                                 className={'ml-2'}
@@ -764,9 +764,8 @@ export default class SomaticGermlineGenePage extends React.Component<
                                     !this.isGermline
                                   }
                                 >
-                                  <div className={'d-flex flex-column mt-4'}>
+                                  <div className={'d-flex flex-column mt-2'}>
                                     <ShowHideText
-                                      className={'text-right'}
                                       show={this.showPrevalenceData}
                                       content={<></>}
                                       title={'prevalence data'}

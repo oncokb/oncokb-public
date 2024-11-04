@@ -161,11 +161,11 @@ export default function StickyMiniNavBar({
   )[0]?.id;
 
   return (
-    <Container
+    <div
       className={classNames(
-        'container',
         styles.container,
-        isSticky ? styles.containerSticky : ''
+        isSticky ? styles.containerSticky : '',
+        'container'
       )}
       style={{
         top: headerHeight,
@@ -177,7 +177,7 @@ export default function StickyMiniNavBar({
         <Col md={11}>
           <nav
             ref={stickyDivRef}
-            className="d-flex flex-row"
+            className={classnames('d-flex flex-row', styles.nav)}
             style={{
               gap: '40px',
               height: '49px',
@@ -224,6 +224,6 @@ export default function StickyMiniNavBar({
           </nav>
         </Col>
       </Row>
-    </Container>
+    </div>
   );
 }
