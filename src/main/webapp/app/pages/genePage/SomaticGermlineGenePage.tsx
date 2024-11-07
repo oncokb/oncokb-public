@@ -82,6 +82,7 @@ import StickyMiniNavBar from 'app/shared/nav/StickyMiniNavBar';
 import MiniNavBarHeader from 'app/shared/nav/MiniNavBarHeader';
 import { GenomicIndicatorTable } from 'app/pages/genePage/GenomicIndicatorTable';
 import GeneticTypeTag from 'app/components/geneticTypeTag/GeneticTypeTag';
+import GeneInfoTile from './GeneInfoTile';
 
 interface MatchParams {
   hugoSymbol: string;
@@ -684,78 +685,12 @@ export default class SomaticGermlineGenePage extends React.Component<
                             )}
                             {this.hasContent && (
                               <>
-                                <div className="d-flex flex-wrap">
-                                  {this.isGermline && (
-                                    <InfoTile
-                                      className={styles.infoTile}
-                                      title={'Genetic Risk'}
-                                      categories={[
-                                        {
-                                          title: 'Penetrance',
-                                          content: this.store.geneNumber.result
-                                            .penetrance,
-                                        },
-                                        {
-                                          title: 'Mechanism of Inheritance',
-                                          content: this.store.geneNumber.result
-                                            .inheritanceMechanism,
-                                        },
-                                      ]}
-                                    />
-                                  )}
-                                  <LoETile
-                                    className={styles.infoTile}
-                                    highestSensitiveLevel={
-                                      this.store.geneNumber.result
-                                        .highestSensitiveLevel
-                                    }
-                                    highestResistanceLevel={
-                                      this.store.geneNumber.result
-                                        .highestResistanceLevel
-                                    }
-                                    highestDiagnosticImplicationLevel={
-                                      this.store.geneNumber.result
-                                        .highestDiagnosticImplicationLevel
-                                    }
-                                    highestPrognosticImplicationLevel={
-                                      this.store.geneNumber.result
-                                        .highestPrognosticImplicationLevel
-                                    }
-                                    highestFdaLevel={
-                                      this.store.geneNumber.result
-                                        .highestFdaLevel
-                                    }
-                                  />
-                                  <InfoTile
-                                    className={styles.infoTile}
-                                    title={`Annotated ${
-                                      this.isGermline
-                                        ? 'variants'
-                                        : 'alterations'
-                                    }`}
-                                    categories={
-                                      this.isGermline
-                                        ? this.store.uniqPathogenicity.map(
-                                            pathogenicity => {
-                                              return {
-                                                title:
-                                                  pathogenicity.pathogenicity,
-                                                content: pathogenicity.counts.toString(),
-                                              };
-                                            }
-                                          )
-                                        : this.store.uniqOncogenicity.map(
-                                            oncogenicity => {
-                                              return {
-                                                title:
-                                                  oncogenicity.oncogenicity,
-                                                content: oncogenicity.counts.toString(),
-                                              };
-                                            }
-                                          )
-                                    }
-                                  />
-                                </div>
+                                <GeneInfoTile
+                                  isGermline={this.isGermline}
+                                  pathogenicities={this.store.uniqPathogenicity}
+                                  oncogenicities={this.store.uniqOncogenicity}
+                                  geneNumber={this.store.geneNumber.result}
+                                />
                                 <If
                                   condition={
                                     this.store.gene.result.entrezGeneId > 0 &&

@@ -161,11 +161,11 @@ export default function StickyMiniNavBar({
   )[0]?.id;
 
   return (
-    <div
+    <Container
       className={classNames(
+        'container',
         styles.container,
-        isSticky ? styles.containerSticky : '',
-        'container'
+        isSticky ? styles.containerSticky : ''
       )}
       style={{
         top: headerHeight,
@@ -224,6 +224,6 @@ export default function StickyMiniNavBar({
           </nav>
         </Col>
       </Row>
-    </div>
+    </Container>
   );
 }
