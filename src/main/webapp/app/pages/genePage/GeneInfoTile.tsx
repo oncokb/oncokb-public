@@ -18,7 +18,9 @@ export interface IGeneInfoTil {
 
 const GeneInfoTile = (props: IGeneInfoTil) => {
   let count = 1;
-  if (props.isGermline) count++;
+  const hasGeneticRiskInfo =
+    props.geneNumber.penetrance || props.geneNumber.inheritanceMechanism;
+  if (hasGeneticRiskInfo) count++;
   if (
     props.geneNumber.highestSensitiveLevel ||
     props.geneNumber.highestResistanceLevel ||
@@ -33,7 +35,7 @@ const GeneInfoTile = (props: IGeneInfoTil) => {
 
   return (
     <div className={styles.infoTileContainer}>
-      {props.isGermline && (
+      {hasGeneticRiskInfo && (
         <InfoTile
           className={classnames(styles.infoTile, tileStyle)}
           title={'Genetic Risk'}

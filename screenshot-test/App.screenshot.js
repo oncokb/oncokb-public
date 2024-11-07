@@ -16,7 +16,7 @@ const LATEST_SNAPSHOTS_DIR = './screenshot-test/__latest_snapshots__/';
 const browserConfig = {
   // Docker requires --no-sandbox to be able to run the tests
   headless: true,
-  args: ['--no-sandbox', '--disable-setuid-sandbox'],
+  args: ['--no-sandbox', '--disable-setuid-sandbox', `--window-size=${VIEW_PORT_1080.width},${VIEW_PORT_1080.height}`],
   ignoreHTTPSErrors: true,
   dumpio: false,
 };
@@ -372,6 +372,7 @@ describe('Tests without ROLE_API and requested', () => {
       } else request.continue();
     });
     await page.goto(`${CLIENT_URL}`);
+    await page.setViewport(VIEW_PORT_1080);
     await page.evaluate(() => {
       localStorage.setItem('localdev', 'true');
       localStorage.setItem('disablebanner', 'true');
@@ -414,6 +415,7 @@ describe('Tests without ROLE_API and not requested', () => {
       } else request.continue();
     });
     await page.goto(`${CLIENT_URL}`);
+    await page.setViewport(VIEW_PORT_1080);
     await page.evaluate(() => {
       localStorage.setItem('localdev', 'true');
       localStorage.setItem('disablebanner', 'true');
@@ -456,6 +458,7 @@ describe('Tests with login', () => {
       } else request.continue();
     });
     await page.goto(`${CLIENT_URL}`);
+    await page.setViewport(VIEW_PORT_1080);
     await page.evaluate(() => {
       localStorage.setItem('localdev', 'true');
       localStorage.setItem('disablebanner', 'true');
@@ -610,6 +613,7 @@ describe('Tests without login', () => {
       }
     });
     await page.goto(`${CLIENT_URL}`);
+    await page.setViewport(VIEW_PORT_1080);
     await page.evaluate(() => {
       localStorage.setItem('localdev', 'true');
       localStorage.setItem('disablebanner', 'true');

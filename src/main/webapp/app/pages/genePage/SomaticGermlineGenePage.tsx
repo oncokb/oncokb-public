@@ -359,6 +359,7 @@ export default class SomaticGermlineGenePage extends React.Component<
   get hasContent() {
     return (
       this.hasClinicalImplications ||
+      this.store.genomicIndicators.result.length > 0 ||
       this.store.filteredBiologicalAlterations.length > 0
     );
   }
