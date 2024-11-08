@@ -11,7 +11,7 @@ export interface IWindowSize {
 class WindowStore {
   @observable size: IWindowSize;
   private handleWindowResize = debounce(this.setWindowSize, 200);
-  public windowObj: any;
+  private windowObj: any;
   private onClickEvents: { (event: any): void }[] = [];
 
   constructor() {

@@ -16,7 +16,7 @@ const LATEST_SNAPSHOTS_DIR = './screenshot-test/__latest_snapshots__/';
 const browserConfig = {
   // Docker requires --no-sandbox to be able to run the tests
   headless: true,
-  args: ['--no-sandbox', '--disable-setuid-sandbox', `--window-size=${VIEW_PORT_1080.width},${VIEW_PORT_1080.height}`],
+  args: ['--no-sandbox', '--disable-setuid-sandbox'],
   ignoreHTTPSErrors: true,
   dumpio: false,
 };
