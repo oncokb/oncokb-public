@@ -432,6 +432,7 @@ describe('Tests with login', () => {
       else request.continue();
     });
     await page.goto(`${CLIENT_URL}`);
+    await page.setViewport(VIEW_PORT_1080);
     await page.evaluate(() => {
       localStorage.setItem('localdev', 'true');
       localStorage.setItem('disablebanner', 'true');
@@ -516,6 +517,7 @@ describe('Tests without login', () => {
       }
     });
     await page.goto(`${CLIENT_URL}`);
+    await page.setViewport(VIEW_PORT_1080);
     await page.evaluate(() => {
       localStorage.setItem('localdev', 'true');
       localStorage.setItem('disablebanner', 'true');
@@ -587,6 +589,7 @@ describe('Tests on mobile view (< large grid)', () => {
       else request.continue();
     });
     await page.goto(`${CLIENT_URL}`);
+    await page.setViewport(VIEW_PORT_1080);
     await page.evaluate(() => {
       localStorage.setItem('localdev', 'true');
       localStorage.setItem('disablebanner', 'true');

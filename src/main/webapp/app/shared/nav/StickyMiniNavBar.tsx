@@ -200,7 +200,7 @@ export default function StickyMiniNavBar({
         <Col md={11}>
           <nav
             ref={stickyDivRef}
-            className="d-flex flex-row"
+            className={classnames('d-flex flex-row', styles.nav)}
             style={{
               gap: '40px',
               height: '49px',

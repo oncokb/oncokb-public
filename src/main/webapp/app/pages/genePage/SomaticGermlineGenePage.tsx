@@ -25,10 +25,9 @@ import LoadingIndicator, {
 } from 'app/components/loadingIndicator/LoadingIndicator';
 import autobind from 'autobind-decorator';
 import BarChart from 'app/components/barChart/BarChart';
-import { capitalize, DefaultTooltip } from 'cbioportal-frontend-commons';
+import { DefaultTooltip } from 'cbioportal-frontend-commons';
 import {
   ANNOTATION_PAGE_TAB_KEYS,
-  ANNOTATION_PAGE_TAB_NAMES,
   DEFAULT_GENE,
   LEVEL_CLASSIFICATION,
   LEVEL_TYPES,
@@ -83,6 +82,7 @@ import StickyMiniNavBar from 'app/shared/nav/StickyMiniNavBar';
 import MiniNavBarHeader from 'app/shared/nav/MiniNavBarHeader';
 import { GenomicIndicatorTable } from 'app/pages/genePage/GenomicIndicatorTable';
 import GeneticTypeTag from 'app/components/geneticTypeTag/GeneticTypeTag';
+import GeneInfoTile from './GeneInfoTile';
 
 interface MatchParams {
   hugoSymbol: string;
@@ -359,6 +359,7 @@ export default class SomaticGermlineGenePage extends React.Component<
   get hasContent() {
     return (
       this.hasClinicalImplications ||
+      this.store.genomicIndicators.result.length > 0 ||
       this.store.filteredBiologicalAlterations.length > 0
     );
   }
@@ -648,19 +649,23 @@ export default class SomaticGermlineGenePage extends React.Component<
                             )}
                           </Col>
                         </Row>
+                        <Row className={'justify-content-center'}>
+                          <Col md={11}>
+                            <GeneticTypeTabs
+                              onChange={(status: GENETIC_TYPE) =>
+                                (this.selectedGeneticType = status)
+                              }
+                              routing={this.props.routing}
+                              hugoSymbol={this.store.hugoSymbol}
+                              geneticType={this.selectedGeneticType}
+                            />
+                          </Col>
+                        </Row>
                       </Container>
-                      <GeneticTypeTabs
-                        onChange={(status: GENETIC_TYPE) =>
-                          (this.selectedGeneticType = status)
-                        }
-                        routing={this.props.routing}
-                        hugoSymbol={this.store.hugoSymbol}
-                        geneticType={this.selectedGeneticType}
-                      />
                       {this.hasContent && (
                         <StickyMiniNavBar
                           title={
-                            <span>
+                            <span className={'d-flex align-items-center'}>
                               <span>{this.store.hugoSymbol}</span>
                               <GeneticTypeTag
                                 className={'ml-2'}
@@ -680,78 +685,12 @@ export default class SomaticGermlineGenePage extends React.Component<
                             )}
                             {this.hasContent && (
                               <>
-                                <div className="d-flex flex-wrap">
-                                  {this.isGermline && (
-                                    <InfoTile
-                                      className={styles.infoTile}
-                                      title={'Genetic Risk'}
-                                      categories={[
-                                        {
-                                          title: 'Penetrance',
-                                          content: this.store.geneNumber.result
-                                            .penetrance,
-                                        },
-                                        {
-                                          title: 'Mechanism of Inheritance',
-                                          content: this.store.geneNumber.result
-                                            .inheritanceMechanism,
-                                        },
-                                      ]}
-                                    />
-                                  )}
-                                  <LoETile
-                                    className={styles.infoTile}
-                                    highestSensitiveLevel={
-                                      this.store.geneNumber.result
-                                        .highestSensitiveLevel
-                                    }
-                                    highestResistanceLevel={
-                                      this.store.geneNumber.result
-                                        .highestResistanceLevel
-                                    }
-                                    highestDiagnosticImplicationLevel={
-                                      this.store.geneNumber.result
-                                        .highestDiagnosticImplicationLevel
-                                    }
-                                    highestPrognosticImplicationLevel={
-                                      this.store.geneNumber.result
-                                        .highestPrognosticImplicationLevel
-                                    }
-                                    highestFdaLevel={
-                                      this.store.geneNumber.result
-                                        .highestFdaLevel
-                                    }
-                                  />
-                                  <InfoTile
-                                    className={styles.infoTile}
-                                    title={`Annotated ${
-                                      this.isGermline
-                                        ? 'variants'
-                                        : 'alterations'
-                                    }`}
-                                    categories={
-                                      this.isGermline
-                                        ? this.store.uniqPathogenicity.map(
-                                            pathogenicity => {
-                                              return {
-                                                title:
-                                                  pathogenicity.pathogenicity,
-                                                content: pathogenicity.counts.toString(),
-                                              };
-                                            }
-                                          )
-                                        : this.store.uniqOncogenicity.map(
-                                            oncogenicity => {
-                                              return {
-                                                title:
-                                                  oncogenicity.oncogenicity,
-                                                content: oncogenicity.counts.toString(),
-                                              };
-                                            }
-                                          )
-                                    }
-                                  />
-                                </div>
+                                <GeneInfoTile
+                                  isGermline={this.isGermline}
+                                  pathogenicities={this.store.uniqPathogenicity}
+                                  oncogenicities={this.store.uniqOncogenicity}
+                                  geneNumber={this.store.geneNumber.result}
+                                />
                                 <If
                                   condition={
                                     this.store.gene.result.entrezGeneId > 0 &&
@@ -760,9 +699,8 @@ export default class SomaticGermlineGenePage extends React.Component<
                                     !this.isGermline
                                   }
                                 >
-                                  <div className={'d-flex flex-column mt-4'}>
+                                  <div className={'d-flex flex-column mt-2'}>
                                     <ShowHideText
-                                      className={'text-right'}
                                       show={this.showPrevalenceData}
                                       content={<></>}
                                       title={'prevalence data'}

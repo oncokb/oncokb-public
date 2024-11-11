@@ -320,8 +320,8 @@ export const FdaLevelIcon: React.FunctionComponent<{
 }> = ({ level, withDescription = true, size = 's1' }) => {
   const scale = parseInt(size.slice(1), 0);
   const style = {
-    fontSize: 9 * scale,
-    lineHeight: `${18 * scale}px`,
+    fontSize: 8 * scale,
+    lineHeight: `${16 * scale}px`,
     margin: '0 3px',
   };
   const fdaIcon = (

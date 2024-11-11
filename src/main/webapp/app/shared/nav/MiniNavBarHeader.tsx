@@ -6,7 +6,7 @@ type IMiniNavBarHeader = {
 };
 export default function MiniNavBarHeader({ id, children }: IMiniNavBarHeader) {
   return (
-    <h4 id={id} className={'mt-4'} mini-nav-bar-header="">
+    <h4 id={id} className={'mt-5'} mini-nav-bar-header="">
       {children}
     </h4>
   );
