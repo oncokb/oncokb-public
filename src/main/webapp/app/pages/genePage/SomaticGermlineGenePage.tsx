@@ -673,7 +673,6 @@ export default class SomaticGermlineGenePage extends React.Component<
                               />
                             </span>
                           }
-                          linkUnderlineColor={COLOR_SOMATIC}
                         />
                       )}
                       <Container>

@@ -36,17 +36,20 @@ function useScrollToHash({ stickyHeight }: { stickyHeight: number }) {
 
 type IStickyMiniNavBar = {
   title: string | JSX.Element;
-  linkUnderlineColor: string;
   stickyBackgroundColor?: string;
 };
 
+function getHeader() {
+  return document.querySelector('header');
+}
+
 export default function StickyMiniNavBar({
   title,
-  linkUnderlineColor,
   stickyBackgroundColor,
 }: IStickyMiniNavBar) {
   const [headerHeight, setHeaderHeight] = useState(0);
   const [isSticky, setIsSticky] = useState(false);
+  const [isScrollingUp, setIsScrollingUp] = useState(false);
   const [sections, setSections] = useState<
     { id: string; label: string | null }[]
   >([]);
@@ -54,7 +57,7 @@ export default function StickyMiniNavBar({
     Record<string, { isPassed: boolean; isInView: boolean }>
   >({});
   const stickyDivRef = useRef<HTMLDivElement | null>(null);
-  const hash = useScrollToHash({
+  useScrollToHash({
     stickyHeight:
       headerHeight +
       (stickyDivRef.current?.getBoundingClientRect().height ?? 0),
@@ -71,7 +74,7 @@ export default function StickyMiniNavBar({
     });
     setSections(newSections);
 
-    const headerElement = document.querySelector('header');
+    const headerElement = getHeader();
 
     const updateHeaderHeight = () => {
       if (headerElement) {
@@ -123,14 +126,34 @@ export default function StickyMiniNavBar({
     };
   }, [sections]);
 
-  const handleScroll = () => {
-    if (stickyDivRef.current) {
-      const stickyOffset = stickyDivRef.current.getBoundingClientRect().top;
-      setIsSticky(stickyOffset <= headerHeight);
-    }
-  };
-
   useEffect(() => {
+    return () => {
+      const headerElement = getHeader();
+      if (headerElement) {
+        headerElement.setAttribute('style', '');
+      }
+    };
+  }, []);
+  useEffect(() => {
+    let lastScrollY = 0;
+    const handleScroll = () => {
+      if (stickyDivRef.current) {
+        const stickyOffset = stickyDivRef.current.getBoundingClientRect().top;
+        setIsSticky(stickyOffset <= headerHeight);
+      }
+      const headerElement = getHeader();
+      const currentScrollY = window.scrollY;
+      const newIsScrollingUp = currentScrollY < lastScrollY;
+      lastScrollY = currentScrollY;
+      if (headerElement) {
+        if (newIsScrollingUp) {
+          headerElement.setAttribute('style', '');
+        } else {
+          headerElement.setAttribute('style', 'position: static;');
+        }
+      }
+      setIsScrollingUp(newIsScrollingUp);
+    };
     window.addEventListener('scroll', handleScroll);
 
     return () => {
@@ -138,92 +161,93 @@ export default function StickyMiniNavBar({
     };
   }, [headerHeight]);
 
-  const currentSectionId = [...sections].sort(
-    ({ id: leftId }, { id: rightId }) => {
-      const leftPassedInfo = passedElements[leftId] ?? {};
-      const rightPassedInfo = passedElements[rightId] ?? {};
-      if (`#${leftId}` === hash && leftPassedInfo.isInView) {
-        return -1;
-      } else if (`#${rightId}` === hash && rightPassedInfo.isInView) {
-        return 1;
-      } else if (leftPassedInfo.isInView && !rightPassedInfo.isInView) {
-        return -1;
-      } else if (rightPassedInfo.isInView && !leftPassedInfo.isInView) {
-        return 1;
-      } else if (rightPassedInfo.isPassed) {
-        return 1;
-      } else if (leftPassedInfo.isPassed) {
-        return -1;
-      } else {
-        return 0;
+  let currentSectionId: string | undefined = undefined;
+
+  // If a section header is visible then the header at the top of the page wins
+  for (const section of sections) {
+    const passedInfo = passedElements[section.id] ?? {};
+    if (passedInfo.isInView) {
+      currentSectionId = section.id;
+      break;
+    }
+  }
+
+  // If no section header is in view then pick the last section header
+  // that was scrolled passed
+  if (currentSectionId === undefined) {
+    for (const section of sections) {
+      const passedInfo = passedElements[section.id] ?? {};
+      if (passedInfo.isPassed) {
+        currentSectionId = section.id;
       }
     }
-  )[0]?.id;
+  }
 
   return (
-    <Container
+    <div
       className={classNames(
-        'container',
         styles.container,
         isSticky ? styles.containerSticky : ''
       )}
       style={{
-        top: headerHeight,
+        top: isScrollingUp ? headerHeight : '0px',
         backgroundColor:
           isSticky && stickyBackgroundColor ? stickyBackgroundColor : undefined,
       }}
     >
-      <Row className="justify-content-center">
-        <Col md={11}>
-          <nav
-            ref={stickyDivRef}
-            className={classnames('d-flex flex-row', styles.nav)}
-            style={{
-              gap: '40px',
-              height: '49px',
-            }}
-          >
-            {isSticky && (
-              <Link
-                className={classnames(styles.stickyHeader)}
-                // # is removed from link so we have to use onclick to scroll to the top
-                to="#"
-                onClick={e => {
-                  e.preventDefault();
-                  window.scrollTo({
-                    top: 0,
-                    behavior: 'smooth',
-                  });
-                }}
-              >
-                {title}
-              </Link>
-            )}
-            <div
-              className="d-flex flex-row"
+      <Container>
+        <Row className="justify-content-center">
+          <Col md={11}>
+            <nav
+              ref={stickyDivRef}
+              className={classnames('d-flex flex-row', styles.nav)}
               style={{
-                gap: '10px',
+                gap: '40px',
+                height: '49px',
               }}
             >
-              {sections.map(({ id, label }) => {
-                const isInSection = currentSectionId === id;
-                return (
-                  <Link
-                    key={id}
-                    to={`#${id}`}
-                    className={classNames(
-                      styles.stickySection,
-                      isInSection ? styles.stickySectionSelected : ''
-                    )}
-                  >
-                    {label}
-                  </Link>
-                );
-              })}
-            </div>
-          </nav>
-        </Col>
-      </Row>
-    </Container>
+              {isSticky && (
+                <Link
+                  className={classnames(styles.stickyHeader)}
+                  // # is removed from link so we have to use onclick to scroll to the top
+                  to="#"
+                  onClick={e => {
+                    e.preventDefault();
+                    window.scrollTo({
+                      top: 0,
+                      behavior: 'smooth',
+                    });
+                  }}
+                >
+                  {title}
+                </Link>
+              )}
+              <div
+                className="d-flex flex-row"
+                style={{
+                  gap: '10px',
+                }}
+              >
+                {sections.map(({ id, label }) => {
+                  const isInSection = currentSectionId === id;
+                  return (
+                    <Link
+                      key={id}
+                      to={`#${id}`}
+                      className={classNames(
+                        styles.stickySection,
+                        isInSection ? styles.stickySectionSelected : ''
+                      )}
+                    >
+                      {label}
+                    </Link>
+                  );
+                })}
+              </div>
+            </nav>
+          </Col>
+        </Row>
+      </Container>
+    </div>
   );
 }
