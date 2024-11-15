@@ -1,0 +1,42 @@
+.backLink {
+  gap: 0.5rem;
+}
+
+.header {
+  margin-bottom: 0.5rem;
+}
+
+.headerContent {
+  gap: 0.5rem;
+}
+
+.navBarTitle {
+  .pill {
+    font-size: 0.85rem;
+  }
+}
+
+.pill {
+  font-size: 1rem;
+  border: #0968c3;
+  color: #0968c3;
+  border-style: solid;
+  border-width: 2px;
+  border-radius: 56px;
+  padding: 0px 8px;
+  background: #f0f5ff;
+}
+
+.alterationTiles {
+  gap: 8px;
+  padding: 32px 0px;
+  align-items: center;
+  justify-content: center;
+  flex-direction: row;
+  display: flex;
+  flex-wrap: wrap;
+}
+
+.descriptionContainer {
+  margin-bottom: 1rem;
+}

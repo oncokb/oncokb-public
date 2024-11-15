@@ -4,7 +4,10 @@ import WindowStore from 'app/store/WindowStore';
 import { RouterStore } from 'mobx-react-router';
 import { PAGE_ROUTE } from 'app/config/constants';
 import { GENETIC_TYPE } from 'app/components/geneticTypeTabs/GeneticTypeTabs';
-import { parseGenePagePath } from 'app/shared/utils/UrlUtils';
+import {
+  parseGenePagePath,
+  parseAlterationPagePath,
+} from 'app/shared/utils/UrlUtils';
 
 const Container: FunctionComponent<{
   inGenePage: boolean;
@@ -25,18 +28,23 @@ const PageContainer: React.FunctionComponent<{
 }> = props => {
   const genePagePath = parseGenePagePath(props.routing.location.pathname);
   const inGenePage = genePagePath.geneticType !== undefined;
+  const inAlterationPage =
+    parseAlterationPagePath(props.routing.location.pathname).geneticType !==
+    undefined;
   return (
     <div className={'view-wrapper'}>
       <div
         className={
-          inGenePage
+          inGenePage || inAlterationPage
             ? ''
             : props.windowStore.isXLscreen
             ? 'container'
             : 'container-fluid'
         }
       >
-        <Container inGenePage={inGenePage}>{props.children}</Container>
+        <Container inGenePage={inGenePage || inAlterationPage}>
+          {props.children}
+        </Container>
       </div>
     </div>
   );

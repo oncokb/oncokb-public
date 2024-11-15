@@ -604,6 +604,8 @@ export enum PAGE_ROUTE {
   SOMATIC_GENE = '/gene/:hugoSymbol/somatic',
   GERMLINE_GENE = '/gene/:hugoSymbol/germline',
   ALTERATION = '/gene/:hugoSymbol/:alteration',
+  SOMATIC_ALTERATION = '/gene/:hugoSymbol/somatic/:alteration',
+  GERMLINE_ALTERATION = '/gene/:hugoSymbol/germline/:alteration',
   HGVSG = '/hgvsg',
   HGVSG_WITH_QUERY = '/hgvsg/:query',
   GENOMIC_CHANGE = '/genomic-change',
