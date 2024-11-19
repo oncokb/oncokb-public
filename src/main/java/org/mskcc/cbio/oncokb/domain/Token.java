@@ -2,6 +2,7 @@ package org.mskcc.cbio.oncokb.domain;
 
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import org.hibernate.annotations.Type;
+import org.mskcc.cbio.oncokb.domain.enumeration.TokenType;
 
 import javax.persistence.*;
 import javax.validation.constraints.*;
@@ -38,11 +39,15 @@ public class Token implements Serializable {
 
     @NotNull
     @Column(name = "current_usage", nullable = false)
-    private Integer currentUsage = 0;
+    private Integer currentUsage;
 
     @NotNull
     @Column(name = "renewable", nullable = false)
-    private Boolean renewable = true;
+    private Boolean renewable;
+
+    @Convert(converter = TokenKeyConverter.class)
+    @Column(name = "new_token")
+    private TokenKey newToken;
 
     @ManyToOne
     @JsonIgnoreProperties(value = "tokens", allowSetters = true)
@@ -135,6 +140,19 @@ public class Token implements Serializable {
         this.renewable = renewable;
     }
 
+    public TokenKey getNewToken() {
+        return newToken;
+    }
+
+    public Token newToken(TokenKey newToken) {
+        this.newToken = newToken;
+        return this;
+    }
+
+    public void setNewToken(TokenKey newToken) {
+        this.newToken = newToken;
+    }
+
     public User getUser() {
         return user;
     }
@@ -176,6 +194,54 @@ public class Token implements Serializable {
             ", usageLimit=" + getUsageLimit() +
             ", currentUsage=" + getCurrentUsage() +
             ", renewable='" + isRenewable() + "'" +
+            ", newToken='" + getNewToken() + "'" +
             "}";
+    }
+}
+
+class TokenKeyConverter implements AttributeConverter<TokenKey, String> {
+    @Override
+    public String convertToDatabaseColumn(TokenKey tokenKey) {
+        if (tokenKey.getTokenType() == null || tokenKey.getToken() == null || tokenKey.getChecksum() == null) {
+            return null;
+        }
+        if (tokenKey.getToken().length() != TokenKey.TOKEN_CHAR_LENGTH || tokenKey.getChecksum().length() != TokenKey.CHECKSUM_CHAR_LENGTH) {
+            return null;
+        }
+        return tokenKey.getTokenType().getType() + "_" + tokenKey.getToken() + tokenKey.getChecksum();
+    }
+
+    @Override
+    public TokenKey convertToEntityAttribute(String dbData) {
+        if (dbData == null) {
+            return null;
+        }
+        String[] parts = dbData.split("_");
+        if (parts.length != 2) {
+            return null;
+        }
+
+
+        TokenKey tokenKey = new TokenKey();
+        String type = parts[0];
+        if (type.equals(TokenType.SERVICE.getType())) {
+            tokenKey.setTokenType(TokenType.SERVICE);
+        } else if (type.equals(TokenType.USER.getType())) {
+            tokenKey.setTokenType(TokenType.USER);
+        } else {
+            return null;
+        }
+
+        String tokenAndChecksum = parts[1];
+        if (tokenAndChecksum.length() == TokenKey.TOKEN_CHAR_LENGTH + TokenKey.CHECKSUM_CHAR_LENGTH) {
+            String token = tokenAndChecksum.substring(0, TokenKey.TOKEN_CHAR_LENGTH);
+            String checksum = tokenAndChecksum.substring(TokenKey.TOKEN_CHAR_LENGTH);
+            tokenKey.setToken(token);
+            tokenKey.setChecksum(checksum);  
+        } else {
+            return null;
+        }
+
+        return tokenKey;
     }
 }
