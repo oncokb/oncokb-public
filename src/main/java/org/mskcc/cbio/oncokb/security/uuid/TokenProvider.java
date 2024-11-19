@@ -2,7 +2,9 @@ package org.mskcc.cbio.oncokb.security.uuid;
 
 import org.mskcc.cbio.oncokb.domain.Authority;
 import org.mskcc.cbio.oncokb.domain.Token;
+import org.mskcc.cbio.oncokb.domain.TokenKey;
 import org.mskcc.cbio.oncokb.domain.User;
+import org.mskcc.cbio.oncokb.domain.enumeration.TokenType;
 import org.mskcc.cbio.oncokb.repository.UserRepository;
 import org.mskcc.cbio.oncokb.security.AuthoritiesConstants;
 import org.mskcc.cbio.oncokb.security.SecurityUtils;
@@ -74,6 +76,7 @@ public class TokenProvider implements InitializingBean {
             token.setExpiration(expirationTime);
         }
         token.setToken(UUID.randomUUID());
+        token.setNewToken(TokenKey.generate(TokenType.USER));
         return token;
     }
 
