@@ -58,10 +58,6 @@ public class TokenKey implements Serializable {
         return sb.toString();
     }
 
-    public boolean validateChecksum() {
-        return false;
-    }
-
     public TokenType getTokenType() {
         return tokenType;
     }
