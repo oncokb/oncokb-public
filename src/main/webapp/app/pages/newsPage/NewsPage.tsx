@@ -3,7 +3,7 @@ import { CitationText } from 'app/components/CitationText';
 import NewsList, { getNews, getNewsTitle } from 'app/pages/newsPage/NewsList';
 import {
   DRUGS_ADDED_TO_ONCOKB,
-  DRUGS_CURRENTLY_IN_ONCOKB,
+  DRUGS_REMAINING_IN_ONCOKB,
   NEWS_BY_DATE,
 } from 'app/pages/newsPage/NewsPageContent';
 import {
@@ -87,6 +87,7 @@ export default class NewsPage extends React.Component<{
           <CitationText />
         </div>
         <div className="mt-2">
+          <NewsList date={'11262024'} />
           <NewsList date={'10242024'} />
           <NewsList date={'09252024'} />
           <NewsList date={'08152024'} />
@@ -187,7 +188,7 @@ export default class NewsPage extends React.Component<{
                               <th>Mutation</th>
                               <th>Cancer Type</th>
                               <th>Current Level of Evidence</th>
-                              <th>{DRUGS_CURRENTLY_IN_ONCOKB}</th>
+                              <th>{DRUGS_REMAINING_IN_ONCOKB}</th>
                               <th>{DRUGS_ADDED_TO_ONCOKB}</th>
                               <th>Evidence</th>
                             </tr>

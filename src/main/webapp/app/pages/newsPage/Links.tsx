@@ -6,7 +6,7 @@ export const FdaApprovalLink: React.FunctionComponent<{
   approval: string;
   year?: string;
 }> = props => {
-  let linkText = 'FDA-approval ';
+  let linkText = 'FDA approval ';
   if (props.year) {
     linkText += `(${props.year}) `;
   }
