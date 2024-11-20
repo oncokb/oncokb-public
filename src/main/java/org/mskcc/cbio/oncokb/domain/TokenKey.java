@@ -1,18 +1,18 @@
 package org.mskcc.cbio.oncokb.domain;
 
 import java.io.Serializable;
-import java.nio.ByteBuffer;
 import java.security.SecureRandom;
 import java.util.zip.CRC32;
 
+import org.apache.commons.lang3.StringUtils;
 import org.mskcc.cbio.oncokb.domain.enumeration.TokenType;
-
-import io.seruco.encoding.base62.Base62;
 
 public class TokenKey implements Serializable {
     public static int TOKEN_CHAR_LENGTH = 30;
 
     public static int CHECKSUM_CHAR_LENGTH = 6;
+
+    private static String BASE62_CHARS = "0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz";
 
     private TokenType tokenType;
 
@@ -24,22 +24,38 @@ public class TokenKey implements Serializable {
         TokenKey tokenKey = new TokenKey();
         tokenKey.setTokenType(type);
         
-        Base62 base62 = Base62.createInstance();
-        SecureRandom secureRandom = new SecureRandom();
+        CRC32 crc32 = new CRC32();
 
-        byte[] bytes = new byte[24];
-        secureRandom.nextBytes(bytes);
-        String token = new String(base62.encode(bytes));
+        String token = generateToken();
         tokenKey.setToken(token);
 
-        CRC32 crc32 = new CRC32();
-        crc32.update(bytes);
-        ByteBuffer buffer = ByteBuffer.allocate(Long.BYTES);
-        buffer.putLong(crc32.getValue());
-        String checksum = new String(base62.encode(buffer.array()));
-        tokenKey.setChecksum(checksum.substring(checksum.length() - TokenKey.CHECKSUM_CHAR_LENGTH));
+        crc32.update(token.getBytes());
+        String base62Checksum = toBase62(crc32.getValue());
+        if (base62Checksum.length() < CHECKSUM_CHAR_LENGTH) {
+            base62Checksum = StringUtils.repeat('0', CHECKSUM_CHAR_LENGTH - base62Checksum.length());
+        }
+        tokenKey.setChecksum(base62Checksum);
 
         return tokenKey;
+    }
+
+    private static String generateToken() {
+        SecureRandom secureRandom = new SecureRandom();
+        StringBuilder token = new StringBuilder();
+        for (int i = 0; i < TOKEN_CHAR_LENGTH; i++) {
+            token.append(BASE62_CHARS.charAt(secureRandom.nextInt(BASE62_CHARS.length())));
+        }
+        return token.toString();
+    }
+
+    public static String toBase62(long val) {
+        StringBuffer sb = new StringBuffer();
+        while(val > 0) {
+            int remainder = (int) (val % 62);
+            val = val / 62;
+            sb.insert(0, BASE62_CHARS.charAt((int) remainder));
+        }
+        return sb.toString();
     }
 
     public boolean validateChecksum() {

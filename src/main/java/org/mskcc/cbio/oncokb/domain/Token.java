@@ -39,11 +39,11 @@ public class Token implements Serializable {
 
     @NotNull
     @Column(name = "current_usage", nullable = false)
-    private Integer currentUsage;
+    private Integer currentUsage = 0;
 
     @NotNull
     @Column(name = "renewable", nullable = false)
-    private Boolean renewable;
+    private Boolean renewable = true;
 
     @Convert(converter = TokenKeyConverter.class)
     @Column(name = "new_token")
