@@ -27,6 +27,7 @@ import {
   YearEndReviewPageLink,
   getAlterationPageLink,
   getAlternativeAllelesPageLinks,
+  getAlternativeGenePageLinks,
 } from 'app/shared/utils/UrlUtils';
 import { PMIDLink } from 'app/shared/links/PMIDLink';
 import { Linkout } from 'app/shared/links/Linkout';
@@ -85,7 +86,7 @@ export const CURRENT_LEVEL_OF_EVIDENCE = 'Current Level of Evidence';
 export const PREVIOUS_LEVEL_OF_EVIDENCE = 'Previous Level of Evidence';
 export const DRUGS_ADDED_TO_ONCOKB = `Drug(s) added to ${ONCOKB_TM}`;
 export const DRUGS_UPDATE_IN_ONCOKB = `Drug(s) updated in ${ONCOKB_TM}`;
-export const DRUGS_CURRENTLY_IN_ONCOKB = `Drug(s) currently in ${ONCOKB_TM}`;
+export const DRUGS_REMAINING_IN_ONCOKB = `Drug(s) remaining in ${ONCOKB_TM}`;
 export const DRUGS_REMOVED_FROM_ONCOKB = `Drug(s) removed from ${ONCOKB_TM}`;
 export const DRUGS_DEMOTED_IN_ONCOKB = `Drug(s) demoted in ${ONCOKB_TM}`;
 export const DRUGS_PROMOTED_IN_ONCOKB = `Drug(s) promoted in ${ONCOKB_TM}`;
@@ -156,7 +157,7 @@ export const CHANGED_ANNOTATION_DRUG_SAME_HIGHEST_LEVEL_COLUMNS = [
   { name: GENE },
   { name: MUTATION },
   { name: CANCER_TYPE },
-  { name: DRUGS_CURRENTLY_IN_ONCOKB },
+  { name: DRUGS_REMAINING_IN_ONCOKB },
   { name: DRUGS_CHANGED_IN_ONCOKB },
   { name: EVIDENCE },
 ];
@@ -166,7 +167,7 @@ export const CHANGED_ANNOTATION_ADDITIONAL_DRUG_SAME_LEVEL_COLUMNS = [
   { name: MUTATION },
   { name: CANCER_TYPE },
   { name: CURRENT_LEVEL_OF_EVIDENCE },
-  { name: DRUGS_CURRENTLY_IN_ONCOKB },
+  { name: DRUGS_REMAINING_IN_ONCOKB },
   { name: DRUGS_ADDED_TO_ONCOKB },
   { name: EVIDENCE },
 ];
@@ -177,7 +178,7 @@ export const CHANGED_ANNOTATION_ADDITIONAL_DRUG_DIFF_LEVEL_COLUMNS = [
   { name: CANCER_TYPE },
   { name: PREVIOUS_LEVEL_OF_EVIDENCE },
   { name: CURRENT_LEVEL_OF_EVIDENCE },
-  { name: DRUGS_CURRENTLY_IN_ONCOKB },
+  { name: DRUGS_REMAINING_IN_ONCOKB },
   { name: DRUGS_ADDED_TO_ONCOKB },
   { name: EVIDENCE },
 ];
@@ -188,7 +189,7 @@ export const CHANGED_ANNOTATION_DRUG_REMOVAL_COLUMNS = [
   { name: CANCER_TYPE },
   { name: PREVIOUS_LEVEL },
   { name: CURRENT_LEVEL_OF_EVIDENCE },
-  { name: DRUGS_CURRENTLY_IN_ONCOKB },
+  { name: DRUGS_REMAINING_IN_ONCOKB },
   { name: DRUGS_REMOVED_FROM_ONCOKB },
   { name: EVIDENCE },
 ];
@@ -198,8 +199,8 @@ export const CHANGED_ANNOTATION_DRUG_REMOVAL_SAME_HIGHEST_LEVEL_COLUMNS = [
   { name: MUTATION },
   { name: CANCER_TYPE },
   { name: CURRENT_LEVEL_OF_EVIDENCE },
-  { name: DRUGS_CURRENTLY_IN_ONCOKB },
   { name: DRUGS_REMOVED_FROM_ONCOKB },
+  { name: DRUGS_REMAINING_IN_ONCOKB },
   { name: EVIDENCE },
 ];
 
@@ -207,7 +208,7 @@ export const CHANGED_ANNOTATION_SENSITIVITY_LEVEL_COLUMNS = [
   { name: GENE },
   { name: MUTATION },
   { name: CANCER_TYPE },
-  { name: DRUGS_CURRENTLY_IN_ONCOKB },
+  { name: DRUGS_REMAINING_IN_ONCOKB },
   { name: DRUGS_ADDED_TO_ONCOKB },
   { name: UPDATED_SENSITIVITY_LEVEL },
   { name: UPDATED_RESISTANCE_LEVEL },
@@ -300,6 +301,134 @@ const EVIDENCE_COLUMN_SEPARATOR = '; ';
 // https://stackoverflow.com/questions/41947168/is-it-possible-to-use-keyof-operator-on-literals-instead-of-interfaces
 
 export const NEWS_BY_DATE: { [date: string]: NewsData } = {
+  '11262024': {
+    changedAnnotations: [
+      {
+        columnHeaderType: AnnotationColumnHeaderType.NEW_ALTERATION_WITH_LEVEL,
+        content: [
+          [
+            '1',
+            'KMT2A',
+            'Fusions',
+            'Mixed Phenotype Acute Leukemia',
+            'Revumenib',
+            [
+              <WithSeparator separator={EVIDENCE_COLUMN_SEPARATOR}>
+                <FdaApprovalLink
+                  approval="revumenib"
+                  link="https://www.fda.gov/drugs/resources-information-approved-drugs/fda-approves-revumenib-relapsed-or-refractory-acute-leukemia-kmt2a-translocation?"
+                />
+                <PMIDLink pmids="39121437 " />
+              </WithSeparator>,
+            ],
+          ],
+        ],
+      },
+      {
+        columnHeaderType:
+          AnnotationColumnHeaderType.ADDITIONAL_SENSITIVITY_LEVEL_DRUG,
+        content: [
+          [
+            'NTRK1',
+            'G595R',
+            'All Solid Tumors',
+            'Larotrectinib (Level R1), Entrectinib (Level R2)',
+            <div>
+              <div>Selitrectinib (Level 3A)</div>
+              <br />
+              <div>Zurletrectinib (Level 4)</div>
+            </div>,
+            '3A',
+            'R1',
+            <WithSeparator separator={EVIDENCE_COLUMN_SEPARATOR}>
+              <PMIDLink pmids="32133433, 33004339, 28578312, 38902532, 34625502" />
+            </WithSeparator>,
+          ],
+          [
+            'NTRK3',
+            'G623R',
+            'All Solid Tumors',
+            'Larotrectinib (Level R1)',
+            <div>
+              <div>Selitrectinib (Level 3A)</div>
+              <br />
+              <div>Zurletrectinib (Level 4)</div>
+            </div>,
+            '3A',
+            'R1',
+            <WithSeparator separator={EVIDENCE_COLUMN_SEPARATOR}>
+              <PMIDLink pmids="28578312, 34030125, 37262390, 38902532, 34625502" />
+            </WithSeparator>,
+          ],
+        ],
+      },
+      {
+        useOneLineRowClass: false,
+        title:
+          'Updated therapeutic implications - Promotion of tumor type-specific level of evidence for an alteration(s)',
+        headers: CHANGED_ANNOTATION_LEVEL_WITH_EVIDENCE_COLUMNS,
+        content: [
+          [
+            'KMT2A',
+            'Fusions',
+            'Acute Myeloid Leukemia, B-cell Lymphoblastic Leukemia/Lymphoma',
+            'Revumenib (Level 3A)',
+            '3A',
+            '1',
+            <WithSeparator separator={EVIDENCE_COLUMN_SEPARATOR}>
+              <FdaApprovalLink
+                approval="revumenib"
+                link="https://www.fda.gov/drugs/resources-information-approved-drugs/fda-approves-revumenib-relapsed-or-refractory-acute-leukemia-kmt2a-translocation?"
+              />
+              <PMIDLink pmids="39121437" />
+            </WithSeparator>,
+          ],
+        ],
+      },
+      {
+        columnHeaderType: AnnotationColumnHeaderType.UPDATED_SAME_LEVEL_DRUG,
+        content: [
+          [
+            '1',
+            <WithSeparator separator={', '}>
+              {getAlternativeGenePageLinks('NTRK1/2/3')}
+            </WithSeparator>,
+            <WithSeparator separator={', '}>
+              <AlterationPageLink hugoSymbol="NTRK1" alteration="Fusions">
+                Fusions
+              </AlterationPageLink>
+            </WithSeparator>,
+            'All Solid Tumors',
+            'Entrectinib, Larotrectinib, Repotrectinib (Level 1)',
+            'Zurletrectinib (Level 4)',
+            <WithSeparator separator={EVIDENCE_COLUMN_SEPARATOR}>
+              <PMIDLink pmids="38902532" />
+            </WithSeparator>,
+          ],
+        ],
+      },
+      {
+        columnHeaderType:
+          AnnotationColumnHeaderType.DRUG_REMOVAL_SAME_HIGHEST_LEVEL,
+        content: [
+          [
+            'PIK3CA',
+            'H1047R',
+            'All Solid Tumors',
+            '4',
+            'LOXO-783, LOXO-783 + Aromatase Inhibition Therapy + Abemaciclib, LOXO-783 + Fulvestrant, LOXO-783 + Fulvestrant + Abemaciclib, LOXO-783 + LY3484356, LOXO-783 + LY3484356 + Abemaciclib, LOXO-783 + Paclitaxel (Level 4)',
+            'RLY-2608, RLY-2608 + Fulvestrant (Level 4)',
+            <WithSeparator separator={EVIDENCE_COLUMN_SEPARATOR}>
+              <Linkout link="https://www.oncologypipeline.com/apexonco/lilly-down-not-out-pi3k-alpha-inhibition">
+                Discontinuation of LOXO-783 development
+              </Linkout>
+            </WithSeparator>,
+          ],
+        ],
+      },
+    ],
+    newlyAddedGenes: ['ADGRG4', 'AFDN', 'AGGF1', 'MAGI2', 'PRKCB', 'ZNF292'],
+  },
   '10242024': {
     priorityNews: [
       <span>
@@ -398,7 +527,7 @@ export const NEWS_BY_DATE: { [date: string]: NewsData } = {
             'Breast Cancer',
             <div>
               <div style={{ fontStyle: 'italic' }}>
-                {DRUGS_CURRENTLY_IN_ONCOKB}:
+                {DRUGS_REMAINING_IN_ONCOKB}:
               </div>
               <div>
                 Alpelisib + Fulvestrant, Capivasertib + Fulvestrant (Level 2)
@@ -743,7 +872,7 @@ export const NEWS_BY_DATE: { [date: string]: NewsData } = {
             'Oligodendroglioma',
             <div>
               <div style={{ fontStyle: 'italic' }}>
-                {DRUGS_CURRENTLY_IN_ONCOKB}:
+                {DRUGS_REMAINING_IN_ONCOKB}:
               </div>
               <div>Ivosidenib (Level 2)</div>
               <br></br>
@@ -770,7 +899,7 @@ export const NEWS_BY_DATE: { [date: string]: NewsData } = {
             'Astrocytoma',
             <div>
               <div style={{ fontStyle: 'italic' }}>
-                {DRUGS_CURRENTLY_IN_ONCOKB}:
+                {DRUGS_REMAINING_IN_ONCOKB}:
               </div>
               <div>Vorasidenib (Level 3A), Ivosidenib (Level 3A)</div>
               <br></br>
@@ -816,7 +945,7 @@ export const NEWS_BY_DATE: { [date: string]: NewsData } = {
             'Endometrial Cancer, Ovarian Cancer',
             <div>
               <div style={{ fontStyle: 'italic' }}>
-                {DRUGS_CURRENTLY_IN_ONCOKB}:
+                {DRUGS_REMAINING_IN_ONCOKB}:
               </div>
               <div>Lunresertib (Level 4), BLU-222 (Level 4)</div>
               <br></br>
@@ -1101,7 +1230,7 @@ export const NEWS_BY_DATE: { [date: string]: NewsData } = {
             'Colorectal Cancer',
             <div>
               <div style={{ fontStyle: 'italic' }}>
-                {DRUGS_CURRENTLY_IN_ONCOKB}:
+                {DRUGS_REMAINING_IN_ONCOKB}:
               </div>
               <div style={{ textDecoration: 'underline' }}>Sensitivity</div>
               <div>
@@ -1686,7 +1815,7 @@ export const NEWS_BY_DATE: { [date: string]: NewsData } = {
             'Breast Cancer',
             <div>
               <div style={{ fontStyle: 'italic' }}>
-                {DRUGS_CURRENTLY_IN_ONCOKB}:
+                {DRUGS_REMAINING_IN_ONCOKB}:
               </div>
               <div>
                 Capivasertib + Fulvestrant (Level 1), Alpelisib + Fulvestrant
@@ -1758,7 +1887,7 @@ export const NEWS_BY_DATE: { [date: string]: NewsData } = {
             'Non-Small Cell Lung Cancer',
             <div>
               <div style={{ fontStyle: 'italic' }}>
-                {DRUGS_CURRENTLY_IN_ONCOKB}:
+                {DRUGS_REMAINING_IN_ONCOKB}:
               </div>
               <div>Osimertinib (Level R2), Afatinib (Level 4)</div>
               <br></br>
@@ -1932,7 +2061,7 @@ export const NEWS_BY_DATE: { [date: string]: NewsData } = {
                 <td>
                   <div>
                     <div style={{ fontStyle: 'italic' }}>
-                      {DRUGS_CURRENTLY_IN_ONCOKB}:
+                      {DRUGS_REMAINING_IN_ONCOKB}:
                     </div>
                     <div>Milademetan (Level 4)</div>
                     <br></br>
@@ -2116,7 +2245,7 @@ export const NEWS_BY_DATE: { [date: string]: NewsData } = {
             'Breast Cancer',
             <div>
               <div style={{ fontStyle: 'italic' }}>
-                {DRUGS_CURRENTLY_IN_ONCOKB}:
+                {DRUGS_REMAINING_IN_ONCOKB}:
               </div>
               <div>GSK2636771, AZD8186 (Currently Level 4)</div>
               <br></br>
@@ -2257,7 +2386,7 @@ export const NEWS_BY_DATE: { [date: string]: NewsData } = {
                 <th>{MUTATION}</th>
                 <th>{CANCER_TYPE}</th>
                 <th>{CURRENT_LEVEL_OF_EVIDENCE}</th>
-                <th>{DRUGS_CURRENTLY_IN_ONCOKB}</th>
+                <th>{DRUGS_REMAINING_IN_ONCOKB}</th>
                 <th>{DRUGS_ADDED_TO_ONCOKB}</th>
                 <th>{EVIDENCE}</th>
               </tr>
@@ -2345,7 +2474,7 @@ export const NEWS_BY_DATE: { [date: string]: NewsData } = {
             'Colorectal Cancer',
             <div>
               <div style={{ fontStyle: 'italic' }}>
-                {DRUGS_CURRENTLY_IN_ONCOKB}:
+                {DRUGS_REMAINING_IN_ONCOKB}:
               </div>
               <div>Adagrasib + Cetuximab (Level 3A)</div>
               <br></br>

@@ -176,6 +176,23 @@ export const getAlternativeAllelesPageLinks = (
   }
 };
 
+export const getAlternativeGenePageLinks = (genes: string) => {
+  const splits = genes.split('/');
+  const temp = splits[0];
+  const baseHugoSymbol = temp.substring(0, temp.length - 1);
+  const geneLinks = [temp[temp.length - 1], ...splits.slice(1)].map(
+    (ending, index) => {
+      const hugoSymbol = `${baseHugoSymbol}${ending}`;
+      return (
+        <GenePageLink hugoSymbol={hugoSymbol}>
+          {index === 0 ? hugoSymbol : ending}
+        </GenePageLink>
+      );
+    }
+  );
+  return <WithSeparator separator={'/'}>{geneLinks}</WithSeparator>;
+};
+
 export type GenePagePath = {
   hugoSymbol?: string;
   geneticType?: GENETIC_TYPE;
