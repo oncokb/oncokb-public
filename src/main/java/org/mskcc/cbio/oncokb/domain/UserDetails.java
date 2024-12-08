@@ -52,6 +52,10 @@ public class UserDetails implements Serializable {
     @JsonIgnoreProperties(value = "userDetails", allowSetters = true)
     private Company company;
 
+    @ManyToOne
+    @JsonIgnoreProperties(value = "serviceUsers", allowSetters = true)
+    private Company serviceCompany;
+
     // jhipster-needle-entity-add-field - JHipster will add fields here
     public Long getId() {
         return id;
@@ -176,6 +180,19 @@ public class UserDetails implements Serializable {
 
     public void setCompany(Company company) {
         this.company = company;
+    }
+
+    public Company getServiceCompany() {
+        return serviceCompany;
+    }
+
+    public UserDetails serviceCompany(Company company) {
+        this.serviceCompany = company;
+        return this;
+    }
+
+    public void setServiceCompany(Company company) {
+        this.serviceCompany = company;
     }
     // jhipster-needle-entity-add-getters-setters - JHipster will add getters and setters here
 

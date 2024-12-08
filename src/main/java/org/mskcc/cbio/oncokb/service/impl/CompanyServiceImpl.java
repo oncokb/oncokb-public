@@ -1,9 +1,20 @@
 package org.mskcc.cbio.oncokb.service.impl;
 
-import org.mskcc.cbio.oncokb.service.CompanyDomainService;
-import org.mskcc.cbio.oncokb.service.CompanyService;
+import static org.mskcc.cbio.oncokb.config.cache.CompanyCacheResolver.COMPANIES_BY_ID_CACHE;
+import static org.mskcc.cbio.oncokb.config.cache.CompanyCacheResolver.COMPANIES_BY_NAME_CACHE;
+
+import java.util.ArrayList;
+import java.util.LinkedList;
+import java.util.List;
+import java.util.Objects;
+import java.util.Optional;
+import java.util.Set;
+import java.util.UUID;
+import java.util.stream.Collectors;
+
 import org.mskcc.cbio.oncokb.config.cache.CacheNameResolver;
 import org.mskcc.cbio.oncokb.domain.Company;
+import org.mskcc.cbio.oncokb.domain.Token;
 import org.mskcc.cbio.oncokb.domain.User;
 import org.mskcc.cbio.oncokb.domain.UserDetails;
 import org.mskcc.cbio.oncokb.domain.enumeration.LicenseStatus;
@@ -11,28 +22,24 @@ import org.mskcc.cbio.oncokb.domain.enumeration.LicenseType;
 import org.mskcc.cbio.oncokb.repository.CompanyRepository;
 import org.mskcc.cbio.oncokb.repository.UserDetailsRepository;
 import org.mskcc.cbio.oncokb.repository.UserRepository;
+import org.mskcc.cbio.oncokb.security.uuid.TokenProvider;
+import org.mskcc.cbio.oncokb.service.CompanyDomainService;
+import org.mskcc.cbio.oncokb.service.CompanyService;
+import org.mskcc.cbio.oncokb.service.UserDetailsService;
+import org.mskcc.cbio.oncokb.service.UserService;
 import org.mskcc.cbio.oncokb.service.dto.CompanyDTO;
 import org.mskcc.cbio.oncokb.service.dto.UserDTO;
 import org.mskcc.cbio.oncokb.service.mapper.CompanyDomainMapper;
 import org.mskcc.cbio.oncokb.service.mapper.CompanyMapper;
+import org.mskcc.cbio.oncokb.service.mapper.UserDetailsMapper;
 import org.mskcc.cbio.oncokb.service.mapper.UserMapper;
 import org.mskcc.cbio.oncokb.web.rest.vm.CompanyVM;
-import org.mskcc.cbio.oncokb.service.UserService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.cache.CacheManager;
 import org.springframework.dao.EmptyResultDataAccessException;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-
-import java.util.LinkedList;
-import java.util.List;
-import java.util.Objects;
-import java.util.Optional;
-import java.util.stream.Collectors;
-
-import static org.mskcc.cbio.oncokb.config.cache.CompanyCacheResolver.COMPANIES_BY_ID_CACHE;
-import static org.mskcc.cbio.oncokb.config.cache.CompanyCacheResolver.COMPANIES_BY_NAME_CACHE;
 
 /**
  * Service Implementation for managing {@link Company}.
@@ -51,6 +58,10 @@ public class CompanyServiceImpl implements CompanyService {
 
     private final UserService userService;
 
+    private final UserDetailsService userDetailsService;
+
+    private final UserDetailsMapper userDetailsMapper;
+
     private final CacheManager cacheManager;
 
     private final CacheNameResolver cacheNameResolver;
@@ -59,26 +70,34 @@ public class CompanyServiceImpl implements CompanyService {
 
     private final UserDetailsRepository userDetailsRepository;
 
+    private final TokenProvider tokenProvider;
+
     public CompanyServiceImpl(
         CompanyRepository companyRepository,
         CompanyMapper companyMapper,
         CompanyDomainService companyDomainService,
         CompanyDomainMapper companyDomainMapper,
         UserService userService,
+        UserDetailsService userDetailsService,
+        UserDetailsMapper userDetailsMapper,
         UserMapper userMapper,
         CacheManager cacheManager,
         CacheNameResolver cacheNameResolver,
         UserRepository userRepository,
-        UserDetailsRepository userDetailsRepository
+        UserDetailsRepository userDetailsRepository,
+        TokenProvider tokenProvider
     ) {
         this.companyRepository = companyRepository;
         this.companyMapper = companyMapper;
         this.userMapper = userMapper;
         this.userService = userService;
+        this.userDetailsService = userDetailsService;
+        this.userDetailsMapper = userDetailsMapper;
         this.cacheManager = cacheManager;
         this.cacheNameResolver = cacheNameResolver;
         this.userRepository = userRepository;
         this.userDetailsRepository = userDetailsRepository;
+        this.tokenProvider = tokenProvider;
     }
 
     @Override
@@ -209,9 +228,88 @@ public class CompanyServiceImpl implements CompanyService {
         companyRepository.deleteById(id);
     }
 
+    @Override
+    @Transactional
+    public Optional<CompanyDTO> createServiceAccount(Long id) {
+        Optional<CompanyDTO> companyDtoOptional = findOne(id);
+        if (!companyDtoOptional.isPresent()) {
+            return companyDtoOptional;
+        }
+
+        Company company = companyMapper.toEntity(companyDtoOptional.get());
+        // only allow one service user per company
+        if (company.getServiceUsers().size() == 0) {
+            UserDTO userDTO = new UserDTO();
+            userDTO = new UserDTO();
+            userDTO.setFirstName(company.getName());
+            userDTO.setLastName(UUID.randomUUID().toString());
+            userDTO.setLogin(UUID.randomUUID().toString());
+            userDTO.setActivated(true);
+            userDTO.setLicenseType(company.getLicenseType());
+
+            User user = userService.createUser(userDTO, Optional.empty(), Optional.of(false));
+
+            Optional<UserDetails> userDetailsOptional = userDetailsRepository.findOneByUser(user);
+            if (userDetailsOptional.isPresent()) {
+                company.addServiceUser(userDetailsOptional.get());
+            }
+        }
+        return Optional.of(companyMapper.toDto(company));
+    }
+
+    @Override
+    @Transactional
+    public void deleteServiceAccount(CompanyDTO companyDTO) {
+        Company company = companyMapper.toEntity(companyDTO);
+        Set<UserDetails> serviceUsers = company.getServiceUsers();
+        // should only ever have one service user
+        for (UserDetails userDetails : serviceUsers) {
+            userService.deleteUser(userDetails.getUser().getLogin());
+        }
+        company.getServiceUsers().clear();
+        companyRepository.save(company);
+    }
+
+    @Override
+    @Transactional
+    public Optional<Token> createServiceAccountToken(Long id) {
+        Optional<CompanyDTO> companyDtoOptional = findOne(id);
+        if (!companyDtoOptional.isPresent()) {
+            return Optional.empty();
+        }
+
+        Company company = companyMapper.toEntity(companyDtoOptional.get());
+        if (company.getServiceUsers().size() == 0) {
+            Optional<CompanyDTO> updatedCompanyDto = createServiceAccount(company.getId());
+            if (updatedCompanyDto.isPresent()) {
+                company = companyMapper.toEntity(updatedCompanyDto.get());
+            } else {
+                return Optional.empty();
+            }
+        }
+
+        UserDetails[] serviceUserDetails = company.getServiceUsers().toArray(new UserDetails[company.getServiceUsers().size()]);
+        // since one service user should always be first in array
+        return Optional.of(tokenProvider.createToken(serviceUserDetails[0].getUser(), Optional.empty(), Optional.of(true)));
+    }
+
     private void clearCompanyCaches(Company company) {
         Objects.requireNonNull(cacheManager.getCache(this.cacheNameResolver.getCacheName(COMPANIES_BY_ID_CACHE))).evict(company.getId());
         Objects.requireNonNull(cacheManager.getCache(this.cacheNameResolver.getCacheName(COMPANIES_BY_NAME_CACHE))).evict(company.getName());
+    }
+
+    @Override
+    public Optional<List<Token>> getServiceAccountTokensForCompany(Long id) {
+        Optional<CompanyDTO> companyDtoOptional = findOne(id);
+        if (companyDtoOptional.isPresent()) {
+            CompanyDTO companyDto = companyDtoOptional.get();
+            List<Token> tokens = new ArrayList<>();
+            for (UserDetails serviceUser : companyDto.getServiceUsers()) {
+                tokens.addAll(tokenProvider.getUserTokens(serviceUser.getUser()));
+            }
+            return Optional.of(tokens);
+        } 
+        return Optional.empty();
     }
 
 }

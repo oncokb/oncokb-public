@@ -25,6 +25,30 @@ export type ApiAccessRequest = {
         'requested': boolean
 
 };
+export type Company = {
+    'businessContact': string
+
+        'companyDomains': Array < CompanyDomain >
+
+        'companyType': "PARENT" | "BRANCH" | "UNKNOWN"
+
+        'description': string
+
+        'id': number
+
+        'legalContact': string
+
+        'licenseModel': "FULL" | "LIMITED"
+
+        'licenseStatus': "TRIAL" | "REGULAR" | "TRIAL_EXPIRED" | "EXPIRED" | "UNKNOWN"
+
+        'licenseType': "ACADEMIC" | "COMMERCIAL" | "RESEARCH_IN_COMMERCIAL" | "HOSPITAL"
+
+        'name': string
+
+        'serviceUsers': Array < UserDetails >
+
+};
 export type CompanyDTO = {
     'businessContact': string
 
@@ -47,6 +71,14 @@ export type CompanyDTO = {
         'name': string
 
         'numberOfUsers': number
+
+        'serviceUsers': Array < UserDetails >
+
+};
+export type CompanyDomain = {
+    'id': number
+
+        'name': string
 
 };
 export type CompanyDomainDTO = {
@@ -79,6 +111,8 @@ export type CompanyVM = {
         'name': string
 
         'numberOfUsers': number
+
+        'serviceUsers': Array < UserDetails >
 
 };
 export type Contact = {
@@ -300,6 +334,30 @@ export type UserDTO = {
         'resetKey': string
 
 };
+export type UserDetails = {
+    'additionalInfo': string
+
+        'address': string
+
+        'city': string
+
+        'company': Company
+
+        'companyName': string
+
+        'country': string
+
+        'id': number
+
+        'jobTitle': string
+
+        'licenseType': "ACADEMIC" | "COMMERCIAL" | "RESEARCH_IN_COMMERCIAL" | "HOSPITAL"
+
+        'serviceCompany': Company
+
+        'user': User
+
+};
 export type UserDetailsDTO = {
     'additionalInfo': AdditionalInfoDTO
 
@@ -318,6 +376,8 @@ export type UserDetailsDTO = {
         'jobTitle': string
 
         'licenseType': "ACADEMIC" | "COMMERCIAL" | "RESEARCH_IN_COMMERCIAL" | "HOSPITAL"
+
+        'serviceCompanyId': number
 
         'userId': number
 
@@ -1985,6 +2045,205 @@ export default class API {
         $domain ? : string
     }): Promise < CompanyDTO > {
         return this.getCompanyByNameUsingGETWithHttpInfo(parameters).then(function(response: request.Response) {
+            return response.body;
+        });
+    };
+    getServiceAccountTokensUsingGETURL(parameters: {
+        $queryParameters ? : any
+    }): string {
+        let queryParameters: any = {};
+        let path = '/api/companies/service/token';
+
+        if (parameters.$queryParameters) {
+            Object.keys(parameters.$queryParameters).forEach(function(parameterName) {
+                var parameter = parameters.$queryParameters[parameterName];
+                queryParameters[parameterName] = parameter;
+            });
+        }
+        let keys = Object.keys(queryParameters);
+        return this.domain + path + (keys.length > 0 ? '?' + (keys.map(key => key + '=' + encodeURIComponent(queryParameters[key])).join('&')) : '');
+    };
+
+    /**
+     * getServiceAccountTokens
+     * @method
+     * @name API#getServiceAccountTokensUsingGET
+     */
+    getServiceAccountTokensUsingGETWithHttpInfo(parameters: {
+        $queryParameters ? : any,
+            $domain ? : string
+    }): Promise < request.Response > {
+        const domain = parameters.$domain ? parameters.$domain : this.domain;
+        const errorHandlers = this.errorHandlers;
+        const request = this.request;
+        let path = '/api/companies/service/token';
+        let body: any;
+        let queryParameters: any = {};
+        let headers: any = {};
+        let form: any = {};
+        return new Promise(function(resolve, reject) {
+            headers['Accept'] = '*/*';
+
+            if (parameters.$queryParameters) {
+                Object.keys(parameters.$queryParameters).forEach(function(parameterName) {
+                    var parameter = parameters.$queryParameters[parameterName];
+                    queryParameters[parameterName] = parameter;
+                });
+            }
+
+            request('GET', domain + path, body, headers, queryParameters, form, reject, resolve, errorHandlers);
+
+        });
+    };
+
+    /**
+     * getServiceAccountTokens
+     * @method
+     * @name API#getServiceAccountTokensUsingGET
+     */
+    getServiceAccountTokensUsingGET(parameters: {
+            $queryParameters ? : any,
+                $domain ? : string
+        }): Promise < Array < Token >
+        > {
+            return this.getServiceAccountTokensUsingGETWithHttpInfo(parameters).then(function(response: request.Response) {
+                return response.body;
+            });
+        };
+    createServiceAccountTokenUsingPOSTURL(parameters: {
+        $queryParameters ? : any
+    }): string {
+        let queryParameters: any = {};
+        let path = '/api/companies/service/token';
+
+        if (parameters.$queryParameters) {
+            Object.keys(parameters.$queryParameters).forEach(function(parameterName) {
+                var parameter = parameters.$queryParameters[parameterName];
+                queryParameters[parameterName] = parameter;
+            });
+        }
+        let keys = Object.keys(queryParameters);
+        return this.domain + path + (keys.length > 0 ? '?' + (keys.map(key => key + '=' + encodeURIComponent(queryParameters[key])).join('&')) : '');
+    };
+
+    /**
+     * createServiceAccountToken
+     * @method
+     * @name API#createServiceAccountTokenUsingPOST
+     */
+    createServiceAccountTokenUsingPOSTWithHttpInfo(parameters: {
+        $queryParameters ? : any,
+            $domain ? : string
+    }): Promise < request.Response > {
+        const domain = parameters.$domain ? parameters.$domain : this.domain;
+        const errorHandlers = this.errorHandlers;
+        const request = this.request;
+        let path = '/api/companies/service/token';
+        let body: any;
+        let queryParameters: any = {};
+        let headers: any = {};
+        let form: any = {};
+        return new Promise(function(resolve, reject) {
+            headers['Accept'] = '*/*';
+            headers['Content-Type'] = 'application/json';
+
+            if (parameters.$queryParameters) {
+                Object.keys(parameters.$queryParameters).forEach(function(parameterName) {
+                    var parameter = parameters.$queryParameters[parameterName];
+                    queryParameters[parameterName] = parameter;
+                });
+            }
+
+            request('POST', domain + path, body, headers, queryParameters, form, reject, resolve, errorHandlers);
+
+        });
+    };
+
+    /**
+     * createServiceAccountToken
+     * @method
+     * @name API#createServiceAccountTokenUsingPOST
+     */
+    createServiceAccountTokenUsingPOST(parameters: {
+        $queryParameters ? : any,
+            $domain ? : string
+    }): Promise < Token > {
+        return this.createServiceAccountTokenUsingPOSTWithHttpInfo(parameters).then(function(response: request.Response) {
+            return response.body;
+        });
+    };
+    deleteServiceAccountUsingDELETEURL(parameters: {
+        'id': number,
+        $queryParameters ? : any
+    }): string {
+        let queryParameters: any = {};
+        let path = '/api/companies/service/{id}';
+
+        path = path.replace('{id}', parameters['id'] + '');
+
+        if (parameters.$queryParameters) {
+            Object.keys(parameters.$queryParameters).forEach(function(parameterName) {
+                var parameter = parameters.$queryParameters[parameterName];
+                queryParameters[parameterName] = parameter;
+            });
+        }
+        let keys = Object.keys(queryParameters);
+        return this.domain + path + (keys.length > 0 ? '?' + (keys.map(key => key + '=' + encodeURIComponent(queryParameters[key])).join('&')) : '');
+    };
+
+    /**
+     * deleteServiceAccount
+     * @method
+     * @name API#deleteServiceAccountUsingDELETE
+     * @param {integer} id - id
+     */
+    deleteServiceAccountUsingDELETEWithHttpInfo(parameters: {
+        'id': number,
+        $queryParameters ? : any,
+        $domain ? : string
+    }): Promise < request.Response > {
+        const domain = parameters.$domain ? parameters.$domain : this.domain;
+        const errorHandlers = this.errorHandlers;
+        const request = this.request;
+        let path = '/api/companies/service/{id}';
+        let body: any;
+        let queryParameters: any = {};
+        let headers: any = {};
+        let form: any = {};
+        return new Promise(function(resolve, reject) {
+            headers['Accept'] = '*/*';
+
+            path = path.replace('{id}', parameters['id'] + '');
+
+            if (parameters['id'] === undefined) {
+                reject(new Error('Missing required  parameter: id'));
+                return;
+            }
+
+            if (parameters.$queryParameters) {
+                Object.keys(parameters.$queryParameters).forEach(function(parameterName) {
+                    var parameter = parameters.$queryParameters[parameterName];
+                    queryParameters[parameterName] = parameter;
+                });
+            }
+
+            request('DELETE', domain + path, body, headers, queryParameters, form, reject, resolve, errorHandlers);
+
+        });
+    };
+
+    /**
+     * deleteServiceAccount
+     * @method
+     * @name API#deleteServiceAccountUsingDELETE
+     * @param {integer} id - id
+     */
+    deleteServiceAccountUsingDELETE(parameters: {
+        'id': number,
+        $queryParameters ? : any,
+        $domain ? : string
+    }): Promise < any > {
+        return this.deleteServiceAccountUsingDELETEWithHttpInfo(parameters).then(function(response: request.Response) {
             return response.body;
         });
     };

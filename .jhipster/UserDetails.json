@@ -47,6 +47,13 @@
       "otherEntityRelationshipName": "userDetails",
       "relationshipName": "company",
       "otherEntityField": "id"
+    },
+    {
+      "relationshipName": "serviceCompany",
+      "otherEntityName": "company",
+      "relationshipType": "many-to-one",
+      "otherEntityField": "id",
+      "otherEntityRelationshipName": "userDetails"
     }
   ],
   "changelogDate": "20190826161330",

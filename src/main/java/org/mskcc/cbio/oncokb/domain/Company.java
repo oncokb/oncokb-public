@@ -72,6 +72,9 @@ public class Company implements Serializable {
                inverseJoinColumns = @JoinColumn(name = "company_domain_id", referencedColumnName = "id"))
     private Set<CompanyDomain> companyDomains = new HashSet<>();
 
+    @OneToMany(fetch = FetchType.EAGER, mappedBy = "serviceCompany")
+    private Set<UserDetails> serviceUsers = new HashSet<>();
+
     // jhipster-needle-entity-add-field - JHipster will add fields here
     public Long getId() {
         return id;
@@ -208,6 +211,31 @@ public class Company implements Serializable {
 
     public void setCompanyDomains(Set<CompanyDomain> companyDomains) {
         this.companyDomains = companyDomains;
+    }
+
+    public Set<UserDetails> getServiceUsers() {
+        return serviceUsers;
+    }
+
+    public Company serviceUsers(Set<UserDetails> userDetails) {
+        this.serviceUsers = userDetails;
+        return this;
+    }
+
+    public Company addServiceUser(UserDetails userDetails) {
+        this.serviceUsers.add(userDetails);
+        userDetails.setServiceCompany(this);
+        return this;
+    }
+
+    public Company removeServiceUser(UserDetails userDetails) {
+        this.serviceUsers.remove(userDetails);
+        userDetails.setServiceCompany(null);
+        return this;
+    }
+
+    public void setServiceUsers(Set<UserDetails> userDetails) {
+        this.serviceUsers = userDetails;
     }
     // jhipster-needle-entity-add-getters-setters - JHipster will add getters and setters here
 

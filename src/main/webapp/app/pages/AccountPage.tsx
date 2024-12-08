@@ -7,8 +7,10 @@ import {
   ACCOUNT_TITLES,
   AUTHORITIES,
   H5_FONT_SIZE,
+  H5_MARGIN_BOTTOM,
   LicenseType,
   PAGE_ROUTE,
+  USER_AUTHORITY,
 } from 'app/config/constants';
 import {
   getAccountInfoTitle,
@@ -17,7 +19,7 @@ import {
 } from 'app/pages/account/AccountUtils';
 import { DefaultTooltip } from 'cbioportal-frontend-commons';
 import classnames from 'classnames';
-import { Row, Col } from 'react-bootstrap';
+import { Row, Col, Button } from 'react-bootstrap';
 import SmallPageContainer from 'app/components/SmallPageContainer';
 import { Token } from 'app/shared/api/generated/API';
 import { notifyError, notifySuccess } from 'app/shared/utils/NotificationUtils';
@@ -26,6 +28,7 @@ import TokenInputGroups from 'app/components/tokenInputGroups/TokenInputGroups';
 import client from 'app/shared/api/clientInstance';
 import { SimpleConfirmModal } from 'app/shared/modal/SimpleConfirmModal';
 import { NOT_USED_IN_AI_MODELS } from 'app/config/constants/terms';
+import OncoKBTable from 'app/components/oncokbTable/OncoKBTable';
 
 export type IRegisterProps = {
   authenticationStore: AuthenticationStore;
@@ -60,6 +63,7 @@ export class AccountPage extends React.Component<IRegisterProps> {
   @observable apiAccessJustification = '';
   @observable apiAccessRequested =
     this.account?.additionalInfo?.apiAccessRequest?.requested || false;
+  @observable serviceAccountTokens: Token[] = [];
 
   constructor(props: Readonly<IRegisterProps>) {
     super(props);
@@ -106,6 +110,28 @@ export class AccountPage extends React.Component<IRegisterProps> {
       .catch(error => {
         notifyError(error);
       });
+  }
+
+  @action.bound
+  async getServiceAccountTokens() {
+    this.serviceAccountTokens = await client.getServiceAccountTokensUsingGET(
+      {}
+    );
+  }
+
+  @action.bound
+  async addServiceAccountToken() {
+    try {
+      await client.createServiceAccountTokenUsingPOST({});
+      await this.getServiceAccountTokens();
+      notifySuccess('Service account token is added');
+    } catch (e) {
+      notifyError(e);
+    }
+  }
+
+  componentDidMount(): void {
+    this.getServiceAccountTokens();
   }
 
   @computed
@@ -184,6 +210,9 @@ export class AccountPage extends React.Component<IRegisterProps> {
       </span>
     );
 
+    /* eslint-disable no-console */
+    console.log('HI');
+
     return (
       <SmallPageContainer size={'lg'}>
         <Row className={getSectionClassName(true)}>
@@ -253,14 +282,16 @@ export class AccountPage extends React.Component<IRegisterProps> {
         <Row className={getSectionClassName()}>
           <Col>
             <div className={'d-flex align-items-center'}>
-              <span style={{ fontSize: H5_FONT_SIZE }}>API</span>
-              <InfoIcon
-                placement={'top'}
-                overlay={
-                  'You can have one token to be used. Your token will be automatically renewed after reviewing the license and account information.'
-                }
-                className={'ml-2'}
-              />
+              <h5>
+                API
+                <InfoIcon
+                  placement={'top'}
+                  overlay={
+                    'You can have one token to be used. Your token will be automatically renewed after reviewing the license and account information.'
+                  }
+                  className={'ml-2'}
+                />
+              </h5>
             </div>
             {this.account.authorities.includes(AUTHORITIES.API)
               ? apiAccess
@@ -269,6 +300,52 @@ export class AccountPage extends React.Component<IRegisterProps> {
               : noApiAccess}
           </Col>
         </Row>
+        {this.account.authorities.includes(
+          USER_AUTHORITY.ROLE_COMPANY_ADMIN
+        ) && (
+          <Row className={getSectionClassName()}>
+            <Col>
+              <div>
+                <div className="d-flex align-items-center justify-content-between">
+                  <div className="d-flex align-items-center">
+                    <h5>Service Account</h5>
+                    <InfoIcon
+                      placement={'top'}
+                      overlay={
+                        'Service account tokens are intended for developers and will not need to be renewed, ensuring system stability.'
+                      }
+                      className={'ml-2'}
+                      style={{ marginBottom: H5_MARGIN_BOTTOM }}
+                    />
+                  </div>
+                  <Button
+                    size="sm"
+                    variant="outline-primary"
+                    style={{ marginBottom: H5_MARGIN_BOTTOM }}
+                    onClick={this.addServiceAccountToken}
+                  >
+                    Add Token
+                  </Button>
+                </div>
+              </div>
+              <OncoKBTable
+                data={this.serviceAccountTokens}
+                columns={[
+                  {
+                    Header: 'Name',
+                  },
+                  {
+                    Header: 'Token',
+                    accessor: 'token',
+                  },
+                ]}
+                minRows={1}
+                loading={false}
+                disableSearch
+              />
+            </Col>
+          </Row>
+        )}
         <SimpleConfirmModal
           title="Request API Access"
           body={

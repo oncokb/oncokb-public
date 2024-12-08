@@ -11,6 +11,7 @@ import {
   LicenseStatus,
   PAGE_ROUTE,
   REDIRECT_TIMEOUT_MILLISECONDS,
+  USER_AUTHORITY,
 } from 'app/config/constants';
 import { Alert, Button, Col, Row } from 'react-bootstrap';
 import {
@@ -156,6 +157,17 @@ export default class CompanyPage extends React.Component<ICompanyPage> {
         this.getCompanyStatus = PromiseStatus.complete;
       })
       .catch(() => (this.getCompanyStatus = PromiseStatus.error));
+  }
+
+  @action.bound
+  async deleteServiceAccount() {
+    try {
+      await client.deleteServiceAccountUsingDELETE({ id: this.company.id });
+      notifySuccess('Service account deleted');
+      this.getCompany();
+    } catch (e) {
+      notifyError(e);
+    }
   }
 
   @action.bound
@@ -969,6 +981,7 @@ export default class CompanyPage extends React.Component<ICompanyPage> {
                         <div className={'my-2 text-danger'}>Danger Zone</div>
                         <div>
                           <Button
+                            className="mr-2"
                             variant="danger"
                             onClick={() => {
                               this.showModal = true;
@@ -978,6 +991,14 @@ export default class CompanyPage extends React.Component<ICompanyPage> {
                           >
                             Delete Company
                           </Button>
+                          {this.company.serviceUsers.length > 0 && (
+                            <Button
+                              variant="outline-danger"
+                              onClick={this.deleteServiceAccount}
+                            >
+                              Delete Service Account
+                            </Button>
+                          )}
                         </div>
                       </Col>
                     </Row>

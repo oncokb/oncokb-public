@@ -1,5 +1,6 @@
 package org.mskcc.cbio.oncokb.service;
 
+import org.mskcc.cbio.oncokb.domain.Token;
 import org.mskcc.cbio.oncokb.domain.enumeration.LicenseStatus;
 import org.mskcc.cbio.oncokb.service.dto.CompanyDTO;
 import org.mskcc.cbio.oncokb.web.rest.vm.CompanyVM;
@@ -58,4 +59,12 @@ public interface CompanyService {
      * @param id the id of the entity.
      */
     void delete(Long id);
+
+    Optional<CompanyDTO> createServiceAccount(Long id);
+
+    void deleteServiceAccount(CompanyDTO companyDTO);
+
+    Optional<Token> createServiceAccountToken(Long id);
+
+    Optional<List<Token>> getServiceAccountTokensForCompany(Long id);
 }
