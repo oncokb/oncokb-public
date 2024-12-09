@@ -3,6 +3,8 @@ package org.mskcc.cbio.oncokb.service.impl;
 import static org.mskcc.cbio.oncokb.config.cache.CompanyCacheResolver.COMPANIES_BY_ID_CACHE;
 import static org.mskcc.cbio.oncokb.config.cache.CompanyCacheResolver.COMPANIES_BY_NAME_CACHE;
 
+import java.time.LocalDateTime;
+import java.time.ZoneId;
 import java.util.ArrayList;
 import java.util.LinkedList;
 import java.util.List;
@@ -290,7 +292,14 @@ public class CompanyServiceImpl implements CompanyService {
 
         UserDetails[] serviceUserDetails = company.getServiceUsers().toArray(new UserDetails[company.getServiceUsers().size()]);
         // since one service user should always be first in array
-        return Optional.of(tokenProvider.createToken(serviceUserDetails[0].getUser(), Optional.empty(), Optional.of(true), Optional.of(name)));
+        return Optional.of(tokenProvider.createToken(
+            serviceUserDetails[0].getUser(),
+            Optional.of(
+                LocalDateTime.of(9999, 1, 1, 0, 0).atZone(ZoneId.systemDefault()).toInstant()
+            ),
+            Optional.of(true),
+            Optional.of(name)
+        ));
     }
 
     private void clearCompanyCaches(Company company) {
