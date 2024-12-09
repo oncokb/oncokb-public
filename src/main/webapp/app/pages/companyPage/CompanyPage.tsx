@@ -176,7 +176,9 @@ export default class CompanyPage extends React.Component<ICompanyPage> {
   @action.bound
   async deleteServiceAccountToken(token: Token) {
     try {
-      await client.deleteTokenUsingDELETE({ token });
+      await client.deleteTokenWithoutSideEffectsUsingDELETE({
+        uuid: token.token,
+      });
       notifySuccess(`Token "${token.name}" is deleted.`);
     } catch (e) {
       notifyError(e);

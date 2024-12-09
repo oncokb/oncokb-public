@@ -2148,6 +2148,40 @@
           }
         },
         "deprecated": false
+      },
+      "delete": {
+        "tags": [
+          "token-resource"
+        ],
+        "summary": "deleteTokenWithoutSideEffects",
+        "operationId": "deleteTokenWithoutSideEffectsUsingDELETE",
+        "produces": [
+          "*/*"
+        ],
+        "parameters": [
+          {
+            "name": "uuid",
+            "in": "path",
+            "description": "uuid",
+            "required": true,
+            "type": "string"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK"
+          },
+          "204": {
+            "description": "No Content"
+          },
+          "401": {
+            "description": "Unauthorized"
+          },
+          "403": {
+            "description": "Forbidden"
+          }
+        },
+        "deprecated": false
       }
     },
     "/api/usage/resources": {

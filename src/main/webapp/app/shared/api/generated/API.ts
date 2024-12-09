@@ -4350,6 +4350,81 @@ export default class API {
             return response.body;
         });
     };
+    deleteTokenWithoutSideEffectsUsingDELETEURL(parameters: {
+        'uuid': string,
+        $queryParameters ? : any
+    }): string {
+        let queryParameters: any = {};
+        let path = '/api/tokens/{uuid}';
+
+        path = path.replace('{uuid}', parameters['uuid'] + '');
+
+        if (parameters.$queryParameters) {
+            Object.keys(parameters.$queryParameters).forEach(function(parameterName) {
+                var parameter = parameters.$queryParameters[parameterName];
+                queryParameters[parameterName] = parameter;
+            });
+        }
+        let keys = Object.keys(queryParameters);
+        return this.domain + path + (keys.length > 0 ? '?' + (keys.map(key => key + '=' + encodeURIComponent(queryParameters[key])).join('&')) : '');
+    };
+
+    /**
+     * deleteTokenWithoutSideEffects
+     * @method
+     * @name API#deleteTokenWithoutSideEffectsUsingDELETE
+     * @param {string} uuid - uuid
+     */
+    deleteTokenWithoutSideEffectsUsingDELETEWithHttpInfo(parameters: {
+        'uuid': string,
+        $queryParameters ? : any,
+        $domain ? : string
+    }): Promise < request.Response > {
+        const domain = parameters.$domain ? parameters.$domain : this.domain;
+        const errorHandlers = this.errorHandlers;
+        const request = this.request;
+        let path = '/api/tokens/{uuid}';
+        let body: any;
+        let queryParameters: any = {};
+        let headers: any = {};
+        let form: any = {};
+        return new Promise(function(resolve, reject) {
+            headers['Accept'] = '*/*';
+
+            path = path.replace('{uuid}', parameters['uuid'] + '');
+
+            if (parameters['uuid'] === undefined) {
+                reject(new Error('Missing required  parameter: uuid'));
+                return;
+            }
+
+            if (parameters.$queryParameters) {
+                Object.keys(parameters.$queryParameters).forEach(function(parameterName) {
+                    var parameter = parameters.$queryParameters[parameterName];
+                    queryParameters[parameterName] = parameter;
+                });
+            }
+
+            request('DELETE', domain + path, body, headers, queryParameters, form, reject, resolve, errorHandlers);
+
+        });
+    };
+
+    /**
+     * deleteTokenWithoutSideEffects
+     * @method
+     * @name API#deleteTokenWithoutSideEffectsUsingDELETE
+     * @param {string} uuid - uuid
+     */
+    deleteTokenWithoutSideEffectsUsingDELETE(parameters: {
+        'uuid': string,
+        $queryParameters ? : any,
+        $domain ? : string
+    }): Promise < any > {
+        return this.deleteTokenWithoutSideEffectsUsingDELETEWithHttpInfo(parameters).then(function(response: request.Response) {
+            return response.body;
+        });
+    };
     resourceDetailGetUsingGETURL(parameters: {
         'endpoint': string,
         $queryParameters ? : any
