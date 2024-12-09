@@ -465,4 +465,32 @@ public class CompanyServiceIT {
         assertThat(latestUserDTO.isActivated()).isTrue();
     }
 
+    @Test
+    @Transactional
+    public void assertThatCreatingNewServiceAccountTokenAlsoCreatesServiceAccount() {
+        CompanyDTO company = companyService.createCompany(companyDTO);
+        assertThat(company.getServiceUsers().size() == 0);
+
+        // Should create service user and new token
+        Long id = company.getId();
+        Token token = companyService.createServiceAccountToken(company.getId(), "New token").get();
+        company = companyService.findOne(company.getId()).get();
+        assertThat(company.getServiceUsers().size() == 1);
+        assertThat(tokenService.findByToken(token.getToken()).get().getName() == "New token");
+    }
+
+    @Test
+    @Transactional
+    public void assertThatOnlyOneServiceUserCanBeCreatedPerCompany() {
+        CompanyDTO company = companyService.createCompany(companyDTO);
+        assertThat(company.getServiceUsers().size() == 0);
+
+        companyService.createServiceAccount(company.getId());
+        company = companyService.findOne(company.getId()).get();
+        assertThat(company.getServiceUsers().size() == 1);
+
+        companyService.createServiceAccount(company.getId());
+        company = companyService.findOne(company.getId()).get();
+        assertThat(company.getServiceUsers().size() == 1);
+    }
 }
