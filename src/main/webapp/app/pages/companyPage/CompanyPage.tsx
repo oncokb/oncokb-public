@@ -71,6 +71,7 @@ import { RouterStore } from 'mobx-react-router';
 import { TEXT_VAL } from 'app/shared/utils/FormValidationUtils';
 import { Helmet } from 'react-helmet-async';
 import { ToggleValue } from '../usageAnalysisPage/usage-analysis-utils';
+import ButtonWithTooltip from 'app/shared/button/ButtonWithTooltip';
 
 interface MatchParams {
   id: string;
@@ -109,6 +110,8 @@ enum SimpleConfirmModalType {
   NA,
   DELETE_COMPANY,
   UPDATE_COMPANY,
+  DELETE_SERVICE_ACCOUNT_TOKEN,
+  DELETE_SERVICE_ACCOUNT,
 }
 
 @inject('routing')
@@ -137,10 +140,14 @@ export default class CompanyPage extends React.Component<ICompanyPage> {
   @observable resourcesTypeToggleValue: ToggleValue =
     ToggleValue.PUBLIC_RESOURCES;
 
+  @observable serviceAccountTokens: Token[] = [];
+  @observable tokenToDelete: Token | undefined;
+
   constructor(props: ICompanyPage) {
     super(props);
     this.getCompany();
     this.getDropdownUsers();
+    this.getServiceAccountTokens();
   }
 
   @action
@@ -160,6 +167,31 @@ export default class CompanyPage extends React.Component<ICompanyPage> {
   }
 
   @action.bound
+  async getServiceAccountTokens() {
+    this.serviceAccountTokens = await client.getServiceAccountTokensForCompanyUsingGET(
+      { id: parseInt(this.props.match.params.id, 10) }
+    );
+  }
+
+  @action.bound
+  async deleteServiceAccountToken(token: Token) {
+    try {
+      await client.deleteTokenUsingDELETE({ token });
+      notifySuccess(`Token "${token.name}" is deleted.`);
+    } catch (e) {
+      notifyError(e);
+    }
+
+    try {
+      await this.getServiceAccountTokens();
+    } catch (e) {
+      notifyError(
+        Error('Error fetching service account tokens. Please refresh the page.')
+      );
+    }
+  }
+
+  @action.bound
   async deleteServiceAccount() {
     try {
       await client.deleteServiceAccountUsingDELETE({ id: this.company.id });
@@ -167,6 +199,14 @@ export default class CompanyPage extends React.Component<ICompanyPage> {
       this.getCompany();
     } catch (e) {
       notifyError(e);
+    }
+
+    try {
+      await this.getServiceAccountTokens();
+    } catch (e) {
+      notifyError(
+        Error('Error fetching service account tokens. Please refresh the page.')
+      );
     }
   }
 
@@ -269,6 +309,17 @@ export default class CompanyPage extends React.Component<ICompanyPage> {
         break;
       case SimpleConfirmModalType.DELETE_COMPANY:
         this.onConfirmDeleteAccountButton();
+        break;
+      case SimpleConfirmModalType.DELETE_SERVICE_ACCOUNT_TOKEN:
+        if (this.tokenToDelete) {
+          this.deleteServiceAccountToken(this.tokenToDelete);
+          this.tokenToDelete = undefined;
+        }
+        this.showModal = false;
+        break;
+      case SimpleConfirmModalType.DELETE_SERVICE_ACCOUNT:
+        this.deleteServiceAccount();
+        this.showModal = false;
         break;
       case SimpleConfirmModalType.NA:
       default:
@@ -967,6 +1018,59 @@ export default class CompanyPage extends React.Component<ICompanyPage> {
                     </Row>
                     <Row className={getSectionClassName()}>
                       <Col>
+                        <div className={'font-weight-bold'}>
+                          Service Account
+                        </div>
+                        <div className="mt-2">
+                          <OncoKBTable
+                            data={this.serviceAccountTokens}
+                            columns={[
+                              {
+                                Header: 'Name',
+                                accessor: 'name',
+                                width: 400,
+                              },
+                              {
+                                Header: 'Token',
+                                accessor: 'token',
+                              },
+                              {
+                                Header: 'Actions',
+                                width: 150,
+                                Cell: (tableProps: { original: Token }) => {
+                                  return (
+                                    <ButtonWithTooltip
+                                      tooltipProps={{
+                                        placement: 'top',
+                                        overlay: 'Delete token',
+                                      }}
+                                      buttonProps={{
+                                        className: 'bg-danger border-danger',
+                                        onClick: () => {
+                                          this.showModal = true;
+                                          this.tokenToDelete =
+                                            tableProps.original;
+                                          this.simpleConfirmModalType =
+                                            SimpleConfirmModalType.DELETE_SERVICE_ACCOUNT_TOKEN;
+                                        },
+                                      }}
+                                      buttonContent={
+                                        <i className={'fa fa-trash'}></i>
+                                      }
+                                    />
+                                  );
+                                },
+                              },
+                            ]}
+                            minRows={1}
+                            loading={false}
+                            disableSearch
+                          />
+                        </div>
+                      </Col>
+                    </Row>
+                    <Row className={getSectionClassName()}>
+                      <Col>
                         <Button
                           id="update-company"
                           variant="primary"
@@ -994,7 +1098,11 @@ export default class CompanyPage extends React.Component<ICompanyPage> {
                           {this.company.serviceUsers.length > 0 && (
                             <Button
                               variant="outline-danger"
-                              onClick={this.deleteServiceAccount}
+                              onClick={() => {
+                                this.showModal = true;
+                                this.simpleConfirmModalType =
+                                  SimpleConfirmModalType.DELETE_SERVICE_ACCOUNT;
+                              }}
                             >
                               Delete Service Account
                             </Button>

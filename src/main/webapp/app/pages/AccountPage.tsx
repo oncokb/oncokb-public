@@ -1,34 +1,35 @@
-import React from 'react';
-import { inject, observer } from 'mobx-react';
-import { action, computed, observable } from 'mobx';
-import { Redirect } from 'react-router-dom';
-import AuthenticationStore from 'app/store/AuthenticationStore';
+import SmallPageContainer from 'app/components/SmallPageContainer';
+import OncoKBTable from 'app/components/oncokbTable/OncoKBTable';
+import TokenInputGroups from 'app/components/tokenInputGroups/TokenInputGroups';
 import {
   ACCOUNT_TITLES,
   AUTHORITIES,
-  H5_FONT_SIZE,
   H5_MARGIN_BOTTOM,
   LicenseType,
   PAGE_ROUTE,
   USER_AUTHORITY,
 } from 'app/config/constants';
+import { NOT_USED_IN_AI_MODELS } from 'app/config/constants/terms';
 import {
   getAccountInfoTitle,
   getLicenseTitle,
   getSectionClassName,
 } from 'app/pages/account/AccountUtils';
+import client from 'app/shared/api/clientInstance';
+import { Token } from 'app/shared/api/generated/API';
+import InfoIcon from 'app/shared/icons/InfoIcon';
+import { SimpleConfirmModal } from 'app/shared/modal/SimpleConfirmModal';
+import { TEXT_VAL } from 'app/shared/utils/FormValidationUtils';
+import { notifyError, notifySuccess } from 'app/shared/utils/NotificationUtils';
+import AuthenticationStore from 'app/store/AuthenticationStore';
+import { AvField, AvForm } from 'availity-reactstrap-validation';
 import { DefaultTooltip } from 'cbioportal-frontend-commons';
 import classnames from 'classnames';
-import { Row, Col, Button } from 'react-bootstrap';
-import SmallPageContainer from 'app/components/SmallPageContainer';
-import { Token } from 'app/shared/api/generated/API';
-import { notifyError, notifySuccess } from 'app/shared/utils/NotificationUtils';
-import InfoIcon from 'app/shared/icons/InfoIcon';
-import TokenInputGroups from 'app/components/tokenInputGroups/TokenInputGroups';
-import client from 'app/shared/api/clientInstance';
-import { SimpleConfirmModal } from 'app/shared/modal/SimpleConfirmModal';
-import { NOT_USED_IN_AI_MODELS } from 'app/config/constants/terms';
-import OncoKBTable from 'app/components/oncokbTable/OncoKBTable';
+import { action, computed, observable } from 'mobx';
+import { inject, observer } from 'mobx-react';
+import React from 'react';
+import { Button, Col, Modal, Row } from 'react-bootstrap';
+import { Redirect } from 'react-router-dom';
 
 export type IRegisterProps = {
   authenticationStore: AuthenticationStore;
@@ -59,14 +60,16 @@ export const InfoRow: React.FunctionComponent<{
 @observer
 export class AccountPage extends React.Component<IRegisterProps> {
   @observable copiedIdToken = false;
-  @observable showConfirmModal = false;
+  @observable showApiAccessConfirmModal = false;
   @observable apiAccessJustification = '';
   @observable apiAccessRequested =
     this.account?.additionalInfo?.apiAccessRequest?.requested || false;
+  @observable showCreateServiceAccountTokenModal = false;
   @observable serviceAccountTokens: Token[] = [];
 
   constructor(props: Readonly<IRegisterProps>) {
     super(props);
+    this.getServiceAccountTokens();
   }
 
   @computed
@@ -120,18 +123,20 @@ export class AccountPage extends React.Component<IRegisterProps> {
   }
 
   @action.bound
-  async addServiceAccountToken() {
+  async addServiceAccountToken(name: string) {
     try {
-      await client.createServiceAccountTokenUsingPOST({});
+      await client.createServiceAccountTokenUsingPOST({ name });
       await this.getServiceAccountTokens();
+      this.hideCreateServiceAccountTokenModal();
       notifySuccess('Service account token is added');
     } catch (e) {
       notifyError(e);
     }
   }
 
-  componentDidMount(): void {
-    this.getServiceAccountTokens();
+  @action.bound
+  hideCreateServiceAccountTokenModal() {
+    this.showCreateServiceAccountTokenModal = false;
   }
 
   @computed
@@ -196,7 +201,7 @@ export class AccountPage extends React.Component<IRegisterProps> {
         You do not have API access. Click{' '}
         <span
           style={{ cursor: 'pointer' }}
-          onClick={() => (this.showConfirmModal = true)}
+          onClick={() => (this.showApiAccessConfirmModal = true)}
         >
           HERE
         </span>{' '}
@@ -322,7 +327,9 @@ export class AccountPage extends React.Component<IRegisterProps> {
                     size="sm"
                     variant="outline-primary"
                     style={{ marginBottom: H5_MARGIN_BOTTOM }}
-                    onClick={this.addServiceAccountToken}
+                    onClick={() => {
+                      this.showCreateServiceAccountTokenModal = true;
+                    }}
                   >
                     Add Token
                   </Button>
@@ -333,6 +340,7 @@ export class AccountPage extends React.Component<IRegisterProps> {
                 columns={[
                   {
                     Header: 'Name',
+                    accessor: 'name',
                   },
                   {
                     Header: 'Token',
@@ -364,7 +372,7 @@ export class AccountPage extends React.Component<IRegisterProps> {
             </>
           }
           confirmDisabled={this.apiAccessJustification.length === 0}
-          onCancel={() => (this.showConfirmModal = false)}
+          onCancel={() => (this.showApiAccessConfirmModal = false)}
           onConfirm={async () => {
             try {
               await client.requestApiAccessUsingPOST({
@@ -378,10 +386,49 @@ export class AccountPage extends React.Component<IRegisterProps> {
             } catch (error) {
               notifyError(error);
             }
-            this.showConfirmModal = false;
+            this.showApiAccessConfirmModal = false;
           }}
-          show={this.showConfirmModal}
+          show={this.showApiAccessConfirmModal}
         />
+        <Modal
+          show={this.showCreateServiceAccountTokenModal}
+          backdrop="static"
+          onHide={this.hideCreateServiceAccountTokenModal}
+        >
+          <Modal.Header closeButton>
+            <Modal.Title>Create Servive Account Token</Modal.Title>
+          </Modal.Header>
+          <AvForm
+            onValidSubmit={(_event: any, values: any) => {
+              console.log(values);
+              this.addServiceAccountToken(values.name);
+            }}
+          >
+            <Modal.Body>
+              <AvField
+                name="name"
+                label={'Name'}
+                validate={{
+                  required: {
+                    value: true,
+                    errorMessage: 'Token name is required.',
+                  },
+                  ...TEXT_VAL,
+                }}
+              />
+            </Modal.Body>
+            <Modal.Footer>
+              <Button
+                className="mr-2"
+                variant="outline-danger"
+                onClick={this.hideCreateServiceAccountTokenModal}
+              >
+                Cancel
+              </Button>
+              <Button type="submit">Create Token</Button>
+            </Modal.Footer>
+          </AvForm>
+        </Modal>
       </SmallPageContainer>
     );
   }

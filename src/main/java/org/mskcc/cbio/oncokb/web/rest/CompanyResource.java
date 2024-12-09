@@ -221,9 +221,15 @@ public class CompanyResource {
         return ResponseEntity.ok().build();
     }
 
+    /* ONLY ROLE_ADMIN */
+    @GetMapping("/companies/service/token/{id}")
+    public ResponseEntity<List<Token>> getServiceAccountTokensForCompany(@PathVariable Long id) {
+        return ResponseUtil.wrapOrNotFound(companyService.getServiceAccountTokensForCompany(id));
+    }
+
     /* ONLY ROLE_COMPANY_ADMIN */
     @PostMapping("/companies/service/token") 
-    public ResponseEntity<Token> createServiceAccountToken() {
+    public ResponseEntity<Token> createServiceAccountToken(@RequestBody String name) {
         Optional<String> currentUserLoginOptional = SecurityUtils.getCurrentUserLogin();
         if (!currentUserLoginOptional.isPresent()) {
             throw new CustomMessageRuntimeException("User is not logged in");
@@ -235,7 +241,7 @@ public class CompanyResource {
         }
 
         UserDTO userDTO = userMapper.userToUserDTO(userOptional.get());
-        return ResponseUtil.wrapOrNotFound(companyService.createServiceAccountToken(userDTO.getCompany().getId()));
+        return ResponseUtil.wrapOrNotFound(companyService.createServiceAccountToken(userDTO.getCompany().getId(), name));
     }
 
     /* ONLY ROLE_COMPANY_ADMIN */

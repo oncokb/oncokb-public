@@ -64,7 +64,7 @@ public interface CompanyService {
 
     void deleteServiceAccount(CompanyDTO companyDTO);
 
-    Optional<Token> createServiceAccountToken(Long id);
+    Optional<Token> createServiceAccountToken(Long id, String name);
 
     Optional<List<Token>> getServiceAccountTokensForCompany(Long id);
 }

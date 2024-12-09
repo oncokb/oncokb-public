@@ -272,7 +272,7 @@ public class CompanyServiceImpl implements CompanyService {
 
     @Override
     @Transactional
-    public Optional<Token> createServiceAccountToken(Long id) {
+    public Optional<Token> createServiceAccountToken(Long id, String name) {
         Optional<CompanyDTO> companyDtoOptional = findOne(id);
         if (!companyDtoOptional.isPresent()) {
             return Optional.empty();
@@ -290,7 +290,7 @@ public class CompanyServiceImpl implements CompanyService {
 
         UserDetails[] serviceUserDetails = company.getServiceUsers().toArray(new UserDetails[company.getServiceUsers().size()]);
         // since one service user should always be first in array
-        return Optional.of(tokenProvider.createToken(serviceUserDetails[0].getUser(), Optional.empty(), Optional.of(true)));
+        return Optional.of(tokenProvider.createToken(serviceUserDetails[0].getUser(), Optional.empty(), Optional.of(true), Optional.of(name)));
     }
 
     private void clearCompanyCaches(Company company) {
