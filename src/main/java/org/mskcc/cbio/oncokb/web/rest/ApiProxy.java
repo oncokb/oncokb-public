@@ -94,7 +94,7 @@ public class ApiProxy {
         }
     }
 
-    @RequestMapping("/private/utils/data/sqlDump")
+    @RequestMapping(path = {"/private/utils/data/sqlDump", "/private/utils/data/transcriptSqlDump"})
     public ResponseEntity<byte[]> proxyDataReleaseDownload(@RequestBody(required = false) String body, HttpMethod method, HttpServletRequest request)
         throws URISyntaxException {
         URI uri = apiProxyService.prepareURI(request);

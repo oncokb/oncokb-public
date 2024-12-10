@@ -13,6 +13,7 @@ import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.bind.annotation.ExceptionHandler;
+import org.springframework.web.client.HttpClientErrorException;
 import org.springframework.web.context.request.NativeWebRequest;
 import org.springframework.web.context.request.WebRequest;
 import org.springframework.core.env.Environment;
@@ -54,6 +55,20 @@ public class ExceptionTranslator implements ProblemHandling, SecurityAdviceTrait
 
     public ExceptionTranslator(Environment env) {
         this.env = env;
+    }
+
+    @ExceptionHandler
+    public ResponseEntity<Problem> handleHttpClientErrorException(HttpClientErrorException ex, NativeWebRequest request) {
+        Problem problem = Problem.builder()
+            .withType(ErrorConstants.DEFAULT_TYPE)
+            .withTitle("HTTP Error")
+            .withStatus(Status.valueOf(ex.getStatusCode().value()))
+            .with(MESSAGE_KEY, "error.http." + ex.getStatusCode().value())
+            .withDetail(ex.getResponseBodyAsString())
+            .with(PATH_KEY, request.getNativeRequest(HttpServletRequest.class).getRequestURI())
+            .build();
+
+        return create(ex, problem, request);
     }
 
     /**
@@ -146,7 +161,6 @@ public class ExceptionTranslator implements ProblemHandling, SecurityAdviceTrait
 
     @Override
     public ProblemBuilder prepare(final Throwable throwable, final StatusType status, final URI type) {
-        
         Collection<String> activeProfiles = Arrays.asList(env.getActiveProfiles());
 
         if (activeProfiles.contains(JHipsterConstants.SPRING_PROFILE_PRODUCTION)) {
@@ -161,7 +175,6 @@ public class ExceptionTranslator implements ProblemHandling, SecurityAdviceTrait
                         .map(this::toProblem)
                         .orElse(null));
             }
-    
             if (throwable instanceof DataAccessException) {
                 return Problem.builder()
                     .withType(type)
@@ -173,7 +186,6 @@ public class ExceptionTranslator implements ProblemHandling, SecurityAdviceTrait
                         .map(this::toProblem)
                         .orElse(null));
             }
-    
             if (containsPackageName(throwable.getMessage())) {
                 return Problem.builder()
                     .withType(type)

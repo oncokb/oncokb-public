@@ -23,7 +23,6 @@ import { Linkout } from 'app/shared/links/Linkout';
 import { COLOR_BLACK, COLOR_DARK_BLUE, COLOR_WARNING } from 'app/config/theme';
 import {
   LinkedInLink,
-  TwitterLink,
   UserGoogleGroupLink,
 } from 'app/shared/links/SocialMediaLinks';
 
@@ -60,8 +59,7 @@ if (
         <div>
           <div>
             <span>
-              Follow us on <LinkedInLink /> and <TwitterLink />, or subscribe to
-              our{' '}
+              Follow us on <LinkedInLink />, or subscribe to our{' '}
               <UserGoogleGroupLink>low-volume email list</UserGoogleGroupLink>,
               to stay updated on our latest data releases and new features!
             </span>

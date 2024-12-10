@@ -8,6 +8,7 @@ import { observer, inject } from 'mobx-react';
 import { observable, action } from 'mobx';
 import { LoadingButton } from 'app/shared/button/LoadingButton';
 import { IDownloadButtonWithPromise } from 'app/components/downloadButtonWithPromise/DownloadButtonWithPromise';
+import { notifyError } from 'app/shared/utils/NotificationUtils';
 
 interface IAuthDownloadButton extends IDownloadButtonWithPromise {
   routing?: RouterStore;
@@ -28,10 +29,19 @@ export class AuthDownloadButton extends React.Component<IAuthDownloadButton> {
         .then(data => {
           if (Array.isArray(data)) {
             data = data.join('');
+          } else if (data === undefined || data === null) {
+            return;
           }
           fileDownload(data, this.props.fileName, this.props.mime);
         })
-        .catch(error => {})
+        .catch(error => {
+          console.error(error);
+          notifyError(
+            new Error(
+              `There was an error fetching the file "${this.props.fileName}"`
+            )
+          );
+        })
         .finally(() => {
           this.downloading = false;
         });

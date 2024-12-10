@@ -38,21 +38,35 @@ const getDataTitle = (date: string, version: string) => {
   return `${getNewsTitle(date)} (${version})`;
 };
 
+function getMajorVersion(versionString: string): number | undefined {
+  const match = versionString.match(/^v(\d+)\./);
+
+  return match ? parseInt(match[1], 10) : undefined;
+}
+function getMinorVersion(versionString: string): number | undefined {
+  const match = versionString.match(/^v(\d+)\.(\d+)/);
+
+  return match ? parseInt(match[2], 10) : undefined;
+}
+
 const BUTTON_CLASS_NAME = 'mr-2 my-1';
 const DownloadButtonGroups: React.FunctionComponent<{
   data: DownloadAvailabilityWithDate;
 }> = props => {
+  const majorVersion = getMajorVersion(props.data.version) ?? 0;
+  const minorVersion = getMinorVersion(props.data.version) ?? 0;
+  const versionIsLessThan4 = majorVersion < 4;
   return (
     <>
       {props.data.hasAllCuratedGenes ? (
         <AuthDownloadButton
           className={BUTTON_CLASS_NAME}
           fileName={`all_curated_genes_${props.data.version}.tsv`}
-          getDownloadData={() =>
-            oncokbClient.utilsAllCuratedGenesTxtGetUsingGET({
+          getDownloadData={() => {
+            return oncokbClient.utilsAllCuratedGenesTxtGetUsingGET({
               version: props.data.version,
-            })
-          }
+            });
+          }}
           buttonText="All Curated Genes"
         />
       ) : null}
@@ -60,26 +74,56 @@ const DownloadButtonGroups: React.FunctionComponent<{
         <AuthDownloadButton
           className={BUTTON_CLASS_NAME}
           fileName={`cancer_gene_list_${props.data.version}.tsv`}
-          getDownloadData={() =>
-            oncokbClient.utilsCancerGeneListTxtGetUsingGET({
+          getDownloadData={() => {
+            return oncokbClient.utilsCancerGeneListTxtGetUsingGET({
               version: props.data.version,
-            })
-          }
+            });
+          }}
           buttonText="Cancer Gene List"
         />
       ) : null}
       {props.data.hasAllActionableVariants ? (
-        <AuthDownloadButton
-          className={BUTTON_CLASS_NAME}
-          fileName={`oncokb_${props.data.version.replace('.', '_')}.sql.gz`}
-          getDownloadData={async () => {
-            const data = await oncokbPrivateClient.utilDataSqlDumpGetUsingGET({
-              version: props.data.version,
-            });
-            return data;
-          }}
-          buttonText="Data Dump"
-        />
+        <>
+          <AuthDownloadButton
+            className={BUTTON_CLASS_NAME}
+            fileName={`oncokb_${props.data.version.replace('.', '_')}.sql.gz`}
+            getDownloadData={async () => {
+              const data = await oncokbPrivateClient.utilDataSqlDumpGetUsingGET(
+                {
+                  version: props.data.version,
+                }
+              );
+              return data;
+            }}
+            buttonText="Data Dump"
+          />
+          <AuthDownloadButton
+            disabled={versionIsLessThan4}
+            title={
+              versionIsLessThan4
+                ? 'Not available for versions below 4.0'
+                : undefined
+            }
+            className={BUTTON_CLASS_NAME}
+            fileName={`oncokb_transcript_${props.data.version.replace(
+              '.',
+              '_'
+            )}.sql.gz`}
+            getDownloadData={async () => {
+              const version =
+                majorVersion === 4 && minorVersion < 23
+                  ? 'v4.23'
+                  : props.data.version;
+              const data = await oncokbPrivateClient.utilDataTranscriptSqlDumpUsingGET(
+                {
+                  version,
+                }
+              );
+              return data;
+            }}
+            buttonText="Transcript Data"
+          />
+        </>
       ) : null}
     </>
   );

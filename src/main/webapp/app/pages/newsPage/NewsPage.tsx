@@ -34,7 +34,6 @@ import { FdaApprovalLink } from 'app/pages/newsPage/Links';
 import { LevelOfEvidencePageLink } from 'app/shared/links/LevelOfEvidencePageLink';
 import {
   LinkedInLink,
-  TwitterLink,
   UserGoogleGroupLink,
 } from 'app/shared/links/SocialMediaLinks';
 import { Helmet } from 'react-helmet-async';
@@ -80,13 +79,14 @@ export default class NewsPage extends React.Component<{
           <p>
             <b>Stay tuned</b> for future data updates (improved annotations, new
             alterations), as well as new features. You can follow us on{' '}
-            <LinkedInLink /> and <TwitterLink />, or subscribe to our{' '}
+            <LinkedInLink />, or subscribe to our{' '}
             <UserGoogleGroupLink>low-volume email list</UserGoogleGroupLink> for
             updates.
           </p>
           <CitationText />
         </div>
         <div className="mt-2">
+          <NewsList date={'12192024'} />
           <NewsList date={'11262024'} />
           <NewsList date={'10242024'} />
           <NewsList date={'09252024'} />

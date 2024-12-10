@@ -5,12 +5,16 @@ export const FdaApprovalLink: React.FunctionComponent<{
   link: string;
   approval: string;
   year?: string;
+  for?: string;
 }> = props => {
   let linkText = 'FDA approval ';
   if (props.year) {
     linkText += `(${props.year}) `;
   }
   linkText += `of ${props.approval}`;
+  if (props.for) {
+    linkText += ` for ${props.for}`;
+  }
   return <Linkout link={props.link}>{linkText}</Linkout>;
 };
 export const FdaWithdrawalLink: React.FunctionComponent<{
