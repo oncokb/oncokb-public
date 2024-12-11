@@ -6,6 +6,8 @@ import static org.mskcc.cbio.oncokb.config.cache.CompanyCacheResolver.COMPANIES_
 import java.time.LocalDateTime;
 import java.time.ZoneId;
 import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.HashSet;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Objects;
@@ -24,6 +26,7 @@ import org.mskcc.cbio.oncokb.domain.enumeration.LicenseType;
 import org.mskcc.cbio.oncokb.repository.CompanyRepository;
 import org.mskcc.cbio.oncokb.repository.UserDetailsRepository;
 import org.mskcc.cbio.oncokb.repository.UserRepository;
+import org.mskcc.cbio.oncokb.security.AuthoritiesConstants;
 import org.mskcc.cbio.oncokb.security.uuid.TokenProvider;
 import org.mskcc.cbio.oncokb.service.CompanyDomainService;
 import org.mskcc.cbio.oncokb.service.CompanyService;
@@ -248,6 +251,7 @@ public class CompanyServiceImpl implements CompanyService {
             userDTO.setLogin(UUID.randomUUID().toString());
             userDTO.setActivated(true);
             userDTO.setLicenseType(company.getLicenseType());
+            userDTO.setAuthorities(new HashSet<>(Arrays.asList(AuthoritiesConstants.ROLE_SERVICE_ACCOUNT)));
 
             User user = userService.createUser(userDTO, Optional.empty(), Optional.of(false));
 

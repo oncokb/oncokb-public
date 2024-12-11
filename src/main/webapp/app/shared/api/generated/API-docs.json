@@ -2153,8 +2153,8 @@
         "tags": [
           "token-resource"
         ],
-        "summary": "deleteTokenWithoutSideEffects",
-        "operationId": "deleteTokenWithoutSideEffectsUsingDELETE",
+        "summary": "deleteTokenWithoutTransferringStats",
+        "operationId": "deleteTokenWithoutTransferringStatsUsingDELETE",
         "produces": [
           "*/*"
         ],

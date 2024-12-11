@@ -101,7 +101,7 @@ public class TokenResource {
     }
 
     @DeleteMapping("/tokens/{uuid}")
-    public ResponseEntity<Void> deleteTokenWithoutSideEffects(@PathVariable String uuid) {
+    public ResponseEntity<Void> deleteTokenWithoutTransferringStats(@PathVariable String uuid) {
         log.debug("REST request to delete Token : {}", uuid);
         Optional<Token> token = tokenService.findByToken(UUID.fromString(uuid));
         if (!token.isPresent()) {

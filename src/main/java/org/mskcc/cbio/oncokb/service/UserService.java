@@ -534,7 +534,7 @@ public class UserService {
     @Transactional(readOnly = true)
     @Cacheable(cacheResolver = "userCacheResolver", key = "#root.methodName")
     public Page<UserDTO> getAllManagedUsers(Pageable pageable) {
-        List<User> users = userRepository.findAllByLoginNot(pageable, Constants.ANONYMOUS_USER).getContent();
+        List<User> users = userRepository.findAllUsersWithoutAuthorityAndLoginNot(AuthoritiesConstants.ROLE_SERVICE_ACCOUNT, Constants.ANONYMOUS_USER);
         List<UserDTO> userDTOs = findAllUsersWithUserDetailsByUsersIn(users);
         return new PageImpl<>(userDTOs, pageable, users.size());
     }

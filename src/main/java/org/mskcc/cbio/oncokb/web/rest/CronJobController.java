@@ -292,11 +292,7 @@ public class CronJobController {
      * @param token
      */
     private void updateExposedToken(Token token) {
-        if (token.getName() != null) {
-            tokenProvider.createToken(token, Optional.of(token.getName()));
-        } else {
-            tokenProvider.createToken(token, Optional.empty());
-        }
+        tokenProvider.createToken(token, Optional.ofNullable(token.getName()));
         token.setExpiration(Instant.now());
         tokenService.save(token);
     }

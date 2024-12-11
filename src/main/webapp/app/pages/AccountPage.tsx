@@ -215,9 +215,6 @@ export class AccountPage extends React.Component<IRegisterProps> {
       </span>
     );
 
-    /* eslint-disable no-console */
-    console.log('HI');
-
     return (
       <SmallPageContainer size={'lg'}>
         <Row className={getSectionClassName(true)}>
@@ -400,7 +397,6 @@ export class AccountPage extends React.Component<IRegisterProps> {
           </Modal.Header>
           <AvForm
             onValidSubmit={(_event: any, values: any) => {
-              console.log(values);
               this.addServiceAccountToken(values.name);
             }}
           >

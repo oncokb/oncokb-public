@@ -241,6 +241,9 @@ public class CompanyResource {
         }
 
         UserDTO userDTO = userMapper.userToUserDTO(userOptional.get());
+        if (userDTO.getCompany() == null) {
+            return ResponseEntity.notFound().build();
+        }
         return ResponseUtil.wrapOrNotFound(companyService.createServiceAccountToken(userDTO.getCompany().getId(), name));
     }
 

@@ -4350,7 +4350,7 @@ export default class API {
             return response.body;
         });
     };
-    deleteTokenWithoutSideEffectsUsingDELETEURL(parameters: {
+    deleteTokenWithoutTransferringStatsUsingDELETEURL(parameters: {
         'uuid': string,
         $queryParameters ? : any
     }): string {
@@ -4370,12 +4370,12 @@ export default class API {
     };
 
     /**
-     * deleteTokenWithoutSideEffects
+     * deleteTokenWithoutTransferringStats
      * @method
-     * @name API#deleteTokenWithoutSideEffectsUsingDELETE
+     * @name API#deleteTokenWithoutTransferringStatsUsingDELETE
      * @param {string} uuid - uuid
      */
-    deleteTokenWithoutSideEffectsUsingDELETEWithHttpInfo(parameters: {
+    deleteTokenWithoutTransferringStatsUsingDELETEWithHttpInfo(parameters: {
         'uuid': string,
         $queryParameters ? : any,
         $domain ? : string
@@ -4411,17 +4411,17 @@ export default class API {
     };
 
     /**
-     * deleteTokenWithoutSideEffects
+     * deleteTokenWithoutTransferringStats
      * @method
-     * @name API#deleteTokenWithoutSideEffectsUsingDELETE
+     * @name API#deleteTokenWithoutTransferringStatsUsingDELETE
      * @param {string} uuid - uuid
      */
-    deleteTokenWithoutSideEffectsUsingDELETE(parameters: {
+    deleteTokenWithoutTransferringStatsUsingDELETE(parameters: {
         'uuid': string,
         $queryParameters ? : any,
         $domain ? : string
     }): Promise < any > {
-        return this.deleteTokenWithoutSideEffectsUsingDELETEWithHttpInfo(parameters).then(function(response: request.Response) {
+        return this.deleteTokenWithoutTransferringStatsUsingDELETEWithHttpInfo(parameters).then(function(response: request.Response) {
             return response.body;
         });
     };
