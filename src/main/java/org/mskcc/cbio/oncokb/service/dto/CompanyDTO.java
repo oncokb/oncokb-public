@@ -5,8 +5,6 @@ import java.io.Serializable;
 import java.util.HashSet;
 import java.util.Set;
 import javax.persistence.Lob;
-
-import org.mskcc.cbio.oncokb.domain.UserDetails;
 import org.mskcc.cbio.oncokb.domain.enumeration.CompanyType;
 import org.mskcc.cbio.oncokb.domain.enumeration.LicenseType;
 import org.mskcc.cbio.oncokb.domain.enumeration.LicenseModel;
@@ -45,8 +43,6 @@ public class CompanyDTO implements Serializable {
     private Set<String> companyDomains = new HashSet<>();
 
     private Integer numberOfUsers;
-
-    private Set<UserDetails> serviceUsers = new HashSet<>();
     
     public Long getId() {
         return id;
@@ -134,14 +130,6 @@ public class CompanyDTO implements Serializable {
 
     public void setNumberOfUsers(Integer numberOfUsers) {
         this.numberOfUsers = numberOfUsers;
-    }
-
-    public Set<UserDetails> getServiceUsers() {
-        return serviceUsers;
-    }
-
-    public void setServiceUsers(Set<UserDetails> userDetails) {
-        this.serviceUsers = userDetails;
     }
 
     @Override

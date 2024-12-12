@@ -3173,87 +3173,6 @@
       },
       "title": "ApiAccessRequest"
     },
-    "Company": {
-      "type": "object",
-      "required": [
-        "companyType",
-        "licenseModel",
-        "licenseStatus",
-        "licenseType",
-        "name"
-      ],
-      "properties": {
-        "businessContact": {
-          "type": "string",
-          "minLength": 0,
-          "maxLength": 255
-        },
-        "companyDomains": {
-          "type": "array",
-          "items": {
-            "$ref": "#/definitions/CompanyDomain"
-          }
-        },
-        "companyType": {
-          "type": "string",
-          "enum": [
-            "PARENT",
-            "BRANCH",
-            "UNKNOWN"
-          ]
-        },
-        "description": {
-          "type": "string"
-        },
-        "id": {
-          "type": "integer",
-          "format": "int64"
-        },
-        "legalContact": {
-          "type": "string",
-          "minLength": 0,
-          "maxLength": 255
-        },
-        "licenseModel": {
-          "type": "string",
-          "enum": [
-            "FULL",
-            "LIMITED"
-          ]
-        },
-        "licenseStatus": {
-          "type": "string",
-          "enum": [
-            "TRIAL",
-            "REGULAR",
-            "TRIAL_EXPIRED",
-            "EXPIRED",
-            "UNKNOWN"
-          ]
-        },
-        "licenseType": {
-          "type": "string",
-          "enum": [
-            "ACADEMIC",
-            "COMMERCIAL",
-            "RESEARCH_IN_COMMERCIAL",
-            "HOSPITAL"
-          ]
-        },
-        "name": {
-          "type": "string",
-          "minLength": 1,
-          "maxLength": 100
-        },
-        "serviceUsers": {
-          "type": "array",
-          "items": {
-            "$ref": "#/definitions/UserDetails"
-          }
-        }
-      },
-      "title": "Company"
-    },
     "CompanyDTO": {
       "type": "object",
       "required": [
@@ -3323,31 +3242,9 @@
         "numberOfUsers": {
           "type": "integer",
           "format": "int32"
-        },
-        "serviceUsers": {
-          "type": "array",
-          "items": {
-            "$ref": "#/definitions/UserDetails"
-          }
         }
       },
       "title": "CompanyDTO"
-    },
-    "CompanyDomain": {
-      "type": "object",
-      "required": [
-        "name"
-      ],
-      "properties": {
-        "id": {
-          "type": "integer",
-          "format": "int64"
-        },
-        "name": {
-          "type": "string"
-        }
-      },
-      "title": "CompanyDomain"
     },
     "CompanyDomainDTO": {
       "type": "object",
@@ -3440,12 +3337,6 @@
         "numberOfUsers": {
           "type": "integer",
           "format": "int32"
-        },
-        "serviceUsers": {
-          "type": "array",
-          "items": {
-            "$ref": "#/definitions/UserDetails"
-          }
         }
       },
       "title": "CompanyVM"
@@ -3986,52 +3877,6 @@
       },
       "title": "UserDTO"
     },
-    "UserDetails": {
-      "type": "object",
-      "properties": {
-        "additionalInfo": {
-          "type": "string"
-        },
-        "address": {
-          "type": "string"
-        },
-        "city": {
-          "type": "string"
-        },
-        "company": {
-          "$ref": "#/definitions/Company"
-        },
-        "companyName": {
-          "type": "string"
-        },
-        "country": {
-          "type": "string"
-        },
-        "id": {
-          "type": "integer",
-          "format": "int64"
-        },
-        "jobTitle": {
-          "type": "string"
-        },
-        "licenseType": {
-          "type": "string",
-          "enum": [
-            "ACADEMIC",
-            "COMMERCIAL",
-            "RESEARCH_IN_COMMERCIAL",
-            "HOSPITAL"
-          ]
-        },
-        "serviceCompany": {
-          "$ref": "#/definitions/Company"
-        },
-        "user": {
-          "$ref": "#/definitions/User"
-        }
-      },
-      "title": "UserDetails"
-    },
     "UserDetailsDTO": {
       "type": "object",
       "properties": {
@@ -4069,10 +3914,6 @@
             "RESEARCH_IN_COMMERCIAL",
             "HOSPITAL"
           ]
-        },
-        "serviceCompanyId": {
-          "type": "integer",
-          "format": "int64"
         },
         "userId": {
           "type": "integer",

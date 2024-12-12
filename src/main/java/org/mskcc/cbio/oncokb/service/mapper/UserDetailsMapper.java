@@ -16,12 +16,10 @@ public interface UserDetailsMapper extends EntityMapper<UserDetailsDTO, UserDeta
 
     @Mapping(source = "user.id", target = "userId")
     @Mapping(source = "company.id", target = "companyId")
-    @Mapping(source = "serviceCompany.id", target = "serviceCompanyId")
     UserDetailsDTO toDto(UserDetails userDetails);
 
     @Mapping(source = "userId", target = "user")
     @Mapping(source = "companyId", target = "company")
-    @Mapping(source = "serviceCompanyId", target = "serviceCompany")
     UserDetails toEntity(UserDetailsDTO userDetailsDTO);
 
     default UserDetails fromId(Long id) {

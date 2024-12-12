@@ -25,30 +25,6 @@ export type ApiAccessRequest = {
         'requested': boolean
 
 };
-export type Company = {
-    'businessContact': string
-
-        'companyDomains': Array < CompanyDomain >
-
-        'companyType': "PARENT" | "BRANCH" | "UNKNOWN"
-
-        'description': string
-
-        'id': number
-
-        'legalContact': string
-
-        'licenseModel': "FULL" | "LIMITED"
-
-        'licenseStatus': "TRIAL" | "REGULAR" | "TRIAL_EXPIRED" | "EXPIRED" | "UNKNOWN"
-
-        'licenseType': "ACADEMIC" | "COMMERCIAL" | "RESEARCH_IN_COMMERCIAL" | "HOSPITAL"
-
-        'name': string
-
-        'serviceUsers': Array < UserDetails >
-
-};
 export type CompanyDTO = {
     'businessContact': string
 
@@ -71,14 +47,6 @@ export type CompanyDTO = {
         'name': string
 
         'numberOfUsers': number
-
-        'serviceUsers': Array < UserDetails >
-
-};
-export type CompanyDomain = {
-    'id': number
-
-        'name': string
 
 };
 export type CompanyDomainDTO = {
@@ -111,8 +79,6 @@ export type CompanyVM = {
         'name': string
 
         'numberOfUsers': number
-
-        'serviceUsers': Array < UserDetails >
 
 };
 export type Contact = {
@@ -336,30 +302,6 @@ export type UserDTO = {
         'resetKey': string
 
 };
-export type UserDetails = {
-    'additionalInfo': string
-
-        'address': string
-
-        'city': string
-
-        'company': Company
-
-        'companyName': string
-
-        'country': string
-
-        'id': number
-
-        'jobTitle': string
-
-        'licenseType': "ACADEMIC" | "COMMERCIAL" | "RESEARCH_IN_COMMERCIAL" | "HOSPITAL"
-
-        'serviceCompany': Company
-
-        'user': User
-
-};
 export type UserDetailsDTO = {
     'additionalInfo': AdditionalInfoDTO
 
@@ -378,8 +320,6 @@ export type UserDetailsDTO = {
         'jobTitle': string
 
         'licenseType': "ACADEMIC" | "COMMERCIAL" | "RESEARCH_IN_COMMERCIAL" | "HOSPITAL"
-
-        'serviceCompanyId': number
 
         'userId': number
 

@@ -313,7 +313,7 @@ public class UserService {
         return newUser;
     }
 
-    public User createUser(UserDTO userDTO, Optional<Integer> tokenValidDays, Optional<Boolean> tokenIsRenewable) {
+    public User createUser(UserDTO userDTO, boolean isServiceUser, Optional<Integer> tokenValidDays, Optional<Boolean> tokenIsRenewable) {
         User user = new User();
         user.setLogin(userDTO.getLogin().toLowerCase());
         user.setFirstName(userDTO.getFirstName());
@@ -355,6 +355,10 @@ public class UserService {
         userDetails.setCompany(companyMapper.toEntity(userDTO.getCompany()));
         userDetailsRepository.save(userDetails);
 
+        if (isServiceUser) {
+            log.debug("Created Information for Service User: {}", user);
+            return user;
+        }
 
         // Check if the user is a part of licensed company and then continue with approval procedure
         if(userDetails.getCompany() != null){

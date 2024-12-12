@@ -9,7 +9,7 @@ import org.mskcc.cbio.oncokb.service.dto.useradditionalinfo.AdditionalInfoDTO;
  * A DTO for the {@link org.mskcc.cbio.oncokb.domain.UserDetails} entity.
  */
 public class UserDetailsDTO implements Serializable {
-    
+
     private Long id;
 
     private LicenseType licenseType;
@@ -31,8 +31,6 @@ public class UserDetailsDTO implements Serializable {
 
     private Long companyId;
 
-    private Long serviceCompanyId;
-    
     public Long getId() {
         return id;
     }
@@ -113,14 +111,6 @@ public class UserDetailsDTO implements Serializable {
         this.companyId = companyId;
     }
 
-    public Long getServiceCompanyId() {
-        return serviceCompanyId;
-    }
-
-    public void setServiceCompanyId(Long companyId) {
-        this.serviceCompanyId = companyId;
-    }
-
     @Override
     public boolean equals(Object o) {
         if (this == o) {
@@ -152,7 +142,6 @@ public class UserDetailsDTO implements Serializable {
             ", additionalInfo='" + getAdditionalInfo() + "'" +
             ", userId=" + getUserId() +
             ", companyId=" + getCompanyId() +
-            ", serviceCompanyId=" + getServiceCompanyId() +
             "}";
     }
 }

@@ -52,12 +52,6 @@
       "relationshipName": "companyDomain",
       "otherEntityField": "id",
       "ownerSide": true
-    },
-    {
-      "relationshipName": "serviceUser",
-      "otherEntityName": "userDetails",
-      "relationshipType": "one-to-many",
-      "otherEntityRelationshipName": "serviceCompany"
     }
   ],
   "changelogDate": "20210927165433",
@@ -72,7 +66,5 @@
   "clientRootFolder": "",
   "applications": "*",
   "skipClient": true,
-  "skipFakeData": true,
-  "searchEngine": false,
-  "databaseType": "sql"
+  "skipFakeData": true
 }

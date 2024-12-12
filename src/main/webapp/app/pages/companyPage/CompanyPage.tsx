@@ -168,9 +168,13 @@ export default class CompanyPage extends React.Component<ICompanyPage> {
 
   @action.bound
   async getServiceAccountTokens() {
-    this.serviceAccountTokens = await client.getServiceAccountTokensForCompanyUsingGET(
-      { id: parseInt(this.props.match.params.id, 10) }
-    );
+    try {
+      this.serviceAccountTokens = await client.getServiceAccountTokensForCompanyUsingGET(
+        { id: parseInt(this.props.match.params.id, 10) }
+      );
+    } catch (e) {
+      this.serviceAccountTokens = [];
+    }
   }
 
   @action.bound
@@ -203,13 +207,7 @@ export default class CompanyPage extends React.Component<ICompanyPage> {
       notifyError(e);
     }
 
-    try {
-      await this.getServiceAccountTokens();
-    } catch (e) {
-      notifyError(
-        Error('Error fetching service account tokens. Please refresh the page.')
-      );
-    }
+    await this.getServiceAccountTokens();
   }
 
   @action.bound
@@ -496,6 +494,12 @@ export default class CompanyPage extends React.Component<ICompanyPage> {
     );
     const blob = new Blob([convertObjectArrayToDelimitedString(userData)]);
     return blob;
+  }
+
+  @computed get showDeleteServiceAccount() {
+    return this.companyUsers.some(user =>
+      user.authorities.includes(USER_AUTHORITY.ROLE_SERVICE_ACCOUNT)
+    );
   }
 
   readonly users = remoteData<UserOverviewUsage[]>({
@@ -1097,7 +1101,7 @@ export default class CompanyPage extends React.Component<ICompanyPage> {
                           >
                             Delete Company
                           </Button>
-                          {this.company.serviceUsers.length > 0 && (
+                          {this.showDeleteServiceAccount && (
                             <Button
                               variant="outline-danger"
                               onClick={() => {

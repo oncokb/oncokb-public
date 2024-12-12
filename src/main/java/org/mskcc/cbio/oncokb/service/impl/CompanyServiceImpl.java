@@ -215,6 +215,11 @@ public class CompanyServiceImpl implements CompanyService {
         }
 
         CompanyDTO companyDTO = maybeCompanyDTO.get();
+        Optional<UserDTO> serviceUser = getServiceUserForCompany(companyDTO.getId());
+        if (serviceUser.isPresent()) {
+            userService.deleteUser(serviceUser.get().getLogin());
+        }
+
         Boolean isCommercial = companyDTO.getLicenseType().equals(LicenseType.COMMERCIAL);
         List<UserDetails> userDetails = userDetailsRepository.findByCompanyId(id);
         for (UserDetails userDetail : userDetails) {
@@ -241,9 +246,11 @@ public class CompanyServiceImpl implements CompanyService {
             return companyDtoOptional;
         }
 
-        Company company = companyMapper.toEntity(companyDtoOptional.get());
+        CompanyDTO companyDTO = companyDtoOptional.get();
+        Company company = companyMapper.toEntity(companyDTO);
+        Optional<UserDTO> serviceUser = getServiceUserForCompany(company.getId());
         // only allow one service user per company
-        if (company.getServiceUsers().size() == 0) {
+        if (!serviceUser.isPresent()) {
             UserDTO userDTO = new UserDTO();
             userDTO = new UserDTO();
             userDTO.setFirstName(company.getName());
@@ -252,13 +259,9 @@ public class CompanyServiceImpl implements CompanyService {
             userDTO.setActivated(true);
             userDTO.setLicenseType(company.getLicenseType());
             userDTO.setAuthorities(new HashSet<>(Arrays.asList(AuthoritiesConstants.ROLE_SERVICE_ACCOUNT)));
+            userDTO.setCompany(companyDTO);
 
-            User user = userService.createUser(userDTO, Optional.empty(), Optional.of(false));
-
-            Optional<UserDetails> userDetailsOptional = userDetailsRepository.findOneByUser(user);
-            if (userDetailsOptional.isPresent()) {
-                company.addServiceUser(userDetailsOptional.get());
-            }
+            userService.createUser(userDTO, true, Optional.empty(), Optional.of(false));
         }
         return Optional.of(companyMapper.toDto(company));
     }
@@ -267,13 +270,10 @@ public class CompanyServiceImpl implements CompanyService {
     @Transactional
     public void deleteServiceAccount(CompanyDTO companyDTO) {
         Company company = companyMapper.toEntity(companyDTO);
-        Set<UserDetails> serviceUsers = company.getServiceUsers();
-        // should only ever have one service user
-        for (UserDetails userDetails : serviceUsers) {
-            userService.deleteUser(userDetails.getUser().getLogin());
+        Optional<UserDTO> serviceUser = getServiceUserForCompany(company.getId());
+        if (serviceUser.isPresent()) {
+            userService.deleteUser(serviceUser.get().getLogin());
         }
-        company.getServiceUsers().clear();
-        companyRepository.save(company);
     }
 
     @Override
@@ -285,19 +285,22 @@ public class CompanyServiceImpl implements CompanyService {
         }
 
         Company company = companyMapper.toEntity(companyDtoOptional.get());
-        if (company.getServiceUsers().size() == 0) {
-            Optional<CompanyDTO> updatedCompanyDto = createServiceAccount(company.getId());
-            if (updatedCompanyDto.isPresent()) {
-                company = companyMapper.toEntity(updatedCompanyDto.get());
+        Optional<UserDTO> serviceUserOptional = getServiceUserForCompany(company.getId());
+        UserDTO serviceUser;
+        if (serviceUserOptional.isPresent()) {
+            serviceUser = serviceUserOptional.get();
+        } else {
+            createServiceAccount(company.getId());
+            serviceUserOptional = getServiceUserForCompany(company.getId());
+            if (serviceUserOptional.isPresent()) {
+                serviceUser = serviceUserOptional.get();
             } else {
                 return Optional.empty();
             }
         }
 
-        UserDetails[] serviceUserDetails = company.getServiceUsers().toArray(new UserDetails[company.getServiceUsers().size()]);
-        // since one service user should always be first in array
         return Optional.of(tokenProvider.createToken(
-            serviceUserDetails[0].getUser(),
+            userMapper.userDTOToUser(serviceUser),
             Optional.of(
                 LocalDateTime.of(9999, 1, 1, 0, 0).atZone(ZoneId.systemDefault()).toInstant()
             ),
@@ -317,12 +320,24 @@ public class CompanyServiceImpl implements CompanyService {
         if (companyDtoOptional.isPresent()) {
             CompanyDTO companyDto = companyDtoOptional.get();
             List<Token> tokens = new ArrayList<>();
-            for (UserDetails serviceUser : companyDto.getServiceUsers()) {
-                tokens.addAll(tokenProvider.getUserTokens(serviceUser.getUser()));
+            Optional<UserDTO> serviceUser = getServiceUserForCompany(companyDto.getId());
+            if (serviceUser.isPresent()) {
+                tokens.addAll(tokenProvider.getUserTokens(userMapper.userDTOToUser(serviceUser.get())));
+            } else {
+                return Optional.empty();
             }
             return Optional.of(tokens);
         } 
         return Optional.empty();
     }
 
+    public Optional<UserDTO> getServiceUserForCompany(Long companyId) {
+        List<UserDTO> companyUsers = userService.getCompanyUsers(companyId);
+        for (UserDTO user : companyUsers) {
+            if (user.getAuthorities().contains(AuthoritiesConstants.ROLE_SERVICE_ACCOUNT)) {
+                return Optional.of(user);
+            }
+        }
+        return Optional.empty();
+    }
 }

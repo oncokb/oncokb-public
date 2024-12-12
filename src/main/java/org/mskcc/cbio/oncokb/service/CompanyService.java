@@ -3,6 +3,7 @@ package org.mskcc.cbio.oncokb.service;
 import org.mskcc.cbio.oncokb.domain.Token;
 import org.mskcc.cbio.oncokb.domain.enumeration.LicenseStatus;
 import org.mskcc.cbio.oncokb.service.dto.CompanyDTO;
+import org.mskcc.cbio.oncokb.service.dto.UserDTO;
 import org.mskcc.cbio.oncokb.web.rest.vm.CompanyVM;
 
 import java.util.List;
@@ -67,4 +68,6 @@ public interface CompanyService {
     Optional<Token> createServiceAccountToken(Long id, String name);
 
     Optional<List<Token>> getServiceAccountTokensForCompany(Long id);
+
+    Optional<UserDTO> getServiceUserForCompany(Long companyId);
 }
