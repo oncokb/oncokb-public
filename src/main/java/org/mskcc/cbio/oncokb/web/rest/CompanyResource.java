@@ -210,7 +210,7 @@ public class CompanyResource {
     }
 
     /* ONLY ROLE_ADMIN */
-    @DeleteMapping("/companies/service/{id}")
+    @DeleteMapping("/companies/{id}/service-account")
     public ResponseEntity<Void> deleteServiceAccount(@PathVariable Long id) {
         Optional<CompanyDTO> companyDto = companyService.findOne(id);
         if (companyDto.isPresent()) {
@@ -222,13 +222,13 @@ public class CompanyResource {
     }
 
     /* ONLY ROLE_ADMIN */
-    @GetMapping("/companies/service/token/{id}")
+    @GetMapping("/companies/{id}/service-account/token")
     public ResponseEntity<List<Token>> getServiceAccountTokensForCompany(@PathVariable Long id) {
         return ResponseUtil.wrapOrNotFound(companyService.getServiceAccountTokensForCompany(id));
     }
 
     /* ONLY ROLE_COMPANY_ADMIN */
-    @PostMapping("/companies/service/token") 
+    @PostMapping("/companies/service-account/token") 
     public ResponseEntity<Token> createServiceAccountToken(@RequestBody String name) {
         Optional<String> currentUserLoginOptional = SecurityUtils.getCurrentUserLogin();
         if (!currentUserLoginOptional.isPresent()) {
@@ -248,7 +248,7 @@ public class CompanyResource {
     }
 
     /* ONLY ROLE_COMPANY_ADMIN */
-    @GetMapping("/companies/service/token")
+    @GetMapping("/companies/service-account/token")
     public ResponseEntity<List<Token>> getServiceAccountTokens() {
         Optional<String> currentUserLoginOptional = SecurityUtils.getCurrentUserLogin();
         if (!currentUserLoginOptional.isPresent()) {
