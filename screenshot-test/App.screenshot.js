@@ -222,7 +222,7 @@ function getMockResponse(url) {
       };
       break;
     case `${SERVER_URL}api/companies/service-account/token`:
-    case `${SERVER_URL}api/companies/{id}/service-account/token`:
+    case `${SERVER_URL}api/companies/1/service-account/token`:
       res = {
         status: 200,
         contentType: 'application/json',
