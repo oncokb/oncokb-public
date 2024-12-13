@@ -134,7 +134,7 @@ public class UserResource {
                 }
                 managedUserVM.setAuthorities(Collections.unmodifiableSet(authorities));
             }
-            User newUser = userService.createUser(managedUserVM, false, Optional.ofNullable(managedUserVM.getTokenValidDays()), Optional.ofNullable(managedUserVM.getTokenIsRenewable()));
+            User newUser = userService.createUser(managedUserVM, Optional.ofNullable(managedUserVM.getTokenValidDays()), Optional.ofNullable(managedUserVM.getTokenIsRenewable()));
             UserDTO newUserDTO = userMapper.userToUserDTO(newUser);
             if (managedUserVM.getNotifyUserOnTrialCreation()) {
                 userService.initiateTrialAccountActivation(newUser.getLogin());

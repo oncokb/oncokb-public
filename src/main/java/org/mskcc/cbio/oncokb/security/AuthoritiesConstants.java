@@ -21,10 +21,6 @@ public final class AuthoritiesConstants {
 
     public static final String API = "ROLE_API";
 
-    public static final String ROLE_COMPANY_ADMIN = "ROLE_COMPANY_ADMIN";
-
-    public static final String ROLE_SERVICE_ACCOUNT = "ROLE_SERVICE_ACCOUNT";
-
     private AuthoritiesConstants() {
     }
 }

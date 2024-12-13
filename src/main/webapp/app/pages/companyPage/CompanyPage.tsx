@@ -11,7 +11,6 @@ import {
   LicenseStatus,
   PAGE_ROUTE,
   REDIRECT_TIMEOUT_MILLISECONDS,
-  USER_AUTHORITY,
 } from 'app/config/constants';
 import { Alert, Button, Col, Row } from 'react-bootstrap';
 import {
@@ -71,7 +70,6 @@ import { RouterStore } from 'mobx-react-router';
 import { TEXT_VAL } from 'app/shared/utils/FormValidationUtils';
 import { Helmet } from 'react-helmet-async';
 import { ToggleValue } from '../usageAnalysisPage/usage-analysis-utils';
-import ButtonWithTooltip from 'app/shared/button/ButtonWithTooltip';
 
 interface MatchParams {
   id: string;
@@ -110,8 +108,6 @@ enum SimpleConfirmModalType {
   NA,
   DELETE_COMPANY,
   UPDATE_COMPANY,
-  DELETE_SERVICE_ACCOUNT_TOKEN,
-  DELETE_SERVICE_ACCOUNT,
 }
 
 @inject('routing')
@@ -140,14 +136,10 @@ export default class CompanyPage extends React.Component<ICompanyPage> {
   @observable resourcesTypeToggleValue: ToggleValue =
     ToggleValue.PUBLIC_RESOURCES;
 
-  @observable serviceAccountTokens: Token[] = [];
-  @observable tokenToDelete: Token | undefined;
-
   constructor(props: ICompanyPage) {
     super(props);
     this.getCompany();
     this.getDropdownUsers();
-    this.getServiceAccountTokens();
   }
 
   @action
@@ -164,50 +156,6 @@ export default class CompanyPage extends React.Component<ICompanyPage> {
         this.getCompanyStatus = PromiseStatus.complete;
       })
       .catch(() => (this.getCompanyStatus = PromiseStatus.error));
-  }
-
-  @action.bound
-  async getServiceAccountTokens() {
-    try {
-      this.serviceAccountTokens = await client.getServiceAccountTokensForCompanyUsingGET(
-        { id: parseInt(this.props.match.params.id, 10) }
-      );
-    } catch (e) {
-      this.serviceAccountTokens = [];
-    }
-  }
-
-  @action.bound
-  async deleteServiceAccountToken(token: Token) {
-    try {
-      await client.deleteTokenWithoutTransferringStatsUsingDELETE({
-        uuid: token.token,
-      });
-      notifySuccess(`Token "${token.name}" is deleted.`);
-    } catch (e) {
-      notifyError(e);
-    }
-
-    try {
-      await this.getServiceAccountTokens();
-    } catch (e) {
-      notifyError(
-        Error('Error fetching service account tokens. Please refresh the page.')
-      );
-    }
-  }
-
-  @action.bound
-  async deleteServiceAccount() {
-    try {
-      await client.deleteServiceAccountUsingDELETE({ id: this.company.id });
-      notifySuccess('Service account deleted');
-      this.getCompany();
-    } catch (e) {
-      notifyError(e);
-    }
-
-    await this.getServiceAccountTokens();
   }
 
   @action.bound
@@ -309,17 +257,6 @@ export default class CompanyPage extends React.Component<ICompanyPage> {
         break;
       case SimpleConfirmModalType.DELETE_COMPANY:
         this.onConfirmDeleteAccountButton();
-        break;
-      case SimpleConfirmModalType.DELETE_SERVICE_ACCOUNT_TOKEN:
-        if (this.tokenToDelete) {
-          this.deleteServiceAccountToken(this.tokenToDelete);
-          this.tokenToDelete = undefined;
-        }
-        this.showModal = false;
-        break;
-      case SimpleConfirmModalType.DELETE_SERVICE_ACCOUNT:
-        this.deleteServiceAccount();
-        this.showModal = false;
         break;
       case SimpleConfirmModalType.NA:
       default:
@@ -494,12 +431,6 @@ export default class CompanyPage extends React.Component<ICompanyPage> {
     );
     const blob = new Blob([convertObjectArrayToDelimitedString(userData)]);
     return blob;
-  }
-
-  @computed get showDeleteServiceAccount() {
-    return this.companyUsers.some(user =>
-      user.authorities.includes(USER_AUTHORITY.ROLE_SERVICE_ACCOUNT)
-    );
   }
 
   readonly users = remoteData<UserOverviewUsage[]>({
@@ -1024,59 +955,6 @@ export default class CompanyPage extends React.Component<ICompanyPage> {
                     </Row>
                     <Row className={getSectionClassName()}>
                       <Col>
-                        <div className={'font-weight-bold'}>
-                          Service Account
-                        </div>
-                        <div className="mt-2">
-                          <OncoKBTable
-                            data={this.serviceAccountTokens}
-                            columns={[
-                              {
-                                Header: 'Name',
-                                accessor: 'name',
-                                width: 400,
-                              },
-                              {
-                                Header: 'Token',
-                                accessor: 'token',
-                              },
-                              {
-                                Header: 'Actions',
-                                width: 150,
-                                Cell: (tableProps: { original: Token }) => {
-                                  return (
-                                    <ButtonWithTooltip
-                                      tooltipProps={{
-                                        placement: 'top',
-                                        overlay: 'Delete token',
-                                      }}
-                                      buttonProps={{
-                                        className: 'bg-danger border-danger',
-                                        onClick: () => {
-                                          this.showModal = true;
-                                          this.tokenToDelete =
-                                            tableProps.original;
-                                          this.simpleConfirmModalType =
-                                            SimpleConfirmModalType.DELETE_SERVICE_ACCOUNT_TOKEN;
-                                        },
-                                      }}
-                                      buttonContent={
-                                        <i className={'fa fa-trash'}></i>
-                                      }
-                                    />
-                                  );
-                                },
-                              },
-                            ]}
-                            minRows={1}
-                            loading={false}
-                            disableSearch
-                          />
-                        </div>
-                      </Col>
-                    </Row>
-                    <Row className={getSectionClassName()}>
-                      <Col>
                         <Button
                           id="update-company"
                           variant="primary"
@@ -1091,7 +969,6 @@ export default class CompanyPage extends React.Component<ICompanyPage> {
                         <div className={'my-2 text-danger'}>Danger Zone</div>
                         <div>
                           <Button
-                            className="mr-2"
                             variant="danger"
                             onClick={() => {
                               this.showModal = true;

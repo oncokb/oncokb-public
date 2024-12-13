@@ -44,9 +44,6 @@ public class Token implements Serializable {
     @Column(name = "renewable", nullable = false)
     private Boolean renewable = true;
 
-    @Column(name = "name")
-    private String name;
-
     @ManyToOne
     @JsonIgnoreProperties(value = "tokens", allowSetters = true)
     private User user;
@@ -138,19 +135,6 @@ public class Token implements Serializable {
         this.renewable = renewable;
     }
 
-    public String getName() {
-        return name;
-    }
-
-    public Token name(String name) {
-        this.name = name;
-        return this;
-    }
-
-    public void setName(String name) {
-        this.name = name;
-    }
-
     public User getUser() {
         return user;
     }
@@ -192,7 +176,6 @@ public class Token implements Serializable {
             ", usageLimit=" + getUsageLimit() +
             ", currentUsage=" + getCurrentUsage() +
             ", renewable='" + isRenewable() + "'" +
-            ", name='" + getName() + "'" +
             "}";
     }
 }

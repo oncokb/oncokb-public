@@ -151,7 +151,7 @@ public class CronJobController {
         Instant newTokenDefaultExpirationDate = Instant.now().plusSeconds(DAY_IN_SECONDS * 15);
         userDTOs.stream().forEach(userDTO -> {
             Instant expirationDate = userDTO.getCreatedDate() == null ? newTokenDefaultExpirationDate : userDTO.getCreatedDate().plusSeconds(DEFAULT_TOKEN_EXPIRATION_IN_SECONDS);
-            tokenProvider.createToken(userMapper.userDTOToUser(userDTO), Optional.of(expirationDate.isBefore(newTokenDefaultExpirationDate) ? newTokenDefaultExpirationDate : expirationDate), Optional.empty(), Optional.empty());
+            tokenProvider.createToken(userMapper.userDTOToUser(userDTO), Optional.of(expirationDate.isBefore(newTokenDefaultExpirationDate) ? newTokenDefaultExpirationDate : expirationDate), Optional.empty());
         });
     }
 
@@ -292,7 +292,7 @@ public class CronJobController {
      * @param token
      */
     private void updateExposedToken(Token token) {
-        tokenProvider.createToken(token, Optional.ofNullable(token.getName()));
+        tokenProvider.createToken(token);
         token.setExpiration(Instant.now());
         tokenService.save(token);
     }

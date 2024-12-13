@@ -362,7 +362,7 @@ public class UserServiceIT {
         userDTO.setActivated(true);
         userDTO.setLicenseType(LicenseType.COMMERCIAL);
 
-        User savedUser = userService.createUser(userDTO, false, Optional.empty(), Optional.of(Boolean.TRUE));
+        User savedUser = userService.createUser(userDTO, Optional.empty(), Optional.of(Boolean.TRUE));
         userDTO = userMapper.userToUserDTO(savedUser);
         userDTO.setActivated(false);
         userDTO = userService.updateUserAndTokens(userDTO).get();

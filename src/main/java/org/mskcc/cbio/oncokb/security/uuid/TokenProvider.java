@@ -80,23 +80,20 @@ public class TokenProvider implements InitializingBean {
     public Token createTokenForCurrentUserLogin(Optional<Instant> definedExpirationTime, Optional<Boolean> isRenewable) {
         Optional<User> userOptional = userRepository.findOneWithAuthoritiesByLogin(SecurityUtils.getCurrentUserLogin().get());
         if(userOptional.isPresent()) {
-            return createToken(userOptional.get(), definedExpirationTime, isRenewable, Optional.empty());
+            return createToken(userOptional.get(), definedExpirationTime, isRenewable);
         }
         return null;
     }
 
-    public Token createToken(User user, Optional<Instant> definedExpirationTime, Optional<Boolean> isRenewable, Optional<String> name) {
+    public Token createToken(User user, Optional<Instant> definedExpirationTime, Optional<Boolean> isRenewable) {
         Token token = getNewToken(user.getAuthorities(), definedExpirationTime, isRenewable);
         token.setUser(user);
-        if (name.isPresent()) {
-            token.setName(name.get());
-        }
         tokenService.save(token);
         return token;
     }
 
-    public void createToken(Token token, Optional<String> name){
-        Token newToken = createToken(token.getUser(), Optional.of(token.getExpiration()), Optional.of(token.isRenewable()), name);
+    public void createToken(Token token){
+        Token newToken = createToken(token.getUser(), Optional.of(token.getExpiration()), Optional.of(token.isRenewable()));
         newToken.setCreation(token.getCreation());
         newToken.setCurrentUsage(token.getCurrentUsage());
         newToken.setUsageLimit(token.getUsageLimit());

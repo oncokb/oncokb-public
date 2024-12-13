@@ -7,7 +7,6 @@
     "usageLimit": null,
     "currentUsage": 0,
     "renewable": true,
-    "name": "Token",
     "user": {
       "id": 4,
       "login": "user",

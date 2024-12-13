@@ -58,13 +58,11 @@ public interface TokenService {
 
     void expireToken(Token token);
 
-    void delete(Long id);
-
     /**
      * Delete the token and associates its token stats with a new token.
      * @param id id of token
      */
-    void deleteAndAssociateStats(Long id);
+    void delete(Long id);
 
     /**
      * Delete all tokens related to the user

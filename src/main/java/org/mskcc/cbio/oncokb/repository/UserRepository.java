@@ -8,7 +8,6 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.EntityGraph;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
-import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Repository;
 
 import java.util.List;
@@ -43,8 +42,7 @@ public interface UserRepository extends JpaRepository<User, Long> {
     @Cacheable(cacheResolver = "userCacheResolver")
     Optional<User> findOneWithAuthoritiesByEmailIgnoreCase(String email);
 
-    @Query("select user from User user where :authorityName not in (select authority.name FROM user.authorities authority) and user.login != :login")
-    List<User> findAllUsersWithoutAuthorityAndLoginNot(@Param("authorityName") String authorityName, @Param("login") String login);
+    Page<User> findAllByLoginNot(Pageable pageable, String login);
 
     @Query("select user, userDetails from User as user left join UserDetails as userDetails on user.id = userDetails.user WHERE user in ?1")
     List<Object[]> findAllUsersWithUserDetailsByUsersIn(List<User> users);
