@@ -19,6 +19,7 @@ import org.mskcc.cbio.oncokb.service.dto.UserDTO;
 import org.mskcc.cbio.oncokb.service.dto.UserDetailsDTO;
 import org.mskcc.cbio.oncokb.service.mapper.CompanyMapper;
 import org.mskcc.cbio.oncokb.service.mapper.UserMapper;
+import org.mskcc.cbio.oncokb.web.rest.errors.TooManyTokensException;
 import org.mskcc.cbio.oncokb.web.rest.vm.CompanyVM;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -37,6 +38,7 @@ import java.util.Set;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.within;
+import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.mskcc.cbio.oncokb.config.Constants.DEFAULT_TOKEN_EXPIRATION_IN_DAYS;
 
 /**
@@ -478,18 +480,28 @@ public class CompanyServiceIT {
         assertThat(tokenService.findByToken(token.getToken()).get().getName() == "New token");
     }
 
-    // @Test
-    // @Transactional
-    // public void assertThatOnlyOneServiceUserCanBeCreatedPerCompany() {
-    //     CompanyDTO company = companyService.createCompany(companyDTO);
-    //     assertThat(company.getServiceUsers().size() == 0);
+    @Test
+    @Transactional
+    public void assertThatOnly10ServiceAccountTokensAreCreated() {
+        CompanyDTO company = companyService.createCompany(companyDTO);
+        for (int i = 0; i < 10; i++) {
+            companyService.createServiceAccountToken(company.getId(), "New token");
+        }
 
-    //     companyService.createServiceAccount(company.getId());
-    //     company = companyService.findOne(company.getId()).get();
-    //     assertThat(company.getServiceUsers().size() == 1);
+        assertThrows(TooManyTokensException.class, () -> companyService.createServiceAccountToken(company.getId(), "New token"));
+    }
 
-    //     companyService.createServiceAccount(company.getId());
-    //     company = companyService.findOne(company.getId()).get();
-    //     assertThat(company.getServiceUsers().size() == 1);
-    // }
+    @Test
+    @Transactional
+    public void assertThatOnlyOneServiceUserCanBeCreatedPerCompany() {
+        CompanyDTO company = companyService.createCompany(companyDTO);
+        Optional<UserDTO> serviceUser = companyService.getServiceUserForCompany(company.getId());
+        assertThat(!serviceUser.isPresent());
+
+        Optional<User> user = companyService.createServiceAccount(company.getId());
+        assertThat(user.isPresent());
+
+        user = companyService.createServiceAccount(company.getId());
+        assertThat(!user.isPresent());
+    }
 }

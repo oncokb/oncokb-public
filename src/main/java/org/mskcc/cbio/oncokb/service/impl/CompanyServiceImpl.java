@@ -1,5 +1,6 @@
 package org.mskcc.cbio.oncokb.service.impl;
 
+import static org.mskcc.cbio.oncokb.config.Constants.MAX_SERVICE_ACCOUNT_TOKENS;
 import static org.mskcc.cbio.oncokb.config.cache.CompanyCacheResolver.COMPANIES_BY_ID_CACHE;
 import static org.mskcc.cbio.oncokb.config.cache.CompanyCacheResolver.COMPANIES_BY_NAME_CACHE;
 
@@ -38,6 +39,7 @@ import org.mskcc.cbio.oncokb.service.mapper.CompanyDomainMapper;
 import org.mskcc.cbio.oncokb.service.mapper.CompanyMapper;
 import org.mskcc.cbio.oncokb.service.mapper.UserDetailsMapper;
 import org.mskcc.cbio.oncokb.service.mapper.UserMapper;
+import org.mskcc.cbio.oncokb.web.rest.errors.TooManyTokensException;
 import org.mskcc.cbio.oncokb.web.rest.vm.CompanyVM;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -240,30 +242,30 @@ public class CompanyServiceImpl implements CompanyService {
 
     @Override
     @Transactional
-    public Optional<CompanyDTO> createServiceAccount(Long id) {
+    public Optional<User> createServiceAccount(Long id) {
         Optional<CompanyDTO> companyDtoOptional = findOne(id);
         if (!companyDtoOptional.isPresent()) {
-            return companyDtoOptional;
+            return Optional.empty();
         }
 
         CompanyDTO companyDTO = companyDtoOptional.get();
         Company company = companyMapper.toEntity(companyDTO);
         Optional<UserDTO> serviceUser = getServiceUserForCompany(company.getId());
         // only allow one service user per company
-        if (!serviceUser.isPresent()) {
-            UserDTO userDTO = new UserDTO();
-            userDTO = new UserDTO();
-            userDTO.setFirstName(company.getName());
-            userDTO.setLastName(UUID.randomUUID().toString());
-            userDTO.setLogin(UUID.randomUUID().toString());
-            userDTO.setActivated(true);
-            userDTO.setLicenseType(company.getLicenseType());
-            userDTO.setAuthorities(new HashSet<>(Arrays.asList(AuthoritiesConstants.ROLE_SERVICE_ACCOUNT)));
-            userDTO.setCompany(companyDTO);
-
-            userService.createUser(userDTO, true, Optional.empty(), Optional.of(false));
+        if (serviceUser.isPresent()) {
+            return Optional.empty();
         }
-        return Optional.of(companyMapper.toDto(company));
+        UserDTO userDTO = new UserDTO();
+        userDTO = new UserDTO();
+        userDTO.setFirstName(company.getName());
+        userDTO.setLastName(UUID.randomUUID().toString());
+        userDTO.setLogin(UUID.randomUUID().toString());
+        userDTO.setActivated(true);
+        userDTO.setLicenseType(company.getLicenseType());
+        userDTO.setAuthorities(new HashSet<>(Arrays.asList(AuthoritiesConstants.ROLE_SERVICE_ACCOUNT)));
+        userDTO.setCompany(companyDTO);
+
+        return Optional.of(userService.createUser(userDTO, true, Optional.empty(), Optional.of(false)));
     }
 
     @Override
@@ -278,7 +280,7 @@ public class CompanyServiceImpl implements CompanyService {
 
     @Override
     @Transactional
-    public Optional<Token> createServiceAccountToken(Long id, String name) {
+    public Optional<Token> createServiceAccountToken(Long id, String name) throws TooManyTokensException {
         Optional<CompanyDTO> companyDtoOptional = findOne(id);
         if (!companyDtoOptional.isPresent()) {
             return Optional.empty();
@@ -286,21 +288,27 @@ public class CompanyServiceImpl implements CompanyService {
 
         Company company = companyMapper.toEntity(companyDtoOptional.get());
         Optional<UserDTO> serviceUserOptional = getServiceUserForCompany(company.getId());
-        UserDTO serviceUser;
+        UserDTO serviceUserDTO;
         if (serviceUserOptional.isPresent()) {
-            serviceUser = serviceUserOptional.get();
+            serviceUserDTO = serviceUserOptional.get();
         } else {
             createServiceAccount(company.getId());
             serviceUserOptional = getServiceUserForCompany(company.getId());
             if (serviceUserOptional.isPresent()) {
-                serviceUser = serviceUserOptional.get();
+                serviceUserDTO = serviceUserOptional.get();
             } else {
                 return Optional.empty();
             }
         }
 
+        User serviceUser = userMapper.userDTOToUser(serviceUserDTO);
+        List<Token> tokens = tokenProvider.getUserTokens(serviceUser);
+        if (tokens.size() >= MAX_SERVICE_ACCOUNT_TOKENS) {
+            throw new TooManyTokensException();
+        }
+
         return Optional.of(tokenProvider.createToken(
-            userMapper.userDTOToUser(serviceUser),
+            serviceUser,
             Optional.of(
                 LocalDateTime.of(9999, 1, 1, 0, 0).atZone(ZoneId.systemDefault()).toInstant()
             ),

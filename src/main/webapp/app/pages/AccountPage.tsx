@@ -6,6 +6,7 @@ import {
   AUTHORITIES,
   H5_MARGIN_BOTTOM,
   LicenseType,
+  MAX_SERVICE_ACCOUNT_TOKENS,
   PAGE_ROUTE,
   USER_AUTHORITY,
 } from 'app/config/constants';
@@ -17,7 +18,9 @@ import {
 } from 'app/pages/account/AccountUtils';
 import client from 'app/shared/api/clientInstance';
 import { Token } from 'app/shared/api/generated/API';
+import ButtonWithTooltip from 'app/shared/button/ButtonWithTooltip';
 import InfoIcon from 'app/shared/icons/InfoIcon';
+import { ContactLink } from 'app/shared/links/ContactLink';
 import { SimpleConfirmModal } from 'app/shared/modal/SimpleConfirmModal';
 import { TEXT_VAL } from 'app/shared/utils/FormValidationUtils';
 import { notifyError, notifySuccess } from 'app/shared/utils/NotificationUtils';
@@ -55,7 +58,6 @@ export const InfoRow: React.FunctionComponent<{
     </Row>
   );
 };
-
 @inject('authenticationStore')
 @observer
 export class AccountPage extends React.Component<IRegisterProps> {
@@ -160,6 +162,35 @@ export class AccountPage extends React.Component<IRegisterProps> {
     } else {
       return '';
     }
+  }
+
+  @computed get serviceAccountTokenCreationDisabled() {
+    return (
+      this.serviceAccountTokens.length >= MAX_SERVICE_ACCOUNT_TOKENS ||
+      !this.account?.company
+    );
+  }
+
+  @computed get serviceAccountTooltip() {
+    if (!this.account?.company) {
+      return (
+        <span>
+          You are not associated with a company. Please reach out to{' '}
+          <ContactLink emailSubject="Delete Service Account Tokens" /> for
+          assistance.
+        </span>
+      );
+    }
+    if (this.serviceAccountTokens.length >= MAX_SERVICE_ACCOUNT_TOKENS) {
+      return (
+        <span>
+          You may not exceed 10 tokens. Please reach out to{' '}
+          <ContactLink emailSubject="Delete Service Account Tokens" /> to
+          request token deletion.
+        </span>
+      );
+    }
+    return <></>;
   }
 
   getContent() {
@@ -314,22 +345,28 @@ export class AccountPage extends React.Component<IRegisterProps> {
                     <InfoIcon
                       placement={'top'}
                       overlay={
-                        'Service account tokens are intended for developers and will not need to be renewed, ensuring system stability.'
+                        'Service account tokens are intended for developers and will not need to be renewed, ensuring system stability. You many have up to 10 tokens'
                       }
                       className={'ml-2'}
                       style={{ marginBottom: H5_MARGIN_BOTTOM }}
                     />
                   </div>
-                  <Button
-                    size="sm"
-                    variant="outline-primary"
-                    style={{ marginBottom: H5_MARGIN_BOTTOM }}
-                    onClick={() => {
-                      this.showCreateServiceAccountTokenModal = true;
+                  <ButtonWithTooltip
+                    buttonProps={{
+                      size: 'sm',
+                      variant: 'outline-primary',
+                      style: { marginBottom: H5_MARGIN_BOTTOM },
+                      disabled: this.serviceAccountTokenCreationDisabled,
+                      onClick: () => {
+                        this.showCreateServiceAccountTokenModal = true;
+                      },
                     }}
-                  >
-                    Add Token
-                  </Button>
+                    tooltipProps={{
+                      overlay: this.serviceAccountTooltip,
+                      disabled: !this.serviceAccountTokenCreationDisabled,
+                    }}
+                    buttonContent={'Add token'}
+                  />
                 </div>
               </div>
               <OncoKBTable

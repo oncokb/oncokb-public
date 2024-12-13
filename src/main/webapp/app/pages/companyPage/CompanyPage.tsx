@@ -1101,18 +1101,6 @@ export default class CompanyPage extends React.Component<ICompanyPage> {
                           >
                             Delete Company
                           </Button>
-                          {this.showDeleteServiceAccount && (
-                            <Button
-                              variant="outline-danger"
-                              onClick={() => {
-                                this.showModal = true;
-                                this.simpleConfirmModalType =
-                                  SimpleConfirmModalType.DELETE_SERVICE_ACCOUNT;
-                              }}
-                            >
-                              Delete Service Account
-                            </Button>
-                          )}
                         </div>
                       </Col>
                     </Row>

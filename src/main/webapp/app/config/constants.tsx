@@ -1006,3 +1006,5 @@ export const FDA_SUBMISSION_URL_SUFFIX = {
   HDE: 'cfhde/hde.cfm',
   DEN: 'cfpmn/denovo.cfm',
 };
+
+export const MAX_SERVICE_ACCOUNT_TOKENS = 10;

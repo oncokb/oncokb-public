@@ -45,6 +45,8 @@ public final class Constants {
 
     public static final String ONCOKB_S3_BUCKET = "oncokb-v2";
 
+    public static final int MAX_SERVICE_ACCOUNT_TOKENS = 10;
+
     private Constants() {
     }
 

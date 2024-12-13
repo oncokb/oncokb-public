@@ -1,9 +1,11 @@
 package org.mskcc.cbio.oncokb.service;
 
 import org.mskcc.cbio.oncokb.domain.Token;
+import org.mskcc.cbio.oncokb.domain.User;
 import org.mskcc.cbio.oncokb.domain.enumeration.LicenseStatus;
 import org.mskcc.cbio.oncokb.service.dto.CompanyDTO;
 import org.mskcc.cbio.oncokb.service.dto.UserDTO;
+import org.mskcc.cbio.oncokb.web.rest.errors.TooManyTokensException;
 import org.mskcc.cbio.oncokb.web.rest.vm.CompanyVM;
 
 import java.util.List;
@@ -61,11 +63,11 @@ public interface CompanyService {
      */
     void delete(Long id);
 
-    Optional<CompanyDTO> createServiceAccount(Long id);
+    Optional<User> createServiceAccount(Long id);
 
     void deleteServiceAccount(CompanyDTO companyDTO);
 
-    Optional<Token> createServiceAccountToken(Long id, String name);
+    Optional<Token> createServiceAccountToken(Long id, String name) throws TooManyTokensException;
 
     Optional<List<Token>> getServiceAccountTokensForCompany(Long id);
 
