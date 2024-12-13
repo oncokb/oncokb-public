@@ -1,25 +1,9 @@
 package org.mskcc.cbio.oncokb.service.impl;
 
-import static org.mskcc.cbio.oncokb.config.Constants.MAX_SERVICE_ACCOUNT_TOKENS;
-import static org.mskcc.cbio.oncokb.config.cache.CompanyCacheResolver.COMPANIES_BY_ID_CACHE;
-import static org.mskcc.cbio.oncokb.config.cache.CompanyCacheResolver.COMPANIES_BY_NAME_CACHE;
-
-import java.time.LocalDateTime;
-import java.time.ZoneId;
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.HashSet;
-import java.util.LinkedList;
-import java.util.List;
-import java.util.Objects;
-import java.util.Optional;
-import java.util.Set;
-import java.util.UUID;
-import java.util.stream.Collectors;
-
+import org.mskcc.cbio.oncokb.service.CompanyDomainService;
+import org.mskcc.cbio.oncokb.service.CompanyService;
 import org.mskcc.cbio.oncokb.config.cache.CacheNameResolver;
 import org.mskcc.cbio.oncokb.domain.Company;
-import org.mskcc.cbio.oncokb.domain.Token;
 import org.mskcc.cbio.oncokb.domain.User;
 import org.mskcc.cbio.oncokb.domain.UserDetails;
 import org.mskcc.cbio.oncokb.domain.enumeration.LicenseStatus;
@@ -27,26 +11,28 @@ import org.mskcc.cbio.oncokb.domain.enumeration.LicenseType;
 import org.mskcc.cbio.oncokb.repository.CompanyRepository;
 import org.mskcc.cbio.oncokb.repository.UserDetailsRepository;
 import org.mskcc.cbio.oncokb.repository.UserRepository;
-import org.mskcc.cbio.oncokb.security.AuthoritiesConstants;
-import org.mskcc.cbio.oncokb.security.uuid.TokenProvider;
-import org.mskcc.cbio.oncokb.service.CompanyDomainService;
-import org.mskcc.cbio.oncokb.service.CompanyService;
-import org.mskcc.cbio.oncokb.service.UserDetailsService;
-import org.mskcc.cbio.oncokb.service.UserService;
 import org.mskcc.cbio.oncokb.service.dto.CompanyDTO;
 import org.mskcc.cbio.oncokb.service.dto.UserDTO;
 import org.mskcc.cbio.oncokb.service.mapper.CompanyDomainMapper;
 import org.mskcc.cbio.oncokb.service.mapper.CompanyMapper;
-import org.mskcc.cbio.oncokb.service.mapper.UserDetailsMapper;
 import org.mskcc.cbio.oncokb.service.mapper.UserMapper;
-import org.mskcc.cbio.oncokb.web.rest.errors.TooManyTokensException;
 import org.mskcc.cbio.oncokb.web.rest.vm.CompanyVM;
+import org.mskcc.cbio.oncokb.service.UserService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.cache.CacheManager;
 import org.springframework.dao.EmptyResultDataAccessException;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+
+import java.util.LinkedList;
+import java.util.List;
+import java.util.Objects;
+import java.util.Optional;
+import java.util.stream.Collectors;
+
+import static org.mskcc.cbio.oncokb.config.cache.CompanyCacheResolver.COMPANIES_BY_ID_CACHE;
+import static org.mskcc.cbio.oncokb.config.cache.CompanyCacheResolver.COMPANIES_BY_NAME_CACHE;
 
 /**
  * Service Implementation for managing {@link Company}.
@@ -65,10 +51,6 @@ public class CompanyServiceImpl implements CompanyService {
 
     private final UserService userService;
 
-    private final UserDetailsService userDetailsService;
-
-    private final UserDetailsMapper userDetailsMapper;
-
     private final CacheManager cacheManager;
 
     private final CacheNameResolver cacheNameResolver;
@@ -77,34 +59,26 @@ public class CompanyServiceImpl implements CompanyService {
 
     private final UserDetailsRepository userDetailsRepository;
 
-    private final TokenProvider tokenProvider;
-
     public CompanyServiceImpl(
         CompanyRepository companyRepository,
         CompanyMapper companyMapper,
         CompanyDomainService companyDomainService,
         CompanyDomainMapper companyDomainMapper,
         UserService userService,
-        UserDetailsService userDetailsService,
-        UserDetailsMapper userDetailsMapper,
         UserMapper userMapper,
         CacheManager cacheManager,
         CacheNameResolver cacheNameResolver,
         UserRepository userRepository,
-        UserDetailsRepository userDetailsRepository,
-        TokenProvider tokenProvider
+        UserDetailsRepository userDetailsRepository
     ) {
         this.companyRepository = companyRepository;
         this.companyMapper = companyMapper;
         this.userMapper = userMapper;
         this.userService = userService;
-        this.userDetailsService = userDetailsService;
-        this.userDetailsMapper = userDetailsMapper;
         this.cacheManager = cacheManager;
         this.cacheNameResolver = cacheNameResolver;
         this.userRepository = userRepository;
         this.userDetailsRepository = userDetailsRepository;
-        this.tokenProvider = tokenProvider;
     }
 
     @Override
@@ -217,11 +191,6 @@ public class CompanyServiceImpl implements CompanyService {
         }
 
         CompanyDTO companyDTO = maybeCompanyDTO.get();
-        Optional<UserDTO> serviceUser = getServiceUserForCompany(companyDTO.getId());
-        if (serviceUser.isPresent()) {
-            userService.deleteUser(serviceUser.get().getLogin());
-        }
-
         Boolean isCommercial = companyDTO.getLicenseType().equals(LicenseType.COMMERCIAL);
         List<UserDetails> userDetails = userDetailsRepository.findByCompanyId(id);
         for (UserDetails userDetail : userDetails) {
@@ -240,112 +209,9 @@ public class CompanyServiceImpl implements CompanyService {
         companyRepository.deleteById(id);
     }
 
-    @Override
-    @Transactional
-    public Optional<User> createServiceAccount(Long id) {
-        Optional<CompanyDTO> companyDtoOptional = findOne(id);
-        if (!companyDtoOptional.isPresent()) {
-            return Optional.empty();
-        }
-
-        CompanyDTO companyDTO = companyDtoOptional.get();
-        Company company = companyMapper.toEntity(companyDTO);
-        Optional<UserDTO> serviceUser = getServiceUserForCompany(company.getId());
-        // only allow one service user per company
-        if (serviceUser.isPresent()) {
-            return Optional.empty();
-        }
-        UserDTO userDTO = new UserDTO();
-        userDTO = new UserDTO();
-        userDTO.setFirstName(company.getName());
-        userDTO.setLastName(UUID.randomUUID().toString());
-        userDTO.setLogin(UUID.randomUUID().toString());
-        userDTO.setActivated(true);
-        userDTO.setLicenseType(company.getLicenseType());
-        userDTO.setAuthorities(new HashSet<>(Arrays.asList(AuthoritiesConstants.ROLE_SERVICE_ACCOUNT)));
-        userDTO.setCompany(companyDTO);
-
-        return Optional.of(userService.createUser(userDTO, true, Optional.empty(), Optional.of(false)));
-    }
-
-    @Override
-    @Transactional
-    public void deleteServiceAccount(CompanyDTO companyDTO) {
-        Company company = companyMapper.toEntity(companyDTO);
-        Optional<UserDTO> serviceUser = getServiceUserForCompany(company.getId());
-        if (serviceUser.isPresent()) {
-            userService.deleteUser(serviceUser.get().getLogin());
-        }
-    }
-
-    @Override
-    @Transactional
-    public Optional<Token> createServiceAccountToken(Long id, String name) throws TooManyTokensException {
-        Optional<CompanyDTO> companyDtoOptional = findOne(id);
-        if (!companyDtoOptional.isPresent()) {
-            return Optional.empty();
-        }
-
-        Company company = companyMapper.toEntity(companyDtoOptional.get());
-        Optional<UserDTO> serviceUserOptional = getServiceUserForCompany(company.getId());
-        UserDTO serviceUserDTO;
-        if (serviceUserOptional.isPresent()) {
-            serviceUserDTO = serviceUserOptional.get();
-        } else {
-            createServiceAccount(company.getId());
-            serviceUserOptional = getServiceUserForCompany(company.getId());
-            if (serviceUserOptional.isPresent()) {
-                serviceUserDTO = serviceUserOptional.get();
-            } else {
-                return Optional.empty();
-            }
-        }
-
-        User serviceUser = userMapper.userDTOToUser(serviceUserDTO);
-        List<Token> tokens = tokenProvider.getUserTokens(serviceUser);
-        if (tokens.size() >= MAX_SERVICE_ACCOUNT_TOKENS) {
-            throw new TooManyTokensException();
-        }
-
-        return Optional.of(tokenProvider.createToken(
-            serviceUser,
-            Optional.of(
-                LocalDateTime.of(9999, 1, 1, 0, 0).atZone(ZoneId.systemDefault()).toInstant()
-            ),
-            Optional.of(true),
-            Optional.of(name)
-        ));
-    }
-
     private void clearCompanyCaches(Company company) {
         Objects.requireNonNull(cacheManager.getCache(this.cacheNameResolver.getCacheName(COMPANIES_BY_ID_CACHE))).evict(company.getId());
         Objects.requireNonNull(cacheManager.getCache(this.cacheNameResolver.getCacheName(COMPANIES_BY_NAME_CACHE))).evict(company.getName());
     }
 
-    @Override
-    public Optional<List<Token>> getServiceAccountTokensForCompany(Long id) {
-        Optional<CompanyDTO> companyDtoOptional = findOne(id);
-        if (companyDtoOptional.isPresent()) {
-            CompanyDTO companyDto = companyDtoOptional.get();
-            List<Token> tokens = new ArrayList<>();
-            Optional<UserDTO> serviceUser = getServiceUserForCompany(companyDto.getId());
-            if (serviceUser.isPresent()) {
-                tokens.addAll(tokenProvider.getUserTokens(userMapper.userDTOToUser(serviceUser.get())));
-            } else {
-                return Optional.empty();
-            }
-            return Optional.of(tokens);
-        } 
-        return Optional.empty();
-    }
-
-    public Optional<UserDTO> getServiceUserForCompany(Long companyId) {
-        List<UserDTO> companyUsers = userService.getCompanyUsers(companyId);
-        for (UserDTO user : companyUsers) {
-            if (user.getAuthorities().contains(AuthoritiesConstants.ROLE_SERVICE_ACCOUNT)) {
-                return Optional.of(user);
-            }
-        }
-        return Optional.empty();
-    }
 }

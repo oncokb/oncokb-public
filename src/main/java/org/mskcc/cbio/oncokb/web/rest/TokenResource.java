@@ -99,16 +99,4 @@ public class TokenResource {
         Optional<Token> token = tokenService.findByToken(UUID.fromString(uuid));
         return ResponseUtil.wrapOrNotFound(token);
     }
-
-    @DeleteMapping("/tokens/{uuid}")
-    public ResponseEntity<Void> deleteTokenWithoutTransferringStats(@PathVariable String uuid) {
-        log.debug("REST request to delete Token : {}", uuid);
-        Optional<Token> token = tokenService.findByToken(UUID.fromString(uuid));
-        if (!token.isPresent()) {
-            return ResponseEntity.notFound().build();   
-        }
-        
-        tokenService.delete(token.get().getId());
-        return ResponseEntity.ok().build();
-    }
 }

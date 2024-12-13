@@ -125,7 +125,7 @@ public class TokenServiceImpl implements TokenService {
     }
 
     @Override
-    public void deleteAndAssociateStats(Long id) {
+    public void delete(Long id) {
         log.debug("Request to delete Token : {}", id);
 
         Optional<Token> tokenOptional = tokenRepository.findById(id);
@@ -156,15 +156,6 @@ public class TokenServiceImpl implements TokenService {
             this.clearTokenCaches(token);
         }
 
-    }
-
-    @Override
-    public void delete(Long id) {
-        Optional<Token> tokenOptional = tokenRepository.findById(id);
-        if (!tokenOptional.isPresent()) {
-            throw new CustomMessageRuntimeException("Token could not be found");
-        }
-        tokenRepository.delete(tokenOptional.get());
     }
 
     @Override

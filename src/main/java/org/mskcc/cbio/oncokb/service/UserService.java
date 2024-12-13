@@ -313,7 +313,7 @@ public class UserService {
         return newUser;
     }
 
-    public User createUser(UserDTO userDTO, boolean isServiceUser, Optional<Integer> tokenValidDays, Optional<Boolean> tokenIsRenewable) {
+    public User createUser(UserDTO userDTO, Optional<Integer> tokenValidDays, Optional<Boolean> tokenIsRenewable) {
         User user = new User();
         user.setLogin(userDTO.getLogin().toLowerCase());
         user.setFirstName(userDTO.getFirstName());
@@ -355,10 +355,6 @@ public class UserService {
         userDetails.setCompany(companyMapper.toEntity(userDTO.getCompany()));
         userDetailsRepository.save(userDetails);
 
-        if (isServiceUser) {
-            log.debug("Created Information for Service User: {}", user);
-            return user;
-        }
 
         // Check if the user is a part of licensed company and then continue with approval procedure
         if(userDetails.getCompany() != null){
@@ -538,7 +534,7 @@ public class UserService {
     @Transactional(readOnly = true)
     @Cacheable(cacheResolver = "userCacheResolver", key = "#root.methodName")
     public Page<UserDTO> getAllManagedUsers(Pageable pageable) {
-        List<User> users = userRepository.findAllUsersWithoutAuthorityAndLoginNot(AuthoritiesConstants.ROLE_SERVICE_ACCOUNT, Constants.ANONYMOUS_USER);
+        List<User> users = userRepository.findAllByLoginNot(pageable, Constants.ANONYMOUS_USER).getContent();
         List<UserDTO> userDTOs = findAllUsersWithUserDetailsByUsersIn(users);
         return new PageImpl<>(userDTOs, pageable, users.size());
     }
@@ -646,8 +642,7 @@ public class UserService {
             Token token = tokenProvider.createToken(
                 userMapper.userDTOToUser(userDTO),
                 tokenValidDays.isPresent() ? Optional.of(Instant.now().plusSeconds(DAY_IN_SECONDS * (long) tokenValidDays.get())) : Optional.empty(),
-                tokenIsRenewable,
-                Optional.empty()
+                tokenIsRenewable
             );
             tokens.add(token);
         }

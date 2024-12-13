@@ -134,7 +134,7 @@ public class AccountResourceIT {
         user.setImageUrl("http://placehold.it/50x50");
         user.setLangKey("en");
         user.setAuthorities(authorities);
-        userService.createUser(user, false, Optional.empty(), Optional.empty());
+        userService.createUser(user, Optional.empty(), Optional.empty());
 
         restAccountMockMvc.perform(get("/api/account")
                 .accept(MediaType.APPLICATION_JSON))

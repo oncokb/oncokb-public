@@ -5,10 +5,13 @@
     "version": "v1.0.0",
     "title": "OncoKB™ APIs",
     "contact": {
-      "name": "OncoKB™"
+      "name": "OncoKB™",
+      "url": "https://www.oncokb.org",
+      "email": "contact@oncokb.org"
     },
     "license": {
-      "name": "Terms of Use"
+      "name": "Terms of Use",
+      "url": "https://www.oncokb.org/terms"
     }
   },
   "tags": [
@@ -917,84 +920,6 @@
         "deprecated": false
       }
     },
-    "/api/companies/service-account/token": {
-      "get": {
-        "tags": [
-          "company-resource"
-        ],
-        "summary": "getServiceAccountTokens",
-        "operationId": "getServiceAccountTokensUsingGET",
-        "produces": [
-          "*/*"
-        ],
-        "responses": {
-          "200": {
-            "description": "OK",
-            "schema": {
-              "type": "array",
-              "items": {
-                "$ref": "#/definitions/Token"
-              }
-            }
-          },
-          "401": {
-            "description": "Unauthorized"
-          },
-          "403": {
-            "description": "Forbidden"
-          },
-          "404": {
-            "description": "Not Found"
-          }
-        },
-        "deprecated": false
-      },
-      "post": {
-        "tags": [
-          "company-resource"
-        ],
-        "summary": "createServiceAccountToken",
-        "operationId": "createServiceAccountTokenUsingPOST",
-        "consumes": [
-          "application/json"
-        ],
-        "produces": [
-          "*/*"
-        ],
-        "parameters": [
-          {
-            "in": "body",
-            "name": "name",
-            "description": "name",
-            "required": true,
-            "schema": {
-              "type": "string"
-            }
-          }
-        ],
-        "responses": {
-          "200": {
-            "description": "OK",
-            "schema": {
-              "$ref": "#/definitions/Token"
-            }
-          },
-          "201": {
-            "description": "Created"
-          },
-          "401": {
-            "description": "Unauthorized"
-          },
-          "403": {
-            "description": "Forbidden"
-          },
-          "404": {
-            "description": "Not Found"
-          }
-        },
-        "deprecated": false
-      }
-    },
     "/api/companies/verify-name": {
       "post": {
         "tags": [
@@ -1112,86 +1037,6 @@
           },
           "403": {
             "description": "Forbidden"
-          }
-        },
-        "deprecated": false
-      }
-    },
-    "/api/companies/{id}/service-account": {
-      "delete": {
-        "tags": [
-          "company-resource"
-        ],
-        "summary": "deleteServiceAccount",
-        "operationId": "deleteServiceAccountUsingDELETE",
-        "produces": [
-          "*/*"
-        ],
-        "parameters": [
-          {
-            "name": "id",
-            "in": "path",
-            "description": "id",
-            "required": true,
-            "type": "integer",
-            "format": "int64"
-          }
-        ],
-        "responses": {
-          "200": {
-            "description": "OK"
-          },
-          "204": {
-            "description": "No Content"
-          },
-          "401": {
-            "description": "Unauthorized"
-          },
-          "403": {
-            "description": "Forbidden"
-          }
-        },
-        "deprecated": false
-      }
-    },
-    "/api/companies/{id}/service-account/token": {
-      "get": {
-        "tags": [
-          "company-resource"
-        ],
-        "summary": "getServiceAccountTokensForCompany",
-        "operationId": "getServiceAccountTokensForCompanyUsingGET",
-        "produces": [
-          "*/*"
-        ],
-        "parameters": [
-          {
-            "name": "id",
-            "in": "path",
-            "description": "id",
-            "required": true,
-            "type": "integer",
-            "format": "int64"
-          }
-        ],
-        "responses": {
-          "200": {
-            "description": "OK",
-            "schema": {
-              "type": "array",
-              "items": {
-                "$ref": "#/definitions/Token"
-              }
-            }
-          },
-          "401": {
-            "description": "Unauthorized"
-          },
-          "403": {
-            "description": "Forbidden"
-          },
-          "404": {
-            "description": "Not Found"
           }
         },
         "deprecated": false
@@ -2145,40 +1990,6 @@
           },
           "404": {
             "description": "Not Found"
-          }
-        },
-        "deprecated": false
-      },
-      "delete": {
-        "tags": [
-          "token-resource"
-        ],
-        "summary": "deleteTokenWithoutTransferringStats",
-        "operationId": "deleteTokenWithoutTransferringStatsUsingDELETE",
-        "produces": [
-          "*/*"
-        ],
-        "parameters": [
-          {
-            "name": "uuid",
-            "in": "path",
-            "description": "uuid",
-            "required": true,
-            "type": "string"
-          }
-        ],
-        "responses": {
-          "200": {
-            "description": "OK"
-          },
-          "204": {
-            "description": "No Content"
-          },
-          "401": {
-            "description": "Unauthorized"
-          },
-          "403": {
-            "description": "Forbidden"
           }
         },
         "deprecated": false
@@ -3625,9 +3436,6 @@
         "id": {
           "type": "integer",
           "format": "int64"
-        },
-        "name": {
-          "type": "string"
         },
         "renewable": {
           "type": "boolean"
