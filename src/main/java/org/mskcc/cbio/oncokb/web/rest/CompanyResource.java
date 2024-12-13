@@ -1,36 +1,45 @@
 package org.mskcc.cbio.oncokb.web.rest;
 
-import org.mskcc.cbio.oncokb.domain.Company;
-import org.mskcc.cbio.oncokb.domain.User;
-import org.mskcc.cbio.oncokb.domain.UserDetails;
-import org.mskcc.cbio.oncokb.domain.enumeration.LicenseType;
-import org.mskcc.cbio.oncokb.repository.CompanyRepository;
-import org.mskcc.cbio.oncokb.repository.UserDetailsRepository;
-import org.mskcc.cbio.oncokb.repository.UserRepository;
-import org.mskcc.cbio.oncokb.security.AuthoritiesConstants;
-import org.mskcc.cbio.oncokb.service.CompanyService;
-import org.mskcc.cbio.oncokb.service.UserDetailsService;
-import org.mskcc.cbio.oncokb.service.UserService;
-import org.mskcc.cbio.oncokb.web.rest.errors.BadRequestAlertException;
-import org.mskcc.cbio.oncokb.web.rest.vm.CompanyVM;
-import org.mskcc.cbio.oncokb.web.rest.vm.VerifyCompanyNameVM;
-import org.mskcc.cbio.oncokb.service.dto.CompanyDTO;
-import org.mskcc.cbio.oncokb.service.dto.UserDTO;
-
-import io.github.jhipster.web.util.ResponseUtil;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-import org.springframework.beans.factory.annotation.Value;
-import org.springframework.http.HttpStatus;
-import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.*;
-
-import javax.validation.Valid;
 import java.net.URI;
 import java.net.URISyntaxException;
 import java.util.List;
 import java.util.Optional;
 import java.util.Set;
+
+import javax.validation.Valid;
+
+import org.mskcc.cbio.oncokb.domain.Company;
+import org.mskcc.cbio.oncokb.domain.Token;
+import org.mskcc.cbio.oncokb.domain.User;
+import org.mskcc.cbio.oncokb.domain.enumeration.LicenseType;
+import org.mskcc.cbio.oncokb.repository.CompanyRepository;
+import org.mskcc.cbio.oncokb.security.AuthoritiesConstants;
+import org.mskcc.cbio.oncokb.security.SecurityUtils;
+import org.mskcc.cbio.oncokb.service.CompanyService;
+import org.mskcc.cbio.oncokb.service.UserService;
+import org.mskcc.cbio.oncokb.service.dto.CompanyDTO;
+import org.mskcc.cbio.oncokb.service.dto.UserDTO;
+import org.mskcc.cbio.oncokb.service.mapper.UserMapper;
+import org.mskcc.cbio.oncokb.web.rest.errors.BadRequestAlertException;
+import org.mskcc.cbio.oncokb.web.rest.errors.CustomMessageRuntimeException;
+import org.mskcc.cbio.oncokb.web.rest.vm.CompanyVM;
+import org.mskcc.cbio.oncokb.web.rest.vm.VerifyCompanyNameVM;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Value;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.DeleteMapping;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.PutMapping;
+import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.RestController;
+
+import io.github.jhipster.web.util.ResponseUtil;
 
 /**
  * REST controller for managing {@link org.mskcc.cbio.oncokb.domain.Company}.
@@ -50,14 +59,18 @@ public class CompanyResource {
 
     private final UserService userService;
 
+    private final UserMapper userMapper;
+
     private final CompanyRepository companyRepository;
 
     public CompanyResource(
             CompanyService companyService,
             UserService userService,
+            UserMapper userMapper,
             CompanyRepository companyRepository) {
         this.companyService = companyService;
         this.userService = userService;
+        this.userMapper = userMapper;
         this.companyRepository = companyRepository;
     }
 
@@ -194,5 +207,60 @@ public class CompanyResource {
         log.debug("REST request to delete Company : {}", id);
         companyService.delete(id);
         return ResponseEntity.ok().build();
+    }
+
+    /* ONLY ROLE_ADMIN */
+    @DeleteMapping("/companies/{id}/service-account")
+    public ResponseEntity<Void> deleteServiceAccount(@PathVariable Long id) {
+        Optional<CompanyDTO> companyDto = companyService.findOne(id);
+        if (companyDto.isPresent()) {
+            companyService.deleteServiceAccount(companyDto.get());
+        } else {
+            return ResponseEntity.notFound().build();
+        }
+        return ResponseEntity.ok().build();
+    }
+
+    /* ONLY ROLE_ADMIN */
+    @GetMapping("/companies/{id}/service-account/token")
+    public ResponseEntity<List<Token>> getServiceAccountTokensForCompany(@PathVariable Long id) {
+        return ResponseUtil.wrapOrNotFound(companyService.getServiceAccountTokensForCompany(id));
+    }
+
+    /* ONLY ROLE_COMPANY_ADMIN */
+    @PostMapping("/companies/service-account/token") 
+    public ResponseEntity<Token> createServiceAccountToken(@RequestBody String name) {
+        Optional<String> currentUserLoginOptional = SecurityUtils.getCurrentUserLogin();
+        if (!currentUserLoginOptional.isPresent()) {
+            throw new CustomMessageRuntimeException("User is not logged in");
+        }
+
+        Optional<User> userOptional = userService.getUserByLogin(currentUserLoginOptional.get());
+        if (!userOptional.isPresent()) {
+            return ResponseEntity.notFound().build();
+        }
+
+        UserDTO userDTO = userMapper.userToUserDTO(userOptional.get());
+        if (userDTO.getCompany() == null) {
+            return ResponseEntity.notFound().build();
+        }
+        return ResponseUtil.wrapOrNotFound(companyService.createServiceAccountToken(userDTO.getCompany().getId(), name));
+    }
+
+    /* ONLY ROLE_COMPANY_ADMIN */
+    @GetMapping("/companies/service-account/token")
+    public ResponseEntity<List<Token>> getServiceAccountTokens() {
+        Optional<String> currentUserLoginOptional = SecurityUtils.getCurrentUserLogin();
+        if (!currentUserLoginOptional.isPresent()) {
+            throw new CustomMessageRuntimeException("User is not logged in");
+        }
+
+        Optional<User> userOptional = userService.getUserByLogin(currentUserLoginOptional.get());
+        if (!userOptional.isPresent()) {
+            return ResponseEntity.notFound().build();
+        }
+
+        UserDTO userDTO = userMapper.userToUserDTO(userOptional.get());
+        return ResponseUtil.wrapOrNotFound(companyService.getServiceAccountTokensForCompany(userDTO.getCompany().getId()));
     }
 }
