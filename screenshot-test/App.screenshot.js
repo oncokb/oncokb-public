@@ -221,6 +221,14 @@ function getMockResponse(url) {
         body: companyDetails,
       };
       break;
+    case `${SERVER_URL}api/companies/service-account/token`:
+    case `${SERVER_URL}api/companies/{id}/service-account/token`:
+      res = {
+        status: 200,
+        contentType: 'application/json',
+        body: companyUserToken,
+      };
+      break;
     case `${SERVER_URL}api/users/non-company-emails`:
       res = {
         status: 200,
