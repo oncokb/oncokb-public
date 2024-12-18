@@ -106,7 +106,7 @@ const NoContent: FunctionComponent<{
       <p className={'d-flex flex-column'}>
         <div>Don’t miss out on the latest data releases and new features.</div>
         <div>
-          Follow us on <LinkedInLink />, or subscribe to our low-volume email
+          Follow us on <LinkedInLink /> or subscribe to our low-volume email
           list!
         </div>
       </p>
