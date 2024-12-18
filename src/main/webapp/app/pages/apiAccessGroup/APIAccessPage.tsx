@@ -268,6 +268,12 @@ export default class APIAccessPage extends React.Component<{
                           )}
                           , the latest
                         </h6>
+                        <p className="rounded">
+                          The transcript database serves OncoKB metadata
+                          included gene, transcript, sequence, etc. Only
+                          required for local installations that will utilize the
+                          /byGenomicChange and /byHGVSg endpoints
+                        </p>
                         <DownloadButtonGroups
                           data={this.dataAvailability.result[0]}
                         />
