@@ -35,6 +35,6 @@ export default class SummaryWithRefs extends React.Component<
       }
     });
 
-    return <span>{content}</span>;
+    return <span style={{ whiteSpace: 'pre-wrap' }}>{content}</span>;
   }
 }
