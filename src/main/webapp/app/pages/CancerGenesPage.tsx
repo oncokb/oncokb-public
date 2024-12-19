@@ -449,10 +449,10 @@ export default class CancerGenesPage extends React.Component<{
             </Col>
             <Col className="col-auto">
               <DownloadButtonWithPromise
-                fileName="cancerGeneList.tsv"
-                getDownloadData={() =>
-                  oncokbClient.utilsCancerGeneListTxtGetUsingGET({})
-                }
+                fileName={'cancerGeneList.tsv'}
+                getDownloadData={() => {
+                  return oncokbClient.utilsCancerGeneListTxtGetUsingGET({});
+                }}
                 buttonText="Cancer Gene List"
               />
             </Col>

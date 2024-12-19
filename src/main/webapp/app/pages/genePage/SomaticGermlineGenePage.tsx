@@ -76,7 +76,7 @@ import GeneticTypeTabs, {
 } from 'app/components/geneticTypeTabs/GeneticTypeTabs';
 import InfoTile from 'app/components/infoTile/InfoTile';
 import AnnotatedAlterations from 'app/pages/annotationPage/AnnotatedAlterations';
-import { LinkedInLink, TwitterLink } from 'app/shared/links/SocialMediaLinks';
+import { LinkedInLink } from 'app/shared/links/SocialMediaLinks';
 import styles from './GenePage.module.scss';
 import StickyMiniNavBar from 'app/shared/nav/StickyMiniNavBar';
 import MiniNavBarHeader from 'app/shared/nav/MiniNavBarHeader';
@@ -106,8 +106,8 @@ const NoContent: FunctionComponent<{
       <p className={'d-flex flex-column'}>
         <div>Don’t miss out on the latest data releases and new features.</div>
         <div>
-          Follow us on <LinkedInLink /> and <TwitterLink />, or subscribe to our
-          low-volume email list!
+          Follow us on <LinkedInLink /> or subscribe to our low-volume email
+          list!
         </div>
       </p>
       <Button

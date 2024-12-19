@@ -14,7 +14,6 @@ import ExternalLinkIcon from 'app/shared/icons/ExternalLinkIcon';
 import { OncoTreeLink } from 'app/shared/utils/UrlUtils';
 import {
   LinkedInLink,
-  TwitterLink,
   UserGoogleGroupLink,
 } from 'app/shared/links/SocialMediaLinks';
 
@@ -58,7 +57,6 @@ class Footer extends React.Component<{ lastDataUpdate: string }> {
           <Link to={PAGE_ROUTE.TERMS}>Terms of Use</Link>
           <ContactLink emailSubject={'Contact us'}>Contact Us</ContactLink>
           <LinkedInLink short />
-          <TwitterLink short />
           <Linkout link={API_DOCUMENT_LINK}>API</Linkout>
         </div>
         <div className={classnames(styles.footerAList)}>

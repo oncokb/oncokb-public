@@ -301,6 +301,97 @@ const EVIDENCE_COLUMN_SEPARATOR = '; ';
 // https://stackoverflow.com/questions/41947168/is-it-possible-to-use-keyof-operator-on-literals-instead-of-interfaces
 
 export const NEWS_BY_DATE: { [date: string]: NewsData } = {
+  '12192024': {
+    priorityNews: [
+      <span>
+        Update to our{' '}
+        <Link to={PAGE_ROUTE.ONCOLOGY_TX}>FDA-Approved Oncology Therapies</Link>{' '}
+        page
+      </span>,
+    ],
+    changedAnnotations: [
+      {
+        columnHeaderType:
+          AnnotationColumnHeaderType.PROMOTION_TUMOR_TYPE_SPECIFIC_EVIDENCE,
+        title:
+          'Updated therapeutic implications - Promotion of tumor type-specific level of evidence for an alteration',
+        content: [
+          [
+            'NRG1',
+            'Fusions',
+            'Non-Small Cell Lung Cancer',
+            <div>
+              <div style={{ fontStyle: 'italic' }}>
+                {DRUGS_PROMOTED_IN_ONCOKB}:
+              </div>
+              <div>Zenocutuzumab</div>
+              <br></br>
+              <div style={{ fontStyle: 'italic' }}>
+                {DRUGS_REMAINING_IN_ONCOKB}:
+              </div>
+              <div>Seribantumab (Level 3A)</div>
+            </div>,
+            '3A',
+            '1',
+            <WithSeparator separator={EVIDENCE_COLUMN_SEPARATOR}>
+              <FdaApprovalLink
+                approval="zenocutuzumab"
+                link="https://www.fda.gov/drugs/resources-information-approved-drugs/fda-grants-accelerated-approval-zenocutuzumab-zbco-non-small-cell-lung-cancer-and-pancreatic"
+              />
+              <AbstractLink
+                abstract="Schram, A. et al. Abstract# 1618P, Annals of Oncol. 2023"
+                link="https://www.annalsofoncology.org/article/S0923-7534(23)03404-X/fulltext"
+              />
+            </WithSeparator>,
+          ],
+          [
+            'NRG1',
+            'Fusions',
+            'Pancreatic Adenocarcinoma',
+            'Zenocutuzumab',
+            '3A',
+            '1',
+            <WithSeparator separator={EVIDENCE_COLUMN_SEPARATOR}>
+              <FdaApprovalLink
+                approval="zenocutuzumab"
+                link="https://www.fda.gov/drugs/resources-information-approved-drugs/fda-grants-accelerated-approval-zenocutuzumab-zbco-non-small-cell-lung-cancer-and-pancreatic"
+              />
+              <AbstractLink
+                abstract="Schram, A. et al. Abstract# 1618P, Annals of Oncol. 2023"
+                link="https://www.annalsofoncology.org/article/S0923-7534(23)03404-X/fulltext"
+              />
+            </WithSeparator>,
+          ],
+        ],
+      },
+      {
+        columnHeaderType: AnnotationColumnHeaderType.UPDATED_SAME_LEVEL_DRUG,
+        content: [
+          [
+            '2',
+            'ERBB2',
+            <WithSeparator separator={', '}>
+              <AlterationPageLink hugoSymbol="ERBB2" alteration="Amplification">
+                Amplification
+              </AlterationPageLink>
+            </WithSeparator>,
+            'Biliary Tract Cancer',
+            'Trastuzumab + Pertuzumab, Tucatinib + Trastuzumab (Level 2)',
+            'Zanidatamab (Level 3A)',
+            <WithSeparator separator={EVIDENCE_COLUMN_SEPARATOR}>
+              <FdaApprovalLink
+                approval="zanidatamab"
+                for="HER2+ (IHC 3+) biliary tract cancer"
+                link="https://www.fda.gov/drugs/resources-information-approved-drugs/fda-grants-accelerated-approval-zanidatamab-hrii-previously-treated-unresectable-or-metastatic-her2"
+              />
+              <PMIDLink pmids="37276871" />
+            </WithSeparator>,
+          ],
+        ],
+      },
+    ],
+    newlyAddedGenes: ['AIP', 'CASR', 'GEN1'],
+  },
   '11262024': {
     changedAnnotations: [
       {

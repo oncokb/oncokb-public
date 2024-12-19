@@ -1766,6 +1766,81 @@ export default class OncoKbPrivateAPI {
                 return response.body;
             });
         };
+    utilDataTranscriptSqlDumpUsingGETURL(parameters: {
+        'version' ? : string,
+        $queryParameters ? : any
+    }): string {
+        let queryParameters: any = {};
+        let path = '/utils/data/transcriptSqlDump';
+        if (parameters['version'] !== undefined) {
+            queryParameters['version'] = parameters['version'];
+        }
+
+        if (parameters.$queryParameters) {
+            Object.keys(parameters.$queryParameters).forEach(function(parameterName) {
+                var parameter = parameters.$queryParameters[parameterName];
+                queryParameters[parameterName] = parameter;
+            });
+        }
+        let keys = Object.keys(queryParameters);
+        return this.domain + path + (keys.length > 0 ? '?' + (keys.map(key => key + '=' + encodeURIComponent(queryParameters[key])).join('&')) : '');
+    };
+
+    /**
+     * utilDataTranscriptSqlDump
+     * @method
+     * @name OncoKbPrivateAPI#utilDataTranscriptSqlDumpUsingGET
+     * @param {string} version - version
+     */
+    utilDataTranscriptSqlDumpUsingGETWithHttpInfo(parameters: {
+        'version' ? : string,
+        $queryParameters ? : any,
+            $domain ? : string
+    }): Promise < request.Response > {
+        const domain = parameters.$domain ? parameters.$domain : this.domain;
+        const errorHandlers = this.errorHandlers;
+        const request = this.request;
+        let path = '/utils/data/transcriptSqlDump';
+        let body: any;
+        let queryParameters: any = {};
+        let headers: any = {};
+        let form: any = {};
+        return new Promise(function(resolve, reject) {
+            headers['Accept'] = 'application/gz';
+            headers['Content-Type'] = 'application/json';
+
+            if (parameters['version'] !== undefined) {
+                queryParameters['version'] = parameters['version'];
+            }
+
+            if (parameters.$queryParameters) {
+                Object.keys(parameters.$queryParameters).forEach(function(parameterName) {
+                    var parameter = parameters.$queryParameters[parameterName];
+                    queryParameters[parameterName] = parameter;
+                });
+            }
+
+            request('GET', domain + path, body, headers, queryParameters, form, reject, resolve, errorHandlers);
+
+        });
+    };
+
+    /**
+     * utilDataTranscriptSqlDump
+     * @method
+     * @name OncoKbPrivateAPI#utilDataTranscriptSqlDumpUsingGET
+     * @param {string} version - version
+     */
+    utilDataTranscriptSqlDumpUsingGET(parameters: {
+            'version' ? : string,
+            $queryParameters ? : any,
+                $domain ? : string
+        }): Promise < Array < string >
+        > {
+            return this.utilDataTranscriptSqlDumpUsingGETWithHttpInfo(parameters).then(function(response: request.Response) {
+                return response.body;
+            });
+        };
     utilsEnsemblGenesGetUsingGETURL(parameters: {
         'entrezGeneId': number,
         $queryParameters ? : any

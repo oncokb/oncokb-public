@@ -42,7 +42,10 @@ superagent.Request.prototype.query = function (queryParameters: any) {
   const token = getStoredToken();
   if (token) {
     this.set('Authorization', `Bearer ${token}`);
-    if (this.url.endsWith('sqlDump')) {
+    if (
+      this.url.endsWith('sqlDump') ||
+      this.url.endsWith('transcriptSqlDump')
+    ) {
       this.responseType('blob');
     }
   }

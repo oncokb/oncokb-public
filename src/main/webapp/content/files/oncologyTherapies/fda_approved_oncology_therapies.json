@@ -862,7 +862,7 @@
   {
     "year": "2014",
     "tx": "Olaparib",
-    "biomarker": "*BRCA1, BRCA2 Oncogenic Mutations  *ATM, BARD1, BRCA1, BRCA2, BRIP1, CDK12, CHEK1, CHEK2, FANCL, PALB2, RAD51B, RAD51C, RAD51D, RAD54 Oncogenic Mutations",
+    "biomarker": "*BRCA1, BRCA2 Oncogenic Mutations  \n*ATM, BARD1, BRCA1, BRCA2, BRIP1, CDK12, CHEK1, CHEK2, FANCL, PALB2, RAD51B, RAD51C, RAD51D, RAD54 Oncogenic Mutations",
     "agentClass": "Small molecule inhibitor",
     "drugTarget": "PARP inhibitor",
     "targetedTx": "Y",
@@ -1637,7 +1637,7 @@
     "drugTarget": "Anti-GD2 antibody",
     "targetedTx": "Y",
     "pxTx": "N",
-    "ngsTest": ""
+    "ngsTest": "NA"
   },
   {
     "year": "2020",
@@ -2278,5 +2278,45 @@
     "targetedTx": "Y",
     "pxTx": "Y",
     "ngsTest": "N"
+  },
+  {
+    "year": "2024",
+    "tx": "Obecabtagene autoleucel",
+    "biomarker": "",
+    "agentClass": "CAR T-cell therapy",
+    "drugTarget": "CAR T-cell therapy (CD19-directed)",
+    "targetedTx": "Y",
+    "pxTx": "N",
+    "ngsTest": "NA"
+  },
+  {
+    "year": "2024",
+    "tx": "Revumenib",
+    "biomarker": "KMT2A Rearrangement",
+    "agentClass": "Small molecule inhibitor",
+    "drugTarget": "Menin inhibitor",
+    "targetedTx": "Y",
+    "pxTx": "Y",
+    "ngsTest": "Y"
+  },
+  {
+    "year": "2024",
+    "tx": "Zanidatamab",
+    "biomarker": "HER2+ (ERBB2 Amplification)",
+    "agentClass": "Monoclonal antibody",
+    "drugTarget": "Anti-HER2 (ERBB2) antibody",
+    "targetedTx": "Y",
+    "pxTx": "Y",
+    "ngsTest": "Y"
+  },
+  {
+    "year": "2024",
+    "tx": "Zenocutuzumab",
+    "biomarker": "NRG1 Fusion",
+    "agentClass": "Bispecific T-cell engager",
+    "drugTarget": "Bispecific HER2/HER3-directed T-cell engager",
+    "targetedTx": "Y",
+    "pxTx": "Y",
+    "ngsTest": "Y"
   }
 ]

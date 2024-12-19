@@ -2,16 +2,6 @@ import React from 'react';
 import { Linkout } from 'app/shared/links/Linkout';
 import { ONCOKB_NEWS_GROUP_SUBSCRIPTION_LINK } from 'app/config/constants';
 
-export const TwitterLink: React.FunctionComponent<{
-  short?: boolean;
-}> = props => {
-  return (
-    <Linkout link={'https://twitter.com/OncoKB'}>
-      Twitter{props.short ? '' : ' (@OncoKB)'}
-    </Linkout>
-  );
-};
-
 export const LinkedInLink: React.FunctionComponent<{
   short?: boolean;
 }> = props => {

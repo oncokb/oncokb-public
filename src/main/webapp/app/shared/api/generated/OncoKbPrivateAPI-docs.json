@@ -644,6 +644,51 @@
         }
       }
     },
+    "/utils/data/transcriptSqlDump": {
+      "get": {
+        "tags": [
+          "Utils"
+        ],
+        "summary": "utilDataTranscriptSqlDump",
+        "operationId": "utilDataTranscriptSqlDumpUsingGET",
+        "consumes": [
+          "application/json"
+        ],
+        "produces": [
+          "application/gz"
+        ],
+        "parameters": [
+          {
+            "name": "version",
+            "in": "query",
+            "description": "version",
+            "required": false,
+            "type": "string"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "schema": {
+              "type": "array",
+              "items": {
+                "type": "string",
+                "format": "byte"
+              }
+            }
+          },
+          "401": {
+            "description": "Unauthorized"
+          },
+          "403": {
+            "description": "Forbidden"
+          },
+          "404": {
+            "description": "Not Found"
+          }
+        }
+      }
+    },
     "/utils/ensembleGenes": {
       "get": {
         "tags": [
