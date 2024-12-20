@@ -4,7 +4,8 @@ entity Token {
     expiration Instant,
     usageLimit Integer,
     currentUsage Integer required,
-    renewable Boolean required
+    renewable Boolean required,
+    newToken String
 }
 
 entity TokenStats {
