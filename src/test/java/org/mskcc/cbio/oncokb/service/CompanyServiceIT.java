@@ -19,6 +19,7 @@ import org.mskcc.cbio.oncokb.service.dto.UserDTO;
 import org.mskcc.cbio.oncokb.service.dto.UserDetailsDTO;
 import org.mskcc.cbio.oncokb.service.mapper.CompanyMapper;
 import org.mskcc.cbio.oncokb.service.mapper.UserMapper;
+import org.mskcc.cbio.oncokb.web.rest.errors.TooManyTokensException;
 import org.mskcc.cbio.oncokb.web.rest.vm.CompanyVM;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -37,6 +38,7 @@ import java.util.Set;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.within;
+import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.mskcc.cbio.oncokb.config.Constants.DEFAULT_TOKEN_EXPIRATION_IN_DAYS;
 
 /**
@@ -153,7 +155,7 @@ public class CompanyServiceIT {
         // Initialize database
         CompanyDTO existingCompany = companyService.createCompany(companyDTO);
         userDTO.setLicenseType(LicenseType.RESEARCH_IN_COMMERCIAL); // Different license type from company
-        User newUser = userService.createUser(userDTO, Optional.empty(), Optional.empty());
+        User newUser = userService.createUser(userDTO, false, Optional.empty(), Optional.empty());
 
         // Add user to the company
         CompanyVM updatedCompany = createCompanyVM(existingCompany);
@@ -180,7 +182,7 @@ public class CompanyServiceIT {
         // Initialize database
         companyDTO.setLicenseStatus(LicenseStatus.TRIAL);
         CompanyDTO existingCompany = companyService.createCompany(companyDTO);
-        User newUser = userService.createUser(userDTO, Optional.empty(), Optional.empty());
+        User newUser = userService.createUser(userDTO, false, Optional.empty(), Optional.empty());
         CompanyVM companyVM = createCompanyVM(existingCompany);
         companyVM.setCompanyUserEmails(Collections.singletonList(DEFAULT_EMAIL));
         companyService.updateCompany(companyVM);
@@ -207,7 +209,7 @@ public class CompanyServiceIT {
         // Initialize database
         companyDTO.setLicenseStatus(LicenseStatus.TRIAL);
         CompanyDTO existingCompany = companyService.createCompany(companyDTO);
-        User newUser = userService.createUser(userDTO, Optional.empty(), Optional.empty());
+        User newUser = userService.createUser(userDTO, false, Optional.empty(), Optional.empty());
         userService.initiateTrialAccountActivation(newUser.getLogin());
         CompanyVM companyVM = createCompanyVM(existingCompany);
         companyVM.setCompanyUserEmails(Collections.singletonList(DEFAULT_EMAIL));
@@ -241,7 +243,7 @@ public class CompanyServiceIT {
         // Initialize database
         companyDTO.setLicenseStatus(LicenseStatus.REGULAR);
         CompanyDTO existingCompany = companyService.createCompany(companyDTO);
-        User newUser = userService.createUser(userDTO, Optional.empty(), Optional.empty());
+        User newUser = userService.createUser(userDTO, false, Optional.empty(), Optional.empty());
         CompanyVM companyVM = createCompanyVM(existingCompany);
         companyVM.setCompanyUserEmails(Collections.singletonList(DEFAULT_EMAIL));
         companyService.updateCompany(companyVM);
@@ -267,7 +269,7 @@ public class CompanyServiceIT {
         // Initialize database
         companyDTO.setLicenseStatus(LicenseStatus.REGULAR);
         CompanyDTO existingCompany = companyService.createCompany(companyDTO);
-        User newUser = userService.createUser(userDTO, Optional.empty(), Optional.empty());
+        User newUser = userService.createUser(userDTO, false, Optional.empty(), Optional.empty());
         CompanyVM companyVM = createCompanyVM(existingCompany);
         companyVM.setCompanyUserEmails(Collections.singletonList(DEFAULT_EMAIL));
         companyService.updateCompany(companyVM);
@@ -338,7 +340,7 @@ public class CompanyServiceIT {
     public void assertThatCompanyUsersFound(){
         Company company = companyRepository.saveAndFlush(companyMapper.toEntity(companyDTO));
         CompanyVM companyVM = createCompanyVM(companyMapper.toDto(company));
-        userService.createUser(userDTO, Optional.empty(), Optional.empty());
+        userService.createUser(userDTO, false, Optional.empty(), Optional.empty());
         companyVM.setCompanyUserEmails(Collections.singletonList(DEFAULT_EMAIL));
         companyService.updateCompany(companyVM);
 
@@ -351,7 +353,7 @@ public class CompanyServiceIT {
     @Test
     @Transactional
     public void assertThatTrialUserExpirationWillBeExtendedAfterLinkedWithTrialCompany() {
-        userService.createUser(userDTO, Optional.empty(), Optional.empty());
+        userService.createUser(userDTO, false, Optional.empty(), Optional.empty());
 
         Optional<User> userOptional = userService.initiateTrialAccountActivation(userDTO.getLogin());
         assertThat(userOptional.isPresent()).isTrue();
@@ -382,7 +384,7 @@ public class CompanyServiceIT {
     @Test
     @Transactional
     public void assertThatTrialUserExpirationWillRemainIfLongerThanDefaultAfterLinkedWithTrialCompany() {
-        userService.createUser(userDTO, Optional.empty(), Optional.empty());
+        userService.createUser(userDTO, false, Optional.empty(), Optional.empty());
 
         Optional<User> userOptional = userService.initiateTrialAccountActivation(userDTO.getLogin());
         assertThat(userOptional.isPresent()).isTrue();
@@ -413,7 +415,7 @@ public class CompanyServiceIT {
     @Test
     @Transactional
     public void assertThatExpiredUserStatusWillChangeToTrialAfterLinkedWithTrialCompany() {
-        User user = userService.createUser(userDTO, Optional.of(DEFAULT_TOKEN_EXPIRATION_IN_DAYS), Optional.of(Boolean.TRUE));
+        User user = userService.createUser(userDTO, false, Optional.of(DEFAULT_TOKEN_EXPIRATION_IN_DAYS), Optional.of(Boolean.TRUE));
         userDTO = userMapper.userToUserDTO(user);
         userDTO.setActivated(false);
         userService.updateUserAndTokens(userDTO);
@@ -445,7 +447,7 @@ public class CompanyServiceIT {
     @Test
     @Transactional
     public void assertThatRegularUserStatusRemainTheSameAfterLinkedWithTrialCompany() {
-        User user = userService.createUser(userDTO, Optional.of(DEFAULT_TOKEN_EXPIRATION_IN_DAYS), Optional.of(Boolean.TRUE));
+        User user = userService.createUser(userDTO, false, Optional.of(DEFAULT_TOKEN_EXPIRATION_IN_DAYS), Optional.of(Boolean.TRUE));
 
         // Create ta trial company
         companyDTO.setLicenseStatus(LicenseStatus.TRIAL);
@@ -465,4 +467,41 @@ public class CompanyServiceIT {
         assertThat(latestUserDTO.isActivated()).isTrue();
     }
 
+    @Test
+    @Transactional
+    public void assertThatCreatingNewServiceAccountTokenAlsoCreatesServiceAccount() {
+        CompanyDTO company = companyService.createCompany(companyDTO);
+        assertThat(!companyService.getServiceUserForCompany(company.getId()).isPresent());
+
+        // Should create service user and new token
+        Token token = companyService.createServiceAccountToken(company.getId(), "New token").get();
+        company = companyService.findOne(company.getId()).get();
+        assertThat(companyService.getServiceUserForCompany(company.getId()).isPresent());
+        assertThat(tokenService.findByToken(token.getToken()).get().getName() == "New token");
+    }
+
+    @Test
+    @Transactional
+    public void assertThatOnly10ServiceAccountTokensAreCreated() {
+        CompanyDTO company = companyService.createCompany(companyDTO);
+        for (int i = 0; i < 10; i++) {
+            companyService.createServiceAccountToken(company.getId(), "New token");
+        }
+
+        assertThrows(TooManyTokensException.class, () -> companyService.createServiceAccountToken(company.getId(), "New token"));
+    }
+
+    @Test
+    @Transactional
+    public void assertThatOnlyOneServiceUserCanBeCreatedPerCompany() {
+        CompanyDTO company = companyService.createCompany(companyDTO);
+        Optional<UserDTO> serviceUser = companyService.getServiceUserForCompany(company.getId());
+        assertThat(!serviceUser.isPresent());
+
+        Optional<User> user = companyService.createServiceAccount(company.getId());
+        assertThat(user.isPresent());
+
+        user = companyService.createServiceAccount(company.getId());
+        assertThat(!user.isPresent());
+    }
 }
