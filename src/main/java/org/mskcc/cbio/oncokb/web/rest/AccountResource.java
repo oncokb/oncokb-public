@@ -367,7 +367,7 @@ public class AccountResource {
         Optional<String> userLogin = SecurityUtils.getCurrentUserLogin();
         if (userLogin.isPresent() && token.getUser() != null) {
             if (userService.isAdmin(userLogin.get()) || token.getUser().getLogin().equalsIgnoreCase(userLogin.get())) {
-                tokenService.delete(token.getId());
+                tokenService.deleteAndAssociateStats(token.getId());
             } else {
                 throw new AuthenticationException("User does not have the permission to update the token requested");
             }
