@@ -37,6 +37,12 @@
   flex-wrap: wrap;
 }
 
+@media (min-width: 576px) {
+  .alterationTiles {
+    flex-wrap: nowrap;
+  }
+}
+
 .descriptionContainer {
   margin-bottom: 1rem;
 }

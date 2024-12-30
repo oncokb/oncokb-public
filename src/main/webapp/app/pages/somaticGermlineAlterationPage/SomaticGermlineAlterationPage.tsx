@@ -615,71 +615,83 @@ export class SomaticGermlineAlterationPage extends React.Component<
                         />
                       </>
                     )}
-                    <AlterationTile
-                      title="Highest level of evidence"
-                      items={[
-                        [
-                          {
-                            title: 'Therapeutic',
-                            value: (
-                              <div className={classNames('d-flex', 'flex-row')}>
+                    {(this.store.geneNumber.result.highestSensitiveLevel ||
+                      this.store.geneNumber.result.highestResistanceLevel ||
+                      this.store.geneNumber.result
+                        .highestDiagnosticImplicationLevel ||
+                      this.store.geneNumber.result
+                        .highestPrognosticImplicationLevel ||
+                      this.store.geneNumber.result
+                        .highestPrognosticImplicationLevel ||
+                      this.store.geneNumber.result.highestFdaLevel) && (
+                      <AlterationTile
+                        title="Highest level of evidence"
+                        items={[
+                          [
+                            {
+                              title: 'Therapeutic',
+                              value: (
+                                <div
+                                  className={classNames('d-flex', 'flex-row')}
+                                >
+                                  <HighestLevelEvidence
+                                    type="Sensitive"
+                                    level={
+                                      this.store.geneNumber.result
+                                        .highestSensitiveLevel
+                                    }
+                                  />
+                                  <HighestLevelEvidence
+                                    type="Resistance"
+                                    level={
+                                      this.store.geneNumber.result
+                                        .highestResistanceLevel
+                                    }
+                                  />
+                                </div>
+                              ),
+                            },
+                            {
+                              title: 'Diagnostic',
+                              value: (
                                 <HighestLevelEvidence
-                                  type="Sensitive"
+                                  type="DiagnosticImplication"
                                   level={
                                     this.store.geneNumber.result
-                                      .highestSensitiveLevel
+                                      .highestDiagnosticImplicationLevel
                                   }
                                 />
+                              ),
+                            },
+                          ],
+                          [
+                            {
+                              title: 'Prognostic',
+                              value: (
                                 <HighestLevelEvidence
-                                  type="Resistance"
+                                  type="PrognosticImplication"
                                   level={
                                     this.store.geneNumber.result
-                                      .highestResistanceLevel
+                                      .highestPrognosticImplicationLevel
                                   }
                                 />
-                              </div>
-                            ),
-                          },
-                          {
-                            title: 'Diagnostic',
-                            value: (
-                              <HighestLevelEvidence
-                                type="DiagnosticImplication"
-                                level={
-                                  this.store.geneNumber.result
-                                    .highestDiagnosticImplicationLevel
-                                }
-                              />
-                            ),
-                          },
-                        ],
-                        [
-                          {
-                            title: 'Prognostic',
-                            value: (
-                              <HighestLevelEvidence
-                                type="PrognosticImplication"
-                                level={
-                                  this.store.geneNumber.result
-                                    .highestPrognosticImplicationLevel
-                                }
-                              />
-                            ),
-                          },
-                          {
-                            title: 'FDA',
-                            value: (
-                              <HighestLevelEvidence
-                                type="Fda"
-                                level={
-                                  this.store.geneNumber.result.highestFdaLevel
-                                }
-                              />
-                            ),
-                          },
-                        ],
-                      ]}
-                    />
+                              ),
+                            },
+                            {
+                              title: 'FDA',
+                              value: (
+                                <HighestLevelEvidence
+                                  type="Fda"
+                                  level={
+                                    this.store.geneNumber.result.highestFdaLevel
+                                  }
+                                />
+                              ),
+                            },
+                          ],
+                        ]}
+                      />
+                    )}
                   </div>
                 </Col>
               </Row>

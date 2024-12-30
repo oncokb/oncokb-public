@@ -7,11 +7,15 @@
   color: #878d96;
 }
 
+.alterationTileContainer {
+  container-type: inline-size;
+  width: 100%;
+}
+
 .alterationTile {
   padding: 16px;
   padding-bottom: 24px;
-  min-width: 347px;
-  max-width: 392px;
+  width: 100%;
   gap: 8px;
   box-shadow: $default-box-shadow;
   border-radius: 8px;
@@ -28,4 +32,24 @@
   grid-template-columns: repeat(2, 1fr);
   grid-auto-rows: 1fr;
   height: 100%;
+}
+
+@container (min-width: 500px) {
+  .alterationTile {
+    height: 140px;
+  }
+  .alterationTileItems {
+    display: flex;
+    gap: 16px;
+    flex-direction: row;
+  }
+  .alterationTileItems > * {
+    border-right: 1px solid #e5e0df;
+    padding-right: 16px;
+    flex-grow: 1;
+  }
+
+  .alterationTileItems > *:last-child {
+    border-right: none;
+  }
 }

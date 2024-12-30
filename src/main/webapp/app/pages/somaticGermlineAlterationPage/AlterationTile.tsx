@@ -52,22 +52,31 @@ export default function AlterationTile({
   items,
 }: AlterationTileProps): JSX.Element {
   return (
-    <div className={classNames('d-flex', 'flex-column', styles.alterationTile)}>
-      <h3 className="h6">{title}</h3>
-      <div className={classNames(styles.alterationTileItems)}>
-        {items.map((parent, i) => {
-          if (Array.isArray(parent)) {
-            return parent.map((child, j) => {
-              return <AlterationItem key={`${i}:${j}`} {...child} />;
-            });
-          } else {
-            return (
-              <div className={classNames(styles.alterationTileColumnMerge)}>
-                <AlterationItem key={i} {...parent} />
-              </div>
-            );
-          }
-        })}
+    <div className={classNames(styles.alterationTileContainer)}>
+      <div
+        className={classNames(
+          'd-flex',
+          'flex-column',
+          'alterationTileItems',
+          styles.alterationTile
+        )}
+      >
+        <h3 className="h6">{title}</h3>
+        <div className={classNames(styles.alterationTileItems)}>
+          {items.map((parent, i) => {
+            if (Array.isArray(parent)) {
+              return parent.map((child, j) => {
+                return <AlterationItem key={`${i}:${j}`} {...child} />;
+              });
+            } else {
+              return (
+                <div className={classNames(styles.alterationTileColumnMerge)}>
+                  <AlterationItem key={i} {...parent} />
+                </div>
+              );
+            }
+          })}
+        </div>
       </div>
     </div>
   );
