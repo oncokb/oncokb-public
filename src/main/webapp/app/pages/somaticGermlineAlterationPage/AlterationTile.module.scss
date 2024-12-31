@@ -10,6 +10,7 @@
 .alterationTileContainer {
   container-type: inline-size;
   width: 100%;
+  max-width: 600px;
 }
 
 .alterationTile {
@@ -34,7 +35,7 @@
   height: 100%;
 }
 
-@container (min-width: 500px) {
+@container (min-width: 550px) {
   .alterationTile {
     height: 140px;
   }

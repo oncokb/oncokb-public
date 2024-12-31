@@ -489,15 +489,7 @@ export class SomaticGermlineAlterationPage extends React.Component<
 
   render() {
     const headerText = (
-      <div
-        className={classNames(
-          'd-flex',
-          'flex-row',
-          'justify-content-left',
-          'align-items-center',
-          styles.headerContent
-        )}
-      >
+      <div className={classNames(styles.headerContent)}>
         {this.store.hugoSymbol} {this.store.alterationNameWithDiff}{' '}
         <span className={classNames(styles.pill)}>
           {upperFirst(this.geneticType)}

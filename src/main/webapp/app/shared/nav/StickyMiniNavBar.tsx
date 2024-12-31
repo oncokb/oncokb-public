@@ -198,14 +198,7 @@ export default function StickyMiniNavBar({
       <Container>
         <Row className="justify-content-center">
           <Col md={11}>
-            <nav
-              ref={stickyDivRef}
-              className={classnames('d-flex flex-row', styles.nav)}
-              style={{
-                gap: '40px',
-                height: '49px',
-              }}
-            >
+            <nav ref={stickyDivRef} className={classnames(styles.nav)}>
               {isSticky && (
                 <Link
                   className={classnames(styles.stickyHeader)}

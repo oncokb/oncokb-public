@@ -54,12 +54,7 @@ export default function AlterationTile({
   return (
     <div className={classNames(styles.alterationTileContainer)}>
       <div
-        className={classNames(
-          'd-flex',
-          'flex-column',
-          'alterationTileItems',
-          styles.alterationTile
-        )}
+        className={classNames('d-flex', 'flex-column', styles.alterationTile)}
       >
         <h3 className="h6">{title}</h3>
         <div className={classNames(styles.alterationTileItems)}>
