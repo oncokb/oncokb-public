@@ -2,6 +2,7 @@ import React from 'react';
 import styles from './AlterationTile.module.scss';
 import classNames from 'classnames';
 import ExternalLinkIcon from 'app/shared/icons/ExternalLinkIcon';
+import { Linkout } from 'app/shared/links/Linkout';
 
 type AlterationItemProps =
   | {
@@ -28,7 +29,10 @@ function AlterationItem({
           <div className={classNames('h5')}>
             {link ? (
               <div className={classNames(styles.itemLink)}>
-                <ExternalLinkIcon link={link}>{value}</ExternalLinkIcon>
+                <Linkout link={link}>
+                  <span className={styles.externalLinkContent}>{value}</span>
+                  <i className="fa fa-external-link" />
+                </Linkout>
               </div>
             ) : (
               value
