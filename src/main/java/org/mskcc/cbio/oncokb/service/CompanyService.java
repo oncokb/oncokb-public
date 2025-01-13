@@ -1,5 +1,6 @@
 package org.mskcc.cbio.oncokb.service;
 
+import org.mskcc.cbio.oncokb.domain.Company;
 import org.mskcc.cbio.oncokb.domain.Token;
 import org.mskcc.cbio.oncokb.domain.User;
 import org.mskcc.cbio.oncokb.domain.enumeration.LicenseStatus;
@@ -72,4 +73,7 @@ public interface CompanyService {
     Optional<List<Token>> getServiceAccountTokensForCompany(Long id);
 
     Optional<UserDTO> getServiceUserForCompany(Long companyId);
+
+
+    List<CompanyDTO> findCompaniesByIds(List<Long> ids);
 }
