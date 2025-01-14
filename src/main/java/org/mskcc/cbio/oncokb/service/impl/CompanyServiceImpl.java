@@ -48,6 +48,16 @@ import org.springframework.dao.EmptyResultDataAccessException;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.ArrayList;
+import java.util.LinkedList;
+import java.util.List;
+import java.util.Objects;
+import java.util.Optional;
+import java.util.stream.Collectors;
+
+import static org.mskcc.cbio.oncokb.config.cache.CompanyCacheResolver.COMPANIES_BY_ID_CACHE;
+import static org.mskcc.cbio.oncokb.config.cache.CompanyCacheResolver.COMPANIES_BY_NAME_CACHE;
+
 /**
  * Service Implementation for managing {@link Company}.
  */
@@ -320,6 +330,16 @@ public class CompanyServiceImpl implements CompanyService {
     private void clearCompanyCaches(Company company) {
         Objects.requireNonNull(cacheManager.getCache(this.cacheNameResolver.getCacheName(COMPANIES_BY_ID_CACHE))).evict(company.getId());
         Objects.requireNonNull(cacheManager.getCache(this.cacheNameResolver.getCacheName(COMPANIES_BY_NAME_CACHE))).evict(company.getName());
+    }
+
+    @Override
+    @Transactional(readOnly = true)
+    public List<CompanyDTO> findCompaniesByIds(List<Long> ids) {
+        log.debug("Request to get Company : {}", ids);
+        return companyRepository.findCompaniesByIds(ids)
+            .stream()
+            .map(companyMapper::toDto)
+            .collect(Collectors.toCollection(ArrayList::new));
     }
 
     @Override

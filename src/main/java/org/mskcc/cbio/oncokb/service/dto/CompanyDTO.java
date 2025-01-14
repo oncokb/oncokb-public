@@ -7,6 +7,7 @@ import java.util.Set;
 import javax.persistence.Lob;
 import org.mskcc.cbio.oncokb.domain.enumeration.CompanyType;
 import org.mskcc.cbio.oncokb.domain.enumeration.LicenseType;
+import org.mskcc.cbio.oncokb.service.dto.companyadditionalinfo.CompanyAdditionalInfoDTO;
 import org.mskcc.cbio.oncokb.domain.enumeration.LicenseModel;
 import org.mskcc.cbio.oncokb.domain.enumeration.LicenseStatus;
 
@@ -14,7 +15,7 @@ import org.mskcc.cbio.oncokb.domain.enumeration.LicenseStatus;
  * A DTO for the {@link org.mskcc.cbio.oncokb.domain.Company} entity.
  */
 public class CompanyDTO implements Serializable {
-    
+
     private Long id;
 
     @NotNull
@@ -42,8 +43,11 @@ public class CompanyDTO implements Serializable {
     @NotEmpty
     private Set<String> companyDomains = new HashSet<>();
 
+    @Lob
+    private CompanyAdditionalInfoDTO additionalInfo;
+
     private Integer numberOfUsers;
-    
+
     public Long getId() {
         return id;
     }
@@ -124,6 +128,14 @@ public class CompanyDTO implements Serializable {
         this.companyDomains = companyDomains;
     }
 
+    public CompanyAdditionalInfoDTO getAdditionalInfo() {
+        return additionalInfo;
+    }
+
+    public void setAdditionalInfo(CompanyAdditionalInfoDTO additionalInfo) {
+        this.additionalInfo = additionalInfo;
+    }
+
     public Integer getNumberOfUsers() {
         return this.numberOfUsers;
     }
@@ -162,6 +174,7 @@ public class CompanyDTO implements Serializable {
             ", licenseStatus='" + getLicenseStatus() + "'" +
             ", businessContact='" + getBusinessContact() + "'" +
             ", legalContact='" + getLegalContact() + "'" +
+            ", additionalInfo='" + getAdditionalInfo() + "'" +
             ", companyDomains='" + getCompanyDomains() + "'" +
             ", numberOfUsers='" + getNumberOfUsers() + "'" +
             "}";

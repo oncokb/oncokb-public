@@ -24,6 +24,13 @@ import org.mskcc.cbio.oncokb.web.rest.errors.BadRequestAlertException;
 import org.mskcc.cbio.oncokb.web.rest.errors.CustomMessageRuntimeException;
 import org.mskcc.cbio.oncokb.web.rest.vm.CompanyVM;
 import org.mskcc.cbio.oncokb.web.rest.vm.VerifyCompanyNameVM;
+import org.mskcc.cbio.oncokb.service.dto.CompanyDTO;
+import org.mskcc.cbio.oncokb.service.dto.UserDTO;
+import org.mskcc.cbio.oncokb.service.dto.companyadditionalinfo.CompanyAdditionalInfoDTO;
+import org.mskcc.cbio.oncokb.service.dto.companyadditionalinfo.CompanyLicense;
+import org.mskcc.cbio.oncokb.service.dto.companyadditionalinfo.CompanyTermination;
+
+import io.github.jhipster.web.util.ResponseUtil;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Value;
@@ -40,6 +47,17 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import io.github.jhipster.web.util.ResponseUtil;
+import org.springframework.web.bind.annotation.*;
+
+import javax.validation.Valid;
+import java.net.URI;
+import java.net.URISyntaxException;
+import java.time.Instant;
+import java.time.temporal.ChronoUnit;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Optional;
+import java.util.Set;
 
 /**
  * REST controller for managing {@link org.mskcc.cbio.oncokb.domain.Company}.
@@ -207,6 +225,34 @@ public class CompanyResource {
         log.debug("REST request to delete Company : {}", id);
         companyService.delete(id);
         return ResponseEntity.ok().build();
+    }
+
+    @GetMapping("/companies/licenses-about-to-expire-pending-notification")
+    public List<Long> getLicensesAboutToExpirePendingNotification() {
+        log.debug("Request to get Company license is about to expire");
+        Instant now = Instant.now();
+        ArrayList<Long> companies = new ArrayList<>();
+        for (CompanyDTO company : companyService.findAll()) {
+           Optional<CompanyTermination> optionalTermination = Optional.ofNullable(company.getAdditionalInfo())
+               .map(CompanyAdditionalInfoDTO::getLicense)
+               .map(CompanyLicense::getTermination);
+           if (optionalTermination.isPresent()) {
+               CompanyTermination termination = optionalTermination.get();
+               Boolean hasBeenNotified = termination.getHasBeenNotified();
+               if (hasBeenNotified == null) {
+                   hasBeenNotified = false;
+               }
+               Integer notificationDays = termination.getNotificationDays();
+               Instant terminationDate = termination.getDate();
+               if (!hasBeenNotified && notificationDays != null && terminationDate != null) {
+                   Instant start = terminationDate.minus(notificationDays, ChronoUnit.DAYS);
+                   if (now.isAfter(start) && now.isBefore(terminationDate)) {
+                       companies.add(company.getId());
+                   }
+               }
+           }
+        }
+        return companies;
     }
 
     /* ONLY ROLE_ADMIN */

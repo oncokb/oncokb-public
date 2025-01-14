@@ -878,6 +878,40 @@
         "deprecated": false
       }
     },
+    "/api/companies/licenses-about-to-expire-pending-notification": {
+      "get": {
+        "tags": [
+          "company-resource"
+        ],
+        "summary": "getLicensesAboutToExpirePendingNotification",
+        "operationId": "getLicensesAboutToExpirePendingNotificationUsingGET",
+        "produces": [
+          "*/*"
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "schema": {
+              "type": "array",
+              "items": {
+                "type": "integer",
+                "format": "int64"
+              }
+            }
+          },
+          "401": {
+            "description": "Unauthorized"
+          },
+          "403": {
+            "description": "Forbidden"
+          },
+          "404": {
+            "description": "Not Found"
+          }
+        },
+        "deprecated": false
+      }
+    },
     "/api/companies/lookup": {
       "get": {
         "tags": [
@@ -1715,6 +1749,98 @@
         "deprecated": false
       }
     },
+    "/api/mails/company-termination-notification": {
+      "post": {
+        "tags": [
+          "mails-controller"
+        ],
+        "summary": "sendTerminationNotificationEmail",
+        "operationId": "sendTerminationNotificationEmailUsingPOST",
+        "consumes": [
+          "application/json"
+        ],
+        "produces": [
+          "*/*"
+        ],
+        "parameters": [
+          {
+            "in": "body",
+            "name": "companyIds",
+            "description": "companyIds",
+            "required": true,
+            "schema": {
+              "type": "array",
+              "items": {
+                "type": "integer",
+                "format": "int64"
+              }
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK"
+          },
+          "201": {
+            "description": "Created"
+          },
+          "401": {
+            "description": "Unauthorized"
+          },
+          "403": {
+            "description": "Forbidden"
+          },
+          "404": {
+            "description": "Not Found"
+          }
+        },
+        "deprecated": false
+      }
+    },
+    "/api/mails/company-termination-warning": {
+      "post": {
+        "tags": [
+          "mails-controller"
+        ],
+        "summary": "sendTerminationWarningEmail",
+        "operationId": "sendTerminationWarningEmailUsingPOST",
+        "consumes": [
+          "application/json"
+        ],
+        "produces": [
+          "*/*"
+        ],
+        "parameters": [
+          {
+            "in": "body",
+            "name": "terminationEmailDTO",
+            "description": "terminationEmailDTO",
+            "required": true,
+            "schema": {
+              "$ref": "#/definitions/TerminationEmailDTO"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK"
+          },
+          "201": {
+            "description": "Created"
+          },
+          "401": {
+            "description": "Unauthorized"
+          },
+          "403": {
+            "description": "Forbidden"
+          },
+          "404": {
+            "description": "Not Found"
+          }
+        },
+        "deprecated": false
+      }
+    },
     "/api/mails/feedback": {
       "post": {
         "tags": [
@@ -1796,6 +1922,46 @@
               "items": {
                 "type": "string"
               }
+            }
+          },
+          "401": {
+            "description": "Unauthorized"
+          },
+          "403": {
+            "description": "Forbidden"
+          },
+          "404": {
+            "description": "Not Found"
+          }
+        },
+        "deprecated": false
+      }
+    },
+    "/api/mails/termination-warning/{companyId}": {
+      "get": {
+        "tags": [
+          "mails-controller"
+        ],
+        "summary": "getTerminationWarningEmail",
+        "operationId": "getTerminationWarningEmailUsingGET",
+        "produces": [
+          "*/*"
+        ],
+        "parameters": [
+          {
+            "name": "companyId",
+            "in": "path",
+            "description": "companyId",
+            "required": true,
+            "type": "integer",
+            "format": "int64"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "schema": {
+              "$ref": "#/definitions/TerminationEmailDTO"
             }
           },
           "401": {
@@ -1913,6 +2079,7 @@
               "TOKEN_HAS_BEEN_EXPOSED_USER",
               "SEARCHING_RESPONSE_STRUCTURE_HAS_CHANGED",
               "LIST_OF_UNAPPROVED_USERS",
+              "TERMINATION_NOTIFICATION_EMAIL",
               "TEST"
             ]
           },
@@ -3173,6 +3340,15 @@
       },
       "title": "ApiAccessRequest"
     },
+    "CompanyAdditionalInfoDTO": {
+      "type": "object",
+      "properties": {
+        "license": {
+          "$ref": "#/definitions/CompanyLicense"
+        }
+      },
+      "title": "CompanyAdditionalInfoDTO"
+    },
     "CompanyDTO": {
       "type": "object",
       "required": [
@@ -3183,6 +3359,9 @@
         "name"
       ],
       "properties": {
+        "additionalInfo": {
+          "$ref": "#/definitions/CompanyAdditionalInfoDTO"
+        },
         "businessContact": {
           "type": "string"
         },
@@ -3262,6 +3441,42 @@
       },
       "title": "CompanyDomainDTO"
     },
+    "CompanyLicense": {
+      "type": "object",
+      "properties": {
+        "activation": {
+          "type": "string",
+          "format": "date-time"
+        },
+        "autoRenewal": {
+          "type": "boolean"
+        },
+        "termination": {
+          "$ref": "#/definitions/CompanyTermination"
+        }
+      },
+      "title": "CompanyLicense"
+    },
+    "CompanyTermination": {
+      "type": "object",
+      "properties": {
+        "date": {
+          "type": "string",
+          "format": "date-time"
+        },
+        "hasBeenNotified": {
+          "type": "boolean"
+        },
+        "notes": {
+          "type": "string"
+        },
+        "notificationDays": {
+          "type": "integer",
+          "format": "int32"
+        }
+      },
+      "title": "CompanyTermination"
+    },
     "CompanyVM": {
       "type": "object",
       "required": [
@@ -3272,6 +3487,9 @@
         "name"
       ],
       "properties": {
+        "additionalInfo": {
+          "$ref": "#/definitions/CompanyAdditionalInfoDTO"
+        },
         "businessContact": {
           "type": "string"
         },
@@ -3452,6 +3670,7 @@
             "TOKEN_HAS_BEEN_EXPOSED_USER",
             "SEARCHING_RESPONSE_STRUCTURE_HAS_CHANGED",
             "LIST_OF_UNAPPROVED_USERS",
+            "TERMINATION_NOTIFICATION_EMAIL",
             "TEST"
           ]
         }
@@ -3602,6 +3821,31 @@
         }
       },
       "title": "PasswordChangeDTO"
+    },
+    "TerminationEmailDTO": {
+      "type": "object",
+      "properties": {
+        "bcc": {
+          "type": "string"
+        },
+        "cc": {
+          "type": "string"
+        },
+        "companyId": {
+          "type": "integer",
+          "format": "int64"
+        },
+        "content": {
+          "type": "string"
+        },
+        "from": {
+          "type": "string"
+        },
+        "subject": {
+          "type": "string"
+        }
+      },
+      "title": "TerminationEmailDTO"
     },
     "Token": {
       "type": "object",
@@ -3964,6 +4208,7 @@
             "TOKEN_HAS_BEEN_EXPOSED_USER",
             "SEARCHING_RESPONSE_STRUCTURE_HAS_CHANGED",
             "LIST_OF_UNAPPROVED_USERS",
+            "TERMINATION_NOTIFICATION_EMAIL",
             "TEST"
           ]
         },
