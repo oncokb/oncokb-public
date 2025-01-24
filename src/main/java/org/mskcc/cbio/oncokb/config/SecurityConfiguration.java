@@ -70,7 +70,7 @@ public class SecurityConfiguration extends WebSecurityConfigurerAdapter {
                 .accessDeniedHandler(problemSupport)
         .and()
             .headers()
-            .contentSecurityPolicy("default-src 'self'; frame-src 'self' https://*.google.com https://www.recaptcha.net https://*.oncokb.org https://*.youtube-nocookie.com https://*.bilibili.com https://*.gitbook.com; script-src 'self' 'unsafe-inline' 'unsafe-eval' https://www.google.com/ https://storage.googleapis.com www.google-analytics.com https://www.googletagmanager.com https://recaptcha.net https://www.gstatic.com; style-src 'self' 'unsafe-inline'; img-src 'self' data: www.google-analytics.com; font-src 'self' data:; connect-src 'self' https://*;")
+            .contentSecurityPolicy("default-src 'self'; frame-src 'self' https://*.google.com https://www.recaptcha.net https://*.oncokb.org https://*.youtube-nocookie.com https://*.bilibili.com https://*.gitbook.com; script-src 'self' 'unsafe-inline' 'unsafe-eval' https://www.google.com/ https://storage.googleapis.com www.google-analytics.com https://www.googletagmanager.com https://recaptcha.net https://www.gstatic.com https://cscript-cdn-use.cassiecloud.com https://cscript-cdn-use.oncokb.org; style-src 'self' 'unsafe-inline' https://cscript-cdn-use.cassiecloud.com https://cscript-cdn-use.oncokb.org; img-src 'self' data: www.google-analytics.com https://cscript-cdn-use.cassiecloud.com https://cscript-cdn-use.oncokb.org; font-src 'self' data:; connect-src 'self' https://*;")
         .and()
             .referrerPolicy(ReferrerPolicyHeaderWriter.ReferrerPolicy.NO_REFERRER_WHEN_DOWNGRADE)
         .and()

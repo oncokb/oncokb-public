@@ -193,6 +193,7 @@
     "fetchAPI": "curl http://localhost:9095/v2/api-docs | json | grep -v basePath | grep -v termsOfService | grep -v host > src/main/webapp/app/shared/api/generated/API-docs.json",
     "buildAPI": "node scripts/generate-api.js src/main/webapp/app/shared/api/generated API",
     "buildNewsPages": "node scripts/generate-news-sections.js -f src/main/webapp/app/pages/newsPage/markdown -o src/main/webapp/app/pages/newsPage/code-generated && yarn run prettier --write \"{,src/main/webapp/app/pages/newsPage/code-generated/**/}*.{md,json,ts,tsx,css,scss,yml}\"",
+    "buildPrivacyNotice": "node scripts/generate-markdown.js -f src/main/webapp/app/pages/privacyNotice/markdown -o src/main/webapp/app/pages/privacyNotice/code-generated && yarn run prettier --write \"{,src/main/webapp/app/pages/privacyNotice/code-generated/**/}*.{md,json,ts,tsx,css,scss,yml}\"",
     "updateOncoKbAPI": "yarn run fetchOncoKbAPI && yarn run buildOncoKbAPI",
     "fetchOncoKbAPI": "curl http://localhost:8080/oncokb-public/api/v1/v2/api-docs?group=Private%20APIs | json | grep -v basePath | grep -v termsOfService | grep -v host > src/main/webapp/app/shared/api/generated/OncoKbAPI-docs.json && curl http://localhost:8080/oncokb-public/api/private/v2/api-docs | json | grep -v basePath | grep -v termsOfService | grep -v host > src/main/webapp/app/shared/api/generated/OncoKbPrivateAPI-docs.json",
     "buildOncoKbAPI": "node scripts/generate-api.js src/main/webapp/app/shared/api/generated OncoKbAPI OncoKbPrivateAPI",
