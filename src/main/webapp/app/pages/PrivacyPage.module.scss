@@ -1,0 +1,10 @@
+@import '~@mskcc/core/utils/font-utilities';
+
+.privacyPage {
+  & > section {
+    margin-top: 32px;
+  }
+  & strong {
+    @include font-gotham('bold');
+  }
+}

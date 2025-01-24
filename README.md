@@ -258,3 +258,58 @@ For more information refer to [Using Docker and Docker-Compose][], this page als
    - Ensure the email you use is one you have access to
 
 9. Check the slack-app-dev channel for a message and approve it
+
+## Update Privacy Notice
+
+If you have a major change you can use [pandoc](https://pandoc.org/) which can
+be installed with [brew](https://formulae.brew.sh/formula/pandoc)
+
+```sh
+pandoc -f docx -t gfm /path/to/word/doc.docx -o ./src/main/webapp/app/pages/privacyNotice/markdown/PrivacyNotice.md
+```
+
+Don't forget to keep the `TableOfContents` component in the markdown
+
+Update `PrivacyNotice.md` and run the following command.
+
+```sh
+yarn run buildPrivacyNotice
+```
+
+## Update News
+
+1. From the News Google doc click to File > Download > Markdown
+2. Move the markdown file here `src/main/webapp/app/pages/newsPage/markdown/NewsContentMMYYYY.md`
+3. Add `<br/>` to force new lines in the markdown.
+   (This is normally needed in the tables)
+4. Create News React Components
+
+   ```sh
+   yarn run buildNewsSections
+   ```
+
+5. Add the release date to `DATA_RELEASES` in the `constants.tsx` file.
+
+   ```tsx
+   export const DATA_RELEASES: DataRelease[] = [
+     { date: 'DDMMYYYY', version: 'vX.XX' },
+     ...
+   ];
+   ```
+
+6. Add `NewsList` to `NewsPage.tsx`
+
+   ```tsx
+   <NewsList date={'MMDDYYYY'} />
+   ```
+
+7. Add `NewContent` to `NewsPageContent.tsx`
+
+   ```tsx
+   export const NEWS_BY_DATE: { [date: string]: NewsData } = {
+     'MMDDYYYY': {
+       rawComponent: <NewsContentDDYYYY />,
+     },
+     ...
+   }
+   ```
