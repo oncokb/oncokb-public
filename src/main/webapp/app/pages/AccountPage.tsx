@@ -19,6 +19,7 @@ import {
 import client from 'app/shared/api/clientInstance';
 import { Token } from 'app/shared/api/generated/API';
 import ButtonWithTooltip from 'app/shared/button/ButtonWithTooltip';
+import { LoadingButton } from 'app/shared/button/LoadingButton';
 import InfoIcon from 'app/shared/icons/InfoIcon';
 import { ContactLink } from 'app/shared/links/ContactLink';
 import { SimpleConfirmModal } from 'app/shared/modal/SimpleConfirmModal';
@@ -67,6 +68,7 @@ export class AccountPage extends React.Component<IRegisterProps> {
   @observable apiAccessRequested =
     this.account?.additionalInfo?.apiAccessRequest?.requested || false;
   @observable showCreateServiceAccountTokenModal = false;
+  @observable isCreatingServiceAccountToken = false;
   @observable serviceAccountTokens: Token[] = [];
 
   constructor(props: Readonly<IRegisterProps>) {
@@ -126,6 +128,7 @@ export class AccountPage extends React.Component<IRegisterProps> {
 
   @action.bound
   async addServiceAccountToken(name: string) {
+    this.isCreatingServiceAccountToken = true;
     try {
       await client.createServiceAccountTokenUsingPOST({ name });
       await this.getServiceAccountTokens();
@@ -133,6 +136,10 @@ export class AccountPage extends React.Component<IRegisterProps> {
       notifySuccess('Service account token is added');
     } catch (e) {
       notifyError(e);
+    } finally {
+      setTimeout(() => {
+        this.isCreatingServiceAccountToken = false;
+      }, 100);
     }
   }
 
@@ -458,7 +465,12 @@ export class AccountPage extends React.Component<IRegisterProps> {
               >
                 Cancel
               </Button>
-              <Button type="submit">Create Token</Button>
+              <Button
+                type="submit"
+                disabled={this.isCreatingServiceAccountToken}
+              >
+                Create Token
+              </Button>
             </Modal.Footer>
           </AvForm>
         </Modal>
