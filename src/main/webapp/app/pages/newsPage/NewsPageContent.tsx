@@ -301,6 +301,144 @@ const EVIDENCE_COLUMN_SEPARATOR = '; ';
 // https://stackoverflow.com/questions/41947168/is-it-possible-to-use-keyof-operator-on-literals-instead-of-interfaces
 
 export const NEWS_BY_DATE: { [date: string]: NewsData } = {
+  '01302025': {
+    priorityNews: [
+      <span>
+        Happy New Year! As of January 30th, 2025, fifteen Level 1, twelve Level
+        2, eighteen Level 3 and eleven Level 4 treatments for unique
+        biomarker-selected indications were added to OncoKB. A table summarizing
+        these changes can be found here{' '}
+        <YearEndReviewPageLink year={'2024'}>here</YearEndReviewPageLink>. The
+        “Precision Oncology: 2024 in Review” article can be found{' '}
+        <Linkout
+          link={
+            'https://aacrjournals.org/cancerdiscovery/article/14/12/2332/750142/Precision-Oncology-2024-in-ReviewPrecision'
+          }
+        >
+          here
+        </Linkout>
+        .
+      </span>,
+    ],
+    changedAnnotations: [
+      {
+        columnHeaderType: AnnotationColumnHeaderType.NEW_ALTERATION_WITH_LEVEL,
+        content: [
+          [
+            '2',
+            'ERBB2',
+            'Oncogenic Mutations',
+            'Cervical Cancer',
+            'Neratinib',
+            [
+              <WithSeparator separator={EVIDENCE_COLUMN_SEPARATOR}>
+                <span>
+                  Inclusion in Cervical Cancer NCCN Guidelines V1.2025
+                </span>
+                <PMIDLink pmids="38211393" />
+              </WithSeparator>,
+            ],
+          ],
+        ],
+      },
+      {
+        columnHeaderType:
+          AnnotationColumnHeaderType.PROMOTION_TUMOR_TYPE_SPECIFIC_EVIDENCE,
+        content: [
+          [
+            'KRAS',
+            'G12C',
+            'Small Bowel Cancer',
+            <div>
+              <div style={{ fontStyle: 'italic' }}>
+                {DRUGS_PROMOTED_IN_ONCOKB}:
+              </div>
+              <div>Adagrasib (Level 2, previously Level 3A)</div>
+              <br></br>
+              <div style={{ fontStyle: 'italic' }}>
+                {DRUGS_ADDED_TO_ONCOKB}:
+              </div>
+              <div>Sotorasib (Level 2)</div>
+            </div>,
+            '3A',
+            '2',
+            <WithSeparator separator={EVIDENCE_COLUMN_SEPARATOR}>
+              <span>
+                Inclusion in Small Bowel Adenocarcinoma NCCN Guidelines V1.2025
+              </span>
+              <PMIDLink pmids="32955176, 37099736, 36546659, 34919824" />
+            </WithSeparator>,
+          ],
+        ],
+      },
+      {
+        columnHeaderType: AnnotationColumnHeaderType.UPDATED_SAME_LEVEL_DRUG,
+        content: [
+          [
+            '1',
+            'ALK',
+            <WithSeparator separator={', '}>
+              <AlterationPageLink hugoSymbol="ALK" alteration="Fusions">
+                Fusions
+              </AlterationPageLink>
+            </WithSeparator>,
+            'Non-Small Cell Lung Cancer',
+            <div>
+              <div>
+                Alectinib, Brigatinib, Certinib, Crizotinib, Lorlatinib (Level
+                1)
+              </div>
+              <br />
+              <div>NVL-655 (Level 3A)</div>
+            </div>,
+            'Ensartinib (Level 1)',
+            <WithSeparator separator={EVIDENCE_COLUMN_SEPARATOR}>
+              <FdaApprovalLink
+                approval="ensartinib"
+                link="https://www.fda.gov/drugs/resources-information-approved-drugs/fda-approves-ensartinib-alk-positive-locally-advanced-or-metastatic-non-small-cell-lung-cancer"
+              />
+              <PMIDLink pmids="34473194" />
+            </WithSeparator>,
+          ],
+          [
+            '1',
+            'KRAS',
+            <WithSeparator separator={', '}>
+              <AlterationPageLink hugoSymbol="KRAS" alteration="G12C">
+                G12C
+              </AlterationPageLink>
+            </WithSeparator>,
+            'Colorectal Cancer',
+            <div>
+              <div style={{ textDecoration: 'underline' }}>Sensitivity</div>
+              <div>Adagrasib + Cetuximab (Level 1)</div>
+              <br />
+              <div>
+                Adagrasib + Panitumumab, Sotorasib + Cetuximab, Sotorasib +
+                Panitumumab (Level 2)
+              </div>
+              <br />
+              <div>Binimetinib, Cobimetinib, Trametinib (Level 4)</div>
+              <br />
+              <div style={{ textDecoration: 'underline' }}>Resistance</div>
+              <div>
+                Cetuximab, Panitumumab, Tucatinib + Trastuzumab (Level R1)
+              </div>
+            </div>,
+            'Sotorasib + Panitumumab (Level 1)',
+            <WithSeparator separator={EVIDENCE_COLUMN_SEPARATOR}>
+              <FdaApprovalLink
+                approval="sotorasib with panitumumab"
+                link="https://www.fda.gov/drugs/resources-information-approved-drugs/fda-approves-sotorasib-panitumumab-kras-g12c-mutated-colorectal-cancer"
+              />
+              <PMIDLink pmids="37870968" />
+            </WithSeparator>,
+          ],
+        ],
+      },
+    ],
+    newlyAddedGenes: ['AKT1S1', 'ALOX15B'],
+  },
   '12192024': {
     priorityNews: [
       <span>
