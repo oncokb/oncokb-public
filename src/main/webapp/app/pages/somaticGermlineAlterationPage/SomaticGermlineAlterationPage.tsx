@@ -17,6 +17,9 @@ import {
   getTreatmentNameByPriority,
   articles2Citations,
   isCategoricalAlteration,
+  citationsHasInfo,
+  isPositionalAlteration,
+  OncoKBOncogenicityIcon,
 } from 'app/shared/utils/Utils';
 import {
   getAlterationPageLink,
@@ -45,8 +48,13 @@ import {
   ANNOTATION_PAGE_TAB_KEYS,
   TREATMENT_EVIDENCE_TYPES,
   ONCOKB_TM,
+  MUTATION_EFFECT,
+  ONCOGENICITY,
 } from 'app/config/constants';
-import { Alteration } from 'app/shared/api/generated/OncoKbAPI';
+import {
+  Alteration,
+  MutationEffectResp,
+} from 'app/shared/api/generated/OncoKbAPI';
 import {
   Evidence,
   VariantAnnotationTumorType,
@@ -69,6 +77,71 @@ import { Else, If, Then } from 'react-if';
 import LoadingIndicator, {
   LoaderSize,
 } from 'app/components/loadingIndicator/LoadingIndicator';
+import { FeedbackType } from 'app/components/feedback/types';
+import { FeedbackIcon } from 'app/components/feedback/FeedbackIcon';
+import { CitationTooltip } from 'app/components/CitationTooltip';
+import { DefaultTooltip } from 'cbioportal-frontend-commons';
+import {
+  COLOR_ICON_WITH_INFO,
+  COLOR_ICON_WITHOUT_INFO,
+} from 'app/config/theme';
+
+function OncogenicInfo({
+  isUnknownOncogenicity,
+  isVus,
+  oncogenicity,
+}: {
+  isUnknownOncogenicity: boolean;
+  oncogenicity: string | undefined;
+  isVus: boolean;
+}) {
+  return (
+    <span className="h5 d-flex">
+      <span>
+        {isUnknownOncogenicity
+          ? `${ONCOGENICITY.UNKNOWN} Oncogenic Effect`
+          : oncogenicity}
+      </span>
+      <OncoKBOncogenicityIcon oncogenicity={oncogenicity} isVus={isVus} />
+    </span>
+  );
+}
+
+function MutationEffectIcon({
+  mutationEffect,
+}: {
+  mutationEffect: MutationEffectResp;
+}) {
+  const hasCitations = citationsHasInfo(mutationEffect.citations);
+  const tooltipOverlay = () => (
+    <CitationTooltip
+      pmids={mutationEffect.citations.pmids}
+      abstracts={mutationEffect.citations.abstracts}
+    />
+  );
+  return (
+    <span className="h5">
+      <span>
+        {mutationEffect.knownEffect === MUTATION_EFFECT.UNKNOWN
+          ? `${MUTATION_EFFECT.UNKNOWN} Biological Effect`
+          : mutationEffect.knownEffect}
+      </span>
+      {hasCitations ? (
+        <DefaultTooltip overlay={tooltipOverlay} key="mutationEffectTooltip">
+          <i
+            className="fa fa-book mx-1"
+            style={{
+              fontSize: '0.8em',
+              color: hasCitations
+                ? COLOR_ICON_WITH_INFO
+                : COLOR_ICON_WITHOUT_INFO,
+            }}
+          ></i>
+        </DefaultTooltip>
+      ) : null}
+    </span>
+  );
+}
 
 type MatchParams = {
   hugoSymbol: string;
@@ -487,15 +560,49 @@ export class SomaticGermlineAlterationPage extends React.Component<
     this.selectedTab = newTabKey;
   }
 
-  render() {
-    const headerText = (
+  @computed
+  get isPositionalAlteration() {
+    return isPositionalAlteration(
+      this.store.annotationData.result.query.proteinStart,
+      this.store.annotationData.result.query.proteinEnd,
+      this.store.annotationData.result.query.consequence
+    );
+  }
+
+  get isUnknownOncogenicity() {
+    return (
+      !this.store.annotationData.result.oncogenic ||
+      this.store.annotationData.result.oncogenic === ONCOGENICITY.UNKNOWN
+    );
+  }
+
+  createHeader(includeEmailLink: boolean) {
+    return (
       <div className={classNames(styles.headerContent)}>
         {this.store.hugoSymbol} {this.store.alterationNameWithDiff}{' '}
         <span className={classNames(styles.pill)}>
           {upperFirst(this.geneticType)}
         </span>
+        <span style={{ fontSize: '0.5em' }} className={'ml-2'}>
+          {includeEmailLink && (
+            <FeedbackIcon
+              feedback={{
+                type: FeedbackType.ANNOTATION,
+                annotation: {
+                  gene: this.store.hugoSymbol,
+                  alteration: this.store.alterationName,
+                  cancerType: this.store.cancerTypeName,
+                },
+              }}
+              appStore={this.props.appStore}
+            />
+          )}
+        </span>
       </div>
     );
+  }
+
+  render() {
     return (
       <>
         <Helmet>
@@ -534,9 +641,19 @@ export class SomaticGermlineAlterationPage extends React.Component<
                       Back to {this.store.hugoSymbol}
                     </Link>
                   </div>
-                  <h1 className={classNames(styles.header)}>{headerText}</h1>
+                  <h1 className={classNames(styles.header)}>
+                    {this.createHeader(true)}
+                  </h1>
                 </Col>
                 <Col md={11}>
+                  <Row className={classNames(styles.descriptionContainer)}>
+                    <Col>
+                      <MiniNavBarHeader id="variant-overview" className="">
+                        Variant Overview
+                      </MiniNavBarHeader>
+                      {this.store.annotationData.result.background}
+                    </Col>
+                  </Row>
                   {this.store.annotationData.result.mutationEffect
                     .description && (
                     <Row className={classNames(styles.descriptionContainer)}>
@@ -566,7 +683,7 @@ export class SomaticGermlineAlterationPage extends React.Component<
             <StickyMiniNavBar
               title={
                 <div className={classNames(styles.navBarTitle)}>
-                  {headerText}
+                  {this.createHeader(false)}
                 </div>
               }
             />
@@ -574,7 +691,7 @@ export class SomaticGermlineAlterationPage extends React.Component<
               <Row className="justify-content-center">
                 <Col md={11}>
                   <div className={classNames(styles.alterationTiles)}>
-                    {this.store.germline && (
+                    {this.store.germline ? (
                       <>
                         <AlterationTile
                           title="Pathogenicity"
@@ -606,83 +723,117 @@ export class SomaticGermlineAlterationPage extends React.Component<
                           ]}
                         />
                       </>
-                    )}
-                    {(this.store.geneNumber.result.highestSensitiveLevel ||
-                      this.store.geneNumber.result.highestResistanceLevel ||
-                      this.store.geneNumber.result
-                        .highestDiagnosticImplicationLevel ||
-                      this.store.geneNumber.result
-                        .highestPrognosticImplicationLevel ||
-                      this.store.geneNumber.result
-                        .highestPrognosticImplicationLevel ||
-                      this.store.geneNumber.result.highestFdaLevel) && (
-                      <AlterationTile
-                        title="Highest level of evidence"
-                        items={[
-                          [
+                    ) : (
+                      <>
+                        <AlterationTile
+                          title="Mutation Effect"
+                          items={[
                             {
-                              title: 'Therapeutic',
+                              title: 'Oncogenicity',
+                              show:
+                                !this.isUnknownOncogenicity ||
+                                !this.isPositionalAlteration,
+
                               value: (
-                                <div
-                                  className={classNames('d-flex', 'flex-row')}
-                                >
+                                <OncogenicInfo
+                                  oncogenicity={
+                                    this.store.annotationData.result.oncogenic
+                                  }
+                                  isVus={this.store.annotationData.result.vus}
+                                  isUnknownOncogenicity={
+                                    this.isUnknownOncogenicity
+                                  }
+                                />
+                              ),
+                            },
+                            {
+                              title: 'Biological Effect',
+                              show:
+                                this.store.annotationData.result
+                                  .mutationEffect &&
+                                (this.store.annotationData.result.mutationEffect
+                                  .knownEffect !== MUTATION_EFFECT.UNKNOWN ||
+                                  this.isPositionalAlteration),
+                              value: (
+                                <MutationEffectIcon
+                                  mutationEffect={
+                                    this.store.annotationData.result
+                                      .mutationEffect
+                                  }
+                                />
+                              ),
+                            },
+                          ]}
+                        />
+                        <AlterationTile
+                          title="Highest level of evidence"
+                          items={[
+                            [
+                              {
+                                title: 'Therapeutic',
+                                value: (
+                                  <div
+                                    className={classNames('d-flex', 'flex-row')}
+                                  >
+                                    <HighestLevelEvidence
+                                      type="Sensitive"
+                                      level={
+                                        this.store.geneNumber.result
+                                          .highestSensitiveLevel
+                                      }
+                                    />
+                                    <HighestLevelEvidence
+                                      type="Resistance"
+                                      level={
+                                        this.store.geneNumber.result
+                                          .highestResistanceLevel
+                                      }
+                                    />
+                                  </div>
+                                ),
+                              },
+                              {
+                                title: 'Diagnostic',
+                                value: (
                                   <HighestLevelEvidence
-                                    type="Sensitive"
+                                    type="DiagnosticImplication"
                                     level={
                                       this.store.geneNumber.result
-                                        .highestSensitiveLevel
+                                        .highestDiagnosticImplicationLevel
                                     }
                                   />
+                                ),
+                              },
+                            ],
+                            [
+                              {
+                                title: 'Prognostic',
+                                value: (
                                   <HighestLevelEvidence
-                                    type="Resistance"
+                                    type="PrognosticImplication"
                                     level={
                                       this.store.geneNumber.result
-                                        .highestResistanceLevel
+                                        .highestPrognosticImplicationLevel
                                     }
                                   />
-                                </div>
-                              ),
-                            },
-                            {
-                              title: 'Diagnostic',
-                              value: (
-                                <HighestLevelEvidence
-                                  type="DiagnosticImplication"
-                                  level={
-                                    this.store.geneNumber.result
-                                      .highestDiagnosticImplicationLevel
-                                  }
-                                />
-                              ),
-                            },
-                          ],
-                          [
-                            {
-                              title: 'Prognostic',
-                              value: (
-                                <HighestLevelEvidence
-                                  type="PrognosticImplication"
-                                  level={
-                                    this.store.geneNumber.result
-                                      .highestPrognosticImplicationLevel
-                                  }
-                                />
-                              ),
-                            },
-                            {
-                              title: 'FDA',
-                              value: (
-                                <HighestLevelEvidence
-                                  type="Fda"
-                                  level={
-                                    this.store.geneNumber.result.highestFdaLevel
-                                  }
-                                />
-                              ),
-                            },
-                          ],
-                        ]}
-                      />
+                                ),
+                              },
+                              {
+                                title: 'FDA',
+                                value: (
+                                  <HighestLevelEvidence
+                                    type="Fda"
+                                    level={
+                                      this.store.geneNumber.result
+                                        .highestFdaLevel
+                                    }
+                                  />
+                                ),
+                              },
+                            ],
+                          ]}
+                        />
+                      </>
                     )}
                   </div>
                 </Col>

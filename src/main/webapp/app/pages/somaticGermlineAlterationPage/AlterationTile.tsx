@@ -1,17 +1,18 @@
 import React from 'react';
 import styles from './AlterationTile.module.scss';
 import classNames from 'classnames';
-import ExternalLinkIcon from 'app/shared/icons/ExternalLinkIcon';
 import { Linkout } from 'app/shared/links/Linkout';
 
 type AlterationItemProps =
   | {
       title: string;
+      show?: boolean;
       value: JSX.Element | string;
       link?: undefined;
     }
   | {
       title: string;
+      show?: boolean;
       value: string;
       link: string;
     };
@@ -62,19 +63,23 @@ export default function AlterationTile({
       >
         <h3 className="h6">{title}</h3>
         <div className={classNames(styles.alterationTileItems)}>
-          {items.map((parent, i) => {
-            if (Array.isArray(parent)) {
-              return parent.map((child, j) => {
-                return <AlterationItem key={`${i}:${j}`} {...child} />;
-              });
-            } else {
-              return (
-                <div className={classNames(styles.alterationTileColumnMerge)}>
-                  <AlterationItem key={i} {...parent} />
-                </div>
-              );
-            }
-          })}
+          {items
+            .filter(x => Array.isArray(x) || (x.show ?? true))
+            .map((parent, i) => {
+              if (Array.isArray(parent)) {
+                return parent
+                  .filter(x => x.show ?? true)
+                  .map((child, j) => {
+                    return <AlterationItem key={`${i}:${j}`} {...child} />;
+                  });
+              } else {
+                return (
+                  <div className={classNames(styles.alterationTileColumnMerge)}>
+                    <AlterationItem key={i} {...parent} />
+                  </div>
+                );
+              }
+            })}
         </div>
       </div>
     </div>

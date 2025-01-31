@@ -3,11 +3,16 @@ import React from 'react';
 type IMiniNavBarHeader = {
   id: string;
   children: React.ReactNode;
+  className?: string;
 };
-export default function MiniNavBarHeader({ id, children }: IMiniNavBarHeader) {
+export default function MiniNavBarHeader({
+  id,
+  children,
+  className = 'mt-5',
+}: IMiniNavBarHeader) {
   return (
-    <h4 id={id} className={'mt-5'} mini-nav-bar-header="">
+    <h3 id={id} className={className} mini-nav-bar-header="">
       {children}
-    </h4>
+    </h3>
   );
 }

@@ -12,7 +12,12 @@
 .alterationTileContainer {
   container-type: inline-size;
   width: 100%;
-  max-width: 600px;
+}
+
+@media (min-width: 600px) {
+  .alterationTileContainer {
+    width: 50%;
+  }
 }
 
 .alterationTile {
