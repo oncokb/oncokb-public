@@ -78,7 +78,9 @@ import InfoTile from 'app/components/infoTile/InfoTile';
 import AnnotatedAlterations from 'app/pages/annotationPage/AnnotatedAlterations';
 import { LinkedInLink, TwitterLink } from 'app/shared/links/SocialMediaLinks';
 import styles from './GenePage.module.scss';
-import StickyMiniNavBar from 'app/shared/nav/StickyMiniNavBar';
+import StickyMiniNavBar, {
+  StickyMiniNavBarContextProvider,
+} from 'app/shared/nav/StickyMiniNavBar';
 import MiniNavBarHeader from 'app/shared/nav/MiniNavBarHeader';
 import { GenomicIndicatorTable } from 'app/pages/genePage/GenomicIndicatorTable';
 import GeneticTypeTag from 'app/components/geneticTypeTag/GeneticTypeTag';
@@ -662,196 +664,208 @@ export default class SomaticGermlineGenePage extends React.Component<
                           </Col>
                         </Row>
                       </Container>
-                      {this.hasContent && (
-                        <StickyMiniNavBar
-                          title={
-                            <span className={'d-flex align-items-center'}>
-                              <span>{this.store.hugoSymbol}</span>
-                              <GeneticTypeTag
-                                className={'ml-2'}
-                                geneticType={this.selectedGeneticType}
-                              />
-                            </span>
-                          }
-                        />
-                      )}
-                      <Container>
-                        <Row className={`justify-content-center`}>
-                          <Col md={11}>
-                            {!this.hasContent && (
-                              <NoContent
-                                geneticType={this.selectedGeneticType}
-                              />
-                            )}
-                            {this.hasContent && (
-                              <>
-                                <GeneInfoTile
-                                  isGermline={this.isGermline}
-                                  pathogenicities={this.store.uniqPathogenicity}
-                                  oncogenicities={this.store.uniqOncogenicity}
-                                  geneNumber={this.store.geneNumber.result}
+                      <StickyMiniNavBarContextProvider>
+                        {this.hasContent && (
+                          <StickyMiniNavBar
+                            title={
+                              <span className={'d-flex align-items-center'}>
+                                <span>{this.store.hugoSymbol}</span>
+                                <GeneticTypeTag
+                                  className={'ml-2'}
+                                  geneticType={this.selectedGeneticType}
                                 />
-                                <If
-                                  condition={
-                                    this.store.gene.result.entrezGeneId > 0 &&
-                                    this.store.mutationMapperDataPortal.result
-                                      .length > 0 &&
-                                    !this.isGermline
-                                  }
-                                >
-                                  <div className={'d-flex flex-column mt-2'}>
-                                    <ShowHideText
-                                      show={this.showPrevalenceData}
-                                      content={<></>}
-                                      title={'prevalence data'}
-                                      onClick={() =>
-                                        (this.showPrevalenceData = !this
-                                          .showPrevalenceData)
-                                      }
-                                    />
-                                    {this.showPrevalenceData && (
-                                      <Row className={'mt-5'}>
-                                        <Col
-                                          xl={this.genePanelClass.xl}
-                                          lg={this.genePanelClass.lg}
-                                          xs={this.genePanelClass.xs}
-                                        >
-                                          <h6>
-                                            Annotated Mutations in{' '}
-                                            <MskimpactLink />
-                                          </h6>
-                                          <OncokbLollipopPlot
-                                            store={this.store}
-                                            windowStore={this.props.windowStore}
-                                            showPlotControlsOnHover={true}
-                                          />
-                                        </Col>
-                                        {this.store.barChartData.length > 0 ? (
+                              </span>
+                            }
+                          />
+                        )}
+                        <Container>
+                          <Row className={`justify-content-center`}>
+                            <Col md={11}>
+                              {!this.hasContent && (
+                                <NoContent
+                                  geneticType={this.selectedGeneticType}
+                                />
+                              )}
+                              {this.hasContent && (
+                                <>
+                                  <GeneInfoTile
+                                    isGermline={this.isGermline}
+                                    pathogenicities={
+                                      this.store.uniqPathogenicity
+                                    }
+                                    oncogenicities={this.store.uniqOncogenicity}
+                                    geneNumber={this.store.geneNumber.result}
+                                  />
+                                  <If
+                                    condition={
+                                      this.store.gene.result.entrezGeneId > 0 &&
+                                      this.store.mutationMapperDataPortal.result
+                                        .length > 0 &&
+                                      !this.isGermline
+                                    }
+                                  >
+                                    <div className={'d-flex flex-column mt-2'}>
+                                      <ShowHideText
+                                        show={this.showPrevalenceData}
+                                        content={<></>}
+                                        title={'prevalence data'}
+                                        onClick={() =>
+                                          (this.showPrevalenceData = !this
+                                            .showPrevalenceData)
+                                        }
+                                      />
+                                      {this.showPrevalenceData && (
+                                        <Row className={'mt-5'}>
                                           <Col
-                                            xl={12 - this.genePanelClass.xl}
-                                            lg={12 - this.genePanelClass.lg}
-                                            xs={12 - this.genePanelClass.xs}
-                                            className={
-                                              'd-flex flex-column align-items-center'
-                                            }
+                                            xl={this.genePanelClass.xl}
+                                            lg={this.genePanelClass.lg}
+                                            xs={this.genePanelClass.xs}
                                           >
                                             <h6>
-                                              Cancer Types with{' '}
-                                              {this.store.hugoSymbol} Mutations
-                                              <DefaultTooltip
-                                                overlay={() => (
-                                                  <div
-                                                    style={{ maxWidth: 300 }}
-                                                  >
-                                                    Currently, the mutation
-                                                    frequency does not take into
-                                                    account copy number changes,
-                                                    chromosomal translocations
-                                                    or cancer types with fewer
-                                                    than 50 samples in{' '}
-                                                    <MskimpactLink />
-                                                  </div>
-                                                )}
-                                              >
-                                                <i className="fa fa-question-circle-o ml-2" />
-                                              </DefaultTooltip>
+                                              Annotated Mutations in{' '}
+                                              <MskimpactLink />
                                             </h6>
-                                            <BarChart
-                                              data={this.store.barChartData}
-                                              height={300}
-                                              filters={
-                                                this.store.selectedCancerTypes
-                                              }
+                                            <OncokbLollipopPlot
+                                              store={this.store}
                                               windowStore={
                                                 this.props.windowStore
                                               }
-                                              onUserSelection={selectedCancerTypes =>
-                                                this.store
-                                                  .mutationMapperStore &&
-                                                this.store.mutationMapperStore
-                                                  .result
-                                                  ? onFilterOptionSelect(
-                                                      selectedCancerTypes,
-                                                      false,
-                                                      this.store
-                                                        .mutationMapperStore
-                                                        .result.dataStore,
-                                                      DataFilterType.CANCER_TYPE,
-                                                      CANCER_TYPE_FILTER_ID
-                                                    )
-                                                  : undefined
-                                              }
+                                              showPlotControlsOnHover={true}
                                             />
                                           </Col>
-                                        ) : null}
-                                      </Row>
-                                    )}
-                                  </div>
-                                </If>
-                                {this.isGermline && (
-                                  <>
-                                    <MiniNavBarHeader id="genomic-indicators">
-                                      Genomic Indicators
-                                    </MiniNavBarHeader>
-                                    <GenomicIndicatorTable
-                                      data={this.store.genomicIndicators.result}
-                                      isPending={
-                                        this.store.genomicIndicators.isPending
-                                      }
-                                    />
-                                  </>
-                                )}
-                                {this.hasClinicalImplications && (
-                                  <>
-                                    <MiniNavBarHeader id="clinical-implications">
-                                      Clinical Implications
-                                    </MiniNavBarHeader>
-                                    <AlterationTableTabs
-                                      selectedTab={this.defaultSelectedTab}
-                                      hugoSymbol={this.store.hugoSymbol}
-                                      biological={[]}
-                                      tx={this.getClinicalImplications(
-                                        this.filteredTxAlterations
+                                          {this.store.barChartData.length >
+                                          0 ? (
+                                            <Col
+                                              xl={12 - this.genePanelClass.xl}
+                                              lg={12 - this.genePanelClass.lg}
+                                              xs={12 - this.genePanelClass.xs}
+                                              className={
+                                                'd-flex flex-column align-items-center'
+                                              }
+                                            >
+                                              <h6>
+                                                Cancer Types with{' '}
+                                                {this.store.hugoSymbol}{' '}
+                                                Mutations
+                                                <DefaultTooltip
+                                                  overlay={() => (
+                                                    <div
+                                                      style={{ maxWidth: 300 }}
+                                                    >
+                                                      Currently, the mutation
+                                                      frequency does not take
+                                                      into account copy number
+                                                      changes, chromosomal
+                                                      translocations or cancer
+                                                      types with fewer than 50
+                                                      samples in{' '}
+                                                      <MskimpactLink />
+                                                    </div>
+                                                  )}
+                                                >
+                                                  <i className="fa fa-question-circle-o ml-2" />
+                                                </DefaultTooltip>
+                                              </h6>
+                                              <BarChart
+                                                data={this.store.barChartData}
+                                                height={300}
+                                                filters={
+                                                  this.store.selectedCancerTypes
+                                                }
+                                                windowStore={
+                                                  this.props.windowStore
+                                                }
+                                                onUserSelection={selectedCancerTypes =>
+                                                  this.store
+                                                    .mutationMapperStore &&
+                                                  this.store.mutationMapperStore
+                                                    .result
+                                                    ? onFilterOptionSelect(
+                                                        selectedCancerTypes,
+                                                        false,
+                                                        this.store
+                                                          .mutationMapperStore
+                                                          .result.dataStore,
+                                                        DataFilterType.CANCER_TYPE,
+                                                        CANCER_TYPE_FILTER_ID
+                                                      )
+                                                    : undefined
+                                                }
+                                              />
+                                            </Col>
+                                          ) : null}
+                                        </Row>
                                       )}
-                                      dx={this.getClinicalImplications(
-                                        this.filteredDxAlterations
-                                      )}
-                                      px={this.getClinicalImplications(
-                                        this.filteredPxAlterations
-                                      )}
-                                      fda={this.getFdaImplication(
-                                        this.filteredTxAlterations
-                                      )}
-                                      onChangeTab={this.onChangeTab}
-                                    />
-                                  </>
-                                )}
-                                {this.store.filteredBiologicalAlterations
-                                  .length > 0 && (
-                                  <>
-                                    <MiniNavBarHeader id="annotated">
-                                      Annotated{' '}
-                                      {this.isGermline
-                                        ? 'Variants'
-                                        : 'Alterations'}
-                                    </MiniNavBarHeader>
-                                    <AnnotatedAlterations
-                                      germline={this.isGermline}
-                                      hugoSymbol={this.store.hugoSymbol}
-                                      alterations={
-                                        this.store.filteredBiologicalAlterations
-                                      }
-                                      isLargeScreen={
-                                        this.props.windowStore.isLargeScreen
-                                      }
-                                    />
-                                  </>
-                                )}
-                              </>
-                            )}
-                          </Col>
-                        </Row>
-                      </Container>
+                                    </div>
+                                  </If>
+                                  {this.isGermline && (
+                                    <>
+                                      <MiniNavBarHeader id="genomic-indicators">
+                                        Genomic Indicators
+                                      </MiniNavBarHeader>
+                                      <GenomicIndicatorTable
+                                        data={
+                                          this.store.genomicIndicators.result
+                                        }
+                                        isPending={
+                                          this.store.genomicIndicators.isPending
+                                        }
+                                      />
+                                    </>
+                                  )}
+                                  {this.hasClinicalImplications && (
+                                    <>
+                                      <MiniNavBarHeader id="clinical-implications">
+                                        Clinical Implications
+                                      </MiniNavBarHeader>
+                                      <AlterationTableTabs
+                                        selectedTab={this.defaultSelectedTab}
+                                        hugoSymbol={this.store.hugoSymbol}
+                                        biological={[]}
+                                        tx={this.getClinicalImplications(
+                                          this.filteredTxAlterations
+                                        )}
+                                        dx={this.getClinicalImplications(
+                                          this.filteredDxAlterations
+                                        )}
+                                        px={this.getClinicalImplications(
+                                          this.filteredPxAlterations
+                                        )}
+                                        fda={this.getFdaImplication(
+                                          this.filteredTxAlterations
+                                        )}
+                                        onChangeTab={this.onChangeTab}
+                                      />
+                                    </>
+                                  )}
+                                  {this.store.filteredBiologicalAlterations
+                                    .length > 0 && (
+                                    <>
+                                      <MiniNavBarHeader id="annotated">
+                                        Annotated{' '}
+                                        {this.isGermline
+                                          ? 'Variants'
+                                          : 'Alterations'}
+                                      </MiniNavBarHeader>
+                                      <AnnotatedAlterations
+                                        germline={this.isGermline}
+                                        hugoSymbol={this.store.hugoSymbol}
+                                        alterations={
+                                          this.store
+                                            .filteredBiologicalAlterations
+                                        }
+                                        isLargeScreen={
+                                          this.props.windowStore.isLargeScreen
+                                        }
+                                      />
+                                    </>
+                                  )}
+                                </>
+                              )}
+                            </Col>
+                          </Row>
+                        </Container>
+                      </StickyMiniNavBarContextProvider>
                     </Then>
                     <Else>
                       <LoadingIndicator

@@ -27,6 +27,7 @@ import AlterationTableTabs from 'app/pages/annotationPage/AlterationTableTabs';
 import { getSummaries, SummaryKey } from 'app/pages/annotationPage/Utils';
 import AppStore from 'app/store/AppStore';
 import { Alteration } from 'app/shared/api/generated/OncoKbAPI';
+import { COLOR_BLUE } from 'app/config/theme';
 
 export type IAlterationView = {
   appStore?: AppStore;
@@ -104,10 +105,9 @@ export default class SomaticGermlineAlterationView extends React.Component<
   }
 
   render() {
-    const dropdownColor = '#0968C3';
     return (
       <>
-        <Row className="mt-4">
+        <Row className="mt-4 mb-4">
           <Col>
             <div
               className={classnames(
@@ -132,21 +132,21 @@ export default class SomaticGermlineAlterationView extends React.Component<
                         height: '30px',
                         minHeight: '30px',
                         borderBottomWidth: '1px',
-                        borderBottomColor: dropdownColor,
+                        borderBottomColor: COLOR_BLUE,
                         borderStyle: 'none',
                         borderBottomStyle: 'solid',
                         borderRadius: '0px',
                         '&:hover': {
-                          borderBottomColor: dropdownColor,
+                          borderBottomColor: COLOR_BLUE,
                         },
                       }),
                       indicatorsContainer: base => ({
                         ...base,
                         '& div': {
-                          color: dropdownColor,
+                          color: COLOR_BLUE,
                         },
                         '& div:hover': {
-                          color: dropdownColor,
+                          color: COLOR_BLUE,
                         },
                       }),
                       indicatorSeparator: base => ({

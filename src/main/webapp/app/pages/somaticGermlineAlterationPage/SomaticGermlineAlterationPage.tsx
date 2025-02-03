@@ -33,7 +33,9 @@ import { observer, inject } from 'mobx-react';
 import { Link } from 'react-router-dom';
 import styles from './SomaticGermlineAlterationPage.module.scss';
 import classNames from 'classnames';
-import StickyMiniNavBar from 'app/shared/nav/StickyMiniNavBar';
+import StickyMiniNavBar, {
+  StickyMiniNavBarContextProvider,
+} from 'app/shared/nav/StickyMiniNavBar';
 import AlterationView from '../annotationPage/AlterationView';
 import AppStore from 'app/store/AppStore';
 import ShowHideText from 'app/shared/texts/ShowHideText';
@@ -86,6 +88,13 @@ import {
   COLOR_ICON_WITHOUT_INFO,
 } from 'app/config/theme';
 import SomaticGermlineAlterationView from '../annotationPage/SomaticGermlineAlterationView';
+import {
+  ITextBreadcrumb,
+  ILinkBreadcrumb,
+  IDropdownBreadcrumb,
+  IInputBreadcrumb,
+  AnnotationBreadcrumbs,
+} from '../annotationPage/AnnotationBreadcrumbs';
 
 function OncogenicInfo({
   isUnknownOncogenicity,
@@ -603,6 +612,44 @@ export class SomaticGermlineAlterationPage extends React.Component<
     );
   }
 
+  @computed
+  get navBreadcrumbs() {
+    const breadcrumbs: (
+      | ITextBreadcrumb
+      | ILinkBreadcrumb
+      | IDropdownBreadcrumb
+      | IInputBreadcrumb
+    )[] = [
+      {
+        type: 'link',
+        key: 'gene',
+        text: this.store.hugoSymbol,
+        to: getGenePageLink({
+          hugoSymbol: this.store.hugoSymbol,
+        }),
+      } as ILinkBreadcrumb,
+      {
+        type: 'link',
+        key: 'alteration',
+        text: this.store.alterationNameWithDiff,
+        to: getAlterationPageLink({
+          hugoSymbol: this.store.hugoSymbol,
+          alteration: this.store.alterationName,
+        }),
+      } as ILinkBreadcrumb,
+    ];
+
+    if (this.store.cancerTypeName) {
+      breadcrumbs.push({
+        type: 'text',
+        text: this.store.cancerTypeName,
+        key: 'cancertype',
+      } as ITextBreadcrumb);
+    }
+
+    return <AnnotationBreadcrumbs breadcrumbs={breadcrumbs} />;
+  }
+
   render() {
     return (
       <>
@@ -620,28 +667,11 @@ export class SomaticGermlineAlterationPage extends React.Component<
           />
         </Helmet>
         {this.pageShouldBeRendered ? (
-          <>
+          <StickyMiniNavBarContextProvider>
             <Container>
               <Row className="justify-content-center">
                 <Col md={11}>
-                  <div className={classNames('d-flex', 'flex-row')}>
-                    <Link
-                      className={classNames(
-                        'd-flex',
-                        'flex-row',
-                        'justify-content-center',
-                        'align-items-center',
-                        styles.backLink
-                      )}
-                      to={getGenePageLink({
-                        hugoSymbol: this.store.hugoSymbol,
-                        geneticType: this.geneticType,
-                      })}
-                    >
-                      <i className="fa fa-chevron-left"></i>
-                      Back to {this.store.hugoSymbol}
-                    </Link>
-                  </div>
+                  {this.navBreadcrumbs}
                   <h1 className={classNames(styles.header)}>
                     {this.createHeader(true)}
                   </h1>
@@ -852,13 +882,19 @@ export class SomaticGermlineAlterationPage extends React.Component<
               </Row>
               <Row className="justify-content-center">
                 <Col md={11}>
-                  <MiniNavBarHeader id="genomic-indicators">
-                    Genomic Indicators
-                  </MiniNavBarHeader>
-                  <GenomicIndicatorTable
-                    data={this.store.genomicIndicators.result}
-                    isPending={this.store.genomicIndicators.isPending}
-                  />
+                  {this.store.germline &&
+                    (this.store.genomicIndicators.isPending ||
+                      this.store.genomicIndicators.result.length > 0) && (
+                      <>
+                        <MiniNavBarHeader id="genomic-indicators">
+                          Genomic Indicators
+                        </MiniNavBarHeader>
+                        <GenomicIndicatorTable
+                          data={this.store.genomicIndicators.result}
+                          isPending={this.store.genomicIndicators.isPending}
+                        />
+                      </>
+                    )}
                   <MiniNavBarHeader id="clinical-implications">
                     Clinical Implications For This Biomarker
                   </MiniNavBarHeader>
@@ -910,7 +946,7 @@ export class SomaticGermlineAlterationPage extends React.Component<
                 </Col>
               </Row>
             </Container>
-          </>
+          </StickyMiniNavBarContextProvider>
         ) : (
           <If condition={this.errorOccurred}>
             <Then>

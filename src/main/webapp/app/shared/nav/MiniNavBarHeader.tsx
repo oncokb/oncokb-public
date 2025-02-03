@@ -1,4 +1,5 @@
-import React from 'react';
+import React, { useContext, useEffect } from 'react';
+import { StickyMiniNavBarContext } from './StickyMiniNavBar';
 
 type IMiniNavBarHeader = {
   id: string;
@@ -10,6 +11,13 @@ export default function MiniNavBarHeader({
   children,
   className = 'mt-5',
 }: IMiniNavBarHeader) {
+  const { invalidateCache } = useContext(StickyMiniNavBarContext);
+  useEffect(() => {
+    invalidateCache();
+    return () => {
+      invalidateCache();
+    };
+  }, []);
   return (
     <h3 id={id} className={className} mini-nav-bar-header="">
       {children}
