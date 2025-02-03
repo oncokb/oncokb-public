@@ -85,6 +85,7 @@ import {
   COLOR_ICON_WITH_INFO,
   COLOR_ICON_WITHOUT_INFO,
 } from 'app/config/theme';
+import SomaticGermlineAlterationView from '../annotationPage/SomaticGermlineAlterationView';
 
 function OncogenicInfo({
   isUnknownOncogenicity,
@@ -771,6 +772,11 @@ export class SomaticGermlineAlterationPage extends React.Component<
                             [
                               {
                                 title: 'Therapeutic',
+                                show:
+                                  !!this.store.geneNumber.result
+                                    .highestSensitiveLevel ||
+                                  !!this.store.geneNumber.result
+                                    .highestResistanceLevel,
                                 value: (
                                   <div
                                     className={classNames('d-flex', 'flex-row')}
@@ -794,6 +800,8 @@ export class SomaticGermlineAlterationPage extends React.Component<
                               },
                               {
                                 title: 'Diagnostic',
+                                show: !!this.store.geneNumber.result
+                                  .highestDiagnosticImplicationLevel,
                                 value: (
                                   <HighestLevelEvidence
                                     type="DiagnosticImplication"
@@ -808,6 +816,8 @@ export class SomaticGermlineAlterationPage extends React.Component<
                             [
                               {
                                 title: 'Prognostic',
+                                show: !!this.store.geneNumber.result
+                                  .highestPrognosticImplicationLevel,
                                 value: (
                                   <HighestLevelEvidence
                                     type="PrognosticImplication"
@@ -820,6 +830,8 @@ export class SomaticGermlineAlterationPage extends React.Component<
                               },
                               {
                                 title: 'FDA',
+                                show: !!this.store.geneNumber.result
+                                  .highestFdaLevel,
                                 value: (
                                   <HighestLevelEvidence
                                     type="Fda"
@@ -848,7 +860,7 @@ export class SomaticGermlineAlterationPage extends React.Component<
                     isPending={this.store.genomicIndicators.isPending}
                   />
                   <MiniNavBarHeader id="clinical-implications">
-                    Clinical Implications
+                    Clinical Implications For This Biomarker
                   </MiniNavBarHeader>
                   {this.store.cancerTypeName ? (
                     <CancerTypeView
@@ -875,7 +887,7 @@ export class SomaticGermlineAlterationPage extends React.Component<
                       onChangeTab={this.onChangeTab}
                     />
                   ) : (
-                    <AlterationView
+                    <SomaticGermlineAlterationView
                       appStore={this.props.appStore}
                       hugoSymbol={this.store.hugoSymbol}
                       alteration={this.store.alterationName}
