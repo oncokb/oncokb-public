@@ -1,0 +1,68 @@
+@import '../../variables.scss';
+
+.itemLink a {
+  justify-content: initial;
+}
+
+.itemHeader {
+  font-size: 1rem;
+  color: #878d96;
+}
+
+.alterationTileContainer {
+  container-type: inline-size;
+  width: 100%;
+}
+
+@media (min-width: 600px) {
+  .alterationTileContainer {
+    width: 50%;
+  }
+}
+
+.alterationTile {
+  padding: 16px;
+  padding-bottom: 24px;
+  width: 100%;
+  gap: 8px;
+  box-shadow: $default-box-shadow;
+  border-radius: 8px;
+  height: 200px;
+}
+
+.alterationTileColumnMerge {
+  grid-column: 1 / 3;
+}
+
+.alterationTileItems {
+  gap: 16px;
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  grid-auto-rows: 1fr;
+  height: 100%;
+}
+
+.externalLinkContent {
+  color: $black;
+  margin-right: 10px;
+}
+
+@container (min-width: 550px) {
+  .alterationTile {
+    height: 140px;
+  }
+  .alterationTileItems {
+    display: flex;
+    gap: 16px;
+    flex-direction: row;
+  }
+  .alterationTileItems > * {
+    border-right: 1px solid #e5e0df;
+    padding-right: 16px;
+    flex-grow: 1;
+  }
+
+  .alterationTileItems > *:last-child {
+    border-right: none;
+  }
+}

@@ -1,0 +1,87 @@
+import React from 'react';
+import styles from './AlterationTile.module.scss';
+import classNames from 'classnames';
+import { Linkout } from 'app/shared/links/Linkout';
+
+type AlterationItemProps =
+  | {
+      title: string;
+      show?: boolean;
+      value: JSX.Element | string;
+      link?: undefined;
+    }
+  | {
+      title: string;
+      show?: boolean;
+      value: string;
+      link: string;
+    };
+
+function AlterationItem({
+  title: itemTitle,
+  value,
+  link,
+}: AlterationItemProps) {
+  return (
+    <div>
+      <h4 className={classNames(styles.itemHeader)}>{itemTitle}</h4>
+      <div>
+        {typeof value === 'string' ? (
+          <div className={classNames('h5')}>
+            {link ? (
+              <div className={classNames(styles.itemLink)}>
+                <Linkout link={link}>
+                  <span className={styles.externalLinkContent}>{value}</span>
+                  <i className="fa fa-external-link" />
+                </Linkout>
+              </div>
+            ) : (
+              value
+            )}
+          </div>
+        ) : (
+          value
+        )}
+      </div>
+    </div>
+  );
+}
+
+type AlterationTileProps = {
+  title: string;
+  items: (AlterationItemProps | [AlterationItemProps, AlterationItemProps])[];
+};
+
+export default function AlterationTile({
+  title,
+  items,
+}: AlterationTileProps): JSX.Element {
+  return (
+    <div className={classNames(styles.alterationTileContainer)}>
+      <div
+        className={classNames('d-flex', 'flex-column', styles.alterationTile)}
+      >
+        <h3 className="h6">{title}</h3>
+        <div className={classNames(styles.alterationTileItems)}>
+          {items
+            .filter(x => Array.isArray(x) || (x.show ?? true))
+            .map((parent, i) => {
+              if (Array.isArray(parent)) {
+                return parent
+                  .filter(x => x.show ?? true)
+                  .map((child, j) => {
+                    return <AlterationItem key={`${i}:${j}`} {...child} />;
+                  });
+              } else {
+                return (
+                  <div className={classNames(styles.alterationTileColumnMerge)}>
+                    <AlterationItem key={i} {...parent} />
+                  </div>
+                );
+              }
+            })}
+        </div>
+      </div>
+    </div>
+  );
+}

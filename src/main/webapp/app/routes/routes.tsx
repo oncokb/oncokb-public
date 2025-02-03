@@ -37,6 +37,7 @@ import { NewsPageNavTab } from 'app/pages/newsPage/NewsPageNavTab';
 import CompanionDiagnosticDevicePage from 'app/pages/companionDiagnosticDevicesPage/companionDiagnosticDevicePage';
 import OncokbRoute from 'app/shared/route/OncokbRoute';
 import GenePage from 'app/pages/genePage/GenePage';
+import { SomaticGermlineAlterationPage } from 'app/pages/somaticGermlineAlterationPage/SomaticGermlineAlterationPage';
 
 const getOldLevelsRedirectRoute = (hash: string) => {
   const queryStrings = QueryString.parse(hash) as {
@@ -191,6 +192,20 @@ const AppRoutes = (props: {
           appStore={props.appStore}
           path={PAGE_ROUTE.ALTERATION}
           component={AlterationPage}
+        />
+        <RecaptchaBoundaryRoute
+          exact
+          isUserAuthenticated={props.authenticationStore.isUserAuthenticated}
+          appStore={props.appStore}
+          path={PAGE_ROUTE.GERMLINE_ALTERATION}
+          component={SomaticGermlineAlterationPage}
+        />
+        <RecaptchaBoundaryRoute
+          exact
+          isUserAuthenticated={props.authenticationStore.isUserAuthenticated}
+          appStore={props.appStore}
+          path={PAGE_ROUTE.SOMATIC_ALTERATION}
+          component={SomaticGermlineAlterationPage}
         />
         <RecaptchaBoundaryRoute
           exact
