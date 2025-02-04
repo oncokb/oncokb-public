@@ -7,6 +7,427 @@ import {
 import { LEVELS } from 'app/config/constants';
 
 export const DATA: { [key in TableKey]: TableData } = {
+  '2024': {
+    [LEVELS.Tx1]: [
+      [
+        'EGFR Exon 20 In-frame Insertions',
+        'Non-Small Cell Lung Cancer',
+        'Amivantamab + Chemotherapy',
+        'Addition of a novel drug to an existing Level 1 clinically actionable biomarker',
+      ],
+      [
+        'BRAF Fusions',
+        'Low-Grade Glioma',
+        'Tovorafenib',
+        'Novel Level 1 clinically actionable biomarker',
+      ],
+      [
+        'BRAF V600 (excluding V600E)',
+        'Low-Grade Glioma',
+        'Tovorafenib',
+        'Novel Level 1 clinically actionable biomarker in this cancer type',
+      ],
+      [
+        'BRAF V600E',
+        'Low-Grade Glioma',
+        'Tovorafenib',
+        'Addition of a novel drug to an existing Level 1 clinically actionable biomarker',
+      ],
+      [
+        'KRAS G12C',
+        'Colorectal Cancer',
+        'Adagrasib + Cetuximab',
+        'Novel Level 1 clinically actionable biomarker in this cancer type',
+      ],
+      [
+        'EGFR Exon 19 In-Frame Deletion, L858R',
+        'Non-Small Cell Lung Cancer',
+        'Osimertinib + Chemotherapy',
+        'Addition of a novel drug to an existing Level 1 clinically actionable biomarker',
+      ],
+      [
+        'NTRK1/2/3 Fusions',
+        'All Solid Tumors',
+        'Repotrectinib',
+        'Addition of a novel drug to an existing Level 1 clinically actionable biomarker',
+      ],
+      [
+        'IDH1 R132C/H/G/S/L',
+        'Oligodendroglioma',
+        'Vorasidenib',
+        'Novel Level 1 clinically actionable biomarker in this cancer type',
+      ],
+      [
+        'IDH1 R132C/H/G/S/L',
+        'Astrocytoma',
+        'Vorasidenib',
+        'Novel Level 1 clinically actionable biomarker in this cancer type',
+      ],
+      [
+        'IDH2 R172K/M/W/S/G',
+        'Astrocytoma, Oligodendroglioma',
+        'Vorasidenib',
+        'Novel Level 1 clinically actionable biomarker in this cancer type',
+      ],
+      [
+        'EGFR Exon 19 In-Frame Deletion, L858R',
+        'Non-Small Cell Lung Cancer',
+        'Amivantamab + Lazertinib',
+        'Addition of a novel drug to an existing Level 1 clinically actionable biomarker',
+      ],
+      [
+        'PIK3CA Oncogenic Mutations',
+        'Breast Cancer',
+        'Inavolisib + Palbociclib + Fulvestrant',
+        <>
+          Addition of a novel drug to an existing Level 1 clinically actionable
+          biomarker
+          <br />
+          *note, previously only select PIK3CA oncogenic mutations were
+          considered Level 1
+        </>,
+      ],
+      [
+        'EGFR Exon 19 In-Frame Deletion, L858R',
+        'Non-Small Cell Lung Cancer',
+        'Amivantamab + Chemotherapy',
+        'Addition of a novel drug to an existing Level 1 clinically actionable biomarker',
+      ],
+      [
+        'KMT2A Fusions',
+        'Mixed Phenotype Acute Leukemia, Acute Myeloid Leukemia, B-cell Lymphoblastic Leukemia/Lymphoma',
+        'Revumenib',
+        'Novel Level 1 clinically actionable biomarker',
+      ],
+      [
+        'NRG1 Fusions',
+        'Non-Small Cell Lung Cancer, Pancreatic Adenocarcinoma',
+        'Zenocutuzumab',
+        'Novel Level 1 clinically actionable biomarker',
+      ],
+    ],
+    [LEVELS.Tx2]: [
+      [
+        'FGFR3 Oncogenic Mutations',
+        'Bladder Cancer',
+        'Erdafitinib',
+        'Addition of a novel drug to an existing clinically actionable biomarker',
+      ],
+      [
+        'KRAS G12C',
+        'Ampullary Cancer',
+        'Sotorasib, Adagrasib',
+        'Novel clinically actionable biomarker in this cancer type',
+      ],
+      [
+        'ERBB2 Amplification',
+        'Salivary Gland Cancer',
+        'Trastuzumab, Trastuzumab + Docetaxel, Ado-Trastuzumab Emtansine, Trastuzumab Deruxtecan, Trastuzumab + Pertuzumab',
+        'Novel clinically actionable biomarker in this cancer type',
+      ],
+      [
+        'POLE Exonuclease Domain Missense Mutations (268_471mis)',
+        'Colorectal Cancer, Small Bowel Cancer',
+        'Pembrolizumab, Nivolumab, Ipilimumab + Nivolumab, Dostarlimab',
+        'Novel clinically actionable biomarker',
+      ],
+      [
+        'POLD1 Exonuclease Domain Missense Mutations (304_533mis)',
+        'Colorectal Cancer, Small Bowel Cancer',
+        'Pembrolizumab, Nivolumab, Ipilimumab + Nivolumab, Dostarlimab',
+        'Novel clinically actionable biomarker',
+      ],
+      [
+        'ALK G1202R, L1196M',
+        'Non-Small Cell Lung Cancer',
+        'Lorlatinib',
+        'Novel clinically actionable biomarker',
+      ],
+      [
+        'MSI-H',
+        'Colorectal Cancer',
+        'Dostarlimab',
+        'Addition of a novel drug to an existing clinically actionable biomarker',
+      ],
+      [
+        'MSI-H',
+        'Small Bowel Cancer',
+        'Nivolumab, Ipilimumab + Nivolumab, Dostarlimab',
+        'Addition of a novel drug to an existing clinically actionable biomarker',
+      ],
+      [
+        'KRAS G12C',
+        'Biliary Tract Cancer',
+        'Adagrasib',
+        'Novel clinically actionable biomarker in this cancer type',
+      ],
+      [
+        'EGFR S768I, L861Q, G719X',
+        'Non-Small Cell Lung Cancer',
+        'Erlotinib, Gefitinib, Dacomitinib, Amivantamab + Chemotherapy',
+        'Addition of a novel drug to an existing clinically actionable biomarker',
+      ],
+      [
+        'ERBB2 Amplification',
+        'Biliary Tract Cancer',
+        'Tucatinib + Trastuzumab',
+        'Addition of a novel drug to an existing clinically actionable biomarker',
+      ],
+      [
+        'IDH1 R132C/H/G/S/L',
+        'Astrocytoma',
+        'Ivosidenib',
+        'Addition of a novel drug to an existing clinically actionable biomarker',
+      ],
+    ],
+    [LEVELS.Tx3]: [
+      [
+        'MDM2 Amplification',
+        'Intimal Sarcoma',
+        'Milademetan',
+        'Novel Level 3A clinically actionable biomarker in this cancer type',
+      ],
+      [
+        'MDM2 Amplification',
+        'Dedifferentiated Liposarcoma, Well-Differentiated Liposarcoma',
+        'Brigimadlin',
+        'Addition of a novel drug to an existing clinically actionable biomarker',
+      ],
+      [
+        'EGFR L718Q, G724S, L718V',
+        'Non-Small Cell Lung Cancer',
+        'Afatinib',
+        'Novel clinically actionable biomarker',
+      ],
+      [
+        'ERBB2 Amplification',
+        'All Solid Tumors (excluding Breast Cancer, Esophagogastric Cancer, and Colorectal Cancer where ERBB2 amplification remains Level 1; Biliary Tract Cancer, Salivary Gland Cancer, and Uterine Cancer where ERBB2 amplification remains Level 2)',
+        'Trastuzumab Deurextecan',
+        'Tumor agnostic FDA drug approval based on HER2 expression via IHC',
+      ],
+      [
+        'MTAP Deletion',
+        'All Solid Tumors',
+        'AMG193 and MRTX1719',
+        'Novel clinically actionable biomarker',
+      ],
+      [
+        'EGFR S768I, L861Q, G719X',
+        'Non-Small Cell Lung Cancer',
+        'Amivantamab + Lazertinib',
+        'Addition of a novel drug to an existing clinically actionable biomarker',
+      ],
+      [
+        'FBXW7 Oncogenic Mutations',
+        'Endometrial Cancer, Ovarian Cancer',
+        'Lunresertib + Camonsertib',
+        'Novel clinically actionable biomarker',
+      ],
+      [
+        'PPP2R1A Oncogenic Mutations',
+        'Endometrial Cancer, Ovarian Cancer',
+        'Lunresertib + Camonsertib',
+        'Novel clinically actionable biomarker',
+      ],
+      [
+        'CCNE1 Amplification',
+        'Endometrial Cancer, Ovarian Cancer',
+        'Lunresertib + Camonsertib',
+        'Addition of a novel drug to an existing clinically actionable biomarker',
+      ],
+      [
+        'ALK F1174L/C, F1245Y/V, R1275Q/L',
+        'Neuroblastoma',
+        'Lorlatinib',
+        'Novel clinically actionable biomarker',
+      ],
+      [
+        'MET H1094Y, F1200I',
+        'Non-Small Cell Lung Cancer',
+        'Elzovantinib',
+        'Novel clinically actionable biomarker',
+      ],
+      [
+        'ROS1 G2032R',
+        'Non-Small Cell Lung Cancer',
+        'Taletrectinib',
+        'Novel clinically actionable biomarker',
+      ],
+      [
+        'ROS1 L2086F',
+        'Non-Small Cell Lung Cancer',
+        'Cabozantinib',
+        'Novel clinically actionable biomarker',
+      ],
+      [
+        'SMARCA4 Oncogenic Mutations',
+        'Non-Small Cell Lung Cancer, Esophageal Adenocarcinoma',
+        'PRT3789',
+        'Novel clinically actionable biomarker',
+      ],
+      [
+        'ALK Fusions',
+        'Non-Small Cell Lung Cancer',
+        'NVL-655',
+        'Addition of a novel drug to an existing clinically actionable biomarker',
+      ],
+      [
+        'ROS1 Fusions',
+        'Non-Small Cell Lung Cancer',
+        'Taletrectinib',
+        'Addition of a novel drug to an existing clinically actionable biomarker',
+      ],
+      [
+        'ALK G1202R',
+        'Non-Small Cell Lung Cancer',
+        'NVL-655',
+        'Addition of a novel drug to an existing clinically actionable biomarker',
+      ],
+      [
+        'KRAS G12D',
+        'Non-Small Cell Lung Cancer, Pancreatic Adenocarcinoma',
+        'ASP3082',
+        'Addition of a novel drug to an existing clinically actionable biomarker',
+      ],
+      [
+        'NTRK1 G595R',
+        'All Solid Tumors',
+        'Selitrectinib',
+        'Novel clinically actionable biomarker',
+      ],
+      [
+        'NTRK3 G623R',
+        'All Solid Tumors',
+        'Selitrectinib',
+        'Novel clinically actionable biomarker',
+      ],
+      [
+        'ERBB2 Amplification',
+        'Biliary Tract Cancer',
+        'Zanidatamab',
+        'Addition of a novel drug to an existing clinically actionable biomarker',
+      ],
+    ],
+    [LEVELS.Tx4]: [
+      [
+        'FBXW7 Oncogenic Mutations',
+        'All Solid Tumors',
+        'Lunresertib + Camonsertib',
+        'Novel clinically actionable biomarker',
+      ],
+      [
+        'PPP2R1A Oncogenic Mutations',
+        'All Solid Tumors',
+        'Lunresertib + Camonsertib',
+        'Novel clinically actionable biomarker',
+      ],
+      [
+        'CCNE1 Amplification',
+        'All Solid Tumors',
+        'Lunresertib + Camonsertib',
+        'Novel clinically actionable biomarker',
+      ],
+      [
+        'SF3B1, U2AF1 Oncogenic Mutations',
+        'Acute Myeloid Leukemia',
+        'Emavusertib',
+        'Addition of a novel drug to an existing clinically actionable biomarker',
+      ],
+      [
+        'SF3B1, U2AF1 Oncogenic Mutations',
+        'Myelodysplastic Syndrome',
+        'Emavusertib and Ceralasertib',
+        'Addition of a novel drug to an existing clinically actionable biomarker',
+      ],
+      [
+        'SRSF2, ZRSR2 Oncogenic Mutations',
+        'Myelodysplastic Syndrome',
+        'Ceralasertib',
+        'Addition of a novel drug to an existing clinically actionable biomarker',
+      ],
+      [
+        'SRF3B1, U2AF1, SRSF2, ZRSR2 Oncogenic Mutations',
+        'Chronic Myelomonocytic Leukemia',
+        'Ceralasertib',
+        'Addition of a novel drug to an existing clinically actionable biomarker',
+      ],
+      [
+        'MET N1100S, V1092I, H1106D, R1170Q, M1250T',
+        'Non-Small Cell Lung Cancer',
+        'Elzovantinib, Capmatinib, Tepotinib',
+        'Novel clinically actionable biomarker',
+      ],
+      [
+        'NTRK1 G595R',
+        'All Solid Tumors',
+        'Zurletrectinib',
+        'Addition of a novel drug to an existing clinically actionable biomarker',
+      ],
+      [
+        'NTRK3 G623R',
+        'All Solid Tumors',
+        'Zurletrectinib',
+        'Addition of a novel drug to an existing clinically actionable biomarker',
+      ],
+      [
+        'NTRK1/2/3 Fusions',
+        'All Solid Tumors',
+        'Zurletrectinib',
+        'Addition of a novel drug to an existing clinically actionable biomarker',
+      ],
+    ],
+    discontinued: [
+      [
+        'FGFR2 Fusions',
+        'Bladder Cancer',
+        'Erdafitinib',
+        '1',
+        'FDA drug label amendment to exclude FGFR2 fusions',
+      ],
+      [
+        'FGFR2 Fusions',
+        'Bladder Cancer',
+        'AZD4547',
+        '4',
+        'Lack of sufficient evidence of clinical activity in FGFR2 fusion-positive bladder cancer',
+      ],
+      [
+        'FGFR3 Fusions (excluding FGFR3-TACC3 Fusion and FGFR3-BAIAP2L1 Fusion)',
+        'Bladder Cancer',
+        'Erdafitinib',
+        '1',
+        'Adherence to FDA drug label and CDx (note OncoKB Level was changed from 1 to 2)',
+      ],
+      [
+        'FGFR1 Amplification',
+        'Lung Squamous Cell Carcinoma',
+        'Erdafitinib',
+        '3A',
+        'Limited response rate to EGFR inhibitors for FGFR1-amplified lung squamous cell carcinoma',
+      ],
+      [
+        'EGFR Exon 20 In-Frame Insertions',
+        'Non-Small Cell Lung Cancer',
+        'Mobocertinib',
+        '1',
+        'Drug development discontinued due to lack of efficacy',
+      ],
+      [
+        'SRSF2, ZRSR2 Oncogenic Mutations',
+        'Acute Myeloid Leukemia',
+        'H3B-8800',
+        '4',
+        'Drug development discontinued due to lack of efficacy',
+      ],
+      [
+        'PIK3CA H1047R',
+        'All Solid Tumors',
+        'LOXO-783',
+        '4',
+        'Drug development discontinued to focus on next-generation therapeutics',
+      ],
+    ],
+  },
   '2023': {
     [LEVELS.Tx1]: [
       [
@@ -270,7 +691,7 @@ export const DATA: { [key in TableKey]: TableData } = {
         'ALK Fusions',
         'Inflammatory Myofibroblastic Tumor',
         'Crizotinib',
-        'Novel clinically actionable biomarker in this cancer type ',
+        'Novel clinically actionable biomarker in this cancer type',
       ],
       [
         'KRAS G12C',
@@ -290,24 +711,24 @@ export const DATA: { [key in TableKey]: TableData } = {
         'BRCA2 Oncogenic Mutations',
         'Uterine Sarcoma',
         'Olaparib, Rucaparib, Niraparib',
-        'Novel clinically actionable biomarker in this cancer type ',
+        'Novel clinically actionable biomarker in this cancer type',
       ],
       [
         'PALB2 Oncogenic Mutations',
         'Pancreatic Cancer',
         'Rucaparib',
-        'Novel clinically actionable biomarker in this cancer type ',
+        'Novel clinically actionable biomarker in this cancer type',
       ],
       [
         'BRCA1/2 Oncogenic Mutations',
         'Pancreatic Cancer',
         'Rucaparib',
-        'Novel clinically actionable biomarker in this cancer type ',
+        'Novel clinically actionable biomarker in this cancer type',
       ],
       [
         'EGFR S768I, L861Q, G719',
         'Non-Small Cell Lung Cancer',
-        'Osimertinib ',
+        'Osimertinib',
         'Addition of novel drug to an existing clinically actionable biomarker',
       ],
       [
@@ -344,15 +765,15 @@ export const DATA: { [key in TableKey]: TableData } = {
     [LEVELS.Tx3]: [
       [
         'KRAS G12C',
-        'Gastrointestinal cancers ',
+        'Gastrointestinal cancers',
         'Adagrasib',
-        'Novel clinically actionable biomarker in this cancer type ',
+        'Novel clinically actionable biomarker in this cancer type',
       ],
       [
         'KRAS G12C',
         'Pancreatic cancer',
         'Sotorasib',
-        'Novel clinically actionable biomarker in this cancer type ',
+        'Novel clinically actionable biomarker in this cancer type',
       ],
       [
         'TP53 Y220C',
@@ -399,13 +820,13 @@ export const DATA: { [key in TableKey]: TableData } = {
       [
         'KMT2A Fusions',
         'B-Lymphoblastic Leukemia/Lymphoma, Acute Myeloid Leukemia',
-        'SNDX-5613 ',
+        'SNDX-5613',
         'Novel clinically actionable biomarker',
       ],
       [
         'NPM1 Oncogenic Mutations',
         'Acute Myeloid Leukemia',
-        'SNDX-5613 ',
+        'SNDX-5613',
         'Novel clinically actionable biomarker',
       ],
     ],
@@ -414,7 +835,7 @@ export const DATA: { [key in TableKey]: TableData } = {
         'PIK3CA Oncogenic Mutations',
         <div style={{ minWidth: 150 }}>All Solid Tumors</div>,
         'RLY-2608',
-        'Novel clinically actionable biomarker in this cancer type ',
+        'Novel clinically actionable biomarker in this cancer type',
       ],
       [
         'PIK3CA H1047R',

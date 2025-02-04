@@ -31,7 +31,6 @@ import { computed, reaction, action, observable } from 'mobx';
 import { GENETIC_TYPE } from 'app/components/geneticTypeTabs/GeneticTypeTabs';
 import { observer, inject } from 'mobx-react';
 import { Link } from 'react-router-dom';
-import styles from './SomaticGermlineAlterationPage.module.scss';
 import classNames from 'classnames';
 import StickyMiniNavBar, {
   StickyMiniNavBarContextProvider,
@@ -72,8 +71,6 @@ import autobind from 'autobind-decorator';
 import { AlterationPageHashQueries } from 'app/shared/route/types';
 import MutationEffectDescription from '../annotationPage/MutationEffectDescription';
 import MiniNavBarHeader from 'app/shared/nav/MiniNavBarHeader';
-import AlterationTile from './AlterationTile';
-import HighestLevelEvidence from './HighestLevelEvidence';
 import { GenomicIndicatorTable } from '../genePage/GenomicIndicatorTable';
 import { Else, If, Then } from 'react-if';
 import LoadingIndicator, {
@@ -87,7 +84,6 @@ import {
   COLOR_ICON_WITH_INFO,
   COLOR_ICON_WITHOUT_INFO,
 } from 'app/config/theme';
-import SomaticGermlineAlterationView from '../annotationPage/SomaticGermlineAlterationView';
 import {
   ITextBreadcrumb,
   ILinkBreadcrumb,
@@ -95,7 +91,9 @@ import {
   IInputBreadcrumb,
   AnnotationBreadcrumbs,
 } from '../annotationPage/AnnotationBreadcrumbs';
-import GermlineSomaticHeader from 'app/shared/header/GermlineSomaticHeader';
+import styles from '../somaticGermlineAlterationPage/SomaticGermlineAlterationPage.module.scss';
+import AlterationTile from '../somaticGermlineAlterationPage/AlterationTile';
+import HighestLevelEvidence from '../somaticGermlineAlterationPage/HighestLevelEvidence';
 
 function OncogenicInfo({
   isUnknownOncogenicity,
@@ -159,26 +157,26 @@ type MatchParams = {
   alteration: string;
 };
 
-type SomaticGermlineAlterationPageProps = {
+type SomaticGermlineCancerTypePageProps = {
   appStore: AppStore;
   windowStore: WindowStore;
   authenticationStore: AuthenticationStore;
 } & RouteComponentProps<MatchParams>;
 
-type SomaticGermlineAlterationPageState = {};
+type SomaticGermlineCancerTypePageState = {};
 
 @inject('appStore', 'windowStore', 'authenticationStore')
 @observer
-export class SomaticGermlineAlterationPage extends React.Component<
-  SomaticGermlineAlterationPageProps,
-  SomaticGermlineAlterationPageState
+export class SomaticGermlineCancerTypePage extends React.Component<
+  SomaticGermlineCancerTypePageProps,
+  SomaticGermlineCancerTypePageState
 > {
   private store: AnnotationStore;
   private selectedTab: ANNOTATION_PAGE_TAB_KEYS;
 
   @observable showMutationEffect = true;
 
-  constructor(props: SomaticGermlineAlterationPageProps) {
+  constructor(props: SomaticGermlineCancerTypePageProps) {
     super(props);
     const alterationQuery = decodeSlash(props.match.params.alteration);
     reaction(
@@ -587,6 +585,37 @@ export class SomaticGermlineAlterationPage extends React.Component<
     );
   }
 
+  createHeader(includeEmailLink: boolean) {
+    return (
+      <div className={classNames(styles.headerContent)}>
+        {this.store.hugoSymbol} {this.store.alterationNameWithDiff}{' '}
+        <span
+          className={classNames(
+            styles.pill,
+            this.store.germline ? styles.germline : styles.somatic
+          )}
+        >
+          {upperFirst(this.geneticType)}
+        </span>
+        <span style={{ fontSize: '0.5em' }} className={'ml-2'}>
+          {includeEmailLink && (
+            <FeedbackIcon
+              feedback={{
+                type: FeedbackType.ANNOTATION,
+                annotation: {
+                  gene: this.store.hugoSymbol,
+                  alteration: this.store.alterationName,
+                  cancerType: this.store.cancerTypeName,
+                },
+              }}
+              appStore={this.props.appStore}
+            />
+          )}
+        </span>
+      </div>
+    );
+  }
+
   @computed
   get navBreadcrumbs() {
     const breadcrumbs: (
@@ -647,17 +676,9 @@ export class SomaticGermlineAlterationPage extends React.Component<
               <Row className="justify-content-center">
                 <Col md={11}>
                   {this.navBreadcrumbs}
-                  <GermlineSomaticHeader
-                    includeEmailLink
-                    annotation={{
-                      gene: this.store.hugoSymbol,
-                      alteration: this.store.alterationName,
-                      cancerType: this.store.cancerTypeName,
-                    }}
-                    appStore={this.props.appStore}
-                    alterationNameWithDiff={this.store.alterationNameWithDiff}
-                    geneticType={this.geneticType}
-                  />
+                  <h1 className={classNames(styles.header)}>
+                    {this.createHeader(true)}
+                  </h1>
                 </Col>
                 <Col md={11}>
                   <Row className={classNames(styles.descriptionContainer)}>
@@ -695,17 +716,7 @@ export class SomaticGermlineAlterationPage extends React.Component<
             <StickyMiniNavBar
               title={
                 <div className={classNames(styles.navBarTitle)}>
-                  <GermlineSomaticHeader
-                    includeEmailLink
-                    annotation={{
-                      gene: this.store.hugoSymbol,
-                      alteration: this.store.alterationName,
-                      cancerType: this.store.cancerTypeName,
-                    }}
-                    appStore={this.props.appStore}
-                    alterationNameWithDiff={this.store.alterationNameWithDiff}
-                    geneticType={this.geneticType}
-                  />
+                  {this.createHeader(false)}
                 </div>
               }
             />
@@ -894,51 +905,30 @@ export class SomaticGermlineAlterationPage extends React.Component<
                       <MiniNavBarHeader id="clinical-implications">
                         Clinical Implications For This Biomarker
                       </MiniNavBarHeader>
-                      {this.store.cancerTypeName ? (
-                        <CancerTypeView
-                          appStore={this.props.appStore}
-                          isLargeScreen={this.props.windowStore.isLargeScreen}
-                          userAuthenticated={
-                            this.props.authenticationStore.isUserAuthenticated
-                          }
-                          hugoSymbol={this.store.hugoSymbol}
-                          alteration={this.store.alterationName}
-                          matchedAlteration={this.store.alteration.result}
-                          tumorType={this.store.cancerTypeName}
-                          onChangeTumorType={this.onChangeTumorType.bind(this)}
-                          annotation={this.store.annotationData.result}
-                          biologicalAlterations={
-                            this.store.biologicalAlterations.result
-                          }
-                          relevantAlterations={undefined}
-                          fdaImplication={this.fdaImplication}
-                          therapeuticImplications={this.therapeuticImplications}
-                          diagnosticImplications={this.diagnosticImplications}
-                          prognosticImplications={this.prognosticImplications}
-                          defaultSelectedTab={this.selectedTab}
-                          onChangeTab={this.onChangeTab}
-                        />
-                      ) : (
-                        <SomaticGermlineAlterationView
-                          appStore={this.props.appStore}
-                          hugoSymbol={this.store.hugoSymbol}
-                          alteration={this.store.alterationName}
-                          matchedAlteration={this.store.alteration.result}
-                          tumorType={this.store.cancerTypeName}
-                          onChangeTumorType={this.onChangeTumorType.bind(this)}
-                          annotation={this.store.annotationData.result}
-                          biologicalAlterations={
-                            this.store.biologicalAlterations.result
-                          }
-                          relevantAlterations={undefined}
-                          fdaImplication={this.fdaImplication}
-                          therapeuticImplications={this.therapeuticImplications}
-                          diagnosticImplications={this.diagnosticImplications}
-                          prognosticImplications={this.prognosticImplications}
-                          defaultSelectedTab={this.selectedTab}
-                          onChangeTab={this.onChangeTab}
-                        />
-                      )}
+                      <CancerTypeView
+                        appStore={this.props.appStore}
+                        isLargeScreen={this.props.windowStore.isLargeScreen}
+                        userAuthenticated={
+                          this.props.authenticationStore.isUserAuthenticated
+                        }
+                        hugoSymbol={this.store.hugoSymbol}
+                        alteration={this.store.alterationName}
+                        matchedAlteration={this.store.alteration.result}
+                        tumorType={this.store.cancerTypeName}
+                        onChangeTumorType={this.onChangeTumorType.bind(this)}
+                        annotation={this.store.annotationData.result}
+                        biologicalAlterations={
+                          this.store.biologicalAlterations.result
+                        }
+                        relevantAlterations={undefined}
+                        fdaImplication={this.fdaImplication}
+                        therapeuticImplications={this.therapeuticImplications}
+                        diagnosticImplications={this.diagnosticImplications}
+                        prognosticImplications={this.prognosticImplications}
+                        defaultSelectedTab={this.selectedTab}
+                        onChangeTab={this.onChangeTab}
+                      />
+                      )
                     </>
                   )}
                 </Col>

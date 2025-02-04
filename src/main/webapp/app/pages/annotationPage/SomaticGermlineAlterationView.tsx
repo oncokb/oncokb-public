@@ -7,7 +7,6 @@ import {
   DEFAULT_MARGIN_BOTTOM_LG,
   OTHER_BIOMARKERS,
 } from 'app/config/constants';
-import styles from 'app/pages/alterationPage/AlterationPage.module.scss';
 import InfoIcon from 'app/shared/icons/InfoIcon';
 import { Col, Row } from 'react-bootstrap';
 import classnames from 'classnames';
@@ -28,6 +27,7 @@ import { getSummaries, SummaryKey } from 'app/pages/annotationPage/Utils';
 import AppStore from 'app/store/AppStore';
 import { Alteration } from 'app/shared/api/generated/OncoKbAPI';
 import { COLOR_BLUE } from 'app/config/theme';
+import SomaticGermlineCancerTypeSelect from 'app/shared/dropdown/SomaticGermlineCancerTypeSelect';
 
 export type IAlterationView = {
   appStore?: AppStore;
@@ -121,73 +121,8 @@ export default class SomaticGermlineAlterationView extends React.Component<
               <span className={classnames('mr-3', 'h6')}>
                 Filter this list by:
               </span>
-              <span
-                className={classnames(styles.headerTumorTypeSelection, 'mr-2')}
-              >
-                <span>
-                  <CancerTypeSelect
-                    styles={{
-                      control: base => ({
-                        ...base,
-                        height: '30px',
-                        minHeight: '30px',
-                        borderBottomWidth: '1px',
-                        borderBottomColor: COLOR_BLUE,
-                        borderStyle: 'none',
-                        borderBottomStyle: 'solid',
-                        borderRadius: '0px',
-                        '&:hover': {
-                          borderBottomColor: COLOR_BLUE,
-                        },
-                      }),
-                      indicatorsContainer: base => ({
-                        ...base,
-                        '& div': {
-                          color: COLOR_BLUE,
-                        },
-                        '& div:hover': {
-                          color: COLOR_BLUE,
-                        },
-                      }),
-                      indicatorSeparator: base => ({
-                        ...base,
-                        width: '0px',
-                      }),
-                      dropdownIndicator: base => ({
-                        ...base,
-                        padding: 4,
-                      }),
-                      clearIndicator: base => ({
-                        ...base,
-                        padding: 4,
-                      }),
-                      valueContainer: base => ({
-                        ...base,
-                        padding: '0px 6px',
-                      }),
-                      input: base => ({
-                        ...base,
-                        margin: 0,
-                        padding: 0,
-                      }),
-                      menu: base => ({ ...base, zIndex: 10 }),
-                    }}
-                    cancerType={this.props.tumorType}
-                    onChange={(selectedOption: any) =>
-                      this.updateTumorTypeQuery(selectedOption)
-                    }
-                  />
-                </span>
-              </span>
-              <InfoIcon
-                overlay={
-                  <span>
-                    For cancer type specific information, please select a cancer
-                    type from the dropdown. The cancer type is curated using{' '}
-                    <OncoTreeLink />
-                  </span>
-                }
-                placement="top"
+              <SomaticGermlineCancerTypeSelect
+                cancerType={this.props.tumorType}
               />
             </div>
           </Col>

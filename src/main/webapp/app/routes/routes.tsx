@@ -38,6 +38,7 @@ import CompanionDiagnosticDevicePage from 'app/pages/companionDiagnosticDevicesP
 import OncokbRoute from 'app/shared/route/OncokbRoute';
 import GenePage from 'app/pages/genePage/GenePage';
 import { SomaticGermlineAlterationPage } from 'app/pages/somaticGermlineAlterationPage/SomaticGermlineAlterationPage';
+import { SomaticGermlineCancerTypePage } from 'app/pages/annotationPage/SomaticGermlineCancerTypePage';
 
 const getOldLevelsRedirectRoute = (hash: string) => {
   const queryStrings = QueryString.parse(hash) as {
@@ -206,6 +207,20 @@ const AppRoutes = (props: {
           appStore={props.appStore}
           path={PAGE_ROUTE.SOMATIC_ALTERATION}
           component={SomaticGermlineAlterationPage}
+        />
+        <RecaptchaBoundaryRoute
+          exact
+          isUserAuthenticated={props.authenticationStore.isUserAuthenticated}
+          appStore={props.appStore}
+          path={PAGE_ROUTE.GERMLINE_TUMOR_TYPE}
+          component={SomaticGermlineCancerTypePage}
+        />
+        <RecaptchaBoundaryRoute
+          exact
+          isUserAuthenticated={props.authenticationStore.isUserAuthenticated}
+          appStore={props.appStore}
+          path={PAGE_ROUTE.SOMATIC_TUMOR_TYPE}
+          component={SomaticGermlineCancerTypePage}
         />
         <RecaptchaBoundaryRoute
           exact

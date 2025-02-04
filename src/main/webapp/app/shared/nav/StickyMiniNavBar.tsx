@@ -55,7 +55,9 @@ export const StickyMiniNavBarContext = createContext<{
   counter: number;
 }>({
   invalidateCache() {
-    return;
+    throw new Error(
+      'StickyMiniNavBarContext was not set, please add a StickyMiniNavBarContextProvider'
+    );
   },
   counter: 0,
 });
@@ -216,6 +218,10 @@ export default function StickyMiniNavBar({
         currentSectionId = section.id;
       }
     }
+  }
+
+  if (sections.length < 2) {
+    return <></>;
   }
 
   return (
