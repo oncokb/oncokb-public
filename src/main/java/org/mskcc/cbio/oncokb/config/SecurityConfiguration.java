@@ -96,6 +96,7 @@ public class SecurityConfiguration extends WebSecurityConfigurerAdapter {
             .antMatchers("/api/v1/v2/api-docs").permitAll()
             .antMatchers("/api/private/utils/data/**").hasAnyAuthority(AuthoritiesConstants.DATA_DOWNLOAD)
 
+            .antMatchers("/api/v1/annotate/sample").hasAnyAuthority(AuthoritiesConstants.PREMIUM_USER, AuthoritiesConstants.ADMIN) // Order matters here
             .antMatchers("/api/v1/annotate/**").hasAnyAuthority(AuthoritiesConstants.API, AuthoritiesConstants.ROLE_SERVICE_ACCOUNT)
 
             .antMatchers("/api/v1/genes/lookup").hasAnyAuthority(AuthoritiesConstants.PUBLIC_WEBSITE, AuthoritiesConstants.USER, AuthoritiesConstants.ADMIN)
@@ -110,7 +111,6 @@ public class SecurityConfiguration extends WebSecurityConfigurerAdapter {
             .antMatchers("/api/v1/utils/cancerGeneList.json").permitAll()
 
             .antMatchers("/api/v1/annotation/search").hasAnyAuthority(AuthoritiesConstants.PREMIUM_USER, AuthoritiesConstants.ADMIN)
-            .antMatchers("/api/v1/annotation/sample").hasAnyAuthority(AuthoritiesConstants.PREMIUM_USER, AuthoritiesConstants.ADMIN)
             .antMatchers("/api/v1/drugs").hasAnyAuthority(AuthoritiesConstants.PREMIUM_USER, AuthoritiesConstants.ADMIN)
             .antMatchers("/api/v1/utils/allActionableVariants").hasAnyAuthority(AuthoritiesConstants.PREMIUM_USER, AuthoritiesConstants.ADMIN)
             .antMatchers("/api/v1/utils/allActionableVariants.txt").hasAnyAuthority(AuthoritiesConstants.PREMIUM_USER, AuthoritiesConstants.ADMIN)
