@@ -521,7 +521,7 @@
   },
   {
     "year": "2011",
-    "tx": "Brentuximab",
+    "tx": "Brentuximab vedotin",
     "biomarker": "CD30+",
     "agentClass": "Hematopoietic protein binding antibody, ADC or cytotoxin",
     "drugTarget": "CD30-directed antibody-drug conjugate",
@@ -1064,7 +1064,7 @@
     "tx": "Atezolizumab",
     "biomarker": "PD-L1-expressing",
     "agentClass": "Immune checkpoint inhibitor",
-    "drugTarget": "Anti-PDL-1 antibody",
+    "drugTarget": "Anti-PD-L1 antibody",
     "targetedTx": "Y",
     "pxTx": "Y",
     "ngsTest": "N"
@@ -1512,7 +1512,7 @@
   {
     "year": "2019",
     "tx": "Trastuzumab deruxtecan",
-    "biomarker": "*HER2+ (ERBB2 Amplification)\n*HER2-low\n*ERBB2 Oncogenic Mutations",
+    "biomarker": "*HER2+ (ERBB2 Amplification)\n*HER2-low\n*ERBB2 Oncogenic Mutations \n*HR+/HER2-low or HER2-ultralow",
     "agentClass": "Antibody drug conjugate",
     "drugTarget": "HER2 (ERBB2)-directed antibody and topoisomerase inhibitor conjugate",
     "targetedTx": "Y",
@@ -1684,7 +1684,7 @@
     "tx": "Sacituzumab govitecan",
     "biomarker": "HR+/HER2-",
     "agentClass": "Antibody drug conjugate",
-    "drugTarget": "TROP2-directed antibody topoisomerase inhibitor conjugate",
+    "drugTarget": "TROP2-directed antibody and topoisomerase inhibitor conjugate",
     "targetedTx": "Y",
     "pxTx": "Y",
     "ngsTest": "N"
@@ -1971,7 +1971,7 @@
   },
   {
     "year": "2022",
-    "tx": "Nivolumab and relatlimab (Opdualag)",
+    "tx": "Nivolumab + Relatlimab (Opdualag)",
     "biomarker": "",
     "agentClass": "Immune checkpoint inhibitor",
     "drugTarget": "Anti-PD-1 antibody + Anti-LAG-3 antibody",
@@ -2318,5 +2318,65 @@
     "targetedTx": "Y",
     "pxTx": "Y",
     "ngsTest": "Y"
+  },
+  {
+    "year": "2024",
+    "tx": "Cosibelimab",
+    "biomarker": "",
+    "agentClass": "Immune checkpoint inhibitor",
+    "drugTarget": "Anti-PD-L1 antibody",
+    "targetedTx": "Y",
+    "pxTx": "N",
+    "ngsTest": "NA"
+  },
+  {
+    "year": "2024",
+    "tx": "Ensartinib",
+    "biomarker": "ALK+ (ALK Fusions)",
+    "agentClass": "Multikinase inhibitor",
+    "drugTarget": "Multi-targeted receptor tyrosine kinase inhibitor (targets include ALK, ROS1 and MET)",
+    "targetedTx": "Y",
+    "pxTx": "Y",
+    "ngsTest": "Y"
+  },
+  {
+    "year": "2025",
+    "tx": "Sotorasib + Panitumumab",
+    "biomarker": "KRAS G12C",
+    "agentClass": "Small molecule inhibitor and monoclonal antibody combination",
+    "drugTarget": "KRAS G12C inhibitor + Anti-EGFR antibody",
+    "targetedTx": "Y",
+    "pxTx": "Y",
+    "ngsTest": "Y"
+  },
+  {
+    "year": "2025",
+    "tx": "Datopotamab deruxtecan",
+    "biomarker": "HR+/HER2-",
+    "agentClass": "Antibody drug conjugate",
+    "drugTarget": "TROP2-directed antibody and topoisomerase inhibitor conjugate",
+    "targetedTx": "Y",
+    "pxTx": "Y",
+    "ngsTest": "N"
+  },
+  {
+    "year": "2025",
+    "tx": "Mirdametinib",
+    "biomarker": "NF1 Oncogenic Mutations",
+    "agentClass": "Small molecule kinase inhibitor",
+    "drugTarget": "MEK1/2 inhibitor",
+    "targetedTx": "Y",
+    "pxTx": "Y",
+    "ngsTest": "Y"
+  },
+  {
+    "year": "2025",
+    "tx": "Vimseltinib",
+    "biomarker": "",
+    "agentClass": "Small molecule kinase inhibitor",
+    "drugTarget": "CSF1R inhibitor",
+    "targetedTx": "Y",
+    "pxTx": "N",
+    "ngsTest": "NA"
   }
 ]
