@@ -610,6 +610,10 @@ public class SlackService {
                     layoutBlocks.add(buildPlainTextBlock(rejectOption.getExpandedNote(), rejectOption.getBlockId()));
             }
         }
+        
+        if (userDTO.getEmail().endsWith(".ir") || userDTO.getCountry().toLowerCase().equals("iran")) {
+            layoutBlocks.add(buildMarkdownBlock(":nerd_alert: *This user may be from Iran. OncoKB cannot be licensed to users in Iran.*", COUNTRY_WARNING));
+        }
 
         List<UserDTO> potentialDuplicateUsers = userService.getPotentialDuplicateAccountsByUser(userDTO);
         if (!potentialDuplicateUsers.isEmpty()) {
