@@ -100,69 +100,72 @@ export default class NewsList extends React.Component<NewsListProps> {
           {this.props.children ? (
             this.props.children
           ) : newsData ? (
-            <ul>
-              {getNews({
-                key: `priority-news-${date}`,
-                content: newsData.priorityNews,
-              })}
-              {newsData.updatedImplication ? (
-                <UpdatedTxImplListItem
-                  title={newsData.updatedImplicationTitle}
-                  data={newsData.updatedImplication.map((item, index) => {
-                    return {
-                      key: `updatedImplication-${date}-${index}`,
-                      content: item.map((subItem, subIndex) => {
-                        return {
-                          key: `updatedImplication-${date}-${index}-${subIndex}`,
-                          content: subItem,
-                        };
-                      }),
-                    };
-                  })}
-                  numOfAssociationsInUpdatedImplication={
-                    newsData.numOfAssociationsInUpdatedImplication
-                  }
-                />
-              ) : undefined}
-              {newsData.updatedImplicationInOldFormat ? (
-                <UpdatedTxImplOldFormatListItem
-                  data={newsData.updatedImplicationInOldFormat}
-                  key={`UpdatedTxImplOldFormatListItem-${date}`}
-                />
-              ) : undefined}
-              {newsData.changedAnnotations
-                ? newsData.changedAnnotations.map(annotation => {
-                    return (
-                      <ChangedAnnotationListItem
-                        title={annotation.title}
-                        columnHeaderType={annotation.columnHeaderType}
-                        headers={annotation.headers}
-                        useOneLineRowClass={annotation.useOneLineRowClass}
-                        data={
-                          annotation.content
-                            ? annotation.content.map((item, index) => {
-                                return {
-                                  key: `changedAnnotation-${date}-${index}`,
-                                  content: item.map((subItem, subIndex) => {
-                                    return {
-                                      key: `changedAnnotation-${date}-${index}-${subIndex}`,
-                                      content: subItem,
-                                    };
-                                  }),
-                                };
-                              })
-                            : []
-                        }
-                      />
-                    );
-                  })
-                : undefined}
-              {getNews({
-                key: `news-${date}`,
-                content: newsData.news ? newsData.news : [],
-              })}
-              {this.getNewlyAddGeneSection(newsData)}
-            </ul>
+            <>
+              {newsData?.rawComponent}
+              <ul>
+                {getNews({
+                  key: `priority-news-${date}`,
+                  content: newsData.priorityNews,
+                })}
+                {newsData.updatedImplication ? (
+                  <UpdatedTxImplListItem
+                    title={newsData.updatedImplicationTitle}
+                    data={newsData.updatedImplication.map((item, index) => {
+                      return {
+                        key: `updatedImplication-${date}-${index}`,
+                        content: item.map((subItem, subIndex) => {
+                          return {
+                            key: `updatedImplication-${date}-${index}-${subIndex}`,
+                            content: subItem,
+                          };
+                        }),
+                      };
+                    })}
+                    numOfAssociationsInUpdatedImplication={
+                      newsData.numOfAssociationsInUpdatedImplication
+                    }
+                  />
+                ) : undefined}
+                {newsData.updatedImplicationInOldFormat ? (
+                  <UpdatedTxImplOldFormatListItem
+                    data={newsData.updatedImplicationInOldFormat}
+                    key={`UpdatedTxImplOldFormatListItem-${date}`}
+                  />
+                ) : undefined}
+                {newsData.changedAnnotations
+                  ? newsData.changedAnnotations.map(annotation => {
+                      return (
+                        <ChangedAnnotationListItem
+                          title={annotation.title}
+                          columnHeaderType={annotation.columnHeaderType}
+                          headers={annotation.headers}
+                          useOneLineRowClass={annotation.useOneLineRowClass}
+                          data={
+                            annotation.content
+                              ? annotation.content.map((item, index) => {
+                                  return {
+                                    key: `changedAnnotation-${date}-${index}`,
+                                    content: item.map((subItem, subIndex) => {
+                                      return {
+                                        key: `changedAnnotation-${date}-${index}-${subIndex}`,
+                                        content: subItem,
+                                      };
+                                    }),
+                                  };
+                                })
+                              : []
+                          }
+                        />
+                      );
+                    })
+                  : undefined}
+                {getNews({
+                  key: `news-${date}`,
+                  content: newsData.news ? newsData.news : [],
+                })}
+                {this.getNewlyAddGeneSection(newsData)}
+              </ul>
+            </>
           ) : undefined}
         </div>
       </>
