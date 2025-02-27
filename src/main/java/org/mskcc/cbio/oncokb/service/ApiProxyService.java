@@ -45,7 +45,7 @@ public class ApiProxyService {
     public HttpHeaders prepareHttpHeaders(String contentType) {
 
         HttpHeaders httpHeaders = new HttpHeaders();
-        if (contentType != null) {
+        if (StringUtils.isNotEmpty(contentType)) {
             httpHeaders.setContentType(MediaType.valueOf(contentType));
         }
 
