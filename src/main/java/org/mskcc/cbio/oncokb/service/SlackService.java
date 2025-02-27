@@ -611,7 +611,10 @@ public class SlackService {
             }
         }
         
-        if (userDTO.getEmail().endsWith(".ir") || userDTO.getCountry().toLowerCase().equals("iran")) {
+
+        if ((userDTO.getEmail() != null && userDTO.getEmail().endsWith(".ir")) 
+            || (userDTO.getCountry() != null && userDTO.getCountry().toLowerCase().equals("iran"))) 
+        {
             layoutBlocks.add(buildMarkdownBlock(":nerd_alert: *This user may be from Iran. OncoKB cannot be licensed to users in Iran.*", COUNTRY_WARNING));
         }
 
