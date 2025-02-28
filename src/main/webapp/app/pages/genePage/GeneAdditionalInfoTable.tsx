@@ -110,21 +110,21 @@ const getRefSeqText = (grch37: string, grch38: string) => {
     return (
       <div>
         {grch37 && (
-          <div>
+          <div className="d-flex">
             <RefSeqLinkout
               refSeq={grch37}
               referenceGenome={REFERENCE_GENOME.GRCh37}
-            />{' '}
-            ({REFERENCE_GENOME.GRCh37})
+            />
+            <span className="ml-1">({REFERENCE_GENOME.GRCh37})</span>
           </div>
         )}
         {grch38 && (
-          <div>
+          <div className="d-flex">
             <RefSeqLinkout
               refSeq={grch38}
               referenceGenome={REFERENCE_GENOME.GRCh38}
-            />{' '}
-            ({REFERENCE_GENOME.GRCh38})
+            />
+            <span className="ml-1">({REFERENCE_GENOME.GRCh38})</span>
           </div>
         )}
       </div>
