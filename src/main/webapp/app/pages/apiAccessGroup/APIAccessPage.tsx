@@ -52,7 +52,6 @@ function getMinorVersion(versionString: string): number | undefined {
 const BUTTON_CLASS_NAME = 'mr-2 my-1';
 const DownloadButtonGroups: React.FunctionComponent<{
   data: DownloadAvailabilityWithDate;
-  authenticationStore: AuthenticationStore;
 }> = props => {
   const majorVersion = getMajorVersion(props.data.version) ?? 0;
   const minorVersion = getMinorVersion(props.data.version) ?? 0;
@@ -282,12 +281,11 @@ export default class APIAccessPage extends React.Component<{
                   </div>
                 </div>
                 {this.props.authenticationStore.account &&
-                (this.props.authenticationStore.account.authorities.includes(
-                  USER_AUTHORITY.ROLE_DATA_DOWNLOAD
-                ) ||
-                  this.props.authenticationStore.account.authorities.includes(
-                    USER_AUTHORITY.ROLE_PREMIUM_USER
-                  )) ? (
+                this.props.authenticationStore.account.authorities.some(
+                  authority =>
+                    authority === USER_AUTHORITY.ROLE_DATA_DOWNLOAD ||
+                    authority === USER_AUTHORITY.ROLE_PREMIUM_USER
+                ) ? (
                   <>
                     <div className={'mb-3'}>
                       <h5 className="title">Data Download</h5>
@@ -310,7 +308,6 @@ export default class APIAccessPage extends React.Component<{
                         </p>
                         <DownloadButtonGroups
                           data={this.dataAvailability.result[0]}
-                          authenticationStore={this.props.authenticationStore}
                         />
 
                         {this.dataAvailability.result.length > 1 ? (
@@ -346,9 +343,6 @@ export default class APIAccessPage extends React.Component<{
                                   <Col>
                                     <DownloadButtonGroups
                                       data={this.selectedData}
-                                      authenticationStore={
-                                        this.props.authenticationStore
-                                      }
                                     />
                                   </Col>
                                 </Row>
