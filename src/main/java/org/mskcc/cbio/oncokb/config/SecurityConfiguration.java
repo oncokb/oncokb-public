@@ -94,7 +94,7 @@ public class SecurityConfiguration extends WebSecurityConfigurerAdapter {
             .antMatchers("/api/slack").permitAll()
             // Permits the api swagger definitions through proxy
             .antMatchers("/api/v1/v2/api-docs").permitAll()
-            .antMatchers("/api/private/utils/data/**").hasAnyAuthority(AuthoritiesConstants.DATA_DOWNLOAD)
+            .antMatchers("/api/private/utils/data/**").hasAnyAuthority(AuthoritiesConstants.DATA_DOWNLOAD, AuthoritiesConstants.PREMIUM_USER)
 
             .antMatchers("/api/v1/annotate/sample").hasAnyAuthority(AuthoritiesConstants.PREMIUM_USER, AuthoritiesConstants.ADMIN) // Order matters here
             .antMatchers("/api/v1/annotate/**").hasAnyAuthority(AuthoritiesConstants.API, AuthoritiesConstants.ROLE_SERVICE_ACCOUNT)
@@ -113,9 +113,9 @@ public class SecurityConfiguration extends WebSecurityConfigurerAdapter {
             .antMatchers("/api/v1/annotation/search").hasAnyAuthority(AuthoritiesConstants.PREMIUM_USER, AuthoritiesConstants.ADMIN)
             .antMatchers("/api/v1/drugs").hasAnyAuthority(AuthoritiesConstants.PREMIUM_USER, AuthoritiesConstants.ADMIN)
             .antMatchers("/api/v1/utils/allActionableVariants").hasAnyAuthority(AuthoritiesConstants.PREMIUM_USER, AuthoritiesConstants.ADMIN)
-            .antMatchers("/api/v1/utils/allActionableVariants.txt").hasAnyAuthority(AuthoritiesConstants.PREMIUM_USER, AuthoritiesConstants.ADMIN)
+            .antMatchers("/api/v1/utils/allActionableVariants.txt").hasAnyAuthority(AuthoritiesConstants.PREMIUM_USER, AuthoritiesConstants.ADMIN, AuthoritiesConstants.DATA_DOWNLOAD)
             .antMatchers("/api/v1/utils/allAnnotatedVariants").hasAnyAuthority(AuthoritiesConstants.PREMIUM_USER, AuthoritiesConstants.ADMIN)
-            .antMatchers("/api/v1/utils/allAnnotatedVariants.txt").hasAnyAuthority(AuthoritiesConstants.PREMIUM_USER, AuthoritiesConstants.ADMIN)
+            .antMatchers("/api/v1/utils/allAnnotatedVariants.txt").hasAnyAuthority(AuthoritiesConstants.PREMIUM_USER, AuthoritiesConstants.ADMIN, AuthoritiesConstants.DATA_DOWNLOAD)
             .antMatchers("/api/v1/utils/allVariantsOfUnknownSignificance").hasAnyAuthority(AuthoritiesConstants.PREMIUM_USER, AuthoritiesConstants.ADMIN)
             .antMatchers("/api/v1/utils/allVariantsOfUnknownSignificance.txt").hasAnyAuthority(AuthoritiesConstants.PREMIUM_USER, AuthoritiesConstants.ADMIN)
 

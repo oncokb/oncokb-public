@@ -83,41 +83,35 @@ const DownloadButtonGroups: React.FunctionComponent<{
           buttonText="Cancer Gene List"
         />
       ) : null}
-      {props.authenticationStore.account?.authorities.includes(
-        USER_AUTHORITY.ROLE_PREMIUM_USER
-      ) && (
-        <>
-          {props.data.hasAllActionableVariants && (
-            <AuthDownloadButton
-              className={BUTTON_CLASS_NAME}
-              fileName={`all_actionable_variants_${props.data.version}.tsv`}
-              getDownloadData={async () => {
-                const data = await oncokbClient.utilsAllActionableVariantsTxtGetUsingGET(
-                  {
-                    version: props.data.version,
-                  }
-                );
-                return data;
-              }}
-              buttonText="All Actionable Variants"
-            />
-          )}
-          {props.data.hasAllAnnotatedVariants && (
-            <AuthDownloadButton
-              className={BUTTON_CLASS_NAME}
-              fileName={`all_annotated_variants_${props.data.version}.tsv`}
-              getDownloadData={async () => {
-                const data = await oncokbClient.utilsAllAnnotatedVariantsTxtGetUsingGET(
-                  {
-                    version: props.data.version,
-                  }
-                );
-                return data;
-              }}
-              buttonText="All Annotated Variants"
-            />
-          )}
-        </>
+      {props.data.hasAllActionableVariants && (
+        <AuthDownloadButton
+          className={BUTTON_CLASS_NAME}
+          fileName={`all_actionable_variants_${props.data.version}.tsv`}
+          getDownloadData={async () => {
+            const data = await oncokbClient.utilsAllActionableVariantsTxtGetUsingGET(
+              {
+                version: props.data.version,
+              }
+            );
+            return data;
+          }}
+          buttonText="All Actionable Variants"
+        />
+      )}
+      {props.data.hasAllAnnotatedVariants && (
+        <AuthDownloadButton
+          className={BUTTON_CLASS_NAME}
+          fileName={`all_annotated_variants_${props.data.version}.tsv`}
+          getDownloadData={async () => {
+            const data = await oncokbClient.utilsAllAnnotatedVariantsTxtGetUsingGET(
+              {
+                version: props.data.version,
+              }
+            );
+            return data;
+          }}
+          buttonText="All Annotated Variants"
+        />
       )}
       {props.data.hasSqlDump ? (
         <>
@@ -288,9 +282,12 @@ export default class APIAccessPage extends React.Component<{
                   </div>
                 </div>
                 {this.props.authenticationStore.account &&
-                this.props.authenticationStore.account.authorities.includes(
+                (this.props.authenticationStore.account.authorities.includes(
                   USER_AUTHORITY.ROLE_DATA_DOWNLOAD
-                ) ? (
+                ) ||
+                  this.props.authenticationStore.account.authorities.includes(
+                    USER_AUTHORITY.ROLE_PREMIUM_USER
+                  )) ? (
                   <>
                     <div className={'mb-3'}>
                       <h5 className="title">Data Download</h5>
