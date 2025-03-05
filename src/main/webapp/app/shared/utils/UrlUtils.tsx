@@ -283,22 +283,6 @@ export const OncoTreeLink: React.FunctionComponent<{}> = props => {
   );
 };
 
-export const WebinarLink: React.FunctionComponent<{}> = props => {
-  return (
-    <span>
-      <Linkout
-        link={getYouTubeLink('regular', YOUTUBE_VIDEO_IDS.WEBINAR_INTRO)}
-      >
-        YouTube.com
-      </Linkout>{' '}
-      or{' '}
-      <Linkout link={'https://www.bilibili.com/video/BV1pZ4y1s7ou'}>
-        bilibili.com
-      </Linkout>
-    </span>
-  );
-};
-
 export const getActionableGenesPageLink = (
   levels?: string,
   sections?: string
