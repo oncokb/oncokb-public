@@ -765,7 +765,7 @@ export function isPositionalAlteration(
 }
 
 export function getYouTubeLink(type: 'embed' | 'regular', videoId: string) {
-  return `https://www.youtube.com/${
+  return `https://www.youtube-nocookie.com/${
     type === 'embed' ? 'embed/' : 'watch?v='
   }${videoId}`;
 }
