@@ -2,7 +2,7 @@ import * as React from 'react';
 import { Col, Nav, Row, Tab } from 'react-bootstrap';
 import AppStore from 'app/store/AppStore';
 import { inject, observer } from 'mobx-react';
-import { ONCOKB_TM, PAGE_ROUTE, PAGE_TITLE } from 'app/config/constants';
+import { PAGE_ROUTE, PAGE_TITLE, SOP_LINK } from 'app/config/constants';
 import { computed, IReactionDisposer, observable, reaction } from 'mobx';
 import { RouterStore } from 'mobx-react-router';
 import { AboutPage } from 'app/pages/AboutPage';
@@ -130,15 +130,12 @@ export class AboutPageNavTab extends React.Component<AboutPageNavTabProps> {
                       <Iframe
                         width="100%"
                         height="1000px"
-                        url="https://sop.oncokb.org"
+                        url={`${SOP_LINK}?contentOnly=true`}
                         frameBorder={0}
                         allow="accelerometer; encrypted-media; gyroscope; picture-in-picture"
                         allowFullScreen
                       />
                     </div>
-                    <h2 style={{ position: 'absolute', top: 0 }}>
-                      {ONCOKB_TM} Standard Operating Procedure
-                    </h2>
                   </div>
                 </Tab.Pane>
               </Tab.Content>
