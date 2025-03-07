@@ -80,7 +80,7 @@ public class TokenServiceImpl implements TokenService {
     }
 
     @Override
-    public Optional<Token> findPublicWebsiteToken() {
+    public List<Token> findPublicWebsiteToken() {
         return tokenRepository.findPublicWebsiteToken();
     }
 

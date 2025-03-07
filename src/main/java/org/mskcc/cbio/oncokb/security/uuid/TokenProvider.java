@@ -108,13 +108,15 @@ public class TokenProvider implements InitializingBean {
         Optional<User> user = userRepository.findOneWithAuthoritiesByLogin(PUBLIC_WEBSITE_LOGIN);
         if (user.isPresent()) {
             Token userToken = new Token();
-            Optional<Token> tokenOptional  = tokenService.findPublicWebsiteToken();
-            if (!tokenOptional.isPresent()) {
+            List<Token> pubWebTokens  = tokenService.findPublicWebsiteToken();
+            if (pubWebTokens.isEmpty()) {
                 Token newToken = getNewToken(user.get().getAuthorities(), Optional.empty());
                 newToken.setUser(user.get());
                 userToken = tokenService.save(newToken);
             } else {
-                userToken = tokenOptional.get();
+                // We may have multiple public website tokens if the daily cronjob generates a new token
+                // before the expired token cronjob deletes the old token. We will use the token with the later expiration date.
+                userToken = pubWebTokens.stream().max((token1, token2) -> token1.getExpiration().compareTo(token2.getExpiration())).get();
                 if (userToken.getExpiration().isBefore(Instant.now())) {
                     // I want to update the token associated with public website once it's expired
                     Token newToken = getNewToken(user.get().getAuthorities(), Optional.empty(), Optional.empty());
