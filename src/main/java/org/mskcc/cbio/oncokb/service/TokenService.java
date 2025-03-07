@@ -37,7 +37,7 @@ public interface TokenService {
      */
     Optional<Token> findOne(Long id);
 
-    Optional<Token> findPublicWebsiteToken();
+    List<Token> findPublicWebsiteToken();
 
     Optional<Token> findByToken(UUID token);
 
