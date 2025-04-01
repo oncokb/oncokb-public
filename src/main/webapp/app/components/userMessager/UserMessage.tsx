@@ -54,6 +54,17 @@ if (
     // UNIQUE ID IS IMPORTANT B/C WE REMEMBER A MESSAGE HAS BEEN SHOWN
     // BASED ON USERS LOCALSTORAGE
     {
+      dateEnd: 1745784000000,
+      content: (
+        <div>
+          Join us at AACR 2025! Visit our poster session (Sun 4/27, 2-5PM CDT,
+          Section 46, Poster 6) to see the latest developments from {ONCOKB_TM}.
+          See you there!
+        </div>
+      ),
+      id: '2025-aacr',
+    },
+    {
       dateEnd: 1735689600000,
       content: (
         <div>
