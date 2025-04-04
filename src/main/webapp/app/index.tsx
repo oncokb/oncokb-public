@@ -10,6 +10,7 @@ import * as Sentry from '@sentry/react';
 
 import 'font-awesome/css/font-awesome.css';
 import './index.scss';
+import './cassie.scss';
 import 'react-table/react-table.css';
 import 'oncokb-styles/dist/oncokb.css';
 import 'cbioportal-frontend-commons/dist/styles.css';
