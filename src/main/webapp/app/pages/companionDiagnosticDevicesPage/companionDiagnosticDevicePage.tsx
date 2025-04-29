@@ -541,6 +541,7 @@ const CompanionDiagnosticDevicePage: React.FunctionComponent<{}> = () => {
           <h2 className={'mb-3'}>
             FDA Cleared or Approved Companion Diagnostic Devices
           </h2>
+          <div className={'mb-2'}>Content current as of 04/25/2025</div>
           <div className={'mb-2'}>
             Companion diagnostic devices (CDx) that are US- Food and Drug
             Administration (FDA) approved or cleared to guide treatment
