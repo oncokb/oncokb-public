@@ -39,13 +39,6 @@ export const TeamPage = () => {
       showCOI: true,
     },
     {
-      firstName: 'Jianjiong',
-      lastName: 'Gao',
-      title: [TITLE.PHD],
-      faculty: false,
-      showCOI: true,
-    },
-    {
       firstName: 'Moriah',
       lastName: 'Nissan',
       title: [TITLE.PHD],
@@ -114,6 +107,13 @@ export const TeamPage = () => {
       lastName: 'Sabbatini',
       title: [TITLE.MD],
       faculty: true,
+      showCOI: true,
+    },
+    {
+      firstName: 'Jianjiong',
+      lastName: 'Gao',
+      title: [TITLE.PHD],
+      faculty: false,
       showCOI: true,
     },
     {
