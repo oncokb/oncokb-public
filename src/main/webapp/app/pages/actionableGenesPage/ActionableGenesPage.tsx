@@ -72,6 +72,8 @@ import {
 } from 'app/shared/utils/LodashUtils';
 import { Helmet } from 'react-helmet-async';
 
+const queryDelimiter = '|';
+
 type Treatment = {
   level: string;
   fdaLevel: string;
@@ -100,9 +102,9 @@ export default class ActionableGenesPage extends React.Component<
   ActionableGenesPageProps,
   any
 > {
-  @observable relevantCancerTypeSearchKeyword = '';
-  @observable drugSearchKeyword = '';
-  @observable geneSearchKeyword = '';
+  @observable relevantCancerTypeSearchKeywords: string[] = [];
+  @observable drugSearchKeywords: string[] = [];
+  @observable geneSearchKeywords: string[] = [];
   @observable refGenome = DEFAULT_REFERENCE_GENOME;
   @observable levelSelected: {
     [level in LEVELS]: boolean;
@@ -166,16 +168,22 @@ export default class ActionableGenesPage extends React.Component<
             }
           }
           if (queryStrings.hugoSymbol) {
-            this.geneSearchKeyword = queryStrings.hugoSymbol;
+            this.geneSearchKeywords = queryStrings.hugoSymbol?.split(
+              queryDelimiter
+            );
           }
           if (queryStrings.tumorType) {
-            this.relevantCancerTypeSearchKeyword = queryStrings.tumorType;
+            this.relevantCancerTypeSearchKeywords = queryStrings.tumorType?.split(
+              queryDelimiter
+            );
           }
           if (queryStrings.cancerType) {
-            this.relevantCancerTypeSearchKeyword = queryStrings.cancerType;
+            this.relevantCancerTypeSearchKeywords = queryStrings.cancerType?.split(
+              queryDelimiter
+            );
           }
           if (queryStrings.drug) {
-            this.drugSearchKeyword = queryStrings.drug;
+            this.drugSearchKeywords = queryStrings.drug?.split(queryDelimiter);
           }
           if (queryStrings.refGenome) {
             this.refGenome = queryStrings.refGenome;
@@ -330,14 +338,23 @@ export default class ActionableGenesPage extends React.Component<
     if (this.selectedLevels.length > 0) {
       queryString.levels = this.selectedLevels;
     }
-    if (this.geneSearchKeyword) {
-      queryString.hugoSymbol = this.geneSearchKeyword;
+    if (this.geneSearchKeywords) {
+      queryString.hugoSymbol =
+        this.geneSearchKeywords.length > 0
+          ? this.geneSearchKeywords.join(queryDelimiter)
+          : undefined;
     }
-    if (this.relevantCancerTypeSearchKeyword) {
-      queryString.cancerType = this.relevantCancerTypeSearchKeyword;
+    if (this.relevantCancerTypeSearchKeywords) {
+      queryString.cancerType =
+        this.relevantCancerTypeSearchKeywords.length > 0
+          ? this.relevantCancerTypeSearchKeywords.join(queryDelimiter)
+          : undefined;
     }
-    if (this.drugSearchKeyword) {
-      queryString.drug = this.drugSearchKeyword;
+    if (this.drugSearchKeywords) {
+      queryString.drug =
+        this.drugSearchKeywords.length > 0
+          ? this.drugSearchKeywords.join(queryDelimiter)
+          : undefined;
     }
     const visibleSections = Object.values(this.collapseStatus).filter(
       sectionStatus => sectionStatus
@@ -362,6 +379,27 @@ export default class ActionableGenesPage extends React.Component<
     } else {
       return this.allOncokbTreatments;
     }
+  }
+
+  @computed
+  get allGenes() {
+    return uniq(
+      this.allTreatments.map(({ hugoSymbol }) => {
+        return {
+          value: hugoSymbol,
+          label: hugoSymbol,
+        };
+      })
+    ).sort();
+  }
+
+  @computed
+  get allDrugs() {
+    return uniq(
+      this.allTreatments.flatMap(({ uniqueDrugs }) => {
+        return uniqueDrugs;
+      })
+    ).sort();
   }
 
   @computed
@@ -401,29 +439,29 @@ export default class ActionableGenesPage extends React.Component<
     return this.allTreatments.filter(treatment => {
       let match = true;
       if (
-        this.geneSearchKeyword &&
-        treatment.hugoSymbol !== this.geneSearchKeyword
+        this.geneSearchKeywords.length > 0 &&
+        !this.geneSearchKeywords.includes(treatment.hugoSymbol)
       ) {
         match = false;
       }
       if (
-        this.relevantCancerTypeSearchKeyword &&
-        treatment.relevantCancerTypes.filter(rct => {
+        this.relevantCancerTypeSearchKeywords.length > 0 &&
+        !treatment.relevantCancerTypes.some(rct => {
           if (rct.code) {
             return (
-              rct.code === this.relevantCancerTypeSearchKeyword ||
-              rct.subtype === this.relevantCancerTypeSearchKeyword
+              this.relevantCancerTypeSearchKeywords.includes(rct.code) ||
+              this.relevantCancerTypeSearchKeywords.includes(rct.subtype)
             );
           } else {
-            return rct.mainType === this.relevantCancerTypeSearchKeyword;
+            return this.relevantCancerTypeSearchKeywords.includes(rct.mainType);
           }
-        }).length === 0
+        })
       ) {
         match = false;
       }
       if (
-        this.drugSearchKeyword &&
-        !treatment.uniqueDrugs.includes(this.drugSearchKeyword)
+        this.drugSearchKeywords.length > 0 &&
+        !treatment.uniqueDrugs.some(x => this.drugSearchKeywords.includes(x))
       ) {
         match = false;
       }
@@ -445,9 +483,9 @@ export default class ActionableGenesPage extends React.Component<
   @computed
   get secondLayerFilterEnabled() {
     return (
-      !!this.geneSearchKeyword ||
-      !!this.relevantCancerTypeSearchKeyword ||
-      !!this.drugSearchKeyword
+      this.geneSearchKeywords.length > 0 ||
+      this.relevantCancerTypeSearchKeywords.length > 0 ||
+      this.drugSearchKeywords.length > 0
     );
   }
 
@@ -525,31 +563,37 @@ export default class ActionableGenesPage extends React.Component<
 
   @computed
   get drugSelectValue() {
-    return this.drugSearchKeyword
-      ? {
-          label: this.drugSearchKeyword,
-          value: this.drugSearchKeyword,
-        }
+    return this.drugSearchKeywords
+      ? this.drugSearchKeywords.map(x => {
+          return {
+            label: x,
+            value: x,
+          };
+        })
       : null;
   }
 
   @computed
   get tumorTypeSelectValue() {
-    return this.relevantCancerTypeSearchKeyword
-      ? {
-          label: this.relevantCancerTypeSearchKeyword,
-          value: this.relevantCancerTypeSearchKeyword,
-        }
+    return this.relevantCancerTypeSearchKeywords
+      ? this.relevantCancerTypeSearchKeywords.map(x => {
+          return {
+            label: x,
+            value: x,
+          };
+        })
       : null;
   }
 
   @computed
   get geneSelectValue() {
-    return this.geneSearchKeyword
-      ? {
-          label: this.geneSearchKeyword,
-          value: this.geneSearchKeyword,
-        }
+    return this.geneSearchKeywords.length > 0
+      ? this.geneSearchKeywords.map(x => {
+          return {
+            label: x,
+            value: x,
+          };
+        })
       : null;
   }
 
@@ -579,9 +623,9 @@ export default class ActionableGenesPage extends React.Component<
   @action
   clearFilters() {
     this.levelSelected = this.initLevelSelected();
-    this.relevantCancerTypeSearchKeyword = '';
-    this.drugSearchKeyword = '';
-    this.geneSearchKeyword = '';
+    this.relevantCancerTypeSearchKeywords = [];
+    this.drugSearchKeywords = [];
+    this.geneSearchKeywords = [];
   }
 
   @autobind
@@ -907,20 +951,16 @@ export default class ActionableGenesPage extends React.Component<
               value={this.geneSelectValue}
               placeholder={`${this.filteredGenes.length} actionable ${pluralize(
                 'gene',
-                this.filteredGenes.length
+                this.allGenes.length
               )}`}
-              options={this.filteredGenes.map(hugoSymbol => {
-                return {
-                  value: hugoSymbol,
-                  label: hugoSymbol,
-                };
-              })}
+              options={this.allGenes}
               isClearable={true}
-              onChange={(selectedOption: any) =>
-                (this.geneSearchKeyword = selectedOption
-                  ? selectedOption.label
-                  : '')
+              onChange={(selectedOption: { value: string; label: string }[]) =>
+                (this.geneSearchKeywords = selectedOption
+                  ? selectedOption.map(x => x.value)
+                  : [])
               }
+              isMulti
             />
           </Col>
           <Col
@@ -929,34 +969,38 @@ export default class ActionableGenesPage extends React.Component<
             xs={12}
           >
             <CancerTypeSelect
-              cancerType={this.relevantCancerTypeSearchKeyword}
-              onChange={(selectedOption: any) =>
-                (this.relevantCancerTypeSearchKeyword = selectedOption
-                  ? selectedOption.value
-                  : '')
+              cancerTypes={this.relevantCancerTypeSearchKeywords}
+              onChange={(selectedOption: { value: string; label: string }[]) =>
+                (this.relevantCancerTypeSearchKeywords = selectedOption
+                  ? selectedOption.map(x => x.label)
+                  : [])
               }
+              isMulti
             />
           </Col>
           {this.drugRelatedLevelSelected && (
             <Col className={classnames(...COMPONENT_PADDING)} lg={4} xs={12}>
               <Select
                 value={this.drugSelectValue}
-                placeholder={`${this.filteredDrugs.length} ${pluralize(
+                placeholder={`${this.allDrugs.length} ${pluralize(
                   'drug',
                   this.filteredDrugs.length
                 )}`}
-                options={this.filteredDrugs.map(drug => {
+                options={this.allDrugs.map(drug => {
                   return {
                     value: drug,
                     label: drug,
                   };
                 })}
                 isClearable={true}
-                onChange={(selectedOption: any) =>
-                  (this.drugSearchKeyword = selectedOption
-                    ? selectedOption.label
-                    : '')
+                onChange={(
+                  selectedOption: { value: string; label: string }[]
+                ) =>
+                  (this.drugSearchKeywords = selectedOption
+                    ? selectedOption.map(x => x.label)
+                    : [])
                 }
+                isMulti
               />
             </Col>
           )}
