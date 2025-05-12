@@ -54,6 +54,17 @@ if (
     // UNIQUE ID IS IMPORTANT B/C WE REMEMBER A MESSAGE HAS BEEN SHOWN
     // BASED ON USERS LOCALSTORAGE
     {
+      dateEnd: 1748926800000,
+      content: (
+        <div>
+          Join us at ASCO 2025 from May 30-June 3! Visit our booth (#30143) to
+          meet our team and explore the latest developments from OncoKB™. See
+          you there!
+        </div>
+      ),
+      id: '2025-asco',
+    },
+    {
       dateEnd: 1745784000000,
       content: (
         <div>
