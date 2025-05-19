@@ -47,7 +47,7 @@ export default function NewsContent052025() {
                 <br />
                 Binimetinib, Cobimetinib, Trametinib (Level 4)
               </td>
-              <td>4</td>
+              <td>4 (KRAS G12A/D/R/S/V previously Level 3B)</td>
               <td>1</td>
               <td>
                 <a href="https://www.fda.gov/drugs/resources-information-approved-drugs/fda-grants-accelerated-approval-combination-avutometinib-and-defactinib-kras-mutated-recurrent-low">
