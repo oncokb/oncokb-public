@@ -2596,6 +2596,16 @@
             "type": "string"
           }
         },
+        "geneType": {
+          "type": "string",
+          "enum": [
+            "ONCOGENE_AND_TSG",
+            "ONCOGENE",
+            "TSG",
+            "UNKNOWN",
+            "NEITHER"
+          ]
+        },
         "genesets": {
           "type": "array",
           "items": {
@@ -2616,12 +2626,6 @@
         },
         "hugoSymbol": {
           "type": "string"
-        },
-        "oncogene": {
-          "type": "boolean"
-        },
-        "tsg": {
-          "type": "boolean"
         }
       }
     },
