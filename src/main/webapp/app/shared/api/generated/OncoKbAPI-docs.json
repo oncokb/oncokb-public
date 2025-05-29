@@ -2745,10 +2745,10 @@
         "geneType": {
           "type": "string",
           "enum": [
+            "INSUFFICIENT_EVIDENCE",
             "ONCOGENE_AND_TSG",
             "ONCOGENE",
             "TSG",
-            "UNKNOWN",
             "NEITHER"
           ]
         },
@@ -3514,10 +3514,10 @@
         "geneType": {
           "type": "string",
           "enum": [
+            "INSUFFICIENT_EVIDENCE",
             "ONCOGENE_AND_TSG",
             "ONCOGENE",
             "TSG",
-            "UNKNOWN",
             "NEITHER"
           ]
         },
@@ -3690,10 +3690,10 @@
         "geneType": {
           "type": "string",
           "enum": [
+            "INSUFFICIENT_EVIDENCE",
             "ONCOGENE_AND_TSG",
             "ONCOGENE",
             "TSG",
-            "UNKNOWN",
             "NEITHER"
           ]
         },

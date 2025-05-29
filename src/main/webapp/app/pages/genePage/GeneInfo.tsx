@@ -15,7 +15,7 @@ enum GENE_TYPE {
   ONCOGENE = 'Oncogene',
   TUMOR_SUPPRESSOR = 'Tumor Suppressor',
   NEITHER = 'Neither Oncogene nor Tumor Suppressor',
-  UNKNOWN = 'Limited data to classify as Oncogene or Tumor Suppressor',
+  INSUFFICIENT_EVIDENCE = 'Insufficient evidence to classify as an Oncogene or Tumor Suppressor',
 }
 
 const HighestLevelItem: React.FunctionComponent<{
@@ -130,6 +130,8 @@ export const getGeneTypeSentence = (geneType: Gene['geneType']) => {
     return GENE_TYPE.TUMOR_SUPPRESSOR;
   } else if (geneType === 'NEITHER') {
     return GENE_TYPE.NEITHER;
+  } else if (geneType === 'INSUFFICIENT_EVIDENCE') {
+    return GENE_TYPE.INSUFFICIENT_EVIDENCE;
   } else {
     return '';
   }

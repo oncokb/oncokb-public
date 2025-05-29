@@ -53,8 +53,10 @@ const getGeneTypeText = (geneType: Gene['geneType']) => {
     return 'TSG';
   } else if (geneType === 'NEITHER') {
     return 'Neither';
+  } else if (geneType === 'INSUFFICIENT_EVIDENCE') {
+    return 'Insufficient Evidence';
   } else {
-    return 'Unknown';
+    return '';
   }
 };
 

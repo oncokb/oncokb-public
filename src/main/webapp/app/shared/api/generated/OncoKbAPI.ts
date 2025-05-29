@@ -184,7 +184,7 @@ export type Gene = {
 
         'geneAliases': Array < string >
 
-        'geneType': "ONCOGENE_AND_TSG" | "ONCOGENE" | "TSG" | "UNKNOWN" | "NEITHER"
+        'geneType': "INSUFFICIENT_EVIDENCE" | "ONCOGENE_AND_TSG" | "ONCOGENE" | "TSG" | "NEITHER"
 
         'genesets': Array < Geneset >
 
@@ -424,7 +424,7 @@ export type CuratedGene = {
 
         'entrezGeneId': number
 
-        'geneType': "ONCOGENE_AND_TSG" | "ONCOGENE" | "TSG" | "UNKNOWN" | "NEITHER"
+        'geneType': "INSUFFICIENT_EVIDENCE" | "ONCOGENE_AND_TSG" | "ONCOGENE" | "TSG" | "NEITHER"
 
         'grch37Isoform': string
 
@@ -500,7 +500,7 @@ export type CancerGene = {
 
         'geneAliases': Array < string >
 
-        'geneType': "ONCOGENE_AND_TSG" | "ONCOGENE" | "TSG" | "UNKNOWN" | "NEITHER"
+        'geneType': "INSUFFICIENT_EVIDENCE" | "ONCOGENE_AND_TSG" | "ONCOGENE" | "TSG" | "NEITHER"
 
         'grch37Isoform': string
 

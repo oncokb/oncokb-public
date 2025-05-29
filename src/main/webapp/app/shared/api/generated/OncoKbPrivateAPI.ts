@@ -284,7 +284,7 @@ export type Gene = {
 
         'geneAliases': Array < string >
 
-        'geneType': "ONCOGENE_AND_TSG" | "ONCOGENE" | "TSG" | "UNKNOWN" | "NEITHER"
+        'geneType': "INSUFFICIENT_EVIDENCE" | "ONCOGENE_AND_TSG" | "ONCOGENE" | "TSG" | "NEITHER"
 
         'genesets': Array < Geneset >
 
