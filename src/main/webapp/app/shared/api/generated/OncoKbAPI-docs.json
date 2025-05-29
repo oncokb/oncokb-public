@@ -3511,6 +3511,16 @@
           "type": "integer",
           "format": "int32"
         },
+        "geneType": {
+          "type": "string",
+          "enum": [
+            "ONCOGENE_AND_TSG",
+            "ONCOGENE",
+            "TSG",
+            "UNKNOWN",
+            "NEITHER"
+          ]
+        },
         "grch37Isoform": {
           "type": "string"
         },
@@ -3535,14 +3545,8 @@
         "hugoSymbol": {
           "type": "string"
         },
-        "oncogene": {
-          "type": "boolean"
-        },
         "summary": {
           "type": "string"
-        },
-        "tsg": {
-          "type": "boolean"
         }
       }
     },
@@ -3683,6 +3687,16 @@
             "type": "string"
           }
         },
+        "geneType": {
+          "type": "string",
+          "enum": [
+            "ONCOGENE_AND_TSG",
+            "ONCOGENE",
+            "TSG",
+            "UNKNOWN",
+            "NEITHER"
+          ]
+        },
         "grch37Isoform": {
           "type": "string"
         },
@@ -3708,16 +3722,10 @@
           "type": "integer",
           "format": "int32"
         },
-        "oncogene": {
-          "type": "boolean"
-        },
         "oncokbAnnotated": {
           "type": "boolean"
         },
         "sangerCGC": {
-          "type": "boolean"
-        },
-        "tsg": {
           "type": "boolean"
         },
         "vogelstein": {

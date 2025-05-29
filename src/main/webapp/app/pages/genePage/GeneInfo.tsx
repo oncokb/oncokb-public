@@ -130,8 +130,8 @@ export const getGeneTypeSentence = (geneType: Gene['geneType']) => {
     return GENE_TYPE.TUMOR_SUPPRESSOR;
   } else if (geneType === 'NEITHER') {
     return GENE_TYPE.NEITHER;
-  } else if (geneType === 'UNKNOWN') {
-    return GENE_TYPE.UNKNOWN;
+  } else {
+    return '';
   }
 };
 

@@ -1,6 +1,10 @@
 import React from 'react';
 import { remoteData } from 'cbioportal-frontend-commons';
-import { CancerGene, CuratedGene } from 'app/shared/api/generated/OncoKbAPI';
+import {
+  CancerGene,
+  CuratedGene,
+  Gene,
+} from 'app/shared/api/generated/OncoKbAPI';
 import { inject, observer } from 'mobx-react';
 import { defaultSortMethod } from 'app/shared/utils/ReactTableUtils';
 import { GenePageLink } from 'app/shared/utils/UrlUtils';
@@ -40,17 +44,18 @@ const InfoIcon = (props: { overlay: string | JSX.Element }) => {
   );
 };
 
-const getGeneType = (isOncogene: boolean, isTsg: boolean) => {
-  if (isOncogene) {
-    if (isTsg) {
-      return 'Oncogene/TSG';
-    } else {
-      return 'Oncogene';
-    }
-  } else if (isTsg) {
+const getGeneTypeText = (geneType: Gene['geneType']) => {
+  if (geneType === 'ONCOGENE_AND_TSG') {
+    return 'Oncogene/TSG';
+  } else if (geneType === 'ONCOGENE') {
+    return 'Oncogene';
+  } else if (geneType === 'TSG') {
     return 'TSG';
+  } else if (geneType === 'NEITHER') {
+    return 'Neither';
+  } else {
+    return 'Unknown';
   }
-  return '';
 };
 
 const getPanelGeneCount = (
@@ -63,7 +68,7 @@ const getPanelGeneCount = (
 type ExtendCancerGene = CancerGene & {
   numOfSources: number;
   annotated: boolean;
-  geneType: string;
+  geneTypeText: string;
 };
 
 @inject('appStore')
@@ -142,7 +147,7 @@ export default class CancerGenesPage extends React.Component<{
         </>
       ),
       minWidth: 140,
-      accessor: 'geneType',
+      accessor: 'geneTypeText',
       onFilter: (data: ExtendCancerGene, keyword) =>
         filterByKeyword(data.geneType, keyword),
       sortMethod: (a: string, b: string) => a.localeCompare(b),
@@ -424,7 +429,7 @@ export default class CancerGenesPage extends React.Component<{
               }
               return numOfSourcesAcc;
             }, 0),
-            geneType: getGeneType(cancerGene.oncogene, cancerGene.tsg),
+            geneTypeText: getGeneTypeText(cancerGene.geneType),
             annotated: !!annotatedGenes[cancerGene.entrezGeneId],
             geneAliases: cancerGene.geneAliases,
           });

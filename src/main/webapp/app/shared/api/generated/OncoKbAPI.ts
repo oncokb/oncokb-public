@@ -424,6 +424,8 @@ export type CuratedGene = {
 
         'entrezGeneId': number
 
+        'geneType': "ONCOGENE_AND_TSG" | "ONCOGENE" | "TSG" | "UNKNOWN" | "NEITHER"
+
         'grch37Isoform': string
 
         'grch37RefSeq': string
@@ -440,11 +442,7 @@ export type CuratedGene = {
 
         'hugoSymbol': string
 
-        'oncogene': boolean
-
         'summary': string
-
-        'tsg': boolean
 
 };
 export type EvidenceQueryRes = {
@@ -502,6 +500,8 @@ export type CancerGene = {
 
         'geneAliases': Array < string >
 
+        'geneType': "ONCOGENE_AND_TSG" | "ONCOGENE" | "TSG" | "UNKNOWN" | "NEITHER"
+
         'grch37Isoform': string
 
         'grch37RefSeq': string
@@ -518,13 +518,9 @@ export type CancerGene = {
 
         'occurrenceCount': number
 
-        'oncogene': boolean
-
         'oncokbAnnotated': boolean
 
         'sangerCGC': boolean
-
-        'tsg': boolean
 
         'vogelstein': boolean
 
