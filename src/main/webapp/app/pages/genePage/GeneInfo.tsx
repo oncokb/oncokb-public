@@ -11,9 +11,11 @@ import {
 import WithSeparator from 'react-with-separator';
 import { LEVELS } from 'app/config/constants';
 
-enum GENE_TYPE_DESC {
+enum GENE_TYPE {
   ONCOGENE = 'Oncogene',
   TUMOR_SUPPRESSOR = 'Tumor Suppressor',
+  NEITHER = 'Neither Oncogene nor Tumor Suppressor',
+  INSUFFICIENT_EVIDENCE = 'Insufficient evidence to classify as an Oncogene or Tumor Suppressor',
 }
 
 const HighestLevelItem: React.FunctionComponent<{
@@ -119,15 +121,20 @@ export const getHighestLevelStrings = (
   );
 };
 
-export const getGeneTypeSentence = (oncogene: boolean, tsg: boolean) => {
-  const geneTypes = [];
-  if (oncogene) {
-    geneTypes.push(GENE_TYPE_DESC.ONCOGENE);
+export const getGeneTypeSentence = (geneType: Gene['geneType']) => {
+  if (geneType === 'ONCOGENE_AND_TSG') {
+    return `${GENE_TYPE.ONCOGENE}, ${GENE_TYPE.TUMOR_SUPPRESSOR}`;
+  } else if (geneType === 'ONCOGENE') {
+    return GENE_TYPE.ONCOGENE;
+  } else if (geneType === 'TSG') {
+    return GENE_TYPE.TUMOR_SUPPRESSOR;
+  } else if (geneType === 'NEITHER') {
+    return GENE_TYPE.NEITHER;
+  } else if (geneType === 'INSUFFICIENT_EVIDENCE') {
+    return GENE_TYPE.INSUFFICIENT_EVIDENCE;
+  } else {
+    return '';
   }
-  if (tsg) {
-    geneTypes.push(GENE_TYPE_DESC.TUMOR_SUPPRESSOR);
-  }
-  return geneTypes.join(', ');
 };
 
 const GeneInfo: React.FunctionComponent<GeneInfoProps> = props => {
@@ -135,12 +142,12 @@ const GeneInfo: React.FunctionComponent<GeneInfoProps> = props => {
   const info: GeneInfoItem[] = [];
 
   // gene type
-  if (gene.oncogene || gene.tsg) {
+  if (gene.geneType) {
     info.push({
       key: 'geneType',
       element: (
         <div>
-          <h5>{getGeneTypeSentence(gene.oncogene, gene.tsg)}</h5>
+          <h5>{getGeneTypeSentence(gene.geneType)}</h5>
         </div>
       ),
     });

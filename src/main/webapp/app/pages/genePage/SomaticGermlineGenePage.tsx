@@ -585,8 +585,7 @@ export default class SomaticGermlineGenePage extends React.Component<
                             </div>
                             <h5 className={'mt-2'}>
                               {getGeneTypeSentence(
-                                this.store.gene.result.oncogene,
-                                this.store.gene.result.tsg
+                                this.store.gene.result.geneType
                               )}
                             </h5>
                             <div className={'d-flex'}>

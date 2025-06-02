@@ -567,8 +567,7 @@ export default class AnnotationPage extends React.Component<
     const categoricalAlterationDescription = getCategoricalAlterationDescription(
       this.props.store.hugoSymbol,
       this.props.store.annotationData.result.query.alteration,
-      this.props.store.gene.result.oncogene,
-      this.props.store.gene.result.tsg
+      this.props.store.gene.result.geneType
     );
     return (
       <>

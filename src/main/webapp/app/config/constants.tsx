@@ -441,8 +441,7 @@ export const DEFAULT_GENE: Gene = {
   geneAliases: [],
   genesets: [],
   hugoSymbol: '',
-  oncogene: false,
-  tsg: false,
+  geneType: 'INSUFFICIENT_EVIDENCE',
 };
 
 export const DEFAULT_GENE_NUMBER: GeneNumber = {
