@@ -2381,12 +2381,42 @@
   },
   {
     "year": "2025",
-    "tx": "Penpulimab + Cisplatin or Carboplatin + Gemcitabine",
+    "tx": "Penpulimab",
     "biomarker": "",
     "agentClass": "Immune checkpoint inhibitor",
     "drugTarget": "Anti-PD-1 antibody",
     "targetedTx": "Y",
     "pxTx": "N",
     "ngsTest": "NA"
+  },
+  {
+    "year": "2025",
+    "tx": "Avutometinib + Defactinib",
+    "biomarker": "KRAS Oncogenic Mutations",
+    "agentClass": "Small molecule kinase inhibitor combination",
+    "drugTarget": "MEK1 inhibitor + FAK inhibitor",
+    "targetedTx": "Y",
+    "pxTx": "Y",
+    "ngsTest": "Y"
+  },
+  {
+    "year": "2025",
+    "tx": "Telisotuzumab",
+    "biomarker": "c-Met+",
+    "agentClass": "Antibody drug conjugate",
+    "drugTarget": "c-Met-directed antibody microtubule inhibitor conjugate",
+    "targetedTx": "Y",
+    "pxTx": "Y",
+    "ngsTest": "N"
+  },
+  {
+    "year": "2025",
+    "tx": "Taletrectinib",
+    "biomarker": "ROS1+ (ROS1 Fusions)",
+    "agentClass": "Small molecule kinase inhibitor",
+    "drugTarget": "ROS1 inhibitor",
+    "targetedTx": "Y",
+    "pxTx": "Y",
+    "ngsTest": "Y"
   }
 ]
