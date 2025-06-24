@@ -10,6 +10,6 @@
 | 1     | ERBB2 | Oncogenic Mutations | Non-Small Cell Lung Cancer | Trastuzumab Deruxtecan (Level 1\)                 | Sevabertinib, Zongertinib (Level 3A) | Abstract: [Loong, HH. et al., ASCO 2025](https://ascopubs.org/doi/10.1200/JCO.2025.43.16_suppl.8504);<br/><br/>PMID: [40293180](https://pubmed.ncbi.nlm.nih.gov/40293180/)                                                                                                        |
 
 - Addition of 3 new genes:
-  - ASCL3
+  - ASCL1
   - ATMIN
   - DLL3

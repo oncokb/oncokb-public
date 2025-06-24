@@ -91,7 +91,7 @@ export default function NewsContent062025() {
       <ul>
         <li>
           <NewlyAddedGenesListItem
-            genes={['ASCL3', 'ATMIN', 'DLL3']}
+            genes={['ASCL1', 'ATMIN', 'DLL3']}
           ></NewlyAddedGenesListItem>
         </li>
       </ul>
