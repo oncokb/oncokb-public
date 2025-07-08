@@ -145,7 +145,23 @@ export default class CancerGenesPage extends React.Component<{
       Header: (
         <>
           <span>Oncogene/TSG</span>
-          <InfoIcon overlay={`As categorised by ${ONCOKB_TM}`} />
+          <InfoIcon
+            overlay={
+              <div>
+                <span>As categorised by {ONCOKB_TM}</span>
+                <br />
+                <br />
+                <span>
+                  <b>Neither</b> - Neither an oncogene nor tumor supressor
+                </span>
+                <br />
+                <span>
+                  <b>Insufficient Evidence</b> - Insufficient evidence to
+                  classify as an oncogene or tumor suppressor
+                </span>
+              </div>
+            }
+          />
         </>
       ),
       minWidth: 140,
