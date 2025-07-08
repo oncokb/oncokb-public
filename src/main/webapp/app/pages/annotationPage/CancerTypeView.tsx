@@ -86,7 +86,6 @@ const TxView: React.FunctionComponent<{
         <>
           <h6>FDA-approved and/or NCCN-recommended drug association(s):</h6>
           <CancerTypeViewTable
-            isLargeScreen={props.isLargeScreen}
             userAuthenticated={props.userAuthenticated}
             type={'tx'}
             hugoSymbol={props.hugoSymbol}
@@ -107,7 +106,6 @@ const TxView: React.FunctionComponent<{
         <>
           <h6>Investigational drug association(s):</h6>
           <CancerTypeViewTable
-            isLargeScreen={props.isLargeScreen}
             userAuthenticated={props.userAuthenticated}
             type={'tx'}
             hugoSymbol={props.hugoSymbol}
@@ -156,7 +154,6 @@ const DxPxView: React.FunctionComponent<{
       {props.summary && <p>{props.summary}</p>}
       {props.implications.length > 0 && (
         <CancerTypeViewTable
-          isLargeScreen={props.isLargeScreen}
           userAuthenticated={props.userAuthenticated}
           type={props.type}
           hugoSymbol={props.hugoSymbol}
@@ -199,7 +196,6 @@ const FdaView: React.FunctionComponent<{
         <FdaTabDescription hugoSymbol={props.hugoSymbol} />
       </p>
       <CancerTypeViewTable
-        isLargeScreen={props.isLargeScreen}
         userAuthenticated={props.userAuthenticated}
         type={'fda'}
         hugoSymbol={props.hugoSymbol}

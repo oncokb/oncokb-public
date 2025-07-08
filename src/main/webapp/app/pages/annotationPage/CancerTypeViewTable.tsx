@@ -1,15 +1,13 @@
-import React from 'react';
-import { SimpleTable, SimpleTableRow } from 'app/components/SimpleTable';
-import { LEVELS, LONG_TEXT_CUTOFF_COMPACT } from 'app/config/constants';
-import { FdaLevelIcon, OncoKBLevelIcon } from 'app/shared/utils/Utils';
 import { CitationTooltip } from 'app/components/CitationTooltip';
-import { DefaultTooltip } from 'cbioportal-frontend-commons';
-import { Citations } from 'app/shared/api/generated/OncoKbAPI';
+import { SimpleTable, SimpleTableRow } from 'app/components/SimpleTable';
+import { LEVELS } from 'app/config/constants';
 import { ImplicationDescriptionCell } from 'app/pages/annotationPage/ImplicationDescriptionCell';
+import { Citations } from 'app/shared/api/generated/OncoKbAPI';
+import { FdaLevelIcon, OncoKBLevelIcon } from 'app/shared/utils/Utils';
+import { DefaultTooltip } from 'cbioportal-frontend-commons';
+import React from 'react';
 import { Else, If, Then } from 'react-if';
 import styles from './index.module.scss';
-import WindowStore from 'app/store/WindowStore';
-import { LongText } from 'app/oncokb-frontend-commons/src/components/LongText';
 
 export type DataType = 'tx' | 'dx' | 'px' | 'fda';
 
@@ -18,7 +16,6 @@ export interface ITable {
   type: DataType;
   hugoSymbol: string;
   data: ITableRow[];
-  isLargeScreen: boolean;
 }
 
 export interface ITableRow {
@@ -30,9 +27,7 @@ export interface ITableRow {
   description?: string;
 }
 
-function inCompactView(store: WindowStore) {
-  return !store.isLargeScreen;
-}
+type DrugsToRows = { [drugs: string]: ITableRow[] };
 
 function getDrugAssociationCellText(
   hugoSymbol: string,
@@ -40,7 +35,7 @@ function getDrugAssociationCellText(
   cancerTypes: string
 ) {
   const altNameIncludesHugoSymbol = alterations.includes(hugoSymbol);
-  return `Associated with ${
+  return `${
     altNameIncludesHugoSymbol ? '' : hugoSymbol
   } ${alterations} in ${cancerTypes}`;
 }
@@ -73,19 +68,12 @@ function getColumns(
   let columns: string[] = [];
   switch (type) {
     case 'tx':
-      if (userAuthenticated && hasDescription) {
-        columns = [];
-      } else {
-        columns = [
-          'Level of Evidence',
-          'Drugs',
-          'Alterations',
-          'Level-associated cancer types',
-          'Citations',
-        ];
-        if (hasDescription) {
-          columns.push('Description');
-        }
+      columns = ['Drugs', 'Level', 'Associated With'];
+      if (!userAuthenticated) {
+        columns.push('Citation');
+      }
+      if (hasDescription) {
+        columns.push('Description');
       }
       break;
     case 'dx':
@@ -173,156 +161,102 @@ function getRows(
   });
 }
 
-function getCompactTxRows(
-  userAuthenticated: boolean,
-  data: ITableRow[],
-  hugoSymbol: string
-): SimpleTableRow[] {
-  const type = 'tx';
-  return data.map((row, index) => {
-    const content = [
-      {
-        key: `${type}-row-${index}`,
-        content: (
-          <div className={'d-flex flex-column'}>
-            <div className={'d-flex flex-row'}>
-              <div className={'mr-3'}>
-                <OncoKBLevelIcon level={row.level} withDescription />
-              </div>
-              <div>
-                <b>{row.drugs}</b>
-              </div>
-            </div>
-            <div className={'text-secondary'}>
-              <LongText
-                text={getDrugAssociationCellText(
-                  hugoSymbol,
-                  row.alterations,
-                  row.cancerTypes
-                )}
-                cutoff={LONG_TEXT_CUTOFF_COMPACT}
-              />
-            </div>
-            <div>
-              <ImplicationDescriptionCell
-                userAuthenticated={userAuthenticated}
-                description={row.description || ''}
-                cutoff={LONG_TEXT_CUTOFF_COMPACT}
-              />
-            </div>
-          </div>
-        ),
-      },
-    ];
-    return {
-      key: `${type}-row-${index}`,
-      content,
-    };
-  });
-}
-
-function getNonCompactTxRows(
+function getTxRows(
   userAuthenticated: boolean,
   data: ITableRow[],
   hugoSymbol: string,
   hasDescription: boolean
 ): SimpleTableRow[] {
+  const drugsToRows: DrugsToRows = {};
+  for (const row of data) {
+    const drugs = row.drugs!;
+    if (drugsToRows[drugs]) {
+      drugsToRows[drugs].push();
+    }
+    drugsToRows[drugs]
+      ? drugsToRows[drugs].push(row)
+      : (drugsToRows[drugs] = [row]);
+  }
+
   const type = 'tx';
-  return data.map((row, index) => {
-    const content = [
-      {
-        key: `${type}-row-${index}-level`,
+  const rows: SimpleTableRow[] = [];
+
+  const entries = Object.entries(drugsToRows);
+  let rowIndex = 0;
+  for (const [drugs, rowData] of entries) {
+    for (let i = 0; i < rowData.length; i++) {
+      const content = [];
+      const currentRowData = rowData[i];
+
+      if (i === 0) {
+        content.push({
+          key: `${type}-row-${rowIndex}-drugs}`,
+          content: <span>{drugs}</span>,
+        });
+      } else {
+        content.push({
+          key: `${type}-row-${rowIndex}-drugs}`,
+          content: undefined,
+        });
+      }
+      content.push({
+        key: `${type}-row-${rowIndex}-level`,
         content: (
-          <div className={'mt-1'}>
-            <OncoKBLevelIcon level={row.level} withDescription />
+          <div>
+            <OncoKBLevelIcon level={currentRowData.level} withDescription />
           </div>
         ),
-      },
-    ];
-
-    // only add the compact drug column for tx implications when user logged in
-    if (userAuthenticated && hasDescription) {
+      });
       content.push({
-        key: `${type}-row-${index}-compact-drugs}`,
-        content: row.drugs ? (
-          <CompactDrugCell
-            hugoSymbol={hugoSymbol}
-            alterations={row.alterations}
-            drugs={row.drugs}
-            cancerTypes={row.cancerTypes}
-          />
-        ) : (
-          <></>
+        key: `${type}-row-${rowIndex}-drugs}`,
+        content: getDrugAssociationCellText(
+          hugoSymbol,
+          currentRowData.alterations,
+          currentRowData.cancerTypes
         ),
       });
-    } else {
-      content.push({
-        key: `${type}-row-${index}-drugs}`,
-        content: <span>{row.drugs}</span>,
-      });
-      content.push({
-        key: `${type}-row-${index}-alterations}`,
-        content: <span>{row.alterations}</span>,
-      });
-      content.push({
-        key: `${type}-row-${index}-cancerTypes}`,
-        content: <span>{row.cancerTypes}</span>,
-      });
-    }
+      if (!userAuthenticated) {
+        const numOfReferences = currentRowData.citations
+          ? currentRowData.citations.abstracts.length +
+            currentRowData.citations.pmids.length
+          : 0;
 
-    // only add the citations column if the table is not tx implications or when user not logged in
-    if (!userAuthenticated || !hasDescription) {
-      const numOfReferences = row.citations
-        ? row.citations.abstracts.length + row.citations.pmids.length
-        : 0;
-      content.push({
-        key: `${type}-row-${index}-citations}`,
-        content: (
-          <DefaultTooltip
-            placement={'left'}
-            overlay={() =>
-              row.citations ? (
-                <CitationTooltip
-                  pmids={row.citations.pmids}
-                  abstracts={row.citations.abstracts}
-                />
-              ) : undefined
-            }
-          >
-            <span>{numOfReferences}</span>
-          </DefaultTooltip>
-        ),
-      });
-    }
+        content.push({
+          key: `${type}-row-${i}-citations}`,
+          content: (
+            <DefaultTooltip
+              placement={'left'}
+              overlay={() =>
+                currentRowData.citations ? (
+                  <CitationTooltip
+                    pmids={currentRowData.citations.pmids}
+                    abstracts={currentRowData.citations.abstracts}
+                  />
+                ) : undefined
+              }
+            >
+              <span>{numOfReferences}</span>
+            </DefaultTooltip>
+          ),
+        });
+      }
+      if (hasDescription) {
+        content.push({
+          key: `tx-row-${rowIndex}-description}`,
+          content: (
+            <ImplicationDescriptionCell
+              userAuthenticated={userAuthenticated}
+              description={currentRowData.description || ''}
+            />
+          ),
+        });
+      }
 
-    if (hasDescription) {
-      content.push({
-        key: `tx-row-${index}-description}`,
-        content: (
-          <ImplicationDescriptionCell
-            userAuthenticated={userAuthenticated}
-            description={row.description || ''}
-          />
-        ),
-      });
+      rows.push({ key: `${type}-row-${i}`, content });
+      rowIndex++;
     }
-    return {
-      key: `${type}-row-${index}`,
-      content,
-    };
-  });
-}
-
-function getTxRows(
-  userAuthenticated: boolean,
-  data: ITableRow[],
-  hugoSymbol: string,
-  hasDescription: boolean,
-  isLargeScreen: boolean
-): SimpleTableRow[] {
-  return !isLargeScreen && userAuthenticated
-    ? getCompactTxRows(userAuthenticated, data, hugoSymbol)
-    : getNonCompactTxRows(userAuthenticated, data, hugoSymbol, hasDescription);
+  }
+  return rows;
 }
 
 export const CancerTypeViewTable: React.FunctionComponent<ITable> = props => {
@@ -346,8 +280,7 @@ export const CancerTypeViewTable: React.FunctionComponent<ITable> = props => {
               props.userAuthenticated,
               props.data,
               props.hugoSymbol,
-              hasDescription,
-              props.isLargeScreen
+              hasDescription
             )
           : getRows(props.userAuthenticated, props.type, props.data)
       }

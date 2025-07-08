@@ -4,7 +4,7 @@ import { Table } from 'react-bootstrap';
 export type ElementType = JSX.Element | string;
 export type SimpleTableCell = {
   key: string;
-  content: ElementType | ElementType[];
+  content: ElementType | ElementType[] | undefined;
 };
 export type SimpleTableRow = { key: string; content: SimpleTableCell[] };
 export type SimpleTableRows = SimpleTableRow[];
@@ -59,11 +59,19 @@ export const SimpleTable = (props: SimpleTableProps) => {
               const element = (
                 <tr key={`${key}_${i}`}>
                   {content.map(({ content: innerContent, key: innerKey }) => {
+                    if (!innerContent) {
+                      return <td style={{ borderTop: 'none' }}></td>;
+                    }
                     if (Array.isArray(innerContent)) {
-                      return <td key={innerKey}>{innerContent[i]}</td>;
+                      return (
+                        <td style={{ verticalAlign: 'middle' }} key={innerKey}>
+                          {innerContent[i]}
+                        </td>
+                      );
                     } else if (i === 0) {
                       return (
                         <td
+                          style={{ verticalAlign: 'middle' }}
                           key={innerKey}
                           rowSpan={
                             maxContentSize > 1 ? maxContentSize : undefined

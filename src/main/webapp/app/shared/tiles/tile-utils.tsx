@@ -16,6 +16,8 @@ import {
   isPositionalAlteration,
   citationsHasInfo,
   OncoKBOncogenicityIcon,
+  OncoKBLevelIcon,
+  levelOfEvidence2Level,
 } from '../utils/Utils';
 import { DefaultTooltip } from 'cbioportal-frontend-commons';
 import { CitationTooltip } from 'app/components/CitationTooltip';
@@ -100,6 +102,23 @@ function createHighestLevelOfEvidenceTileProps(
     highestResistanceLevel,
     highestSensitiveLevel,
   } = variantAnnotation;
+
+  let isLevel3B = highestSensitiveLevel === 'LEVEL_3B' || false;
+  let isLevel4 = highestSensitiveLevel === 'LEVEL_4' || false;
+  if ('treatments' in variantAnnotation) {
+    for (const treatment of variantAnnotation.treatments) {
+      if (treatment.level === 'LEVEL_3B') {
+        isLevel3B = true;
+      }
+      if (treatment.level === 'LEVEL_4') {
+        isLevel4 = true;
+      }
+      if (isLevel3B && isLevel4) {
+        break;
+      }
+    }
+  }
+
   return {
     title: includeTitle ? 'Highest Level of Evidence' : undefined,
     items: [
@@ -109,10 +128,25 @@ function createHighestLevelOfEvidenceTileProps(
           show: !!highestSensitiveLevel || !!highestResistanceLevel,
           value: (
             <div className={classnames('d-flex', 'flex-row')}>
-              <HighestLevelEvidence
-                type="Sensitive"
-                level={highestSensitiveLevel}
-              />
+              {isLevel3B && isLevel4 ? (
+                <>
+                  <OncoKBLevelIcon
+                    size="s2"
+                    level={levelOfEvidence2Level('LEVEL_3B')}
+                    key="highestSensitiveLevel_3B"
+                  />
+                  <OncoKBLevelIcon
+                    size="s2"
+                    level={levelOfEvidence2Level('LEVEL_4')}
+                    key="highestSensitiveLevel_4"
+                  />
+                </>
+              ) : (
+                <HighestLevelEvidence
+                  type="Sensitive"
+                  level={highestSensitiveLevel}
+                />
+              )}
               <HighestLevelEvidence
                 type="Resistance"
                 level={highestResistanceLevel}
