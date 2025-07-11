@@ -4,3 +4,4 @@ services:
     image: redis:6.0.4
     ports:
       - '6379:6379'
+    command: redis-server --requirepass oncokb-public-redis-password --appendonly yes
