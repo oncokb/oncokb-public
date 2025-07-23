@@ -37,10 +37,9 @@ export default function NewsContent022025() {
             <tr>
               <td>{getAlternativeGenePageLinks('FGFR1')}</td>
               <td>
-                <AlterationPageLink
-                  hugoSymbol="FGFR1"
-                  alteration="Fusions"
-                ></AlterationPageLink>
+                <AlterationPageLink hugoSymbol="FGFR1" alteration="Fusions">
+                  Fusions
+                </AlterationPageLink>
               </td>
               <td>Pancreatic Cancer</td>
               <td>
@@ -63,10 +62,9 @@ export default function NewsContent022025() {
             <tr>
               <td>{getAlternativeGenePageLinks('FGFR2')}</td>
               <td>
-                <AlterationPageLink
-                  hugoSymbol="FGFR2"
-                  alteration="Fusions"
-                ></AlterationPageLink>
+                <AlterationPageLink hugoSymbol="FGFR2" alteration="Fusions">
+                  Fusions
+                </AlterationPageLink>
               </td>
               <td>Pancreatic Cancer</td>
               <td>
@@ -92,7 +90,9 @@ export default function NewsContent022025() {
                 <AlterationPageLink
                   hugoSymbol="FGFR2"
                   alteration="Oncogenic Mutations"
-                ></AlterationPageLink>
+                >
+                  Oncogenic Mutations
+                </AlterationPageLink>
               </td>
               <td>Non-Small Cell Lung Cancer</td>
               <td>
@@ -119,7 +119,9 @@ export default function NewsContent022025() {
                 <AlterationPageLink
                   hugoSymbol="FGFR3"
                   alteration="Oncogenic Mutations"
-                ></AlterationPageLink>
+                >
+                  Oncogenic Mutations
+                </AlterationPageLink>
               </td>
               <td>Non-Small Cell Lung Cancer</td>
               <td>
@@ -168,10 +170,9 @@ export default function NewsContent022025() {
               <td>1</td>
               <td>{getAlternativeGenePageLinks('BRAF')}</td>
               <td>
-                <AlterationPageLink
-                  hugoSymbol="BRAF"
-                  alteration="V600E"
-                ></AlterationPageLink>
+                <AlterationPageLink hugoSymbol="BRAF" alteration="V600E">
+                  V600E
+                </AlterationPageLink>
               </td>
               <td>Colorectal Cancer</td>
               <td>Encorafenib + Cetuximab (Level 1)</td>
