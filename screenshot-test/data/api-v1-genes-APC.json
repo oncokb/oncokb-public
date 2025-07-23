@@ -2,7 +2,6 @@
     {
         "entrezGeneId": 324,
         "hugoSymbol": "APC",
-        "oncogene": false,
         "grch37Isoform": "ENST00000257430",
         "grch37RefSeq": "NM_000038.5",
         "grch38Isoform": "ENST00000257430",
@@ -12,6 +11,6 @@
             "DP2.5"
         ],
         "genesets": [],
-        "tsg": true
+        "geneType": "TSG"
     }
 ]

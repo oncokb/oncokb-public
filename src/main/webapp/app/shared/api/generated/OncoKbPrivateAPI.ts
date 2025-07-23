@@ -284,6 +284,8 @@ export type Gene = {
 
         'geneAliases': Array < string >
 
+        'geneType': "INSUFFICIENT_EVIDENCE" | "ONCOGENE_AND_TSG" | "ONCOGENE" | "TSG" | "NEITHER"
+
         'genesets': Array < Geneset >
 
         'grch37Isoform': string
@@ -295,10 +297,6 @@ export type Gene = {
         'grch38RefSeq': string
 
         'hugoSymbol': string
-
-        'oncogene': boolean
-
-        'tsg': boolean
 
 };
 export type TumorType = {

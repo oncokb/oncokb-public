@@ -1,6 +1,7 @@
 import {
   Article,
   Citations,
+  Gene,
   TreatmentDrug,
 } from 'app/shared/api/generated/OncoKbAPI';
 import React, { ReactNode } from 'react';
@@ -838,8 +839,7 @@ export const getGeneCoordinates = (ensemblGenes: EnsemblGene[]) => {
 export const getCategoricalAlterationDescription = (
   hugoSymbol: string,
   alteration: string,
-  oncogene?: boolean,
-  tsg?: boolean
+  geneType?: Gene['geneType']
 ) => {
   const geneLink = (
     <GenePageLink hugoSymbol={hugoSymbol}>the {hugoSymbol} gene</GenePageLink>
@@ -885,9 +885,9 @@ export const getCategoricalAlterationDescription = (
   if (ONCOGENIC_MUTATIONS.toLowerCase() === alteration.toLowerCase()) {
     let prefix =
       'Defined as point mutations, rearrangements/fusions or copy number alterations within';
-    if (oncogene && !tsg) {
+    if (geneType === 'ONCOGENE') {
       prefix = 'Defined as point mutations or rearrangements/fusions within';
-    } else if (!oncogene && tsg) {
+    } else if (geneType === 'TSG') {
       prefix =
         'Defined as point mutations, rearrangements/fusions or gene deletions within';
     }

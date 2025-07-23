@@ -1,314 +1,259 @@
 [
-  {
-    "genes":
-    [
-      {
-        "entrezGeneId": 673,
-        "hugoSymbol": "BRAF",
-        "oncogene": true,
-        "grch37Isoform": "ENST00000288602",
-        "grch37RefSeq": "NM_004333.4",
-        "grch38Isoform": "ENST00000646891",
-        "grch38RefSeq": "NM_004333.4",
-        "geneAliases":
-        [
-          "BRAF1"
+    {
+        "genes": [
+            {
+                "entrezGeneId": 673,
+                "hugoSymbol": "BRAF",
+                "grch37Isoform": "ENST00000288602",
+                "grch37RefSeq": "NM_004333.4",
+                "grch38Isoform": "ENST00000646891",
+                "grch38RefSeq": "NM_004333.4",
+                "geneAliases": [
+                    "BRAF1"
+                ],
+                "genesets": [],
+                "geneType": "ONCOGENE"
+            }
         ],
-        "genesets":
-        [],
-        "tsg": false
-      }
-    ],
-    "level": "LEVEL_Dx2"
-  },
-  {
-    "genes":
-    [
-      {
-        "entrezGeneId": 6098,
-        "hugoSymbol": "ROS1",
-        "oncogene": true,
-        "grch37Isoform": "ENST00000368508",
-        "grch37RefSeq": "NM_002944.2",
-        "grch38Isoform": "ENST00000368508",
-        "grch38RefSeq": "NM_002944.2",
-        "geneAliases":
-        [
-          "MCF3",
-          "ROS",
-          "c-ros-1"
+        "level": "LEVEL_Dx2"
+    },
+    {
+        "genes": [
+            {
+                "entrezGeneId": 6098,
+                "hugoSymbol": "ROS1",
+                "grch37Isoform": "ENST00000368508",
+                "grch37RefSeq": "NM_002944.2",
+                "grch38Isoform": "ENST00000368508",
+                "grch38RefSeq": "NM_002944.2",
+                "geneAliases": [
+                    "MCF3",
+                    "ROS",
+                    "c-ros-1"
+                ],
+                "genesets": [],
+                "geneType": "ONCOGENE"
+            },
+            {
+                "entrezGeneId": 673,
+                "hugoSymbol": "BRAF",
+                "grch37Isoform": "ENST00000288602",
+                "grch37RefSeq": "NM_004333.4",
+                "grch38Isoform": "ENST00000646891",
+                "grch38RefSeq": "NM_004333.4",
+                "geneAliases": [
+                    "BRAF1"
+                ],
+                "genesets": [],
+                "geneType": "ONCOGENE"
+            }
         ],
-        "genesets":
-        [],
-        "tsg": false
-      },
-      {
-        "entrezGeneId": 673,
-        "hugoSymbol": "BRAF",
-        "oncogene": true,
-        "grch37Isoform": "ENST00000288602",
-        "grch37RefSeq": "NM_004333.4",
-        "grch38Isoform": "ENST00000646891",
-        "grch38RefSeq": "NM_004333.4",
-        "geneAliases":
-        [
-          "BRAF1"
+        "level": "LEVEL_1"
+    },
+    {
+        "genes": [
+            {
+                "entrezGeneId": 673,
+                "hugoSymbol": "BRAF",
+                "grch37Isoform": "ENST00000288602",
+                "grch37RefSeq": "NM_004333.4",
+                "grch38Isoform": "ENST00000646891",
+                "grch38RefSeq": "NM_004333.4",
+                "geneAliases": [
+                    "BRAF1"
+                ],
+                "genesets": [],
+                "geneType": "ONCOGENE"
+            }
         ],
-        "genesets":
-        [],
-        "tsg": false
-      }
-    ],
-    "level": "LEVEL_1"
-  },
-  {
-    "genes":
-    [
-      {
-        "entrezGeneId": 673,
-        "hugoSymbol": "BRAF",
-        "oncogene": true,
-        "grch37Isoform": "ENST00000288602",
-        "grch37RefSeq": "NM_004333.4",
-        "grch38Isoform": "ENST00000646891",
-        "grch38RefSeq": "NM_004333.4",
-        "geneAliases":
-        [
-          "BRAF1"
+        "level": "LEVEL_Dx3"
+    },
+    {
+        "genes": [
+            {
+                "entrezGeneId": 7157,
+                "hugoSymbol": "TP53",
+                "grch37Isoform": "ENST00000269305",
+                "grch37RefSeq": "NM_000546.5",
+                "grch38Isoform": "ENST00000269305",
+                "grch38RefSeq": "NM_000546.5",
+                "geneAliases": [
+                    "LFS1",
+                    "p53"
+                ],
+                "genesets": [],
+                "geneType": "TSG"
+            }
         ],
-        "genesets":
-        [],
-        "tsg": false
-      }
-    ],
-    "level": "LEVEL_Dx3"
-  },
-  {
-    "genes":
-    [
-      {
-        "entrezGeneId": 7157,
-        "hugoSymbol": "TP53",
-        "oncogene": false,
-        "grch37Isoform": "ENST00000269305",
-        "grch37RefSeq": "NM_000546.5",
-        "grch38Isoform": "ENST00000269305",
-        "grch38RefSeq": "NM_000546.5",
-        "geneAliases":
-        [
-          "LFS1",
-          "p53"
+        "level": "LEVEL_Px3"
+    },
+    {
+        "genes": [
+            {
+                "entrezGeneId": 6098,
+                "hugoSymbol": "ROS1",
+                "grch37Isoform": "ENST00000368508",
+                "grch37RefSeq": "NM_002944.2",
+                "grch38Isoform": "ENST00000368508",
+                "grch38RefSeq": "NM_002944.2",
+                "geneAliases": [
+                    "MCF3",
+                    "ROS",
+                    "c-ros-1"
+                ],
+                "genesets": [],
+                "geneType": "ONCOGENE"
+            },
+            {
+                "entrezGeneId": 673,
+                "hugoSymbol": "BRAF",
+                "grch37Isoform": "ENST00000288602",
+                "grch37RefSeq": "NM_004333.4",
+                "grch38Isoform": "ENST00000646891",
+                "grch38RefSeq": "NM_004333.4",
+                "geneAliases": [
+                    "BRAF1"
+                ],
+                "genesets": [],
+                "geneType": "ONCOGENE"
+            }
         ],
-        "genesets":
-        [],
-        "tsg": true
-      }
-    ],
-    "level": "LEVEL_Px3"
-  },
-  {
-    "genes":
-    [
-      {
-        "entrezGeneId": 6098,
-        "hugoSymbol": "ROS1",
-        "oncogene": true,
-        "grch37Isoform": "ENST00000368508",
-        "grch37RefSeq": "NM_002944.2",
-        "grch38Isoform": "ENST00000368508",
-        "grch38RefSeq": "NM_002944.2",
-        "geneAliases":
-        [
-          "MCF3",
-          "ROS",
-          "c-ros-1"
+        "level": "LEVEL_3A"
+    },
+    {
+        "genes": [
+            {
+                "entrezGeneId": 7157,
+                "hugoSymbol": "TP53",
+                "grch37Isoform": "ENST00000269305",
+                "grch37RefSeq": "NM_000546.5",
+                "grch38Isoform": "ENST00000269305",
+                "grch38RefSeq": "NM_000546.5",
+                "geneAliases": [
+                    "LFS1",
+                    "p53"
+                ],
+                "genesets": [],
+                "geneType": "TSG"
+            }
         ],
-        "genesets":
-        [],
-        "tsg": false
-      },
-      {
-        "entrezGeneId": 673,
-        "hugoSymbol": "BRAF",
-        "oncogene": true,
-        "grch37Isoform": "ENST00000288602",
-        "grch37RefSeq": "NM_004333.4",
-        "grch38Isoform": "ENST00000646891",
-        "grch38RefSeq": "NM_004333.4",
-        "geneAliases":
-        [
-          "BRAF1"
+        "level": "LEVEL_Px1"
+    },
+    {
+        "genes": [
+            {
+                "entrezGeneId": 673,
+                "hugoSymbol": "BRAF",
+                "grch37Isoform": "ENST00000288602",
+                "grch37RefSeq": "NM_004333.4",
+                "grch38Isoform": "ENST00000646891",
+                "grch38RefSeq": "NM_004333.4",
+                "geneAliases": [
+                    "BRAF1"
+                ],
+                "genesets": [],
+                "geneType": "ONCOGENE"
+            }
         ],
-        "genesets":
-        [],
-        "tsg": false
-      }
-    ],
-    "level": "LEVEL_3A"
-  },
-  {
-    "genes":
-    [
-      {
-        "entrezGeneId": 7157,
-        "hugoSymbol": "TP53",
-        "oncogene": false,
-        "grch37Isoform": "ENST00000269305",
-        "grch37RefSeq": "NM_000546.5",
-        "grch38Isoform": "ENST00000269305",
-        "grch38RefSeq": "NM_000546.5",
-        "geneAliases":
-        [
-          "LFS1",
-          "p53"
+        "level": "LEVEL_4"
+    },
+    {
+        "genes": [
+            {
+                "entrezGeneId": 6098,
+                "hugoSymbol": "ROS1",
+                "grch37Isoform": "ENST00000368508",
+                "grch37RefSeq": "NM_002944.2",
+                "grch38Isoform": "ENST00000368508",
+                "grch38RefSeq": "NM_002944.2",
+                "geneAliases": [
+                    "MCF3",
+                    "ROS",
+                    "c-ros-1"
+                ],
+                "genesets": [],
+                "geneType": "ONCOGENE"
+            },
+            {
+                "entrezGeneId": 673,
+                "hugoSymbol": "BRAF",
+                "grch37Isoform": "ENST00000288602",
+                "grch37RefSeq": "NM_004333.4",
+                "grch38Isoform": "ENST00000646891",
+                "grch38RefSeq": "NM_004333.4",
+                "geneAliases": [
+                    "BRAF1"
+                ],
+                "genesets": [],
+                "geneType": "ONCOGENE"
+            }
         ],
-        "genesets":
-        [],
-        "tsg": true
-      }
-    ],
-    "level": "LEVEL_Px1"
-  },
-  {
-    "genes":
-    [
-      {
-        "entrezGeneId": 673,
-        "hugoSymbol": "BRAF",
-        "oncogene": true,
-        "grch37Isoform": "ENST00000288602",
-        "grch37RefSeq": "NM_004333.4",
-        "grch38Isoform": "ENST00000646891",
-        "grch38RefSeq": "NM_004333.4",
-        "geneAliases":
-        [
-          "BRAF1"
+        "level": "LEVEL_Fda2"
+    },
+    {
+        "genes": [
+            {
+                "entrezGeneId": 6098,
+                "hugoSymbol": "ROS1",
+                "grch37Isoform": "ENST00000368508",
+                "grch37RefSeq": "NM_002944.2",
+                "grch38Isoform": "ENST00000368508",
+                "grch38RefSeq": "NM_002944.2",
+                "geneAliases": [
+                    "MCF3",
+                    "ROS",
+                    "c-ros-1"
+                ],
+                "genesets": [],
+                "geneType": "ONCOGENE"
+            },
+            {
+                "entrezGeneId": 673,
+                "hugoSymbol": "BRAF",
+                "grch37Isoform": "ENST00000288602",
+                "grch37RefSeq": "NM_004333.4",
+                "grch38Isoform": "ENST00000646891",
+                "grch38RefSeq": "NM_004333.4",
+                "geneAliases": [
+                    "BRAF1"
+                ],
+                "genesets": [],
+                "geneType": "ONCOGENE"
+            }
         ],
-        "genesets":
-        [],
-        "tsg": false
-      }
-    ],
-    "level": "LEVEL_4"
-  },
-  {
-    "genes":
-    [
-      {
-        "entrezGeneId": 6098,
-        "hugoSymbol": "ROS1",
-        "oncogene": true,
-        "grch37Isoform": "ENST00000368508",
-        "grch37RefSeq": "NM_002944.2",
-        "grch38Isoform": "ENST00000368508",
-        "grch38RefSeq": "NM_002944.2",
-        "geneAliases":
-        [
-          "MCF3",
-          "ROS",
-          "c-ros-1"
+        "level": "LEVEL_Fda3"
+    },
+    {
+        "genes": [
+            {
+                "entrezGeneId": 6098,
+                "hugoSymbol": "ROS1",
+                "grch37Isoform": "ENST00000368508",
+                "grch37RefSeq": "NM_002944.2",
+                "grch38Isoform": "ENST00000368508",
+                "grch38RefSeq": "NM_002944.2",
+                "geneAliases": [
+                    "MCF3",
+                    "ROS",
+                    "c-ros-1"
+                ],
+                "genesets": [],
+                "geneType": "ONCOGENE"
+            },
+            {
+                "entrezGeneId": 673,
+                "hugoSymbol": "BRAF",
+                "grch37Isoform": "ENST00000288602",
+                "grch37RefSeq": "NM_004333.4",
+                "grch38Isoform": "ENST00000646891",
+                "grch38RefSeq": "NM_004333.4",
+                "geneAliases": [
+                    "BRAF1"
+                ],
+                "genesets": [],
+                "geneType": "ONCOGENE"
+            }
         ],
-        "genesets":
-        [],
-        "tsg": false
-      },
-      {
-        "entrezGeneId": 673,
-        "hugoSymbol": "BRAF",
-        "oncogene": true,
-        "grch37Isoform": "ENST00000288602",
-        "grch37RefSeq": "NM_004333.4",
-        "grch38Isoform": "ENST00000646891",
-        "grch38RefSeq": "NM_004333.4",
-        "geneAliases":
-        [
-          "BRAF1"
-        ],
-        "genesets":
-        [],
-        "tsg": false
-      }
-    ],
-    "level": "LEVEL_Fda2"
-  },
-  {
-    "genes":
-    [
-      {
-        "entrezGeneId": 6098,
-        "hugoSymbol": "ROS1",
-        "oncogene": true,
-        "grch37Isoform": "ENST00000368508",
-        "grch37RefSeq": "NM_002944.2",
-        "grch38Isoform": "ENST00000368508",
-        "grch38RefSeq": "NM_002944.2",
-        "geneAliases":
-        [
-          "MCF3",
-          "ROS",
-          "c-ros-1"
-        ],
-        "genesets":
-        [],
-        "tsg": false
-      },
-      {
-        "entrezGeneId": 673,
-        "hugoSymbol": "BRAF",
-        "oncogene": true,
-        "grch37Isoform": "ENST00000288602",
-        "grch37RefSeq": "NM_004333.4",
-        "grch38Isoform": "ENST00000646891",
-        "grch38RefSeq": "NM_004333.4",
-        "geneAliases":
-        [
-          "BRAF1"
-        ],
-        "genesets":
-        [],
-        "tsg": false
-      }
-    ],
-    "level": "LEVEL_Fda3"
-  },
-  {
-    "genes":
-    [
-      {
-        "entrezGeneId": 6098,
-        "hugoSymbol": "ROS1",
-        "oncogene": true,
-        "grch37Isoform": "ENST00000368508",
-        "grch37RefSeq": "NM_002944.2",
-        "grch38Isoform": "ENST00000368508",
-        "grch38RefSeq": "NM_002944.2",
-        "geneAliases":
-        [
-          "MCF3",
-          "ROS",
-          "c-ros-1"
-        ],
-        "genesets":
-        [],
-        "tsg": false
-      },
-      {
-        "entrezGeneId": 673,
-        "hugoSymbol": "BRAF",
-        "oncogene": true,
-        "grch37Isoform": "ENST00000288602",
-        "grch37RefSeq": "NM_004333.4",
-        "grch38Isoform": "ENST00000646891",
-        "grch38RefSeq": "NM_004333.4",
-        "geneAliases":
-        [
-          "BRAF1"
-        ],
-        "genesets":
-        [],
-        "tsg": false
-      }
-    ],
-    "level": "LEVEL_2"
-  }
+        "level": "LEVEL_2"
+    }
 ]
