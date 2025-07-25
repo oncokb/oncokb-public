@@ -44,10 +44,9 @@ export default function NewsContent062025() {
               <td>1</td>
               <td>{getAlternativeGenePageLinks('ROS1')}</td>
               <td>
-                <AlterationPageLink
-                  hugoSymbol="ROS1"
-                  alteration="Fusions"
-                ></AlterationPageLink>
+                <AlterationPageLink hugoSymbol="ROS1" alteration="Fusions">
+                  Fusions
+                </AlterationPageLink>
               </td>
               <td>Non-Small Cell Lung Cancer</td>
               <td>Crizotinib, Entrectinib, Repotrectinib (Level 1)</td>
@@ -69,7 +68,9 @@ export default function NewsContent062025() {
                 <AlterationPageLink
                   hugoSymbol="ERBB2"
                   alteration="Oncogenic Mutations"
-                ></AlterationPageLink>
+                >
+                  Oncogenic Mutations
+                </AlterationPageLink>
               </td>
               <td>Non-Small Cell Lung Cancer</td>
               <td>Trastuzumab Deruxtecan (Level 1)</td>

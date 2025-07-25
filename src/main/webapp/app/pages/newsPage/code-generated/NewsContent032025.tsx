@@ -35,7 +35,9 @@ export default function NewsContent032025() {
                 <AlterationPageLink
                   hugoSymbol="ERBB2"
                   alteration="Oncogenic Mutations"
-                ></AlterationPageLink>
+                >
+                  Oncogenic Mutations
+                </AlterationPageLink>
               </td>
               <td>Biliary Tract Cancer</td>
               <td>
@@ -80,7 +82,9 @@ export default function NewsContent032025() {
                 <AlterationPageLink
                   hugoSymbol="ERBB2"
                   alteration="Oncogenic Mutations"
-                ></AlterationPageLink>
+                >
+                  Oncogenic Mutations
+                </AlterationPageLink>
               </td>
               <td>Breast Cancer</td>
               <td>
@@ -131,7 +135,9 @@ export default function NewsContent032025() {
                 <AlterationPageLink
                   hugoSymbol="NF1"
                   alteration="Oncogenic Mutations"
-                ></AlterationPageLink>
+                >
+                  Oncogenic Mutations
+                </AlterationPageLink>
               </td>
               <td>Neurofibroma</td>
               <td>Selumentinib (Level 1)</td>

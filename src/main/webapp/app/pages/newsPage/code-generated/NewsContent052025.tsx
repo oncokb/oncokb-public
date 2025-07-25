@@ -35,7 +35,9 @@ export default function NewsContent052025() {
                 <AlterationPageLink
                   hugoSymbol="KRAS"
                   alteration="Oncogenic Mutations"
-                ></AlterationPageLink>
+                >
+                  Oncogenic Mutations
+                </AlterationPageLink>
               </td>
               <td>Low-Grade Serous Ovarian Cancer</td>
               <td>
