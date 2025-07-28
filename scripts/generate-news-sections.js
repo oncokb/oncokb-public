@@ -1,6 +1,8 @@
 const fs = require('fs');
 const path = require('path');
 const MarkdownIt = require('markdown-it');
+// copying since this is a one of script
+const ALTERNATIVE_ALLELES_REGEX = /([A-Z]+[0-9]+)([A-Z]+(\/[A-Z]+)*)/i;
 
 const oncokbBaseUrls = [
   'https://oncokb.org',
@@ -217,20 +219,112 @@ function addAutoTableLinks(md, state) {
       const child = token.children[0];
       if (currentGene === '') {
         throw new Error(`No gene for this row and mutation "${child.content}"`);
+      } else if (child.content.startsWith('Oncogenic Mutations (excluding')) {
+        // Oncogenic Mutations with excluding do not need links, but they
+        // need to have a few line breaks between "Mutations" and "(excluding"
+        const oncogenicMutationsStr = 'Oncogenic Mutations';
+        const excludingSection = child.content.replace(
+          `${oncogenicMutationsStr} `,
+          ''
+        );
+        token.children = [
+          createMarkdownTextToken(md, oncogenicMutationsStr),
+          // forcing <br/> to be the only tag added
+          createMarkdownToken(md, 'br/')[0],
+          createMarkdownToken(md, 'br/')[0],
+          createMarkdownTextToken(md, excludingSection),
+        ];
+
+        continue;
       }
-      const alterationPageLinkTags = createMarkdownToken(
-        md,
-        'AlterationPageLink'
-      );
-      alterationPageLinkTags[0].attrSet('hugoSymbol', currentGene);
-      alterationPageLinkTags[0].attrSet('alteration', child.content);
-      token.children = alterationPageLinkTags;
+      const mutationNames = child.content.split(',').map(x => x.trim());
+      const allMutationLinks = [];
+      for (mutationName of mutationNames) {
+        let mutationLinks = [
+          {
+            alteration: mutationName,
+            linkText: mutationName,
+          },
+        ];
+        // Check for for cases like L718Q/V
+        if (ALTERNATIVE_ALLELES_REGEX.test(mutationName)) {
+          const matches = ALTERNATIVE_ALLELES_REGEX.exec(mutationName);
+          if (matches) {
+            const positionalVar = matches[1];
+            const alternativeAlleles = matches[2];
+            mutationLinks = alternativeAlleles
+              .split('/')
+              .map((allele, index) => {
+                return {
+                  alteration:
+                    index === 0 ? `${positionalVar}${allele}` : allele,
+                  linkText: `${positionalVar}${allele}`,
+                };
+              });
+          }
+        }
+
+        let i = 0;
+        for (const mutationLink of mutationLinks) {
+          if (i > 0) {
+            // Add / text for cases like L718Q/V
+            const textToken = createMarkdownTextToken(md, '/');
+            allMutationLinks.push(textToken);
+          }
+          i++;
+          const alterationPageLinkTags = createMarkdownToken(
+            md,
+            'AlterationPageLink'
+          );
+          alterationPageLinkTags[0].attrSet('hugoSymbol', currentGene);
+          alterationPageLinkTags[0].attrSet(
+            'alteration',
+            mutationLink.linkText
+          );
+          if (i > 0) {
+            const linkEndToken = alterationPageLinkTags.pop();
+            const textToken = createMarkdownTextToken(
+              md,
+              mutationLink.alteration
+            );
+            alterationPageLinkTags.push(textToken, linkEndToken);
+          }
+          allMutationLinks.push(...alterationPageLinkTags);
+        }
+        const commaToken = createMarkdownTextToken(md, ', ');
+        allMutationLinks.push(commaToken);
+      }
+      // remove the last comma token
+      allMutationLinks.pop();
+      token.children = allMutationLinks;
     } else if (inTh && token.content === 'Gene') {
       geneIdx = columnIdx;
     } else if (inTh && token.content === 'Mutation') {
       mutationIdx = columnIdx;
     }
   }
+}
+
+/**
+ * Creates a Markdown text token.
+ *
+ * @param {import('markdown-it')} md - The markdown-it instance used for parsing.
+ * @param {string} text - The text in the token.
+ * @returns {import('markdown-it').Token} - An array of markdown-it token objects with the modified tag.
+ *
+ * @example
+ * const md = require('markdown-it')();
+ * const tokens = createMarkdownToken(md, 'custom-tag');
+ * console.log(tokens);
+ */
+function createMarkdownTextToken(md, text) {
+  // can't figure out how to make a token on my own so I'm forcing
+  // markdown-it to make me one
+  const alterationPageLinkTags = md
+    .parse('[placeholder](placeholder)', {})[1]
+    .children.filter(x => x.type === 'text')[0];
+  alterationPageLinkTags.content = text;
+  return alterationPageLinkTags;
 }
 
 /**
