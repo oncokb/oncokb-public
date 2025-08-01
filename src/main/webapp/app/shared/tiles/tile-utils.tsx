@@ -6,12 +6,18 @@ import {
   Query,
   GeneNumber,
 } from '../api/generated/OncoKbPrivateAPI';
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 import classnames from 'classnames';
 import SomaticGermlineTiles, {
   AlterationTileProps,
 } from './SomaticGermlineTiles';
-import { ONCOGENICITY, MUTATION_EFFECT, ONCOKB_TM } from 'app/config/constants';
+import config, {
+  ONCOGENICITY,
+  MUTATION_EFFECT,
+  ONCOKB_TM,
+  GENOME_NEXUS_ANNOTATION_BASE_URL,
+  CLINVAR_VARIANT_BASE_URL,
+} from 'app/config/constants';
 import {
   isPositionalAlteration,
   citationsHasInfo,
@@ -27,6 +33,7 @@ import {
   Oncogenicity,
   Pathogenicity,
 } from 'app/components/oncokbMutationMapper/OncokbMutationMapper';
+import axios from 'axios';
 
 function OncogenicInfo({
   isUnknownOncogenicity,
@@ -196,8 +203,16 @@ function createMutationEffectTileProps(
 
 function createPathogenicityTileProps(
   variantAnnotation: GermlineVariant,
+  clinvarData: ClinvarData | undefined | null,
   includeTitle: boolean
 ): AlterationTileProps {
+  let clinvarPathogenicity = '';
+  if (clinvarData === null || clinvarData?.pathogenicity === '') {
+    clinvarPathogenicity = 'Not Available';
+  } else if (clinvarData) {
+    clinvarPathogenicity = clinvarData.pathogenicity;
+  }
+
   return {
     title: includeTitle ? 'Pathogenicity' : undefined,
     items: [
@@ -208,8 +223,11 @@ function createPathogenicityTileProps(
         },
         {
           title: 'ClinVar',
-          value: 'ClinVar not Implemented',
-          link: '#',
+          value: clinvarPathogenicity,
+          link:
+            clinvarData?.clinvarId && clinvarData?.pathogenicity
+              ? `${CLINVAR_VARIANT_BASE_URL}/${clinvarData.clinvarId}`
+              : undefined,
         },
       ],
     ],
@@ -243,15 +261,45 @@ type SomaticGermlineAlterationTilesProps = {
   variantAnnotation: VariantAnnotation;
 };
 
+type ClinvarData = { pathogenicity: string; clinvarId: number | undefined };
+
 export function SomaticGermlineAlterationTiles({
   includeTitle,
   ...rest
 }: SomaticGermlineAlterationTilesProps) {
   const tiles: AlterationTileProps[] = [];
-  if (rest.isGermline) {
+  const isGermline = rest.isGermline;
+
+  const [clinvar, setClinvar] = useState<ClinvarData | undefined | null>(
+    undefined
+  );
+
+  useEffect(() => {
+    async function fetchClinvarFromGenomeNexus() {
+      const response = await axios.get(
+        `${GENOME_NEXUS_ANNOTATION_BASE_URL}/${rest.variantAnnotation.query.hugoSymbol}:${rest.variantAnnotation.query.alteration}?fields=clinvar`
+      );
+      const clinvarAnnotation = response.data.clinvar.annotation;
+      if (clinvarAnnotation) {
+        setClinvar({
+          pathogenicity: clinvarAnnotation.clinicalSignificance,
+          clinvarId: clinvarAnnotation.clinvarId,
+        });
+      } else {
+        setClinvar(null);
+      }
+    }
+
+    if (isGermline) {
+      fetchClinvarFromGenomeNexus();
+    }
+  }, [setClinvar, isGermline, GENOME_NEXUS_ANNOTATION_BASE_URL]);
+
+  if (isGermline) {
     tiles.push(
       createPathogenicityTileProps(
         rest.variantAnnotation.germline,
+        clinvar,
         includeTitle
       )
     );
