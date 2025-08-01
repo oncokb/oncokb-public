@@ -18,7 +18,7 @@ enum GENE_TYPE {
   INSUFFICIENT_EVIDENCE = 'Insufficient evidence to classify as an Oncogene or Tumor Suppressor',
 }
 
-const HighestLevelItem: React.FunctionComponent<{
+export const HighestLevelItem: React.FunctionComponent<{
   level: LEVELS;
   key?: string;
 }> = props => {
