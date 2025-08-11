@@ -21,7 +21,7 @@ export const SERVER_API_URL = process.env.SERVER_API_URL;
 export const LOCAL_DEV_OPT = 'localdev';
 export const DISABLE_BANNER_OPT = 'disablebanner';
 
-export const DEV_URL = 'http://localhost:9095';
+export const DEV_URL = 'http://localhost:9090';
 
 export const AUTHORITIES = {
   ADMIN: 'ROLE_ADMIN',
@@ -1023,4 +1023,4 @@ export const MAX_SERVICE_ACCOUNT_TOKENS = 10;
 export const CLINVAR_VARIANT_BASE_URL =
   'https://www.ncbi.nlm.nih.gov/clinvar/variation';
 export const GENOME_NEXUS_ANNOTATION_BASE_URL =
-  'http://www.genomenexus.org/annotation';
+  'https://www.genomenexus.org/annotation';
