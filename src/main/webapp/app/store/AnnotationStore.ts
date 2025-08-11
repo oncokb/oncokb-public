@@ -220,15 +220,45 @@ export class AnnotationStore {
     await: () => [this.gene],
     invoke: async () => {
       try {
-        const evidences = await apiClient.evidencesLookupGetUsingGET({
+        let geneSummary = undefined;
+
+        const somaticEvidencesPromise = apiClient.evidencesLookupGetUsingGET({
           hugoSymbol: this.gene.result.hugoSymbol,
           evidenceTypes: EVIDENCE_TYPES.GENE_SUMMARY,
         });
-        if (evidences.length > 0) {
-          return evidences[0].description;
+
+        if (this.germline) {
+          const germlineEvidencesPromise = apiClient.evidencesLookupGetUsingGET(
+            {
+              hugoSymbol: this.gene.result.hugoSymbol,
+              evidenceTypes: EVIDENCE_TYPES.GENE_SUMMARY,
+              germline: true,
+            }
+          );
+
+          const [somaticEvidences, germlineEvidences] = await Promise.all([
+            somaticEvidencesPromise,
+            germlineEvidencesPromise,
+          ]);
+          if (somaticEvidences.length > 0) {
+            geneSummary = somaticEvidences[0].description;
+          }
+
+          if (germlineEvidences.length > 0) {
+            if (geneSummary === undefined) {
+              geneSummary = germlineEvidences[0].description;
+            } else {
+              geneSummary += ' ' + germlineEvidences[0].description;
+            }
+          }
         } else {
-          return undefined;
+          const somaticEvidences = await somaticEvidencesPromise;
+          if (somaticEvidences.length > 0) {
+            geneSummary = somaticEvidences[0].description;
+          }
         }
+
+        return geneSummary;
       } catch (e) {
         notifyError(e, 'Error loading gene summary');
         return undefined;
