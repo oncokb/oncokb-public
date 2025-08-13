@@ -19,10 +19,11 @@ export default function OncokbRoute({
   ...rest
 }: OncokbRouteProps) {
   const newRender = (props: RouteComponentProps) => {
+    const newProps = { ...props, windowStore };
     return render ? (
-      <>{render(props)}</>
+      <>{render(newProps)}</>
     ) : (
-      <>{React.createElement(component!, props)}</>
+      <>{React.createElement(component!, newProps)}</>
     );
   };
   return pageContainer({

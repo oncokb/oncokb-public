@@ -14,58 +14,58 @@ import CompanyDetailsPage from 'app/pages/companyManagement/CompanyDetailsPage';
 import ReadOnlyMode from 'app/shared/readonly/ReadOnlyMode';
 import WindowStore from 'app/store/WindowStore';
 
-const AdminRoutes = ({ widowStore }: { widowStore: WindowStore }) => {
+const AdminRoutes = ({ windowStore }: { windowStore: WindowStore }) => {
   return (
     <Switch>
       <ErrorBoundaryRoute
         exact
         path={PAGE_ROUTE.ADMIN_USER_DETAILS}
         component={UserDetailsPage}
-        windowStore={widowStore}
+        windowStore={windowStore}
       />
       <ErrorBoundaryRoute
         exact
         path={PAGE_ROUTE.ADMIN_USAGE_ANALYSIS}
         component={UsageAnalysisPage}
-        windowStore={widowStore}
+        windowStore={windowStore}
       />
       <ErrorBoundaryRoute
         exact
         path={PAGE_ROUTE.ADMIN_USER_USAGE_DETAILS}
         component={UserUsageDetailsPage}
-        windowStore={widowStore}
+        windowStore={windowStore}
       />
       <ErrorBoundaryRoute
         exact
         path={PAGE_ROUTE.ADMIN_RESOURCE_DETAILS}
         component={ResourceUsageDetailsPage}
-        windowStore={widowStore}
+        windowStore={windowStore}
       />
       <ErrorBoundaryRoute
         exact
         path={PAGE_ROUTE.ADMIN_SEND_EMAILS}
         component={ReadOnlyMode(SendEmailsPage)}
-        windowStore={widowStore}
+        windowStore={windowStore}
       />
       <ErrorBoundaryRoute
         exact
         path={PAGE_ROUTE.ADMIN_CREATE_ACCOUNT}
         component={ReadOnlyMode(CreateAccountPage)}
-        windowStore={widowStore}
+        windowStore={windowStore}
       />
       <ErrorBoundaryRoute
         exact
         path={PAGE_ROUTE.ADMIN_ADD_COMPANY}
         component={ReadOnlyMode(CreateCompanyPage)}
-        windowStore={widowStore}
+        windowStore={windowStore}
       />
       <ErrorBoundaryRoute
         exact
         path={PAGE_ROUTE.ADMIN_COMPANY_DETAILS}
         component={CompanyDetailsPage}
-        windowStore={widowStore}
+        windowStore={windowStore}
       />
-      <ErrorBoundaryRoute component={PageNotFound} windowStore={widowStore} />
+      <ErrorBoundaryRoute component={PageNotFound} windowStore={windowStore} />
     </Switch>
   );
 };
