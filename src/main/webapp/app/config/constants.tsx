@@ -1025,4 +1025,4 @@ export const MAX_SERVICE_ACCOUNT_TOKENS = 10;
 export const CLINVAR_VARIANT_BASE_URL =
   'https://www.ncbi.nlm.nih.gov/clinvar/variation';
 export const GENOME_NEXUS_ANNOTATION_BASE_URL =
-  'http://www.genomenexus.org/annotation';
+  'https://www.genomenexus.org/annotation';
