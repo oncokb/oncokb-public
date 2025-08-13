@@ -604,6 +604,10 @@ export enum PAGE_ROUTE {
   SOMATIC_GENE = '/gene/:hugoSymbol/somatic',
   GERMLINE_GENE = '/gene/:hugoSymbol/germline',
   ALTERATION = '/gene/:hugoSymbol/:alteration',
+  SOMATIC_ALTERATION = '/gene/:hugoSymbol/somatic/:alteration',
+  GERMLINE_ALTERATION = '/gene/:hugoSymbol/germline/:alteration',
+  SOMATIC_TUMOR_TYPE = '/gene/:hugoSymbol/somatic/:alteration/:tumorType',
+  GERMLINE_TUMOR_TYPE = '/gene/:hugoSymbol/germline/:alteration/:tumorType',
   HGVSG = '/hgvsg',
   HGVSG_WITH_QUERY = '/hgvsg/:query',
   GENOMIC_CHANGE = '/genomic-change',
@@ -1017,3 +1021,8 @@ export const FDA_SUBMISSION_URL_SUFFIX = {
 };
 
 export const MAX_SERVICE_ACCOUNT_TOKENS = 10;
+
+export const CLINVAR_VARIANT_BASE_URL =
+  'https://www.ncbi.nlm.nih.gov/clinvar/variation';
+export const GENOME_NEXUS_ANNOTATION_BASE_URL =
+  'https://www.genomenexus.org/annotation';

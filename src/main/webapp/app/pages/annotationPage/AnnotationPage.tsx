@@ -20,7 +20,7 @@ import {
 } from 'app/config/constants';
 import styles from 'app/pages/alterationPage/AlterationPage.module.scss';
 import { AlterationInfo } from 'app/pages/annotationPage/AlterationInfo';
-import { Col, Row, Alert } from 'react-bootstrap';
+import { Col, Row, Alert, Container } from 'react-bootstrap';
 import classnames from 'classnames';
 import { action, computed, observable } from 'mobx';
 import * as QueryString from 'querystring';
