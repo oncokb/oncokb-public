@@ -574,8 +574,7 @@ export class SomaticGermlineAlterationPage extends React.Component<
                         alteration={
                           this.store.annotationData.result.query.alteration
                         }
-                        oncogene={this.store.gene.result.oncogene}
-                        tsg={this.store.gene.result.tsg}
+                        geneType={this.store.gene.result.geneType}
                       />
                     </Col>
                   </Row>

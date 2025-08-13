@@ -2,27 +2,25 @@ import React from 'react';
 import classnames from 'classnames';
 import { DEFAULT_MARGIN_TOP_LG } from 'app/config/constants';
 import { getCategoricalAlterationDescription } from '../utils/Utils';
+import { Gene } from '../api/generated/OncoKbPrivateAPI';
 
 type VariantOverViewProps = {
   alterationSummaries: { content: string }[];
   hugoSymbol: string;
   alteration: string;
-  oncogene: boolean | undefined;
-  tsg: boolean | undefined;
+  geneType: Gene['geneType'];
 };
 
 export default function VariantOverView({
   alterationSummaries,
   hugoSymbol,
   alteration,
-  oncogene,
-  tsg,
+  geneType,
 }: VariantOverViewProps) {
   const categoricalAlterationDescription = getCategoricalAlterationDescription(
     hugoSymbol,
     alteration,
-    oncogene,
-    tsg
+    geneType
   );
   return (
     <div style={{ wordWrap: 'break-word' }}>
