@@ -4,10 +4,10 @@ import PageContainer from 'app/components/PageContainer';
 import WindowStore from 'app/store/WindowStore';
 
 export type OncokbRouteProps = RouteProps & {
-  pageContainer?: (props: {
+  pageContainer?: React.FunctionComponent<{
     windowStore: WindowStore;
     children: JSX.Element;
-  }) => JSX.Element;
+  }>;
   windowStore: WindowStore;
 };
 
@@ -15,7 +15,7 @@ export default function OncokbRoute({
   render,
   component,
   windowStore,
-  pageContainer = props => <PageContainer {...props} />,
+  pageContainer = props => props.children,
   ...rest
 }: OncokbRouteProps) {
   const newRender = (props: RouteComponentProps) => {
