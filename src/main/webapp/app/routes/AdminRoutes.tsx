@@ -22,50 +22,62 @@ const AdminRoutes = ({ windowStore }: { windowStore: WindowStore }) => {
         path={PAGE_ROUTE.ADMIN_USER_DETAILS}
         component={UserDetailsPage}
         windowStore={windowStore}
+        pageContainer={({ children }) => children}
       />
       <ErrorBoundaryRoute
         exact
         path={PAGE_ROUTE.ADMIN_USAGE_ANALYSIS}
         component={UsageAnalysisPage}
         windowStore={windowStore}
+        pageContainer={({ children }) => children}
       />
       <ErrorBoundaryRoute
         exact
         path={PAGE_ROUTE.ADMIN_USER_USAGE_DETAILS}
         component={UserUsageDetailsPage}
         windowStore={windowStore}
+        pageContainer={({ children }) => children}
       />
       <ErrorBoundaryRoute
         exact
         path={PAGE_ROUTE.ADMIN_RESOURCE_DETAILS}
         component={ResourceUsageDetailsPage}
         windowStore={windowStore}
+        pageContainer={({ children }) => children}
       />
       <ErrorBoundaryRoute
         exact
         path={PAGE_ROUTE.ADMIN_SEND_EMAILS}
         component={ReadOnlyMode(SendEmailsPage)}
         windowStore={windowStore}
+        pageContainer={({ children }) => children}
       />
       <ErrorBoundaryRoute
         exact
         path={PAGE_ROUTE.ADMIN_CREATE_ACCOUNT}
         component={ReadOnlyMode(CreateAccountPage)}
         windowStore={windowStore}
+        pageContainer={({ children }) => children}
       />
       <ErrorBoundaryRoute
         exact
         path={PAGE_ROUTE.ADMIN_ADD_COMPANY}
         component={ReadOnlyMode(CreateCompanyPage)}
         windowStore={windowStore}
+        pageContainer={({ children }) => children}
       />
       <ErrorBoundaryRoute
         exact
         path={PAGE_ROUTE.ADMIN_COMPANY_DETAILS}
         component={CompanyDetailsPage}
         windowStore={windowStore}
+        pageContainer={({ children }) => children}
       />
-      <ErrorBoundaryRoute component={PageNotFound} windowStore={windowStore} />
+      <ErrorBoundaryRoute
+        component={PageNotFound}
+        windowStore={windowStore}
+        pageContainer={({ children }) => children}
+      />
     </Switch>
   );
 };
