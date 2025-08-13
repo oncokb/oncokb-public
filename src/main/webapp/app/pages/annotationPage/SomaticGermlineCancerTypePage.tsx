@@ -706,7 +706,7 @@ export class SomaticGermlineCancerTypePage extends React.Component<
               <Row className="justify-content-center">
                 <Col md={11}>
                   <CancerTypeView
-                    somaticGermline={this.store.germline}
+                    isGermline={this.store.germline}
                     appStore={this.props.appStore}
                     isLargeScreen={this.props.windowStore.isLargeScreen}
                     userAuthenticated={

@@ -43,7 +43,7 @@ export type ICancerTypeView = {
     selectedTabKey: ANNOTATION_PAGE_TAB_KEYS,
     newTabKey: ANNOTATION_PAGE_TAB_KEYS
   ) => void;
-  somaticGermline?: boolean;
+  isGermline?: boolean;
 };
 
 const TxView: React.FunctionComponent<{
@@ -52,7 +52,7 @@ const TxView: React.FunctionComponent<{
   hugoSymbol: string;
   summary: string | undefined;
   implications: TherapeuticImplication[];
-  somaticGermline: boolean | undefined;
+  isGermline: boolean | undefined;
 }> = props => {
   const txStandardCares = sortTherapeuticImplications(
     props.implications.filter(implication =>
@@ -70,7 +70,7 @@ const TxView: React.FunctionComponent<{
   );
   return (
     <div>
-      {props.somaticGermline !== undefined ? (
+      {props.isGermline !== undefined ? (
         <MiniNavBarHeader
           id="treatment-implications-of-this-biomarker"
           className={classnames('h5')}
@@ -135,11 +135,11 @@ const DxPxView: React.FunctionComponent<{
   hugoSymbol: string;
   summary?: string;
   implications: TherapeuticImplication[];
-  somaticGermline: boolean | undefined;
+  isGermline: boolean | undefined;
 }> = props => {
   return (
     <div>
-      {props.somaticGermline !== undefined ? (
+      {props.isGermline !== undefined ? (
         <MiniNavBarHeader
           id={`${
             props.type === 'dx' ? 'diagnostic' : 'prognostic'
@@ -181,11 +181,11 @@ const FdaView: React.FunctionComponent<{
   hugoSymbol: string;
   summary?: string;
   implications: FdaImplication[];
-  somaticGermline: boolean | undefined;
+  isGermline: boolean | undefined;
 }> = props => {
   return (
     <div>
-      {props.somaticGermline !== undefined ? (
+      {props.isGermline !== undefined ? (
         <MiniNavBarHeader
           id="fda-recognized-biomarker"
           className={classnames('h5', 'mt-5')}
@@ -226,7 +226,7 @@ export const CancerTypeView: React.FunctionComponent<ICancerTypeView> = props =>
         hugoSymbol={props.hugoSymbol}
         summary={props.annotation.tumorTypeSummary}
         implications={props.therapeuticImplications}
-        somaticGermline={props.somaticGermline}
+        isGermline={props.isGermline}
       />
       {(props.annotation.diagnosticSummary ||
         props.diagnosticImplications.length > 0) && (
@@ -237,7 +237,7 @@ export const CancerTypeView: React.FunctionComponent<ICancerTypeView> = props =>
           hugoSymbol={props.hugoSymbol}
           summary={props.annotation.diagnosticSummary}
           implications={props.diagnosticImplications}
-          somaticGermline={props.somaticGermline}
+          isGermline={props.isGermline}
         />
       )}
       {(props.annotation.prognosticSummary ||
@@ -249,7 +249,7 @@ export const CancerTypeView: React.FunctionComponent<ICancerTypeView> = props =>
           hugoSymbol={props.hugoSymbol}
           summary={props.annotation.prognosticSummary}
           implications={props.prognosticImplications}
-          somaticGermline={props.somaticGermline}
+          isGermline={props.isGermline}
         />
       )}
       {props.fdaImplication.length > 0 && (
@@ -259,7 +259,7 @@ export const CancerTypeView: React.FunctionComponent<ICancerTypeView> = props =>
           hugoSymbol={props.hugoSymbol}
           summary={props.annotation.prognosticSummary}
           implications={props.fdaImplication}
-          somaticGermline={props.somaticGermline}
+          isGermline={props.isGermline}
         />
       )}
     </div>
