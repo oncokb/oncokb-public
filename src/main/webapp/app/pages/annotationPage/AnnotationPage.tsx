@@ -751,37 +751,33 @@ export default class AnnotationPage extends React.Component<
         this.props.store.gene.result === DEFAULT_GENE) ? (
       <UnknownGeneAlert />
     ) : (
-      <Container>
-        <Row className="justify-content-center">
-          <Col md={11}>
-            {this.navBreadcrumbs}
-            {this.pageShouldBeRendered ? (
-              this.props.store.annotationData.result.query.hugoSymbol ? (
-                this.getAnnotationComponents()
-              ) : (
-                <Alert variant="warning" className={'text-center'}>
-                  We do not have any information for this variant
-                </Alert>
-              )
-            ) : (
-              <If condition={this.props.store.annotationData.isError}>
-                <Then>
-                  <Alert variant="warning" className={'text-center'}>
-                    An error occurred while annotating your variant.
-                  </Alert>
-                </Then>
-                <Else>
-                  <LoadingIndicator
-                    size={LoaderSize.LARGE}
-                    center={true}
-                    isLoading={true}
-                  />
-                </Else>
-              </If>
-            )}
-          </Col>
-        </Row>
-      </Container>
+      <>
+        {this.navBreadcrumbs}
+        {this.pageShouldBeRendered ? (
+          this.props.store.annotationData.result.query.hugoSymbol ? (
+            this.getAnnotationComponents()
+          ) : (
+            <Alert variant="warning" className={'text-center'}>
+              We do not have any information for this variant
+            </Alert>
+          )
+        ) : (
+          <If condition={this.props.store.annotationData.isError}>
+            <Then>
+              <Alert variant="warning" className={'text-center'}>
+                An error occurred while annotating your variant.
+              </Alert>
+            </Then>
+            <Else>
+              <LoadingIndicator
+                size={LoaderSize.LARGE}
+                center={true}
+                isLoading={true}
+              />
+            </Else>
+          </If>
+        )}
+      </>
     );
   }
 }
