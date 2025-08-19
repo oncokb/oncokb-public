@@ -13,8 +13,6 @@ import org.slf4j.MDC;
 import org.springframework.core.annotation.Order;
 import org.springframework.stereotype.Component;
 import org.springframework.web.filter.OncePerRequestFilter;
-import org.springframework.web.util.ContentCachingRequestWrapper;
-import org.springframework.web.util.ContentCachingResponseWrapper;
 
 @Order(1)
 @Component
@@ -40,24 +38,11 @@ public class RequestResponseLoggingFilter extends OncePerRequestFilter {
     MDC.put(MDC_REQUEST_ID_KEY, requestId);
 
     try {
-      ContentCachingRequestWrapper wrappedRequest = new ContentCachingRequestWrapper(
-        request
-      );
-      ContentCachingResponseWrapper wrappedResponse = new ContentCachingResponseWrapper(
-        response
-      );
-      String url = wrappedRequest.getRequestURI();
-      String method = wrappedRequest.getMethod();
+      String url = request.getRequestURI();
+      String method = request.getMethod();
       LOGGER.info("Incoming Request: {} {}", method, url);
-      if (LOGGER.isDebugEnabled()) {
-        filterChain.doFilter(wrappedRequest, wrappedResponse);
-
-        logRequest(wrappedRequest);
-        logResponse(wrappedResponse);
-      } else {
-        filterChain.doFilter(request, response);
-      }
-      int status = wrappedResponse.getStatus();
+      filterChain.doFilter(request, response);
+      int status = response.getStatus();
       LOGGER.info("Response status: {}", status);
     } catch (Exception e) {
       LOGGER.error("Unhandled exception", e);
@@ -65,38 +50,5 @@ public class RequestResponseLoggingFilter extends OncePerRequestFilter {
     } finally {
       MDC.remove(MDC_REQUEST_ID_KEY);
     }
-  }
-
-  private void logRequest(ContentCachingRequestWrapper request)
-    throws IOException {
-    StringBuilder requestLog = new StringBuilder();
-    requestLog
-      .append("Request: ")
-      .append(request.getMethod())
-      .append(" ")
-      .append(request.getRequestURI());
-
-    byte[] requestBody = request.getContentAsByteArray();
-    if (requestBody.length > 0) {
-      String body = new String(requestBody, StandardCharsets.UTF_8);
-      requestLog.append("\nBody: ").append(body);
-    }
-
-    LOGGER.debug(requestLog.toString());
-  }
-
-  private void logResponse(ContentCachingResponseWrapper response)
-    throws IOException {
-    StringBuilder responseLog = new StringBuilder();
-    responseLog.append("Response: ").append(response.getStatus());
-
-    byte[] responseBody = response.getContentAsByteArray();
-    if (responseBody.length > 0) {
-      String body = new String(responseBody, StandardCharsets.UTF_8);
-      responseLog.append("\nBody: ").append(body);
-    }
-
-    LOGGER.debug(responseLog.toString());
-    response.copyBodyToResponse();
   }
 }
