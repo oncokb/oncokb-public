@@ -122,10 +122,11 @@ if (AppConfig.serverConfig?.sentryProjectId) {
     // Adjust tracesSampleRate for production.
     // For more information, please see https://docs.sentry.io/platforms/javascript/guides/react/configuration/options/#tracing-options
     dsn: AppConfig.serverConfig.sentryProjectId,
-    integrations: [new Sentry.Replay()],
+    // integrations: [new Sentry.Replay()],
     environment: 'production',
     tracesSampleRate: 0.5,
-    replaysOnErrorSampleRate: 1.0,
+    // disable replays since calls to blob:https://*.oncokb.org are blocked
+    // replaysOnErrorSampleRate: 1.0,
     ignoreErrors: [
       // the following errors are for this project only
       'ResizeObserver loop limit exceeded',
