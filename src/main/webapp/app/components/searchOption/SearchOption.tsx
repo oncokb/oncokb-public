@@ -186,11 +186,12 @@ const DrugSearchOption: React.FunctionComponent<{
 }> = props => {
   return (
     <>
-      <div>
+      <div className="d-flex">
         <Highlighter
           searchWords={[props.search]}
           textToHighlight={props.data.drug.drugName}
         />
+        {getGeneticTypeTag(props.data.geneticType)}
       </div>
       <div className={styles.subTitle}>
         {props.data.highestSensitiveLevel && (
