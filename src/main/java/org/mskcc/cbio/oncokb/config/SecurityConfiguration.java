@@ -77,8 +77,7 @@ public class SecurityConfiguration extends WebSecurityConfigurerAdapter {
               "style-src 'self' 'unsafe-inline' https://cscript-cdn-use.cassiecloud.com https://cscript-cdn-use.oncokb.org; " +
               "img-src 'self' data: www.google-analytics.com https://cscript-cdn-use.cassiecloud.com https://cscript-cdn-use.oncokb.org; " +
               "font-src 'self' data:; " +
-              "connect-src 'self' https://*; " +
-              "worker-src 'self' blob:https://*.oncokb.org;"
+              "connect-src 'self' https://*; "
             )
         .and()
             .referrerPolicy(ReferrerPolicyHeaderWriter.ReferrerPolicy.NO_REFERRER_WHEN_DOWNGRADE)
