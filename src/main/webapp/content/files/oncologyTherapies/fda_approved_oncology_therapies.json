@@ -1214,7 +1214,7 @@
     "tx": "Neratinib",
     "biomarker": "HER2+ (ERBB2 Amplification)",
     "agentClass": "Small molecule kinase inhibitor",
-    "drugTarget": "EGFR//HER2 (ERBB2)/HER4 (ERBB4) inhibitor",
+    "drugTarget": "EGFR/HER2 (ERBB2)/HER4 (ERBB4) inhibitor",
     "targetedTx": "Y",
     "pxTx": "Y",
     "ngsTest": "Y"
@@ -2313,8 +2313,8 @@
     "year": "2024",
     "tx": "Zenocutuzumab",
     "biomarker": "NRG1 Fusion",
-    "agentClass": "Bispecific T-cell engager",
-    "drugTarget": "Bispecific HER2/HER3-directed T-cell engager",
+    "agentClass": "Bispecific antibody",
+    "drugTarget": "Bispecific HER2/HER3 antibody",
     "targetedTx": "Y",
     "pxTx": "Y",
     "ngsTest": "Y"
@@ -2352,7 +2352,7 @@
   {
     "year": "2025",
     "tx": "Datopotamab deruxtecan",
-    "biomarker": "HR+/HER2-",
+    "biomarker": "*HR+/HER2-\n*EGFR Oncogenic Mutations",
     "agentClass": "Antibody drug conjugate",
     "drugTarget": "TROP2-directed antibody and topoisomerase inhibitor conjugate",
     "targetedTx": "Y",
@@ -2415,6 +2415,46 @@
     "biomarker": "ROS1+ (ROS1 Fusions)",
     "agentClass": "Small molecule kinase inhibitor",
     "drugTarget": "ROS1 inhibitor",
+    "targetedTx": "Y",
+    "pxTx": "Y",
+    "ngsTest": "Y"
+  },
+  {
+    "year": "2025",
+    "tx": "Linvoseltamab",
+    "biomarker": "",
+    "agentClass": "Bispecific T-cell engager",
+    "drugTarget": "Bispecific BCMA-directed CD3 T-cell engager",
+    "targetedTx": "Y",
+    "pxTx": "N",
+    "ngsTest": "NA"
+  },
+  {
+    "year": "2025",
+    "tx": "Sunvozertinib",
+    "biomarker": "EGFR Exon 20 Insertions",
+    "agentClass": "Small molecule kinase inhibitor",
+    "drugTarget": "EGFR tyrosine kinase inhibitor",
+    "targetedTx": "Y",
+    "pxTx": "Y",
+    "ngsTest": "Y"
+  },
+  {
+    "year": "2025",
+    "tx": "Dordaviprone",
+    "biomarker": "H3 K27M (K28M): H3-3A (H3F3A), H3C2 (HIST1H3B), H3C3 (HIST1H3C)",
+    "agentClass": "Protease activator",
+    "drugTarget": "DRD2 and ClpP agonist",
+    "targetedTx": "Y",
+    "pxTx": "Y",
+    "ngsTest": "Y"
+  },
+  {
+    "year": "2025",
+    "tx": "Zongertinib",
+    "biomarker": "ERBB2 TKD activating mutations",
+    "agentClass": "Small molecule kinase inhibitor",
+    "drugTarget": "HER2 (ERBB2) inhibitor",
     "targetedTx": "Y",
     "pxTx": "Y",
     "ngsTest": "Y"
