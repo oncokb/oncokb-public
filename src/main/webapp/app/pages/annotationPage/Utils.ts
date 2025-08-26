@@ -36,15 +36,17 @@ export const getUniqueFdaImplications = (
   return finalList;
 };
 
+export const compareLevels = (a: LEVELS, b: LEVELS) => {
+  return LEVEL_PRIORITY.indexOf(a) - LEVEL_PRIORITY.indexOf(b);
+};
+
 export const sortTherapeuticImplications = (
   implications: TherapeuticImplication[],
   desc = true
 ) => {
   return implications.sort((a, b) => {
     let compareScore =
-      (LEVEL_PRIORITY.indexOf(a.level as LEVELS) -
-        LEVEL_PRIORITY.indexOf(b.level as LEVELS)) *
-      (desc ? -1 : 1);
+      compareLevels(a.level as LEVELS, b.level as LEVELS) * (desc ? -1 : 1);
     if (compareScore === 0) {
       compareScore = a.drugs.localeCompare(b.drugs);
     }

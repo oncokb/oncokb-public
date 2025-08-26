@@ -16,7 +16,10 @@ import {
 } from 'app/config/constants';
 import { FdaTabDescription } from 'app/pages/annotationPage/TabDescriptor';
 import { CancerTypeViewTable } from 'app/pages/annotationPage/CancerTypeViewTable';
-import { sortTherapeuticImplications } from 'app/pages/annotationPage/Utils';
+import {
+  compareLevels,
+  sortTherapeuticImplications,
+} from 'app/pages/annotationPage/Utils';
 import WindowStore from 'app/store/WindowStore';
 import { defaultFdaImplicationSortMethod } from 'app/shared/utils/ReactTableUtils';
 import classnames from 'classnames';
@@ -54,20 +57,55 @@ const TxView: React.FunctionComponent<{
   implications: TherapeuticImplication[];
   isGermline: boolean | undefined;
 }> = props => {
-  const txStandardCares = sortTherapeuticImplications(
-    props.implications.filter(implication =>
-      [LEVELS.Tx1, LEVELS.Tx2, LEVELS.R1]
-        .map(level => level.toString())
-        .includes(implication.level)
-    )
+  let txStandardCares: TherapeuticImplication[] = [];
+  let txInvestigationalCares: TherapeuticImplication[] = [];
+  const drugsHighestLevels: { [drugs: string]: string } = {};
+
+  const standardCareLevels = [LEVELS.Tx1, LEVELS.Tx2, LEVELS.R1].map(level =>
+    level.toString()
   );
-  const txInvestigationalCares = sortTherapeuticImplications(
-    props.implications.filter(implication =>
-      [LEVELS.Tx3A, LEVELS.Tx3B, LEVELS.Tx4, LEVELS.R2]
-        .map(level => level.toString())
-        .includes(implication.level)
-    )
+  const investigationalCareLevels = [
+    LEVELS.Tx3A,
+    LEVELS.Tx3B,
+    LEVELS.Tx4,
+    LEVELS.R2,
+  ].map(level => level.toString());
+  for (const implication of props.implications) {
+    if (standardCareLevels.includes(implication.level)) {
+      txStandardCares.push(implication);
+    } else if (investigationalCareLevels.includes(implication.level)) {
+      txInvestigationalCares.push(implication);
+    }
+
+    if (
+      !drugsHighestLevels[implication.drugs] ||
+      compareLevels(
+        drugsHighestLevels[implication.drugs] as LEVELS,
+        implication.level as LEVELS
+      ) < 0
+    ) {
+      drugsHighestLevels[implication.drugs] = implication.level;
+    }
+  }
+
+  txStandardCares = txStandardCares.filter(
+    tx =>
+      compareLevels(
+        tx.level as LEVELS,
+        drugsHighestLevels[tx.drugs] as LEVELS
+      ) >= 0
   );
+  txInvestigationalCares = txInvestigationalCares.filter(
+    tx =>
+      compareLevels(
+        tx.level as LEVELS,
+        drugsHighestLevels[tx.drugs] as LEVELS
+      ) >= 0
+  );
+
+  sortTherapeuticImplications(txStandardCares);
+  sortTherapeuticImplications(txInvestigationalCares);
+
   return (
     <div>
       {props.isGermline !== undefined ? (
