@@ -12,13 +12,24 @@ import { API_DOCUMENT_LINK, PAGE_ROUTE } from 'app/config/constants';
 import { Linkout } from 'app/shared/links/Linkout';
 import ExternalLinkIcon from 'app/shared/icons/ExternalLinkIcon';
 import { OncoTreeLink } from 'app/shared/utils/UrlUtils';
-import {
-  LinkedInLink,
-  UserGoogleGroupLink,
-} from 'app/shared/links/SocialMediaLinks';
+import { LinkedInLink } from 'app/shared/links/SocialMediaLinks';
+import { showPreferences } from 'vanilla-cookieconsent';
+
+function Privacy({ childClassName }: { childClassName: string }) {
+  return (
+    <>
+      <Link className={childClassName} to={PAGE_ROUTE.PRIVACY}>
+        Privacy
+      </Link>
+      <button className={childClassName} onClick={showPreferences}>
+        Cookie Settings
+      </button>
+    </>
+  );
+}
 
 class Footer extends React.Component<{ lastDataUpdate: string }> {
-  public get externalLinks() {
+  public get top() {
     return (
       <>
         <div className={'mb-2'}>
@@ -50,41 +61,14 @@ class Footer extends React.Component<{ lastDataUpdate: string }> {
     );
   }
 
-  public get internalLinks() {
-    return (
-      <>
-        <div className={classnames(styles.footerAList)}>
-          <Link to={PAGE_ROUTE.TERMS}>Terms of Use</Link>
-          <ContactLink emailSubject={'Contact us'}>Contact Us</ContactLink>
-          <LinkedInLink short />
-          <Linkout link={API_DOCUMENT_LINK}>API</Linkout>
-        </div>
-        <div className={classnames(styles.footerAList)}>
-          <Link to={PAGE_ROUTE.NEWS}>
-            Last data update: {this.props.lastDataUpdate}
-          </Link>
-        </div>
-      </>
-    );
-  }
-
   public render() {
     return (
       <footer className={classnames('footer', styles.footer)}>
         <Container>
           <Row className="text-center mb-2">
-            <Col>{this.externalLinks}</Col>
+            <Col>{this.top}</Col>
           </Row>
           <Row className="text-center">
-            <Col
-              lg
-              md={12}
-              className={
-                'd-flex flex-column justify-content-center align-items-center my-1'
-              }
-            >
-              {this.internalLinks}
-            </Col>
             <Col
               lg
               md={12}
@@ -95,16 +79,63 @@ class Footer extends React.Component<{ lastDataUpdate: string }> {
               <MskccLogo imageHeight={50} />
             </Col>
             <Col
-              lg
+              lg={8}
               md={12}
               className={
                 'd-flex flex-column justify-content-center align-items-center my-1'
               }
             >
-              <div>
-                &copy; {new Date().getFullYear()} Memorial Sloan Kettering
-                Cancer Center
-              </div>
+              <Container>
+                <Row>
+                  <Col
+                    lg
+                    md={12}
+                    className={
+                      'd-flex flex-column justify-content-center align-items-left my-1'
+                    }
+                  >
+                    <div
+                      className={classnames(
+                        styles.footerAList,
+                        styles.internalLinks
+                      )}
+                    >
+                      <Link to={PAGE_ROUTE.TERMS}>Terms of Use</Link>
+                      <ContactLink emailSubject={'Contact us'}>
+                        Contact Us
+                      </ContactLink>
+                      <LinkedInLink short />
+                      <Linkout link={API_DOCUMENT_LINK}>API</Linkout>
+                      <Privacy childClassName={classnames('d-inline')} />
+                    </div>
+                  </Col>
+                </Row>
+                <Row>
+                  <Col>
+                    <div
+                      className={classnames(styles.footerAList, styles.news)}
+                    >
+                      <Link to={PAGE_ROUTE.NEWS}>
+                        Last data update: {this.props.lastDataUpdate}
+                      </Link>
+                    </div>
+                  </Col>
+                  <Col
+                    lg
+                    md={12}
+                    className={
+                      'd-flex flex-column justify-content-center align-items-center my-1'
+                    }
+                  >
+                    <div className={classnames(styles.footerAList)}>
+                      <div>
+                        &copy; {new Date().getFullYear()} Memorial Sloan
+                        Kettering Cancer Center
+                      </div>
+                    </div>
+                  </Col>
+                </Row>
+              </Container>
             </Col>
           </Row>
         </Container>

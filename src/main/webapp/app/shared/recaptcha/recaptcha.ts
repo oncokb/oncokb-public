@@ -36,7 +36,11 @@ export default class ReCAPTCHA {
           token = res;
         })
         .catch((error: Error) => {
-          if (AppConfig.serverConfig?.sentryProjectId) {
+          if (
+            AppConfig.serverConfig?.sentryProjectId &&
+            // check if sentry is initialized
+            Sentry.getCurrentHub().getClient()
+          ) {
             Sentry.captureException(error);
           }
         });
