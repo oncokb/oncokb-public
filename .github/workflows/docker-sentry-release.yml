@@ -1,5 +1,7 @@
 name: Build/Push docker image and tag the release in sentry
 on:
+  # Allow manual triggering of the action
+  workflow_dispatch:
   release:
     types: [published]
 jobs:
