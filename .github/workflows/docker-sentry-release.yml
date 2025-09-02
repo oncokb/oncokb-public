@@ -2,8 +2,8 @@ name: Build/Push docker image and tag the release in sentry
 on:
   workflow_dispatch:
     inputs:
-      version:
-        description: "Version number to tag the image (required if manually running)"
+      tag-name:
+        description: "Tag name to use for the image (required if manually running)"
         required: true
         type: string
   release:
@@ -18,7 +18,7 @@ jobs:
       SPRING_OUTPUT_ANSI_ENABLED: DETECT
       SPRING_JPA_SHOW_SQL: false
       JHI_DISABLE_WEBPACK_LOGS: true
-      TAG_NAME: ${{ github.ref_name }}
+      TAG_NAME: ${{ inputs.tag-name || github.ref_name }}
       VERSION: ${{ github.ref }}
     steps:
       - uses: actions/checkout@v2
@@ -36,8 +36,12 @@ jobs:
           DOCKER_USERNAME: ${{secrets.DOCKER_USERNAME}}
           DOCKER_PASSWORD: ${{secrets.DOCKER_PASSWORD}}
           REPOSITORY: 'mskcc/oncokb-public'
-        run: |
-          ./mvnw -ntp package -Pprod verify jib:build -DskipTests -Djib.to.image="${REPOSITORY}:${TAG_NAME}" -Djib.to.auth.username=$DOCKER_USERNAME -Djib.to.auth.password=$DOCKER_PASSWORD
+          run: |
+            ./mvnw -ntp package -Pprod verify jib:build \
+            -DskipTests \
+            -Djib.to.image="${REPOSITORY}:${TAG_NAME}" \
+            -Djib.to.auth.username=$DOCKER_USERNAME \
+            -Djib.to.auth.password=$DOCKER_PASSWORD
       - name: Create a Sentry.io release in oncokb-public-website
         uses: getsentry/action-release@v1.7.0
         env:
