@@ -18,7 +18,6 @@ jobs:
       SPRING_OUTPUT_ANSI_ENABLED: DETECT
       SPRING_JPA_SHOW_SQL: false
       JHI_DISABLE_WEBPACK_LOGS: true
-      TAG_NAME: ${{ inputs.tag-name || github.ref_name }}
       VERSION: ${{ github.ref }}
     steps:
       - uses: actions/checkout@v2
@@ -35,6 +34,7 @@ jobs:
         env:
           DOCKER_USERNAME: ${{secrets.DOCKER_USERNAME}}
           DOCKER_PASSWORD: ${{secrets.DOCKER_PASSWORD}}
+          TAG_NAME: ${{ inputs.tag-name || github.ref_name }}
           REPOSITORY: 'mskcc/oncokb-public'
         run: |
           ./mvnw -ntp package -Pprod verify jib:build \
