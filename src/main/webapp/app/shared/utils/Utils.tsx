@@ -1,11 +1,15 @@
 import {
   Article,
   Citations,
+  Evidence,
   Gene,
   TreatmentDrug,
 } from 'app/shared/api/generated/OncoKbAPI';
 import React, { ReactNode } from 'react';
 import {
+  ALLELE_STATE_BIALLELEIC,
+  ALLELE_STATE_CARRIER,
+  ALLELE_STATE_MONOALLELIC,
   AMPLIFICATION,
   APP_LOCAL_DATE_FORMAT,
   APP_LOCAL_DATETIME_FORMAT,
@@ -21,6 +25,8 @@ import {
   LEVEL_TYPES,
   LEVELS,
   LOSS_OF_FUNCTION_MUTATIONS,
+  MECHANISM_OF_INHERITANCE_DOMINANT,
+  MECHANISM_OF_INHERITANCE_RECESSIVE,
   ONCOGENIC_MUTATIONS,
   ONCOGENICITY,
   ONCOGENICITY_CLASS_NAMES,
@@ -36,7 +42,6 @@ import classnames from 'classnames';
 import {
   Alteration,
   EnsemblGene,
-  Evidence,
   Treatment,
   TumorType,
 } from 'app/shared/api/generated/OncoKbPrivateAPI';
@@ -964,4 +969,45 @@ export const getFdaSubmissionNumber = (
   return supplementNumber
     ? `${primaryNumber}/${supplementNumber}`
     : primaryNumber;
+};
+
+type AlleleState =
+  | typeof ALLELE_STATE_MONOALLELIC
+  | typeof ALLELE_STATE_BIALLELEIC
+  | typeof ALLELE_STATE_CARRIER;
+
+const isAlleleState = (str: string): str is AlleleState => {
+  return (
+    str === ALLELE_STATE_MONOALLELIC ||
+    str === ALLELE_STATE_BIALLELEIC ||
+    str === ALLELE_STATE_CARRIER
+  );
+};
+
+export const getAlleleStatesFromEvidence = (evidence: Evidence) => {
+  if (!evidence.knownEffect) {
+    return [];
+  }
+
+  const alleleStates: AlleleState[] = [];
+  for (const alleleState of evidence.knownEffect.split(',')) {
+    if (isAlleleState(alleleState)) {
+      alleleStates.push(alleleState);
+    }
+  }
+  return alleleStates;
+};
+
+export const getMechanismOfInheritanceFromAlleleStates = (
+  alleleStates: AlleleState[]
+) => {
+  if (alleleStates.length === 0 || alleleStates.length > 1) {
+    return undefined;
+  }
+  if (alleleStates[0] === ALLELE_STATE_MONOALLELIC) {
+    return MECHANISM_OF_INHERITANCE_DOMINANT;
+  }
+  if (alleleStates[0] === ALLELE_STATE_BIALLELEIC) {
+    return MECHANISM_OF_INHERITANCE_RECESSIVE;
+  }
 };
