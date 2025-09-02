@@ -13,7 +13,9 @@ export function TableOfContents() {
       elements.push(
         <li>
           <a
-            onClick={() => {
+            href="#"
+            onClick={e => {
+              e.preventDefault();
               window.scrollTo({ top: y, behavior: 'smooth' });
             }}
           >

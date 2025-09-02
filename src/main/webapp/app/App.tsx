@@ -77,7 +77,16 @@ class App extends React.Component {
   }
 
   componentDidMount() {
+    const consentDescription =
+      '<p>We use cookies to operate our website. &nbsp;We also use cookies to improve your site experience and analyze our site’s performance, including through our analytics partners. &nbsp;By clicking “Accept All”, you consent to our use of cookies. &nbsp;You may also manage your cookie preferences by clicking “Manage Cookies”. &nbsp;For more information about how we use cookies please see our <a href="/privacy">OncoKB Privacy Notice</a></p>';
     CookieConsent.run({
+      disablePageInteraction: true,
+      guiOptions: {
+        consentModal: {
+          layout: 'cloud inline',
+          position: 'bottom center',
+        },
+      },
       categories: {
         necessary: {
           enabled: true,
@@ -212,14 +221,13 @@ class App extends React.Component {
           enabled: false,
         },
       },
-
       language: {
         default: 'en',
         translations: {
           en: {
             consentModal: {
               title: 'We use cookies',
-              description: 'Cookie modal description',
+              description: consentDescription,
               acceptAllBtn: 'Accept all',
               acceptNecessaryBtn: 'Reject all',
               showPreferencesBtn: 'Manage Individual preferences',
@@ -232,8 +240,7 @@ class App extends React.Component {
               closeIconLabel: 'Close modal',
               sections: [
                 {
-                  description:
-                    '<p>We use cookies to operate our website. &nbsp;We also use cookies to improve your site experience and analyze our site’s performance, including through our analytics partners. &nbsp;By clicking “Accept All”, you consent to our use of cookies. &nbsp;You may also manage your cookie preferences by clicking “Manage Cookies”. &nbsp;For more information about how we use cookies please see our <a href="/privacy">OncoKB Privacy Notice</a></p>',
+                  description: consentDescription,
                 },
                 {
                   title: 'Strictly Necessary Cookies',
