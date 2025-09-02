@@ -624,13 +624,13 @@ export default class SomaticGermlineGenePage extends React.Component<
                               </Row>
                             )}
                             {this.store.geneSummary.result && (
-                              <div className="mt-2 d-flex">
+                              <div className="mt-2">
                                 <SummaryWithRefs
                                   content={this.store.geneSummary.result}
                                   type="linkout"
                                 />
                                 <ShowHideText
-                                  className={'text-nowrap ml-2'}
+                                  className={'text-nowrap mt-2'}
                                   show={this.showGeneBackground}
                                   title={`${this.store.hugoSymbol} background`}
                                   content={''}

@@ -182,12 +182,13 @@ export default function StickyMiniNavBar({
     const handleScroll = () => {
       if (!ticking) {
         requestAnimationFrame(() => {
-          const translateY =
-            miniNavElement.getBoundingClientRect().top - headerHeight;
+          const miniNavTop = miniNavElement.getBoundingClientRect().top;
+          const translateY = miniNavTop - headerHeight;
           headerElement.style.transform = `translateY(${Math.min(
             translateY,
             0
           )}px)`;
+          setIsSticky(miniNavTop === 0);
           ticking = false;
         });
       }
