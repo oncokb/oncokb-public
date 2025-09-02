@@ -693,6 +693,12 @@ export default class SomaticGermlineGenePage extends React.Component<
                               )}
                               {this.hasContent && (
                                 <>
+                                  <MiniNavBarHeader
+                                    id="test"
+                                    showOnPage={false}
+                                  >
+                                    Gene Overview
+                                  </MiniNavBarHeader>
                                   <SomaticGermlineGeneInfoTiles
                                     isGermline={this.isGermline}
                                     pathogenicities={
