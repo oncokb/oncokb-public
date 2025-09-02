@@ -36,12 +36,12 @@ jobs:
           DOCKER_USERNAME: ${{secrets.DOCKER_USERNAME}}
           DOCKER_PASSWORD: ${{secrets.DOCKER_PASSWORD}}
           REPOSITORY: 'mskcc/oncokb-public'
-          run: |
-            ./mvnw -ntp package -Pprod verify jib:build \
-            -DskipTests \
-            -Djib.to.image="${REPOSITORY}:${TAG_NAME}" \
-            -Djib.to.auth.username=$DOCKER_USERNAME \
-            -Djib.to.auth.password=$DOCKER_PASSWORD
+        run: |
+          ./mvnw -ntp package -Pprod verify jib:build \
+          -DskipTests \
+          -Djib.to.image="${REPOSITORY}:${TAG_NAME}" \
+          -Djib.to.auth.username=$DOCKER_USERNAME \
+          -Djib.to.auth.password=$DOCKER_PASSWORD
       - name: Create a Sentry.io release in oncokb-public-website
         uses: getsentry/action-release@v1.7.0
         env:
