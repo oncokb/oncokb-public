@@ -1,5 +1,7 @@
 name: Build/Push docker image and tag the release in sentry
 on:
+  # Allow manual triggering of the action
+  workflow_dispatch:
   release:
     types: [published]
 jobs:
@@ -28,7 +30,7 @@ jobs:
           DOCKER_USERNAME: ${{secrets.DOCKER_USERNAME}}
           DOCKER_PASSWORD: ${{secrets.DOCKER_PASSWORD}}
           TAG_NAME: ${{ github.event.release.tag_name }}
-          REPOSITORY: ${{ github.repository }}
+          REPOSITORY: 'mskcc/oncokb-public'
         run: |
           ./mvnw -ntp package -Pprod verify jib:build \
           -DskipTests \
