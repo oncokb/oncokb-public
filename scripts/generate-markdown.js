@@ -85,9 +85,11 @@ function decodeHtmlEntities(text) {
  * console.log(fixed); // '{["Example]"}'
  */
 function fixHtmlString(htmlString) {
-  return htmlString.replace(objectPropertyMarkRegex, (_, group) => {
-    return `{${decodeHtmlEntities(group)}}`;
-  });
+  return htmlString
+    .replace(objectPropertyMarkRegex, (_, group) => {
+      return `{${decodeHtmlEntities(group)}}`;
+    })
+    .replace(/\u00A0/g, ' ');
 }
 
 /**
@@ -355,7 +357,6 @@ function createMarkdownToken(md, tag) {
 const md = new MarkdownIt({
   html: true,
   linkify: true,
-  breaks: true,
 }).use(md => {
   // https://markdown-it.github.io/markdown-it
   // https://github.com/markdown-it/markdown-it/blob/master/docs/examples/renderer_rules.md
@@ -435,11 +436,11 @@ files.forEach(file => {
   const componentName = path
     .basename(file, '.md')
     .replace(/[^a-zA-Z0-9]/g, '_');
-
   const tsxContent = `import React from 'react';
 import { Link } from 'react-router-dom';
 import { AlterationPageLink, getAlternativeGenePageLinks } from 'app/shared/utils/UrlUtils';
 import { NewlyAddedGenesListItem } from 'app/pages/newsPage/NewlyAddedGenesListItem';
+import { TableOfContents } from 'app/pages/privacyNotice/TableOfContents';
 
 export default function ${componentName}() {
   return (

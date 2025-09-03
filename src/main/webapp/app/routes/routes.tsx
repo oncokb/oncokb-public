@@ -319,6 +319,13 @@ const AppRoutes = (props: {
         />
         <OncokbRoute
           exact
+          path={PAGE_ROUTE.PRIVACY}
+          windowStore={props.windowStore}
+          component={AboutPageNavTab}
+          pageContainer={PageContainer}
+        />
+        <OncokbRoute
+          exact
           path={PAGE_ROUTE.YEAR_END_SUMMARY}
           component={NewsPageNavTab}
           windowStore={props.windowStore}
