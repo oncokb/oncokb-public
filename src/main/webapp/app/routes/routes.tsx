@@ -402,6 +402,15 @@ const AppRoutes = (props: {
           exact
           isUserAuthenticated={props.authenticationStore.isUserAuthenticated}
           appStore={props.appStore}
+          path={PAGE_ROUTE.ACCOUNT_PASSWORD_RESET_REQUEST}
+          render={ReadOnlyMode(PasswordResetInit)}
+          windowStore={props.windowStore}
+          pageContainer={PageContainer}
+        />
+        <RecaptchaBoundaryRoute
+          exact
+          isUserAuthenticated={props.authenticationStore.isUserAuthenticated}
+          appStore={props.appStore}
           path={PAGE_ROUTE.ACCOUNT_PASSWORD_RESET_FINISH}
           render={ReadOnlyMode(PasswordResetFinish)}
           windowStore={props.windowStore}
