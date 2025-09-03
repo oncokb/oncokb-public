@@ -13,6 +13,8 @@ export function TableOfContents() {
       elements.push(
         <li>
           <a
+            // We need the href to have a value so that the css styles properly
+            // display as a link.
             href="#"
             onClick={e => {
               e.preventDefault();
