@@ -464,6 +464,8 @@ export type TypeaheadSearchResp = {
 
         'gene': Gene
 
+        'geneticType': "SOMATIC" | "GERMLINE"
+
         'highestResistanceLevel': string
 
         'highestSensitiveLevel': string
