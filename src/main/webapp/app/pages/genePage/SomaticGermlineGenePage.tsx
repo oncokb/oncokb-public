@@ -694,7 +694,7 @@ export default class SomaticGermlineGenePage extends React.Component<
                               {this.hasContent && (
                                 <>
                                   <MiniNavBarHeader
-                                    id="test"
+                                    id="gene-overview"
                                     showOnPage={false}
                                   >
                                     Gene Overview
