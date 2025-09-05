@@ -1001,6 +1001,7 @@ export const getAlleleStatesFromEvidence = (evidence: Evidence) => {
 export const getMechanismOfInheritanceFromAlleleStates = (
   alleleStates: AlleleState[]
 ) => {
+  // If more than one allele state, implies monoalleic and carrier, so mechanism of inheritance does not apply
   if (alleleStates.length === 0 || alleleStates.length > 1) {
     return undefined;
   }
