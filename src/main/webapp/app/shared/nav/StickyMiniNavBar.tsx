@@ -85,7 +85,6 @@ export default function StickyMiniNavBar({
 }: IStickyMiniNavBar) {
   const [headerHeight, setHeaderHeight] = useState(0);
   const [isSticky, setIsSticky] = useState(false);
-  const [isScrollingUp, setIsScrollingUp] = useState(false);
   const [sections, setSections] = useState<
     { id: string; label: string | null }[]
   >([]);
@@ -171,27 +170,32 @@ export default function StickyMiniNavBar({
       }
     };
   }, []);
+
   useEffect(() => {
-    let lastScrollY = 0;
+    const miniNavElement = stickyDivRef.current;
+    const headerElement = getHeader();
+    if (!miniNavElement || !headerElement) {
+      return;
+    }
+
+    let ticking = false;
     const handleScroll = () => {
-      if (stickyDivRef.current) {
-        const stickyOffset = stickyDivRef.current.getBoundingClientRect().top;
-        setIsSticky(stickyOffset <= headerHeight);
+      if (!ticking) {
+        requestAnimationFrame(() => {
+          const miniNavTop = miniNavElement.getBoundingClientRect().top;
+          const translateY = miniNavTop - headerHeight;
+          headerElement.style.transform = `translateY(${Math.min(
+            translateY,
+            0
+          )}px)`;
+          setIsSticky(miniNavTop === 0);
+          ticking = false;
+        });
       }
-      const headerElement = getHeader();
-      const currentScrollY = window.scrollY;
-      const newIsScrollingUp = currentScrollY < lastScrollY;
-      lastScrollY = currentScrollY;
-      if (headerElement) {
-        if (newIsScrollingUp) {
-          headerElement.setAttribute('style', '');
-        } else {
-          headerElement.setAttribute('style', 'position: static;');
-        }
-      }
-      setIsScrollingUp(newIsScrollingUp);
+      ticking = true;
     };
-    window.addEventListener('scroll', handleScroll);
+
+    window.addEventListener('scroll', handleScroll, { passive: true });
 
     return () => {
       window.removeEventListener('scroll', handleScroll);
@@ -231,7 +235,7 @@ export default function StickyMiniNavBar({
         isSticky ? styles.containerSticky : ''
       )}
       style={{
-        top: isScrollingUp ? headerHeight : '0px',
+        top: '0px',
         backgroundColor:
           isSticky && stickyBackgroundColor ? stickyBackgroundColor : undefined,
       }}

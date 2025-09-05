@@ -49,7 +49,7 @@ function AlterationItem({
 
 export type AlterationTileProps = {
   title?: string;
-  items: [AlterationItemProps, AlterationItemProps][];
+  items: AlterationItemProps[][];
 };
 
 function SomaticGermlineTile({

@@ -246,10 +246,6 @@ function createGeneticRiskTileProps(
           title: 'Penetrance',
           value: variantAnnotation.penetrance,
         },
-        {
-          title: 'Inheritance',
-          value: variantAnnotation.inheritanceMechanism,
-        },
       ],
     ],
   };
@@ -363,10 +359,6 @@ export function SomaticGermlineGeneInfoTiles({
           {
             title: 'Penetrance',
             value: geneNumber.penetrance,
-          },
-          {
-            title: 'Mechanism of Inheritance',
-            value: geneNumber.inheritanceMechanism,
           },
         ],
       ],

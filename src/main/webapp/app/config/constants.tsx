@@ -1030,3 +1030,10 @@ export const CLINVAR_VARIANT_BASE_URL =
   'https://www.ncbi.nlm.nih.gov/clinvar/variation';
 export const GENOME_NEXUS_ANNOTATION_BASE_URL =
   'https://www.genomenexus.org/annotation';
+
+export const ALLELE_STATE_MONOALLELIC = 'monoallelic';
+export const ALLELE_STATE_BIALLELEIC = 'biallelic';
+export const ALLELE_STATE_CARRIER = 'carrier';
+
+export const MECHANISM_OF_INHERITANCE_RECESSIVE = 'Autosomal Recessive';
+export const MECHANISM_OF_INHERITANCE_DOMINANT = 'Autosomal Dominant';
