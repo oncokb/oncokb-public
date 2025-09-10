@@ -35,7 +35,7 @@ jobs:
           DOCKER_USERNAME: ${{secrets.DOCKER_USERNAME}}
           DOCKER_PASSWORD: ${{secrets.DOCKER_PASSWORD}}
           TAG_NAME: ${{ inputs.tag-name || github.ref_name }}
-          REPOSITORY: 'oncokb/oncokb-public'
+          REPOSITORY: 'mskcc/oncokb-public'
         run: |
           ./mvnw -ntp package -Pprod verify jib:build \
           -DskipTests \
