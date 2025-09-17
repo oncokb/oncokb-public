@@ -15,7 +15,7 @@ import { LEVEL_PRIORITY_BY_TYPE, ONCOKB_TM } from 'app/config/constants';
 import { Alteration } from 'app/shared/api/generated/OncoKbPrivateAPI';
 import { sortByLevelWithLevels } from 'app/shared/utils/ReactTableUtils';
 import WithSeparator from 'react-with-separator';
-import GeneticTypeTag from 'app/components/geneticTypeTag/GeneticTypeTag';
+import GeneticTypeTag from 'app/components/tag/GeneticTypeTag';
 import { GENETIC_TYPE } from 'app/components/geneticTypeTabs/GeneticTypeTabs';
 
 export enum SearchOptionType {

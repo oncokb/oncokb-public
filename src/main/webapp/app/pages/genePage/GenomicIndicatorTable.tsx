@@ -2,6 +2,7 @@ import OncoKBTable, {
   SearchColumn,
 } from 'app/components/oncokbTable/OncoKBTable';
 import {
+  AlleleState,
   LG_TABLE_FIXED_HEIGHT,
   THRESHOLD_TABLE_FIXED_HEIGHT,
 } from 'app/config/constants';
@@ -13,6 +14,7 @@ import {
 } from 'app/shared/utils/Utils';
 import { LongText } from 'app/oncokb-frontend-commons/src/components/LongText';
 import { Evidence } from 'app/shared/api/generated/OncoKbAPI';
+import AlleleStateTag from 'app/components/tag/alleleStateTag';
 
 export const GenomicIndicatorTable: React.FunctionComponent<{
   data: Evidence[];
@@ -20,13 +22,26 @@ export const GenomicIndicatorTable: React.FunctionComponent<{
 }> = props => {
   const columns: SearchColumn<Evidence>[] = [
     {
-      Header: <span>Syndrome</span>,
-      accessor: 'name',
-      width: 400,
+      Header: <span>Genomic Indicator</span>,
+      maxWidth: 200,
+      Cell(row: { original: Evidence }) {
+        const alleleStates = getAlleleStatesFromEvidence(row.original);
+        const alleleState: AlleleState | undefined = alleleStates.includes(
+          'carrier'
+        )
+          ? 'carrier'
+          : alleleStates[0];
+        return (
+          <>
+            <div>{row.original.name}</div>
+            <AlleleStateTag alleleState={alleleState} />
+          </>
+        );
+      },
     },
     {
       Header: <span>Inheritance</span>,
-      width: 200,
+      maxWidth: 200,
       Cell(row: { original: Evidence }) {
         return (
           <span>
@@ -39,7 +54,7 @@ export const GenomicIndicatorTable: React.FunctionComponent<{
     },
     {
       Header: <span>Associated Variants</span>,
-      width: 200,
+      maxWidth: 200,
       Cell(row: { original: Evidence }) {
         return (
           <span>
@@ -49,11 +64,6 @@ export const GenomicIndicatorTable: React.FunctionComponent<{
           </span>
         );
       },
-    },
-    {
-      Header: <span>Allele State</span>,
-      accessor: 'knownEffect',
-      width: 150,
     },
     {
       Header: <span>Description</span>,

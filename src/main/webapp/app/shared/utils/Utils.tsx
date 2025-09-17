@@ -10,6 +10,7 @@ import {
   ALLELE_STATE_BIALLELEIC,
   ALLELE_STATE_CARRIER,
   ALLELE_STATE_MONOALLELIC,
+  AlleleState,
   AMPLIFICATION,
   APP_LOCAL_DATE_FORMAT,
   APP_LOCAL_DATETIME_FORMAT,
@@ -970,11 +971,6 @@ export const getFdaSubmissionNumber = (
     ? `${primaryNumber}/${supplementNumber}`
     : primaryNumber;
 };
-
-type AlleleState =
-  | typeof ALLELE_STATE_MONOALLELIC
-  | typeof ALLELE_STATE_BIALLELEIC
-  | typeof ALLELE_STATE_CARRIER;
 
 const isAlleleState = (str: string): str is AlleleState => {
   return (

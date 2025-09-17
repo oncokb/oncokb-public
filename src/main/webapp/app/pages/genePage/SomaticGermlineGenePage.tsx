@@ -81,7 +81,7 @@ import StickyMiniNavBar, {
 } from 'app/shared/nav/StickyMiniNavBar';
 import MiniNavBarHeader from 'app/shared/nav/MiniNavBarHeader';
 import { GenomicIndicatorTable } from 'app/pages/genePage/GenomicIndicatorTable';
-import GeneticTypeTag from 'app/components/geneticTypeTag/GeneticTypeTag';
+import GeneticTypeTag from 'app/components/tag/GeneticTypeTag';
 import { SomaticGermlineGeneInfoTiles } from 'app/shared/tiles/tile-utils';
 
 interface MatchParams {

@@ -74,7 +74,7 @@ import GermlineSomaticHeader from 'app/shared/header/GermlineSomaticHeader';
 import SomaticGermlineBreadcrumbs from 'app/shared/nav/SomaticGermlineBreadcrumbs';
 import { RouterStore } from 'mobx-react-router';
 import { SomaticGermlineAlterationTiles } from 'app/shared/tiles/tile-utils';
-import GeneticTypeTag from 'app/components/geneticTypeTag/GeneticTypeTag';
+import GeneticTypeTag from 'app/components/tag/GeneticTypeTag';
 import VariantOverView from 'app/shared/sections/VariantOverview';
 
 type MatchParams = {

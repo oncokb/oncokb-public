@@ -4,7 +4,7 @@ import { FeedbackType } from 'app/components/feedback/types';
 import { FeedbackIcon } from 'app/components/feedback/FeedbackIcon';
 import styles from './GermlineSomaticHeader.module.scss';
 import AppStore from 'app/store/AppStore';
-import GeneticTypeTag from 'app/components/geneticTypeTag/GeneticTypeTag';
+import GeneticTypeTag from 'app/components/tag/GeneticTypeTag';
 export default function GermlineSomaticHeader({
   includeEmailLink,
   annotation,

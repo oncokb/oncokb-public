@@ -1,6 +1,6 @@
 @import '../../variables';
 
-.geneticTypeTag {
+.tag {
   font-weight: 500 !important;
   font-family: 'Gotham Book';
   font-size: 12px;
@@ -14,14 +14,37 @@
 }
 
 .germlineTag {
-  @extend .geneticTypeTag;
+  @extend .tag;
   color: $primary;
   border: var(--radius-2, 2px) solid var(--Color-11, $primary);
   background: #f0f5ff;
 }
 
 .somaticTag {
-  @extend .geneticTypeTag;
+  @extend .tag;
   color: #ffffff;
   background: $primary;
+}
+
+.alleleStateTag {
+  @extend .tag;
+  font-size: 15px;
+  line-height: 22.5px;
+}
+
+.carrierTag {
+  @extend .alleleStateTag;
+  line-height: 22.5px;
+  color: '#4D5358';
+  background: #f2f4f8;
+  border: 1.5px solid #dde1e6;
+}
+
+.monoallelicAndBiallelicTag {
+  @extend .alleleStateTag;
+  font-size: 15px;
+  line-height: 22.5px;
+  border: 1.5px solid #fddc69;
+  color: #684e00;
+  background: #fcf4d6;
 }
