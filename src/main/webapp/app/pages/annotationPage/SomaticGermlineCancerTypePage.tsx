@@ -71,7 +71,7 @@ import GermlineSomaticHeader from 'app/shared/header/GermlineSomaticHeader';
 import SomaticGermlineCancerTypeSelect from 'app/shared/dropdown/SomaticGermlineCancerTypeSelect';
 import { RouterStore } from 'mobx-react-router';
 import { SomaticGermlineAlterationTiles } from 'app/shared/tiles/tile-utils';
-import GeneticTypeTag from 'app/components/geneticTypeTag/GeneticTypeTag';
+import GeneticTypeTag from 'app/components/tag/GeneticTypeTag';
 import VariantOverView from 'app/shared/sections/VariantOverview';
 import styles from './SomaticGermlineCancerTypePage.module.scss';
 

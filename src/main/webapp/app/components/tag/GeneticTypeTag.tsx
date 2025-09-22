@@ -1,7 +1,7 @@
 import React, { FunctionComponent } from 'react';
 import { GENETIC_TYPE } from 'app/components/geneticTypeTabs/GeneticTypeTabs';
 import classnames from 'classnames';
-import styles from './genetic-type-tag.module.scss';
+import styles from './tag.module.scss';
 import { capitalize } from 'cbioportal-frontend-commons';
 
 const GeneticTypeTag: FunctionComponent<{

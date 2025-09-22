@@ -1034,6 +1034,10 @@ export const GENOME_NEXUS_ANNOTATION_BASE_URL =
 export const ALLELE_STATE_MONOALLELIC = 'monoallelic';
 export const ALLELE_STATE_BIALLELEIC = 'biallelic';
 export const ALLELE_STATE_CARRIER = 'carrier';
+export type AlleleState =
+  | typeof ALLELE_STATE_MONOALLELIC
+  | typeof ALLELE_STATE_BIALLELEIC
+  | typeof ALLELE_STATE_CARRIER;
 
 export const MECHANISM_OF_INHERITANCE_RECESSIVE = 'Autosomal Recessive';
 export const MECHANISM_OF_INHERITANCE_DOMINANT = 'Autosomal Dominant';
