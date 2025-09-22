@@ -14,7 +14,7 @@ import {
 } from 'app/shared/utils/Utils';
 import { LongText } from 'app/oncokb-frontend-commons/src/components/LongText';
 import { Evidence } from 'app/shared/api/generated/OncoKbAPI';
-import AlleleStateTag from 'app/components/tag/alleleStateTag';
+import AlleleStateTag from 'app/components/tag/AlleleStateTag';
 
 export const GenomicIndicatorTable: React.FunctionComponent<{
   data: Evidence[];
@@ -34,7 +34,7 @@ export const GenomicIndicatorTable: React.FunctionComponent<{
         return (
           <>
             <div>{row.original.name}</div>
-            <AlleleStateTag alleleState={alleleState} />
+            {alleleState && <AlleleStateTag alleleState={alleleState} />}
           </>
         );
       },
