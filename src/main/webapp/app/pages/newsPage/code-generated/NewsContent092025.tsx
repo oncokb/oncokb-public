@@ -12,9 +12,10 @@ export default function NewsContent092025() {
     <>
       <ul>
         <li>
-          We have removed ERBB2 V697L, Q709L, A710V and E717D from the level 1
-          association for ERBB2 Tyrosine Kinase Domain Activating Mutations in
-          non-small cell lung cancer for zongertinib.
+          We have updated the Level 1 annotation of ERBB2 Tyrosine Kinase Domain
+          activating mutations in NSCLC (in association with zongertinib) to
+          exclude the following mutations, which fall outside the TKD (ERBB2
+          V697L, Q709L, A710V and E717D)
         </li>
         <li>
           Updated Therapeutic Implications - Addition of drug(s) associated with
@@ -43,10 +44,8 @@ export default function NewsContent092025() {
                 Oncogenic Mutations
                 <br />
                 <br />
-                (excluding L726F, L726I, T733I, L768S, L755A, L755P, L755S,
-                L755W, I767M, D769H, D769Y, V773L, G776S, G776V, V777L, V777M,
-                V794M, T798M, D808N, G815R, D821N, L841V, V842I, L866M, L869R,
-                770_831ins)
+                (excluding select TKD activating mutations, which are currently
+                Level 1)
               </td>
               <td>Non-Small Cell Lung Cancer</td>
               <td>
