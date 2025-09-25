@@ -12,19 +12,14 @@ export default function NewsContent092025() {
     <>
       <ul>
         <li>
-          <p>
-            We have removed ERBB2 V697L, Q709L, A710V and E717D from the level 1
-            association for ERBB2 Tyrosine Kinase Domain Activating Mutations in
-            non-small cell lung cancer for zongertinib.
-          </p>
+          We have removed ERBB2 V697L, Q709L, A710V and E717D from the level 1
+          association for ERBB2 Tyrosine Kinase Domain Activating Mutations in
+          non-small cell lung cancer for zongertinib.
         </li>
         <li>
-          <p>
-            Updated Therapeutic Implications - Addition of drug(s) associated
-            with a tumor type-specific leveled alteration(s) currently in
-            OncoKB™ (without changing the alteration's highest level of
-            evidence)
-          </p>
+          Updated Therapeutic Implications - Addition of drug(s) associated with
+          a tumor type-specific leveled alteration(s) currently in OncoKB™
+          (without changing the alteration's highest level of evidence)
         </li>
       </ul>
       <div className="table-responsive">

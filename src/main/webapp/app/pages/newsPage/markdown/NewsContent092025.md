@@ -1,5 +1,4 @@
 - We have removed ERBB2 V697L, Q709L, A710V and E717D from the level 1 association for ERBB2 Tyrosine Kinase Domain Activating Mutations in non-small cell lung cancer for zongertinib.
-
 - Updated Therapeutic Implications - Addition of drug(s) associated with a tumor type-specific leveled alteration(s) currently in OncoKB™ (without changing the alteration's highest level of evidence)
 
 | Level | Gene  | Mutation                                                                                                                                                                                                                  | Cancer Type                | Level-Associated Drug(s) in OncoKB™                                                                                                                                                              | Drug(s) Added to OncoKB™                   | Evidence                                                                                                                     |
