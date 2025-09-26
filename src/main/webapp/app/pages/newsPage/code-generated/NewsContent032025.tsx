@@ -5,6 +5,7 @@ import {
   getAlternativeGenePageLinks,
 } from 'app/shared/utils/UrlUtils';
 import { NewlyAddedGenesListItem } from 'app/pages/newsPage/NewlyAddedGenesListItem';
+import { TableOfContents } from 'app/pages/privacyNotice/TableOfContents';
 
 export default function NewsContent032025() {
   return (

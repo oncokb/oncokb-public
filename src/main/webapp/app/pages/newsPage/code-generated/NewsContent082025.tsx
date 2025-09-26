@@ -5,6 +5,7 @@ import {
   getAlternativeGenePageLinks,
 } from 'app/shared/utils/UrlUtils';
 import { NewlyAddedGenesListItem } from 'app/pages/newsPage/NewlyAddedGenesListItem';
+import { TableOfContents } from 'app/pages/privacyNotice/TableOfContents';
 
 export default function NewsContent082025() {
   return (
@@ -39,7 +40,7 @@ export default function NewsContent082025() {
               <td>1</td>
               <td>{getAlternativeGenePageLinks('ERBB2')}</td>
               <td>
-                {'Tyrosine Kinase Domain Activating Mutations ('}
+                Tyrosine Kinase Domain Activating Mutations (
                 <AlterationPageLink hugoSymbol="ERBB2" alteration="V697L">
                   V697L
                 </AlterationPageLink>
@@ -159,7 +160,7 @@ export default function NewsContent082025() {
                 <AlterationPageLink hugoSymbol="ERBB2" alteration="770_831ins">
                   770_831ins
                 </AlterationPageLink>
-                {')'}
+                )
               </td>
               <td>Non-Small Cell Lung Cancer</td>
               <td>

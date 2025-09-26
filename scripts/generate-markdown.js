@@ -236,75 +236,99 @@ function addAutoTableLinks(md, state) {
           createMarkdownToken(md, 'br/')[0],
           createMarkdownTextToken(md, excludingSection),
         ];
+      } else if (
+        child.content.startsWith(
+          'Tyrosine Kinase Domain Activating Mutations ('
+        )
+      ) {
+        const activatingMutationTitleStr =
+          'Tyrosine Kinase Domain Activating Mutations (';
+        const mutationNames = child.content
+          .replace(`${activatingMutationTitleStr} `, '')
+          .trim()
+          // remove ')' at the end of the string
+          .slice(0, -1)
+          .split(',')
+          .map(x => x.trim());
 
-        continue;
-      }
-      const mutationNames = child.content.split(',').map(x => x.trim());
-      const allMutationLinks = [];
-      for (mutationName of mutationNames) {
-        let mutationLinks = [
-          {
-            alteration: mutationName,
-            linkText: mutationName,
-          },
+        const allMutationLinks = createMutationLinks(
+          md,
+          currentGene,
+          mutationNames
+        );
+
+        token.children = [
+          createMarkdownTextToken(md, activatingMutationTitleStr),
+          ...allMutationLinks,
+          createMarkdownTextToken(md, ')'),
         ];
-        // Check for for cases like L718Q/V
-        if (ALTERNATIVE_ALLELES_REGEX.test(mutationName)) {
-          const matches = ALTERNATIVE_ALLELES_REGEX.exec(mutationName);
-          if (matches) {
-            const positionalVar = matches[1];
-            const alternativeAlleles = matches[2];
-            mutationLinks = alternativeAlleles
-              .split('/')
-              .map((allele, index) => {
-                return {
-                  alteration:
-                    index === 0 ? `${positionalVar}${allele}` : allele,
-                  linkText: `${positionalVar}${allele}`,
-                };
-              });
-          }
-        }
-
-        let i = 0;
-        for (const mutationLink of mutationLinks) {
-          if (i > 0) {
-            // Add / text for cases like L718Q/V
-            const textToken = createMarkdownTextToken(md, '/');
-            allMutationLinks.push(textToken);
-          }
-          i++;
-          const alterationPageLinkTags = createMarkdownToken(
-            md,
-            'AlterationPageLink'
-          );
-          alterationPageLinkTags[0].attrSet('hugoSymbol', currentGene);
-          alterationPageLinkTags[0].attrSet(
-            'alteration',
-            mutationLink.linkText
-          );
-          if (i > 0) {
-            const linkEndToken = alterationPageLinkTags.pop();
-            const textToken = createMarkdownTextToken(
-              md,
-              mutationLink.alteration
-            );
-            alterationPageLinkTags.push(textToken, linkEndToken);
-          }
-          allMutationLinks.push(...alterationPageLinkTags);
-        }
-        const commaToken = createMarkdownTextToken(md, ', ');
-        allMutationLinks.push(commaToken);
+      } else {
+        const mutationNames = child.content.split(',').map(x => x.trim());
+        const allMutationLinks = createMutationLinks(
+          md,
+          currentGene,
+          mutationNames
+        );
+        token.children = allMutationLinks;
       }
-      // remove the last comma token
-      allMutationLinks.pop();
-      token.children = allMutationLinks;
     } else if (inTh && token.content === 'Gene') {
       geneIdx = columnIdx;
     } else if (inTh && token.content === 'Mutation') {
       mutationIdx = columnIdx;
     }
   }
+}
+
+function createMutationLinks(md, currentGene, mutationNames) {
+  const allMutationLinks = [];
+  for (mutationName of mutationNames) {
+    let mutationLinks = [
+      {
+        alteration: mutationName,
+        linkText: mutationName,
+      },
+    ];
+    // Check for for cases like L718Q/V
+    if (ALTERNATIVE_ALLELES_REGEX.test(mutationName)) {
+      const matches = ALTERNATIVE_ALLELES_REGEX.exec(mutationName);
+      if (matches) {
+        const positionalVar = matches[1];
+        const alternativeAlleles = matches[2];
+        mutationLinks = alternativeAlleles.split('/').map((allele, index) => {
+          return {
+            alteration: index === 0 ? `${positionalVar}${allele}` : allele,
+            linkText: `${positionalVar}${allele}`,
+          };
+        });
+      }
+    }
+    let i = 0;
+    for (const mutationLink of mutationLinks) {
+      if (i > 0) {
+        // Add / text for cases like L718Q/V
+        const textToken = createMarkdownTextToken(md, '/');
+        allMutationLinks.push(textToken);
+      }
+      i++;
+      const alterationPageLinkTags = createMarkdownToken(
+        md,
+        'AlterationPageLink'
+      );
+      alterationPageLinkTags[0].attrSet('hugoSymbol', currentGene);
+      alterationPageLinkTags[0].attrSet('alteration', mutationLink.linkText);
+      if (i > 0) {
+        const linkEndToken = alterationPageLinkTags.pop();
+        const textToken = createMarkdownTextToken(md, mutationLink.alteration);
+        alterationPageLinkTags.push(textToken, linkEndToken);
+      }
+      allMutationLinks.push(...alterationPageLinkTags);
+    }
+    const commaToken = createMarkdownTextToken(md, ', ');
+    allMutationLinks.push(commaToken);
+  }
+  // remove the last comma token
+  allMutationLinks.pop();
+  return allMutationLinks;
 }
 
 /**
