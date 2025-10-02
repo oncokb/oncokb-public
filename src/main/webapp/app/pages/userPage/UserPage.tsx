@@ -619,7 +619,9 @@ export default class UserPage extends React.Component<IUserPage> {
                             <QuickToolButton
                               onClick={() =>
                                 this.props.routing.history.push(
-                                  `${PAGE_ROUTE.ADMIN_SEND_EMAILS}?to=${this.user.email}`
+                                  `${
+                                    PAGE_ROUTE.ADMIN_SEND_EMAILS
+                                  }?to=${encodeURIComponent(this.user.email)}`
                                 )
                               }
                             >
