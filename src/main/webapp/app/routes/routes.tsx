@@ -83,6 +83,7 @@ const AppRoutes = (props: {
         windowStore={props.windowStore}
         component={HomePage}
         pageContainer={PageContainer}
+        authenticationStore={props.authenticationStore}
       />
       <Redirect
         exact
@@ -134,6 +135,7 @@ const AppRoutes = (props: {
           component={Login}
           windowStore={props.windowStore}
           pageContainer={PageContainer}
+          authenticationStore={props.authenticationStore}
         />
         <ErrorBoundaryRoute
           exact
@@ -141,6 +143,7 @@ const AppRoutes = (props: {
           component={Logout}
           windowStore={props.windowStore}
           pageContainer={PageContainer}
+          authenticationStore={props.authenticationStore}
         />
         <RecaptchaBoundaryRoute
           exact
@@ -150,12 +153,14 @@ const AppRoutes = (props: {
           component={ApiAccessPageNavTab}
           windowStore={props.windowStore}
           pageContainer={PageContainer}
+          authenticationStore={props.authenticationStore}
         />
         <ErrorBoundaryRoute
           exact
           path={PAGE_ROUTE.API_ACCESS}
           component={ApiAccessPageNavTab}
           windowStore={props.windowStore}
+          authenticationStore={props.authenticationStore}
           pageContainer={PageContainer}
         />
         <ErrorBoundaryRoute
@@ -163,6 +168,7 @@ const AppRoutes = (props: {
           path={PAGE_ROUTE.FAQ_ACCESS}
           component={FAQPage}
           windowStore={props.windowStore}
+          authenticationStore={props.authenticationStore}
           pageContainer={PageContainer}
         />
         <RecaptchaBoundaryRoute
@@ -172,6 +178,7 @@ const AppRoutes = (props: {
           path={PAGE_ROUTE.CANCER_GENES}
           component={CancerGenesPage}
           windowStore={props.windowStore}
+          authenticationStore={props.authenticationStore}
           pageContainer={PageContainer}
         />
         <RecaptchaBoundaryRoute
@@ -181,6 +188,7 @@ const AppRoutes = (props: {
           path={PAGE_ROUTE.ACTIONABLE_GENE}
           component={ActionableGenesPage}
           windowStore={props.windowStore}
+          authenticationStore={props.authenticationStore}
           pageContainer={PageContainer}
         />
         <RecaptchaBoundaryRoute
@@ -190,6 +198,7 @@ const AppRoutes = (props: {
           path={PAGE_ROUTE.ONCOLOGY_TX}
           component={OncologyTherapiesPage}
           windowStore={props.windowStore}
+          authenticationStore={props.authenticationStore}
           pageContainer={PageContainer}
         />
         <RecaptchaBoundaryRoute
@@ -199,6 +208,7 @@ const AppRoutes = (props: {
           path={PAGE_ROUTE.CDX}
           component={CompanionDiagnosticDevicePage}
           windowStore={props.windowStore}
+          authenticationStore={props.authenticationStore}
           pageContainer={PageContainer}
         />
         <RecaptchaBoundaryRoute
@@ -208,7 +218,9 @@ const AppRoutes = (props: {
           path={PAGE_ROUTE.SOMATIC_GENE}
           component={SomaticGermlineGenePage}
           windowStore={props.windowStore}
+          authenticationStore={props.authenticationStore}
           pageContainer={({ children }) => children}
+          hasRegistrationLock
         />
         <RecaptchaBoundaryRoute
           exact
@@ -217,7 +229,9 @@ const AppRoutes = (props: {
           path={PAGE_ROUTE.GERMLINE_GENE}
           component={SomaticGermlineGenePage}
           windowStore={props.windowStore}
+          authenticationStore={props.authenticationStore}
           pageContainer={({ children }) => children}
+          hasRegistrationLock
         />
         <Redirect // need to be sure not matching new gene route
           exact
@@ -231,7 +245,9 @@ const AppRoutes = (props: {
           path={PAGE_ROUTE.GERMLINE_ALTERATION}
           component={SomaticGermlineAlterationPage}
           windowStore={props.windowStore}
+          authenticationStore={props.authenticationStore}
           pageContainer={({ children }) => children}
+          hasRegistrationLock
         />
         <RecaptchaBoundaryRoute
           exact
@@ -240,7 +256,9 @@ const AppRoutes = (props: {
           path={PAGE_ROUTE.SOMATIC_ALTERATION}
           component={SomaticGermlineAlterationPage}
           windowStore={props.windowStore}
+          authenticationStore={props.authenticationStore}
           pageContainer={({ children }) => children}
+          hasRegistrationLock
         />
         <Redirect // need to be sure not matching new alteration route
           exact
@@ -254,7 +272,9 @@ const AppRoutes = (props: {
           path={PAGE_ROUTE.GERMLINE_TUMOR_TYPE}
           component={SomaticGermlineCancerTypePage}
           windowStore={props.windowStore}
+          authenticationStore={props.authenticationStore}
           pageContainer={({ children }) => children}
+          hasRegistrationLock
         />
         <RecaptchaBoundaryRoute
           exact
@@ -263,7 +283,9 @@ const AppRoutes = (props: {
           path={PAGE_ROUTE.SOMATIC_TUMOR_TYPE}
           component={SomaticGermlineCancerTypePage}
           windowStore={props.windowStore}
+          authenticationStore={props.authenticationStore}
           pageContainer={({ children }) => children}
+          hasRegistrationLock
         />
         <RecaptchaBoundaryRoute
           exact
@@ -272,6 +294,7 @@ const AppRoutes = (props: {
           path={PAGE_ROUTE.HGVSG_WITH_QUERY}
           component={GenomicPage}
           windowStore={props.windowStore}
+          authenticationStore={props.authenticationStore}
           pageContainer={PageContainer}
         />
         <RecaptchaBoundaryRoute
@@ -281,6 +304,7 @@ const AppRoutes = (props: {
           path={PAGE_ROUTE.GENOMIC_CHANGE_WITH_QUERY}
           component={GenomicPage}
           windowStore={props.windowStore}
+          authenticationStore={props.authenticationStore}
           pageContainer={PageContainer}
         />
         <PrivateRoute
@@ -297,6 +321,7 @@ const AppRoutes = (props: {
           path={PAGE_ROUTE.ABOUT}
           component={AboutPageNavTab}
           windowStore={props.windowStore}
+          authenticationStore={props.authenticationStore}
           pageContainer={PageContainer}
         />
         <OncokbRoute
@@ -304,6 +329,7 @@ const AppRoutes = (props: {
           path={PAGE_ROUTE.TEAM}
           component={AboutPageNavTab}
           windowStore={props.windowStore}
+          authenticationStore={props.authenticationStore}
           pageContainer={PageContainer}
         />
         <OncokbRoute
@@ -311,12 +337,14 @@ const AppRoutes = (props: {
           path={PAGE_ROUTE.SOP}
           component={AboutPageNavTab}
           windowStore={props.windowStore}
+          authenticationStore={props.authenticationStore}
           pageContainer={PageContainer}
         />
         <OncokbRoute
           exact
           path={PAGE_ROUTE.PRIVACY}
           windowStore={props.windowStore}
+          authenticationStore={props.authenticationStore}
           component={AboutPageNavTab}
           pageContainer={PageContainer}
         />
@@ -325,6 +353,7 @@ const AppRoutes = (props: {
           path={PAGE_ROUTE.YEAR_END_SUMMARY}
           component={NewsPageNavTab}
           windowStore={props.windowStore}
+          authenticationStore={props.authenticationStore}
           pageContainer={PageContainer}
         />
         <OncokbRoute
@@ -332,6 +361,7 @@ const AppRoutes = (props: {
           path={PAGE_ROUTE.NEWS}
           component={NewsPageNavTab}
           windowStore={props.windowStore}
+          authenticationStore={props.authenticationStore}
           pageContainer={PageContainer}
         />
         <OncokbRoute
@@ -339,6 +369,7 @@ const AppRoutes = (props: {
           path={PAGE_ROUTE.FDA_RECOGNITION}
           component={AboutPageNavTab}
           windowStore={props.windowStore}
+          authenticationStore={props.authenticationStore}
           pageContainer={PageContainer}
         />
         <OncokbRoute
@@ -346,12 +377,14 @@ const AppRoutes = (props: {
           path={PAGE_ROUTE.TERMS}
           component={ApiAccessPageNavTab}
           windowStore={props.windowStore}
+          authenticationStore={props.authenticationStore}
           pageContainer={PageContainer}
         />
         <OncokbRoute
           exact
           path={PAGE_ROUTE.LEVELS}
           windowStore={props.windowStore}
+          authenticationStore={props.authenticationStore}
           pageContainer={PageContainer}
         >
           {getOldLevelsRedirectRoute(window.location.hash)}
@@ -361,6 +394,7 @@ const AppRoutes = (props: {
           path={PAGE_ROUTE.DX}
           component={LevelOfEvidencePage}
           windowStore={props.windowStore}
+          authenticationStore={props.authenticationStore}
           pageContainer={PageContainer}
         />
         <OncokbRoute
@@ -368,6 +402,7 @@ const AppRoutes = (props: {
           path={PAGE_ROUTE.PX}
           component={LevelOfEvidencePage}
           windowStore={props.windowStore}
+          authenticationStore={props.authenticationStore}
           pageContainer={PageContainer}
         />
         <OncokbRoute
@@ -375,6 +410,7 @@ const AppRoutes = (props: {
           path={PAGE_ROUTE.V2}
           component={LevelOfEvidencePage}
           windowStore={props.windowStore}
+          authenticationStore={props.authenticationStore}
           pageContainer={PageContainer}
         />
         <OncokbRoute
@@ -382,6 +418,7 @@ const AppRoutes = (props: {
           path={PAGE_ROUTE.FDA_NGS}
           component={LevelOfEvidencePage}
           windowStore={props.windowStore}
+          authenticationStore={props.authenticationStore}
           pageContainer={PageContainer}
         />
 
@@ -392,6 +429,7 @@ const AppRoutes = (props: {
           path={PAGE_ROUTE.ACCOUNT_VERIFY}
           render={ReadOnlyMode(ActivateAccount)}
           windowStore={props.windowStore}
+          authenticationStore={props.authenticationStore}
           pageContainer={PageContainer}
         />
         <RecaptchaBoundaryRoute
@@ -401,6 +439,7 @@ const AppRoutes = (props: {
           path={PAGE_ROUTE.ACCOUNT_PASSWORD_RESET_REQUEST}
           render={ReadOnlyMode(PasswordResetInit)}
           windowStore={props.windowStore}
+          authenticationStore={props.authenticationStore}
           pageContainer={PageContainer}
         />
         <RecaptchaBoundaryRoute
@@ -410,6 +449,7 @@ const AppRoutes = (props: {
           path={PAGE_ROUTE.ACCOUNT_PASSWORD_RESET_FINISH}
           render={ReadOnlyMode(PasswordResetFinish)}
           windowStore={props.windowStore}
+          authenticationStore={props.authenticationStore}
           pageContainer={PageContainer}
         />
         <RecaptchaBoundaryRoute
@@ -419,6 +459,7 @@ const AppRoutes = (props: {
           path={PAGE_ROUTE.ACCOUNT_ACTIVE_TRIAL_FINISH}
           render={ReadOnlyMode(ActivateTrialFinish)}
           windowStore={props.windowStore}
+          authenticationStore={props.authenticationStore}
           pageContainer={PageContainer}
         />
         <PrivateRoute
@@ -483,6 +524,7 @@ const AppRoutes = (props: {
         <ErrorBoundaryRoute
           component={PageNotFound}
           windowStore={props.windowStore}
+          authenticationStore={props.authenticationStore}
           pageContainer={PageContainer}
         />
       </Switch>

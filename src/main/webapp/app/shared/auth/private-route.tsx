@@ -77,6 +77,12 @@ export const PrivateRoute = observer(
         }`
       );
 
-    return <OncokbRoute {...rest} render={renderRedirect} />;
+    return (
+      <OncokbRoute
+        authenticationStore={authenticationStore}
+        {...rest}
+        render={renderRedirect}
+      />
+    );
   }
 );

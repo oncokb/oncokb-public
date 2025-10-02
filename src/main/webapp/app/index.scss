@@ -327,3 +327,19 @@ input[type='radio']:checked {
 .grecaptcha-badge {
   z-index: 1;
 }
+
+/*
+ Adds an asterisk to any <label> that is immediately followed
+ by a required form control.
+
+ :has(+ *[required]) means:
+   - +  → select the next adjacent sibling
+   - *  → any element type
+   - [required] → that element has the required attribute
+
+ So if the element directly after the label is required,
+ this rule appends "*" using ::after.
+*/
+label:has(+ *[required])::after {
+  content: ' * ';
+}
