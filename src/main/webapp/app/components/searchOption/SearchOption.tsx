@@ -12,7 +12,10 @@ import AppStore from 'app/store/AppStore';
 import { FeedbackIcon } from 'app/components/feedback/FeedbackIcon';
 import { FeedbackType } from 'app/components/feedback/types';
 import { LEVEL_PRIORITY_BY_TYPE, ONCOKB_TM } from 'app/config/constants';
-import { Alteration } from 'app/shared/api/generated/OncoKbPrivateAPI';
+import {
+  Alteration,
+  TypeaheadSearchResp,
+} from 'app/shared/api/generated/OncoKbPrivateAPI';
 import { sortByLevelWithLevels } from 'app/shared/utils/ReactTableUtils';
 import WithSeparator from 'react-with-separator';
 import GeneticTypeTag from 'app/components/tag/GeneticTypeTag';
@@ -26,6 +29,23 @@ export enum SearchOptionType {
   CANCER_TYPE = 'CANCER_TYPE',
   TEXT = 'TEXT',
 }
+
+function getGeneticTypeTag(geneticType: TypeaheadSearchResp['geneticType']) {
+  return geneticType &&
+    Object.values(GENETIC_TYPE).includes(
+      geneticType.toLowerCase() as GENETIC_TYPE
+    ) ? (
+    <div>
+      <GeneticTypeTag
+        isGermline={geneticType === 'GERMLINE'}
+        className={'ml-2'}
+      />
+    </div>
+  ) : (
+    <></>
+  );
+}
+
 type SearchOptionProps = {
   search: string | undefined;
   type: SearchOptionType;
@@ -54,15 +74,7 @@ const GeneSearchOption: React.FunctionComponent<{
           textToHighlight={`${props.data.gene.hugoSymbol} (Entrez Gene: ${props.data.gene.entrezGeneId})`}
           autoEscape
         />
-        {props.data.annotation &&
-          Object.values(GENETIC_TYPE).includes(
-            props.data.annotation.toLowerCase() as GENETIC_TYPE
-          ) && (
-            <GeneticTypeTag
-              isGermline={props.data.annotation.toLowerCase() === 'germline'}
-              className={'ml-2'}
-            />
-          )}
+        {getGeneticTypeTag(props.data.geneticType)}
         {props.data.highestSensitiveLevel ||
         props.data.highestResistanceLevel ? (
           <span className={classnames(styles.subTitle, 'ml-2')}>
@@ -113,6 +125,7 @@ const AlterationSearchOption: React.FunctionComponent<{
           searchWords={[props.search]}
           autoEscape
         />
+        {getGeneticTypeTag(props.data.geneticType)}
         <OncoKBAnnotationIcon
           className={'mb-1 ml-1'}
           oncogenicity={props.data.oncogenicity}
@@ -153,6 +166,7 @@ const GenomicSearchOption: React.FunctionComponent<{
       <div className={'d-flex align-items-center'}>
         Query is annotated as {props.data.gene.hugoSymbol} /{' '}
         {props.data.alterationsName}
+        {getGeneticTypeTag(props.data.geneticType)}
         <OncoKBAnnotationIcon
           className={'mb-1 ml-1'}
           oncogenicity={props.data.oncogenicity}
@@ -176,12 +190,13 @@ const DrugSearchOption: React.FunctionComponent<{
 }> = props => {
   return (
     <>
-      <div>
+      <div className="d-flex">
         <Highlighter
           searchWords={[props.search]}
           textToHighlight={props.data.drug.drugName}
           autoEscape
         />
+        {getGeneticTypeTag(props.data.geneticType)}
       </div>
       <div className={styles.subTitle}>
         {props.data.highestSensitiveLevel && (
