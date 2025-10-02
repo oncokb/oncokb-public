@@ -639,8 +639,13 @@ export class SomaticGermlineAlterationPage extends React.Component<
                           Genomic Indicators
                         </MiniNavBarHeader>
                         <GenomicIndicatorTable
-                          data={this.store.genomicIndicators.result}
-                          isPending={this.store.genomicIndicators.isPending}
+                          data={
+                            this.store.genomicIndicatorsAssociatedWithVariant
+                          }
+                          isPending={
+                            this.store.annotationResult.isPending ||
+                            this.store.genomicIndicators.isPending
+                          }
                         />
                       </>
                     )}
