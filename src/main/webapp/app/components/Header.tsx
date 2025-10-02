@@ -25,6 +25,7 @@ import AppStore from 'app/store/AppStore';
 import OptimizedImage from 'app/shared/image/OptimizedImage';
 import { AppConfig } from 'app/appConfig';
 import { Location } from 'history';
+import RegistrationNudge from './registrationNudge/RegistrationNudge';
 
 export interface IHeaderProps {
   isUserAuthenticated: boolean;
@@ -181,6 +182,10 @@ class Header extends React.Component<IHeaderProps> {
           authStore={this.props.authStore}
         />
         <header className="sticky-top header">
+          <RegistrationNudge
+            windowStore={this.props.windowStore}
+            authStore={this.props.authStore}
+          />
           <Navbar
             bg="oncokb"
             expand="lg"

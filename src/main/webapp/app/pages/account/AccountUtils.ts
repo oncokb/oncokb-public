@@ -31,17 +31,17 @@ export function getAccountInfoTitle(
     let title: string;
     switch (license) {
       case LicenseType.ACADEMIC:
-        title = 'Institution / University';
+        title = 'Institution / University Name';
         break;
       case LicenseType.COMMERCIAL:
       case LicenseType.RESEARCH_IN_COMMERCIAL:
-        title = 'Company';
+        title = 'Company Name';
         break;
       case LicenseType.HOSPITAL:
-        title = 'Hospital';
+        title = 'Hospital Name';
         break;
       default:
-        title = 'Company';
+        title = 'Company Name';
         break;
     }
 

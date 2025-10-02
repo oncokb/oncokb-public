@@ -50,10 +50,16 @@ export class ApiAccessPageNavTab extends React.Component<
     reaction(
       () => this.selectedTab,
       newSelectedTab => {
-        this.props.routing.history.push({
-          pathname: newSelectedTab as any,
-          hash: this.props.routing.location.hash,
-        });
+        // If you click a link to the registration page then this code will trigger
+        // react router already will put `/account/register` in the browser history
+        // Without an if statement another `/account/register` path will be put
+        // in the browser history.
+        if (this.props.routing.location.pathname !== (newSelectedTab as any)) {
+          this.props.routing.history.push({
+            pathname: newSelectedTab as any,
+            hash: this.props.routing.location.hash,
+          });
+        }
       }
     ),
       reaction(
