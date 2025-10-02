@@ -871,6 +871,20 @@ export class AnnotationStore {
     }
   }
 
+  @computed
+  get genomicIndicatorsAssociatedWithVariant() {
+    if (this.annotationResult.isPending || this.genomicIndicators.isPending) {
+      return [];
+    }
+
+    const variantGIStrings = this.annotationResult.result.germline
+      .genomicIndicators;
+    const allGeneGIEvidences = this.genomicIndicators.result;
+    return allGeneGIEvidences.filter(evidence => {
+      return variantGIStrings.includes(evidence.name);
+    });
+  }
+
   destroy() {
     for (const reaction of this.reactions) {
       reaction();
