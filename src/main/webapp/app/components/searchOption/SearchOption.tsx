@@ -52,6 +52,7 @@ const GeneSearchOption: React.FunctionComponent<{
         <Highlighter
           searchWords={[props.search]}
           textToHighlight={`${props.data.gene.hugoSymbol} (Entrez Gene: ${props.data.gene.entrezGeneId})`}
+          autoEscape
         />
         {props.data.annotation &&
           Object.values(GENETIC_TYPE).includes(
@@ -84,6 +85,7 @@ const GeneSearchOption: React.FunctionComponent<{
             <Highlighter
               searchWords={[props.search]}
               textToHighlight={`${props.data.gene.geneAliases.join(', ')}`}
+              autoEscape
             />
           </div>
         </i>
@@ -103,11 +105,13 @@ const AlterationSearchOption: React.FunctionComponent<{
         <Highlighter
           textToHighlight={props.data.gene.hugoSymbol}
           searchWords={[props.search]}
+          autoEscape
         />{' '}
         /
         <Highlighter
           textToHighlight={props.data.alterationsName}
           searchWords={[props.search]}
+          autoEscape
         />
         <OncoKBAnnotationIcon
           className={'mb-1 ml-1'}
@@ -176,6 +180,7 @@ const DrugSearchOption: React.FunctionComponent<{
         <Highlighter
           searchWords={[props.search]}
           textToHighlight={props.data.drug.drugName}
+          autoEscape
         />
       </div>
       <div className={styles.subTitle}>
@@ -260,6 +265,7 @@ const CancerTypeSearchOption: React.FunctionComponent<{
         <Highlighter
           searchWords={[props.search]}
           textToHighlight={props.data.tumorTypesName}
+          autoEscape
         />
       </div>
       {props.data.annotationByLevel !== null ? (
