@@ -15,20 +15,116 @@ export default function NewsContent102025() {
           Release of <Link to="/sop">OncoKB™ SOP v5.2</Link>
         </li>
         <li>
-          OncoTree updated from version{' '}
-          <a href="https://oncotree.info/?version=oncotree_2019_12_01&amp;field=NAME">
-            2019_12_01
-          </a>{' '}
-          to version oncotree_latest_stable, which incorporates changes to the
-          CNS branch of OncoTree
+          OncoTree updated from version 2019_12_01 to version{' '}
+          <a href="https://oncotree.mskcc.org/?version=oncotree_candidate_release&amp;field=NAME">
+            oncotree_candidate_release
+          </a>
+          , which incorporates changes to the CNS branch of OncoTree
         </li>
         <li>
-          Transcripts have been updated for the following genes to better align
-          with coordinating resources: ATXN7, CCNQ, CDKN2A, CRLF2, GAB1, KBTBD4,
-          MUTYH, NADK, PAX8, PGBD5, RBM10
+          Update to CDKN2A to include two distinct gene pages, for the{' '}
+          <Link to="/gene/CDKN2A">p16</Link> and{' '}
+          <Link to="/gene/CDKN2A%20(p14)">p14</Link> isoforms
         </li>
-        <li>CDKN2A has been split into the p16 and p14 isoforms</li>
+        <li>
+          Transcripts have been updated for the following genes:{' '}
+          <Link to="/gene/ATXN7">ATXN7</Link>, <Link to="/gene/CCNQ">CCNQ</Link>
+          , <Link to="/gene/CRLF2">CRLF2</Link>,{' '}
+          <Link to="/gene/GAB1">GAB1</Link>,{' '}
+          <Link to="/gene/KBTBD4">KBTBD4</Link>,{' '}
+          <Link to="/gene/MUTYH">MUTYH</Link>, <Link to="/gene/NADK">NADK</Link>
+          , <Link to="/gene/PAX8">PAX8</Link>,{' '}
+          <Link to="/gene/PGBD8">PGBD8</Link>,{' '}
+          <Link to="/gene/RBM10">RBM10</Link>
+        </li>
       </ul>
+      <details>
+        <summary>View transcript update details</summary>
+        <div className="table-responsive">
+          <table className="table">
+            <thead>
+              <tr>
+                <th>Gene</th>
+                <th>Old Transcript(s)</th>
+                <th>Updated Transcript(s)</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td>
+                  <Link to="/gene/ATXN7">ATXN7</Link>
+                </td>
+                <td>ENST00000295900 (GRCh37/GRCh38)</td>
+                <td>ENST00000398590.3 (GRCh37) ENST00000522345.2 (GRCh38)</td>
+              </tr>
+              <tr>
+                <td>
+                  <Link to="/gene/CCNQ">CCNQ</Link>
+                </td>
+                <td>ENST00000576892 (GRCh37/GRCh38)</td>
+                <td>ENST00000406277.2 (GRCh37) ENST00000576892.8 (GRCh38)</td>
+              </tr>
+              <tr>
+                <td>
+                  <Link to="/gene/CRLF2">CRLF2</Link>
+                </td>
+                <td>ENST00000381566 (GRCh37/GRCh38)</td>
+                <td>ENST00000400841.2 (GRCh37) ENST00000400841.8 (GRCh38)</td>
+              </tr>
+              <tr>
+                <td>
+                  <Link to="/gene/GAB1">GAB1</Link>
+                </td>
+                <td>ENST00000262994 (GRCh37/GRCh38)</td>
+                <td>ENST00000262995.4 (GRCh37) ENST00000262995.9 (GRCh38)</td>
+              </tr>
+              <tr>
+                <td>
+                  <Link to="/gene/KBTBD4">KBTBD4</Link>
+                </td>
+                <td>ENST00000395288 (GRCh37/GRCh38)</td>
+                <td>ENST00000430070.2 (GRCh37) ENST00000430070.7 (GRCh38)</td>
+              </tr>
+              <tr>
+                <td>
+                  <Link to="/gene/MUTYH">MUTYH</Link>
+                </td>
+                <td>ENST00000372115 (GRCh37/GRCh38)</td>
+                <td>ENST00000450313.1 (GRCh37) ENST00000710952.2 (GRCh38)</td>
+              </tr>
+              <tr>
+                <td>
+                  <Link to="/gene/NADK">NADK</Link>
+                </td>
+                <td>ENST00000341426 (GRCh37/GRCh38)</td>
+                <td>ENST00000378625.1 (GRCh37) ENST00000378625.5 (GRCh38)</td>
+              </tr>
+              <tr>
+                <td>
+                  <Link to="/gene/PAX8">PAX8</Link>
+                </td>
+                <td>ENST00000263334 (GRCh37/GRCh38)</td>
+                <td>ENST00000429538.3 (GRCh37) ENST00000429538.8 (GRCh38)</td>
+              </tr>
+              <tr>
+                <td>
+                  <Link to="/gene/PGBD8">PGBD8</Link>
+                </td>
+                <td>ENST00000525115 (GRCh37/GRCh38)</td>
+                <td>ENST00000391860.1 (GRCh37) ENST00000391860.7 (GRCh38)</td>
+              </tr>
+              <tr>
+                <td>
+                  <Link to="/gene/RBM10">RBM10</Link>
+                </td>
+                <td>ENST00000329236 (GRCh37/GRCh38)</td>
+                <td>ENST00000377604.3 (GRCh37) ENST00000377604.8 (GRCh38)</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+      </details>
+      <br></br>
       <p>
         <strong>Updated Therapeutic Implications</strong>
       </p>
