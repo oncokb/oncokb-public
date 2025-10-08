@@ -4,7 +4,7 @@
 - Transcripts have been updated for the following genes: [ATXN7](https://www.oncokb.org/gene/ATXN7), [CCNQ](https://www.oncokb.org/gene/CCNQ), [CRLF2](https://www.oncokb.org/gene/CRLF2), [GAB1](https://www.oncokb.org/gene/GAB1), [KBTBD4](https://www.oncokb.org/gene/KBTBD4), [MUTYH](https://www.oncokb.org/gene/MUTYH), [NADK](https://www.oncokb.org/gene/NADK), [PAX8](https://www.oncokb.org/gene/PAX8), [PGBD8](https://www.oncokb.org/gene/PGBD8), [RBM10](https://www.oncokb.org/gene/RBM10)
 
 <details>
-<summary>View transcript update details</summary>
+<summary>View details for updated transcripts</summary>
 
 | Gene                                         | Old Transcript(s)               | Updated Transcript(s)                                 |
 | :------------------------------------------- | :------------------------------ | :---------------------------------------------------- |

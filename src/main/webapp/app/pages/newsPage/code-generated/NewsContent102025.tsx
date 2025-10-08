@@ -38,8 +38,8 @@ export default function NewsContent102025() {
           <Link to="/gene/RBM10">RBM10</Link>
         </li>
       </ul>
-      <details>
-        <summary>View transcript update details</summary>
+      <details style={{ marginLeft: 10 }}>
+        <summary>View details for updated transcripts</summary>
         <div className="table-responsive">
           <table className="table">
             <thead>
