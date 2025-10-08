@@ -1,7 +1,7 @@
 - Release of [OncoKB™ SOP v5.2](https://www.oncokb.org/sop)
 - OncoTree updated from version 2019_12_01 to version [oncotree_candidate_release](https://oncotree.mskcc.org/?version=oncotree_candidate_release&field=NAME), which incorporates changes to the CNS branch of OncoTree
 - Update to CDKN2A to include two distinct gene pages, for the [p16](https://www.oncokb.org/gene/CDKN2A) and [p14](<https://oncokb.org/gene/CDKN2A%20(p14)>) isoforms
-- Transcripts have been updated for the following genes: [ATXN7](https://www.oncokb.org/gene/ATXN7), [CCNQ](https://www.oncokb.org/gene/CCNQ), [CRLF2](https://www.oncokb.org/gene/CRLF2), [GAB1](https://www.oncokb.org/gene/GAB1), [KBTBD4](https://www.oncokb.org/gene/KBTBD4), [MUTYH](https://www.oncokb.org/gene/MUTYH), [NADK](https://www.oncokb.org/gene/NADK), [PAX8](https://www.oncokb.org/gene/PAX8), [PGBD8](https://www.oncokb.org/gene/PGBD8), [RBM10](https://www.oncokb.org/gene/RBM10)
+- Transcripts have been updated for the following genes: [ATXN7](https://www.oncokb.org/gene/ATXN7), [CCNQ](https://www.oncokb.org/gene/CCNQ), [CRLF2](https://www.oncokb.org/gene/CRLF2), [GAB1](https://www.oncokb.org/gene/GAB1), [KBTBD4](https://www.oncokb.org/gene/KBTBD4), [MUTYH](https://www.oncokb.org/gene/MUTYH), [NADK](https://www.oncokb.org/gene/NADK), [PAX8](https://www.oncokb.org/gene/PAX8), [PGBD5](https://www.oncokb.org/gene/PGBD5), [RBM10](https://www.oncokb.org/gene/RBM10)
 
 <details>
 <summary>View details for updated transcripts</summary>
@@ -16,7 +16,7 @@
 | [MUTYH](https://www.oncokb.org/gene/MUTYH)   | ENST00000372115 (GRCh37/GRCh38) | ENST00000450313.1 (GRCh37) ENST00000710952.2 (GRCh38) |
 | [NADK](https://www.oncokb.org/gene/NADK)     | ENST00000341426 (GRCh37/GRCh38) | ENST00000378625.1 (GRCh37) ENST00000378625.5 (GRCh38) |
 | [PAX8](https://www.oncokb.org/gene/PAX8)     | ENST00000263334 (GRCh37/GRCh38) | ENST00000429538.3 (GRCh37) ENST00000429538.8 (GRCh38) |
-| [PGBD8](https://www.oncokb.org/gene/PGBD8)   | ENST00000525115 (GRCh37/GRCh38) | ENST00000391860.1 (GRCh37) ENST00000391860.7 (GRCh38) |
+| [PGBD5](https://www.oncokb.org/gene/PGBD5)   | ENST00000525115 (GRCh37/GRCh38) | ENST00000391860.1 (GRCh37) ENST00000391860.7 (GRCh38) |
 | [RBM10](https://www.oncokb.org/gene/RBM10)   | ENST00000329236 (GRCh37/GRCh38) | ENST00000377604.3 (GRCh37) ENST00000377604.8 (GRCh38) |
 
 </details>

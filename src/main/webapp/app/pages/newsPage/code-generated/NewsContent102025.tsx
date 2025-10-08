@@ -34,7 +34,7 @@ export default function NewsContent102025() {
           <Link to="/gene/KBTBD4">KBTBD4</Link>,{' '}
           <Link to="/gene/MUTYH">MUTYH</Link>, <Link to="/gene/NADK">NADK</Link>
           , <Link to="/gene/PAX8">PAX8</Link>,{' '}
-          <Link to="/gene/PGBD8">PGBD8</Link>,{' '}
+          <Link to="/gene/PGBD5">PGBD5</Link>,{' '}
           <Link to="/gene/RBM10">RBM10</Link>
         </li>
       </ul>
@@ -108,7 +108,7 @@ export default function NewsContent102025() {
               </tr>
               <tr>
                 <td>
-                  <Link to="/gene/PGBD8">PGBD8</Link>
+                  <Link to="/gene/PGBD5">PGBD5</Link>
                 </td>
                 <td>ENST00000525115 (GRCh37/GRCh38)</td>
                 <td>ENST00000391860.1 (GRCh37) ENST00000391860.7 (GRCh38)</td>
