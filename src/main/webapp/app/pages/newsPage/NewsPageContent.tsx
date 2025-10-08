@@ -312,7 +312,11 @@ const EVIDENCE_COLUMN_SEPARATOR = '; ';
 
 export const NEWS_BY_DATE: { [date: string]: NewsData } = {
   '10082025': {
-    rawComponent: <NewsContent102025 />,
+    rawComponent: (
+      <div className={mainstyle.indentedDetails}>
+        <NewsContent102025 />
+      </div>
+    ),
   },
   '09292025': {
     rawComponent: <NewsContent092025 />,

@@ -39,7 +39,7 @@ export default function NewsContent102025() {
         </li>
       </ul>
       <details>
-        <summary>View transcript update details</summary>
+        <summary>View details for updated transcripts</summary>
         <div className="table-responsive">
           <table className="table">
             <thead>
