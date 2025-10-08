@@ -210,7 +210,12 @@ function createPathogenicityTileProps(
   if (clinvarData === null || clinvarData?.pathogenicity === '') {
     clinvarPathogenicity = 'Not Available';
   } else if (clinvarData) {
-    clinvarPathogenicity = clinvarData.pathogenicity;
+    clinvarPathogenicity = clinvarData.pathogenicity
+      .replace(/_/g, ' ')
+      .replace(/\|/g, ';');
+    clinvarPathogenicity =
+      clinvarPathogenicity.charAt(0).toUpperCase() +
+      clinvarPathogenicity.slice(1);
   }
 
   return {
@@ -275,6 +280,10 @@ export function SomaticGermlineAlterationTiles({
       const response = await axios.get(
         `${GENOME_NEXUS_ANNOTATION_BASE_URL}/${rest.variantAnnotation.query.hugoSymbol}:${rest.variantAnnotation.query.alteration}?fields=clinvar`
       );
+      if (!response.data.successfully_annotated) {
+        setClinvar(null);
+        return;
+      }
       const clinvarAnnotation = response.data.clinvar.annotation;
       if (clinvarAnnotation) {
         setClinvar({
