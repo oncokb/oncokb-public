@@ -424,12 +424,18 @@ public class UserService {
      * @return updated user.
      */
     public Optional<UserDTO> updateUserAndTokens(UserDTO userDTO) {
-        Optional<UserDTO> updatedUserDTO = updateUserFromUserDTO(userDTO);
+        return updateUserAndTokens(userDTO, Optional.empty(), Optional.empty());
+    }
 
+    public Optional<UserDTO> updateUserAndTokens(UserDTO userDTO, Optional<Integer> tokenValidDays, Optional<Boolean> tokenIsRenewable) {
+        Optional<UserDTO> updatedUserDTO = updateUserFromUserDTO(userDTO);
         if (updatedUserDTO.isPresent()) {
             if (updatedUserDTO.get().isActivated()) {
-                List<Token> tokens = generateTokenForUserIfNotExist(updatedUserDTO.get(), Optional.empty(), Optional.empty());
+                List<Token> tokens = generateTokenForUserIfNotExist(updatedUserDTO.get(), tokenValidDays, tokenIsRenewable);
                 tokens.forEach(token -> {
+                    if (tokenIsRenewable.isPresent()) {
+                        token.setRenewable(tokenIsRenewable.get());
+                    }
                     if (token.getExpiration().isBefore(Instant.now())) {
                         token.setExpiration(Instant.now().plusSeconds(DEFAULT_TOKEN_EXPIRATION_IN_SECONDS));
                     }
@@ -748,7 +754,7 @@ public class UserService {
                         if (!isAccountCreation) {
                             mailService.sendActiveTrialMail(userMapper.userToUserDTO(updatedUser.get()), false);
                         }
-                        updatedUserDTO = updateUserAndTokens(userMapper.userToUserDTO(updatedUser.get()));
+                        updatedUserDTO = updateUserAndTokens(userMapper.userToUserDTO(updatedUser.get()), Optional.of(TRIAL_PERIOD_IN_DAYS), Optional.of(false));
                     }
                 }
             } else if (isInactiveLicense(companyLicenseStatus)) {

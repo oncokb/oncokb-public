@@ -333,6 +333,7 @@ export default class UserPage extends React.Component<IUserPage> {
                       .then(
                         () => {
                           notifySuccess('Updated Token');
+                          this.getUserTokens();
                         },
                         (error: Error) => {
                           this.getUserStatus = PromiseStatus.error;
