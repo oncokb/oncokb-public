@@ -424,10 +424,10 @@ public class UserService {
      * @return updated user.
      */
     public Optional<UserDTO> updateUserAndTokens(UserDTO userDTO) {
-        return updateUserAndTokens(userDTO, Optional.empty(), Optional.empty());
+        return updateUserAndTokensWithExpirationInfo(userDTO, Optional.empty(), Optional.empty());
     }
 
-    public Optional<UserDTO> updateUserAndTokens(UserDTO userDTO, Optional<Integer> tokenValidDays, Optional<Boolean> tokenIsRenewable) {
+    public Optional<UserDTO> updateUserAndTokensWithExpirationInfo(UserDTO userDTO, Optional<Integer> tokenValidDays, Optional<Boolean> tokenIsRenewable) {
         Optional<UserDTO> updatedUserDTO = updateUserFromUserDTO(userDTO);
         if (updatedUserDTO.isPresent()) {
             if (updatedUserDTO.get().isActivated()) {
@@ -754,7 +754,7 @@ public class UserService {
                         if (!isAccountCreation) {
                             mailService.sendActiveTrialMail(userMapper.userToUserDTO(updatedUser.get()), false);
                         }
-                        updatedUserDTO = updateUserAndTokens(userMapper.userToUserDTO(updatedUser.get()), Optional.of(TRIAL_PERIOD_IN_DAYS), Optional.of(false));
+                        updatedUserDTO = updateUserAndTokensWithExpirationInfo(userMapper.userToUserDTO(updatedUser.get()), Optional.of(TRIAL_PERIOD_IN_DAYS), Optional.of(false));
                     }
                 }
             } else if (isInactiveLicense(companyLicenseStatus)) {
