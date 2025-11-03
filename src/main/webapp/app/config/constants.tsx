@@ -653,6 +653,7 @@ export enum PAGE_ROUTE {
   ACCOUNT_PASSWORD_RESET_REQUEST = '/account/reset/request',
   ACCOUNT_PASSWORD_RESET_FINISH = '/account/reset/finish',
   ACCOUNT_ACTIVE_TRIAL_FINISH = '/account/active-trial/finish',
+  PATIENT_REPORT = '/patient-report',
 }
 
 export enum API_ROUTE {

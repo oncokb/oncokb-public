@@ -41,6 +41,7 @@ import { SomaticGermlineAlterationPage } from 'app/pages/somaticGermlineAlterati
 import { SomaticGermlineCancerTypePage } from 'app/pages/annotationPage/SomaticGermlineCancerTypePage';
 import WindowStore from 'app/store/WindowStore';
 import PageContainer from 'app/components/PageContainer';
+import PatientReport from 'app/PatientReport';
 
 const getOldLevelsRedirectRoute = (hash: string) => {
   const queryStrings = QueryString.parse(hash) as {
@@ -293,6 +294,15 @@ const AppRoutes = (props: {
           appStore={props.appStore}
           path={PAGE_ROUTE.ALTERATION_TUMOR_TYPE}
           component={AlterationPage}
+          windowStore={props.windowStore}
+          pageContainer={PageContainer}
+        />
+        <RecaptchaBoundaryRoute
+          exact
+          isUserAuthenticated={props.authenticationStore.isUserAuthenticated}
+          appStore={props.appStore}
+          path={PAGE_ROUTE.PATIENT_REPORT}
+          component={PatientReport}
           windowStore={props.windowStore}
           pageContainer={PageContainer}
         />
