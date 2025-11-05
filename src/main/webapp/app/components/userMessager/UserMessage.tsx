@@ -57,9 +57,10 @@ if (
       dateEnd: 1763164800000,
       content: (
         <div>
-          Join us November 11-15 at AMP 2025! Visit our poster (#I011) or stop
-          by our booth (#430) to meet our team and explore the latest
-          developments from OncoKB™. See you there!
+          Join us November 11-15 at AMP 2025! Visit our poster (#I011; Sat
+          November 15, 9-10 AM) or stop by our booth (#430; Exhibit Hall) to
+          meet our team and explore the latest developments from OncoKB™. See
+          you there!
         </div>
       ),
       id: '2025-amp',
