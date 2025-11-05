@@ -31,7 +31,7 @@ public class TokenProvider implements InitializingBean {
     public static final int EXPIRATION_TIME_IN_SECONDS = DEFAULT_TOKEN_EXPIRATION_IN_SECONDS;
 
     // This is for the public website
-    private static final int EXPIRATION_TIME_PUBLIC_WEBSITE_IN_SECONDS = 60 * 60;
+    private static final int EXPIRATION_TIME_PUBLIC_WEBSITE_IN_SECONDS = 60 * 60 * 24;
 
     private UserRepository userRepository;
 
