@@ -252,6 +252,8 @@ public class SlackService {
     }
 
     private void truncateStringIfSlackLimitExceeded(StringBuilder sb) {
+        // 2001 is the text character limit for slack
+        // use https://app.slack.com/block-kit-builder to test
         if (sb.length() > 2000) {
             final String truncateString = "… [exceeded slack character limit]";
             sb.setLength(2000 - truncateString.length());

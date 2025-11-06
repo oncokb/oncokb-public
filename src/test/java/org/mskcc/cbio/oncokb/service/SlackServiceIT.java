@@ -188,7 +188,6 @@ class SlackServiceIT {
         // Ensure url is correct
         assertThat(url).isEqualTo(USER_REGISTRATION_WEBHOOK);
 
-        // Ensure all crucial information is in payload
         Set<String> expectedValues = new HashSet<>();
         expectedValues.add(LicenseType.COMMERCIAL.getName());
         expectedValues.add("Not Activated");
