@@ -13,12 +13,12 @@ export const CitationText = ({
     <span>
       When using {ONCOKB_TM}, please cite:{' '}
       <a
-        href="https://aacrjournals.org/cancerdiscovery/article/doi/10.1158/2159-8290.CD-23-0467/729589/Quantifying-the-Expanding-Landscape-of-Clinical"
+        href="https://aacrjournals.org/cancerdiscovery/article/14/1/49/732527/Quantifying-the-Expanding-Landscape-of-Clinical"
         className={boldLinkout ? 'font-medium' : undefined}
         target="_blank"
         rel="noopener noreferrer"
       >
-        Suehnholz et al., Cancer Discovery 2023
+        Suehnholz et al., Cancer Discovery 2024
       </a>{' '}
       and{' '}
       <a
