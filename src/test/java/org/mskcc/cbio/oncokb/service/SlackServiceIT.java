@@ -22,6 +22,10 @@ import org.mskcc.cbio.oncokb.domain.Company;
 import org.mskcc.cbio.oncokb.domain.enumeration.LicenseStatus;
 import org.mskcc.cbio.oncokb.domain.enumeration.LicenseType;
 import org.mskcc.cbio.oncokb.service.dto.UserDTO;
+import org.mskcc.cbio.oncokb.service.dto.useradditionalinfo.AdditionalInfoDTO;
+import org.mskcc.cbio.oncokb.service.dto.useradditionalinfo.ApiAccessRequest;
+import org.mskcc.cbio.oncokb.service.dto.useradditionalinfo.TrialAccount;
+import org.mskcc.cbio.oncokb.service.dto.useradditionalinfo.UserCompany;
 import org.mskcc.cbio.oncokb.service.mapper.UserMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
@@ -143,6 +147,73 @@ class SlackServiceIT {
             }
         }
         assertThat(expectedValues).isEmpty();
+    }
+
+    @Test
+    void testUseCaseSizeLimit() throws IOException {
+        // Create mock user
+        UserDTO user = new UserDTO();
+        setMockResponse(200);
+        user.setId(0L);
+        user.setEmail("john.doe@example.com");
+        user.setFirstName("john");
+        user.setLastName("doe");
+        user.setJobTitle("job title");
+        user.setCompanyName("company name");
+        user.setCity("city");
+        user.setCountry("country");
+        user.setLicenseType(LicenseType.COMMERCIAL);
+        Company company = new Company();
+        company.setName("company name");
+        company.setLicenseType(LicenseType.COMMERCIAL);
+        company.setLicenseStatus(LicenseStatus.UNKNOWN);
+
+        AdditionalInfoDTO additionalInfo = new AdditionalInfoDTO();
+        UserCompany userCompany = new UserCompany();
+        int length = 3000;
+        StringBuilder sb = new StringBuilder(length);
+        for (int i = 0; i < length; i++) {
+            sb.append('A');
+        }
+        userCompany.setUseCase(sb.toString());
+        additionalInfo.setUserCompany(userCompany);
+        user.setAdditionalInfo(additionalInfo);
+
+        // Mock send Slack blocks
+        slackService.sendUserRegistrationToChannel(user, false, company);
+        verify(slack).send(urlCaptor.capture(), payloadCaptor.capture());
+        String url = urlCaptor.getValue();
+        Payload payload = payloadCaptor.getValue();
+
+        // Ensure url is correct
+        assertThat(url).isEqualTo(USER_REGISTRATION_WEBHOOK);
+
+        // Ensure all crucial information is in payload
+        Set<String> expectedValues = new HashSet<>();
+        expectedValues.add(LicenseType.COMMERCIAL.getName());
+        expectedValues.add("Not Activated");
+        expectedValues.add("REGULAR");
+        expectedValues.add("john.doe@example.com");
+        expectedValues.add("john doe");
+        expectedValues.add("job title");
+        expectedValues.add("company name");
+        expectedValues.add("city");
+        expectedValues.add("country");
+        for (LayoutBlock block : payload.getBlocks()) {
+            if (block instanceof SectionBlock) {
+                SectionBlock sectionBlock = (SectionBlock) block;
+                if (sectionBlock.getText() != null) {
+                    // 2001 is the text character limit for slack
+                    assertThat(sectionBlock.getText().getText().length()).isLessThan(2001);
+                }
+                if (sectionBlock.getFields() != null) {
+                    for (TextObject textObject : sectionBlock.getFields()) {
+                        // 2001 is the text character limit for slack
+                        assertThat(textObject.getText().length()).isLessThan(2001);
+                    }
+                }
+            }
+        }
     }
 
     @Test
