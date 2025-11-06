@@ -251,6 +251,16 @@ public class SlackService {
         return blockActionPayload.getActions().stream().filter(action -> action.getActionId().equalsIgnoreCase(actionKey.getId())).findFirst();
     }
 
+    private void truncateStringIfSlackLimitExceeded(StringBuilder sb) {
+        // 2001 is the text character limit for slack
+        // use https://app.slack.com/block-kit-builder to test
+        if (sb.length() > 2000) {
+            final String truncateString = "… [exceeded slack character limit]";
+            sb.setLength(2000 - truncateString.length());
+            sb.append(truncateString);
+        }
+    }
+
     private TextObject getTextObject(String title, String content) {
         StringBuilder sb = new StringBuilder();
         if (StringUtils.isNotEmpty(title)) {
@@ -259,6 +269,8 @@ public class SlackService {
         if (StringUtils.isNotEmpty(content)) {
             sb.append("*" + content + "*");
         }
+
+        truncateStringIfSlackLimitExceeded(sb);
         return MarkdownTextObject.builder().text(sb.toString()).build();
     }
 
@@ -328,6 +340,9 @@ public class SlackService {
                 sb.append("Collapsed");
             }
         }
+
+        truncateStringIfSlackLimitExceeded(sb);
+
         return SectionBlock.builder()
             .text(MarkdownTextObject.builder().text(sb.toString()).build())
             .accessory(buildExpandButton(userDTO)).blockId(COLLAPSED.getId()).build();
@@ -368,14 +383,6 @@ public class SlackService {
             return SectionBlock.builder().text(MarkdownTextObject.builder().text("<!here>").build()).build();
         } else {
             return SectionBlock.builder().text(PlainTextObject.builder().text("[placeholder for @here handle]").build()).build();
-        }
-    }
-
-    private LayoutBlock buildChannelMentionBlock() {
-        if (applicationProperties.getProfile() != null && applicationProperties.getProfile().equals(ProjectProfile.PROD)) {
-            return SectionBlock.builder().text(MarkdownTextObject.builder().text("<!channel>").build()).build();
-        } else {
-            return SectionBlock.builder().text(PlainTextObject.builder().text("[placeholder for @channel handle]").build()).build();
         }
     }
 
@@ -463,12 +470,14 @@ public class SlackService {
     }
 
     public boolean withNote(DropdownEmailOption mailOption, UserDTO userDTO, ActionId actionId) {
+        AdditionalInfoDTO additionalInfoDTO = userDTO.getAdditionalInfo();
         switch (mailOption) {
             case GIVE_TRIAL_ACCESS:
                 if (
-                    ObjectUtil.isObjectEmpty(userDTO.getAdditionalInfo())
-                        || userDTO.getAdditionalInfo().getTrialAccount() == null
-                        || userDTO.getAdditionalInfo().getTrialAccount().getActivation() == null
+                        additionalInfoDTO == null
+                        || (additionalInfoDTO.getTrialAccount() == null && additionalInfoDTO.getUserCompany() == null && additionalInfoDTO.getApiAccessRequest() == null)
+                        || additionalInfoDTO.getTrialAccount() == null
+                        || additionalInfoDTO.getTrialAccount().getActivation() == null
                 ) {
                     return false;
                 }
@@ -610,10 +619,10 @@ public class SlackService {
                     layoutBlocks.add(buildPlainTextBlock(rejectOption.getExpandedNote(), rejectOption.getBlockId()));
             }
         }
-        
 
-        if ((userDTO.getEmail() != null && userDTO.getEmail().endsWith(".ir")) 
-            || (userDTO.getCountry() != null && userDTO.getCountry().toLowerCase().equals("iran"))) 
+
+        if ((userDTO.getEmail() != null && userDTO.getEmail().endsWith(".ir"))
+            || (userDTO.getCountry() != null && userDTO.getCountry().toLowerCase().equals("iran")))
         {
             layoutBlocks.add(buildMarkdownBlock(":nerd_alert: *This user may be from Iran. OncoKB cannot be licensed to users in Iran.*", COUNTRY_WARNING));
         }
