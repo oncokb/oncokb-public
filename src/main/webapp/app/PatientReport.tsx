@@ -1,10 +1,11 @@
 import { inject, observer } from 'mobx-react';
-import React, { useState } from 'react';
+import React from 'react';
 import AuthenticationStore from './store/AuthenticationStore';
 import { FormTextAreaField } from './shared/textarea/FormTextAreaField';
 import { AvForm } from 'availity-reactstrap-validation';
 import { Button } from 'react-bootstrap';
 import { action, observable } from 'mobx';
+import { getStoredUserToken } from './indexUtils';
 
 interface IPatientReportPageProps {
   authenticationStore: AuthenticationStore;
@@ -20,7 +21,40 @@ export default class PatientReportPage extends React.Component<
   @observable structuralVariants = '';
 
   @action.bound
-  handleValidSubmit(event: any, values: any) {}
+  handleValidSubmit() {
+    const form = document.createElement('form');
+    form.method = 'POST';
+    form.action = 'http://localhost:5173/report/tsv';
+    form.target = '_blank';
+
+    const tokenInput = document.createElement('input');
+    tokenInput.type = 'hidden';
+    tokenInput.name = 'token';
+    tokenInput.value = getStoredUserToken();
+    form.appendChild(tokenInput);
+
+    const mutationsInput = document.createElement('input');
+    mutationsInput.type = 'hidden';
+    mutationsInput.name = 'mutations';
+    mutationsInput.value = this.mutations;
+    form.appendChild(mutationsInput);
+
+    const copyNumberAlterationsInput = document.createElement('input');
+    copyNumberAlterationsInput.type = 'hidden';
+    copyNumberAlterationsInput.name = 'copyNumberAlterations';
+    copyNumberAlterationsInput.value = this.copyNumberAlterations;
+    form.appendChild(copyNumberAlterationsInput);
+
+    const structuralVariantsInput = document.createElement('input');
+    structuralVariantsInput.type = 'hidden';
+    structuralVariantsInput.name = 'structuralVariants';
+    structuralVariantsInput.value = this.structuralVariants;
+    form.appendChild(structuralVariantsInput);
+
+    document.body.appendChild(form);
+    form.submit();
+    document.body.removeChild(form);
+  }
 
   render() {
     if (!this.props.authenticationStore.isUserAuthenticated) {
