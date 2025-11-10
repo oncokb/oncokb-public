@@ -10,7 +10,6 @@ import CancerGenesPage from 'app/pages/CancerGenesPage';
 import ActionableGenesPage from 'app/pages/actionableGenesPage/ActionableGenesPage';
 import { RouterStore } from 'mobx-react-router';
 import SomaticGermlineGenePage from 'app/pages/genePage/SomaticGermlineGenePage';
-import AlterationPage from 'app/pages/alterationPage/AlterationPage';
 import { AccountPage } from 'app/pages/AccountPage';
 import ActivateAccount from 'app/components/account/ActivateAccount';
 import { PasswordResetInit } from 'app/components/account/PasswordResetInit';
@@ -84,6 +83,11 @@ const AppRoutes = (props: {
         component={HomePage}
         pageContainer={PageContainer}
       />
+      <Redirect
+        exact
+        from={PAGE_ROUTE.LEGACY_GENE}
+        to={PAGE_ROUTE.SOMATIC_GENE}
+      />
       <Redirect exact from={'/updates'} to={PAGE_ROUTE.NEWS} />
       <Redirect exact from={'/genes'} to={PAGE_ROUTE.CANCER_GENES} />
       <Redirect
@@ -112,19 +116,14 @@ const AppRoutes = (props: {
       <Redirect
         exact
         from={'/gene/:hugoSymbol/alteration/:alteration'}
-        to={PAGE_ROUTE.ALTERATION}
+        to={PAGE_ROUTE.SOMATIC_ALTERATION}
       />
       <Redirect
         exact
         from={'/gene/:hugoSymbol/variant/:alteration'}
-        to={PAGE_ROUTE.ALTERATION}
+        to={PAGE_ROUTE.SOMATIC_ALTERATION}
       />
       <Redirect exact from={PAGE_ROUTE.PO_TX} to={PAGE_ROUTE.ONCOLOGY_TX} />
-      <Redirect
-        exact
-        from={PAGE_ROUTE.LEGACY_GENE}
-        to={PAGE_ROUTE.SOMATIC_GENE}
-      />
       <Switch>
         <RecaptchaBoundaryRoute
           exact
@@ -219,14 +218,10 @@ const AppRoutes = (props: {
           windowStore={props.windowStore}
           pageContainer={({ children }) => children}
         />
-        <RecaptchaBoundaryRoute
+        <Redirect // need to be sure not matching new gene route
           exact
-          isUserAuthenticated={props.authenticationStore.isUserAuthenticated}
-          appStore={props.appStore}
-          path={PAGE_ROUTE.ALTERATION}
-          component={AlterationPage}
-          windowStore={props.windowStore}
-          pageContainer={PageContainer}
+          from={PAGE_ROUTE.LEGACY_ALTERATION}
+          to={PAGE_ROUTE.SOMATIC_ALTERATION}
         />
         <RecaptchaBoundaryRoute
           exact
@@ -245,6 +240,11 @@ const AppRoutes = (props: {
           component={SomaticGermlineAlterationPage}
           windowStore={props.windowStore}
           pageContainer={({ children }) => children}
+        />
+        <Redirect // need to be sure not matching new alteration route
+          exact
+          from={PAGE_ROUTE.LEGACY_ALTERATION_TUMOR_TYPE}
+          to={PAGE_ROUTE.SOMATIC_TUMOR_TYPE}
         />
         <RecaptchaBoundaryRoute
           exact
@@ -279,15 +279,6 @@ const AppRoutes = (props: {
           appStore={props.appStore}
           path={PAGE_ROUTE.GENOMIC_CHANGE_WITH_QUERY}
           component={GenomicPage}
-          windowStore={props.windowStore}
-          pageContainer={PageContainer}
-        />
-        <RecaptchaBoundaryRoute
-          exact
-          isUserAuthenticated={props.authenticationStore.isUserAuthenticated}
-          appStore={props.appStore}
-          path={PAGE_ROUTE.ALTERATION_TUMOR_TYPE}
-          component={AlterationPage}
           windowStore={props.windowStore}
           pageContainer={PageContainer}
         />
