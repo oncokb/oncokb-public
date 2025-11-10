@@ -3403,7 +3403,8 @@
             "REGULAR",
             "TRIAL_EXPIRED",
             "EXPIRED",
-            "UNKNOWN"
+            "UNKNOWN",
+            "TERMINATED"
           ]
         },
         "licenseType": {
@@ -3537,7 +3538,8 @@
             "REGULAR",
             "TRIAL_EXPIRED",
             "EXPIRED",
-            "UNKNOWN"
+            "UNKNOWN",
+            "TERMINATED"
           ]
         },
         "licenseType": {
