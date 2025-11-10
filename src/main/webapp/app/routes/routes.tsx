@@ -36,7 +36,6 @@ import OncologyTherapiesPage from 'app/pages/oncologyTherapiesPage/oncologyThera
 import { NewsPageNavTab } from 'app/pages/newsPage/NewsPageNavTab';
 import CompanionDiagnosticDevicePage from 'app/pages/companionDiagnosticDevicesPage/companionDiagnosticDevicePage';
 import OncokbRoute from 'app/shared/route/OncokbRoute';
-import GenePage from 'app/pages/genePage/GenePage';
 import { SomaticGermlineAlterationPage } from 'app/pages/somaticGermlineAlterationPage/SomaticGermlineAlterationPage';
 import { SomaticGermlineCancerTypePage } from 'app/pages/annotationPage/SomaticGermlineCancerTypePage';
 import WindowStore from 'app/store/WindowStore';
@@ -121,6 +120,11 @@ const AppRoutes = (props: {
         to={PAGE_ROUTE.ALTERATION}
       />
       <Redirect exact from={PAGE_ROUTE.PO_TX} to={PAGE_ROUTE.ONCOLOGY_TX} />
+      <Redirect
+        exact
+        from={PAGE_ROUTE.LEGACY_GENE}
+        to={PAGE_ROUTE.SOMATIC_GENE}
+      />
       <Switch>
         <RecaptchaBoundaryRoute
           exact
@@ -194,15 +198,6 @@ const AppRoutes = (props: {
           appStore={props.appStore}
           path={PAGE_ROUTE.CDX}
           component={CompanionDiagnosticDevicePage}
-          windowStore={props.windowStore}
-          pageContainer={PageContainer}
-        />
-        <RecaptchaBoundaryRoute
-          exact
-          isUserAuthenticated={props.authenticationStore.isUserAuthenticated}
-          appStore={props.appStore}
-          path={PAGE_ROUTE.GENE}
-          component={GenePage}
           windowStore={props.windowStore}
           pageContainer={PageContainer}
         />

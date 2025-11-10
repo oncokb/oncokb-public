@@ -602,7 +602,7 @@ export enum PAGE_ROUTE {
   ONCOLOGY_TX = '/oncology-therapies',
   CDX = '/companion-diagnostic-devices',
   GENE_HEADER = '/gene',
-  GENE = '/gene/:hugoSymbol',
+  LEGACY_GENE = '/gene/:hugoSymbol',
   SOMATIC_GENE = '/gene/:hugoSymbol/somatic',
   GERMLINE_GENE = '/gene/:hugoSymbol/germline',
   ALTERATION = '/gene/:hugoSymbol/:alteration',
