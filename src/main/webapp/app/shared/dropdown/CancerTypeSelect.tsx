@@ -9,6 +9,7 @@ import { uniq } from 'app/shared/utils/LodashUtils';
 
 interface ICancerTypeSelect extends SelectProps {
   cancerTypes?: string[];
+  prioritizedCancerTypes?: string[];
 }
 
 @observer
@@ -72,30 +73,45 @@ export default class CancerTypeSelect extends React.Component<
         .filter(ct => ct.level === -1 && ct.mainType.startsWith('All '))
         .map(ct => ct.mainType)
     );
-    return [
-      {
-        label: 'Cancer Type',
-        options: uniq(cancerTypesGroup)
-          .sort()
-          .map(cancerType => {
-            return {
-              value: cancerType,
-              label: cancerType,
-            };
-          }),
-      },
-      {
-        label: 'Cancer Type Detailed',
-        options: this.allSubtypes
-          .sort((ct1, ct2) => ct1.subtype.localeCompare(ct2.subtype))
-          .map(cancerType => {
-            return {
-              value: cancerType.code,
-              label: `${cancerType.subtype} (${cancerType.code})`,
-            };
-          }),
-      },
-    ];
+
+    const allTumorTypesOptions = [];
+    if (this.props.prioritizedCancerTypes) {
+      allTumorTypesOptions.push({
+        label: 'Cancer Types with Evidence',
+        options: this.props.prioritizedCancerTypes.map(cancerType => {
+          return {
+            value: cancerType,
+            label: cancerType,
+          };
+        }),
+      });
+    }
+    allTumorTypesOptions.push({
+      label: 'Cancer Type',
+      options: uniq(cancerTypesGroup)
+        .filter(ct => !this.props.prioritizedCancerTypes?.includes(ct))
+        .sort()
+        .map(cancerType => {
+          return {
+            value: cancerType,
+            label: cancerType,
+          };
+        }),
+    });
+    allTumorTypesOptions.push({
+      label: 'Cancer Type Detailed',
+      options: this.allSubtypes
+        .sort((ct1, ct2) => ct1.subtype.localeCompare(ct2.subtype))
+        .filter(ct => !this.props.prioritizedCancerTypes?.includes(ct.subtype))
+        .map(cancerType => {
+          return {
+            value: cancerType.code,
+            label: `${cancerType.subtype} (${cancerType.code})`,
+          };
+        }),
+    });
+
+    return allTumorTypesOptions;
   }
 
   render() {

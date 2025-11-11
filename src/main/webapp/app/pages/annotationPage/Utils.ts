@@ -85,3 +85,18 @@ export const getSummaries = (
     return acc;
   }, [] as { key: string; title: string; content: string }[]);
 };
+
+export const getCancerTypesSortedByName = (
+  implications: TherapeuticImplication[]
+) => {
+  const cancerTypes: string[] = [];
+  for (const implication of implications) {
+    for (const cancerType of implication.cancerTypesArray) {
+      if (!cancerTypes.includes(cancerType)) {
+        cancerTypes.push(cancerType);
+      }
+    }
+  }
+  cancerTypes.sort();
+  return cancerTypes;
+};
