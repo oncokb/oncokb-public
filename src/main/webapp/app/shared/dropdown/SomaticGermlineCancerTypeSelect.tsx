@@ -22,6 +22,7 @@ export default function SomaticGermlineCancerTypeSelect({
   alterationQuery,
   germline,
   onchange,
+  prioritizedCancerTypes,
 }: {
   cancerType?: string;
   selectStyles?: StylesConfig;
@@ -33,6 +34,7 @@ export default function SomaticGermlineCancerTypeSelect({
   alterationQuery: string;
   germline: boolean;
   onchange?: (cancerType: string) => void;
+  prioritizedCancerTypes?: string[];
 }) {
   const {
     control,
@@ -164,6 +166,7 @@ export default function SomaticGermlineCancerTypeSelect({
               onchange?.(value.value);
             }
           }}
+          prioritizedCancerTypes={prioritizedCancerTypes}
         />
       </span>
       <span style={{ width: '1rem' }}></span>

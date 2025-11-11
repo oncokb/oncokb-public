@@ -253,6 +253,7 @@ export class SomaticGermlineAlterationPage extends React.Component<
             ),
             drugs: getTreatmentNameByPriority(treatment),
             cancerTypes: cancerTypesName,
+            cancerTypesArray: cancerTypes,
             cancerTypesView: (
               <>
                 <WithSeparator separator={', '}>
@@ -309,6 +310,7 @@ export class SomaticGermlineAlterationPage extends React.Component<
           ),
           drugs: '',
           cancerTypes: cancerTypesName,
+          cancerTypesArray: cancerTypes,
           cancerTypesView: (
             <>
               <WithSeparator separator={', '}>
