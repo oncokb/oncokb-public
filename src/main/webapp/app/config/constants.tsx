@@ -756,6 +756,7 @@ export enum LicenseStatus {
   TRIAL = 'TRIAL',
   TRIAL_EXPIRED = 'TRIAL_EXPIRED',
   EXPIRED = 'EXPIRED',
+  TERMINATED = 'TERMINATED',
   UNKNOWN = 'UNKNOWN',
 }
 
@@ -765,6 +766,7 @@ export const LICENSE_STATUS_TITLES: { [key in LicenseStatus]: string } = {
   [LicenseStatus.TRIAL_EXPIRED]: 'Trial Expired',
   [LicenseStatus.EXPIRED]: 'Expired',
   [LicenseStatus.UNKNOWN]: 'Unknown',
+  [LicenseStatus.TERMINATED]: 'Terminated',
 };
 
 export enum LicenseModel {

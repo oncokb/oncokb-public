@@ -46,7 +46,7 @@ export type CompanyDTO = {
 
         'licenseModel': "FULL" | "LIMITED"
 
-        'licenseStatus': "TRIAL" | "REGULAR" | "TRIAL_EXPIRED" | "EXPIRED" | "UNKNOWN"
+        'licenseStatus': "TRIAL" | "REGULAR" | "TRIAL_EXPIRED" | "EXPIRED" | "UNKNOWN" | "TERMINATED"
 
         'licenseType': "ACADEMIC" | "COMMERCIAL" | "RESEARCH_IN_COMMERCIAL" | "HOSPITAL"
 
@@ -98,7 +98,7 @@ export type CompanyVM = {
 
         'licenseModel': "FULL" | "LIMITED"
 
-        'licenseStatus': "TRIAL" | "REGULAR" | "TRIAL_EXPIRED" | "EXPIRED" | "UNKNOWN"
+        'licenseStatus': "TRIAL" | "REGULAR" | "TRIAL_EXPIRED" | "EXPIRED" | "UNKNOWN" | "TERMINATED"
 
         'licenseType': "ACADEMIC" | "COMMERCIAL" | "RESEARCH_IN_COMMERCIAL" | "HOSPITAL"
 

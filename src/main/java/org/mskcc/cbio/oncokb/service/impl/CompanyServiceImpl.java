@@ -8,6 +8,7 @@ import java.time.LocalDateTime;
 import java.time.ZoneId;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.EnumSet;
 import java.util.HashSet;
 import java.util.LinkedList;
 import java.util.List;
@@ -75,10 +76,6 @@ public class CompanyServiceImpl implements CompanyService {
 
     private final UserService userService;
 
-    private final UserDetailsService userDetailsService;
-
-    private final UserDetailsMapper userDetailsMapper;
-
     private final CacheManager cacheManager;
 
     private final CacheNameResolver cacheNameResolver;
@@ -89,14 +86,19 @@ public class CompanyServiceImpl implements CompanyService {
 
     private final TokenProvider tokenProvider;
 
+    private static final Set<LicenseStatus> INACTIVE_LICENSE_STATUSES =
+    EnumSet.of(
+        LicenseStatus.TRIAL_EXPIRED,
+        LicenseStatus.EXPIRED,
+        LicenseStatus.TERMINATED
+    );
+
     public CompanyServiceImpl(
         CompanyRepository companyRepository,
         CompanyMapper companyMapper,
         CompanyDomainService companyDomainService,
         CompanyDomainMapper companyDomainMapper,
         UserService userService,
-        UserDetailsService userDetailsService,
-        UserDetailsMapper userDetailsMapper,
         UserMapper userMapper,
         CacheManager cacheManager,
         CacheNameResolver cacheNameResolver,
@@ -108,8 +110,6 @@ public class CompanyServiceImpl implements CompanyService {
         this.companyMapper = companyMapper;
         this.userMapper = userMapper;
         this.userService = userService;
-        this.userDetailsService = userDetailsService;
-        this.userDetailsMapper = userDetailsMapper;
         this.cacheManager = cacheManager;
         this.cacheNameResolver = cacheNameResolver;
         this.userRepository = userRepository;
@@ -170,21 +170,16 @@ public class CompanyServiceImpl implements CompanyService {
      * @return true if the license status change is valid
      */
     @Override
-    public boolean verifyLicenseStatusChange(LicenseStatus oldLicenseStatus, LicenseStatus newLicenseStatus) {
-        switch(oldLicenseStatus) {
-            case REGULAR:
-                return !newLicenseStatus.equals(LicenseStatus.TRIAL_EXPIRED);
-            case TRIAL:
-                break;
-            case TRIAL_EXPIRED:
-                return !newLicenseStatus.equals(LicenseStatus.EXPIRED);
-            case EXPIRED:
-                return !newLicenseStatus.equals(LicenseStatus.TRIAL_EXPIRED);
-            case UNKNOWN:
-                break;
-            default:
-                return false;
+    public boolean verifyLicenseStatusChange(LicenseStatus oldStatus, LicenseStatus newStatus) {
+        if (oldStatus == LicenseStatus.REGULAR) {
+            return newStatus != LicenseStatus.TRIAL_EXPIRED;
         }
+
+        // Forbid if both old and new are inactive 
+        if (INACTIVE_LICENSE_STATUSES.contains(oldStatus) && INACTIVE_LICENSE_STATUSES.contains(newStatus)) {
+            return false;
+        }
+
         return true;
     }
 

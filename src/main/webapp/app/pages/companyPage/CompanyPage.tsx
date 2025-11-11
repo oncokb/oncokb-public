@@ -467,23 +467,26 @@ export default class CompanyPage extends React.Component<ICompanyPage> {
   @computed
   // Certain license status changes are not valid, so we hide those options
   get licenseStatusOptions() {
-    const hideOptions = [LicenseStatus.UNKNOWN]; // For now, we are hiding the UNKNOWN status
-    switch (this.company.licenseStatus) {
-      case LicenseStatus.REGULAR:
-        hideOptions.push(LicenseStatus.TRIAL_EXPIRED);
-        break;
-      case LicenseStatus.TRIAL_EXPIRED:
-        hideOptions.push(LicenseStatus.EXPIRED);
-        break;
-      case LicenseStatus.EXPIRED:
-        hideOptions.push(LicenseStatus.TRIAL_EXPIRED);
-        break;
-      default:
+    const INACTIVE = [
+      LicenseStatus.TRIAL_EXPIRED,
+      LicenseStatus.EXPIRED,
+      LicenseStatus.TERMINATED,
+    ];
+
+    const currentLicense = this.company.licenseStatus as LicenseStatus;
+    let hide = [LicenseStatus.UNKNOWN]; // For now we are hiding the unknown status
+
+    if (currentLicense === LicenseStatus.REGULAR) {
+      hide.push(LicenseStatus.TRIAL_EXPIRED);
+    } else if (INACTIVE.includes(currentLicense)) {
+      hide = hide.concat(INACTIVE);
     }
+
     return COMPANY_FORM_OPTIONS.licenseStatus.filter(
-      option => !hideOptions.includes(option.value)
+      option => !hide.includes(option.value)
     );
   }
+
   @computed
   get licenseChangeModalTitle() {
     if (this.simpleConfirmModalType === SimpleConfirmModalType.UPDATE_COMPANY) {

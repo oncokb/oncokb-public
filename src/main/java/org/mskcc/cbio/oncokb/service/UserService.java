@@ -751,12 +751,16 @@ public class UserService {
                         updatedUserDTO = updateUserAndTokens(userMapper.userToUserDTO(updatedUser.get()));
                     }
                 }
-            }else if (companyLicenseStatus.equals(LicenseStatus.TRIAL_EXPIRED) || companyLicenseStatus.equals(LicenseStatus.EXPIRED)) {
+            } else if (isInactiveLicense(companyLicenseStatus)) {
                 expireUserAccount(userDTO);
             }
         }
 
         return updatedUserDTO;
+    }
+
+    private Boolean isInactiveLicense(LicenseStatus status) {
+        return status.equals(LicenseStatus.TRIAL_EXPIRED) || status.equals(LicenseStatus.EXPIRED) || status.equals(LicenseStatus.TERMINATED);
     }
 
     /**

@@ -289,6 +289,32 @@ public class CompanyServiceIT {
             .isCloseTo(Instant.now(), within(timeDiffToleranceInMilliseconds, ChronoUnit.MILLIS)); // token should be expired
     }
 
+    @Test
+    @Transactional
+    public void assertThatUserTokenExpireAfterCompanyLicenseTerminated() {
+        // Initialize database
+        companyDTO.setLicenseStatus(LicenseStatus.REGULAR);
+        CompanyDTO existingCompany = companyService.createCompany(companyDTO);
+        User newUser = userService.createUser(userDTO, false, Optional.empty(), Optional.empty());
+        CompanyVM companyVM = createCompanyVM(existingCompany);
+        companyVM.setCompanyUserEmails(Collections.singletonList(DEFAULT_EMAIL));
+        companyService.updateCompany(companyVM);
+
+        // Terminate the company's license
+        CompanyVM updatedCompanyVM = createCompanyVM(existingCompany);
+        updatedCompanyVM.setLicenseStatus(LicenseStatus.TERMINATED);
+        companyService.updateCompany(updatedCompanyVM);
+
+        // Check assumptions
+        Optional<User> optionalUser = userRepository.findOneById(newUser.getId());
+        assertThat(optionalUser).isPresent();
+        UserDTO userDTO = userMapper.userToUserDTO(optionalUser.get());
+        assertThat(userDTO.isActivated()).isFalse(); // user should be deactivated
+        List<Token> tokens = tokenService.findByUser(userMapper.userDTOToUser(userDTO));
+        assertThat(tokens.get(0).getExpiration())
+            .isCloseTo(Instant.now(), within(timeDiffToleranceInMilliseconds, ChronoUnit.MILLIS)); // token should be expired
+    }
+
     /**
      * The following tests verify whether the correct company is found based on the user's email address
      */
