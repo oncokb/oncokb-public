@@ -1,4 +1,4 @@
-import React, { CSSProperties } from 'react';
+import React, { CSSProperties, useRef, useState } from 'react';
 import CancerTypeSelect from './CancerTypeSelect';
 import classnames from 'classnames';
 import { COLOR_BLUE } from 'app/config/theme';
@@ -36,6 +36,8 @@ export default function SomaticGermlineCancerTypeSelect({
   onchange?: (cancerType: string) => void;
   prioritizedCancerTypes?: string[];
 }) {
+  const [isOverflowing, setIsOverflowing] = useState(false);
+
   const {
     control,
     indicatorsContainer,
@@ -61,16 +63,42 @@ export default function SomaticGermlineCancerTypeSelect({
       <span className={classnames('flex-grow-1')}>
         <CancerTypeSelect
           components={{
-            Control: ({ children, ...rest }) => (
-              <DefaultTooltip
-                placement="bottomLeft"
-                overlay={<>{cancerType}</>}
-              >
+            Control({ children, ...rest }) {
+              const selectControl = (
                 <div>
                   <components.Control {...rest}>{children}</components.Control>
                 </div>
-              </DefaultTooltip>
-            ),
+              );
+
+              if (!isOverflowing) {
+                return selectControl;
+              }
+
+              return (
+                <DefaultTooltip
+                  placement="bottomLeft"
+                  overlay={<>{cancerType}</>}
+                >
+                  {selectControl}
+                </DefaultTooltip>
+              );
+            },
+            SingleValue({ children, ...rest }) {
+              return (
+                <components.SingleValue {...rest}>
+                  <div
+                    ref={ref => {
+                      if (ref) {
+                        setIsOverflowing(ref.scrollWidth > ref.clientWidth);
+                      }
+                    }}
+                    className="text-truncate"
+                  >
+                    {children}
+                  </div>
+                </components.SingleValue>
+              );
+            },
           }}
           styles={{
             control(base, props) {
