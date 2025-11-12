@@ -174,6 +174,7 @@ export default class GenePage extends React.Component<GenePageProps, any> {
             drugs: drug,
             cancerTypes: cancerTypesName,
             drugDescription: variant.drugDescription,
+            cancerTypesArray: cancerTypeNames,
             cancerTypesView,
             citations: {
               abstracts: variant.drugAbstracts,
@@ -189,6 +190,7 @@ export default class GenePage extends React.Component<GenePageProps, any> {
           drugs: '',
           cancerTypes: cancerTypesName,
           drugDescription: variant.drugDescription,
+          cancerTypesArray: cancerTypeNames,
           cancerTypesView,
           citations: {
             abstracts: variant.drugAbstracts,

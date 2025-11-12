@@ -24,7 +24,11 @@ import {
 import { isCategoricalAlteration } from 'app/shared/utils/Utils';
 import CancerTypeSelect from 'app/shared/dropdown/CancerTypeSelect';
 import AlterationTableTabs from 'app/pages/annotationPage/AlterationTableTabs';
-import { getSummaries, SummaryKey } from 'app/pages/annotationPage/Utils';
+import {
+  getCancerTypesSortedByName,
+  getSummaries,
+  SummaryKey,
+} from 'app/pages/annotationPage/Utils';
 import AppStore from 'app/store/AppStore';
 import { Alteration } from 'app/shared/api/generated/OncoKbAPI';
 
@@ -144,6 +148,11 @@ export default class AlterationView extends React.Component<
                   onChange={(selectedOption: any) =>
                     this.updateTumorTypeQuery(selectedOption)
                   }
+                  prioritizedCancerTypes={getCancerTypesSortedByName([
+                    ...this.props.therapeuticImplications,
+                    ...this.props.diagnosticImplications,
+                    ...this.props.prognosticImplications,
+                  ])}
                 />
               </span>
               <InfoIcon

@@ -227,6 +227,7 @@ export default class SomaticGermlineGenePage extends React.Component<
             alterationsView: alterationView,
             drugs: drug,
             cancerTypes: cancerTypesName,
+            cancerTypesArray: cancerTypeNames,
             drugDescription: variant.drugDescription,
             cancerTypesView,
             citations: {
@@ -242,6 +243,7 @@ export default class SomaticGermlineGenePage extends React.Component<
           alterationsView: alterationView,
           drugs: '',
           cancerTypes: cancerTypesName,
+          cancerTypesArray: cancerTypeNames,
           drugDescription: variant.drugDescription,
           cancerTypesView,
           citations: {

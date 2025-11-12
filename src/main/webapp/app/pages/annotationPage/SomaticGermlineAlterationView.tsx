@@ -22,7 +22,11 @@ import {
 } from 'app/store/AnnotationStore';
 import { isCategoricalAlteration } from 'app/shared/utils/Utils';
 import AlterationTableTabs from 'app/pages/annotationPage/AlterationTableTabs';
-import { getSummaries, SummaryKey } from 'app/pages/annotationPage/Utils';
+import {
+  getCancerTypesSortedByName,
+  getSummaries,
+  SummaryKey,
+} from 'app/pages/annotationPage/Utils';
 import AppStore from 'app/store/AppStore';
 import { Alteration } from 'app/shared/api/generated/OncoKbAPI';
 import SomaticGermlineCancerTypeSelect from 'app/shared/dropdown/SomaticGermlineCancerTypeSelect';
@@ -130,6 +134,11 @@ export default class SomaticGermlineAlterationView extends React.Component<
                   germline={this.props.germline}
                   routing={this.props.routing}
                   cancerType={this.props.tumorType}
+                  prioritizedCancerTypes={getCancerTypesSortedByName([
+                    ...this.props.therapeuticImplications,
+                    ...this.props.diagnosticImplications,
+                    ...this.props.prognosticImplications,
+                  ])}
                 />
               </span>
             </div>
