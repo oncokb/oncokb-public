@@ -441,7 +441,7 @@ describe('Tests with login', () => {
   })
 
   it('Gene Page', async() => {
-    await page.goto(`${CLIENT_URL}gene/ROS1`);
+    await page.goto(`${CLIENT_URL}gene/ROS1/somatic`);
     await page.setViewport(VIEW_PORT_1080);
     await page.waitFor(LONG_WAITING_TIME);
     let image = await page.screenshot(getScreenshotConfig('Gene Page with Login'));
@@ -449,7 +449,7 @@ describe('Tests with login', () => {
   })
 
   it('Alteration Page', async() => {
-    await page.goto(`${CLIENT_URL}gene/TP53/Deletion`);
+    await page.goto(`${CLIENT_URL}gene/TP53/somatic/Deletion`);
     await page.setViewport(VIEW_PORT_1080);
     await page.waitFor(WAITING_TIME);
     let image = await page.screenshot(getScreenshotConfig('Alteration Page with Login'));
@@ -457,7 +457,7 @@ describe('Tests with login', () => {
   })
 
   it('Alteration Page with Cancer Type - Solid', async() => {
-    await page.goto(`${CLIENT_URL}gene/BRAF/V600E/MEL`);
+    await page.goto(`${CLIENT_URL}gene/BRAF/somatic/V600E/MEL`);
     await page.setViewport(VIEW_PORT_1080);
     await page.waitFor(WAITING_TIME);
     let image = await page.screenshot(getScreenshotConfig('Alteration Page with Cancer Type - Solid with Login'));
@@ -465,7 +465,7 @@ describe('Tests with login', () => {
   })
 
   it('Alteration Page with Cancer Type - Heme', async() => {
-    await page.goto(`${CLIENT_URL}gene/BRAF/V600E/HCL`);
+    await page.goto(`${CLIENT_URL}gene/BRAF/somatic/V600E/HCL`);
     await page.setViewport(VIEW_PORT_1080);
     await page.waitFor(WAITING_TIME);
     let image = await page.screenshot(getScreenshotConfig('Alteration Page with Cancer Type - Heme with Login'));
