@@ -19,15 +19,14 @@ import {
   CATEGORICAL_ALTERATIONS,
   DELETION,
   FUSIONS,
-  GAIN_OF_FUNCTION_MUTATIONS,
   GENERAL_ONCOGENICITY,
   GENERAL_PATHOGENICITY,
+  InheritanceMechanism,
   LEVEL_PRIORITY,
   LEVEL_TYPES,
   LEVELS,
-  LOSS_OF_FUNCTION_MUTATIONS,
-  MECHANISM_OF_INHERITANCE_DOMINANT,
-  MECHANISM_OF_INHERITANCE_RECESSIVE,
+  MECHANISM_OF_INHERITANCE_AUTOSOMAL_DOMINANT,
+  MECHANISM_OF_INHERITANCE_AUTOSOMAL_RECESSIVE,
   ONCOGENIC_MUTATIONS,
   ONCOGENICITY,
   ONCOGENICITY_CLASS_NAMES,
@@ -35,7 +34,6 @@ import {
   ONCOKB_TM,
   PAGE_ROUTE,
   SHORTEN_TEXT_FROM_LIST_THRESHOLD,
-  SWITCH_OF_FUNCTION_MUTATIONS,
   TABLE_COLUMN_KEY,
   TRUNCATING_MUTATIONS,
 } from 'app/config/constants';
@@ -981,31 +979,29 @@ const isAlleleState = (str: string): str is AlleleState => {
   );
 };
 
-export const getAlleleStatesFromEvidence = (evidence: Evidence) => {
-  if (!evidence.knownEffect) {
-    return [];
+export const getAlleleStateFromMechanismOfInheritance = (
+  inheritanceMechanism: InheritanceMechanism
+): AlleleState | undefined => {
+  if (inheritanceMechanism === MECHANISM_OF_INHERITANCE_AUTOSOMAL_DOMINANT) {
+    return ALLELE_STATE_MONOALLELIC;
   }
 
-  const alleleStates: AlleleState[] = [];
-  for (const alleleState of evidence.knownEffect.split(',')) {
-    if (isAlleleState(alleleState)) {
-      alleleStates.push(alleleState);
-    }
+  if (inheritanceMechanism === MECHANISM_OF_INHERITANCE_AUTOSOMAL_RECESSIVE) {
+    return ALLELE_STATE_BIALLELEIC;
   }
-  return alleleStates;
+
+  if (inheritanceMechanism === 'Carrier') {
+    return ALLELE_STATE_CARRIER;
+  }
+
+  return undefined;
 };
 
-export const getMechanismOfInheritanceFromAlleleStates = (
-  alleleStates: AlleleState[]
-) => {
-  // If more than one allele state, implies monoalleic and carrier, so mechanism of inheritance does not apply
-  if (alleleStates.length === 0 || alleleStates.length > 1) {
+export const getAlleleStatesFromEvidence = (evidence: Evidence) => {
+  if (!evidence.knownEffect) {
     return undefined;
   }
-  if (alleleStates[0] === ALLELE_STATE_MONOALLELIC) {
-    return MECHANISM_OF_INHERITANCE_DOMINANT;
-  }
-  if (alleleStates[0] === ALLELE_STATE_BIALLELEIC) {
-    return MECHANISM_OF_INHERITANCE_RECESSIVE;
-  }
+  const moi = evidence.knownEffect.trim() as InheritanceMechanism;
+  const alleleState = getAlleleStateFromMechanismOfInheritance(moi);
+  return alleleState;
 };

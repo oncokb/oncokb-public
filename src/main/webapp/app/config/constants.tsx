@@ -1044,5 +1044,13 @@ export type AlleleState =
   | typeof ALLELE_STATE_BIALLELEIC
   | typeof ALLELE_STATE_CARRIER;
 
-export const MECHANISM_OF_INHERITANCE_RECESSIVE = 'Autosomal Recessive';
-export const MECHANISM_OF_INHERITANCE_DOMINANT = 'Autosomal Dominant';
+export const MECHANISM_OF_INHERITANCE_AUTOSOMAL_RECESSIVE =
+  'Autosomal Recessive';
+export const MECHANISM_OF_INHERITANCE_AUTOSOMAL_DOMINANT = 'Autosomal Dominant';
+export const MECHANISM_OF_INHERITANCE_X_LINKED_RECESSIVE = 'X-Linked Recessive';
+
+export type InheritanceMechanism =
+  | typeof MECHANISM_OF_INHERITANCE_AUTOSOMAL_DOMINANT
+  | typeof MECHANISM_OF_INHERITANCE_AUTOSOMAL_RECESSIVE
+  | typeof MECHANISM_OF_INHERITANCE_X_LINKED_RECESSIVE
+  | 'Carrier';
