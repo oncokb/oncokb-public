@@ -333,6 +333,7 @@ export default class UserPage extends React.Component<IUserPage> {
                       .then(
                         () => {
                           notifySuccess('Updated Token');
+                          this.getUserTokens();
                         },
                         (error: Error) => {
                           this.getUserStatus = PromiseStatus.error;
@@ -537,6 +538,14 @@ export default class UserPage extends React.Component<IUserPage> {
   @computed
   get trialInitiated() {
     return !!this.user.additionalInfo?.trialAccount?.activation?.initiationDate;
+  }
+
+  @computed
+  get awaitingTrialAgreementAccepted() {
+    return (
+      this.trialInitiated &&
+      !this.user.additionalInfo?.trialAccount?.licenseAgreement?.acceptanceDate
+    );
   }
 
   @computed
@@ -934,8 +943,15 @@ export default class UserPage extends React.Component<IUserPage> {
                             validate={TEXT_VAL}
                           />
                           <div className={'mb-2 font-weight-bold'}>
-                            Account Type
+                            <span className="mr-2">Account Type</span>
                           </div>
+                          {this.awaitingTrialAgreementAccepted && (
+                            <b className="text-primary">
+                              This user has not yet accepted their trial
+                              agreement. Once this happens, trial user will be
+                              selected.
+                            </b>
+                          )}
                           <AvRadioGroup
                             inline
                             name="accountType"
@@ -953,10 +969,12 @@ export default class UserPage extends React.Component<IUserPage> {
                             <AvRadio
                               label={AccountType.REGULAR}
                               value={AccountType.REGULAR}
+                              disabled={this.awaitingTrialAgreementAccepted}
                             />
                             <AvRadio
                               label={AccountType.TRIAL}
                               value={AccountType.TRIAL}
+                              disabled={this.awaitingTrialAgreementAccepted}
                             />
                           </AvRadioGroup>
                           {this.selectedAccountType === AccountType.TRIAL ? (
