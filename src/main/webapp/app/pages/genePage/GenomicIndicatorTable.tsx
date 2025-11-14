@@ -2,7 +2,6 @@ import OncoKBTable, {
   SearchColumn,
 } from 'app/components/oncokbTable/OncoKBTable';
 import {
-  AlleleState,
   LG_TABLE_FIXED_HEIGHT,
   THRESHOLD_TABLE_FIXED_HEIGHT,
 } from 'app/config/constants';
@@ -10,7 +9,6 @@ import React from 'react';
 import {
   getAlleleStatesFromEvidence,
   getAlterationName,
-  getMechanismOfInheritanceFromAlleleStates,
 } from 'app/shared/utils/Utils';
 import { LongText } from 'app/oncokb-frontend-commons/src/components/LongText';
 import { Evidence } from 'app/shared/api/generated/OncoKbAPI';
@@ -25,12 +23,7 @@ export const GenomicIndicatorTable: React.FunctionComponent<{
       Header: <span>Genomic Indicator</span>,
       maxWidth: 200,
       Cell(row: { original: Evidence }) {
-        const alleleStates = getAlleleStatesFromEvidence(row.original);
-        const alleleState: AlleleState | undefined = alleleStates.includes(
-          'carrier'
-        )
-          ? 'carrier'
-          : alleleStates[0];
+        const alleleState = getAlleleStatesFromEvidence(row.original);
         return (
           <>
             <div>{row.original.name}</div>
@@ -43,13 +36,7 @@ export const GenomicIndicatorTable: React.FunctionComponent<{
       Header: <span>Inheritance</span>,
       maxWidth: 200,
       Cell(row: { original: Evidence }) {
-        return (
-          <span>
-            {getMechanismOfInheritanceFromAlleleStates(
-              getAlleleStatesFromEvidence(row.original)
-            )}
-          </span>
-        );
+        return <span>{row.original.knownEffect}</span>;
       },
     },
     {

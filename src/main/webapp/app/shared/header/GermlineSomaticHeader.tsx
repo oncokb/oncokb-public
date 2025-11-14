@@ -22,6 +22,10 @@ export default function GermlineSomaticHeader({
   isGermline: boolean;
   extra?: React.ReactNode;
 }) {
+  const normalizedProteinAlteration =
+    proteinAlteration && !proteinAlteration.startsWith('p.')
+      ? `p.${proteinAlteration}`
+      : proteinAlteration;
   return (
     <h1 className={classnames(styles.header, 'h2')}>
       <div
@@ -40,7 +44,7 @@ export default function GermlineSomaticHeader({
         </span>
         {proteinAlteration && (
           <span className={classnames(styles.headerContentGene)}>
-            {proteinAlteration}
+            {`(${normalizedProteinAlteration})`}
           </span>
         )}
         <span className={classnames(styles.extraContent, styles.centerContent)}>
