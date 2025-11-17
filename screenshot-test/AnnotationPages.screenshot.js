@@ -161,7 +161,7 @@ function getMockResponse(url){
       break;
 
     // ROS1
-    case `${SERVER_URL}api/private/utils/numbers/gene/ROS1`:
+    case `${SERVER_URL}api/private/utils/numbers/gene/ROS1?germline=false`:
       res = {
         status: 200,
         contentType: 'application/json',
@@ -175,14 +175,14 @@ function getMockResponse(url){
         body: rose1GeneQuery
       };
       break;
-    case `${SERVER_URL}api/private/search/variants/biological?hugoSymbol=ROS1`:
+    case `${SERVER_URL}api/private/search/variants/biological?hugoSymbol=ROS1&germline=false`:
       res = {
         status: 200,
         contentType: 'application/json',
         body: ros1BiologicalVariants
       };
       break;
-    case `${SERVER_URL}api/private/search/variants/clinical?hugoSymbol=ROS1`:
+    case `${SERVER_URL}api/private/search/variants/clinical?hugoSymbol=ROS1&germline=false`:
       res = {
         status: 200,
         contentType: 'application/json',
@@ -247,7 +247,7 @@ function getMockResponse(url){
       break;
 
     // TP53 Deletion
-    case `${SERVER_URL}api/private/utils/numbers/gene/TP53`:
+    case `${SERVER_URL}api/private/utils/numbers/gene/TP53?germline=false`:
       res = {
         status: 200,
         contentType: 'application/json',
@@ -261,14 +261,14 @@ function getMockResponse(url){
         body: tp53GeneQuery
       };
       break;
-    case `${SERVER_URL}api/private/search/variants/biological?hugoSymbol=TP53`:
+    case `${SERVER_URL}api/private/search/variants/biological?hugoSymbol=TP53&germline=false`:
       res = {
         status: 200,
         contentType: 'application/json',
         body: tp53BiologicalVariants
       };
       break;
-    case `${SERVER_URL}api/private/search/variants/clinical?hugoSymbol=TP53`:
+    case `${SERVER_URL}api/private/search/variants/clinical?hugoSymbol=TP53&germline=false`:
       res = {
         status: 200,
         contentType: 'application/json',
@@ -282,7 +282,7 @@ function getMockResponse(url){
         body: tp53EnsemblGenes
       };
       break;
-    case `${SERVER_URL}api/private/utils/variantAnnotation?hugoSymbol=TP53&referenceGenome=GRCh37&alteration=Deletion`:
+    case `${SERVER_URL}api/private/utils/variantAnnotation?hugoSymbol=TP53&referenceGenome=GRCh37&alteration=Deletion&germline=false`:
       res = {
         status: 200,
         contentType: 'application/json',
@@ -305,7 +305,7 @@ function getMockResponse(url){
       break;
 
     // BRAF V600E
-    case `${SERVER_URL}api/private/utils/numbers/gene/BRAF`:
+    case `${SERVER_URL}api/private/utils/numbers/gene/BRAF?germline=false`:
       res = {
         status: 200,
         contentType: 'application/json',
@@ -319,14 +319,14 @@ function getMockResponse(url){
         body: brafGeneQuery
       };
       break;
-    case `${SERVER_URL}api/private/search/variants/biological?hugoSymbol=BRAF`:
+    case `${SERVER_URL}api/private/search/variants/biological?hugoSymbol=BRAF&germline=false`:
       res = {
         status: 200,
         contentType: 'application/json',
         body: brafBiologicalVariants
       };
       break;
-    case `${SERVER_URL}api/private/search/variants/clinical?hugoSymbol=BRAF`:
+    case `${SERVER_URL}api/private/search/variants/clinical?hugoSymbol=BRAF&germline=false`:
       res = {
         status: 200,
         contentType: 'application/json',
@@ -354,14 +354,14 @@ function getMockResponse(url){
         body: brafV600eRelevantAlterations
       };
       break;
-    case `${SERVER_URL}api/private/utils/variantAnnotation?hugoSymbol=BRAF&referenceGenome=GRCh37&alteration=V600E&tumorType=MEL`:
+    case `${SERVER_URL}api/private/utils/variantAnnotation?hugoSymbol=BRAF&referenceGenome=GRCh37&alteration=V600E&tumorType=MEL&germline=false`:
       res = {
         status: 200,
         contentType: 'application/json',
         body: brafV600eMelanomaVariantAnnotation
       };
       break;
-    case `${SERVER_URL}api/private/utils/variantAnnotation?hugoSymbol=BRAF&referenceGenome=GRCh37&alteration=V600E&tumorType=HCL`:
+    case `${SERVER_URL}api/private/utils/variantAnnotation?hugoSymbol=BRAF&referenceGenome=GRCh37&alteration=V600E&tumorType=HCL&germline=false`:
       res = {
         status: 200,
         contentType: 'application/json',
@@ -441,7 +441,7 @@ describe('Tests with login', () => {
   })
 
   it('Gene Page', async() => {
-    await page.goto(`${CLIENT_URL}gene/ROS1`);
+    await page.goto(`${CLIENT_URL}gene/ROS1/somatic`);
     await page.setViewport(VIEW_PORT_1080);
     await page.waitFor(LONG_WAITING_TIME);
     let image = await page.screenshot(getScreenshotConfig('Gene Page with Login'));
@@ -449,7 +449,7 @@ describe('Tests with login', () => {
   })
 
   it('Alteration Page', async() => {
-    await page.goto(`${CLIENT_URL}gene/TP53/Deletion`);
+    await page.goto(`${CLIENT_URL}gene/TP53/somatic/Deletion`);
     await page.setViewport(VIEW_PORT_1080);
     await page.waitFor(WAITING_TIME);
     let image = await page.screenshot(getScreenshotConfig('Alteration Page with Login'));
@@ -457,7 +457,7 @@ describe('Tests with login', () => {
   })
 
   it('Alteration Page with Cancer Type - Solid', async() => {
-    await page.goto(`${CLIENT_URL}gene/BRAF/V600E/MEL`);
+    await page.goto(`${CLIENT_URL}gene/BRAF/somatic/V600E/MEL`);
     await page.setViewport(VIEW_PORT_1080);
     await page.waitFor(WAITING_TIME);
     let image = await page.screenshot(getScreenshotConfig('Alteration Page with Cancer Type - Solid with Login'));
@@ -465,7 +465,7 @@ describe('Tests with login', () => {
   })
 
   it('Alteration Page with Cancer Type - Heme', async() => {
-    await page.goto(`${CLIENT_URL}gene/BRAF/V600E/HCL`);
+    await page.goto(`${CLIENT_URL}gene/BRAF/somatic/V600E/HCL`);
     await page.setViewport(VIEW_PORT_1080);
     await page.waitFor(WAITING_TIME);
     let image = await page.screenshot(getScreenshotConfig('Alteration Page with Cancer Type - Heme with Login'));
@@ -525,7 +525,7 @@ describe('Tests without login', () => {
   })
 
   it('Gene Page', async() => {
-    await page.goto(`${CLIENT_URL}gene/ROS1`);
+    await page.goto(`${CLIENT_URL}gene/ROS1/somatic`);
     await page.setViewport(VIEW_PORT_1080);
     await page.waitFor(LONG_WAITING_TIME);
     let image = await page.screenshot(getScreenshotConfig('Gene Page without Login'));
@@ -533,7 +533,7 @@ describe('Tests without login', () => {
   })
 
   it('Alteration Page', async() => {
-    await page.goto(`${CLIENT_URL}gene/TP53/Deletion`);
+    await page.goto(`${CLIENT_URL}gene/TP53/somatic/Deletion`);
     await page.setViewport(VIEW_PORT_1080);
     await page.waitFor(WAITING_TIME);
     let image = await page.screenshot(getScreenshotConfig('Alteration Page without Login'));
@@ -541,7 +541,7 @@ describe('Tests without login', () => {
   })
 
   it('Alteration Page with Cancer Type - Solid', async() => {
-    await page.goto(`${CLIENT_URL}gene/BRAF/V600E/MEL`);
+    await page.goto(`${CLIENT_URL}gene/BRAF/somatic/V600E/MEL`);
     await page.setViewport(VIEW_PORT_1080);
     await page.waitFor(WAITING_TIME);
     let image = await page.screenshot(getScreenshotConfig('Alteration Page with Cancer Type - Solid without Login'));
@@ -549,7 +549,7 @@ describe('Tests without login', () => {
   })
 
   it('Alteration Page with Cancer Type - Heme', async() => {
-    await page.goto(`${CLIENT_URL}gene/BRAF/V600E/HCL`);
+    await page.goto(`${CLIENT_URL}gene/BRAF/somatic/V600E/HCL`);
     await page.setViewport(VIEW_PORT_1080);
     await page.waitFor(WAITING_TIME);
     let image = await page.screenshot(getScreenshotConfig('Alteration Page with Cancer Type - Heme without Login'));
@@ -600,7 +600,7 @@ describe('Tests on mobile view (< large grid)', () => {
     await page.evaluate(() => {
       localStorage.setItem('oncokb-user-token', 'oncokb-public-demo-admin-token');
     });
-    await page.goto(`${CLIENT_URL}gene/BRAF/V600E/HCL`);
+    await page.goto(`${CLIENT_URL}gene/BRAF/somatic/V600E/HCL`);
     await page.setViewport(MOBILE_VIEW_PORT);
     await page.waitFor(WAITING_TIME);
     let image = await page.screenshot(getScreenshotConfig('Alteration Page with Cancer Type - With login - Mobile'));
@@ -611,7 +611,7 @@ describe('Tests on mobile view (< large grid)', () => {
     await page.evaluate(() => {
       localStorage.removeItem('oncokb-user-token');
     });
-    await page.goto(`${CLIENT_URL}gene/BRAF/V600E/HCL`);
+    await page.goto(`${CLIENT_URL}gene/BRAF/somatic/V600E/HCL`);
     await page.setViewport(MOBILE_VIEW_PORT);
     await page.waitFor(WAITING_TIME);
     let image = await page.screenshot(getScreenshotConfig('Alteration Page with Cancer Type - Without login - Mobile'));
