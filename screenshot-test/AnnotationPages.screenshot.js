@@ -161,7 +161,7 @@ function getMockResponse(url){
       break;
 
     // ROS1
-    case `${SERVER_URL}api/private/utils/numbers/gene/ROS1`:
+    case `${SERVER_URL}api/private/utils/numbers/gene/ROS1?germline=false`:
       res = {
         status: 200,
         contentType: 'application/json',
@@ -175,14 +175,14 @@ function getMockResponse(url){
         body: rose1GeneQuery
       };
       break;
-    case `${SERVER_URL}api/private/search/variants/biological?hugoSymbol=ROS1`:
+    case `${SERVER_URL}api/private/search/variants/biological?hugoSymbol=ROS1&germline=false`:
       res = {
         status: 200,
         contentType: 'application/json',
         body: ros1BiologicalVariants
       };
       break;
-    case `${SERVER_URL}api/private/search/variants/clinical?hugoSymbol=ROS1`:
+    case `${SERVER_URL}api/private/search/variants/clinical?hugoSymbol=ROS1&germline=false`:
       res = {
         status: 200,
         contentType: 'application/json',
@@ -525,7 +525,7 @@ describe('Tests without login', () => {
   })
 
   it('Gene Page', async() => {
-    await page.goto(`${CLIENT_URL}gene/ROS1`);
+    await page.goto(`${CLIENT_URL}gene/ROS1/somatic`);
     await page.setViewport(VIEW_PORT_1080);
     await page.waitFor(LONG_WAITING_TIME);
     let image = await page.screenshot(getScreenshotConfig('Gene Page without Login'));
