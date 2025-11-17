@@ -64,13 +64,15 @@ export const GenePageLink: React.FunctionComponent<{
   searchQueries?: GenePageSearchQueries;
   hashQueries?: GenePageHashQueries;
   onClick?: () => void;
-}> = props => {
+  germline?: boolean;
+}> = ({ germline = false, ...props }) => {
   const highlightContent =
     props.highlightContent === undefined ? true : props.highlightContent;
   const pageLink = getGenePageLink({
     hugoSymbol: props.hugoSymbol,
     searchQueries: props.searchQueries,
     hashQueries: props.hashQueries,
+    germline,
   });
   return (
     <Link
@@ -138,7 +140,7 @@ export const AlterationPageLink: React.FunctionComponent<{
   showGene?: boolean;
   germline?: boolean;
   onClick?: () => void;
-}> = props => {
+}> = ({ germline = false, ...props }) => {
   const alterationName = getAlterationName(props.alteration, true);
   const pageLink = getAlterationPageLink({
     hugoSymbol: props.hugoSymbol,
@@ -147,7 +149,7 @@ export const AlterationPageLink: React.FunctionComponent<{
     cancerType: props.cancerType,
     searchQueries: props.searchQueries,
     hashQueries: props.hashQueries,
-    germline: props.germline,
+    germline,
   });
   return (
     <>
@@ -283,23 +285,6 @@ export const getGenomicPageLink = (props: {
     pageLink = `${pageLink}?${QueryString.stringify(location.search)}`;
   }
   return pageLink;
-};
-
-export const TumorTypePageLink: React.FunctionComponent<{
-  hugoSymbol: string;
-  alteration: string;
-  tumorType: string;
-  content?: string;
-}> = props => {
-  return (
-    <Link
-      to={`${PAGE_ROUTE.GENE_HEADER}/${props.hugoSymbol}/${encodeSlash(
-        props.alteration
-      )}/${encodeSlash(props.tumorType)}`}
-    >
-      {props.content ? props.content : props.tumorType}
-    </Link>
-  );
 };
 
 export const MSILink: React.FunctionComponent<{}> = () => {
