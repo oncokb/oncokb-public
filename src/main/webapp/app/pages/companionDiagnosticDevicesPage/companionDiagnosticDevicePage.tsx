@@ -74,6 +74,7 @@ interface IBiomarkerAssociation {
   drugs: string;
   cancerTypes: ICancerType[];
   fdaSubmissions: any[];
+  associationId: number;
 }
 
 interface ICancerType {
@@ -201,6 +202,7 @@ const parseCDx = () => {
           drugs: getDrugName(assoc.drugs, assoc.rules),
           cancerTypes: assoc.cancerTypes,
           fdaSubmissions: assoc.fdaSubmissions,
+          associationId: assoc.id,
         }));
       })
       .flat()
@@ -459,13 +461,20 @@ const CompanionDiagnosticDevicePage: React.FunctionComponent<{}> = () => {
         </span>
       ),
       Cell(tableProps: { original: ICompanionDiagnosticDevice }): JSX.Element {
+        const assoc = tableProps.original.biomarkerAssociation;
+        // TODO: Remove once we support https://github.com/oncokb/oncokb-pipeline/issues/969
+        // Reason is that this association is pending on FDA, so there is no PMA.
+        if (assoc.associationId === 319) {
+          return <span>PMA not available as of 11/20/25</span>;
+        }
         return (
           <WithSeparator separator=", ">
-            {tableProps.original.biomarkerAssociation.fdaSubmissions.map(
-              (fdaSubmission: IFdaSubmission) => {
-                return <FdaSubmissionLink fdaSubmission={fdaSubmission} />;
-              }
-            )}
+            {assoc.fdaSubmissions.map((fdaSubmission: IFdaSubmission) => (
+              <FdaSubmissionLink
+                key={`${fdaSubmission.id}-${fdaSubmission.number}-${fdaSubmission.supplementNumber}`}
+                fdaSubmission={fdaSubmission}
+              />
+            ))}
           </WithSeparator>
         );
       },
