@@ -23,6 +23,20 @@ export default function NewsContent112025() {
           </Link>{' '}
           (CDx) page
         </li>
+        <li>
+          Key updates to the functional classification and variant-level
+          annotation of the <em>NPM1</em> gene
+          <ul>
+            <li>
+              <em>NPM1</em> updated from Tumor Suppressor gene (TSG) to both
+              Oncogene (OG) and TSG
+            </li>
+            <li>
+              Biological effect of annotated variants updated from
+              Loss-of-function to Switch-of-function
+            </li>
+          </ul>
+        </li>
       </ul>
       <p>
         <strong>Updated Therapeutic Implications</strong>
@@ -111,9 +125,9 @@ export default function NewsContent112025() {
                 ,{' '}
                 <AlterationPageLink
                   hugoSymbol="NPM1"
-                  alteration="K134delinsQLLSGLq"
+                  alteration="K134delinsQLLSGLQ"
                 >
-                  K134delinsQLLSGLq
+                  K134delinsQLLSGLQ
                 </AlterationPageLink>
                 ,{' '}
                 <AlterationPageLink
