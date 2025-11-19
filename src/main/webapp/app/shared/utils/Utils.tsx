@@ -801,19 +801,14 @@ export const isCategoricalAlteration = (alteration: string) => {
 };
 
 export const getCategoricalAlteration = (alteration: string) => {
-  if (isCategoricalAlteration(alteration)) {
-    const matched = CATEGORICAL_ALTERATIONS.filter(categoricalAlt => {
-      return alteration.toLowerCase().startsWith(categoricalAlt.toLowerCase());
-    });
-    // We use only the base categorical alteration name (stripping anything after it)
-    // so that cases like "Oncogenic Mutations {excluding Fusions}" correctly link
-    // to the main, non-exclusion page.
-    // Some cases e.g. "Truncating mutations in exon 11" (with no exclusion suffix) should retain the full name instead.
-    if (alteration.includes('{')) {
-      return matched.pop();
-    }
-  }
-  return alteration;
+  if (!isCategoricalAlteration(alteration)) return alteration;
+
+  // We use only the base categorical alteration name (stripping exclusion critera)
+  // so that cases like "Oncogenic Mutations {excluding Fusions}" correctly link
+  // to the main, non-exclusion page.
+  // Some cases e.g. "Truncating mutations in exon 11" (with no exclusion suffix) should retain the full name instead.
+  const i = alteration.search(/[({]/);
+  return i === -1 ? alteration.trim() : alteration.slice(0, i).trim();
 };
 
 /**
