@@ -69,8 +69,10 @@ export default function NewsContent112025() {
               </td>
               <td>Breast Cancer</td>
               <td>
-                <em>Drug(s) added to OncoKB™:</em> Imlunestrant (Level 1){' '}
-                <em>Drug(s) remaining in OncoKB™:</em> Elacestrant (Level 2)
+                <em>Drug(s) added to OncoKB™:</em> Imlunestrant (Level 1)
+                <br></br>
+                <br></br> <em>Drug(s) remaining in OncoKB™:</em> Elacestrant
+                (Level 2)
               </td>
               <td>2</td>
               <td>1</td>
@@ -93,8 +95,10 @@ export default function NewsContent112025() {
               </td>
               <td>Breast Cancer</td>
               <td>
-                <em>Drug(s) added to OncoKB™:</em> Imlunestrant (Level 1){' '}
-                <em>Drug(s) remaining in OncoKB™:</em> Fulvestrant (Level 3A)
+                <em>Drug(s) added to OncoKB™:</em> Imlunestrant (Level 1)
+                <br></br>
+                <br></br> <em>Drug(s) remaining in OncoKB™:</em> Fulvestrant
+                (Level 3A)
               </td>
               <td>3A</td>
               <td>1</td>
@@ -178,9 +182,9 @@ export default function NewsContent112025() {
               </td>
               <td>Acute Myeloid Leukemia</td>
               <td>
-                <em>Drug(s) added to OncoKB™:</em> Ziftomenib (Level 1){' '}
-                <em>Drug(s) promoted in OncoKB™:</em> Revumenib (Level 1,
-                previously Level 3A)
+                <em>Drug(s) added to OncoKB™:</em> Ziftomenib (Level 1)<br></br>
+                <br></br> <em>Drug(s) promoted in OncoKB™:</em> Revumenib (Level
+                1, previously Level 3A)
               </td>
               <td>3A</td>
               <td>1</td>
@@ -189,7 +193,9 @@ export default function NewsContent112025() {
                   FDA approval of revumenib
                 </a>
                 ; PMID:{' '}
-                <a href="https://pubmed.ncbi.nlm.nih.gov/40332046/">40332046</a>{' '}
+                <a href="https://pubmed.ncbi.nlm.nih.gov/40332046/">40332046</a>
+                <br></br>
+                <br></br>{' '}
                 <a href="https://www.fda.gov/drugs/resources-information-approved-drugs/fda-approves-ziftomenib-relapsed-or-refractory-acute-myeloid-leukemia-npm1-mutation?">
                   FDA approval of ziftomenib
                 </a>
