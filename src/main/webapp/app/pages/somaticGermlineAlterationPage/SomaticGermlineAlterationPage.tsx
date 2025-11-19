@@ -1,81 +1,79 @@
-import React from 'react';
-import { Helmet } from 'react-helmet-async';
-import {
-  AnnotationStore,
-  TherapeuticImplication,
-  FdaImplication,
-} from 'app/store/AnnotationStore';
-import { AnnotationType } from '../annotationPage/AnnotationPage';
-import { RouteComponentProps } from 'react-router';
-import * as QueryString from 'query-string';
-import {
-  decodeSlash,
-  getPageTitle,
-  levelOfEvidence2Level,
-  getCancerTypeNameFromOncoTreeType,
-  getCancerTypesName,
-  getTreatmentNameByPriority,
-  articles2Citations,
-  isCategoricalAlteration,
-  isPositionalAlteration,
-  getCategoricalAlterationDescription,
-} from 'app/shared/utils/Utils';
-import {
-  getAlterationPageLink,
-  parseAlterationPagePath,
-  AlterationPageLink,
-} from 'app/shared/utils/UrlUtils';
-import { computed, reaction, action, observable } from 'mobx';
 import { GENETIC_TYPE } from 'app/components/geneticTypeTabs/GeneticTypeTabs';
-import { observer, inject } from 'mobx-react';
-import styles from './SomaticGermlineAlterationPage.module.scss';
-import classnames from 'classnames';
-import StickyMiniNavBar, {
-  StickyMiniNavBarContextProvider,
-} from 'app/shared/nav/StickyMiniNavBar';
-import AppStore from 'app/store/AppStore';
-import ShowHideText from 'app/shared/texts/ShowHideText';
-import { Col, Alert } from 'reactstrap';
-import { Row, Container } from 'react-bootstrap';
-import WindowStore from 'app/store/WindowStore';
-import AuthenticationStore from 'app/store/AuthenticationStore';
+import LoadingIndicator, {
+  LoaderSize,
+} from 'app/components/loadingIndicator/LoadingIndicator';
+import GeneticTypeTag from 'app/components/tag/GeneticTypeTag';
 import {
-  EVIDENCE_TYPES,
-  REFERENCE_GENOME,
   ANNOTATION_PAGE_TAB_KEYS,
-  TREATMENT_EVIDENCE_TYPES,
+  EVIDENCE_TYPES,
   ONCOGENICITY,
-  DEFAULT_MARGIN_BOTTOM_LG,
-  DEFAULT_MARGIN_TOP_LG,
+  ONCOKB_TM,
+  REFERENCE_GENOME,
+  TREATMENT_EVIDENCE_TYPES,
 } from 'app/config/constants';
 import { Alteration } from 'app/shared/api/generated/OncoKbAPI';
 import {
   Evidence,
   VariantAnnotationTumorType,
 } from 'app/shared/api/generated/OncoKbPrivateAPI';
-import WithSeparator from 'react-with-separator';
+import GermlineSomaticHeader from 'app/shared/header/GermlineSomaticHeader';
+import MiniNavBarHeader from 'app/shared/nav/MiniNavBarHeader';
+import SomaticGermlineBreadcrumbs from 'app/shared/nav/SomaticGermlineBreadcrumbs';
+import StickyMiniNavBar, {
+  StickyMiniNavBarContextProvider,
+} from 'app/shared/nav/StickyMiniNavBar';
+import { AlterationPageHashQueries } from 'app/shared/route/types';
+import VariantOverView from 'app/shared/sections/VariantOverview';
+import ShowHideText from 'app/shared/texts/ShowHideText';
+import { SomaticGermlineAlterationTiles } from 'app/shared/tiles/tile-utils';
 import { uniqBy, upperFirst } from 'app/shared/utils/LodashUtils';
+import {
+  AlterationPageLink,
+  getAlterationPageLink,
+  parseAlterationPagePath,
+} from 'app/shared/utils/UrlUtils';
+import {
+  articles2Citations,
+  decodeSlash,
+  getCancerTypeNameFromOncoTreeType,
+  getCancerTypesName,
+  getPageTitle,
+  getTreatmentNameByPriority,
+  isCategoricalAlteration,
+  isPositionalAlteration,
+  levelOfEvidence2Level,
+} from 'app/shared/utils/Utils';
+import {
+  AnnotationStore,
+  FdaImplication,
+  TherapeuticImplication,
+} from 'app/store/AnnotationStore';
+import AppStore from 'app/store/AppStore';
+import AuthenticationStore from 'app/store/AuthenticationStore';
+import WindowStore from 'app/store/WindowStore';
+import autobind from 'autobind-decorator';
+import classnames from 'classnames';
+import { action, computed, observable, reaction } from 'mobx';
+import { inject, observer } from 'mobx-react';
+import { RouterStore } from 'mobx-react-router';
+import * as QueryString from 'query-string';
+import React from 'react';
+import { Container, Row } from 'react-bootstrap';
+import { Helmet } from 'react-helmet-async';
+import { Else, If, Then } from 'react-if';
+import { RouteComponentProps } from 'react-router';
+import WithSeparator from 'react-with-separator';
+import { Alert, Col } from 'reactstrap';
+import { AnnotationType } from '../annotationPage/AnnotationPage';
+import MutationEffectDescription from '../annotationPage/MutationEffectDescription';
+import SomaticGermlineAlterationView from '../annotationPage/SomaticGermlineAlterationView';
 import {
   SummaryKey,
   getSummaries,
   getUniqueFdaImplications,
 } from '../annotationPage/Utils';
-import autobind from 'autobind-decorator';
-import { AlterationPageHashQueries } from 'app/shared/route/types';
-import MutationEffectDescription from '../annotationPage/MutationEffectDescription';
-import MiniNavBarHeader from 'app/shared/nav/MiniNavBarHeader';
 import { GenomicIndicatorTable } from '../genePage/GenomicIndicatorTable';
-import { Else, If, Then } from 'react-if';
-import LoadingIndicator, {
-  LoaderSize,
-} from 'app/components/loadingIndicator/LoadingIndicator';
-import SomaticGermlineAlterationView from '../annotationPage/SomaticGermlineAlterationView';
-import GermlineSomaticHeader from 'app/shared/header/GermlineSomaticHeader';
-import SomaticGermlineBreadcrumbs from 'app/shared/nav/SomaticGermlineBreadcrumbs';
-import { RouterStore } from 'mobx-react-router';
-import { SomaticGermlineAlterationTiles } from 'app/shared/tiles/tile-utils';
-import GeneticTypeTag from 'app/components/tag/GeneticTypeTag';
-import VariantOverView from 'app/shared/sections/VariantOverview';
+import styles from './SomaticGermlineAlterationPage.module.scss';
 
 type MatchParams = {
   hugoSymbol: string;
@@ -196,6 +194,15 @@ export class SomaticGermlineAlterationPage extends React.Component<
       this.props.location.pathname
     );
     return geneticType ?? GENETIC_TYPE.SOMATIC;
+  }
+
+  @computed
+  get hasClinicalImplications() {
+    return (
+      this.therapeuticImplications.length > 0 ||
+      this.diagnosticImplications.length > 0 ||
+      this.prognosticImplications.length > 0
+    );
   }
 
   onChangeTumorType(newTumorType: string) {
@@ -652,28 +659,47 @@ export class SomaticGermlineAlterationPage extends React.Component<
                   <MiniNavBarHeader id="clinical-implications">
                     Clinical Implications For This Biomarker
                   </MiniNavBarHeader>
-                  <SomaticGermlineAlterationView
-                    appStore={this.props.appStore}
-                    hugoSymbol={this.store.hugoSymbol}
-                    alteration={this.store.alterationName}
-                    alterationQuery={this.store.alterationQuery}
-                    germline={this.store.germline}
-                    matchedAlteration={this.store.alteration.result}
-                    tumorType={this.store.cancerTypeName}
-                    onChangeTumorType={this.onChangeTumorType.bind(this)}
-                    annotation={this.store.annotationData.result}
-                    biologicalAlterations={
-                      this.store.biologicalAlterations.result
-                    }
-                    relevantAlterations={undefined}
-                    fdaImplication={this.fdaImplication}
-                    therapeuticImplications={this.therapeuticImplications}
-                    diagnosticImplications={this.diagnosticImplications}
-                    prognosticImplications={this.prognosticImplications}
-                    defaultSelectedTab={this.selectedTab}
-                    onChangeTab={this.onChangeTab}
-                    routing={this.props.routing}
-                  />
+                  {this.hasClinicalImplications ? (
+                    <SomaticGermlineAlterationView
+                      appStore={this.props.appStore}
+                      hugoSymbol={this.store.hugoSymbol}
+                      alteration={this.store.alterationName}
+                      alterationQuery={this.store.alterationQuery}
+                      germline={this.store.germline}
+                      matchedAlteration={this.store.alteration.result}
+                      tumorType={this.store.cancerTypeName}
+                      onChangeTumorType={this.onChangeTumorType.bind(this)}
+                      annotation={this.store.annotationData.result}
+                      biologicalAlterations={
+                        this.store.biologicalAlterations.result
+                      }
+                      relevantAlterations={undefined}
+                      fdaImplication={this.fdaImplication}
+                      therapeuticImplications={this.therapeuticImplications}
+                      diagnosticImplications={this.diagnosticImplications}
+                      prognosticImplications={this.prognosticImplications}
+                      defaultSelectedTab={this.selectedTab}
+                      onChangeTab={this.onChangeTab}
+                      routing={this.props.routing}
+                    />
+                  ) : (
+                    <div
+                      className={classnames(
+                        styles['no-clinical-implications'],
+                        'p-4 mt-1 bg-pale-blue-grey rounded'
+                      )}
+                    >
+                      <div className="d-flex text-primary">
+                        <i className={'fa fa-exclamation-circle mr-2'}></i>
+                        <h6>No clinical implications</h6>
+                      </div>
+                      <div>
+                        {ONCOKB_TM} has not yet curated any clinical
+                        implications for this biomarker. Check back soon for
+                        updates!
+                      </div>
+                    </div>
+                  )}
                 </Col>
               </Row>
             </Container>

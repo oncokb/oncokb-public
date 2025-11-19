@@ -1,3 +1,5 @@
+@import '~oncokb-styles/scss/vars';
+
 .backLink {
   gap: 0.5rem;
 }
@@ -15,4 +17,8 @@
 
 .showHideText {
   margin-bottom: '0.5rem';
+}
+
+.no-clinical-implications {
+  background-color: $pale-blue-grey;
 }
