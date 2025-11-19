@@ -2478,5 +2478,15 @@
     "targetedTx": "Y",
     "pxTx": "Y",
     "ngsTest": "Y"
+  },
+  {
+    "year": "2025",
+    "tx": "Sevabertinib",
+    "biomarker": "ERBB2 TKD activating mutations",
+    "agentClass": "Small molecule kinase inhibitor",
+    "drugTarget": "HER2 (ERBB2) inhibitor",
+    "targetedTx": "Y",
+    "pxTx": "Y",
+    "ngsTest": "Y"
   }
 ]
