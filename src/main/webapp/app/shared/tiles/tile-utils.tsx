@@ -278,9 +278,6 @@ export function SomaticGermlineAlterationTiles({
 
   useEffect(() => {
     async function fetchClinvarFromGenomeNexus() {
-      /* eslint-disable no-console */
-      console.log(rest.variantAnnotation);
-      console.log(rest);
       const response = await axios.get(
         `${GENOME_NEXUS_ANNOTATION_BASE_URL}/${rest.grch37Isoform}:${rest.variantAnnotation.query.alteration}?fields=clinvar`
       );
