@@ -660,6 +660,7 @@ export class SomaticGermlineCancerTypePage extends React.Component<
                     includeTitle={false}
                     isGermline={this.store.germline}
                     variantAnnotation={this.store.annotationData.result}
+                    grch37Isoform={this.store.gene.result.grch37Isoform}
                   />
                 </Col>
               </Row>
