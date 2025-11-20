@@ -465,7 +465,7 @@ const CompanionDiagnosticDevicePage: React.FunctionComponent<{}> = () => {
         // TODO: Remove once we support https://github.com/oncokb/oncokb-pipeline/issues/969
         // Reason is that this association is pending on FDA, so there is no PMA.
         if (assoc.associationId === 319) {
-          return <span>PMA not available as of 11/20/25</span>;
+          return <span>PMA not available as of 11/24/25</span>;
         }
         return (
           <WithSeparator separator=", ">
