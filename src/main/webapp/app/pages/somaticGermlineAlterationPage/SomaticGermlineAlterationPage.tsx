@@ -613,6 +613,7 @@ export class SomaticGermlineAlterationPage extends React.Component<
                     includeTitle
                     variantAnnotation={this.store.annotationData.result}
                     isGermline={this.store.germline}
+                    grch37Isoform={this.store.gene.result.grch37Isoform}
                   />
                 </Col>
               </Row>
