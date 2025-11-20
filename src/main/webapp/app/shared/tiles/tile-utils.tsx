@@ -260,6 +260,7 @@ type SomaticGermlineAlterationTilesProps = {
   includeTitle: boolean;
   isGermline: boolean;
   variantAnnotation: VariantAnnotation;
+  grch37Isoform: string;
 };
 
 type ClinvarData = { pathogenicity: string; clinvarId: number | undefined };
@@ -278,7 +279,7 @@ export function SomaticGermlineAlterationTiles({
   useEffect(() => {
     async function fetchClinvarFromGenomeNexus() {
       const response = await axios.get(
-        `${GENOME_NEXUS_ANNOTATION_BASE_URL}/${rest.variantAnnotation.query.hugoSymbol}:${rest.variantAnnotation.query.alteration}?fields=clinvar`
+        `${GENOME_NEXUS_ANNOTATION_BASE_URL}/${rest.grch37Isoform}:${rest.variantAnnotation.query.alteration}?fields=clinvar`
       );
       if (!response.data.successfully_annotated) {
         setClinvar(null);
