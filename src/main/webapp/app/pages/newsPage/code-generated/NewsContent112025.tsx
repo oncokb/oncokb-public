@@ -70,9 +70,9 @@ export default function NewsContent112025() {
               <td>Breast Cancer</td>
               <td>
                 <em>Drug(s) added to OncoKB™:</em> Imlunestrant (Level 1)
-                <br></br>
-                <br></br> <em>Drug(s) remaining in OncoKB™:</em> Elacestrant
-                (Level 2)
+                <br />
+                <br />
+                <em>Drug(s) remaining in OncoKB™:</em> Elacestrant (Level 2)
               </td>
               <td>2</td>
               <td>1</td>
@@ -96,9 +96,9 @@ export default function NewsContent112025() {
               <td>Breast Cancer</td>
               <td>
                 <em>Drug(s) added to OncoKB™:</em> Imlunestrant (Level 1)
-                <br></br>
-                <br></br> <em>Drug(s) remaining in OncoKB™:</em> Fulvestrant
-                (Level 3A)
+                <br />
+                <br />
+                <em>Drug(s) remaining in OncoKB™:</em> Fulvestrant (Level 3A)
               </td>
               <td>3A</td>
               <td>1</td>
@@ -115,23 +115,35 @@ export default function NewsContent112025() {
             <tr>
               <td>{getAlternativeGenePageLinks('NPM1')}</td>
               <td>
-                <AlterationPageLink hugoSymbol="NPM1" alteration="118_153trunc">
-                  118_153trunc
-                </AlterationPageLink>
-                ,{' '}
-                <AlterationPageLink hugoSymbol="NPM1" alteration="224_257trunc">
-                  224_257trunc
-                </AlterationPageLink>
-                ,{' '}
-                <AlterationPageLink hugoSymbol="NPM1" alteration="283_294trunc">
-                  283_294trunc
+                Susceptible NPM1 mutations per the FDA label:{' '}
+                <AlterationPageLink
+                  hugoSymbol="NPM1"
+                  alteration="Exon 5 truncating mutations"
+                >
+                  Exon 5 truncating mutations
                 </AlterationPageLink>
                 ,{' '}
                 <AlterationPageLink
                   hugoSymbol="NPM1"
-                  alteration="K134delinsQLLSGLQ"
+                  alteration="Exon 9 truncating mutations"
                 >
-                  K134delinsQLLSGLQ
+                  Exon 9 truncating mutations
+                </AlterationPageLink>
+                ,{' '}
+                <AlterationPageLink
+                  hugoSymbol="NPM1"
+                  alteration="Exon 11 truncating mutations"
+                >
+                  Exon 11 truncating mutations
+                </AlterationPageLink>
+                <br />
+                <br />
+                Select exon 5 indels:{' '}
+                <AlterationPageLink
+                  hugoSymbol="NPM1"
+                  alteration="K134delinsQLLSGL"
+                >
+                  K134delinsQLLSGL
                 </AlterationPageLink>
                 ,{' '}
                 <AlterationPageLink
@@ -154,7 +166,9 @@ export default function NewsContent112025() {
                 >
                   K141_142insLSALSISGK
                 </AlterationPageLink>
-                ,{' '}
+                <br />
+                <br />
+                Select NPM1 fusions:{' '}
                 <AlterationPageLink hugoSymbol="NPM1" alteration="CCDC28A">
                   CCDC28A
                 </AlterationPageLink>
@@ -179,12 +193,16 @@ export default function NewsContent112025() {
                 >
                   NPM1-RPP30 Fusion
                 </AlterationPageLink>
+                <br />
+                <br />
               </td>
               <td>Acute Myeloid Leukemia</td>
               <td>
-                <em>Drug(s) added to OncoKB™:</em> Ziftomenib (Level 1)<br></br>
-                <br></br> <em>Drug(s) promoted in OncoKB™:</em> Revumenib (Level
-                1, previously Level 3A)
+                <em>Drug(s) added to OncoKB™:</em> Ziftomenib (Level 1)
+                <br />
+                <br />
+                <em>Drug(s) promoted in OncoKB™:</em> Revumenib (Level 1,
+                previously Level 3A)
               </td>
               <td>3A</td>
               <td>1</td>
@@ -194,8 +212,8 @@ export default function NewsContent112025() {
                 </a>
                 ; PMID:{' '}
                 <a href="https://pubmed.ncbi.nlm.nih.gov/40332046/">40332046</a>
-                <br></br>
-                <br></br>{' '}
+                <br />
+                <br />
                 <a href="https://www.fda.gov/drugs/resources-information-approved-drugs/fda-approves-ziftomenib-relapsed-or-refractory-acute-myeloid-leukemia-npm1-mutation?">
                   FDA approval of ziftomenib
                 </a>
