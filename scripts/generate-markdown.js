@@ -266,7 +266,7 @@ function addAutoTableLinks(md, state) {
         'Susceptible NPM1 mutations per the FDA label:'
       )) {
         const tokens = [];
-        for (const section of child.content.split('   ')) {
+        for (const section of child.content.split('_BREAK_')) {
           const [title, content] = section.split(':')
           const mutationNames = content
             .trim()
@@ -310,7 +310,7 @@ function createMutationLinks(md, currentGene, mutationNames) {
       },
     ];
     // Check for for cases like L718Q/V
-    if (ALTERNATIVE_ALLELES_REGEX.test(mutationName)) {
+    if (ALTERNATIVE_ALLELES_REGEX.test(mutationName) && !mutationName.endsWith("Fusion")) {
       const matches = ALTERNATIVE_ALLELES_REGEX.exec(mutationName);
       if (matches) {
         const positionalVar = matches[1];

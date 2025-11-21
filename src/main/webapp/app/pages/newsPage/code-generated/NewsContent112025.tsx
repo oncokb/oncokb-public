@@ -118,23 +118,23 @@ export default function NewsContent112025() {
                 Susceptible NPM1 mutations per the FDA label:{' '}
                 <AlterationPageLink
                   hugoSymbol="NPM1"
-                  alteration="Exon 5 truncating mutations"
+                  alteration="Truncating mutations in Exon 5"
                 >
-                  Exon 5 truncating mutations
+                  Truncating mutations in Exon 5
                 </AlterationPageLink>
                 ,{' '}
                 <AlterationPageLink
                   hugoSymbol="NPM1"
-                  alteration="Exon 9 truncating mutations"
+                  alteration="Truncating mutations in Exon 9"
                 >
-                  Exon 9 truncating mutations
+                  Truncating mutations in Exon 9
                 </AlterationPageLink>
                 ,{' '}
                 <AlterationPageLink
                   hugoSymbol="NPM1"
-                  alteration="Exon 11 truncating mutations"
+                  alteration="Truncating mutations in Exon 11"
                 >
-                  Exon 11 truncating mutations
+                  Truncating mutations in Exon 11
                 </AlterationPageLink>
                 <br />
                 <br />
@@ -169,8 +169,11 @@ export default function NewsContent112025() {
                 <br />
                 <br />
                 Select NPM1 fusions:{' '}
-                <AlterationPageLink hugoSymbol="NPM1" alteration="CCDC28A">
-                  CCDC28A
+                <AlterationPageLink
+                  hugoSymbol="NPM1"
+                  alteration="NPM1-CCDC28A Fusion"
+                >
+                  NPM1-CCDC28A Fusion
                 </AlterationPageLink>
                 ,{' '}
                 <AlterationPageLink
