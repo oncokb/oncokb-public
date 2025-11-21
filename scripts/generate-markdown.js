@@ -262,6 +262,27 @@ function addAutoTableLinks(md, state) {
           ...allMutationLinks,
           createMarkdownTextToken(md, ')'),
         ];
+      } else if (child.content.startsWith(
+        'Susceptible NPM1 mutations per the FDA label:'
+      )) {
+        const tokens = [];
+        for (const section of child.content.split('   ')) {
+          const [title, content] = section.split(':')
+          const mutationNames = content
+            .trim()
+            .split(',')
+            .map(x => x.trim());
+          const mutationLinks = createMutationLinks(
+            md,
+            currentGene,
+            mutationNames
+          );
+          tokens.push(createMarkdownTextToken(md, title + ": "))
+          tokens.push(...mutationLinks)
+          tokens.push(createMarkdownToken(md, 'br/')[0],)
+          tokens.push(createMarkdownToken(md, 'br/')[0],)
+        }
+        token.children = tokens;
       } else {
         const mutationNames = child.content.split(',').map(x => x.trim());
         const allMutationLinks = createMutationLinks(
