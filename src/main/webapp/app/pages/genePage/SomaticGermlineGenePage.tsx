@@ -705,6 +705,9 @@ export default class SomaticGermlineGenePage extends React.Component<
                                       this.store.uniqPathogenicity
                                     }
                                     oncogenicities={this.store.uniqOncogenicity}
+                                    mutationEffects={
+                                      this.store.uniqMutationEffect
+                                    }
                                     geneNumber={this.store.geneNumber.result}
                                   />
                                   <If
