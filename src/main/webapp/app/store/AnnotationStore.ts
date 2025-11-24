@@ -42,10 +42,12 @@ import {
   shortenPathogenicity,
 } from 'app/shared/utils/Utils';
 import {
+  mutationEffectSortMethod,
   oncogenicitySortMethod,
   pathogenicitySortMethod,
 } from 'app/shared/utils/ReactTableUtils';
 import {
+  MutationEffect,
   Oncogenicity,
   Pathogenicity,
 } from 'app/components/oncokbMutationMapper/OncokbMutationMapper';
@@ -549,6 +551,11 @@ export class AnnotationStore {
   calculatePathogenicities(biologicalAlterations: BiologicalVariant[]) {
     const pathogenicities = biologicalAlterations.reduce((acc, item) => {
       const pathogenic = shortenPathogenicity(item.pathogenic);
+      // Skip variants without a mappable pathogenicity (DPYD) to avoid
+      // creating an "undefined" bucket in the aggregated output.
+      if (!pathogenic) {
+        return acc;
+      }
       const variant = {
         ...item,
         pathogenic,
@@ -566,6 +573,28 @@ export class AnnotationStore {
       });
       return acc;
     }, [] as Pathogenicity[]);
+  }
+
+  calculateMutationEffect(biologicalAlterations: BiologicalVariant[]) {
+    const effects = biologicalAlterations.reduce((acc, item) => {
+      const mutationEffect = item.mutationEffect;
+      const variant = {
+        ...item,
+        mutationEffect,
+      };
+      if (!acc[mutationEffect]) acc[mutationEffect] = [];
+      acc[mutationEffect].push(variant);
+      return acc;
+    }, {});
+    const keys = Object.keys(effects).sort(mutationEffectSortMethod);
+    return keys.reduce((acc, mutationEffect) => {
+      const datum = effects[mutationEffect];
+      acc.push({
+        mutationEffect,
+        counts: datum.length,
+      });
+      return acc;
+    }, [] as MutationEffect[]);
   }
 
   @computed
@@ -760,6 +789,11 @@ export class AnnotationStore {
   @computed
   get uniqPathogenicity() {
     return this.calculatePathogenicities(this.biologicalAlterations.result);
+  }
+
+  @computed
+  get uniqMutationEffect() {
+    return this.calculateMutationEffect(this.biologicalAlterations.result);
   }
 
   @computed
