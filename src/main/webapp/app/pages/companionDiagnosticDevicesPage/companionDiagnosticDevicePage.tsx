@@ -74,6 +74,7 @@ interface IBiomarkerAssociation {
   drugs: string;
   cancerTypes: ICancerType[];
   fdaSubmissions: any[];
+  associationId: number;
 }
 
 interface ICancerType {
@@ -201,6 +202,7 @@ const parseCDx = () => {
           drugs: getDrugName(assoc.drugs, assoc.rules),
           cancerTypes: assoc.cancerTypes,
           fdaSubmissions: assoc.fdaSubmissions,
+          associationId: assoc.id,
         }));
       })
       .flat()
@@ -459,13 +461,20 @@ const CompanionDiagnosticDevicePage: React.FunctionComponent<{}> = () => {
         </span>
       ),
       Cell(tableProps: { original: ICompanionDiagnosticDevice }): JSX.Element {
+        const assoc = tableProps.original.biomarkerAssociation;
+        // TODO: Remove once we support https://github.com/oncokb/oncokb-pipeline/issues/969
+        // Reason is that this association is pending on FDA, so there is no PMA.
+        if (assoc.associationId === 319) {
+          return <span>PMA not available as of 11/24/25</span>;
+        }
         return (
           <WithSeparator separator=", ">
-            {tableProps.original.biomarkerAssociation.fdaSubmissions.map(
-              (fdaSubmission: IFdaSubmission) => {
-                return <FdaSubmissionLink fdaSubmission={fdaSubmission} />;
-              }
-            )}
+            {assoc.fdaSubmissions.map((fdaSubmission: IFdaSubmission) => (
+              <FdaSubmissionLink
+                key={`${fdaSubmission.id}-${fdaSubmission.number}-${fdaSubmission.supplementNumber}`}
+                fdaSubmission={fdaSubmission}
+              />
+            ))}
           </WithSeparator>
         );
       },
@@ -541,7 +550,7 @@ const CompanionDiagnosticDevicePage: React.FunctionComponent<{}> = () => {
           <h2 className={'mb-3'}>
             FDA Cleared or Approved Companion Diagnostic Devices
           </h2>
-          <div className={'mb-2'}>Content current as of 04/25/2025</div>
+          <div className={'mb-2'}>Content current as of 11/24/2025</div>
           <div className={'mb-2'}>
             Companion diagnostic devices (CDx) that are US- Food and Drug
             Administration (FDA) approved or cleared to guide treatment

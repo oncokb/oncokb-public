@@ -262,6 +262,27 @@ function addAutoTableLinks(md, state) {
           ...allMutationLinks,
           createMarkdownTextToken(md, ')'),
         ];
+      } else if (child.content.startsWith(
+        'Susceptible NPM1 mutations per the FDA label:'
+      )) {
+        const tokens = [];
+        for (const section of child.content.split('_BREAK_')) {
+          const [title, content] = section.split(':')
+          const mutationNames = content
+            .trim()
+            .split(',')
+            .map(x => x.trim());
+          const mutationLinks = createMutationLinks(
+            md,
+            currentGene,
+            mutationNames
+          );
+          tokens.push(createMarkdownTextToken(md, title + ": "))
+          tokens.push(...mutationLinks)
+          tokens.push(createMarkdownToken(md, 'br/')[0],)
+          tokens.push(createMarkdownToken(md, 'br/')[0],)
+        }
+        token.children = tokens;
       } else {
         const mutationNames = child.content.split(',').map(x => x.trim());
         const allMutationLinks = createMutationLinks(
@@ -289,7 +310,7 @@ function createMutationLinks(md, currentGene, mutationNames) {
       },
     ];
     // Check for for cases like L718Q/V
-    if (ALTERNATIVE_ALLELES_REGEX.test(mutationName)) {
+    if (ALTERNATIVE_ALLELES_REGEX.test(mutationName) && !mutationName.endsWith("Fusion")) {
       const matches = ALTERNATIVE_ALLELES_REGEX.exec(mutationName);
       if (matches) {
         const positionalVar = matches[1];

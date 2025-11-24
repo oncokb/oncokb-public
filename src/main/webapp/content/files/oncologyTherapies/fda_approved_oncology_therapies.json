@@ -2292,7 +2292,7 @@
   {
     "year": "2024",
     "tx": "Revumenib",
-    "biomarker": "KMT2A Rearrangement",
+    "biomarker": "*KMT2A Rearrangement\n*Susceptible NPM1 mutations, which includes W288Cfs*12 and W290Rfs*10",
     "agentClass": "Small molecule inhibitor",
     "drugTarget": "Menin inhibitor",
     "targetedTx": "Y",
@@ -2452,6 +2452,36 @@
   {
     "year": "2025",
     "tx": "Zongertinib",
+    "biomarker": "ERBB2 TKD activating mutations",
+    "agentClass": "Small molecule kinase inhibitor",
+    "drugTarget": "HER2 (ERBB2) inhibitor",
+    "targetedTx": "Y",
+    "pxTx": "Y",
+    "ngsTest": "Y"
+  },
+  {
+    "year": "2025",
+    "tx": "Imlunestrant",
+    "biomarker": "ESR1 V422del, S463F, S463P, L469V, L536, Y537, D538, or E380  and ER+/HER2-",
+    "agentClass": "Hormone therapy",
+    "drugTarget": "Selective estrogen receptor degrader (SERD)",
+    "targetedTx": "Y",
+    "pxTx": "Y",
+    "ngsTest": "Y"
+  },
+  {
+    "year": "2025",
+    "tx": "Ziftomenib",
+    "biomarker": "Susceptible NPM1 mutations, which includes W288Cfs*12 and W290Rfs*10",
+    "agentClass": "Small molecule inhibitor",
+    "drugTarget": "Menin inhibitor",
+    "targetedTx": "Y",
+    "pxTx": "Y",
+    "ngsTest": "Y"
+  },
+  {
+    "year": "2025",
+    "tx": "Sevabertinib",
     "biomarker": "ERBB2 TKD activating mutations",
     "agentClass": "Small molecule kinase inhibitor",
     "drugTarget": "HER2 (ERBB2) inhibitor",
