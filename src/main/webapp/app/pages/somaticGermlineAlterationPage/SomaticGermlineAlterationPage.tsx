@@ -651,7 +651,7 @@ export class SomaticGermlineAlterationPage extends React.Component<
                       </>
                     )}
                   <MiniNavBarHeader id="clinical-implications">
-                    Clinical Implications For This Biomarker
+                    Clinical Implications for this Biomarker
                   </MiniNavBarHeader>
                   <SomaticGermlineAlterationView
                     appStore={this.props.appStore}
