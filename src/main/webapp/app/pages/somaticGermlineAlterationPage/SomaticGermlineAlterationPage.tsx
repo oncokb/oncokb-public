@@ -76,6 +76,7 @@ import { RouterStore } from 'mobx-react-router';
 import { SomaticGermlineAlterationTiles } from 'app/shared/tiles/tile-utils';
 import GeneticTypeTag from 'app/components/tag/GeneticTypeTag';
 import VariantOverView from 'app/shared/sections/VariantOverview';
+import GeneAdditionalInfoSection from 'app/shared/sections/GeneAdditionalInfoSection';
 
 type MatchParams = {
   hugoSymbol: string;
@@ -101,6 +102,7 @@ export class SomaticGermlineAlterationPage extends React.Component<
   private selectedTab: ANNOTATION_PAGE_TAB_KEYS;
 
   @observable showMutationEffect = true;
+  @observable showAdditionalGeneInfo = false;
 
   constructor(props: SomaticGermlineAlterationPageProps) {
     super(props);
@@ -144,6 +146,11 @@ export class SomaticGermlineAlterationPage extends React.Component<
   @action.bound
   toggleMutationEffect(value: boolean) {
     this.showMutationEffect = value;
+  }
+
+  @action.bound
+  toggleAdditionalGeneInfo() {
+    this.showAdditionalGeneInfo = !this.showAdditionalGeneInfo;
   }
 
   @computed
@@ -563,6 +570,12 @@ export class SomaticGermlineAlterationPage extends React.Component<
                       this.store.alteration.result?.proteinChange
                     }
                     isGermline={this.store.germline}
+                  />
+                  <GeneAdditionalInfoSection
+                    gene={this.store.gene.result}
+                    ensemblGenes={this.store.ensemblGenes.result}
+                    show={this.showAdditionalGeneInfo}
+                    onToggle={this.toggleAdditionalGeneInfo}
                   />
                 </Col>
                 <Col md={11}>

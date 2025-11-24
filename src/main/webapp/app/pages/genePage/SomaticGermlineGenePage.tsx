@@ -59,15 +59,13 @@ import {
 } from 'app/shared/route/types';
 import AlterationTableTabs from 'app/pages/annotationPage/AlterationTableTabs';
 import { getGeneTypeSentence } from './GeneInfo';
-import GeneAdditionalInfoTable from 'app/pages/genePage/GeneAdditionalInfoTable';
 import OncokbLollipopPlot from './OncokbLollipopPlot';
 import { getUniqueFdaImplications } from 'app/pages/annotationPage/Utils';
 import ShowHideText from 'app/shared/texts/ShowHideText';
 import { AnnotationType } from 'app/pages/annotationPage/AnnotationPage';
 import SummaryWithRefs from 'app/oncokb-frontend-commons/src/components/SummaryWithRefs';
-import { findLast, upperFirst } from 'app/shared/utils/LodashUtils';
+import { upperFirst } from 'app/shared/utils/LodashUtils';
 import { Helmet } from 'react-helmet-async';
-import { NcbiLink } from 'app/shared/links/NcbiLink';
 import GeneAliasesDescription from 'app/shared/texts/GeneAliasesDescription';
 import { COLOR_GREY, COLOR_SOMATIC } from 'app/config/theme';
 import GeneticTypeTabs, {
@@ -83,6 +81,7 @@ import MiniNavBarHeader from 'app/shared/nav/MiniNavBarHeader';
 import { GenomicIndicatorTable } from 'app/pages/genePage/GenomicIndicatorTable';
 import GeneticTypeTag from 'app/components/tag/GeneticTypeTag';
 import { SomaticGermlineGeneInfoTiles } from 'app/shared/tiles/tile-utils';
+import GeneAdditionalInfoSection from 'app/shared/sections/GeneAdditionalInfoSection';
 
 interface MatchParams {
   hugoSymbol: string;
@@ -588,41 +587,12 @@ export default class SomaticGermlineGenePage extends React.Component<
                                 this.store.gene.result.geneType
                               )}
                             </h5>
-                            <div className={'d-flex'}>
-                              <NcbiLink
-                                entrezGeneId={
-                                  this.store.gene.result.entrezGeneId
-                                }
-                              />
-                              <span className={'mx-2'}>|</span>
-                              <ShowHideText
-                                show={this.showAdditionalGeneInfo}
-                                title={'additional gene information'}
-                                content={''}
-                                onClick={this.toggleAdditionalGeneInfo}
-                              />
-                            </div>
-                            {this.showAdditionalGeneInfo && (
-                              <Row className={'mt-2'}>
-                                <Col lg={6} md={8} xs={12}>
-                                  <GeneAdditionalInfoTable
-                                    gene={this.store.gene.result}
-                                    grch37ensemblGene={findLast(
-                                      this.store.ensemblGenes.result,
-                                      item =>
-                                        item.referenceGenome ===
-                                        REFERENCE_GENOME.GRCh37
-                                    )}
-                                    grch38ensemblGene={findLast(
-                                      this.store.ensemblGenes.result,
-                                      item =>
-                                        item.referenceGenome ===
-                                        REFERENCE_GENOME.GRCh38
-                                    )}
-                                  />
-                                </Col>
-                              </Row>
-                            )}
+                            <GeneAdditionalInfoSection
+                              gene={this.store.gene.result}
+                              ensemblGenes={this.store.ensemblGenes.result}
+                              show={this.showAdditionalGeneInfo}
+                              onToggle={this.toggleAdditionalGeneInfo}
+                            />
                             {this.store.geneSummary.result && (
                               <div className="mt-2">
                                 <SummaryWithRefs
