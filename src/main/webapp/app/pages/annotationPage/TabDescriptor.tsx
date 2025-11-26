@@ -8,8 +8,7 @@ export const FdaTabDescription: React.FunctionComponent<{
 }> = props => {
   return (
     <span>
-      A list of the tumor type-specific {props.hugoSymbol} alterations and the
-      corresponding{' '}
+      Tumor type-specific {props.hugoSymbol} alterations and the corresponding{' '}
       <LevelOfEvidencePageLink levelType={LEVEL_TYPES.FDA}>
         FDA Level of Evidence
       </LevelOfEvidencePageLink>{' '}
