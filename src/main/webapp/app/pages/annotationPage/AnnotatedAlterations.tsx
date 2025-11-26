@@ -129,8 +129,17 @@ const AnnotatedAlterations: FunctionComponent<{
     <>
       <div style={style}>
         <span>
-          A list of the oncogenic and mutation effects of{' '}
-          <b>all {ONCOKB_TM} curated</b> {props.hugoSymbol} alterations.
+          {props.germline ? (
+            <>
+              Pathogenocity and penetrance of <b>all {ONCOKB_TM} curated</b>{' '}
+              {props.hugoSymbol} alterations.
+            </>
+          ) : (
+            <>
+              Oncogenic and mutation effects of <b>all {ONCOKB_TM} curated</b>{' '}
+              {props.hugoSymbol} alterations.
+            </>
+          )}
         </span>
       </div>
       <GenePageTable
