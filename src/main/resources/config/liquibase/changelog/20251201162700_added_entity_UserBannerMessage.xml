@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="utf-8"?>
+<databaseChangeLog
+    xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+    xmlns:ext="http://www.liquibase.org/xml/ns/dbchangelog-ext"
+    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-3.9.xsd
+                        http://www.liquibase.org/xml/ns/dbchangelog-ext http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-ext.xsd">
+
+    <property name="autoIncrement" value="true"/>
+
+    <!--
+        Added the entity UserBannerMessage.
+    -->
+    <changeSet id="20251201162700-1" author="jkonecny">
+        <createTable tableName="user_banner_message">
+            <column name="id" type="bigint" autoIncrement="${autoIncrement}">
+                <constraints primaryKey="true" nullable="false"/>
+            </column>
+            <column name="start_date" type="date">
+                <constraints nullable="true" />
+            </column>
+            <column name="end_date" type="date">
+                <constraints nullable="true" />
+            </column>
+            <column name="content" type="varchar(5000)">
+                <constraints nullable="false" />
+            </column>
+            <column name="banner_type" type="varchar(255)">
+                <constraints nullable="false" />
+            </column>
+        </createTable>
+    </changeSet>
+</databaseChangeLog>
