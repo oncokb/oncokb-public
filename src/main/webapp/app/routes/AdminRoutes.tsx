@@ -13,6 +13,9 @@ import { CreateCompanyPage } from 'app/pages/CreateCompanyPage';
 import CompanyDetailsPage from 'app/pages/companyManagement/CompanyDetailsPage';
 import ReadOnlyMode from 'app/shared/readonly/ReadOnlyMode';
 import WindowStore from 'app/store/WindowStore';
+import UserBannerPage from 'app/pages/userBannerManagement/UserBannerPage';
+import CreateUserBannerMessagePage from 'app/pages/CreateUserBannerMessagePage';
+import EditUserBannerMessagePage from 'app/pages/EditUserBannerMessagePage';
 
 const AdminRoutes = ({ windowStore }: { windowStore: WindowStore }) => {
   return (
@@ -61,8 +64,26 @@ const AdminRoutes = ({ windowStore }: { windowStore: WindowStore }) => {
       />
       <ErrorBoundaryRoute
         exact
+        path={PAGE_ROUTE.ADMIN_ADD_USER_BANNER_MESSAGE}
+        component={CreateUserBannerMessagePage}
+        windowStore={windowStore}
+      />
+      <ErrorBoundaryRoute
+        exact
+        path={PAGE_ROUTE.ADMIN_EDIT_USER_BANNER_MESSAGE}
+        component={EditUserBannerMessagePage}
+        windowStore={windowStore}
+      />
+      <ErrorBoundaryRoute
+        exact
         path={PAGE_ROUTE.ADMIN_COMPANY_DETAILS}
         component={CompanyDetailsPage}
+        windowStore={windowStore}
+      />
+      <ErrorBoundaryRoute
+        exact
+        path={PAGE_ROUTE.ADMIN_USER_BANNER_MESSAGES}
+        component={UserBannerPage}
         windowStore={windowStore}
       />
       <ErrorBoundaryRoute component={PageNotFound} windowStore={windowStore} />

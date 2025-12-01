@@ -110,6 +110,18 @@ Note: There are still a few other things remaining to do for Leaflet that we won
 
 For further instructions on how to develop with JHipster, have a look at [Using JHipster in development][].
 
+### Local Database Migrations
+
+1. Add liquibase migrations (Used an LLM to put together the xml file)
+   `src/main/resources/config/liquibase/changelog/XXXXXXXXXXXXXX.xml`
+2. Add you `xml` file to the `src/main/resources/config/liquibase/master.xml` list.
+3. Update the `pom.xml` file with your database configurations
+4. Run the migration
+
+   ```sh
+   ./mvnw liquibase:update
+   ```
+
 ## Building for production
 
 ### Packaging as jar
