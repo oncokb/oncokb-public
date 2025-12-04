@@ -25,6 +25,7 @@ import {
 } from 'app/indexUtils';
 import { API_ROUTE, UNAUTHORIZED_ALLOWED_PATH } from 'app/config/constants';
 import { AppConfig, AppProfile } from 'app/appConfig';
+import { notifyError } from 'app/shared/utils/NotificationUtils';
 
 assignPublicToken();
 
@@ -74,48 +75,83 @@ superagent.Request.prototype.end = function (callback) {
       response.body = response.text;
     }
 
-    // If the code is 401, which means the token has expired, we need to refresh the page
-    // But in certain pages, 401 is a valid response
+    // Reload is not neccessary in dev environment
+    if (AppConfig.serverConfig.appProfile !== AppProfile.PROD) {
+      return callback(error, response);
+    }
+
+    // Only reload if the status code is 401, indicating the token might have expired.
+    if (response?.statusCode !== 401) {
+      return callback(error, response);
+    }
+
+    // We do not reload the page when the /api/authenticate fails
+    // or on auth-related pages where 401 is a valid response
     if (
-      response &&
-      response.statusCode === 401 &&
-      AppConfig.serverConfig.token &&
-      AppConfig.serverConfig.appProfile === AppProfile.PROD &&
-      response.req &&
-      // we do not reload the page when the /api/authenticate failed
-      response.req.url !== API_ROUTE.AUTHENTICATE &&
+      response?.req?.url === API_ROUTE.AUTHENTICATE ||
       UNAUTHORIZED_ALLOWED_PATH.some(path =>
         window.location.pathname.endsWith(path)
       )
     ) {
-      const currentDate = new Date();
-
-      const STORAGE_KEY = `${WEBSITE_RELOAD_TIMES_KEY}-${currentDate.getFullYear()}-${currentDate.getMonth()}-${currentDate.getDay()}-${currentDate.getHours()}`;
-      if (localStorage.getItem(STORAGE_KEY) == null) {
-        localStorage.setItem(STORAGE_KEY, '0');
-      }
-      if (
-        Number(localStorage.getItem(STORAGE_KEY)) <=
-        WEBSITE_RELOAD_TIMES_THRESHOLD
-      ) {
-        const newIncrement = Number(localStorage.getItem(STORAGE_KEY)) + 1;
-        localStorage.setItem(STORAGE_KEY, `${newIncrement}`);
-        window.location.reload();
-      } else {
-        if (
-          AppConfig.serverConfig?.sentryProjectId &&
-          // check if sentry is initialized
-          Sentry.getCurrentHub().getClient()
-        ) {
-          // Send an error to sentry
-          Sentry.captureException(
-            new Error(
-              `The user cannot reload the page with the newest public website token. The website has retried ${WEBSITE_RELOAD_TIMES_THRESHOLD} time(s). The token currently used is ${getPublicWebsiteToken()}`
-            )
-          );
-        }
-      }
+      return callback(error, response);
     }
+
+    // For the public website token, we want to reload the page to obtain a fresh token
+    // because a new pub token is rotated in every day.
+    const storedToken = getStoredToken();
+    const publicWebsiteToken = getPublicWebsiteToken();
+
+    if (!publicWebsiteToken || storedToken !== publicWebsiteToken) {
+      return callback(error, response);
+    }
+
+    const currentDate = new Date();
+    const STORAGE_KEY = `${WEBSITE_RELOAD_TIMES_KEY}-${currentDate.getFullYear()}-${currentDate.getMonth()}-${currentDate.getDay()}-${currentDate.getHours()}`;
+
+    if (localStorage.getItem(STORAGE_KEY) == null) {
+      localStorage.setItem(STORAGE_KEY, '0');
+    }
+
+    const currentCount = Number(localStorage.getItem(STORAGE_KEY));
+
+    // If we've already reloaded more than the threshold for this hour,
+    // log to Sentry (if configured) or show a generic error to prevent
+    // infinite reload.
+    if (currentCount > WEBSITE_RELOAD_TIMES_THRESHOLD) {
+      let message =
+        'An unexpected error occurred while refreshing your session. Please reload the page and contact support if the issue persists.';
+
+      if (
+        AppConfig.serverConfig?.sentryProjectId &&
+        // check if sentry is initialized
+        Sentry.getCurrentHub().getClient()
+      ) {
+        const eventId = Sentry.captureException(
+          new Error(
+            `The user cannot reload the page with the newest public website token. The website has retried ${WEBSITE_RELOAD_TIMES_THRESHOLD} time(s). The token currently used is ${getPublicWebsiteToken()}`
+          )
+        );
+        message = `${message} Code: ${eventId}`;
+      }
+
+      notifyError(new Error(message));
+
+      return callback(error, response);
+    }
+
+    const newIncrement = currentCount + 1;
+    localStorage.setItem(STORAGE_KEY, `${newIncrement}`);
+
+    notifyError(
+      new Error(
+        'Unauthenticated session has expired. Please log in or reload the page to refresh. Page will automatically refresh in 5 seconds.'
+      )
+    );
+
+    setTimeout(() => {
+      window.location.reload();
+    }, 5000);
+
     callback(error, response);
   });
 };
