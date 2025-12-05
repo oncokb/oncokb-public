@@ -108,6 +108,19 @@ export function sortByAlteration(a: Alteration, b: Alteration): number {
   return result;
 }
 
+export function genomicIndicatorNameSortMethod(a: string, b: string) {
+  const nameA = (a ?? '').toLowerCase().includes('carrier');
+  const nameB = (b ?? '').toLowerCase().includes('carrier');
+
+  if (nameA && !nameB) {
+    return 1;
+  }
+  if (!nameA && nameB) {
+    return -1;
+  }
+  return defaultSortMethod(a, b);
+}
+
 const oncogenicityOrder = [
   ONCOGENICITY.ONCOGENIC,
   ONCOGENICITY.LIKELY_ONCOGENIC,
