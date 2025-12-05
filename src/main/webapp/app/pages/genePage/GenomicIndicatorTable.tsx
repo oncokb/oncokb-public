@@ -13,15 +13,21 @@ import {
 import { LongText } from 'app/oncokb-frontend-commons/src/components/LongText';
 import { Evidence } from 'app/shared/api/generated/OncoKbAPI';
 import AlleleStateTag from 'app/components/tag/AlleleStateTag';
+import { genomicIndicatorNameSortMethod } from 'app/shared/utils/ReactTableUtils';
 
 export const GenomicIndicatorTable: React.FunctionComponent<{
   data: Evidence[];
   isPending: boolean;
 }> = props => {
+  const sortedData = [...props.data].sort((a, b) =>
+    genomicIndicatorNameSortMethod(a.name, b.name)
+  );
+
   const columns: SearchColumn<Evidence>[] = [
     {
       Header: <span>Genomic Indicator</span>,
       maxWidth: 200,
+      accessor: 'name',
       Cell(row: { original: Evidence }) {
         const alleleState = getAlleleStatesFromEvidence(row.original);
         return (
@@ -55,14 +61,11 @@ export const GenomicIndicatorTable: React.FunctionComponent<{
     {
       Header: <span>Description</span>,
       accessor: 'description',
-      Cell(row: { original: Evidence }) {
-        return <LongText text={row.original.description} cutoff={180} />;
-      },
     },
   ];
   return (
     <OncoKBTable
-      data={props.data}
+      data={sortedData}
       columns={columns}
       loading={props.isPending}
       showPagination={false}
