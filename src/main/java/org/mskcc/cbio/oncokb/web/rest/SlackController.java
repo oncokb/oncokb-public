@@ -58,9 +58,19 @@ public class SlackController {
 
     private void updateUserWithRoleApiIfRequested(UserDTO userDTO) {
         boolean apiAccessRequested = userDTO.getAdditionalInfo() != null && userDTO.getAdditionalInfo().getApiAccessRequest() != null && userDTO.getAdditionalInfo().getApiAccessRequest().isRequested();
+        log.info(
+            "Checking if the user requested API access. licenseType={}, apiAccessRequested={}, ID={}",
+            userDTO.getLicenseType(),
+            apiAccessRequested,
+            userDTO.getId()
+        );
+
         if (!userDTO.getLicenseType().equals(LicenseType.ACADEMIC) || apiAccessRequested) {
+            log.info("Giving the user access to the API");
             Set<String> userDTOAuthorities = userDTO.getAuthorities();
             userDTOAuthorities.add(AuthoritiesConstants.API);
+        } else {
+            log.info("The user did not request access");
         }
     }
 
@@ -72,6 +82,7 @@ public class SlackController {
     public ResponseEntity<String> approveUser(@RequestParam("payload") String actionJSON) throws IOException, MessagingException {
         Gson snakeCase = GsonFactory.createSnakeCase();
         UnknownPayload pl = snakeCase.fromJson(actionJSON, UnknownPayload.class);
+        log.info("TYPE={}", pl.getType());
         if (pl.getType().equals(BlockActionPayload.TYPE)) {
             BlockActionPayload blockActionPayload = snakeCase.fromJson(actionJSON, BlockActionPayload.class);
             ActionId actionId = this.slackService.getActionId(blockActionPayload);
@@ -79,6 +90,7 @@ public class SlackController {
                 || StringUtils.isEmpty(blockActionPayload.getResponseUrl())
                 || StringUtils.isEmpty(blockActionPayload.getToken())
             ) {
+                log.info("bad request");
                 return new ResponseEntity<>("", HttpStatus.BAD_REQUEST);
             }
             BlockActionPayload.Action action = this.slackService.getAction(blockActionPayload, actionId).orElse(null);
@@ -90,8 +102,10 @@ public class SlackController {
             }
 
             Optional<User> user = userRepository.findOneWithAuthoritiesByLogin(login);
+            log.info("Login={} actionId={}", login, actionId);
             if (user.isPresent()) {
                 UserDTO userDTO = userMapper.userToUserDTO(user.get());
+                log.info("UserID={} isActivated={}", userDTO.getId(), userDTO.isActivated());
                 switch (actionId) {
                     case APPROVE_USER:
                         if (!userDTO.isActivated()) {
@@ -157,12 +171,14 @@ public class SlackController {
             if (viewSubmissionPayload.getResponseUrls().stream().map(responseUrl -> responseUrl.getResponseUrl()).anyMatch(StringUtils::isEmpty)
                 || StringUtils.isEmpty(viewSubmissionPayload.getToken())
             ) {
+                log.info("bad request");
                 return new ResponseEntity<>("", HttpStatus.BAD_REQUEST);
             }
 
             Optional<User> user = userRepository.findOneWithAuthoritiesByLogin(slackService.getOptionValueLogin(viewSubmissionPayload.getView().getPrivateMetadata()));
             if (user.isPresent()) {
                 UserDTO userDTO = userMapper.userToUserDTO(user.get());
+                log.info("UserID={} isActivated={}", userDTO.getId(), userDTO.isActivated());
                 ActionId actionId = this.slackService.getActionId(viewSubmissionPayload);
                 DropdownEmailOption mailOption = null;
                 for (DropdownEmailOption curMailOption : DropdownEmailOption.values()) {
