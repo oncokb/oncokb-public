@@ -651,31 +651,44 @@ export class SomaticGermlineAlterationPage extends React.Component<
                         />
                       </>
                     )}
-                  <MiniNavBarHeader id="clinical-implications">
-                    Clinical Implications For This Biomarker
-                  </MiniNavBarHeader>
-                  <SomaticGermlineAlterationView
-                    appStore={this.props.appStore}
-                    hugoSymbol={this.store.hugoSymbol}
-                    alteration={this.store.alterationName}
-                    alterationQuery={this.store.alterationQuery}
-                    germline={this.store.germline}
-                    matchedAlteration={this.store.alteration.result}
-                    tumorType={this.store.cancerTypeName}
-                    onChangeTumorType={this.onChangeTumorType.bind(this)}
-                    annotation={this.store.annotationData.result}
-                    biologicalAlterations={
-                      this.store.biologicalAlterations.result
-                    }
-                    relevantAlterations={undefined}
-                    fdaImplication={this.fdaImplication}
-                    therapeuticImplications={this.therapeuticImplications}
-                    diagnosticImplications={this.diagnosticImplications}
-                    prognosticImplications={this.prognosticImplications}
-                    defaultSelectedTab={this.selectedTab}
-                    onChangeTab={this.onChangeTab}
-                    routing={this.props.routing}
-                  />
+                  <div className="d-flex align-items-center">
+                    <MiniNavBarHeader
+                      id="clinical-implications"
+                      comingSoon={this.store.germline}
+                    >
+                      <span
+                        className={
+                          this.store.germline ? 'text-secondary' : undefined
+                        }
+                      >
+                        Clinical Implications For This Biomarker
+                      </span>
+                    </MiniNavBarHeader>
+                  </div>
+                  {!this.store.germline && (
+                    <SomaticGermlineAlterationView
+                      appStore={this.props.appStore}
+                      hugoSymbol={this.store.hugoSymbol}
+                      alteration={this.store.alterationName}
+                      alterationQuery={this.store.alterationQuery}
+                      germline={this.store.germline}
+                      matchedAlteration={this.store.alteration.result}
+                      tumorType={this.store.cancerTypeName}
+                      onChangeTumorType={this.onChangeTumorType.bind(this)}
+                      annotation={this.store.annotationData.result}
+                      biologicalAlterations={
+                        this.store.biologicalAlterations.result
+                      }
+                      relevantAlterations={undefined}
+                      fdaImplication={this.fdaImplication}
+                      therapeuticImplications={this.therapeuticImplications}
+                      diagnosticImplications={this.diagnosticImplications}
+                      prognosticImplications={this.prognosticImplications}
+                      defaultSelectedTab={this.selectedTab}
+                      onChangeTab={this.onChangeTab}
+                      routing={this.props.routing}
+                    />
+                  )}
                 </Col>
               </Row>
             </Container>
