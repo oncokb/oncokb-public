@@ -5,6 +5,7 @@ export enum TITLE {
   MD = 'MD',
   PHD = 'PhD',
   MSC = 'MSc',
+  MS = 'MS',
   MPA = 'MPA',
   FACP = 'FACP',
   FRCPC = 'FRCPC',

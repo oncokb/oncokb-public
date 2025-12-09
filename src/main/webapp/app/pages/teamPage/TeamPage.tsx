@@ -554,6 +554,96 @@ const eab: ITeamMember[] = [
   },
 ];
 
+const dmg: ITeamMember[] = [
+  {
+    firstName: 'Nikita',
+    lastName: 'Mehta',
+    title: [TITLE.MSC],
+    faculty: false,
+    showCOI: true,
+  },
+  {
+    firstName: 'Eva',
+    lastName: 'Park',
+    title: [TITLE.MPH],
+    faculty: false,
+    showCOI: true,
+  },
+  {
+    firstName: 'Ciyu',
+    lastName: 'Yang',
+    title: [TITLE.PHD],
+    faculty: false,
+    showCOI: true,
+  },
+  {
+    firstName: 'Yirong',
+    lastName: 'Li',
+    title: [TITLE.PHD],
+    faculty: false,
+    showCOI: true,
+  },
+  {
+    firstName: 'Bree',
+    lastName: 'Martin',
+    title: [TITLE.MSC],
+    faculty: false,
+    showCOI: true,
+  },
+  {
+    firstName: 'Ozge',
+    lastName: 'Ceyhan-Birsoy',
+    title: [TITLE.PHD],
+    faculty: false,
+    showCOI: true,
+  },
+  {
+    firstName: 'Maksym',
+    lastName: 'Misyura',
+    title: [TITLE.PHD],
+    faculty: false,
+    showCOI: true,
+  },
+  {
+    firstName: 'Panieh',
+    lastName: 'Terraf',
+    title: [TITLE.PHD],
+    faculty: false,
+    showCOI: true,
+  },
+  {
+    firstName: 'Chuan',
+    lastName: 'Gao',
+    title: [TITLE.PHD],
+    faculty: false,
+    showCOI: true,
+  },
+  {
+    firstName: 'Neal',
+    lastName: 'Cody',
+    title: [TITLE.PHD],
+    faculty: false,
+    showCOI: true,
+  },
+];
+
+const cgs: ITeamMember[] = [
+  {
+    firstName: 'Margaret',
+    lastName: 'Sheehan',
+    title: [TITLE.MS],
+    showCOI: true,
+    faculty: false,
+  },
+  {
+    firstName: 'Yelena',
+    lastName: 'Kemel',
+    title: [TITLE.MS],
+    showCOI: true,
+    faculty: true,
+  },
+];
+
 const pastContributors: IPastMember[] = [
   {
     firstName: 'Tripti',
@@ -803,14 +893,6 @@ const pastContributors: IPastMember[] = [
     type: MEMBER_TYPE.CGAC,
   },
   {
-    firstName: 'Jianjiong',
-    lastName: 'Gao',
-    title: [TITLE.PHD],
-    faculty: true,
-    showCOI: true,
-    type: MEMBER_TYPE.CORE,
-  },
-  {
     firstName: 'Stephanie',
     lastName: 'Carrero',
     title: [TITLE.BA],
@@ -882,6 +964,36 @@ const pastContributors: IPastMember[] = [
     showCOI: true,
     type: MEMBER_TYPE.CGAC,
   },
+  {
+    firstName: 'Amanda',
+    lastName: 'Dhaneshwar',
+    title: [TITLE.PHD],
+    faculty: false,
+    showCOI: true,
+    type: MEMBER_TYPE.CORE,
+  },
+  {
+    firstName: 'Hongxin',
+    lastName: 'Zhang',
+    title: [TITLE.MSC],
+    faculty: false,
+    showCOI: true,
+    type: MEMBER_TYPE.CORE,
+  },
+  {
+    firstName: 'Benjamin',
+    lastName: 'Xu',
+    type: MEMBER_TYPE.CORE,
+  },
+  {
+    firstName: 'Bob',
+    middleName: 'T',
+    lastName: 'Li',
+    title: [TITLE.MD, TITLE.PHD, TITLE.MPH],
+    faculty: true,
+    showCOI: true,
+    type: MEMBER_TYPE.CGAC,
+  },
 ];
 
 type TeamSections = {
@@ -903,21 +1015,29 @@ const teamSections: TeamSections[] = [
     members: sortBy(cgac, member => member.lastName),
   },
   {
-    teamName: 'Past Design & Development Member',
+    teamName: 'Clinical Genetics Service',
+    members: sortBy(cgs, member => member.lastName),
+  },
+  {
+    teamName: 'Diagnostic Molecular Genetics',
+    members: sortBy(dmg, member => member.lastName),
+  },
+  {
+    teamName: 'Past Design & Development Members',
     members: sortBy(
       pastContributors.filter(x => x.type === MEMBER_TYPE.CORE),
       member => member.lastName
     ),
   },
   {
-    teamName: 'Past CGAC Member',
+    teamName: 'Past CGAC Members',
     members: sortBy(
       pastContributors.filter(x => x.type === MEMBER_TYPE.CGAC),
       member => member.lastName
     ),
   },
   {
-    teamName: 'Past Curator',
+    teamName: 'Past Curators',
     members: sortBy(
       pastContributors.filter(x => x.type === MEMBER_TYPE.CURATOR),
       member => member.lastName
