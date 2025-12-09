@@ -970,38 +970,3 @@ export const getFdaSubmissionNumber = (
     ? `${primaryNumber}/${supplementNumber}`
     : primaryNumber;
 };
-
-const isAlleleState = (str: string): str is AlleleState => {
-  return (
-    str === ALLELE_STATE_MONOALLELIC ||
-    str === ALLELE_STATE_BIALLELEIC ||
-    str === ALLELE_STATE_CARRIER
-  );
-};
-
-export const getAlleleStateFromMechanismOfInheritance = (
-  inheritanceMechanism: InheritanceMechanism
-): AlleleState | undefined => {
-  if (inheritanceMechanism === MECHANISM_OF_INHERITANCE_AUTOSOMAL_DOMINANT) {
-    return ALLELE_STATE_MONOALLELIC;
-  }
-
-  if (inheritanceMechanism === MECHANISM_OF_INHERITANCE_AUTOSOMAL_RECESSIVE) {
-    return ALLELE_STATE_BIALLELEIC;
-  }
-
-  if (inheritanceMechanism === 'Carrier') {
-    return ALLELE_STATE_CARRIER;
-  }
-
-  return undefined;
-};
-
-export const getAlleleStatesFromEvidence = (evidence: Evidence) => {
-  if (!evidence.knownEffect) {
-    return undefined;
-  }
-  const moi = evidence.knownEffect.trim() as InheritanceMechanism;
-  const alleleState = getAlleleStateFromMechanismOfInheritance(moi);
-  return alleleState;
-};
