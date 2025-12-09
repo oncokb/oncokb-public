@@ -999,49 +999,58 @@ const pastContributors: IPastMember[] = [
 type TeamSections = {
   teamName: string;
   members: ITeamMember[];
+  arePastMembers: boolean;
 };
 
 const teamSections: TeamSections[] = [
   {
     teamName: 'Design & Development',
     members: teamMembers,
+    arePastMembers: false,
   },
   {
     teamName: 'External Advisory Board',
     members: sortBy(eab, member => member.lastName),
+    arePastMembers: false,
   },
   {
     teamName: 'Clinical Genomics Annotation Committee',
     members: sortBy(cgac, member => member.lastName),
+    arePastMembers: false,
   },
   {
     teamName: 'Clinical Genetics Service',
     members: sortBy(cgs, member => member.lastName),
+    arePastMembers: false,
   },
   {
     teamName: 'Diagnostic Molecular Genetics',
     members: sortBy(dmg, member => member.lastName),
+    arePastMembers: false,
   },
   {
-    teamName: 'Past Design & Development Members',
+    teamName: 'Design & Development Members',
     members: sortBy(
       pastContributors.filter(x => x.type === MEMBER_TYPE.CORE),
       member => member.lastName
     ),
+    arePastMembers: true,
   },
   {
-    teamName: 'Past CGAC Members',
+    teamName: 'CGAC Members',
     members: sortBy(
       pastContributors.filter(x => x.type === MEMBER_TYPE.CGAC),
       member => member.lastName
     ),
+    arePastMembers: true,
   },
   {
-    teamName: 'Past Curators',
+    teamName: 'Curators',
     members: sortBy(
       pastContributors.filter(x => x.type === MEMBER_TYPE.CURATOR),
       member => member.lastName
     ),
+    arePastMembers: true,
   },
 ];
 
@@ -1073,11 +1082,26 @@ export const TeamPage = () => {
               {teamSections.map(section => {
                 return (
                   <>
-                    <h3 className="h5">{section.teamName}</h3>
+                    {section.arePastMembers ? (
+                      <h3 className="h5">
+                        <span className="badge badge-secondary">Past</span>{' '}
+                        {section.teamName}
+                      </h3>
+                    ) : (
+                      <h3 className="h5">{section.teamName}</h3>
+                    )}
                     <ul>
                       {section.members.map(member => (
                         <li key={`${member.lastName}-${member.firstName}`}>
-                          <TeamMember {...member} />
+                          {section.arePastMembers ? (
+                            <TeamMember
+                              {...member}
+                              showCOI={false}
+                              faculty={false}
+                            />
+                          ) : (
+                            <TeamMember {...member} />
+                          )}
                         </li>
                       ))}
                     </ul>
