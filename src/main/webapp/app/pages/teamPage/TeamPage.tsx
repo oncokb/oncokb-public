@@ -631,14 +631,14 @@ const cgs: ITeamMember[] = [
   {
     firstName: 'Margaret',
     lastName: 'Sheehan',
-    title: [TITLE.MS],
+    title: [TITLE.MSC],
     showCOI: true,
     faculty: false,
   },
   {
     firstName: 'Yelena',
     lastName: 'Kemel',
-    title: [TITLE.MS],
+    title: [TITLE.MSC],
     showCOI: true,
     faculty: true,
   },
