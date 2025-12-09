@@ -48,3 +48,18 @@
   color: #684e00;
   background: #fcf4d6;
 }
+
+.comingSoonTagSmall {
+  @extend .tag;
+  color: $primary;
+  border: var(--radius-2, 2px) solid var(--Color-11, $primary);
+}
+
+.comingSoonTagLarge {
+  @extend .tag;
+  color: white;
+  font-size: 18px;
+  background: $primary;
+  padding: 4px var(--radius-8, 0.5rem);
+  border: var(--radius-2, 2px) solid var(--Color-11, $primary);
+}
