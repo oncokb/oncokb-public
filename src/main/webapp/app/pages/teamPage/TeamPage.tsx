@@ -95,7 +95,7 @@ const teamMembers: ITeamMember[] = [
   {
     firstName: 'Bo',
     lastName: 'Kim',
-    title: [TITLE.BSC],
+    title: [TITLE.BHA, TITLE.BHCI],
     faculty: false,
     showCOI: true,
   },

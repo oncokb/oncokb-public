@@ -11,6 +11,8 @@ export enum TITLE {
   BSC = 'BSc',
   BA = 'BA',
   MPH = 'MPH',
+  BHA = 'BHA',
+  BHCI = 'BHCI',
 }
 
 export enum INSTITUTION {
