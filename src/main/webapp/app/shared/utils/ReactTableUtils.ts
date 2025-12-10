@@ -95,6 +95,17 @@ export function sortNumber(
 }
 
 export function sortByAlteration(a: Alteration, b: Alteration): number {
+  const aName = a.name ?? '';
+  const bName = b.name ?? '';
+  const isHGVSc =
+    aName.toLowerCase().startsWith('c.') ||
+    bName.toLowerCase().startsWith('c.');
+
+  // For germline variants, we want to sort alphabetically
+  if (isHGVSc) {
+    return aName.localeCompare(bName);
+  }
+
   // force null and undefined to the bottom
   let result = sortNumber(a.proteinStart, b.proteinStart);
 
@@ -103,7 +114,7 @@ export function sortByAlteration(a: Alteration, b: Alteration): number {
   }
 
   if (result === 0) {
-    result = a.name.localeCompare(b.name);
+    result = aName.localeCompare(bName);
   }
   return result;
 }
