@@ -58,9 +58,19 @@ public class SlackController {
 
     private void updateUserWithRoleApiIfRequested(UserDTO userDTO) {
         boolean apiAccessRequested = userDTO.getAdditionalInfo() != null && userDTO.getAdditionalInfo().getApiAccessRequest() != null && userDTO.getAdditionalInfo().getApiAccessRequest().isRequested();
+        log.info(
+            "Checking if the user requested API access. licenseType={}, apiAccessRequested={}, ID={}",
+            userDTO.getLicenseType(),
+            apiAccessRequested,
+            userDTO.getId()
+        );
+
         if (!userDTO.getLicenseType().equals(LicenseType.ACADEMIC) || apiAccessRequested) {
+            log.info("Giving the user API access");
             Set<String> userDTOAuthorities = userDTO.getAuthorities();
             userDTOAuthorities.add(AuthoritiesConstants.API);
+        } else {
+            log.info("The user did not request API access");
         }
     }
 
@@ -70,6 +80,7 @@ public class SlackController {
     // Considering faking a actionJSON with correct user email is difficult. Ignore the auth for now.
     @RequestMapping(method = RequestMethod.POST, value = "/slack", headers = {"content-type=application/x-www-form-urlencoded"})
     public ResponseEntity<String> approveUser(@RequestParam("payload") String actionJSON) throws IOException, MessagingException {
+        log.info("actionJSON={}", actionJSON);
         Gson snakeCase = GsonFactory.createSnakeCase();
         UnknownPayload pl = snakeCase.fromJson(actionJSON, UnknownPayload.class);
         if (pl.getType().equals(BlockActionPayload.TYPE)) {
@@ -90,8 +101,10 @@ public class SlackController {
             }
 
             Optional<User> user = userRepository.findOneWithAuthoritiesByLogin(login);
+            log.info("login={} actionId={}", login, actionId);
             if (user.isPresent()) {
                 UserDTO userDTO = userMapper.userToUserDTO(user.get());
+                log.info("userID={} isActivated={}", userDTO.getId(), userDTO.isActivated());
                 switch (actionId) {
                     case APPROVE_USER:
                         if (!userDTO.isActivated()) {
@@ -163,6 +176,7 @@ public class SlackController {
             Optional<User> user = userRepository.findOneWithAuthoritiesByLogin(slackService.getOptionValueLogin(viewSubmissionPayload.getView().getPrivateMetadata()));
             if (user.isPresent()) {
                 UserDTO userDTO = userMapper.userToUserDTO(user.get());
+                log.info("userID={} isActivated={}", userDTO.getId(), userDTO.isActivated());
                 ActionId actionId = this.slackService.getActionId(viewSubmissionPayload);
                 DropdownEmailOption mailOption = null;
                 for (DropdownEmailOption curMailOption : DropdownEmailOption.values()) {
