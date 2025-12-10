@@ -11,6 +11,7 @@ import { Row, Col, Container } from 'react-bootstrap';
 import styles from './StickyMiniNavBar.module.scss';
 import classNames from 'classnames';
 import classnames from 'classnames';
+import ComingSoonTag from 'app/components/tag/ComingSoonTag';
 
 function getNavBarSectionElements() {
   return document.querySelectorAll('[mini-nav-bar-header]');
@@ -86,7 +87,7 @@ export default function StickyMiniNavBar({
   const [headerHeight, setHeaderHeight] = useState(0);
   const [isSticky, setIsSticky] = useState(false);
   const [sections, setSections] = useState<
-    { id: string; label: string | null }[]
+    { id: string; label: string | null; comingSoon: boolean }[]
   >([]);
   const [passedElements, setPassedElements] = useState<
     Record<string, { isPassed: boolean; isInView: boolean }>
@@ -106,6 +107,7 @@ export default function StickyMiniNavBar({
       newSections.push({
         id: ele.id,
         label: ele.textContent,
+        comingSoon: ele.getAttribute('coming-soon') !== null ? true : false,
       });
     });
     setSections(newSections);
@@ -266,10 +268,11 @@ export default function StickyMiniNavBar({
                   gap: '10px',
                 }}
               >
-                {sections.map(({ id, label }) => {
+                {sections.map(({ id, label, comingSoon }) => {
                   const isInSection = currentSectionId === id;
                   return (
                     <Link
+                      style={comingSoon ? { pointerEvents: 'none' } : undefined}
                       key={id}
                       to={`#${id}`}
                       className={classNames(
@@ -277,7 +280,12 @@ export default function StickyMiniNavBar({
                         isInSection ? styles.stickySectionSelected : ''
                       )}
                     >
-                      {label}
+                      <span
+                        className={comingSoon ? 'text-secondary' : undefined}
+                      >
+                        {label}
+                      </span>
+                      {comingSoon && <ComingSoonTag className="ml-2" />}
                     </Link>
                   );
                 })}

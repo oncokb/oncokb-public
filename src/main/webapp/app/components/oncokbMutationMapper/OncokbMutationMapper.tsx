@@ -1,6 +1,5 @@
 import { MutationMapperProps, MutationMapper } from 'react-mutation-mapper';
 import { observer } from 'mobx-react';
-import React from 'react';
 
 export type Filter = {
   name: string;
@@ -14,6 +13,11 @@ export type Oncogenicity = {
 
 export type Pathogenicity = {
   pathogenicity: string;
+  counts: number;
+};
+
+export type MutationEffect = {
+  mutationEffect: string;
   counts: number;
 };
 
