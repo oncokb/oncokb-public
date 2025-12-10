@@ -10,8 +10,6 @@ import {
   TITLE,
 } from 'app/pages/teamPage/TeamMember';
 import { getPageTitle } from 'app/shared/utils/Utils';
-import { useState } from 'react';
-import Select from 'react-select';
 import { sortBy } from 'app/shared/utils/LodashUtils';
 import { Helmet } from 'react-helmet-async';
 import styles from './TeamPage.module.scss';
@@ -60,15 +58,22 @@ const teamMembers: ITeamMember[] = [
     showCOI: true,
   },
   {
-    firstName: 'Benjamin',
-    lastName: 'Preiser',
+    firstName: 'Kelly',
+    lastName: 'Cavender',
     title: [TITLE.BSC],
     faculty: false,
     showCOI: true,
   },
   {
-    firstName: 'John',
-    lastName: 'Konecny',
+    firstName: 'Kinisha',
+    lastName: 'Gala',
+    title: [TITLE.PHD],
+    faculty: false,
+    showCOI: true,
+  },
+  {
+    firstName: 'Benjamin',
+    lastName: 'Preiser',
     title: [TITLE.BSC],
     faculty: false,
     showCOI: true,
@@ -81,16 +86,16 @@ const teamMembers: ITeamMember[] = [
     showCOI: true,
   },
   {
-    firstName: 'Kelly',
-    lastName: 'Cavender',
+    firstName: 'John',
+    lastName: 'Konecny',
     title: [TITLE.BSC],
     faculty: false,
     showCOI: true,
   },
   {
-    firstName: 'Kinisha',
-    lastName: 'Gala',
-    title: [TITLE.PHD],
+    firstName: 'Bo',
+    lastName: 'Kim',
+    title: [TITLE.BSC],
     faculty: false,
     showCOI: true,
   },
@@ -515,6 +520,13 @@ const cgac: ITeamMember[] = sortBy(
       lastName: 'Carlo',
       title: [TITLE.MD],
       faculty: true,
+      showCOI: true,
+    },
+    {
+      firstName: 'Lauren',
+      lastName: 'Banaszak',
+      title: [TITLE.MD],
+      faculty: false,
       showCOI: true,
     },
   ],
@@ -993,6 +1005,14 @@ const pastContributors: IPastMember[] = [
     faculty: true,
     showCOI: true,
     type: MEMBER_TYPE.CGAC,
+  },
+  {
+    firstName: 'Melissa',
+    lastName: 'Nguyen',
+    title: [TITLE.BSC],
+    faculty: false,
+    showCOI: false,
+    type: MEMBER_TYPE.CORE,
   },
 ];
 
