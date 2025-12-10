@@ -1,0 +1,9 @@
+$col: 20rem; // desired column width
+$gap: 1rem; // column gap
+
+.grid {
+  column-width: $col; // target column width
+  column-gap: $gap; // space between columns
+  width: 100%;
+  margin-inline: auto; // center when capped
+}
