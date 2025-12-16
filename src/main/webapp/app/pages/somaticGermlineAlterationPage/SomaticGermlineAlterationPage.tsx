@@ -127,6 +127,19 @@ export class SomaticGermlineAlterationPage extends React.Component<
       true
     );
     reaction(
+      () => [
+        this.props.match.params.hugoSymbol,
+        this.props.match.params.alteration,
+      ],
+      ([hugoSymbol, alteration]) => {
+        if (this.store) {
+          this.store.hugoSymbolQuery = hugoSymbol;
+          this.store.alterationQuery = decodeSlash(alteration) ?? '';
+        }
+      }
+    );
+
+    reaction(
       () => [props.location.hash],
       ([hash]) => {
         const queryStrings = QueryString.parse(
