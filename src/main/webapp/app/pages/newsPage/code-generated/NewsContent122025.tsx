@@ -33,8 +33,8 @@ export default function NewsContent122025() {
             <li>
               For more details on germline variant curation, please refer to our
               updated SOP,{' '}
-              <em>PART II. Germline Variant annotation in OncoKB</em> in v6.0 of
-              the <a href="https://sop.oncokb.org/">OncoKB SOP</a>.
+              <em>PART II. Germline Variant annotation in OncoKB™</em> in v6.0
+              of the <a href="https://sop.oncokb.org/">OncoKB™ SOP</a>.
             </li>
           </ul>
         </li>
