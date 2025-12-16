@@ -2357,7 +2357,7 @@
     "drugTarget": "TROP2-directed antibody and topoisomerase inhibitor conjugate",
     "targetedTx": "Y",
     "pxTx": "Y",
-    "ngsTest": "N"
+    "ngsTest": "Y"
   },
   {
     "year": "2025",
