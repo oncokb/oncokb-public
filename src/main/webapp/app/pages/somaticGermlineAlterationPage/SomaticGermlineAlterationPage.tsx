@@ -107,37 +107,17 @@ export class SomaticGermlineAlterationPage extends React.Component<
   constructor(props: SomaticGermlineAlterationPageProps) {
     super(props);
     const alterationQuery = decodeSlash(props.match.params.alteration);
-    reaction(
-      () => [this.geneticType],
-      ([geneticType]) => {
-        if (props.match.params) {
-          this.store = new AnnotationStore({
-            type: alterationQuery
-              ? AnnotationType.PROTEIN_CHANGE
-              : AnnotationType.GENE,
-            hugoSymbolQuery: props.match.params.hugoSymbol,
-            alterationQuery,
-            germline: geneticType === GENETIC_TYPE.GERMLINE,
-          });
-          if (this.store.cancerTypeName) {
-            this.showMutationEffect = false;
-          }
-        }
-      },
-      true
-    );
-    reaction(
-      () => [
-        this.props.match.params.hugoSymbol,
-        this.props.match.params.alteration,
-      ],
-      ([hugoSymbol, alteration]) => {
-        if (this.store) {
-          this.store.hugoSymbolQuery = hugoSymbol;
-          this.store.alterationQuery = decodeSlash(alteration) ?? '';
-        }
-      }
-    );
+    this.store = new AnnotationStore({
+      type: alterationQuery
+        ? AnnotationType.PROTEIN_CHANGE
+        : AnnotationType.GENE,
+      hugoSymbolQuery: props.match.params.hugoSymbol,
+      alterationQuery,
+      germline: this.geneticType === GENETIC_TYPE.GERMLINE,
+    });
+    if (this.store.cancerTypeName) {
+      this.showMutationEffect = false;
+    }
 
     reaction(
       () => [props.location.hash],
@@ -164,6 +144,25 @@ export class SomaticGermlineAlterationPage extends React.Component<
   @action.bound
   toggleAdditionalGeneInfo() {
     this.showAdditionalGeneInfo = !this.showAdditionalGeneInfo;
+  }
+
+  @action.bound
+  updateQuery(prevProps: SomaticGermlineAlterationPageProps) {
+    if (
+      this.props.match.params.hugoSymbol !== prevProps.match.params.hugoSymbol
+    ) {
+      this.store.hugoSymbolQuery = this.props.match.params.hugoSymbol;
+    }
+    if (
+      this.props.match.params.alteration !== prevProps.match.params.alteration
+    ) {
+      this.store.alterationQuery =
+        decodeSlash(this.props.match.params.alteration) ?? '';
+    }
+  }
+
+  componentDidUpdate(prevProps: SomaticGermlineAlterationPageProps) {
+    this.updateQuery(prevProps);
   }
 
   @computed
