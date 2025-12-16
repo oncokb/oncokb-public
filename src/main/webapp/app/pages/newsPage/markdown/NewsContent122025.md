@@ -3,7 +3,7 @@
   - Upcoming releases will incorporate therapeutic implications for germline variants and support for germline variant annotation through the API.
   - To support this expansion, we have introduced a **new gene page layout** that
     clearly separates somatic and germline content. See [BRCA1](/gene/BRCA1/germline) as an example.
-  - For more details on germline variant curation, please refer to our updated SOP, _PART II. Germline Variant annotation in OncoKB_ in v6.0 of the [OncoKB SOP](https://sop.oncokb.org/).
+  - For more details on germline variant curation, please refer to our updated SOP, _PART II. Germline Variant annotation in OncoKB™_ in v6.0 of the [OncoKB™ SOP](https://sop.oncokb.org/).
 - Release of [OncoKB™ SOP v6.0](https://sop.oncokb.org/)
 - Transcripts have been updated for the following genes (note, only RefSeq transcripts have changed, not Ensembl transcripts):
 
