@@ -3,6 +3,7 @@ import { Link } from 'react-router-dom';
 import {
   AlterationPageLink,
   getAlternativeGenePageLinks,
+  GenePageLink,
 } from 'app/shared/utils/UrlUtils';
 import { NewlyAddedGenesListItem } from 'app/pages/newsPage/NewlyAddedGenesListItem';
 import { TableOfContents } from 'app/pages/privacyNotice/TableOfContents';
@@ -17,26 +18,385 @@ export default function NewsContent122025() {
           <ul>
             <li>
               This release includes 2649 pathogenic or likely pathogenic
-              germline variants across 109 cancer-associated genes.
-            </li>
-            <li>
-              Upcoming releases will incorporate therapeutic implications for
-              germline variants and support for germline variant annotation
-              through the API.
-            </li>
-            <li>
-              To support this expansion, we have introduced a{' '}
-              <strong>new gene page layout</strong> that clearly separates
-              somatic and germline content. See{' '}
-              <a href="/gene/BRCA1/germline">BRCA1</a> as an example.
-            </li>
-            <li>
-              For more details on germline variant curation, please refer to our
-              updated SOP,{' '}
-              <em>PART II. Germline Variant annotation in OncoKB™</em> in v6.0
-              of the <a href="https://sop.oncokb.org/">OncoKB™ SOP</a>.
+              germline variants across
             </li>
           </ul>
+        </li>
+      </ul>
+      <details>
+        <summary>109 cancer-associated genes.</summary>
+        <div className="table-responsive">
+          <table className="table table-sm mb-0">
+            <tbody>
+              <tr>
+                <td>
+                  <GenePageLink hugoSymbol="ALK" germline />
+                </td>
+                <td>
+                  <GenePageLink hugoSymbol="ANKRD26" germline />
+                </td>
+                <td>
+                  <GenePageLink hugoSymbol="APC" germline />
+                </td>
+                <td>
+                  <GenePageLink hugoSymbol="ATM" germline />
+                </td>
+                <td>
+                  <GenePageLink hugoSymbol="AXIN2" germline />
+                </td>
+                <td>
+                  <GenePageLink hugoSymbol="BAP1" germline />
+                </td>
+                <td>
+                  <GenePageLink hugoSymbol="BARD1" germline />
+                </td>
+                <td>
+                  <GenePageLink hugoSymbol="BLM" germline />
+                </td>
+                <td>
+                  <GenePageLink hugoSymbol="BMPR1A" germline />
+                </td>
+                <td>
+                  <GenePageLink hugoSymbol="BRCA1" germline />
+                </td>
+                <td>
+                  <GenePageLink hugoSymbol="BRCA2" germline />
+                </td>
+              </tr>
+              <tr>
+                <td>
+                  <GenePageLink hugoSymbol="BRIP1" germline />
+                </td>
+                <td>
+                  <GenePageLink hugoSymbol="BTK" germline />
+                </td>
+                <td>
+                  <GenePageLink hugoSymbol="CALR" germline />
+                </td>
+                <td>
+                  <GenePageLink hugoSymbol="CBL" germline />
+                </td>
+                <td>
+                  <GenePageLink hugoSymbol="CDC73" germline />
+                </td>
+                <td>
+                  <GenePageLink hugoSymbol="CDH1" germline />
+                </td>
+                <td>
+                  <GenePageLink hugoSymbol="CDK4" germline />
+                </td>
+                <td>
+                  <GenePageLink hugoSymbol="CDKN1B" germline />
+                </td>
+                <td>
+                  <GenePageLink hugoSymbol="CDKN2A" germline />
+                </td>
+                <td>
+                  <GenePageLink hugoSymbol="CDKN2A (p14)" germline />
+                </td>
+                <td>
+                  <GenePageLink hugoSymbol="CEBPA" germline />
+                </td>
+              </tr>
+              <tr>
+                <td>
+                  <GenePageLink hugoSymbol="CHEK2" germline />
+                </td>
+                <td>
+                  <GenePageLink hugoSymbol="CTR9" germline />
+                </td>
+                <td>
+                  <GenePageLink hugoSymbol="DDX41" germline />
+                </td>
+                <td>
+                  <GenePageLink hugoSymbol="DICER1" germline />
+                </td>
+                <td>
+                  <GenePageLink hugoSymbol="DPYD" germline />
+                </td>
+                <td>
+                  <GenePageLink hugoSymbol="EGFR" germline />
+                </td>
+                <td>
+                  <GenePageLink hugoSymbol="ELOC" germline />
+                </td>
+                <td>
+                  <GenePageLink hugoSymbol="EPCAM" germline />
+                </td>
+                <td>
+                  <GenePageLink hugoSymbol="ERCC3" germline />
+                </td>
+                <td>
+                  <GenePageLink hugoSymbol="ETV6" germline />
+                </td>
+                <td>
+                  <GenePageLink hugoSymbol="FANCA" germline />
+                </td>
+              </tr>
+              <tr>
+                <td>
+                  <GenePageLink hugoSymbol="FANCC" germline />
+                </td>
+                <td>
+                  <GenePageLink hugoSymbol="FAS" germline />
+                </td>
+                <td>
+                  <GenePageLink hugoSymbol="FH" germline />
+                </td>
+                <td>
+                  <GenePageLink hugoSymbol="FLCN" germline />
+                </td>
+                <td>
+                  <GenePageLink hugoSymbol="GATA2" germline />
+                </td>
+                <td>
+                  <GenePageLink hugoSymbol="GREM1" germline />
+                </td>
+                <td>
+                  <GenePageLink hugoSymbol="HOXB13" germline />
+                </td>
+                <td>
+                  <GenePageLink hugoSymbol="HRAS" germline />
+                </td>
+                <td>
+                  <GenePageLink hugoSymbol="IKZF1" germline />
+                </td>
+                <td>
+                  <GenePageLink hugoSymbol="KEAP1" germline />
+                </td>
+                <td>
+                  <GenePageLink hugoSymbol="KIT" germline />
+                </td>
+              </tr>
+              <tr>
+                <td>
+                  <GenePageLink hugoSymbol="KRAS" germline />
+                </td>
+                <td>
+                  <GenePageLink hugoSymbol="LZTR1" germline />
+                </td>
+                <td>
+                  <GenePageLink hugoSymbol="MAP3K1" germline />
+                </td>
+                <td>
+                  <GenePageLink hugoSymbol="MAX" germline />
+                </td>
+                <td>
+                  <GenePageLink hugoSymbol="MEN1" germline />
+                </td>
+                <td>
+                  <GenePageLink hugoSymbol="MET" germline />
+                </td>
+                <td>
+                  <GenePageLink hugoSymbol="MITF" germline />
+                </td>
+                <td>
+                  <GenePageLink hugoSymbol="MLH1" germline />
+                </td>
+                <td>
+                  <GenePageLink hugoSymbol="MPL" germline />
+                </td>
+                <td>
+                  <GenePageLink hugoSymbol="MSH2" germline />
+                </td>
+                <td>
+                  <GenePageLink hugoSymbol="MSH3" germline />
+                </td>
+              </tr>
+              <tr>
+                <td>
+                  <GenePageLink hugoSymbol="MSH6" germline />
+                </td>
+                <td>
+                  <GenePageLink hugoSymbol="MUTYH" germline />
+                </td>
+                <td>
+                  <GenePageLink hugoSymbol="NBN" germline />
+                </td>
+                <td>
+                  <GenePageLink hugoSymbol="NF1" germline />
+                </td>
+                <td>
+                  <GenePageLink hugoSymbol="NF2" germline />
+                </td>
+                <td>
+                  <GenePageLink hugoSymbol="NRAS" germline />
+                </td>
+                <td>
+                  <GenePageLink hugoSymbol="NSD1" germline />
+                </td>
+                <td>
+                  <GenePageLink hugoSymbol="NTHL1" germline />
+                </td>
+                <td>
+                  <GenePageLink hugoSymbol="PALB2" germline />
+                </td>
+                <td>
+                  <GenePageLink hugoSymbol="PAX5" germline />
+                </td>
+                <td>
+                  <GenePageLink hugoSymbol="PDGFRA" germline />
+                </td>
+              </tr>
+              <tr>
+                <td>
+                  <GenePageLink hugoSymbol="PHOX2B" germline />
+                </td>
+                <td>
+                  <GenePageLink hugoSymbol="PMS2" germline />
+                </td>
+                <td>
+                  <GenePageLink hugoSymbol="POLD1" germline />
+                </td>
+                <td>
+                  <GenePageLink hugoSymbol="POLE" germline />
+                </td>
+                <td>
+                  <GenePageLink hugoSymbol="POT1" germline />
+                </td>
+                <td>
+                  <GenePageLink hugoSymbol="PRKAR1A" germline />
+                </td>
+                <td>
+                  <GenePageLink hugoSymbol="PTCH1" germline />
+                </td>
+                <td>
+                  <GenePageLink hugoSymbol="PTEN" germline />
+                </td>
+                <td>
+                  <GenePageLink hugoSymbol="PTPN11" germline />
+                </td>
+                <td>
+                  <GenePageLink hugoSymbol="RAD51B" germline />
+                </td>
+                <td>
+                  <GenePageLink hugoSymbol="RAD51C" germline />
+                </td>
+              </tr>
+              <tr>
+                <td>
+                  <GenePageLink hugoSymbol="RAD51D" germline />
+                </td>
+                <td>
+                  <GenePageLink hugoSymbol="RB1" germline />
+                </td>
+                <td>
+                  <GenePageLink hugoSymbol="REST" germline />
+                </td>
+                <td>
+                  <GenePageLink hugoSymbol="RET" germline />
+                </td>
+                <td>
+                  <GenePageLink hugoSymbol="RNF43" germline />
+                </td>
+                <td>
+                  <GenePageLink hugoSymbol="RTEL1" germline />
+                </td>
+                <td>
+                  <GenePageLink hugoSymbol="RUNX1" germline />
+                </td>
+                <td>
+                  <GenePageLink hugoSymbol="SDHA" germline />
+                </td>
+                <td>
+                  <GenePageLink hugoSymbol="SDHAF2" germline />
+                </td>
+                <td>
+                  <GenePageLink hugoSymbol="SDHB" germline />
+                </td>
+                <td>
+                  <GenePageLink hugoSymbol="SDHC" germline />
+                </td>
+              </tr>
+              <tr>
+                <td>
+                  <GenePageLink hugoSymbol="SDHD" germline />
+                </td>
+                <td>
+                  <GenePageLink hugoSymbol="SH2B3" germline />
+                </td>
+                <td>
+                  <GenePageLink hugoSymbol="SMAD3" germline />
+                </td>
+                <td>
+                  <GenePageLink hugoSymbol="SMAD4" germline />
+                </td>
+                <td>
+                  <GenePageLink hugoSymbol="SMARCA4" germline />
+                </td>
+                <td>
+                  <GenePageLink hugoSymbol="SMARCB1" germline />
+                </td>
+                <td>
+                  <GenePageLink hugoSymbol="SMARCE1" germline />
+                </td>
+                <td>
+                  <GenePageLink hugoSymbol="SRP72" germline />
+                </td>
+                <td>
+                  <GenePageLink hugoSymbol="STK11" germline />
+                </td>
+                <td>
+                  <GenePageLink hugoSymbol="SUFU" germline />
+                </td>
+                <td>
+                  <GenePageLink hugoSymbol="TERT" germline />
+                </td>
+              </tr>
+              <tr>
+                <td>
+                  <GenePageLink hugoSymbol="TGFBR1" germline />
+                </td>
+                <td>
+                  <GenePageLink hugoSymbol="TGFBR2" germline />
+                </td>
+                <td>
+                  <GenePageLink hugoSymbol="TMEM127" germline />
+                </td>
+                <td>
+                  <GenePageLink hugoSymbol="TP53" germline />
+                </td>
+                <td>
+                  <GenePageLink hugoSymbol="TRIP13" germline />
+                </td>
+                <td>
+                  <GenePageLink hugoSymbol="TSC1" germline />
+                </td>
+                <td>
+                  <GenePageLink hugoSymbol="TSC2" germline />
+                </td>
+                <td>
+                  <GenePageLink hugoSymbol="TYK2" germline />
+                </td>
+                <td>
+                  <GenePageLink hugoSymbol="VHL" germline />
+                </td>
+                <td>
+                  <GenePageLink hugoSymbol="WT1" germline />
+                </td>
+                <td></td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+      </details>
+      <br />
+      <ul>
+        <li>
+          Upcoming releases will incorporate therapeutic implications for
+          germline variants and support for germline variant annotation through
+          the API.
+        </li>
+        <li>
+          To support this expansion, we have introduced a{' '}
+          <strong>new gene page layout</strong> that clearly separates somatic
+          and germline content. See <a href="/gene/BRCA1/germline">BRCA1</a> as
+          an example.
+        </li>
+        <li>
+          For more details on germline variant curation, please refer to our
+          updated SOP, <em>PART II. Germline Variant annotation in OncoKB™</em>{' '}
+          in v6.0 of the <a href="https://sop.oncokb.org/">OncoKB™ SOP</a>.
         </li>
         <li>
           Release of <a href="https://sop.oncokb.org/">OncoKB™ SOP v6.0</a>
