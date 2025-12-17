@@ -1,8 +1,9 @@
-- We are excited to announce that OncoKB™ now includes germline variant annotation on our website\!
-  - This release includes 2649 pathogenic or likely pathogenic germline variants across
-
+<ul>
+<li>We are excited to announce that OncoKB™ now includes germline variant annotation on our website!</li>
+<ul>
+<li>This release includes 2649 pathogenic or likely pathogenic germline variants across 109 cancer-associated genes.
 <details>
-  <summary>109 cancer-associated genes.</summary>
+  <summary>View the 109 cancer-associated genes.</summary>
 
   <div className="table-responsive">
   <table className="table table-sm mb-0">
@@ -141,7 +142,9 @@
   </table>
   </div>
 </details>
-<br/>
+</li>
+</ul>
+</ul>
 
 - Upcoming releases will incorporate therapeutic implications for germline variants and support for germline variant annotation through the API.
 - To support this expansion, we have introduced a **new gene page layout** that
