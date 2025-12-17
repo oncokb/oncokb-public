@@ -378,25 +378,25 @@ export default function NewsContent122025() {
               </div>
             </details>
           </li>
+          <li>
+            Upcoming releases will incorporate therapeutic implications for
+            germline variants and support for germline variant annotation
+            through the API.
+          </li>
+          <li>
+            To support this expansion, we have introduced a{' '}
+            <b>new gene page layout</b> that clearly separates somatic and
+            germline content. See <a href="/gene/BRCA1/germline">BRCA1</a> as an
+            example.
+          </li>
+          <li>
+            For more details on germline variant curation, please refer to our
+            updated SOP, <i>PART II. Germline Variant annotation in OncoKB™</i>{' '}
+            in v6.0 of the <a href="https://sop.oncokb.org/">OncoKB™ SOP</a>.
+          </li>
         </ul>
       </ul>
       <ul>
-        <li>
-          Upcoming releases will incorporate therapeutic implications for
-          germline variants and support for germline variant annotation through
-          the API.
-        </li>
-        <li>
-          To support this expansion, we have introduced a{' '}
-          <strong>new gene page layout</strong> that clearly separates somatic
-          and germline content. See <a href="/gene/BRCA1/germline">BRCA1</a> as
-          an example.
-        </li>
-        <li>
-          For more details on germline variant curation, please refer to our
-          updated SOP, <em>PART II. Germline Variant annotation in OncoKB™</em>{' '}
-          in v6.0 of the <a href="https://sop.oncokb.org/">OncoKB™ SOP</a>.
-        </li>
         <li>
           Release of <a href="https://sop.oncokb.org/">OncoKB™ SOP v6.0</a>
         </li>
