@@ -491,7 +491,7 @@ files.forEach(file => {
     .replace(/[^a-zA-Z0-9]/g, '_');
   const tsxContent = `import React from 'react';
 import { Link } from 'react-router-dom';
-import { AlterationPageLink, getAlternativeGenePageLinks } from 'app/shared/utils/UrlUtils';
+import { AlterationPageLink, getAlternativeGenePageLinks, GenePageLink } from 'app/shared/utils/UrlUtils';
 import { NewlyAddedGenesListItem } from 'app/pages/newsPage/NewlyAddedGenesListItem';
 import { TableOfContents } from 'app/pages/privacyNotice/TableOfContents';
 

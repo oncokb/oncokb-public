@@ -3,6 +3,7 @@ import { Link } from 'react-router-dom';
 import {
   AlterationPageLink,
   getAlternativeGenePageLinks,
+  GenePageLink,
 } from 'app/shared/utils/UrlUtils';
 import { NewlyAddedGenesListItem } from 'app/pages/newsPage/NewlyAddedGenesListItem';
 import { TableOfContents } from 'app/pages/privacyNotice/TableOfContents';
