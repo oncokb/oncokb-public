@@ -21,7 +21,7 @@ export default function NewsContent122025() {
             This release includes 2649 pathogenic or likely pathogenic germline
             variants across 109 cancer-associated genes.
             <details>
-              <summary>View the 109 cancer-associated genes.</summary>
+              <summary>View the 109 cancer-associated germline genes.</summary>
               <div className="table-responsive">
                 <table className="table table-sm mb-0">
                   <tbody>
