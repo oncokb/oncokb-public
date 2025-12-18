@@ -106,7 +106,10 @@ function newlyAddedGenes(md, state) {
   let toRemoveEnd = -1;
   const genes = [];
   for (const token of state.tokens) {
-    if (token.content.toLowerCase().includes('new gene')) {
+    if (
+      token.content.toLowerCase().includes('new gene') &&
+      !token.content.toLowerCase().includes('new gene page layout')
+    ) {
       foundNewlyAddedGenes = true;
       toRemoveStart = index;
     } else if (foundNewlyAddedGenes && token.type === 'bullet_list_close') {
@@ -262,12 +265,14 @@ function addAutoTableLinks(md, state) {
           ...allMutationLinks,
           createMarkdownTextToken(md, ')'),
         ];
-      } else if (child.content.startsWith(
-        'Susceptible NPM1 mutations per the FDA label:'
-      )) {
+      } else if (
+        child.content.startsWith(
+          'Susceptible NPM1 mutations per the FDA label:'
+        )
+      ) {
         const tokens = [];
         for (const section of child.content.split('_BREAK_')) {
-          const [title, content] = section.split(':')
+          const [title, content] = section.split(':');
           const mutationNames = content
             .trim()
             .split(',')
@@ -277,10 +282,10 @@ function addAutoTableLinks(md, state) {
             currentGene,
             mutationNames
           );
-          tokens.push(createMarkdownTextToken(md, title + ": "))
-          tokens.push(...mutationLinks)
-          tokens.push(createMarkdownToken(md, 'br/')[0],)
-          tokens.push(createMarkdownToken(md, 'br/')[0],)
+          tokens.push(createMarkdownTextToken(md, title + ': '));
+          tokens.push(...mutationLinks);
+          tokens.push(createMarkdownToken(md, 'br/')[0]);
+          tokens.push(createMarkdownToken(md, 'br/')[0]);
         }
         token.children = tokens;
       } else {
@@ -310,7 +315,10 @@ function createMutationLinks(md, currentGene, mutationNames) {
       },
     ];
     // Check for for cases like L718Q/V
-    if (ALTERNATIVE_ALLELES_REGEX.test(mutationName) && !mutationName.endsWith("Fusion")) {
+    if (
+      ALTERNATIVE_ALLELES_REGEX.test(mutationName) &&
+      !mutationName.endsWith('Fusion')
+    ) {
       const matches = ALTERNATIVE_ALLELES_REGEX.exec(mutationName);
       if (matches) {
         const positionalVar = matches[1];
@@ -483,7 +491,7 @@ files.forEach(file => {
     .replace(/[^a-zA-Z0-9]/g, '_');
   const tsxContent = `import React from 'react';
 import { Link } from 'react-router-dom';
-import { AlterationPageLink, getAlternativeGenePageLinks } from 'app/shared/utils/UrlUtils';
+import { AlterationPageLink, getAlternativeGenePageLinks, GenePageLink } from 'app/shared/utils/UrlUtils';
 import { NewlyAddedGenesListItem } from 'app/pages/newsPage/NewlyAddedGenesListItem';
 import { TableOfContents } from 'app/pages/privacyNotice/TableOfContents';
 

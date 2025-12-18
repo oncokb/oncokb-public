@@ -74,6 +74,7 @@ import { SomaticGermlineAlterationTiles } from 'app/shared/tiles/tile-utils';
 import GeneticTypeTag from 'app/components/tag/GeneticTypeTag';
 import VariantOverView from 'app/shared/sections/VariantOverview';
 import styles from './SomaticGermlineCancerTypePage.module.scss';
+import GeneAdditionalInfoSection from 'app/shared/sections/GeneAdditionalInfoSection';
 
 type MatchParams = {
   hugoSymbol: string;
@@ -100,6 +101,7 @@ export class SomaticGermlineCancerTypePage extends React.Component<
   private selectedTab: ANNOTATION_PAGE_TAB_KEYS;
 
   @observable showMutationEffect = true;
+  @observable showAdditionalGeneInfo = false;
 
   constructor(props: SomaticGermlineCancerTypePageProps) {
     super(props);
@@ -154,6 +156,11 @@ export class SomaticGermlineCancerTypePage extends React.Component<
   @action.bound
   toggleMutationEffect(value: boolean) {
     this.showMutationEffect = value;
+  }
+
+  @action.bound
+  toggleAdditionalGeneInfo() {
+    this.showAdditionalGeneInfo = !this.showAdditionalGeneInfo;
   }
 
   @computed
@@ -613,6 +620,12 @@ export class SomaticGermlineCancerTypePage extends React.Component<
                       />
                     }
                   />
+                  <GeneAdditionalInfoSection
+                    gene={this.store.gene.result}
+                    ensemblGenes={this.store.ensemblGenes.result}
+                    show={this.showAdditionalGeneInfo}
+                    onToggle={this.toggleAdditionalGeneInfo}
+                  />
                 </Col>
                 <Col md={11}>
                   <Row className={classnames(styles.descriptionContainer)}>
@@ -660,6 +673,7 @@ export class SomaticGermlineCancerTypePage extends React.Component<
                     includeTitle={false}
                     isGermline={this.store.germline}
                     variantAnnotation={this.store.annotationData.result}
+                    grch37Isoform={this.store.gene.result.grch37Isoform}
                   />
                 </Col>
               </Row>
@@ -671,8 +685,13 @@ export class SomaticGermlineCancerTypePage extends React.Component<
                       <>
                         <h3>Genomic Indicators</h3>
                         <GenomicIndicatorTable
-                          data={this.store.genomicIndicators.result}
-                          isPending={this.store.genomicIndicators.isPending}
+                          data={
+                            this.store.genomicIndicatorsAssociatedWithVariant
+                          }
+                          isPending={
+                            this.store.annotationResult.isPending ||
+                            this.store.genomicIndicators.isPending
+                          }
                         />
                       </>
                     )}

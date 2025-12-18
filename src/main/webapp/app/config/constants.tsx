@@ -602,10 +602,10 @@ export enum PAGE_ROUTE {
   ONCOLOGY_TX = '/oncology-therapies',
   CDX = '/companion-diagnostic-devices',
   GENE_HEADER = '/gene',
-  GENE = '/gene/:hugoSymbol',
+  LEGACY_GENE = '/gene/:hugoSymbol',
   SOMATIC_GENE = '/gene/:hugoSymbol/somatic',
   GERMLINE_GENE = '/gene/:hugoSymbol/germline',
-  ALTERATION = '/gene/:hugoSymbol/:alteration',
+  LEGACY_ALTERATION = '/gene/:hugoSymbol/:alteration',
   SOMATIC_ALTERATION = '/gene/:hugoSymbol/somatic/:alteration',
   GERMLINE_ALTERATION = '/gene/:hugoSymbol/germline/:alteration',
   SOMATIC_TUMOR_TYPE = '/gene/:hugoSymbol/somatic/:alteration/:tumorType',
@@ -614,7 +614,7 @@ export enum PAGE_ROUTE {
   HGVSG_WITH_QUERY = '/hgvsg/:query',
   GENOMIC_CHANGE = '/genomic-change',
   GENOMIC_CHANGE_WITH_QUERY = '/genomic-change/:query',
-  ALTERATION_TUMOR_TYPE = '/gene/:hugoSymbol/:alteration/:tumorType',
+  LEGACY_ALTERATION_TUMOR_TYPE = '/gene/:hugoSymbol/:alteration/:tumorType',
   HOME = '/',
   ABOUT = '/about',
   TERMS = '/terms',
@@ -874,6 +874,7 @@ export type DataRelease = {
 };
 
 export const DATA_RELEASES: DataRelease[] = [
+  { date: '12182025', version: 'v6.0' },
   { date: '11242025', version: 'v5.4' },
   { date: '10082025', version: 'v5.3' },
   { date: '09292025', version: 'v5.2' },
@@ -1044,5 +1045,13 @@ export type AlleleState =
   | typeof ALLELE_STATE_BIALLELEIC
   | typeof ALLELE_STATE_CARRIER;
 
-export const MECHANISM_OF_INHERITANCE_RECESSIVE = 'Autosomal Recessive';
-export const MECHANISM_OF_INHERITANCE_DOMINANT = 'Autosomal Dominant';
+export const MECHANISM_OF_INHERITANCE_AUTOSOMAL_RECESSIVE =
+  'Autosomal Recessive';
+export const MECHANISM_OF_INHERITANCE_AUTOSOMAL_DOMINANT = 'Autosomal Dominant';
+export const MECHANISM_OF_INHERITANCE_X_LINKED_RECESSIVE = 'X-Linked Recessive';
+
+export type InheritanceMechanism =
+  | typeof MECHANISM_OF_INHERITANCE_AUTOSOMAL_DOMINANT
+  | typeof MECHANISM_OF_INHERITANCE_AUTOSOMAL_RECESSIVE
+  | typeof MECHANISM_OF_INHERITANCE_X_LINKED_RECESSIVE
+  | 'Carrier';

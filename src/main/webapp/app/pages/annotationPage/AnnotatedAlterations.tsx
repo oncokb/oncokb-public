@@ -100,18 +100,13 @@ const getColumns = (germline: boolean, hugoSymbol: string) => {
       onFilter: (data: BiologicalVariant, keyword: string) =>
         filterByKeyword(data.penetrance, keyword),
     },
-    {
-      Header: <span>Mechanism of Inheritance</span>,
-      accessor: 'inheritanceMechanism',
-      onFilter: (data: BiologicalVariant, keyword: string) =>
-        filterByKeyword(data.inheritanceMechanism, keyword),
-    },
-    {
-      Header: <span>Cancer Risk</span>,
-      accessor: 'cancerRisk',
-      onFilter: (data: BiologicalVariant, keyword: string) =>
-        filterByKeyword(data.cancerRisk, keyword),
-    },
+    // Hiding because not in use now, but will be in the future
+    // {
+    //   Header: <span>Cancer Risk</span>,
+    //   accessor: 'cancerRisk',
+    //   onFilter: (data: BiologicalVariant, keyword: string) =>
+    //     filterByKeyword(data.cancerRisk, keyword),
+    // },
     descriptionColumn,
   ];
   return germline ? germlineColumns : somaticColumns;
@@ -134,8 +129,17 @@ const AnnotatedAlterations: FunctionComponent<{
     <>
       <div style={style}>
         <span>
-          A list of the oncogenic and mutation effects of{' '}
-          <b>all {ONCOKB_TM} curated</b> {props.hugoSymbol} alterations.
+          {props.germline ? (
+            <>
+              Pathogenocity and penetrance of <b>all {ONCOKB_TM} curated</b>{' '}
+              {props.hugoSymbol} alterations.
+            </>
+          ) : (
+            <>
+              Oncogenic and mutation effects of <b>all {ONCOKB_TM} curated</b>{' '}
+              {props.hugoSymbol} alterations.
+            </>
+          )}
         </span>
       </div>
       <GenePageTable

@@ -30,6 +30,7 @@ import {
   COLOR_ICON_WITHOUT_INFO,
 } from 'app/config/theme';
 import {
+  MutationEffect,
   Oncogenicity,
   Pathogenicity,
 } from 'app/components/oncokbMutationMapper/OncokbMutationMapper';
@@ -210,7 +211,12 @@ function createPathogenicityTileProps(
   if (clinvarData === null || clinvarData?.pathogenicity === '') {
     clinvarPathogenicity = 'Not Available';
   } else if (clinvarData) {
-    clinvarPathogenicity = clinvarData.pathogenicity;
+    clinvarPathogenicity = clinvarData.pathogenicity
+      .replace(/_/g, ' ')
+      .replace(/\|/g, ';');
+    clinvarPathogenicity =
+      clinvarPathogenicity.charAt(0).toUpperCase() +
+      clinvarPathogenicity.slice(1);
   }
 
   return {
@@ -255,6 +261,7 @@ type SomaticGermlineAlterationTilesProps = {
   includeTitle: boolean;
   isGermline: boolean;
   variantAnnotation: VariantAnnotation;
+  grch37Isoform: string;
 };
 
 type ClinvarData = { pathogenicity: string; clinvarId: number | undefined };
@@ -273,8 +280,12 @@ export function SomaticGermlineAlterationTiles({
   useEffect(() => {
     async function fetchClinvarFromGenomeNexus() {
       const response = await axios.get(
-        `${GENOME_NEXUS_ANNOTATION_BASE_URL}/${rest.variantAnnotation.query.hugoSymbol}:${rest.variantAnnotation.query.alteration}?fields=clinvar`
+        `${GENOME_NEXUS_ANNOTATION_BASE_URL}/${rest.grch37Isoform}:${rest.variantAnnotation.query.alteration}?fields=clinvar`
       );
+      if (!response.data.successfully_annotated) {
+        setClinvar(null);
+        return;
+      }
       const clinvarAnnotation = response.data.clinvar.annotation;
       if (clinvarAnnotation) {
         setClinvar({
@@ -339,6 +350,7 @@ export type SomaticGermlineGeneInfoTilesProps = {
   geneNumber: GeneNumber;
   oncogenicities: Oncogenicity[];
   pathogenicities: Pathogenicity[];
+  mutationEffects: MutationEffect[];
 };
 
 export function SomaticGermlineGeneInfoTiles({
@@ -346,6 +358,7 @@ export function SomaticGermlineGeneInfoTiles({
   geneNumber,
   oncogenicities,
   pathogenicities,
+  mutationEffects,
 }: SomaticGermlineGeneInfoTilesProps) {
   const tiles: AlterationTileProps[] = [];
   const hasGeneticRiskInfo =
@@ -364,26 +377,34 @@ export function SomaticGermlineGeneInfoTiles({
       ],
     });
   }
+
   tiles.push(createHighestLevelOfEvidenceTileProps(geneNumber, true));
+
+  const annotatedTitle = `Annotated ${isGermline ? 'Variants' : 'Alterations'}`;
+  let annotatedItems: { title: string; value: string }[] = [];
+  if (isGermline) {
+    if (pathogenicities.length > 0) {
+      annotatedItems = pathogenicities.map(p => ({
+        title: p.pathogenicity,
+        value: p.counts.toString(),
+      }));
+    } else {
+      // Some genes don't have pathogenic variants, so we fall back to mutation effect (DPYD)
+      annotatedItems = mutationEffects.map(m => ({
+        title: m.mutationEffect,
+        value: m.counts.toString(),
+      }));
+    }
+  } else {
+    annotatedItems = oncogenicities.map(o => ({
+      title: o.oncogenicity,
+      value: o.counts.toString(),
+    }));
+  }
+
   tiles.push({
-    title: `Annotated ${isGermline ? 'Variants' : 'Alterations'}`,
-    items: isGermline
-      ? makeTwoColumnRow(
-          pathogenicities.map(pathogenicity => {
-            return {
-              title: pathogenicity.pathogenicity,
-              value: pathogenicity.counts.toString(),
-            };
-          })
-        )
-      : makeTwoColumnRow(
-          oncogenicities.map(oncogenicity => {
-            return {
-              title: oncogenicity.oncogenicity,
-              value: oncogenicity.counts.toString(),
-            };
-          })
-        ),
+    title: annotatedTitle,
+    items: makeTwoColumnRow(annotatedItems),
   });
 
   return <SomaticGermlineTiles tiles={tiles} />;

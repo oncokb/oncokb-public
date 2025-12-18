@@ -76,6 +76,7 @@ import { RouterStore } from 'mobx-react-router';
 import { SomaticGermlineAlterationTiles } from 'app/shared/tiles/tile-utils';
 import GeneticTypeTag from 'app/components/tag/GeneticTypeTag';
 import VariantOverView from 'app/shared/sections/VariantOverview';
+import GeneAdditionalInfoSection from 'app/shared/sections/GeneAdditionalInfoSection';
 
 type MatchParams = {
   hugoSymbol: string;
@@ -101,29 +102,23 @@ export class SomaticGermlineAlterationPage extends React.Component<
   private selectedTab: ANNOTATION_PAGE_TAB_KEYS;
 
   @observable showMutationEffect = true;
+  @observable showAdditionalGeneInfo = false;
 
   constructor(props: SomaticGermlineAlterationPageProps) {
     super(props);
     const alterationQuery = decodeSlash(props.match.params.alteration);
-    reaction(
-      () => [this.geneticType],
-      ([geneticType]) => {
-        if (props.match.params) {
-          this.store = new AnnotationStore({
-            type: alterationQuery
-              ? AnnotationType.PROTEIN_CHANGE
-              : AnnotationType.GENE,
-            hugoSymbolQuery: props.match.params.hugoSymbol,
-            alterationQuery,
-            germline: geneticType === GENETIC_TYPE.GERMLINE,
-          });
-          if (this.store.cancerTypeName) {
-            this.showMutationEffect = false;
-          }
-        }
-      },
-      true
-    );
+    this.store = new AnnotationStore({
+      type: alterationQuery
+        ? AnnotationType.PROTEIN_CHANGE
+        : AnnotationType.GENE,
+      hugoSymbolQuery: props.match.params.hugoSymbol,
+      alterationQuery,
+      germline: this.geneticType === GENETIC_TYPE.GERMLINE,
+    });
+    if (this.store.cancerTypeName) {
+      this.showMutationEffect = false;
+    }
+
     reaction(
       () => [props.location.hash],
       ([hash]) => {
@@ -144,6 +139,30 @@ export class SomaticGermlineAlterationPage extends React.Component<
   @action.bound
   toggleMutationEffect(value: boolean) {
     this.showMutationEffect = value;
+  }
+
+  @action.bound
+  toggleAdditionalGeneInfo() {
+    this.showAdditionalGeneInfo = !this.showAdditionalGeneInfo;
+  }
+
+  @action.bound
+  updateQuery(prevProps: SomaticGermlineAlterationPageProps) {
+    if (
+      this.props.match.params.hugoSymbol !== prevProps.match.params.hugoSymbol
+    ) {
+      this.store.hugoSymbolQuery = this.props.match.params.hugoSymbol;
+    }
+    if (
+      this.props.match.params.alteration !== prevProps.match.params.alteration
+    ) {
+      this.store.alterationQuery =
+        decodeSlash(this.props.match.params.alteration) ?? '';
+    }
+  }
+
+  componentDidUpdate(prevProps: SomaticGermlineAlterationPageProps) {
+    this.updateQuery(prevProps);
   }
 
   @computed
@@ -566,6 +585,12 @@ export class SomaticGermlineAlterationPage extends React.Component<
                     }
                     isGermline={this.store.germline}
                   />
+                  <GeneAdditionalInfoSection
+                    gene={this.store.gene.result}
+                    ensemblGenes={this.store.ensemblGenes.result}
+                    show={this.showAdditionalGeneInfo}
+                    onToggle={this.toggleAdditionalGeneInfo}
+                  />
                 </Col>
                 <Col md={11}>
                   <Row className={classnames(styles.descriptionContainer)}>
@@ -613,6 +638,7 @@ export class SomaticGermlineAlterationPage extends React.Component<
                     includeTitle
                     variantAnnotation={this.store.annotationData.result}
                     isGermline={this.store.germline}
+                    grch37Isoform={this.store.gene.result.grch37Isoform}
                   />
                 </Col>
               </Row>
@@ -641,36 +667,54 @@ export class SomaticGermlineAlterationPage extends React.Component<
                           Genomic Indicators
                         </MiniNavBarHeader>
                         <GenomicIndicatorTable
-                          data={this.store.genomicIndicators.result}
-                          isPending={this.store.genomicIndicators.isPending}
+                          data={
+                            this.store.genomicIndicatorsAssociatedWithVariant
+                          }
+                          isPending={
+                            this.store.annotationResult.isPending ||
+                            this.store.genomicIndicators.isPending
+                          }
                         />
                       </>
                     )}
-                  <MiniNavBarHeader id="clinical-implications">
-                    Clinical Implications For This Biomarker
-                  </MiniNavBarHeader>
-                  <SomaticGermlineAlterationView
-                    appStore={this.props.appStore}
-                    hugoSymbol={this.store.hugoSymbol}
-                    alteration={this.store.alterationName}
-                    alterationQuery={this.store.alterationQuery}
-                    germline={this.store.germline}
-                    matchedAlteration={this.store.alteration.result}
-                    tumorType={this.store.cancerTypeName}
-                    onChangeTumorType={this.onChangeTumorType.bind(this)}
-                    annotation={this.store.annotationData.result}
-                    biologicalAlterations={
-                      this.store.biologicalAlterations.result
-                    }
-                    relevantAlterations={undefined}
-                    fdaImplication={this.fdaImplication}
-                    therapeuticImplications={this.therapeuticImplications}
-                    diagnosticImplications={this.diagnosticImplications}
-                    prognosticImplications={this.prognosticImplications}
-                    defaultSelectedTab={this.selectedTab}
-                    onChangeTab={this.onChangeTab}
-                    routing={this.props.routing}
-                  />
+                  <div className="d-flex align-items-center">
+                    <MiniNavBarHeader
+                      id="clinical-implications"
+                      comingSoon={this.store.germline}
+                    >
+                      <span
+                        className={
+                          this.store.germline ? 'text-secondary' : undefined
+                        }
+                      >
+                        Clinical Implications for this Biomarker
+                      </span>
+                    </MiniNavBarHeader>
+                  </div>
+                  {!this.store.germline && (
+                    <SomaticGermlineAlterationView
+                      appStore={this.props.appStore}
+                      hugoSymbol={this.store.hugoSymbol}
+                      alteration={this.store.alterationName}
+                      alterationQuery={this.store.alterationQuery}
+                      germline={this.store.germline}
+                      matchedAlteration={this.store.alteration.result}
+                      tumorType={this.store.cancerTypeName}
+                      onChangeTumorType={this.onChangeTumorType.bind(this)}
+                      annotation={this.store.annotationData.result}
+                      biologicalAlterations={
+                        this.store.biologicalAlterations.result
+                      }
+                      relevantAlterations={undefined}
+                      fdaImplication={this.fdaImplication}
+                      therapeuticImplications={this.therapeuticImplications}
+                      diagnosticImplications={this.diagnosticImplications}
+                      prognosticImplications={this.prognosticImplications}
+                      defaultSelectedTab={this.selectedTab}
+                      onChangeTab={this.onChangeTab}
+                      routing={this.props.routing}
+                    />
+                  )}
                 </Col>
               </Row>
             </Container>

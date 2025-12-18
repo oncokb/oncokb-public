@@ -3084,6 +3084,13 @@
         "gene": {
           "$ref": "#/definitions/Gene"
         },
+        "geneticType": {
+          "type": "string",
+          "enum": [
+            "SOMATIC",
+            "GERMLINE"
+          ]
+        },
         "highestResistanceLevel": {
           "type": "string"
         },

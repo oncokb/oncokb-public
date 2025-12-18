@@ -91,16 +91,15 @@ export default class AlterationTableTabs extends React.Component<
       if (this.props.alteration) {
         content = (
           <span>
-            A list of the oncogenic and mutation effects of {ONCOKB_TM} curated
-            alterations that related to {this.props.hugoSymbol}{' '}
-            {this.props.alteration.name}.
+            Oncogenic and mutation effects of {ONCOKB_TM} curated alterations
+            related to {this.props.hugoSymbol} {this.props.alteration.name}.
           </span>
         );
       } else {
         content = (
           <span>
-            A list of the oncogenic and mutation effects of{' '}
-            <b>all {ONCOKB_TM} curated</b> {this.props.hugoSymbol} alterations.
+            Oncogenic and mutation effects of <b>all {ONCOKB_TM} curated</b>{' '}
+            {this.props.hugoSymbol} alterations.
           </span>
         );
       }
@@ -108,9 +107,9 @@ export default class AlterationTableTabs extends React.Component<
     } else if (key === ANNOTATION_PAGE_TAB_KEYS.TX) {
       return (
         <span>
-          A list of the cancer type-specific {this.props.hugoSymbol} alterations
-          that may predict response to a targeted drug and the corresponding{' '}
-          {ONCOKB_TM} level of evidence assigning their level of{' '}
+          Cancer type-specific {this.props.hugoSymbol} alterations that may
+          predict response to a targeted drug and the corresponding {ONCOKB_TM}{' '}
+          level of evidence assigning their level of{' '}
           <LevelOfEvidencePageLink levelType={LEVEL_TYPES.TX}>
             clinical actionability
           </LevelOfEvidencePageLink>
@@ -120,8 +119,7 @@ export default class AlterationTableTabs extends React.Component<
     } else if (key === ANNOTATION_PAGE_TAB_KEYS.DX) {
       return (
         <span>
-          A list of diagnostic {this.props.hugoSymbol} alterations and the
-          corresponding{' '}
+          Diagnostic {this.props.hugoSymbol} alterations and the corresponding{' '}
           <LevelOfEvidencePageLink levelType={LEVEL_TYPES.DX}>
             {ONCOKB_TM} diagnostic level of evidence
           </LevelOfEvidencePageLink>
@@ -131,8 +129,8 @@ export default class AlterationTableTabs extends React.Component<
     } else if (key === ANNOTATION_PAGE_TAB_KEYS.PX) {
       return (
         <span>
-          A list of tumor-type specific prognostic {this.props.hugoSymbol}{' '}
-          alterations and the corresponding{' '}
+          Tumor-type specific prognostic {this.props.hugoSymbol} alterations and
+          the corresponding{' '}
           <LevelOfEvidencePageLink levelType={LEVEL_TYPES.PX}>
             {ONCOKB_TM} prognostic level of evidence
           </LevelOfEvidencePageLink>
