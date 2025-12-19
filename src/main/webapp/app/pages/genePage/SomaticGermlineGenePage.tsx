@@ -371,9 +371,21 @@ export default class SomaticGermlineGenePage extends React.Component<
 
   constructor(props: any) {
     super(props);
+
+    const initialGenePagePath = parseGenePagePath(window.location.pathname);
+    this.selectedGeneticType =
+      initialGenePagePath.geneticType ?? GENETIC_TYPE.SOMATIC;
+
     this.hugoSymbolQuery = props.match.params
       ? props.match.params.hugoSymbol
       : undefined;
+
+    this.store = new AnnotationStore({
+      type: AnnotationType.GENE,
+      germline: this.selectedGeneticType === GENETIC_TYPE.GERMLINE,
+      hugoSymbolQuery: this.hugoSymbolQuery,
+    });
+
     const queryStringsHash = QueryString.parse(
       window.location.hash
     ) as GenePageHashQueries;
