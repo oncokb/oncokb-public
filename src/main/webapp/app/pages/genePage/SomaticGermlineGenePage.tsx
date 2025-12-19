@@ -857,7 +857,7 @@ export default class SomaticGermlineGenePage extends React.Component<
                       <LoadingIndicator
                         size={LoaderSize.LARGE}
                         center={true}
-                        isLoading={this.store.gene.isPending}
+                        isLoading
                       />
                     </Else>
                   </If>
