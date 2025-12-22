@@ -2,7 +2,6 @@ package org.mskcc.cbio.oncokb.service;
 
 import org.apache.commons.lang3.StringUtils;
 import org.mskcc.cbio.oncokb.config.application.ApplicationProperties;
-import org.mskcc.cbio.oncokb.security.SecurityUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -30,11 +29,6 @@ public class ApiProxyService {
     public URI prepareURI(HttpServletRequest request) throws URISyntaxException {
         String queryString = request.getQueryString();
         String defaultApiProxyUrl = applicationProperties.getApiProxyUrl();
-        String germlineParam = request.getParameter("germline");
-        if (germlineParam != null && Boolean.TRUE.equals(Boolean.parseBoolean(germlineParam))
-            && SecurityUtils.isAuthenticated() && StringUtils.isNotEmpty(applicationProperties.getApiProxyGermlineUrl())) {
-            defaultApiProxyUrl = applicationProperties.getApiProxyGermlineUrl();
-        }
         return new URI(defaultApiProxyUrl + request.getRequestURI() + (queryString == null ? "" : "?" + queryString));
     }
 

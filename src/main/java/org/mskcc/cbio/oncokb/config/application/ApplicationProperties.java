@@ -22,7 +22,6 @@ public class ApplicationProperties {
     private String name;
     private String baseUrl = "";
     private String apiProxyUrl;
-    private String apiProxyGermlineUrl;
     private SlackProperties slack;
     private ProjectProfile profile;
     private Boolean sitemapEnabled;
@@ -61,14 +60,6 @@ public class ApplicationProperties {
 
     public void setApiProxyUrl(String apiProxyUrl) {
         this.apiProxyUrl = apiProxyUrl;
-    }
-
-    public String getApiProxyGermlineUrl() {
-        return apiProxyGermlineUrl;
-    }
-
-    public void setApiProxyGermlineUrl(String apiProxyGermlineUrl) {
-        this.apiProxyGermlineUrl = apiProxyGermlineUrl;
     }
 
     public SlackProperties getSlack() { return slack; }
