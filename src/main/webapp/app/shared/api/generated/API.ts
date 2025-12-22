@@ -850,6 +850,81 @@ export default class API {
             return response.body;
         });
     };
+    authenticateGenomicReportUsingGETURL(parameters: {
+        'authorization': string,
+        $queryParameters ? : any
+    }): string {
+        let queryParameters: any = {};
+        let path = '/api/account/authenticate-genomic-report';
+
+        if (parameters.$queryParameters) {
+            Object.keys(parameters.$queryParameters).forEach(function(parameterName) {
+                var parameter = parameters.$queryParameters[parameterName];
+                queryParameters[parameterName] = parameter;
+            });
+        }
+        let keys = Object.keys(queryParameters);
+        return this.domain + path + (keys.length > 0 ? '?' + (keys.map(key => key + '=' + encodeURIComponent(queryParameters[key])).join('&')) : '');
+    };
+
+    /**
+     * authenticateGenomicReport
+     * @method
+     * @name API#authenticateGenomicReportUsingGET
+     * @param {string} authorization - Authorization
+     */
+    authenticateGenomicReportUsingGETWithHttpInfo(parameters: {
+        'authorization': string,
+        $queryParameters ? : any,
+        $domain ? : string
+    }): Promise < request.Response > {
+        const domain = parameters.$domain ? parameters.$domain : this.domain;
+        const errorHandlers = this.errorHandlers;
+        const request = this.request;
+        let path = '/api/account/authenticate-genomic-report';
+        let body: any;
+        let queryParameters: any = {};
+        let headers: any = {};
+        let form: any = {};
+        return new Promise(function(resolve, reject) {
+            headers['Accept'] = '*/*';
+
+            if (parameters['authorization'] !== undefined) {
+                headers['Authorization'] = parameters['authorization'];
+            }
+
+            if (parameters['authorization'] === undefined) {
+                reject(new Error('Missing required  parameter: authorization'));
+                return;
+            }
+
+            if (parameters.$queryParameters) {
+                Object.keys(parameters.$queryParameters).forEach(function(parameterName) {
+                    var parameter = parameters.$queryParameters[parameterName];
+                    queryParameters[parameterName] = parameter;
+                });
+            }
+
+            request('GET', domain + path, body, headers, queryParameters, form, reject, resolve, errorHandlers);
+
+        });
+    };
+
+    /**
+     * authenticateGenomicReport
+     * @method
+     * @name API#authenticateGenomicReportUsingGET
+     * @param {string} authorization - Authorization
+     */
+    authenticateGenomicReportUsingGET(parameters: {
+        'authorization': string,
+        $queryParameters ? : any,
+        $domain ? : string
+    }): Promise < any > {
+        return this.authenticateGenomicReportUsingGETWithHttpInfo(parameters).then(function(response: request.Response) {
+            return response.body;
+        });
+    };
     changePasswordUsingPOSTURL(parameters: {
         'passwordChangeDto': PasswordChangeDTO,
         $queryParameters ? : any

@@ -8,6 +8,7 @@ import org.mskcc.cbio.oncokb.domain.User;
 import org.mskcc.cbio.oncokb.domain.enumeration.LicenseStatus;
 import org.mskcc.cbio.oncokb.domain.enumeration.LicenseType;
 import org.mskcc.cbio.oncokb.repository.UserRepository;
+import org.mskcc.cbio.oncokb.security.AuthoritiesConstants;
 import org.mskcc.cbio.oncokb.security.SecurityUtils;
 import org.mskcc.cbio.oncokb.security.uuid.TokenProvider;
 import org.mskcc.cbio.oncokb.service.*;
@@ -503,6 +504,31 @@ public class AccountResource {
             mailService.sendActivationEmail(userMapper.userToUserDTO(userOptional.get()));
         }
         // }
+    }
+
+    @GetMapping(path = "/account/authenticate-genomic-report")
+    public ResponseEntity<Void> authenticateGenomicReport(@RequestHeader("Authorization") String authHeader) {
+        String headerPrefix = "Bearer ";
+        if (authHeader == null || !authHeader.startsWith(headerPrefix)) {
+            return ResponseEntity.badRequest().build();
+        }
+
+        String tokenString = authHeader.substring(headerPrefix.length());
+        UUID tokenUuid;
+        try {
+            tokenUuid = UUID.fromString(tokenString);
+        } catch (IllegalArgumentException e) {
+            return ResponseEntity.badRequest().build();
+        }
+
+
+        Optional<Token> token = tokenService.findByToken(tokenUuid);
+        if (!token.isPresent() 
+        || token.get().getUser().getAuthorities().stream().filter(authority -> authority.getName().equals(AuthoritiesConstants.ROLE_GENOMIC_REPORT)).count() < 1
+        ) {
+            return ResponseEntity.status(HttpStatus.UNAUTHORIZED).build();
+        }
+        return ResponseEntity.ok().build();
     }
 
     private static boolean checkPasswordLength(String password) {

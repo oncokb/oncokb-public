@@ -12,6 +12,7 @@ declare module '*.otf';
 declare module '*.woff';
 declare module '*.woff2';
 declare module '*.xlsx';
+declare module '*.tsv';
 declare module '*.png' {
   const value: any;
   export default value;

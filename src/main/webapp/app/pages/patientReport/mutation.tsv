@@ -1,0 +1,4 @@
+Protein_Change	Mutation_Type	Chromosome	Start_Position	End_Position	Reference_Allele	Variant_Allele	Tumor_Alt_Count	Tumor_Ref_Count	Normal_Alt_Count	Normal_Ref_Count
+T790M	Missense_Mutation	7	55249071	55249071	C	T	96	91		142
+L858R	Missense_Mutation	7	55259515	55259515	T	G	15	108		128
+L861Q	Missense_Mutation	7	55259524	55259524	T	A	13	119		192

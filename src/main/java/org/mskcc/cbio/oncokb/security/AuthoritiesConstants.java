@@ -25,6 +25,8 @@ public final class AuthoritiesConstants {
 
     public static final String ROLE_SERVICE_ACCOUNT = "ROLE_SERVICE_ACCOUNT";
 
+    public static final String ROLE_GENOMIC_REPORT = "ROLE_GENOMIC_REPORT";
+
     private AuthoritiesConstants() {
     }
 }
