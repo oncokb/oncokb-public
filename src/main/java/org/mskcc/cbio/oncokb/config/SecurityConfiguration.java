@@ -124,7 +124,7 @@ public class SecurityConfiguration extends WebSecurityConfigurerAdapter {
             .antMatchers("/api/account/reset-password/init").permitAll()
             .antMatchers("/api/account/reset-password/finish").permitAll()
             .antMatchers("/api/account/resend-verification").permitAll()
-            .antMatchers("/api/account/authenticate-genomic-report").permitAll()
+            .antMatchers("/api/account/authenticate-genomic-report").hasAnyAuthority(AuthoritiesConstants.ROLE_GENOMIC_REPORT)
             .antMatchers("/api/account/generate-reset-key").hasAnyAuthority(AuthoritiesConstants.ADMIN)
             .antMatchers("/api/account/active-trial/init").hasAnyAuthority(AuthoritiesConstants.ADMIN)
             .antMatchers("/api/account/active-trial/finish").permitAll()
