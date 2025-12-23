@@ -3,7 +3,7 @@ import ErrorBoundaryRoute from 'app/shared/error/error-boundary-route';
 import Login from 'app/components/login/LoginPage';
 import { Logout } from 'app/components/login/logout';
 import { PrivateRoute } from 'app/shared/auth/private-route';
-import { AUTHORITIES, PAGE_ROUTE } from 'app/config/constants';
+import { AUTHORITIES, PAGE_ROUTE, USER_AUTHORITY } from 'app/config/constants';
 import HomePage from 'app/pages/HomePage';
 import AuthenticationStore from 'app/store/AuthenticationStore';
 import CancerGenesPage from 'app/pages/CancerGenesPage';
@@ -39,6 +39,7 @@ import { SomaticGermlineAlterationPage } from 'app/pages/somaticGermlineAlterati
 import { SomaticGermlineCancerTypePage } from 'app/pages/annotationPage/SomaticGermlineCancerTypePage';
 import WindowStore from 'app/store/WindowStore';
 import PageContainer from 'app/components/PageContainer';
+import GenomicReport from 'app/pages/patientReport/GenomicReport';
 
 const getOldLevelsRedirectRoute = (hash: string) => {
   const queryStrings = QueryString.parse(hash) as {
@@ -279,6 +280,15 @@ const AppRoutes = (props: {
           appStore={props.appStore}
           path={PAGE_ROUTE.GENOMIC_CHANGE_WITH_QUERY}
           component={GenomicPage}
+          windowStore={props.windowStore}
+          pageContainer={PageContainer}
+        />
+        <PrivateRoute
+          authenticationStore={props.authenticationStore}
+          routing={props.routing}
+          path={PAGE_ROUTE.GENOMIC_REPORT}
+          component={GenomicReport}
+          hasAnyAuthorities={[USER_AUTHORITY.ROLE_GENOMIC_REPORT]}
           windowStore={props.windowStore}
           pageContainer={PageContainer}
         />

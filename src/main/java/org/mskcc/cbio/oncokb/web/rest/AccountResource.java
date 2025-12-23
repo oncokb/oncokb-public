@@ -8,6 +8,7 @@ import org.mskcc.cbio.oncokb.domain.User;
 import org.mskcc.cbio.oncokb.domain.enumeration.LicenseStatus;
 import org.mskcc.cbio.oncokb.domain.enumeration.LicenseType;
 import org.mskcc.cbio.oncokb.repository.UserRepository;
+import org.mskcc.cbio.oncokb.security.AuthoritiesConstants;
 import org.mskcc.cbio.oncokb.security.SecurityUtils;
 import org.mskcc.cbio.oncokb.security.uuid.TokenProvider;
 import org.mskcc.cbio.oncokb.service.*;
@@ -503,6 +504,11 @@ public class AccountResource {
             mailService.sendActivationEmail(userMapper.userToUserDTO(userOptional.get()));
         }
         // }
+    }
+
+    @GetMapping(path = "/account/authenticate-genomic-report")
+    public ResponseEntity<Void> authenticateGenomicReport() { // security config will handle auth
+        return ResponseEntity.ok().build();
     }
 
     private static boolean checkPasswordLength(String password) {

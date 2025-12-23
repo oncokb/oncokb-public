@@ -16,8 +16,12 @@ export const setPublicWebsiteToken = (pubWebToken: string) => {
   Storage.session.set(AUTH_WEBSITE_TOKEN_KEY, pubWebToken);
 };
 
+export const getStoredUserToken = () => {
+  return Storage.local.get(AUTH_UER_TOKEN_KEY);
+};
+
 export const getStoredToken = () => {
-  return Storage.local.get(AUTH_UER_TOKEN_KEY) || getPublicWebsiteToken();
+  return getStoredUserToken() || getPublicWebsiteToken();
 };
 
 export const setRecaptchaToken = (recaptchaToken: string) => {
