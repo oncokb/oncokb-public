@@ -9,7 +9,9 @@ import { StylesConfig } from 'react-select';
 import { RouterStore } from 'mobx-react-router';
 import { DefaultTooltip } from 'cbioportal-frontend-commons';
 import { components } from 'react-select';
-import { SIGUSR1 } from 'constants';
+import * as QueryString from 'query-string';
+import { encodeSlash } from '../utils/Utils';
+import { PAGE_ROUTE } from 'app/config/constants';
 
 export default function SomaticGermlineCancerTypeSelect({
   cancerType,
@@ -177,21 +179,47 @@ export default function SomaticGermlineCancerTypeSelect({
           isClearable={isClearable}
           cancerTypes={cancerType ? [cancerType] : undefined}
           onChange={value => {
-            if (
-              typeof value === 'object' &&
-              value !== null &&
-              'value' in value
-            ) {
+            const path = routing.location.pathname.toLowerCase();
+            const isGenomicPage =
+              path.startsWith(`${PAGE_ROUTE.HGVSG}/`) ||
+              path.startsWith(`${PAGE_ROUTE.GENOMIC_CHANGE}/`);
+
+            const selectedValue =
+              value && typeof value === 'object' && 'value' in value
+                ? value.value
+                : undefined;
+
+            if (isGenomicPage) {
+              const parsedSearch = QueryString.parse(
+                routing.location.search
+              ) as Record<string, any>;
+
+              if (selectedValue) {
+                parsedSearch.tumorType = encodeSlash(selectedValue);
+                onchange?.(selectedValue);
+              } else {
+                delete parsedSearch.tumorType;
+                onchange?.('');
+              }
+
+              routing.history.push({
+                pathname: routing.location.pathname,
+                search: QueryString.stringify(parsedSearch),
+              });
+              return;
+            }
+
+            if (selectedValue) {
               routing.history.push(
                 getAlterationPageLink({
                   hugoSymbol,
                   alteration: alterationQuery,
                   germline,
-                  cancerType: value.value,
+                  cancerType: selectedValue,
                   withProtocolHostPrefix: false,
                 })
               );
-              onchange?.(value.value);
+              onchange?.(selectedValue);
             }
           }}
           prioritizedCancerTypes={prioritizedCancerTypes}

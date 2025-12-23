@@ -151,6 +151,7 @@ const DropdownBreadcrumb: React.FunctionComponent<IDropdownBreadcrumb> = props =
         <Then>
           <Select
             menuIsOpen
+            closeMenuOnBlur
             theme={theme => ({
               ...theme,
               colors: {
@@ -158,12 +159,18 @@ const DropdownBreadcrumb: React.FunctionComponent<IDropdownBreadcrumb> = props =
                 primary: COLOR_BLUE,
               },
             })}
+            menuPortalTarget={document.body}
+            menuPosition="fixed"
             styles={{
               control: baseStyles => ({
                 ...baseStyles,
                 fontSize: 12,
                 width: 110,
                 minHeight: 10,
+              }),
+              menuPortal: baseStyles => ({
+                ...baseStyles,
+                zIndex: 9999,
               }),
               option: baseStyles => ({
                 ...baseStyles,
@@ -195,6 +202,7 @@ const DropdownBreadcrumb: React.FunctionComponent<IDropdownBreadcrumb> = props =
               props.onChange(selectedOption);
               setEditing(false);
             }}
+            onBlur={() => setEditing(false)}
             defaultValue={{
               label: props.text,
               value: props.text,

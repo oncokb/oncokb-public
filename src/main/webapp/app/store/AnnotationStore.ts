@@ -167,15 +167,26 @@ export class AnnotationStore {
 
   readonly gene = remoteData<Gene>({
     await: () => {
-      return this.hgvsgQuery ? [this.annotationResultByHgvsg] : [];
+      if (this.hgvsgQuery) {
+        return [this.annotationResultByHgvsg];
+      }
+      if (this.genomicChangeQuery) {
+        return [this.annotationResultByGenomicChange];
+      }
+      return [];
     },
     invoke: async () => {
       try {
-        const genes = await apiClient.genesLookupGetUsingGET({
-          query: this.hgvsgQuery
-            ? this.annotationResultByHgvsg.result.query.hugoSymbol
-            : this.hugoSymbolQuery,
-        });
+        const query = this.hgvsgQuery
+          ? this.annotationResultByHgvsg.result.query.hugoSymbol
+          : this.genomicChangeQuery
+          ? this.annotationResultByGenomicChange.result.query.hugoSymbol
+          : this.hugoSymbolQuery;
+        if (!query) {
+          return DEFAULT_GENE;
+        }
+
+        const genes = await apiClient.genesLookupGetUsingGET({ query });
         return genes && genes.length > 0 ? genes[0] : DEFAULT_GENE;
       } catch (e) {
         notifyError(e, 'Error finding gene');

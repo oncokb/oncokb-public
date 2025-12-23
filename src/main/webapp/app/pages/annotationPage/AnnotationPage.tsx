@@ -3,15 +3,12 @@ import { observer } from 'mobx-react';
 
 import {
   AlterationPageLink,
-  getAlterationPageLink,
-  getGenePageLink,
   getGenomicPageLink,
   getGenomicPageLocation,
 } from 'app/shared/utils/UrlUtils';
 import {
   ANNOTATION_PAGE_TAB_KEYS,
   DEFAULT_GENE,
-  DEFAULT_MARGIN_BOTTOM_LG,
   EVIDENCE_TYPES,
   OTHER_BIOMARKERS,
   PAGE_ROUTE,
@@ -19,8 +16,7 @@ import {
   TREATMENT_EVIDENCE_TYPES,
 } from 'app/config/constants';
 import styles from 'app/pages/alterationPage/AlterationPage.module.scss';
-import { AlterationInfo } from 'app/pages/annotationPage/AlterationInfo';
-import { Col, Row, Alert, Container } from 'react-bootstrap';
+import { Col, Row, Alert } from 'react-bootstrap';
 import classnames from 'classnames';
 import { action, computed, observable } from 'mobx';
 import * as QueryString from 'querystring';
@@ -37,16 +33,12 @@ import {
   articles2Citations,
   getCancerTypeNameFromOncoTreeType,
   getCancerTypesName,
-  getCategoricalAlterationDescription,
   getTreatmentNameByPriority,
   isCategoricalAlteration,
-  isPositionalAlteration,
   levelOfEvidence2Level,
 } from 'app/shared/utils/Utils';
 import WithSeparator from 'react-with-separator';
 import AppStore from 'app/store/AppStore';
-import { FeedbackIcon } from 'app/components/feedback/FeedbackIcon';
-import { FeedbackType } from 'app/components/feedback/types';
 import { Alteration } from 'app/shared/api/generated/OncoKbAPI';
 import {
   getSummaries,
@@ -54,7 +46,6 @@ import {
   SummaryKey,
 } from 'app/pages/annotationPage/Utils';
 import ShowHideText from 'app/shared/texts/ShowHideText';
-import AlterationView from 'app/pages/annotationPage/AlterationView';
 import { CancerTypeView } from 'app/pages/annotationPage/CancerTypeView';
 import AuthenticationStore from 'app/store/AuthenticationStore';
 import WindowStore from 'app/store/WindowStore';
@@ -79,6 +70,15 @@ import { Option } from 'app/shared/select/FormSelectWithLabelField';
 import MutationEffectDescription from 'app/pages/annotationPage/MutationEffectDescription';
 import { uniqBy } from 'app/shared/utils/LodashUtils';
 import { Helmet } from 'react-helmet-async';
+import SomaticGermlineAlterationView from './SomaticGermlineAlterationView';
+import VariantOverView from 'app/shared/sections/VariantOverview';
+import GermlineSomaticHeader from 'app/shared/header/GermlineSomaticHeader';
+import GeneAdditionalInfoSection from 'app/shared/sections/GeneAdditionalInfoSection';
+import { SomaticGermlineAlterationTiles } from 'app/shared/tiles/tile-utils';
+import MiniNavBarHeader from 'app/shared/nav/MiniNavBarHeader';
+import { StickyMiniNavBarContextProvider } from 'app/shared/nav/StickyMiniNavBar';
+import SomaticGermlineCancerTypeSelect from 'app/shared/dropdown/SomaticGermlineCancerTypeSelect';
+import { COLOR_BLUE } from 'app/config/theme';
 
 export enum AnnotationType {
   GENE,
@@ -109,17 +109,20 @@ export default class AnnotationPage extends React.Component<
   {}
 > {
   @observable showMutationEffect = true;
+  @observable showAdditionalGeneInfo = false;
 
   constructor(props: any) {
     super(props);
-    if (this.props.store.cancerTypeName) {
-      this.showMutationEffect = false;
-    }
   }
 
   @action.bound
   toggleMutationEffect(value: boolean) {
     this.showMutationEffect = value;
+  }
+
+  @action.bound
+  toggleAdditionalGeneInfo() {
+    this.showAdditionalGeneInfo = !this.showAdditionalGeneInfo;
   }
 
   getImplications(evidences: Evidence[]) {
@@ -416,16 +419,6 @@ export default class AnnotationPage extends React.Component<
   }
 
   @computed
-  get showGeneName() {
-    const lHugo = this.props.store.hugoSymbol.toLowerCase();
-    const altNameIncludesGene = this.props.store.annotationData.result.query.alteration
-      .toLowerCase()
-      .includes(lHugo);
-    const isOtherBiomarkers = lHugo === OTHER_BIOMARKERS.toLowerCase();
-    return !altNameIncludesGene && !isOtherBiomarkers;
-  }
-
-  @computed
   get pageShouldBeRendered() {
     if (this.props.annotationType === AnnotationType.PROTEIN_CHANGE) {
       return (
@@ -459,27 +452,6 @@ export default class AnnotationPage extends React.Component<
       | IInputBreadcrumb
     )[] = [];
     switch (this.props.annotationType) {
-      case AnnotationType.PROTEIN_CHANGE:
-        breadcrumbs = [
-          {
-            type: 'link',
-            key: 'gene',
-            text: this.props.store.hugoSymbol,
-            to: getGenePageLink({
-              hugoSymbol: this.props.store.hugoSymbol,
-            }),
-          } as ILinkBreadcrumb,
-          {
-            type: 'link',
-            key: 'alteration',
-            text: this.props.store.alterationNameWithDiff,
-            to: getAlterationPageLink({
-              hugoSymbol: this.props.store.hugoSymbol,
-              alteration: this.props.store.alterationName,
-            }),
-          } as ILinkBreadcrumb,
-        ];
-        break;
       case AnnotationType.HGVSG:
         breadcrumbs = [
           {
@@ -566,11 +538,6 @@ export default class AnnotationPage extends React.Component<
   }
 
   getAnnotationComponents() {
-    const categoricalAlterationDescription = getCategoricalAlterationDescription(
-      this.props.store.hugoSymbol,
-      this.props.store.annotationData.result.query.alteration,
-      this.props.store.gene.result.geneType
-    );
     return (
       <>
         <Helmet>
@@ -579,170 +546,198 @@ export default class AnnotationPage extends React.Component<
             content={this.annotationPageMetaDescription}
           />
         </Helmet>
-        <div className={'d-flex justify-content-between flex-wrap'}>
-          <div style={{ flex: '1 1 300px' }}>
-            <h2
-              className={'d-flex align-items-baseline flex-wrap'}
-              style={{ marginBottom: 0 }}
-            >
-              {this.showGeneName && (
-                <span className={'mr-2'}>{this.props.store.hugoSymbol}</span>
-              )}
-              <span>{this.props.store.alterationNameWithDiff}</span>
-              {this.props.store.cancerTypeName && (
-                <span className={'mx-2'}>
-                  in {this.props.store.cancerTypeName}
-                </span>
-              )}
-              <span style={{ fontSize: '0.5em' }} className={'ml-2'}>
-                <FeedbackIcon
-                  feedback={{
-                    type: FeedbackType.ANNOTATION,
-                    annotation: {
-                      gene: this.props.store.hugoSymbol,
-                      alteration: this.props.store.alterationName,
-                      cancerType: this.props.store.cancerTypeName,
-                    },
-                  }}
-                  appStore={this.props.appStore}
-                />
-              </span>
-            </h2>
-            <AlterationInfo
-              isPositionalAlteration={isPositionalAlteration(
-                this.props.store.annotationData.result.query.proteinStart,
-                this.props.store.annotationData.result.query.proteinEnd,
-                this.props.store.annotationData.result.query.consequence
-              )}
-              oncogenicity={this.props.store.annotationData.result.oncogenic}
-              mutationEffect={
-                this.isCategoricalAlteration
-                  ? undefined
-                  : this.props.store.annotationData.result.mutationEffect
-              }
-              isVus={this.props.store.annotationData.result.vus}
-              highestSensitiveLevel={
-                this.props.store.annotationData.result.highestSensitiveLevel
-              }
-              highestResistanceLevel={
-                this.props.store.annotationData.result.highestResistanceLevel
-              }
-              highestDiagnosticImplicationLevel={
-                this.props.store.annotationData.result
-                  .highestDiagnosticImplicationLevel
-              }
-              highestPrognosticImplicationLevel={
-                this.props.store.annotationData.result
-                  .highestPrognosticImplicationLevel
-              }
-              highestFdaLevel={
-                this.props.store.annotationData.result.highestFdaLevel
-              }
-            />
-            {categoricalAlterationDescription && (
-              <div
-                className={classnames(
-                  styles.categoricalAltDescription,
-                  DEFAULT_MARGIN_BOTTOM_LG
-                )}
-              >
-                {categoricalAlterationDescription}
-              </div>
-            )}
-            {this.alterationSummaries.map(summary => {
-              return (
-                <div key={summary.content} className={DEFAULT_MARGIN_BOTTOM_LG}>
-                  {summary.content}
-                </div>
-              );
-            })}
-          </div>
-          {(this.props.annotationType === AnnotationType.HGVSG ||
-            this.props.annotationType === AnnotationType.GENOMIC_CHANGE) && (
-            <div className={'my-1 d-flex flex-column align-items-center'}>
-              <div>Genomic annotation powered by</div>
-              <PowerBySource
-                name={'Genome Nexus'}
-                url={'genomenexus.org'}
-                logo={gnLogo}
+        <StickyMiniNavBarContextProvider>
+          <Row className="align-items-start">
+            <Col className="flex-grow-1">
+              <GermlineSomaticHeader
+                includeEmailLink
+                annotation={{
+                  gene: this.props.store.hugoSymbol,
+                  alteration: this.props.store.alterationName,
+                  cancerType: this.props.store.cancerTypeName,
+                }}
+                appStore={this.props.appStore}
+                alteration={this.props.store.alterationNameWithDiff}
+                proteinAlteration={
+                  this.props.store.alteration?.proteinChange
+                }
+                isGermline={this.props.store.germline}
+                extra={
+                  this.props.store.cancerTypeName && (
+                    <SomaticGermlineCancerTypeSelect
+                      pretext="in"
+                      cancerType={this.props.store.cancerTypeName}
+                      isClearable={false}
+                      routing={this.props.routing}
+                      hugoSymbol={this.props.store.hugoSymbol}
+                      alterationQuery={this.props.store.alterationQuery}
+                      germline={this.props.store.germline}
+                      onchange={x => (this.props.store.tumorTypeQuery = x)}
+                      selectStyles={{
+                        singleValue(base) {
+                          return {
+                            ...base,
+                            color: COLOR_BLUE,
+                          };
+                        },
+                        input(base) {
+                          return {
+                            ...base,
+                            color: COLOR_BLUE,
+                          };
+                        },
+                        menu(base) {
+                          return {
+                            ...base,
+                            fontSize: '1rem',
+                            fontFamily: '"Gotham Book", serif',
+                          };
+                        },
+                      }}
+                    />
+                  )
+                }
               />
-              {this.props.store.annotationData.result.vue && (
+              <GeneAdditionalInfoSection
+                gene={this.props.store.gene.result}
+                ensemblGenes={this.props.store.ensemblGenes.result}
+                show={this.showAdditionalGeneInfo}
+                onToggle={this.toggleAdditionalGeneInfo}
+              />
+              <Row className={classnames(styles.descriptionContainer)}>
+                <Col>
+                  <VariantOverView
+                    alterationSummaries={this.alterationSummaries}
+                    hugoSymbol={this.props.store.hugoSymbol}
+                    alteration={
+                      this.props.store.annotationData.result.query.alteration
+                    }
+                    geneType={this.props.store.gene.result.geneType}
+                  />
+                </Col>
+              </Row>
+            </Col>
+            {(this.props.annotationType === AnnotationType.HGVSG ||
+              this.props.annotationType === AnnotationType.GENOMIC_CHANGE) && (
+              <Col
+                md="2"
+                className={
+                  'd-flex flex-column align-items-center justify-content-start mt-4'
+                }
+              >
+                <div className="text-center">Genomic annotation powered by</div>
                 <PowerBySource
-                  name={'reVUE'}
-                  url={'cancerrevue.org'}
-                  logo={revueLogo}
+                  name={'Genome Nexus'}
+                  url={'genomenexus.org'}
+                  logo={gnLogo}
                 />
-              )}
-            </div>
+                {this.props.store.annotationData.result.vue && (
+                  <PowerBySource
+                    name={'reVUE'}
+                    url={'cancerrevue.org'}
+                    logo={revueLogo}
+                  />
+                )}
+              </Col>
+            )}
+          </Row>
+          {this.props.store.annotationData.result.mutationEffect
+            .description && (
+            <Row>
+              <Col>
+                <ShowHideText
+                  show={this.showMutationEffect}
+                  title="mutation effect description"
+                  content={
+                    <MutationEffectDescription
+                      hugoSymbol={this.props.store.hugoSymbol}
+                      description={
+                        this.props.store.annotationData.result.mutationEffect
+                          .description
+                      }
+                    />
+                  }
+                  onClick={() =>
+                    this.toggleMutationEffect(!this.showMutationEffect)
+                  }
+                />
+              </Col>
+            </Row>
           )}
-        </div>
-        {this.props.store.annotationData.result.mutationEffect.description && (
           <Row>
             <Col>
-              <ShowHideText
-                show={this.showMutationEffect}
-                title="mutation effect description"
-                content={
-                  <MutationEffectDescription
-                    hugoSymbol={this.props.store.hugoSymbol}
-                    description={
-                      this.props.store.annotationData.result.mutationEffect
-                        .description
-                    }
-                  />
-                }
-                onClick={() =>
-                  this.toggleMutationEffect(!this.showMutationEffect)
-                }
+              <SomaticGermlineAlterationTiles
+                includeTitle
+                variantAnnotation={this.props.store.annotationData.result}
+                isGermline={this.props.store.germline}
+                grch37Isoform={this.props.store.gene.result.grch37Isoform}
               />
             </Col>
           </Row>
-        )}
-        {this.props.store.cancerTypeName ? (
-          <CancerTypeView
-            appStore={this.props.appStore}
-            isLargeScreen={this.props.windowStore.isLargeScreen}
-            userAuthenticated={
-              this.props.authenticationStore.isUserAuthenticated
-            }
-            hugoSymbol={this.props.store.hugoSymbol}
-            alteration={this.props.store.alterationName}
-            matchedAlteration={this.props.store.alteration}
-            tumorType={this.props.store.cancerTypeName}
-            onChangeTumorType={this.props.onChangeTumorType}
-            annotation={this.props.store.annotationData.result}
-            biologicalAlterations={
-              this.props.store.biologicalAlterations.result
-            }
-            relevantAlterations={this.props.relevantAlterations}
-            fdaImplication={this.fdaImplication}
-            therapeuticImplications={this.therapeuticImplications}
-            diagnosticImplications={this.diagnosticImplications}
-            prognosticImplications={this.prognosticImplications}
-            defaultSelectedTab={this.props.defaultSelectedTab}
-            onChangeTab={this.props.onChangeTab}
-          />
-        ) : (
-          <AlterationView
-            appStore={this.props.appStore}
-            hugoSymbol={this.props.store.hugoSymbol}
-            alteration={this.props.store.alterationName}
-            matchedAlteration={this.props.store.alteration}
-            tumorType={this.props.store.cancerTypeName}
-            onChangeTumorType={this.props.onChangeTumorType}
-            annotation={this.props.store.annotationData.result}
-            biologicalAlterations={
-              this.props.store.biologicalAlterations.result
-            }
-            relevantAlterations={this.props.relevantAlterations}
-            fdaImplication={this.fdaImplication}
-            therapeuticImplications={this.therapeuticImplications}
-            diagnosticImplications={this.diagnosticImplications}
-            prognosticImplications={this.prognosticImplications}
-            defaultSelectedTab={this.props.defaultSelectedTab}
-            onChangeTab={this.props.onChangeTab}
-          />
-        )}
+          <div className="d-flex align-items-center">
+            <MiniNavBarHeader
+              id="clinical-implications"
+              comingSoon={this.props.store.germline}
+            >
+              <span
+                className={
+                  this.props.store.germline ? 'text-secondary' : undefined
+                }
+              >
+                Clinical Implications for this Biomarker
+              </span>
+            </MiniNavBarHeader>
+          </div>
+          {this.props.store.cancerTypeName ? (
+            <CancerTypeView
+              appStore={this.props.appStore}
+              isLargeScreen={this.props.windowStore.isLargeScreen}
+              userAuthenticated={
+                this.props.authenticationStore.isUserAuthenticated
+              }
+              isGermline={false}
+              hugoSymbol={this.props.store.hugoSymbol}
+              alteration={this.props.store.alterationName}
+              matchedAlteration={this.props.store.alteration}
+              tumorType={this.props.store.cancerTypeName}
+              onChangeTumorType={this.props.onChangeTumorType}
+              annotation={this.props.store.annotationData.result}
+              biologicalAlterations={
+                this.props.store.biologicalAlterations.result
+              }
+              relevantAlterations={this.props.relevantAlterations}
+              fdaImplication={this.fdaImplication}
+              therapeuticImplications={this.therapeuticImplications}
+              diagnosticImplications={this.diagnosticImplications}
+              prognosticImplications={this.prognosticImplications}
+              defaultSelectedTab={this.props.defaultSelectedTab}
+              onChangeTab={this.props.onChangeTab}
+            />
+          ) : (
+            <SomaticGermlineAlterationView
+              appStore={this.props.appStore}
+              hugoSymbol={this.props.store.hugoSymbol}
+              alteration={this.props.store.alterationName}
+              alterationQuery={this.props.store.alterationName}
+              germline={false}
+              matchedAlteration={this.props.store.alteration}
+              tumorType={this.props.store.cancerTypeName}
+              onChangeTumorType={this.props.onChangeTumorType}
+              annotation={this.props.store.annotationData.result}
+              biologicalAlterations={
+                this.props.store.biologicalAlterations.result
+              }
+              relevantAlterations={this.props.relevantAlterations}
+              fdaImplication={this.fdaImplication}
+              therapeuticImplications={this.therapeuticImplications}
+              diagnosticImplications={this.diagnosticImplications}
+              prognosticImplications={this.prognosticImplications}
+              defaultSelectedTab={this.props.defaultSelectedTab}
+              onChangeTab={this.props.onChangeTab}
+              routing={this.props.routing}
+            />
+          )}
+        </StickyMiniNavBarContextProvider>
       </>
     );
   }

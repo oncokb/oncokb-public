@@ -94,6 +94,9 @@ export default class GenomicPage extends React.Component<GenomicPageProps> {
           if (queryStrings.tumorType) {
             this.tumorType = queryStrings.tumorType;
             this.store.tumorTypeQuery = this.tumorType;
+          } else {
+            this.tumorType = '';
+            this.store.tumorTypeQuery = '';
           }
         },
         { fireImmediately: true }
