@@ -185,29 +185,24 @@ export class AnnotationStore {
     default: DEFAULT_GENE,
   });
 
-  readonly alteration = remoteData<Alteration | undefined>({
-    await: () => [this.gene],
-    invoke: async () => {
-      try {
-        const variant = this.hgvsgQuery
-          ? this.annotationResultByHgvsg.result.query.alteration
-          : this.alterationQuery;
-        if (!variant) {
-          return undefined;
-        }
-        const variants = await apiClient.variantsLookupGetUsingGET({
-          hugoSymbol: this.gene.result.hugoSymbol
-            ? this.gene.result.hugoSymbol
-            : this.hugoSymbolQuery,
-          variant,
-        });
-        return variants[0];
-      } catch (e) {
-        notifyError(e, 'Error finding alteration');
-        return undefined;
+  @computed
+  get alteration(): Alteration | undefined {
+    try {
+      const altLowerCaseQuery = this.alterationQuery?.toLowerCase();
+      const matched = this.biologicalAlterations.result.filter(
+        alt =>
+          alt.variant.alteration.toLowerCase() === altLowerCaseQuery ||
+          alt.variant.name.toLowerCase() === altLowerCaseQuery
+      );
+      if (matched.length > 0) {
+        return matched[0].variant;
       }
-    },
-  });
+      return this.annotationResult.result.alteration;
+    } catch (e) {
+      notifyError(e, 'Error finding alteration');
+      return undefined;
+    }
+  }
 
   readonly ensemblGenes = remoteData<EnsemblGene[]>({
     await: () => [this.gene],
@@ -374,15 +369,15 @@ export class AnnotationStore {
   });
 
   readonly relevantAlterations = remoteData<Alteration[]>({
-    await: () => [this.gene, this.alteration],
+    await: () => [this.gene, this.biologicalAlterations, this.annotationResult],
     invoke: async () => {
-      if (!this.gene.result.entrezGeneId || !this.alteration.result) {
+      if (!this.gene.result.entrezGeneId || !this.alteration) {
         return [];
       }
       return privateClient.utilRelevantAlterationsGetUsingGET({
         entrezGeneId: this.gene.result.entrezGeneId,
-        alteration: this.alteration.result
-          ? this.alteration.result.alteration
+        alteration: this.alteration
+          ? this.alteration.alteration
           : this.alterationQuery,
         referenceGenome: this.referenceGenomeQuery,
       });
@@ -681,18 +676,18 @@ export class AnnotationStore {
   // need to pass all observables from @computed, so they can be monitored by mobx
   computeAlterationName(
     annotationType: AnnotationType,
-    alteration: any,
+    alteration: Alteration | undefined,
     alterationQuery: string,
     annotationData: any,
     showDiff: boolean
   ) {
     if (annotationType === AnnotationType.PROTEIN_CHANGE) {
       return getAlterationName(
-        alteration.result === undefined
+        alteration === undefined
           ? alterationQuery
           : {
-              alteration: alteration.result.alteration,
-              name: alteration.result.name,
+              alteration: alteration.alteration,
+              name: alteration.name,
             },
         showDiff
       );

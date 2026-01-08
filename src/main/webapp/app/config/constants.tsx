@@ -1,5 +1,6 @@
 import { Gene, OncoKBInfo } from 'app/shared/api/generated/OncoKbAPI';
 import {
+  Alteration,
   GeneNumber,
   MainNumber,
   VariantAnnotation,
@@ -498,8 +499,36 @@ export const DEFAULT_QUERY = {
   alleleState: '',
 };
 
+const DEFAULT_ALTERATION: Alteration = {
+  alteration: '',
+  consequence: {
+    description: '',
+    isGenerallyTruncating: false,
+    term: '',
+  },
+  gene: {
+    entrezGeneId: 0,
+    geneAliases: [],
+    geneType: 'INSUFFICIENT_EVIDENCE',
+    genesets: [],
+    grch37Isoform: '',
+    grch37RefSeq: '',
+    grch38Isoform: '',
+    grch38RefSeq: '',
+    hugoSymbol: '',
+  },
+  name: '',
+  proteinChange: '',
+  proteinEnd: 0,
+  proteinStart: 0,
+  refResidues: '',
+  referenceGenomes: ['GRCh37'],
+  variantResidues: '',
+};
+
 export const DEFAULT_ANNOTATION: VariantAnnotation = {
   alleleExist: false,
+  alteration: DEFAULT_ALTERATION,
   background: '',
   dataVersion: '',
   diagnosticImplications: [],

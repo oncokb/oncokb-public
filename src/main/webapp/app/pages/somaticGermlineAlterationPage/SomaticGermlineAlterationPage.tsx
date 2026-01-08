@@ -409,8 +409,8 @@ export class SomaticGermlineAlterationPage extends React.Component<
         ) {
           mappedAlteration = alt;
         } else {
-          if (this.store.alteration.result) {
-            mappedAlteration = this.store.alteration.result;
+          if (this.store.alteration) {
+            mappedAlteration = this.store.alteration;
           } else {
             mappedAlteration.name = mappedAlteration.alteration = this.store.alterationName;
           }
@@ -581,7 +581,7 @@ export class SomaticGermlineAlterationPage extends React.Component<
                     appStore={this.props.appStore}
                     alteration={this.store.alterationNameWithDiff}
                     proteinAlteration={
-                      this.store.alteration.result?.proteinChange
+                      this.store.alteration?.proteinChange
                     }
                     isGermline={this.store.germline}
                   />
@@ -698,7 +698,7 @@ export class SomaticGermlineAlterationPage extends React.Component<
                       alteration={this.store.alterationName}
                       alterationQuery={this.store.alterationQuery}
                       germline={this.store.germline}
-                      matchedAlteration={this.store.alteration.result}
+                      matchedAlteration={this.store.alteration}
                       tumorType={this.store.cancerTypeName}
                       onChangeTumorType={this.onChangeTumorType.bind(this)}
                       annotation={this.store.annotationData.result}

@@ -154,6 +154,8 @@ export type CancerTypeCount = {
 export type VariantAnnotation = {
     'alleleExist': boolean
 
+        'alteration': Alteration
+
         'background': string
 
         'dataVersion': string
