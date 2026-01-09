@@ -314,8 +314,8 @@ export default class AnnotationPage extends React.Component<
         ) {
           mappedAlteration = alt;
         } else {
-          if (this.props.store.alteration.result) {
-            mappedAlteration = this.props.store.alteration.result;
+          if (this.props.store.alteration) {
+            mappedAlteration = this.props.store.alteration;
           } else {
             mappedAlteration.name = mappedAlteration.alteration = this.props.store.alterationName;
           }
@@ -707,7 +707,7 @@ export default class AnnotationPage extends React.Component<
             }
             hugoSymbol={this.props.store.hugoSymbol}
             alteration={this.props.store.alterationName}
-            matchedAlteration={this.props.store.alteration.result}
+            matchedAlteration={this.props.store.alteration}
             tumorType={this.props.store.cancerTypeName}
             onChangeTumorType={this.props.onChangeTumorType}
             annotation={this.props.store.annotationData.result}
@@ -727,7 +727,7 @@ export default class AnnotationPage extends React.Component<
             appStore={this.props.appStore}
             hugoSymbol={this.props.store.hugoSymbol}
             alteration={this.props.store.alterationName}
-            matchedAlteration={this.props.store.alteration.result}
+            matchedAlteration={this.props.store.alteration}
             tumorType={this.props.store.cancerTypeName}
             onChangeTumorType={this.props.onChangeTumorType}
             annotation={this.props.store.annotationData.result}

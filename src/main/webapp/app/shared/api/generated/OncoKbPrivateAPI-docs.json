@@ -2163,6 +2163,9 @@
         "alleleExist": {
           "type": "boolean"
         },
+        "alteration": {
+          "$ref": "#/definitions/Alteration"
+        },
         "background": {
           "type": "string"
         },
