@@ -291,6 +291,8 @@ export type UserBannerMessageDTO = {
 
         'startDate': string
 
+        'status': "SCHEDULED" | "ACTIVE" | "EXPIRED" | "UNKNOWN"
+
 };
 export type UserCompany = {
     'anticipatedReports': string
@@ -863,7 +865,6 @@ export default class API {
         });
     };
     authenticateGenomicReportUsingGETURL(parameters: {
-        'authorization': string,
         $queryParameters ? : any
     }): string {
         let queryParameters: any = {};
@@ -883,12 +884,10 @@ export default class API {
      * authenticateGenomicReport
      * @method
      * @name API#authenticateGenomicReportUsingGET
-     * @param {string} authorization - Authorization
      */
     authenticateGenomicReportUsingGETWithHttpInfo(parameters: {
-        'authorization': string,
         $queryParameters ? : any,
-        $domain ? : string
+            $domain ? : string
     }): Promise < request.Response > {
         const domain = parameters.$domain ? parameters.$domain : this.domain;
         const errorHandlers = this.errorHandlers;
@@ -900,15 +899,6 @@ export default class API {
         let form: any = {};
         return new Promise(function(resolve, reject) {
             headers['Accept'] = '*/*';
-
-            if (parameters['authorization'] !== undefined) {
-                headers['Authorization'] = parameters['authorization'];
-            }
-
-            if (parameters['authorization'] === undefined) {
-                reject(new Error('Missing required  parameter: authorization'));
-                return;
-            }
 
             if (parameters.$queryParameters) {
                 Object.keys(parameters.$queryParameters).forEach(function(parameterName) {
@@ -926,12 +916,10 @@ export default class API {
      * authenticateGenomicReport
      * @method
      * @name API#authenticateGenomicReportUsingGET
-     * @param {string} authorization - Authorization
      */
     authenticateGenomicReportUsingGET(parameters: {
-        'authorization': string,
         $queryParameters ? : any,
-        $domain ? : string
+            $domain ? : string
     }): Promise < any > {
         return this.authenticateGenomicReportUsingGETWithHttpInfo(parameters).then(function(response: request.Response) {
             return response.body;
