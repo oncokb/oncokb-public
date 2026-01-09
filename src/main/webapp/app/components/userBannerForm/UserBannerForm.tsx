@@ -1,4 +1,4 @@
-import React, { useCallback } from 'react';
+import React, { useCallback, useState, ChangeEvent, useEffect } from 'react';
 import { Button, Col, Row } from 'react-bootstrap';
 import { UserBannerMessageDTO } from 'app/shared/api/generated/API';
 import { getSectionClassName } from 'app/pages/account/AccountUtils';
@@ -7,8 +7,7 @@ import {
   SHORT_TEXT_VAL,
   textValidation,
 } from 'app/shared/utils/FormValidationUtils';
-
-type UserBannerType = UserBannerMessageDTO['bannerType'];
+import { UserBannerMessage } from '../userMessager/UserMessage';
 
 type IUserBannerMessageFormProps = {
   onValidSubmit: (newUserBannerMessage: Partial<UserBannerMessageDTO>) => void;
@@ -25,6 +24,21 @@ export default function UserBannerForm({
     },
     [onValidSubmit]
   );
+
+  const [currentBannerType, setCurrentBannerType] = useState<
+    UserBannerMessageDTO['bannerType'] | undefined
+  >(existingBannerMessage?.bannerType);
+  useEffect(() => {
+    setCurrentBannerType(existingBannerMessage?.bannerType);
+  }, [existingBannerMessage?.bannerType]);
+
+  const [currentContent, setCurrentContent] = useState(
+    existingBannerMessage?.content
+  );
+  useEffect(() => {
+    setCurrentContent(existingBannerMessage?.content);
+  }, [existingBannerMessage?.content]);
+
   return (
     <AvForm
       onValidSubmit={handleValidSubmit}
@@ -51,6 +65,12 @@ export default function UserBannerForm({
                 errorMessage: 'Message Type is required.',
               },
             }}
+            onChange={(e: ChangeEvent<HTMLSelectElement>) => {
+              setCurrentBannerType(
+                (e.target.value ??
+                  undefined) as UserBannerMessageDTO['bannerType']
+              );
+            }}
           >
             <option value="INFO">Info</option>
             <option value="ALERT">Alert</option>
@@ -75,13 +95,28 @@ export default function UserBannerForm({
                 errorMessage: 'Your message is required.',
               },
             }}
+            onChange={(e: ChangeEvent<HTMLInputElement>) => {
+              setCurrentContent(e.target.value ?? undefined);
+            }}
           />
           <small className="text-muted">
             Give your message some flair: wrap words in **double asterisks** to
             embolden them, and surround link text with
             [brackets](https://example.com) so readers can follow your call to
-            action.
+            action. <b>DON'T FORGET</b> about putting https:// in front of web
+            links!
           </small>
+        </Col>
+      </Row>
+      <Row>
+        <Col style={{ padding: '2rem 1rem' }}>
+          {currentContent && (
+            <UserBannerMessage
+              isXLscreen={false}
+              bannerType={currentBannerType ?? 'INFO'}
+              content={currentContent}
+            />
+          )}
         </Col>
       </Row>
       <Row>

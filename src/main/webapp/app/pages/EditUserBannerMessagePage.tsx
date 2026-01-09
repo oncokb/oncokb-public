@@ -7,8 +7,9 @@ import { notifySuccess } from 'app/shared/utils/NotificationUtils';
 import UserBannerForm from 'app/components/userBannerForm/UserBannerForm';
 import { Link, useParams } from 'react-router-dom';
 import LoadingIndicator from 'app/components/loadingIndicator/LoadingIndicator';
-import { Button } from 'react-bootstrap';
+import { Alert, Button } from 'react-bootstrap';
 import { PAGE_ROUTE } from 'app/config/constants';
+import { UserBannerStatusBadge } from 'app/components/userBannerStatus/UserBannerStatusBadge';
 
 enum EditBannerMessageStatus {
   EDIT_SUCCESS,
@@ -26,6 +27,7 @@ export default function EditUserBannerMessagePage() {
   >();
   const [bannerMessage, setBannerMessage] = useState<UserBannerMessageDTO>();
   const [pageErrorMessage, setPageErrorMessage] = useState<OncoKBError>();
+  const bannerIsExpired = bannerMessage?.status === 'EXPIRED';
   const handleValidSubmit = useCallback(
     (updatedBannerMessage: UserBannerMessageDTO) => {
       setCreateBannerMessageStatus(EditBannerMessageStatus.EDIT_PENDING);
@@ -34,10 +36,9 @@ export default function EditUserBannerMessagePage() {
           userBannerMessageDto: updatedBannerMessage,
         })
         .then(
-          x => {
+          () => {
             notifySuccess('Banner message edited successfully!');
             setCreateBannerMessageStatus(EditBannerMessageStatus.EDIT_SUCCESS);
-            // setBannerMessage(x);
             window.location.reload(false);
           },
           error => {
@@ -83,6 +84,19 @@ export default function EditUserBannerMessagePage() {
           Back to banner messages
         </Button>
       </Link>
+      {bannerMessage?.status && (
+        <div className="mt-3 d-flex align-items-center">
+          <strong className="mr-2">Status:</strong>
+          <UserBannerStatusBadge status={bannerMessage.status} />
+        </div>
+      )}
+      {bannerIsExpired && (
+        <Alert variant="warning" className="mt-2">
+          This banner message expired on{' '}
+          <strong>{bannerMessage?.endDate ?? 'an unknown date'}</strong>. Update
+          the end date to make it active again.
+        </Alert>
+      )}
       {pageErrorMessage ? <ErrorAlert error={pageErrorMessage} /> : null}
       {createBannerMessageStatus !== EditBannerMessageStatus.LOAD_ERROR && (
         <UserBannerForm

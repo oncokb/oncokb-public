@@ -18,6 +18,7 @@ import LoadingIndicator, {
 import { Link } from 'react-router-dom';
 import { QuickToolButton } from '../userPage/QuickToolButton';
 import { SimpleConfirmModal } from 'app/shared/modal/SimpleConfirmModal';
+import { UserBannerStatusBadge } from 'app/components/userBannerStatus/UserBannerStatusBadge';
 
 @observer
 export default class UserBannerPage extends React.Component {
@@ -71,6 +72,7 @@ export default class UserBannerPage extends React.Component {
           bannerMessage => bannerMessage.id !== id
         );
         this.closeDeleteConfirmModal();
+        window.location.reload(false);
       }),
       error => {
         notifyError(error, 'Error deleting banner message');
@@ -90,6 +92,19 @@ export default class UserBannerPage extends React.Component {
       Header: <span className={styles.tableHeader}>Banner Type</span>,
       minWidth: 60,
       accessor: 'bannerType',
+    },
+    {
+      id: 'status',
+      Header: <span className={styles.tableHeader}>Status</span>,
+      minWidth: 90,
+      accessor: 'status',
+      Cell: (props: { original: UserBannerMessageDTO }) => (
+        <UserBannerStatusBadge status={props.original.status} />
+      ),
+      onFilter: (data: UserBannerMessageDTO, keyword: string) =>
+        (data.status ?? '')
+          .toLowerCase()
+          .includes(keyword.trim().toLowerCase()),
     },
     {
       id: 'edit',

@@ -5,6 +5,7 @@ import java.time.LocalDate;
 import javax.validation.constraints.*;
 import org.mskcc.cbio.oncokb.domain.UserBannerMessage;
 import org.mskcc.cbio.oncokb.domain.enumeration.BannerType;
+import org.mskcc.cbio.oncokb.domain.enumeration.UserBannerMessageStatus;
 
 /**
  * A DTO for the {@link org.mskcc.cbio.oncokb.domain.UserBannerMessage} entity.
@@ -22,6 +23,8 @@ public class UserBannerMessageDTO implements Serializable {
 
   @NotNull
   private BannerType bannerType;
+
+  private UserBannerMessageStatus status;
 
   public Long getId() {
     return id;
@@ -63,6 +66,14 @@ public class UserBannerMessageDTO implements Serializable {
     this.bannerType = bannerType;
   }
 
+  public UserBannerMessageStatus getStatus() {
+    return status;
+  }
+
+  public void setStatus(UserBannerMessageStatus status) {
+    this.status = status;
+  }
+
   // prettier-ignore
     @Override
     public String toString() {
@@ -72,6 +83,7 @@ public class UserBannerMessageDTO implements Serializable {
             ", endDate=" + endDate +
             ", content='" + content + '\'' +
             ", bannerType=" + bannerType +
+            ", status=" + status +
             "}";
     }
 }

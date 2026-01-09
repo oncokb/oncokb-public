@@ -277,15 +277,6 @@
         "produces": [
           "*/*"
         ],
-        "parameters": [
-          {
-            "name": "Authorization",
-            "in": "header",
-            "description": "Authorization",
-            "required": true,
-            "type": "string"
-          }
-        ],
         "responses": {
           "200": {
             "description": "OK"
@@ -4293,6 +4284,15 @@
         "startDate": {
           "type": "string",
           "format": "date"
+        },
+        "status": {
+          "type": "string",
+          "enum": [
+            "SCHEDULED",
+            "ACTIVE",
+            "EXPIRED",
+            "UNKNOWN"
+          ]
         }
       },
       "title": "UserBannerMessageDTO"

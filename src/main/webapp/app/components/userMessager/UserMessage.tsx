@@ -95,6 +95,36 @@ function renderBannerContent(content: string) {
   return nodes.length ? nodes : content;
 }
 
+type UserBannerMessageProps = {
+  content: string;
+  bannerType: IUserMessage['bannerType'];
+  isXLscreen: boolean;
+  onDismiss?: () => void;
+};
+
+export function UserBannerMessage({
+  content,
+  bannerType,
+  isXLscreen,
+  onDismiss,
+}: UserBannerMessageProps) {
+  return (
+    <div
+      className={classNames(styles.message, {
+        [styles.alert]: bannerType === 'ALERT',
+      })}
+    >
+      <Container fluid={!isXLscreen} className={styles.messageContainer}>
+        <div>{renderBannerContent(content)}</div>
+        <i
+          className={classNames(styles.close, 'fa', 'fa-close')}
+          onClick={onDismiss}
+        />
+      </Container>
+    </div>
+  );
+}
+
 type UserMessageBaseProps = {
   dataUrl?: string;
   show: boolean;
@@ -193,7 +223,12 @@ class UserMessage extends React.Component<UserMessageProps> {
     if (localStorage.getItem(DISABLE_BANNER_OPT) === 'true') {
       return [];
     }
-    return this.bannerMessages;
+    return this.bannerMessages
+      .filter(message => {
+        const notYetShown = !localStorage.getItem(makeMessageKey(message.id));
+        return notYetShown;
+      })
+      .sort((a, b) => a.endDate - b.endDate);
   }
 
   @action
@@ -210,23 +245,13 @@ class UserMessage extends React.Component<UserMessageProps> {
   render() {
     if (this.showBeVisible) {
       return toJS(this.messages).map(message => (
-        <div
-          className={classNames(styles.message, {
-            [styles.alert]: message.bannerType === 'ALERT',
-          })}
+        <UserBannerMessage
           key={message.id}
-        >
-          <Container
-            fluid={!this.props.windowStore.isXLscreen}
-            className={styles.messageContainer}
-          >
-            <div>{renderBannerContent(message.content)}</div>
-            <i
-              className={classNames(styles.close, 'fa', 'fa-close')}
-              onClick={() => this.markMessageDismissed(message.id)}
-            />
-          </Container>
-        </div>
+          content={message.content}
+          bannerType={message.bannerType}
+          isXLscreen={this.props.windowStore.isXLscreen}
+          onDismiss={() => this.markMessageDismissed(message.id)}
+        />
       ));
     } else {
       return null;
