@@ -19,6 +19,20 @@ $danger: #dc3545;
 $inactive: #f2f4f8; // from design team
 $black: #212529;
 
+// Request status colors
+$request-status-approved-bg: #d4edda;
+$request-status-approved-text: #155724;
+$request-status-approved-border: #c3e6cb;
+$request-status-pending-bg: #fff3cd;
+$request-status-pending-text: #856404;
+$request-status-pending-border: #ffeeba;
+$request-status-rejected-bg: #f8d7da;
+$request-status-rejected-text: #721c24;
+$request-status-rejected-border: #f5c6cb;
+$request-status-unknown-bg: #e2e3e5;
+$request-status-unknown-text: #383d41;
+$request-status-unknown-border: #d6d8db;
+
 $link-hover-color: $oncokb-darker-blue;
 $nav-bg-color: $oncokb-blue;
 

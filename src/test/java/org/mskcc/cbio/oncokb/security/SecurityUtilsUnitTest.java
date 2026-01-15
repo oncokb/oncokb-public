@@ -1,12 +1,15 @@
 package org.mskcc.cbio.oncokb.security;
 
 import org.junit.jupiter.api.Test;
+import org.mskcc.cbio.oncokb.domain.User;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.context.SecurityContext;
 import org.springframework.security.core.context.SecurityContextHolder;
 
+import java.time.Duration;
+import java.time.Instant;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Optional;
@@ -29,7 +32,7 @@ public class SecurityUtilsUnitTest {
     }
 
     @Test
-    public void testgetCurrentUserToken() {
+    public void testGetCurrentUserToken() {
         SecurityContext securityContext = SecurityContextHolder.createEmptyContext();
         UUID uuid = UUID.randomUUID();
         securityContext.setAuthentication(new UsernamePasswordAuthenticationToken("admin", uuid));
@@ -69,6 +72,60 @@ public class SecurityUtilsUnitTest {
 
         assertThat(SecurityUtils.isCurrentUserInRole(AuthoritiesConstants.USER)).isTrue();
         assertThat(SecurityUtils.isCurrentUserInRole(AuthoritiesConstants.ADMIN)).isFalse();
+    }
+
+    @Test
+    public void getActivationGracePeriodDaysRemainingRoundsUpForPartialDay() {
+        Instant reference = Instant.now();
+        // Leave roughly 1 hour remaining in the grace period
+        Instant createdDate = reference.minus(Duration.ofDays(14)).plus(Duration.ofHours(1));
+        User user = createUserWithCreatedDate(createdDate);
+
+        long daysRemaining = SecurityUtils.getActivationGracePeriodDaysRemaining(user);
+
+        assertThat(daysRemaining).isEqualTo(1);
+    }
+
+    @Test
+    public void getActivationGracePeriodDaysRemainingRoundsUpWhenMoreThanOneDayLeft() {
+        Instant reference = Instant.now();
+        // Leave 1 day and 1 hour remaining so rounding adds the extra day
+        Instant createdDate = reference.minus(Duration.ofDays(12)).minus(Duration.ofHours(1));
+        User user = createUserWithCreatedDate(createdDate);
+
+        long daysRemaining = SecurityUtils.getActivationGracePeriodDaysRemaining(user);
+
+        assertThat(daysRemaining).isEqualTo(2);
+    }
+
+    @Test
+    public void getActivationGracePeriodDaysRemainingReturnsZeroOutsideGracePeriod() {
+        Instant reference = Instant.now();
+        // Grace period already expired
+        Instant createdDate = reference.minus(Duration.ofDays(14));
+        User user = createUserWithCreatedDate(createdDate);
+
+        long daysRemaining = SecurityUtils.getActivationGracePeriodDaysRemaining(user);
+
+        assertThat(daysRemaining).isZero();
+    }
+
+    @Test
+    public void getActivationGracePeriodDaysRemainingReturnsZeroWhenDurationNegative() {
+        Instant reference = Instant.now();
+        // Created far enough in the past so the grace period ended before now
+        Instant createdDate = reference.minus(Duration.ofDays(16));
+        User user = createUserWithCreatedDate(createdDate);
+
+        long daysRemaining = SecurityUtils.getActivationGracePeriodDaysRemaining(user);
+
+        assertThat(daysRemaining).isZero();
+    }
+
+    private User createUserWithCreatedDate(Instant createdDate) {
+        User user = new User();
+        user.setCreatedDate(createdDate);
+        return user;
     }
 
 }

@@ -3,6 +3,7 @@ package org.mskcc.cbio.oncokb.web.rest;
 import org.mskcc.cbio.oncokb.RedisTestContainerExtension;
 import org.mskcc.cbio.oncokb.OncokbPublicApp;
 import org.mskcc.cbio.oncokb.domain.UserDetails;
+import org.mskcc.cbio.oncokb.domain.enumeration.AccountRequestStatus;
 import org.mskcc.cbio.oncokb.repository.UserDetailsRepository;
 import org.mskcc.cbio.oncokb.service.UserDetailsService;
 import org.mskcc.cbio.oncokb.service.dto.UserDetailsDTO;
@@ -92,6 +93,7 @@ public class UserDetailsResourceIT {
             .city(DEFAULT_CITY)
             .country(DEFAULT_COUNTRY)
             .address(DEFAULT_ADDRESS)
+            .accountRequestStatus(AccountRequestStatus.PENDING)
             .additionalInfo(DEFAULT_ADDITIONAL_INFO);
         return userDetails;
     }
@@ -182,7 +184,7 @@ public class UserDetailsResourceIT {
             .andExpect(jsonPath("$.[*].address").value(hasItem(DEFAULT_ADDRESS)))
             .andExpect(jsonPath("$.[*].additionalInfo.userCompany.useCase").value(hasItem("AAAAAAAAAA")));
     }
-    
+
     @Test
     @Transactional
     public void getUserDetails() throws Exception {

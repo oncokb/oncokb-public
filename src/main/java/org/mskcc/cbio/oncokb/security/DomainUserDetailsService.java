@@ -1,9 +1,13 @@
 package org.mskcc.cbio.oncokb.security;
 
+import java.util.*;
+import java.util.stream.Collectors;
 import org.apache.commons.lang3.StringUtils;
-import org.mskcc.cbio.oncokb.domain.User;
-import org.mskcc.cbio.oncokb.repository.UserRepository;
 import org.hibernate.validator.internal.constraintvalidators.hv.EmailValidator;
+import org.mskcc.cbio.oncokb.domain.User;
+import org.mskcc.cbio.oncokb.domain.enumeration.AccountRequestStatus;
+import org.mskcc.cbio.oncokb.repository.UserDetailsRepository;
+import org.mskcc.cbio.oncokb.repository.UserRepository;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.security.core.GrantedAuthority;
@@ -13,9 +17,10 @@ import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Component;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.web.server.ResponseStatusException;
+import org.springframework.http.HttpStatus;
 
-import java.util.*;
-import java.util.stream.Collectors;
+import io.sentry.RequestDetails;
 
 /**
  * Authenticate a user from the database.
@@ -26,9 +31,11 @@ public class DomainUserDetailsService implements UserDetailsService {
     private final Logger log = LoggerFactory.getLogger(DomainUserDetailsService.class);
 
     private final UserRepository userRepository;
+    private final UserDetailsRepository userDetailsRepository;
 
-    public DomainUserDetailsService(UserRepository userRepository) {
+    public DomainUserDetailsService(UserRepository userRepository, UserDetailsRepository userDetailsRepository) {
         this.userRepository = userRepository;
+        this.userDetailsRepository = userDetailsRepository;
     }
 
     @Override
@@ -50,10 +57,33 @@ public class DomainUserDetailsService implements UserDetailsService {
     }
 
     private org.springframework.security.core.userdetails.User createSpringSecurityUser(String lowercaseLogin, User user) {
+        AccountRequestStatus accountRequestStatus = userDetailsRepository.findOneByUser(user)
+            .map(org.mskcc.cbio.oncokb.domain.UserDetails::getAccountRequestStatus)
+            .orElse(AccountRequestStatus.UNKNOWN);
+
+        if (AccountRequestStatus.UNKNOWN.equals(accountRequestStatus)) {
+            log.warn("Account request status missing for user '{}'. Denying login.", user.getLogin());
+            throw new UserNotApprovedException(lowercaseLogin);
+        }
+
+        if (AccountRequestStatus.REJECTED.equals(accountRequestStatus)) {
+            throw new ResponseStatusException(HttpStatus.FORBIDDEN, "User account request has been rejected.");
+        }
+
         if (!user.getActivated()) {
             if (StringUtils.isNotEmpty(user.getActivationKey())) {
                 throw new UserNotActivatedException(lowercaseLogin);
-            } else {
+            }
+
+            if (AccountRequestStatus.APPROVED.equals(accountRequestStatus)) {
+                throw new UserNotActivatedException(lowercaseLogin);
+            }
+
+            if (!SecurityUtils.isWithinActivationGracePeriod(user)) {
+                throw new ExpiredGracePeriodException(lowercaseLogin);
+            }
+
+            if (!AccountRequestStatus.PENDING.equals(accountRequestStatus)) {
                 throw new UserNotApprovedException(lowercaseLogin);
             }
         }
@@ -64,4 +94,5 @@ public class DomainUserDetailsService implements UserDetailsService {
             user.getPassword(),
             grantedAuthorities);
     }
+
 }

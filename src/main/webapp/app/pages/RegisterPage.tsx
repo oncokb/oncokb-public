@@ -188,7 +188,9 @@ export class RegisterPage extends React.Component<IRegisterProps> {
         </p>
         <p>
           After validating your email address, please allow 1-2 business days
-          for us to review your request.{' '}
+          for us to review your request. Your activation email also includes
+          more details about the temporary grace-period access available while
+          your license request is under review.{' '}
           {licenseType === LicenseType.ACADEMIC ? (
             ''
           ) : (

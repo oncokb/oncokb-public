@@ -6,7 +6,9 @@ import org.mskcc.cbio.oncokb.config.Constants;
 import org.mskcc.cbio.oncokb.domain.Authority;
 import org.mskcc.cbio.oncokb.domain.User;
 import org.mskcc.cbio.oncokb.domain.UserDetails;
+import org.mskcc.cbio.oncokb.domain.enumeration.AccountRequestStatus;
 import org.mskcc.cbio.oncokb.domain.enumeration.LicenseType;
+import org.mskcc.cbio.oncokb.security.SecurityUtils;
 import org.mskcc.cbio.oncokb.service.dto.useradditionalinfo.AdditionalInfoDTO;
 
 import javax.validation.constraints.*;
@@ -52,6 +54,8 @@ public class UserDTO implements Serializable {
 
     private AdditionalInfoDTO additionalInfo;
 
+    private AccountRequestStatus accountRequestStatus;
+
     @Email
     @Size(min = 5, max = 254)
     private String email;
@@ -62,6 +66,8 @@ public class UserDTO implements Serializable {
     private String imageUrl;
 
     private boolean activated = false;
+
+    private long activationGracePeriodDaysRemaining;
 
     @Size(min = 2, max = 10)
     private String langKey;
@@ -103,6 +109,7 @@ public class UserDTO implements Serializable {
         this.createdDate = user.getCreatedDate();
         this.lastModifiedBy = user.getLastModifiedBy();
         this.lastModifiedDate = user.getLastModifiedDate();
+        this.activationGracePeriodDaysRemaining = SecurityUtils.getActivationGracePeriodDaysRemaining(user);
         this.authorities = user.getAuthorities().stream()
             .map(Authority::getName)
             .collect(Collectors.toSet());
@@ -113,6 +120,9 @@ public class UserDTO implements Serializable {
             this.city = userDetails.getCity();
             this.country = userDetails.getCountry();
             this.additionalInfo = new Gson().fromJson(userDetails.getAdditionalInfo(), AdditionalInfoDTO.class);
+            this.accountRequestStatus = userDetails.getAccountRequestStatus();
+        } else {
+            this.accountRequestStatus = AccountRequestStatus.UNKNOWN;
         }
     }
 
@@ -220,6 +230,14 @@ public class UserDTO implements Serializable {
         this.additionalInfo = additionalInfo;
     }
 
+    public AccountRequestStatus getAccountRequestStatus() {
+        return accountRequestStatus;
+    }
+
+    public void setAccountRequestStatus(AccountRequestStatus accountRequestStatus) {
+        this.accountRequestStatus = accountRequestStatus;
+    }
+
     public String getImageUrl() {
         return imageUrl;
     }
@@ -234,6 +252,14 @@ public class UserDTO implements Serializable {
 
     public void setActivated(boolean activated) {
         this.activated = activated;
+    }
+
+    public long getActivationGracePeriodDaysRemaining() {
+        return activationGracePeriodDaysRemaining;
+    }
+
+    public void setActivationGracePeriodDaysRemaining(long activationGracePeriodDaysRemaining) {
+        this.activationGracePeriodDaysRemaining = activationGracePeriodDaysRemaining;
     }
 
     public String getActivationKey() {
@@ -311,6 +337,7 @@ public class UserDTO implements Serializable {
             ", country=" + country +
             ", imageUrl='" + imageUrl + '\'' +
             ", activated=" + activated +
+            ", activationGracePeriodDaysRemaining=" + activationGracePeriodDaysRemaining +
             ", activationKey=" + activationKey +
             ", resetKey=" + resetKey +
             ", resetDate=" + resetDate +

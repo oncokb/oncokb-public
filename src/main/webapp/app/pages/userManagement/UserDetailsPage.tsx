@@ -206,6 +206,27 @@ export default class UserDetailsPage extends React.Component<{
     return activated ? 'Activated' : 'Inactivated';
   }
 
+  private getRequestStatusLabel(status: UserDTO['accountRequestStatus']) {
+    if (status === undefined || status === null) {
+      return 'Unknown';
+    }
+    return status.charAt(0) + status.slice(1).toLowerCase();
+  }
+
+  private getRequestStatusClass(status: UserDTO['accountRequestStatus']) {
+    switch (status) {
+      case 'APPROVED':
+        return styles.requestStatusApproved;
+      case 'PENDING':
+        return styles.requestStatusPending;
+      case 'REJECTED':
+        return styles.requestStatusRejected;
+      case 'UNKNOWN':
+      default:
+        return styles.requestStatusUnknown;
+    }
+  }
+
   private columns: SearchColumn<UserDTO>[] = [
     {
       id: 'createdDate',
@@ -274,6 +295,29 @@ export default class UserDetailsPage extends React.Component<{
         filterByKeyword(data.email, keyword),
       Cell(props: { original: UserDTO }) {
         return <span>{props.original.email}</span>;
+      },
+    },
+    {
+      id: 'accountRequestStatus',
+      Header: (
+        <span className={styles.tableHeader}>Account Request Status</span>
+      ),
+      accessor: 'accountRequestStatus',
+      minWidth: 140,
+      defaultSortDesc: false,
+      className: 'justify-content-center',
+      onFilter: (data: UserDTO, keyword) =>
+        filterByKeyword(
+          this.getRequestStatusLabel(data.accountRequestStatus),
+          keyword
+        ),
+      Cell: (props: { original: UserDTO }) => {
+        const status = props.original.accountRequestStatus;
+        const label = this.getRequestStatusLabel(status);
+        const className = `${
+          styles.requestStatusBadge
+        } ${this.getRequestStatusClass(status)}`;
+        return <span className={className}>{label}</span>;
       },
     },
     {

@@ -74,6 +74,8 @@ export const FAQ_LINK = 'https://faq.oncokb.org';
 export const FAQ_URL_PATTERNS_LINK = `${FAQ_LINK}/technical#what-are-the-url-patterns-of-oncokb-website`;
 export const API_DOCUMENT_LINK = 'https://api.oncokb.org/oncokb-website/api';
 export const DEMO_WEBSITE_LINK = 'https://demo.oncokb.org';
+export const DEMO_API_DOCUMENT_LINK =
+  'https://demo.oncokb.org/api/v1/swagger-ui.html';
 export const FACULTY_COI_WEBSITE_LINK = 'https://www.mskcc.org/disclosures';
 export const ONCOKB_DATAHUB_LINK = 'https://github.com/oncokb/oncokb-datahub';
 export const NONE_FACULTY_COI_WEBSITE_LINK =

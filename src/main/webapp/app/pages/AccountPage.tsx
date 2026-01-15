@@ -4,6 +4,7 @@ import TokenInputGroups from 'app/components/tokenInputGroups/TokenInputGroups';
 import {
   ACCOUNT_TITLES,
   AUTHORITIES,
+  DEMO_API_DOCUMENT_LINK,
   H5_MARGIN_BOTTOM,
   LicenseType,
   MAX_SERVICE_ACCOUNT_TOKENS,
@@ -22,6 +23,7 @@ import ButtonWithTooltip from 'app/shared/button/ButtonWithTooltip';
 import { LoadingButton } from 'app/shared/button/LoadingButton';
 import InfoIcon from 'app/shared/icons/InfoIcon';
 import { ContactLink } from 'app/shared/links/ContactLink';
+import { Linkout } from 'app/shared/links/Linkout';
 import { SimpleConfirmModal } from 'app/shared/modal/SimpleConfirmModal';
 import { TEXT_VAL } from 'app/shared/utils/FormValidationUtils';
 import { notifyError, notifySuccess } from 'app/shared/utils/NotificationUtils';
@@ -249,7 +251,9 @@ export class AccountPage extends React.Component<IRegisterProps> {
     const awaitingApiAccess = (
       <span>
         We are reviewing your API access request. If you haven't heard back from
-        us after 1-2 business days, please feel free to contact us.
+        us after 1-2 business days, please feel free to contact us. In the
+        meantime, you can use our{' '}
+        <Linkout link={DEMO_API_DOCUMENT_LINK}>demo API</Linkout>.
       </span>
     );
 

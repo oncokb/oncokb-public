@@ -337,7 +337,7 @@ export default class AlterationTableTabs extends React.Component<
         onFilter: (data: TherapeuticImplication, keyword) =>
           filterByKeyword(data.drugs, keyword),
       },
-      ...(this.props.authenticationStore?.isUserAuthenticated &&
+      ...(this.props.authenticationStore?.isAuthenticatedAndApprovedUser &&
       this.txHasDescriptions
         ? []
         : [citationColumn]),
