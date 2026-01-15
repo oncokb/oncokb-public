@@ -1,6 +1,7 @@
 package org.mskcc.cbio.oncokb.service.dto;
 
 import java.io.Serializable;
+import java.time.Instant;
 import java.time.LocalDate;
 import javax.validation.constraints.*;
 import org.mskcc.cbio.oncokb.domain.UserBannerMessage;
@@ -25,6 +26,8 @@ public class UserBannerMessageDTO implements Serializable {
   private BannerType bannerType;
 
   private UserBannerMessageStatus status;
+
+  private Instant lastUpdated;
 
   public Long getId() {
     return id;
@@ -74,6 +77,14 @@ public class UserBannerMessageDTO implements Serializable {
     this.status = status;
   }
 
+  public Instant getLastUpdated() {
+    return lastUpdated;
+  }
+
+  public void setLastUpdated(Instant lastUpdated) {
+    this.lastUpdated = lastUpdated;
+  }
+
   // prettier-ignore
     @Override
     public String toString() {
@@ -84,6 +95,7 @@ public class UserBannerMessageDTO implements Serializable {
             ", content='" + content + '\'' +
             ", bannerType=" + bannerType +
             ", status=" + status +
+            ", lastUpdated=" + lastUpdated +
             "}";
     }
 }

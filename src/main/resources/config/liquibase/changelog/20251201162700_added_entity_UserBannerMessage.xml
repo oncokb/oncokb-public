@@ -28,6 +28,9 @@
             <column name="banner_type" type="varchar(255)">
                 <constraints nullable="false" />
             </column>
+            <column name="last_updated" type="timestamp" defaultValueComputed="CURRENT_TIMESTAMP">
+                <constraints nullable="false"/>
+            </column>
         </createTable>
     </changeSet>
 </databaseChangeLog>

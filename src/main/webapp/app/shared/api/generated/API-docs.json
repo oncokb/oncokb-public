@@ -4281,6 +4281,10 @@
           "type": "integer",
           "format": "int64"
         },
+        "lastUpdated": {
+          "type": "string",
+          "format": "date-time"
+        },
         "startDate": {
           "type": "string",
           "format": "date"

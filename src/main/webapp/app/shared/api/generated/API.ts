@@ -289,6 +289,8 @@ export type UserBannerMessageDTO = {
 
         'id': number
 
+        'lastUpdated': string
+
         'startDate': string
 
         'status': "SCHEDULED" | "ACTIVE" | "EXPIRED" | "UNKNOWN"

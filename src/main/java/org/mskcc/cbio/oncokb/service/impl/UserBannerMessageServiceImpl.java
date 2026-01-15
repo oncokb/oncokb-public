@@ -1,5 +1,6 @@
 package org.mskcc.cbio.oncokb.service.impl;
 
+import java.time.Instant;
 import java.time.LocalDate;
 import java.time.ZoneOffset;
 import java.util.LinkedList;
@@ -44,6 +45,7 @@ public class UserBannerMessageServiceImpl implements UserBannerMessageService {
     UserBannerMessage userBannerMessage = userBannerMessageMapper.toEntity(
       userBannerMessageDTO
     );
+    userBannerMessage.setLastUpdated(Instant.now());
     userBannerMessage = userBannerMessageRepository.save(userBannerMessage);
     return userBannerMessageMapper.toDto(userBannerMessage);
   }

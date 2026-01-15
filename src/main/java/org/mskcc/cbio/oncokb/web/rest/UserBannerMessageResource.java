@@ -3,6 +3,7 @@ package org.mskcc.cbio.oncokb.web.rest;
 import io.github.jhipster.web.util.ResponseUtil;
 import java.net.URI;
 import java.net.URISyntaxException;
+import java.time.Instant;
 import java.util.List;
 import java.util.Optional;
 import javax.validation.Valid;
@@ -56,6 +57,7 @@ public class UserBannerMessageResource {
                     ENTITY_NAME,
                     "idexists");
         }
+        userBannerMessageDTO.setLastUpdated(Instant.now());
         UserBannerMessageDTO result = userBannerMessageService.save(
                 userBannerMessageDTO);
         return ResponseEntity
@@ -85,6 +87,7 @@ public class UserBannerMessageResource {
         if (userBannerMessageDTO.getId() == null) {
             throw new BadRequestAlertException("Invalid id", ENTITY_NAME, "idnull");
         }
+        userBannerMessageDTO.setLastUpdated(Instant.now());
         UserBannerMessageDTO result = userBannerMessageService.save(
                 userBannerMessageDTO);
         return ResponseEntity.ok().body(result);
