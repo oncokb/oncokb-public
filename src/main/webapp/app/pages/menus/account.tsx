@@ -4,6 +4,7 @@ import { observer } from 'mobx-react';
 import { Dropdown, NavItem } from 'react-bootstrap';
 import NavLink from 'react-bootstrap/NavLink';
 import { PAGE_ROUTE, PAGE_TITLE } from 'app/config/constants';
+import { UserDTO } from 'app/shared/api/generated/API';
 
 const AccountMenuItemsAuthenticated: React.FunctionComponent<{
   isAdmin: boolean;
@@ -56,15 +57,47 @@ export default class AccountMenu extends React.Component<{
   isAuthenticated: boolean;
   isAdmin: boolean;
   showAccountText?: boolean;
+  account?: UserDTO;
 }> {
   render() {
+    const {
+      activated = false,
+      activationGracePeriodDaysRemaining: graceDaysRemaining = 0,
+    } = this.props.account ?? {};
+    const showGraceIndicator =
+      this.props.isAuthenticated && !activated && graceDaysRemaining > 0;
+    const dayLabel = graceDaysRemaining === 1 ? 'day' : 'days';
+    const reviewLicenseText = `We are reviewing your license application. Meanwhile, you can view limited content for ${graceDaysRemaining} ${dayLabel}.`;
     return (
       <Dropdown as={NavItem}>
         <Dropdown.Toggle id={'account-menu'} as={NavLink}>
           <i className={'fa fa-user-o mr-1'} />
           {this.props.showAccountText ? PAGE_TITLE.ACCOUNT : undefined}
+          {showGraceIndicator && (
+            <i
+              className="fa fa-exclamation-circle text-warning ml-1"
+              title={reviewLicenseText}
+            />
+          )}
         </Dropdown.Toggle>
         <Dropdown.Menu alignRight={true}>
+          {!this.props.isAuthenticated ||
+            (showGraceIndicator && (
+              <>
+                <Dropdown.ItemText
+                  className="small text-dark px-3 py-2"
+                  style={{
+                    borderLeft: '4px solid #f0ad4e',
+                    backgroundColor: '#fff8e5',
+                  }}
+                >
+                  <p style={{ lineHeight: '1.5rem', marginBottom: '0rem' }}>
+                    {reviewLicenseText}
+                  </p>
+                </Dropdown.ItemText>
+                <Dropdown.Divider />
+              </>
+            ))}
           {this.props.isAuthenticated ? (
             <AccountMenuItemsAuthenticated isAdmin={this.props.isAdmin} />
           ) : (

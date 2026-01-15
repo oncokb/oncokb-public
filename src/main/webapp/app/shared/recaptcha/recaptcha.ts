@@ -29,7 +29,11 @@ export default class ReCAPTCHA {
 
   async getToken(): Promise<string> {
     let token = '';
-    if (this.siteKey !== '' && this.siteKey !== null) {
+    if (
+      this.siteKey !== '' &&
+      this.siteKey !== undefined &&
+      this.siteKey !== null
+    ) {
       await window.grecaptcha.enterprise
         .execute(this.siteKey)
         .then((res: string) => {

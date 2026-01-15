@@ -1,9 +1,11 @@
 package org.mskcc.cbio.oncokb.security;
 
+import java.util.*;
+import java.util.stream.Collectors;
 import org.apache.commons.lang3.StringUtils;
+import org.hibernate.validator.internal.constraintvalidators.hv.EmailValidator;
 import org.mskcc.cbio.oncokb.domain.User;
 import org.mskcc.cbio.oncokb.repository.UserRepository;
-import org.hibernate.validator.internal.constraintvalidators.hv.EmailValidator;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.security.core.GrantedAuthority;
@@ -13,9 +15,6 @@ import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Component;
 import org.springframework.transaction.annotation.Transactional;
-
-import java.util.*;
-import java.util.stream.Collectors;
 
 /**
  * Authenticate a user from the database.
@@ -50,7 +49,7 @@ public class DomainUserDetailsService implements UserDetailsService {
     }
 
     private org.springframework.security.core.userdetails.User createSpringSecurityUser(String lowercaseLogin, User user) {
-        if (!user.getActivated()) {
+        if (!user.getActivated() && !SecurityUtils.isWithinActivationGracePeriod(user)) {
             if (StringUtils.isNotEmpty(user.getActivationKey())) {
                 throw new UserNotActivatedException(lowercaseLogin);
             } else {
@@ -64,4 +63,5 @@ public class DomainUserDetailsService implements UserDetailsService {
             user.getPassword(),
             grantedAuthorities);
     }
+
 }

@@ -273,15 +273,6 @@
         "produces": [
           "*/*"
         ],
-        "parameters": [
-          {
-            "name": "Authorization",
-            "in": "header",
-            "description": "Authorization",
-            "required": true,
-            "type": "string"
-          }
-        ],
         "responses": {
           "200": {
             "description": "OK"
@@ -3721,6 +3712,10 @@
         "activated": {
           "type": "boolean"
         },
+        "activationGracePeriodDaysRemaining": {
+          "type": "integer",
+          "format": "int64"
+        },
         "activationKey": {
           "type": "string"
         },
@@ -4054,6 +4049,10 @@
       "properties": {
         "activated": {
           "type": "boolean"
+        },
+        "activationGracePeriodDaysRemaining": {
+          "type": "integer",
+          "format": "int64"
         },
         "activationKey": {
           "type": "string"

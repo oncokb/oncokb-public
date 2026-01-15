@@ -703,7 +703,7 @@ export default class AnnotationPage extends React.Component<
             appStore={this.props.appStore}
             isLargeScreen={this.props.windowStore.isLargeScreen}
             userAuthenticated={
-              this.props.authenticationStore.isUserAuthenticated
+              this.props.authenticationStore.isAuthenticatedAndApprovedUser
             }
             hugoSymbol={this.props.store.hugoSymbol}
             alteration={this.props.store.alterationName}
