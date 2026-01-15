@@ -3947,6 +3947,10 @@
         "activated": {
           "type": "boolean"
         },
+        "activationGracePeriodDaysRemaining": {
+          "type": "integer",
+          "format": "int64"
+        },
         "activationKey": {
           "type": "string"
         },
@@ -4327,6 +4331,10 @@
       "properties": {
         "activated": {
           "type": "boolean"
+        },
+        "activationGracePeriodDaysRemaining": {
+          "type": "integer",
+          "format": "int64"
         },
         "activationKey": {
           "type": "string"

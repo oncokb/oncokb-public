@@ -7,6 +7,7 @@ import org.mskcc.cbio.oncokb.domain.Authority;
 import org.mskcc.cbio.oncokb.domain.User;
 import org.mskcc.cbio.oncokb.domain.UserDetails;
 import org.mskcc.cbio.oncokb.domain.enumeration.LicenseType;
+import org.mskcc.cbio.oncokb.security.SecurityUtils;
 import org.mskcc.cbio.oncokb.service.dto.useradditionalinfo.AdditionalInfoDTO;
 
 import javax.validation.constraints.*;
@@ -63,6 +64,8 @@ public class UserDTO implements Serializable {
 
     private boolean activated = false;
 
+    private long activationGracePeriodDaysRemaining;
+
     @Size(min = 2, max = 10)
     private String langKey;
 
@@ -103,6 +106,7 @@ public class UserDTO implements Serializable {
         this.createdDate = user.getCreatedDate();
         this.lastModifiedBy = user.getLastModifiedBy();
         this.lastModifiedDate = user.getLastModifiedDate();
+        this.activationGracePeriodDaysRemaining = SecurityUtils.getActivationGracePeriodDaysRemaining(user);
         this.authorities = user.getAuthorities().stream()
             .map(Authority::getName)
             .collect(Collectors.toSet());
@@ -236,6 +240,14 @@ public class UserDTO implements Serializable {
         this.activated = activated;
     }
 
+    public long getActivationGracePeriodDaysRemaining() {
+        return activationGracePeriodDaysRemaining;
+    }
+
+    public void setActivationGracePeriodDaysRemaining(long activationGracePeriodDaysRemaining) {
+        this.activationGracePeriodDaysRemaining = activationGracePeriodDaysRemaining;
+    }
+
     public String getActivationKey() {
         return activationKey;
     }
@@ -311,6 +323,7 @@ public class UserDTO implements Serializable {
             ", country=" + country +
             ", imageUrl='" + imageUrl + '\'' +
             ", activated=" + activated +
+            ", activationGracePeriodDaysRemaining=" + activationGracePeriodDaysRemaining +
             ", activationKey=" + activationKey +
             ", resetKey=" + resetKey +
             ", resetDate=" + resetDate +

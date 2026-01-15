@@ -13,8 +13,11 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
+import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.time.Duration;
+import java.time.Instant;
 import java.util.Locale;
 
 import static org.assertj.core.api.Assertions.assertThat;
@@ -33,6 +36,10 @@ public class DomainUserDetailsServiceIT {
     private static final String USER_TWO_EMAIL = "test-user-two@localhost";
     private static final String USER_THREE_LOGIN = "test-user-three";
     private static final String USER_THREE_EMAIL = "test-user-three@localhost";
+    private static final String USER_FOUR_LOGIN = "test-user-four";
+    private static final String USER_FOUR_EMAIL = "test-user-four@localhost";
+    private static final String USER_FIVE_LOGIN = "test-user-five";
+    private static final String USER_FIVE_EMAIL = "test-user-five@localhost";
 
     @Autowired
     private UserRepository userRepository;
@@ -71,6 +78,39 @@ public class DomainUserDetailsServiceIT {
         userThree.setLastName("doe");
         userThree.setLangKey("en");
         userRepository.save(userThree);
+
+        // The save method sets the created date on the first creation of the user.
+        // In order to get around this we do an update to the same user to force
+        // an older creation date.
+        userThree.setCreatedDate(Instant.now().minus(Duration.ofDays(15)));
+        userRepository.save(userThree);
+
+        User userFour = new User();
+        userFour.setLogin(USER_FOUR_LOGIN);
+        userFour.setPassword(RandomStringUtils.random(60));
+        userFour.setActivated(false);
+        userFour.setEmail(USER_FOUR_EMAIL);
+        userFour.setFirstName("userFour");
+        userFour.setLastName("doe");
+        userFour.setLangKey("en");
+        userRepository.save(userFour);
+
+        userFour.setCreatedDate(Instant.now().minus(Duration.ofDays(5)));
+        userRepository.save(userFour);
+
+        User userFive = new User();
+        userFive.setLogin(USER_FIVE_LOGIN);
+        userFive.setPassword(RandomStringUtils.random(60));
+        userFive.setActivated(false);
+        userFive.setEmail(USER_FIVE_EMAIL);
+        userFive.setFirstName("userFive");
+        userFive.setLastName("doe");
+        userFive.setLangKey("en");
+        userFive.setActivationKey(RandomStringUtils.random(20));
+        userRepository.save(userFive);
+
+        userFive.setCreatedDate(Instant.now().minus(Duration.ofDays(7)));
+        userRepository.save(userFive);
     }
 
     @Test
@@ -109,9 +149,33 @@ public class DomainUserDetailsServiceIT {
     }
 
     @Test
-    public void assertThatUserNotActivatedExceptionIsThrownForNotActivatedUsers() {
+    public void assertThatUserNotActivatedExceptionIsThrownForPostGracePeriodUsers() {
         assertThatExceptionOfType(UserNotApprovedException.class).isThrownBy(
             () -> domainUserDetailsService.loadUserByUsername(USER_THREE_LOGIN));
     }
 
+    @Test
+    public void assertThatGracePeriodUserCanLogin() {
+        UserDetails userDetails = domainUserDetailsService.loadUserByUsername(USER_FOUR_EMAIL);
+        assertThat(userDetails).isNotNull();
+        assertThat(userDetails.getUsername()).isEqualTo(USER_FOUR_LOGIN);
+    }
+
+    @Test
+    public void assertThatUserWithActivationKeyPastGracePeriodThrowsUserNotActivated() {
+        assertThatExceptionOfType(UserNotActivatedException.class)
+            .isThrownBy(() -> domainUserDetailsService.loadUserByUsername(USER_FIVE_LOGIN));
+    }
+
+    @Test
+    public void assertThatUnknownEmailThrowsUsernameNotFound() {
+        assertThatExceptionOfType(UsernameNotFoundException.class)
+            .isThrownBy(() -> domainUserDetailsService.loadUserByUsername("missing@oncokb.org"));
+    }
+
+    @Test
+    public void assertThatUnknownLoginThrowsUsernameNotFound() {
+        assertThatExceptionOfType(UsernameNotFoundException.class)
+            .isThrownBy(() -> domainUserDetailsService.loadUserByUsername("unknown-login"));
+    }
 }
