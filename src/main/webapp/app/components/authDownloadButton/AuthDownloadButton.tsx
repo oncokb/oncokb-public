@@ -22,7 +22,7 @@ export class AuthDownloadButton extends React.Component<IAuthDownloadButton> {
 
   @action
   onClick = () => {
-    if (this.props.authenticationStore!.isUserAuthenticated) {
+    if (this.props.authenticationStore!.isAuthenticatedAndApprovedUser) {
       this.downloading = true;
       this.props
         .getDownloadData()

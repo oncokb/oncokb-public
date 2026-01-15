@@ -235,6 +235,7 @@ class Header extends React.Component<IHeaderProps> {
                       isAuthenticated={this.props.isUserAuthenticated}
                       isAdmin={this.props.isAdmin}
                       showAccountText={this.props.windowStore.isXLscreen}
+                      account={this.props.authStore.account}
                     />
                   )}
                   <Nav.Item style={{ paddingRight: 0 }}>

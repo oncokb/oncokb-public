@@ -190,6 +190,11 @@ class AuthenticationStore {
   }
 
   @computed
+  get isAuthenticatedAndApprovedUser() {
+    return this.isUserAuthenticated && (this.account?.activated ?? false);
+  }
+
+  @computed
   get accountStatus() {
     const tokenValid = this.tokens.filter(
       token => new Date(token.expiration).getDate() <= Date.now()

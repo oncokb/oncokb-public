@@ -5,7 +5,10 @@ import org.mskcc.cbio.oncokb.config.cache.CacheNameResolver;
 import org.mskcc.cbio.oncokb.config.cache.UserCacheResolver;
 import org.mskcc.cbio.oncokb.domain.Authority;
 import org.mskcc.cbio.oncokb.domain.User;
+import org.mskcc.cbio.oncokb.domain.UserDetails;
 import org.mskcc.cbio.oncokb.domain.enumeration.LicenseType;
+import org.mskcc.cbio.oncokb.domain.enumeration.AccountRequestStatus;
+import org.mskcc.cbio.oncokb.repository.UserDetailsRepository;
 import org.mskcc.cbio.oncokb.repository.UserRepository;
 import org.mskcc.cbio.oncokb.security.AuthoritiesConstants;
 import org.mskcc.cbio.oncokb.service.dto.UserDTO;
@@ -68,6 +71,9 @@ public class UserResourceIT {
 
     @Autowired
     private UserRepository userRepository;
+
+    @Autowired
+    private UserDetailsRepository userDetailsRepository;
 
     @Autowired
     private UserMapper userMapper;
@@ -151,6 +157,12 @@ public class UserResourceIT {
             assertThat(testUser.getImageUrl()).isEqualTo(DEFAULT_IMAGEURL);
             assertThat(testUser.getLangKey()).isEqualTo(DEFAULT_LANGKEY);
         });
+
+        Optional<User> userOptional = userRepository.findOneWithAuthoritiesByLogin(DEFAULT_LOGIN);
+        assertThat(userOptional).isPresent();
+        Optional<UserDetails> userDetailsOptional = userDetailsRepository.findOneByUser(userOptional.get());
+        assertThat(userDetailsOptional).isPresent();
+        assertThat(userDetailsOptional.get().getAccountRequestStatus()).isEqualTo(AccountRequestStatus.APPROVED);
     }
 
     @Test
@@ -336,6 +348,47 @@ public class UserResourceIT {
             assertThat(testUser.getImageUrl()).isEqualTo(UPDATED_IMAGEURL);
             assertThat(testUser.getLangKey()).isEqualTo(UPDATED_LANGKEY);
         });
+    }
+
+    @Test
+    @Transactional
+    public void updateUserActivatesAccountApprovesRequest() throws Exception {
+        // Initialize the database with an inactive user
+        user.setActivated(false);
+        userRepository.saveAndFlush(user);
+
+        UserDetails userDetails = new UserDetails();
+        userDetails.setUser(user);
+        userDetails.setAccountRequestStatus(AccountRequestStatus.PENDING);
+        userDetailsRepository.saveAndFlush(userDetails);
+
+        User updatedUser = userRepository.findById(user.getId()).get();
+
+        ManagedUserVM managedUserVM = new ManagedUserVM();
+        managedUserVM.setId(updatedUser.getId());
+        managedUserVM.setLogin(updatedUser.getLogin());
+        managedUserVM.setPassword(UPDATED_PASSWORD);
+        managedUserVM.setFirstName(UPDATED_FIRSTNAME);
+        managedUserVM.setLastName(UPDATED_LASTNAME);
+        managedUserVM.setEmail(UPDATED_EMAIL);
+        managedUserVM.setActivated(true);
+        managedUserVM.setImageUrl(UPDATED_IMAGEURL);
+        managedUserVM.setLangKey(UPDATED_LANGKEY);
+        managedUserVM.setAuthorities(Collections.singleton(AuthoritiesConstants.USER));
+
+        LinkedMultiValueMap<String, String> requestParams = new LinkedMultiValueMap<>();
+        requestParams.add("sendEmail", "false");
+        requestParams.add("unlinkUser", "false");
+
+        restUserMockMvc.perform(put("/api/users")
+            .contentType(MediaType.APPLICATION_JSON)
+            .content(TestUtil.convertObjectToJsonBytes(managedUserVM))
+            .params(requestParams))
+            .andExpect(status().isOk());
+
+        Optional<UserDetails> updatedUserDetails = userDetailsRepository.findOneByUser(updatedUser);
+        assertThat(updatedUserDetails).isPresent();
+        assertThat(updatedUserDetails.get().getAccountRequestStatus()).isEqualTo(AccountRequestStatus.APPROVED);
     }
 
     @Test

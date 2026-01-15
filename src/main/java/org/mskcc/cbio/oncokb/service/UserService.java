@@ -10,6 +10,7 @@ import org.mskcc.cbio.oncokb.domain.*;
 import org.mskcc.cbio.oncokb.domain.enumeration.LicenseModel;
 import org.mskcc.cbio.oncokb.domain.enumeration.LicenseStatus;
 import org.mskcc.cbio.oncokb.domain.enumeration.LicenseType;
+import org.mskcc.cbio.oncokb.domain.enumeration.AccountRequestStatus;
 import org.mskcc.cbio.oncokb.repository.AuthorityRepository;
 import org.mskcc.cbio.oncokb.repository.CompanyDomainRepository;
 import org.mskcc.cbio.oncokb.repository.CompanyRepository;
@@ -212,6 +213,7 @@ public class UserService {
                 additionalInfoDTO.setTrialAccount(initiateTrialAccountInfo());
             }
             ud.setAdditionalInfo(new Gson().toJson(additionalInfoDTO));
+            ud.setAccountRequestStatus(AccountRequestStatus.APPROVED);
 
             userDetailsRepository.save(ud);
             return userOptional;
@@ -298,6 +300,7 @@ public class UserService {
 
         UserDetails userDetails = new UserDetails();
         userDetails.setUser(newUser);
+        userDetails.setAccountRequestStatus(AccountRequestStatus.PENDING);
         userDetails.setLicenseType(userDTO.getLicenseType());
         userDetails.setJobTitle(userDTO.getJobTitle());
         userDetails.setCompanyName(userDTO.getCompanyName());
@@ -353,6 +356,7 @@ public class UserService {
             userDetails.setAdditionalInfo(new Gson().toJson(userDTO.getAdditionalInfo()));
         }
         userDetails.setCompany(companyMapper.toEntity(userDTO.getCompany()));
+        userDetails.setAccountRequestStatus(AccountRequestStatus.APPROVED);
         userDetailsRepository.save(userDetails);
 
         if (isServiceUser) {
@@ -382,6 +386,7 @@ public class UserService {
         .filter(Optional::isPresent)
         .map(Optional::get)
         .map(user -> {
+            boolean activatingAccount = userDTO.isActivated() && !user.getActivated();
             this.clearUserCaches(user);
             user.setLogin(userDTO.getLogin().toLowerCase());
             user.setFirstName(userDTO.getFirstName());
@@ -409,8 +414,13 @@ public class UserService {
                 .forEach(managedAuthorities::add);
             this.clearUserCaches(user);
             log.debug("Changed Information for User: {}", user);
-            UserDTO newUserDTO =  new UserDTO(user, getUpdatedUserDetails(
-                user, userDTO.getLicenseType(), userDTO.getJobTitle(), userDTO.getCompanyName(), userDTO.getCompany(), new Gson().toJson(userDTO.getAdditionalInfo()), userDTO.getCity(), userDTO.getCountry()));
+            UserDetails updatedUserDetails = getUpdatedUserDetails(
+                user, userDTO.getLicenseType(), userDTO.getJobTitle(), userDTO.getCompanyName(), userDTO.getCompany(), new Gson().toJson(userDTO.getAdditionalInfo()), userDTO.getCity(), userDTO.getCountry());
+            if (activatingAccount) {
+                updatedUserDetails.setAccountRequestStatus(AccountRequestStatus.APPROVED);
+                userDetailsRepository.save(updatedUserDetails);
+            }
+            UserDTO newUserDTO =  new UserDTO(user, updatedUserDetails);
             newUserDTO.setCompany(userDTO.getCompany());
             return newUserDTO;
         });
@@ -462,6 +472,7 @@ public class UserService {
             userDetailsRepository.save(userDetails.get());
             return userDetails.get();
         } else {
+            log.warn("UserDetails missing for user {}. Creating new UserDetails record.", user.getLogin());
             UserDetails newUserDetails = new UserDetails();
             newUserDetails.setLicenseType(alignedLicenseType);
             newUserDetails.setJobTitle(jobTitle);
@@ -471,6 +482,7 @@ public class UserService {
             newUserDetails.setCity(city);
             newUserDetails.setCountry(country);
             newUserDetails.setUser(user);
+            newUserDetails.setAccountRequestStatus(AccountRequestStatus.UNKNOWN);
             userDetailsRepository.save(newUserDetails);
             return newUserDetails;
         }
@@ -579,6 +591,21 @@ public class UserService {
         if (!userDTO.isActivated()) {
             userDTO.setActivated(true);
         }
+
+        User user = userMapper.userDTOToUser(userDTO);
+        Optional<UserDetails> userDetailsOptional = userDetailsRepository.findOneByUser(user);
+        if (userDetailsOptional.isPresent()) {
+            UserDetails userDetails = userDetailsOptional.get();
+            userDetails.setAccountRequestStatus(AccountRequestStatus.APPROVED);
+            userDetailsRepository.save(userDetails);
+        } else {
+            log.warn("UserDetails missing for user {} during activation. Creating with APPROVED status.", user.getLogin());
+            UserDetails userDetails = new UserDetails();
+            userDetails.setUser(user);
+            userDetails.setAccountRequestStatus(AccountRequestStatus.APPROVED);
+            userDetailsRepository.save(userDetails);
+        }
+
         Optional<UserDTO> updatedUserDTO = updateUserAndTokens(userDTO);
         if (updatedUserDTO.isPresent()) {
             List<Token> tokens =
@@ -745,6 +772,7 @@ public class UserService {
                     Optional<User> updatedUser = initiateTrialAccountActivation(userDTO.getLogin());
                     if (updatedUser.isPresent()) {
                         updatedUser.get().setActivated(true);
+                        userRepository.saveAndFlush(updatedUser.get());
                         if (!isAccountCreation) {
                             mailService.sendActiveTrialMail(userMapper.userToUserDTO(updatedUser.get()), false);
                         }

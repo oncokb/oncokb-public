@@ -8,11 +8,18 @@ import javax.mail.MessagingException;
 
 import org.mskcc.cbio.oncokb.domain.enumeration.LicenseType;
 import org.mskcc.cbio.oncokb.domain.Company;
+import org.mskcc.cbio.oncokb.domain.User;
+import org.mskcc.cbio.oncokb.domain.UserDetails;
 import org.mskcc.cbio.oncokb.domain.UserMessagePair;
+import org.mskcc.cbio.oncokb.domain.enumeration.AccountRequestStatus;
 import org.mskcc.cbio.oncokb.domain.enumeration.MailType;
+import org.mskcc.cbio.oncokb.repository.UserDetailsRepository;
+import org.mskcc.cbio.oncokb.repository.UserRepository;
 import org.mskcc.cbio.oncokb.service.dto.TerminationEmailDTO;
 import org.mskcc.cbio.oncokb.service.dto.UserDTO;
 import org.mskcc.cbio.oncokb.service.dto.UserMailsDTO;
+import org.mskcc.cbio.oncokb.service.TokenService;
+import org.mskcc.cbio.oncokb.security.SecurityUtils;
 import org.mskcc.cbio.oncokb.web.rest.vm.ExposedToken;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -51,6 +58,7 @@ public class MailService {
     private static final String USER = "user";
 
     private static final String BASE_URL = "baseUrl";
+    private static final String ACTIVATION_GRACE_PERIOD_DAYS = "activationGracePeriodDays";
 
     private static final String EXPIRE_IN_DAYS = "expiresInDays";
     private static final String EMAIL_TITLE = "emailTitle";
@@ -66,10 +74,14 @@ public class MailService {
     private final SpringTemplateEngine templateEngine;
 
     private final UserMailsService userMailsService;
+    private final TokenService tokenService;
+    private final UserRepository userRepository;
+    private final UserDetailsRepository userDetailsRepository;
 
     public MailService(JHipsterProperties jHipsterProperties, JavaMailSender javaMailSender,
                        MessageSource messageSource, SpringTemplateEngine templateEngine,
-                       UserMailsService userMailsService, ApplicationProperties applicationProperties
+                       UserMailsService userMailsService, TokenService tokenService, UserRepository userRepository,
+                       UserDetailsRepository userDetailsRepository, ApplicationProperties applicationProperties
     ) {
 
         this.jHipsterProperties = jHipsterProperties;
@@ -77,6 +89,9 @@ public class MailService {
         this.messageSource = messageSource;
         this.templateEngine = templateEngine;
         this.userMailsService = userMailsService;
+        this.tokenService = tokenService;
+        this.userRepository = userRepository;
+        this.userDetailsRepository = userDetailsRepository;
         this.applicationProperties = applicationProperties;
     }
 
@@ -158,6 +173,47 @@ public class MailService {
         userMailsDTO.setSentBy(sentBy);
         userMailsDTO.setUserId(userDTO.getId());
         userMailsService.save(userMailsDTO);
+
+        if (isRejectionMailType(mailType)) {
+            updateUserDetailsStatusToRejected(userDTO);
+        }
+    }
+
+    private boolean isRejectionMailType(MailType mailType) {
+        return MailType.REJECTION.equals(mailType)
+            || MailType.REJECTION_US_SANCTION.equals(mailType)
+            || MailType.REJECT_ALUMNI_ADDRESS.equals(mailType);
+    }
+
+    private void updateUserDetailsStatusToRejected(UserDTO userDTO) {
+        if (userDTO == null || userDTO.getId() == null) {
+            throw new IllegalArgumentException("Cannot update user details status to REJECTED: UserDTO or UserDTO's ID is null.");
+        }
+
+        Optional<User> userOptional = userRepository.findOneById(userDTO.getId());
+        if (!userOptional.isPresent()) {
+            throw new IllegalStateException(String.format("Cannot update user details status to REJECTED: user %s not found.", userDTO.getId()));
+        }
+
+        User user = userOptional.get();
+        Optional<UserDetails> userDetailsOptional = userDetailsRepository.findOneByUser(user);
+        if (userDetailsOptional.isPresent()) {
+            UserDetails userDetails = userDetailsOptional.get();
+            userDetails.setAccountRequestStatus(AccountRequestStatus.REJECTED);
+            userDetailsRepository.save(userDetails);
+            user.setActivated(false);
+            userRepository.save(user);
+            tokenService.deleteAllByUser(user);
+        } else {
+            log.warn("UserDetails missing for user {} during rejection. Creating with REJECTED status.", user.getLogin());
+            UserDetails userDetails = new UserDetails();
+            userDetails.setUser(user);
+            userDetails.setAccountRequestStatus(AccountRequestStatus.REJECTED);
+            userDetailsRepository.save(userDetails);
+            user.setActivated(false);
+            userRepository.save(user);
+            tokenService.deleteAllByUser(user);
+        }
     }
 
     @Async
@@ -227,6 +283,7 @@ public class MailService {
         Context context = new Context(locale);
         context.setVariable(USER, user);
         context.setVariable(BASE_URL, jHipsterProperties.getMail().getBaseUrl());
+        context.setVariable(ACTIVATION_GRACE_PERIOD_DAYS, SecurityUtils.getActivationGracePeriodDays());
 
         // Merge the additional context
         if (additionalContext != null)

@@ -582,9 +582,7 @@ export class SomaticGermlineCancerTypePage extends React.Component<
                     }}
                     appStore={this.props.appStore}
                     alteration={this.store.alterationNameWithDiff}
-                    proteinAlteration={
-                      this.store.alteration?.proteinChange
-                    }
+                    proteinAlteration={this.store.alteration?.proteinChange}
                     isGermline={this.store.germline}
                     extra={
                       <SomaticGermlineCancerTypeSelect
@@ -728,7 +726,8 @@ export class SomaticGermlineCancerTypePage extends React.Component<
                     appStore={this.props.appStore}
                     isLargeScreen={this.props.windowStore.isLargeScreen}
                     userAuthenticated={
-                      this.props.authenticationStore.isUserAuthenticated
+                      this.props.authenticationStore
+                        .isAuthenticatedAndApprovedUser
                     }
                     hugoSymbol={this.store.hugoSymbol}
                     alteration={this.store.alterationName}

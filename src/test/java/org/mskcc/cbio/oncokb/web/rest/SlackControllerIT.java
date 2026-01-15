@@ -30,6 +30,7 @@ import org.mskcc.cbio.oncokb.config.application.SlackProperties;
 import org.mskcc.cbio.oncokb.domain.Token;
 import org.mskcc.cbio.oncokb.domain.User;
 import org.mskcc.cbio.oncokb.domain.UserDetails;
+import org.mskcc.cbio.oncokb.domain.enumeration.AccountRequestStatus;
 import org.mskcc.cbio.oncokb.domain.enumeration.LicenseType;
 import org.mskcc.cbio.oncokb.domain.enumeration.MailType;
 import org.mskcc.cbio.oncokb.repository.UserDetailsRepository;
@@ -183,7 +184,10 @@ public class SlackControllerIT {
         doNothing().when(javaMailSender).send(messageCaptor.capture());
 
         // Inject mock dependencies
-        mailService = new MailService(jHipsterProperties, javaMailSender, messageSource, templateEngine, userMailsService, applicationProperties);
+        mailService = new MailService(
+            jHipsterProperties, javaMailSender, messageSource, templateEngine,
+            userMailsService, tokenService, userRepository, userDetailsRepository, applicationProperties
+        );
         slackService = new SlackService(applicationProperties, mailService, userService, userMailsService, userMapper, slack, sentryService);
         slackController = new SlackController(userService, userRepository, mailService, slackService, userMapper);
 
@@ -206,6 +210,7 @@ public class SlackControllerIT {
         UserDetails mockUserDetails = new UserDetails().user(mockUser);
         mockUserDetails.setCompanyName(DEFAULT_COMPANY_NAME);
         mockUserDetails.setLicenseType(DEFAULT_LICENSE_TYPE);
+        mockUserDetails.setAccountRequestStatus(AccountRequestStatus.PENDING);
         userDetailsRepository.save(mockUserDetails);
     }
 
@@ -242,6 +247,9 @@ public class SlackControllerIT {
         User mockUser = userRepository.findOneWithAuthoritiesByLogin(DEFAULT_USER_EMAIL).orElse(null);
         assertThat(mockUser).isNotNull();
         assertThat(mockUser.getActivated()).isTrue();
+        UserDetails mockUserDetails = userDetailsRepository.findOneByUser(mockUser).orElse(null);
+        assertThat(mockUserDetails).isNotNull();
+        assertThat(mockUserDetails.getAccountRequestStatus()).isEqualTo(AccountRequestStatus.APPROVED);
 
         // Check user token
         List<Token> mockTokens = tokenService.findByUser(mockUser);
@@ -292,6 +300,9 @@ public class SlackControllerIT {
         User mockUser = userRepository.findOneWithAuthoritiesByLogin(DEFAULT_USER_EMAIL).orElse(null);
         assertThat(mockUser).isNotNull();
         assertThat(mockUser.getActivated()).isFalse();
+        UserDetails mockUserDetails = userDetailsRepository.findOneByUser(mockUser).orElse(null);
+        assertThat(mockUserDetails).isNotNull();
+        assertThat(mockUserDetails.getAccountRequestStatus()).isEqualTo(AccountRequestStatus.APPROVED);
 
         // Check trial account properties
         UserDTO mockUserDTO = userMapper.userToUserDTO(mockUser);
@@ -347,6 +358,9 @@ public class SlackControllerIT {
         User mockUser = userRepository.findOneWithAuthoritiesByLogin(DEFAULT_USER_EMAIL).orElse(null);
         assertThat(mockUser).isNotNull();
         assertThat(mockUser.getActivated()).isTrue();
+        UserDetails mockUserDetails = userDetailsRepository.findOneByUser(mockUser).orElse(null);
+        assertThat(mockUserDetails).isNotNull();
+        assertThat(mockUserDetails.getAccountRequestStatus()).isEqualTo(AccountRequestStatus.APPROVED);
 
         // Check user token
         List<Token> mockTokens = tokenService.findByUser(mockUser);
@@ -391,6 +405,9 @@ public class SlackControllerIT {
         assertThat(mockUser).isNotNull();
         assertThat(mockUser.getActivated()).isFalse();
         assertThat(userMapper.userToUserDTO(mockUser).getLicenseType()).isEqualTo(OTHER_LICENSE_TYPE);
+        UserDetails mockUserDetails = userDetailsRepository.findOneByUser(mockUser).orElse(null);
+        assertThat(mockUserDetails).isNotNull();
+        assertThat(mockUserDetails.getAccountRequestStatus()).isEqualTo(AccountRequestStatus.PENDING);
 
         /*******************************
          * Test collapsing block
