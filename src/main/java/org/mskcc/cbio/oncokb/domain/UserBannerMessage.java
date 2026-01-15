@@ -30,6 +30,10 @@ public class UserBannerMessage {
   @Column(name = "banner_type", nullable = false)
   private BannerType bannerType;
 
+  @NotNull
+  @Column(name = "last_updated", nullable = false)
+  private Instant lastUpdated = Instant.now();
+
   public Long getId() {
     return id;
   }
@@ -92,5 +96,23 @@ public class UserBannerMessage {
 
   public void setBannerType(BannerType bannerType) {
     this.bannerType = bannerType;
+  }
+
+  public Instant getLastUpdated() {
+    return lastUpdated;
+  }
+
+  public void setLastUpdated(Instant lastUpdated) {
+    this.lastUpdated = lastUpdated;
+  }
+
+  @PrePersist
+  public void onCreate() {
+    this.lastUpdated = Instant.now();
+  }
+
+  @PreUpdate
+  public void onUpdate() {
+    this.lastUpdated = Instant.now();
   }
 }

@@ -25,13 +25,14 @@ const MARKDOWN_LINK_OR_BOLD_REGEX = /\[([^\]]+)\]\(([^)]+)\)|\*\*([^*]+)\*\*/g;
 type IUserMessage = {
   startDate: number;
   endDate: number;
+  lastUpdated: string;
   content: string;
   id: string;
   bannerType: UserBannerMessageDTO['bannerType'];
 };
 
-function makeMessageKey(id: string) {
-  return `oncokbMessageKey-${id}`;
+function makeMessageKey({ id, lastUpdated }: IUserMessage) {
+  return `oncokbMessageKey-${id}-${lastUpdated}`;
 }
 
 function createTextNodes(text: string, keyPrefix: string) {
@@ -162,6 +163,7 @@ function transformBannerMessage(
     endDate,
     startDate,
     bannerType: bannerMessage.bannerType || 'INFO',
+    lastUpdated: bannerMessage.lastUpdated,
   };
 }
 
@@ -225,15 +227,15 @@ class UserMessage extends React.Component<UserMessageProps> {
     }
     return this.bannerMessages
       .filter(message => {
-        const notYetShown = !localStorage.getItem(makeMessageKey(message.id));
+        const notYetShown = !localStorage.getItem(makeMessageKey(message));
         return notYetShown;
       })
       .sort((a, b) => a.endDate - b.endDate);
   }
 
   @action
-  markMessageDismissed(messageId: string) {
-    localStorage.setItem(makeMessageKey(messageId), 'shown');
+  markMessageDismissed(message: IUserMessage) {
+    localStorage.setItem(makeMessageKey(message), 'shown');
     this.messages = this.getMessages();
   }
 
@@ -250,7 +252,7 @@ class UserMessage extends React.Component<UserMessageProps> {
           content={message.content}
           bannerType={message.bannerType}
           isXLscreen={this.props.windowStore.isXLscreen}
-          onDismiss={() => this.markMessageDismissed(message.id)}
+          onDismiss={() => this.markMessageDismissed(message)}
         />
       ));
     } else {
