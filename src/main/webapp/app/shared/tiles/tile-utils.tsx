@@ -3,7 +3,6 @@ import {
   VariantAnnotation,
   MutationEffectResp,
   GermlineVariant,
-  Query,
   GeneNumber,
 } from '../api/generated/OncoKbPrivateAPI';
 import React, { useEffect, useState } from 'react';
@@ -22,7 +21,6 @@ import {
   isPositionalAlteration,
   citationsHasInfo,
   OncoKBOncogenicityIcon,
-  shortenPathogenicity,
 } from '../utils/Utils';
 import { DefaultTooltip } from 'cbioportal-frontend-commons';
 import { CitationTooltip } from 'app/components/CitationTooltip';

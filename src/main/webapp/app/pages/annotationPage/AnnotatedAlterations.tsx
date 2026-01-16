@@ -2,7 +2,6 @@ import { BiologicalVariant } from 'app/shared/api/generated/OncoKbPrivateAPI';
 import {
   filterByKeyword,
   getDefaultColumnDefinition,
-  shortenPathogenicity,
 } from 'app/shared/utils/Utils';
 import {
   ONCOKB_TM,
