@@ -139,18 +139,20 @@ const AnnotatedAlterations: FunctionComponent<{
         zIndex: 1,
       }
     : undefined;
+
   const hasPathogenicity = props.germline
-    ? props.alterations.some(alteration =>
-        Boolean(shortenPathogenicity(alteration.pathogenic))
-      )
+    ? props.alterations.some(alteration => !!alteration.pathogenic)
     : false;
-  const useMutationEffectForGermline = props.germline && !hasPathogenicity;
+
+  const useMutationEffectForGermline = props.germline && !hasPathogenicity; // Pharmocogenic gene like DPYD don't have pathogenicity
+
   return (
     <>
       <div style={style}>
         <span>
           {props.germline ? (
-            <><b>All {ONCOKB_TM} curated</b> {props.hugoSymbol} alterations.
+            <>
+              <b>All {ONCOKB_TM} curated</b> {props.hugoSymbol} alterations.
             </>
           ) : (
             <>

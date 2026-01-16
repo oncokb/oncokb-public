@@ -182,9 +182,7 @@ function createMutationEffectTileProps(
       [
         {
           title: 'Oncogenicity',
-          show:
-            !isGermline &&
-            (!isUnknownOncogenicity || !isPositionalAlt),
+          show: !isGermline && (!isUnknownOncogenicity || !isPositionalAlt),
           value: (
             <OncogenicInfo
               oncogenicity={oncogenic}
@@ -276,13 +274,10 @@ export function SomaticGermlineAlterationTiles({
 }: SomaticGermlineAlterationTilesProps) {
   const tiles: AlterationTileProps[] = [];
   const isGermline = rest.isGermline;
-  const hasPathogenicity = Boolean(
-    shortenPathogenicity(rest.variantAnnotation.germline?.pathogenic || '')
-  );
-  const hasMutationEffect = Boolean(
-    rest.variantAnnotation.mutationEffect?.knownEffect
-  );
-  const hasPenetrance = Boolean(rest.variantAnnotation.germline?.penetrance);
+  const hasPathogenicity = !!rest.variantAnnotation.germline?.pathogenic;
+  const hasMutationEffect = !!rest.variantAnnotation.mutationEffect
+    ?.knownEffect;
+  const hasPenetrance = !!rest.variantAnnotation.germline?.penetrance;
 
   const [clinvar, setClinvar] = useState<ClinvarData | undefined | null>(
     undefined
@@ -340,7 +335,10 @@ export function SomaticGermlineAlterationTiles({
     }
     if (hasPenetrance) {
       tiles.push(
-        createGeneticRiskTileProps(rest.variantAnnotation.germline, includeTitle)
+        createGeneticRiskTileProps(
+          rest.variantAnnotation.germline,
+          includeTitle
+        )
       );
     }
   } else {
@@ -395,7 +393,7 @@ export function SomaticGermlineGeneInfoTiles({
   mutationEffects,
 }: SomaticGermlineGeneInfoTilesProps) {
   const tiles: AlterationTileProps[] = [];
-  const hasGeneticRiskInfo = Boolean(geneNumber.penetrance);
+  const hasGeneticRiskInfo = !!geneNumber.penetrance;
 
   if (hasGeneticRiskInfo) {
     tiles.push({
