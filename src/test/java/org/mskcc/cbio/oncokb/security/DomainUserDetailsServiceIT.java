@@ -15,6 +15,8 @@ import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.time.Duration;
+import java.time.Instant;
 import java.util.Locale;
 
 import static org.assertj.core.api.Assertions.assertThat;
@@ -33,6 +35,8 @@ public class DomainUserDetailsServiceIT {
     private static final String USER_TWO_EMAIL = "test-user-two@localhost";
     private static final String USER_THREE_LOGIN = "test-user-three";
     private static final String USER_THREE_EMAIL = "test-user-three@localhost";
+    private static final String USER_FOUR_LOGIN = "test-user-four";
+    private static final String USER_FOUR_EMAIL = "test-user-four@localhost";
 
     @Autowired
     private UserRepository userRepository;
@@ -71,6 +75,22 @@ public class DomainUserDetailsServiceIT {
         userThree.setLastName("doe");
         userThree.setLangKey("en");
         userRepository.save(userThree);
+
+        // The save method sets the created date on the first creation of the user.
+        // In order to get around this we do an update to the same user to force
+        // an older creation date.
+        userThree.setCreatedDate(Instant.now().minus(Duration.ofDays(8)));
+        userRepository.save(userThree);
+
+        User userFour = new User();
+        userFour.setLogin(USER_FOUR_LOGIN);
+        userFour.setPassword(RandomStringUtils.random(60));
+        userFour.setActivated(false);
+        userFour.setEmail(USER_FOUR_EMAIL);
+        userFour.setFirstName("userFour");
+        userFour.setLastName("doe");
+        userFour.setLangKey("en");
+        userRepository.save(userFour);
     }
 
     @Test
@@ -109,9 +129,15 @@ public class DomainUserDetailsServiceIT {
     }
 
     @Test
-    public void assertThatUserNotActivatedExceptionIsThrownForNotActivatedUsers() {
+    public void assertThatUserNotActivatedExceptionIsThrownForPostGracePeriodUsers() {
         assertThatExceptionOfType(UserNotApprovedException.class).isThrownBy(
             () -> domainUserDetailsService.loadUserByUsername(USER_THREE_LOGIN));
     }
 
+    @Test
+    public void assertThatGracePeriodUserCanLogin() {
+        UserDetails userDetails = domainUserDetailsService.loadUserByUsername(USER_FOUR_EMAIL);
+        assertThat(userDetails).isNotNull();
+        assertThat(userDetails.getUsername()).isEqualTo(USER_FOUR_LOGIN);
+    }
 }
