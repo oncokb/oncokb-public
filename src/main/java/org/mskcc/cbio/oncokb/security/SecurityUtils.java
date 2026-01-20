@@ -18,7 +18,7 @@ import org.springframework.security.core.userdetails.UserDetails;
  */
 public final class SecurityUtils {
 
-    private static final Duration ACTIVATION_GRACE_PERIOD = Duration.ofDays(7);
+    private static final Duration ACTIVATION_GRACE_PERIOD = Duration.ofDays(14);
 
     private SecurityUtils() {
     }

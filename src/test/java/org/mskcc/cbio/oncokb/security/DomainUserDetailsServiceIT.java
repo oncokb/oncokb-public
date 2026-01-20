@@ -79,7 +79,7 @@ public class DomainUserDetailsServiceIT {
         // The save method sets the created date on the first creation of the user.
         // In order to get around this we do an update to the same user to force
         // an older creation date.
-        userThree.setCreatedDate(Instant.now().minus(Duration.ofDays(8)));
+        userThree.setCreatedDate(Instant.now().minus(Duration.ofDays(15)));
         userRepository.save(userThree);
 
         User userFour = new User();
