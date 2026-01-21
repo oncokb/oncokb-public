@@ -47,14 +47,14 @@ const getColumns = (
     ...getDefaultColumnDefinition(TABLE_COLUMN_KEY.DESCRIPTION),
     accessor(d: BiologicalVariant) {
       return useMutationEffectForGermline
-        ? ({
+        ? {
             abstracts: d.mutationEffectAbstracts,
             pmids: d.mutationEffectPmids,
-          } as Citations)
-        : ({
+          }
+        : {
             abstracts: d.pathogenicAbstracts,
             pmids: d.pathogenicPmids,
-          } as Citations);
+          };
     },
     Cell(props: { original: BiologicalVariant }) {
       return (
