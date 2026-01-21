@@ -25,6 +25,7 @@ import org.mskcc.cbio.oncokb.domain.User;
 import org.mskcc.cbio.oncokb.domain.UserDetails;
 import org.mskcc.cbio.oncokb.domain.enumeration.LicenseStatus;
 import org.mskcc.cbio.oncokb.domain.enumeration.LicenseType;
+import org.mskcc.cbio.oncokb.domain.enumeration.TokenType;
 import org.mskcc.cbio.oncokb.repository.CompanyRepository;
 import org.mskcc.cbio.oncokb.repository.UserDetailsRepository;
 import org.mskcc.cbio.oncokb.repository.UserRepository;
@@ -314,6 +315,7 @@ public class CompanyServiceImpl implements CompanyService {
 
         return Optional.of(tokenProvider.createToken(
             serviceUser,
+            TokenType.SERVICE,
             Optional.of(
                 LocalDateTime.of(9999, 1, 1, 0, 0).atZone(ZoneId.systemDefault()).toInstant()
             ),
