@@ -1,5 +1,3 @@
-import { computed } from 'mobx';
-import { SearchColumn } from 'app/components/oncokbTable/OncoKBTable';
 import { BiologicalVariant } from 'app/shared/api/generated/OncoKbPrivateAPI';
 import {
   filterByKeyword,
@@ -17,7 +15,11 @@ import SummaryWithRefs from 'app/oncokb-frontend-commons/src/components/SummaryW
 import React, { FunctionComponent } from 'react';
 import { GenePageTable } from 'app/pages/genePage/GenePageTable';
 
-const getColumns = (germline: boolean, hugoSymbol: string) => {
+const getColumns = (
+  germline: boolean,
+  hugoSymbol: string,
+  useMutationEffectForGermline: boolean
+) => {
   const altColumn = {
     ...getDefaultColumnDefinition(TABLE_COLUMN_KEY.ALTERATION),
     accessor: 'variant',
@@ -44,10 +46,15 @@ const getColumns = (germline: boolean, hugoSymbol: string) => {
   const descriptionColumn = {
     ...getDefaultColumnDefinition(TABLE_COLUMN_KEY.DESCRIPTION),
     accessor(d: BiologicalVariant) {
-      return {
-        abstracts: d.pathogenicAbstracts,
-        pmids: d.pathogenicPmids,
-      } as Citations;
+      return useMutationEffectForGermline
+        ? {
+            abstracts: d.mutationEffectAbstracts,
+            pmids: d.mutationEffectPmids,
+          }
+        : {
+            abstracts: d.pathogenicAbstracts,
+            pmids: d.pathogenicPmids,
+          };
     },
     Cell(props: { original: BiologicalVariant }) {
       return (
@@ -88,12 +95,18 @@ const getColumns = (germline: boolean, hugoSymbol: string) => {
       onFilter: (data: BiologicalVariant, keyword: string) =>
         filterByKeyword(data.variant.proteinChange, keyword),
     },
-    {
-      Header: <span>Pathogenicity</span>,
-      accessor: 'pathogenic',
-      onFilter: (data: BiologicalVariant, keyword: string) =>
-        filterByKeyword(data.pathogenic, keyword),
-    },
+    useMutationEffectForGermline
+      ? {
+          ...getDefaultColumnDefinition(TABLE_COLUMN_KEY.MUTATION_EFFECT),
+          onFilter: (data: BiologicalVariant, keyword: string) =>
+            filterByKeyword(data.mutationEffect, keyword),
+        }
+      : {
+          Header: <span>Pathogenicity</span>,
+          accessor: 'pathogenic',
+          onFilter: (data: BiologicalVariant, keyword: string) =>
+            filterByKeyword(data.pathogenic, keyword),
+        },
     {
       Header: <span>Penetrance</span>,
       accessor: 'penetrance',
@@ -125,14 +138,20 @@ const AnnotatedAlterations: FunctionComponent<{
         zIndex: 1,
       }
     : undefined;
+
+  const hasPathogenicity = props.germline
+    ? props.alterations.some(alteration => !!alteration.pathogenic)
+    : false;
+
+  const useMutationEffectForGermline = props.germline && !hasPathogenicity; // Pharmocogenic gene like DPYD don't have pathogenicity
+
   return (
     <>
       <div style={style}>
         <span>
           {props.germline ? (
             <>
-              Pathogenocity and penetrance of <b>all {ONCOKB_TM} curated</b>{' '}
-              {props.hugoSymbol} alterations.
+              <b>All {ONCOKB_TM} curated</b> {props.hugoSymbol} alterations.
             </>
           ) : (
             <>
@@ -144,7 +163,11 @@ const AnnotatedAlterations: FunctionComponent<{
       </div>
       <GenePageTable
         data={props.alterations}
-        columns={getColumns(props.germline, props.hugoSymbol)}
+        columns={getColumns(
+          props.germline,
+          props.hugoSymbol,
+          useMutationEffectForGermline
+        )}
         isPending={false}
       />
     </>
