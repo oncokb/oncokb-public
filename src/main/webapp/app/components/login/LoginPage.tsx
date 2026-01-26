@@ -122,6 +122,9 @@ export default class LoginPage extends React.Component<ILoginProps> {
     ) {
       return <Redirect to={from} />;
     }
+    const errorMessage = getErrorMessage(
+      this.props.authenticationStore.loginError ?? new Error()
+    );
     return (
       <SmallPageContainer>
         <AvForm onSubmit={this.handleLogin}>
@@ -131,8 +134,28 @@ export default class LoginPage extends React.Component<ILoginProps> {
                 <>
                   <Alert variant={'danger'}>
                     <div>
-                      {getErrorMessage(
-                        this.props.authenticationStore.loginError
+                      {errorMessage === UNAUTHORIZED_EXPIRED ? (
+                        <div>
+                          <p>
+                            <b>Your account is temporarily locked</b>
+                          </p>
+                          <p>
+                            For your security, your account has been locked due
+                            to inactivity.
+                          </p>
+
+                          <p>
+                            We’ve sent an activation email from{' '}
+                            <a href="mailto:registration@oncokb.org">
+                              registration@oncokb.org
+                            </a>{' '}
+                            to your inbox with a link to unlock your account.
+                            Please check your email and follow the instructions
+                            to regain access.
+                          </p>
+                        </div>
+                      ) : (
+                        errorMessage
                       )}
                       <div>{this.trialActivationLink}</div>
                     </div>
@@ -140,8 +163,7 @@ export default class LoginPage extends React.Component<ILoginProps> {
                   {this.showResendInfo && (
                     <>
                       <Alert variant={'info'}>
-                        We have emailed you a verification link. Did not receive
-                        the verification email?{' '}
+                        Did not receive the verification email?{' '}
                         <LoadingButton
                           variant="primary"
                           size={'sm'}
