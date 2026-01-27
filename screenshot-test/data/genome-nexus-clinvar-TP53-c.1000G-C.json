@@ -1,0 +1,279 @@
+{
+  "variant": "ENST00000269305:c.1000G>C",
+  "colocatedVariants": [
+    {
+      "dbSnpId": "CM134054"
+    },
+    {
+      "dbSnpId": "COSV52820679"
+    },
+    {
+      "dbSnpId": "rs730882028"
+    }
+  ],
+  "originalVariantQuery": "ENST00000269305:c.1000G>C",
+  "id": "ENST00000269305:c.1000G>C",
+  "assembly_name": "GRCh37",
+  "seq_region_name": "17",
+  "start": 7574027,
+  "end": 7574027,
+  "allele_string": "C/G",
+  "strand": 1,
+  "most_severe_consequence": "missense_variant",
+  "transcript_consequences": [
+    {
+      "exon": "10/11",
+      "alphaMissense": {
+        "score": 0.9894,
+        "pathogenicity": "pathogenic"
+      },
+      "transcript_id": "ENST00000269305",
+      "hgvsp": "ENSP00000269305.4:p.Gly334Arg",
+      "hgvsc": "ENST00000269305.4:c.1000G>C",
+      "variant_allele": "C",
+      "codons": "Ggg/Cgg",
+      "protein_id": "ENSP00000269305",
+      "protein_start": 334,
+      "protein_end": 334,
+      "gene_symbol": "TP53",
+      "gene_id": "ENSG00000141510",
+      "amino_acids": "G/R",
+      "hgnc_id": "11998",
+      "canonical": "1",
+      "polyphen_score": 0.997,
+      "polyphen_prediction": "probably_damaging",
+      "sift_score": 0.0,
+      "sift_prediction": "deleterious",
+      "refseq_transcript_ids": [
+        "NM_001126112.2",
+        "NM_001276761.1",
+        "NM_001276760.1",
+        "NM_000546.5",
+        "NM_001126118.1"
+      ],
+      "consequence_terms": [
+        "missense_variant"
+      ]
+    },
+    {
+      "transcript_id": "ENST00000359597",
+      "hgvsc": "ENST00000359597.4:c.993+2826G>C",
+      "variant_allele": "C",
+      "protein_id": "ENSP00000352610",
+      "gene_symbol": "TP53",
+      "gene_id": "ENSG00000141510",
+      "hgnc_id": "11998",
+      "consequence_terms": [
+        "intron_variant"
+      ]
+    },
+    {
+      "transcript_id": "ENST00000413465",
+      "hgvsc": "ENST00000413465.2:c.782+3472G>C",
+      "variant_allele": "C",
+      "protein_id": "ENSP00000410739",
+      "gene_symbol": "TP53",
+      "gene_id": "ENSG00000141510",
+      "hgnc_id": "11998",
+      "consequence_terms": [
+        "intron_variant"
+      ]
+    },
+    {
+      "exon": "11/12",
+      "transcript_id": "ENST00000420246",
+      "hgvsc": "ENST00000420246.2:c.*107G>C",
+      "variant_allele": "C",
+      "protein_id": "ENSP00000391127",
+      "gene_symbol": "TP53",
+      "gene_id": "ENSG00000141510",
+      "hgnc_id": "11998",
+      "refseq_transcript_ids": [
+        "NM_001126114.2",
+        "NM_001276696.1"
+      ],
+      "consequence_terms": [
+        "3_prime_UTR_variant"
+      ]
+    },
+    {
+      "exon": "10/11",
+      "alphaMissense": {
+        "score": 0.9894,
+        "pathogenicity": "pathogenic"
+      },
+      "transcript_id": "ENST00000445888",
+      "hgvsp": "ENSP00000391478.2:p.Gly334Arg",
+      "hgvsc": "ENST00000445888.2:c.1000G>C",
+      "variant_allele": "C",
+      "codons": "Ggg/Cgg",
+      "protein_id": "ENSP00000391478",
+      "protein_start": 334,
+      "protein_end": 334,
+      "gene_symbol": "TP53",
+      "gene_id": "ENSG00000141510",
+      "amino_acids": "G/R",
+      "hgnc_id": "11998",
+      "polyphen_score": 0.997,
+      "polyphen_prediction": "probably_damaging",
+      "sift_score": 0.0,
+      "sift_prediction": "deleterious",
+      "consequence_terms": [
+        "missense_variant"
+      ]
+    },
+    {
+      "exon": "11/12",
+      "transcript_id": "ENST00000455263",
+      "hgvsc": "ENST00000455263.2:c.*19G>C",
+      "variant_allele": "C",
+      "protein_id": "ENSP00000398846",
+      "gene_symbol": "TP53",
+      "gene_id": "ENSG00000141510",
+      "hgnc_id": "11998",
+      "refseq_transcript_ids": [
+        "NM_001276695.1",
+        "NM_001126113.2"
+      ],
+      "consequence_terms": [
+        "3_prime_UTR_variant"
+      ]
+    },
+    {
+      "transcript_id": "ENST00000503591",
+      "variant_allele": "C",
+      "protein_id": "ENSP00000426252",
+      "gene_symbol": "TP53",
+      "gene_id": "ENSG00000141510",
+      "hgnc_id": "11998",
+      "consequence_terms": [
+        "downstream_gene_variant"
+      ]
+    },
+    {
+      "exon": "7/8",
+      "transcript_id": "ENST00000504290",
+      "hgvsc": "ENST00000504290.1:n.942G>C",
+      "variant_allele": "C",
+      "gene_symbol": "TP53",
+      "gene_id": "ENSG00000141510",
+      "hgnc_id": "11998",
+      "consequence_terms": [
+        "non_coding_transcript_exon_variant"
+      ]
+    },
+    {
+      "exon": "6/7",
+      "transcript_id": "ENST00000504937",
+      "hgvsc": "ENST00000504937.1:n.882G>C",
+      "variant_allele": "C",
+      "gene_symbol": "TP53",
+      "gene_id": "ENSG00000141510",
+      "hgnc_id": "11998",
+      "consequence_terms": [
+        "non_coding_transcript_exon_variant"
+      ]
+    },
+    {
+      "transcript_id": "ENST00000505014",
+      "variant_allele": "C",
+      "gene_symbol": "TP53",
+      "gene_id": "ENSG00000141510",
+      "hgnc_id": "11998",
+      "consequence_terms": [
+        "downstream_gene_variant"
+      ]
+    },
+    {
+      "transcript_id": "ENST00000508793",
+      "variant_allele": "C",
+      "protein_id": "ENSP00000424104",
+      "gene_symbol": "TP53",
+      "gene_id": "ENSG00000141510",
+      "hgnc_id": "11998",
+      "consequence_terms": [
+        "downstream_gene_variant"
+      ]
+    },
+    {
+      "transcript_id": "ENST00000509690",
+      "variant_allele": "C",
+      "protein_id": "ENSP00000425104",
+      "gene_symbol": "TP53",
+      "gene_id": "ENSG00000141510",
+      "hgnc_id": "11998",
+      "consequence_terms": [
+        "downstream_gene_variant"
+      ]
+    },
+    {
+      "exon": "7/8",
+      "transcript_id": "ENST00000510385",
+      "hgvsc": "ENST00000510385.1:n.1015G>C",
+      "variant_allele": "C",
+      "gene_symbol": "TP53",
+      "gene_id": "ENSG00000141510",
+      "hgnc_id": "11998",
+      "consequence_terms": [
+        "non_coding_transcript_exon_variant"
+      ]
+    },
+    {
+      "transcript_id": "ENST00000514944",
+      "variant_allele": "C",
+      "protein_id": "ENSP00000423862",
+      "gene_symbol": "TP53",
+      "gene_id": "ENSG00000141510",
+      "hgnc_id": "11998",
+      "consequence_terms": [
+        "downstream_gene_variant"
+      ]
+    },
+    {
+      "transcript_id": "ENST00000574684",
+      "variant_allele": "C",
+      "gene_symbol": "TP53",
+      "gene_id": "ENSG00000141510",
+      "hgnc_id": "11998",
+      "consequence_terms": [
+        "downstream_gene_variant"
+      ]
+    },
+    {
+      "transcript_id": "ENST00000576024",
+      "hgvsc": "ENST00000576024.1:c.54-1019G>C",
+      "variant_allele": "C",
+      "protein_id": "ENSP00000458393",
+      "gene_symbol": "TP53",
+      "gene_id": "ENSG00000141510",
+      "hgnc_id": "11998",
+      "consequence_terms": [
+        "intron_variant"
+      ]
+    },
+    {
+      "transcript_id": "ENST00000604348",
+      "variant_allele": "C",
+      "protein_id": "ENSP00000473895",
+      "gene_symbol": "TP53",
+      "gene_id": "ENSG00000141510",
+      "hgnc_id": "11998",
+      "consequence_terms": [
+        "downstream_gene_variant"
+      ]
+    }
+  ],
+  "successfully_annotated": true,
+  "clinvar": {
+    "annotation": {
+      "chromosome": "17",
+      "startPosition": 7574027,
+      "endPosition": 7574027,
+      "referenceAllele": "C",
+      "alternateAllele": "G",
+      "clinvarId": 182969,
+      "clinicalSignificance": "Uncertain_significance",
+      "conflictingClinicalSignificance": ""
+    }
+  }
+}

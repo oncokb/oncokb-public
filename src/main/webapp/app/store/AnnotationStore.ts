@@ -18,6 +18,7 @@ import {
 } from 'app/shared/api/generated/OncoKbAPI';
 import {
   DEFAULT_ANNOTATION,
+  DEFAULT_GERMLINE_ANNOTATION,
   DEFAULT_GENE,
   DEFAULT_GENE_NUMBER,
   EVIDENCE_TYPES,
@@ -29,10 +30,11 @@ import {
   ClinicalVariant,
   EnsemblGene,
   GeneNumber,
+  GermlineVariantAnnotation,
   PortalAlteration,
   Tag,
+  SomaticVariantAnnotation,
   TumorType,
-  VariantAnnotation,
 } from 'app/shared/api/generated/OncoKbPrivateAPI';
 import { BarChartDatum } from 'app/components/barChart/BarChart';
 import {
@@ -80,6 +82,10 @@ export interface IAnnotationStore {
   genomicChangeQuery?: string;
   referenceGenomeQuery?: REFERENCE_GENOME;
 }
+
+export type VariantAnnotation =
+  | SomaticVariantAnnotation
+  | GermlineVariantAnnotation;
 
 export type TherapeuticImplication = {
   level: string;
@@ -169,20 +175,33 @@ export class AnnotationStore {
   readonly gene = remoteData<Gene>({
     await: () => {
       if (this.hgvsgQuery) {
-        return [this.annotationResultByHgvsg];
+        const annotationResult = this.germline
+          ? this.germlineAnnotationResultByHgvsg
+          : this.annotationResultByHgvsg;
+        return [annotationResult];
       }
       if (this.genomicChangeQuery) {
-        return [this.annotationResultByGenomicChange];
+        const annotationResult = this.germline
+          ? this.germlineAnnotationResultByGenomicChange
+          : this.annotationResultByGenomicChange;
+        return [annotationResult];
       }
       return [];
     },
     invoke: async () => {
       try {
-        const query = this.hgvsgQuery
-          ? this.annotationResultByHgvsg.result.query.hugoSymbol
-          : this.genomicChangeQuery
-          ? this.annotationResultByGenomicChange.result.query.hugoSymbol
-          : this.hugoSymbolQuery;
+        let query = this.hugoSymbolQuery;
+        if (this.hgvsgQuery) {
+          const annotationResult = this.germline
+            ? this.germlineAnnotationResultByHgvsg
+            : this.annotationResultByHgvsg;
+          query = annotationResult.result.query.hugoSymbol;
+        } else if (this.genomicChangeQuery) {
+          const annotationResult = this.germline
+            ? this.germlineAnnotationResultByGenomicChange
+            : this.annotationResultByGenomicChange;
+          query = annotationResult.result.query.hugoSymbol;
+        }
         if (!query) {
           return DEFAULT_GENE;
         }
@@ -221,7 +240,10 @@ export class AnnotationStore {
       if (matched.length > 0) {
         return matched[0].variant;
       }
-      return this.annotationResult.result.alteration;
+      if (!this.germline) {
+        return this.somaticAnnotationData.result.alteration;
+      }
+      return undefined;
     } catch (e) {
       notifyError(e, 'Error finding alteration');
       return undefined;
@@ -406,7 +428,11 @@ export class AnnotationStore {
   });
 
   readonly relevantAlterations = remoteData<Alteration[]>({
-    await: () => [this.gene, this.biologicalAlterations, this.annotationResult],
+    await: () => [
+      this.gene,
+      this.biologicalAlterations,
+      this.selectedAnnotationData,
+    ],
     invoke: async () => {
       if (!this.gene.result.entrezGeneId || !this.alteration) {
         return [];
@@ -445,14 +471,23 @@ export class AnnotationStore {
     default: [],
   });
 
-  readonly defaultAnnotationResult = remoteData<VariantAnnotation>({
+  readonly defaultAnnotationResult = remoteData<SomaticVariantAnnotation>({
     invoke() {
       return Promise.resolve(DEFAULT_ANNOTATION);
     },
     default: DEFAULT_ANNOTATION,
   });
 
-  readonly annotationResult = remoteData<VariantAnnotation>({
+  readonly defaultGermlineAnnotationResult = remoteData<
+    GermlineVariantAnnotation
+  >({
+    invoke() {
+      return Promise.resolve(DEFAULT_GERMLINE_ANNOTATION);
+    },
+    default: DEFAULT_GERMLINE_ANNOTATION,
+  });
+
+  readonly annotationResult = remoteData<SomaticVariantAnnotation>({
     await: () => [this.gene],
     invoke: () => {
       return privateClient.utilVariantAnnotationGetUsingGET({
@@ -460,13 +495,12 @@ export class AnnotationStore {
         alteration: this.alterationQuery,
         tumorType: this.tumorTypeQuery ? this.tumorTypeQuery : undefined,
         referenceGenome: this.referenceGenomeQuery,
-        germline: this.germline,
       });
     },
     default: DEFAULT_ANNOTATION,
   });
 
-  readonly annotationResultByHgvsg = remoteData<VariantAnnotation>({
+  readonly annotationResultByHgvsg = remoteData<SomaticVariantAnnotation>({
     await: () => [],
     invoke: () => {
       return privateClient.utilVariantAnnotationGetUsingGET({
@@ -478,7 +512,9 @@ export class AnnotationStore {
     default: DEFAULT_ANNOTATION,
   });
 
-  readonly annotationResultByGenomicChange = remoteData<VariantAnnotation>({
+  readonly annotationResultByGenomicChange = remoteData<
+    SomaticVariantAnnotation
+  >({
     await: () => [],
     invoke: () => {
       return privateClient.utilVariantAnnotationGetUsingGET({
@@ -488,6 +524,47 @@ export class AnnotationStore {
       });
     },
     default: DEFAULT_ANNOTATION,
+  });
+
+  readonly germlineAnnotationResult = remoteData<GermlineVariantAnnotation>({
+    await: () => [this.gene],
+    invoke: () => {
+      return privateClient.utilVariantAnnotationGermlineGetUsingGET({
+        hugoSymbol: this.gene.result.hugoSymbol,
+        alteration: this.alterationQuery,
+        tumorType: this.tumorTypeQuery,
+        referenceGenome: this.referenceGenomeQuery,
+      });
+    },
+    default: DEFAULT_GERMLINE_ANNOTATION,
+  });
+
+  readonly germlineAnnotationResultByHgvsg = remoteData<
+    GermlineVariantAnnotation
+  >({
+    await: () => [],
+    invoke: () => {
+      return privateClient.utilVariantAnnotationGermlineGetUsingGET({
+        hgvsg: this.hgvsgQuery,
+        tumorType: this.tumorTypeQuery,
+        referenceGenome: this.referenceGenomeQuery,
+      });
+    },
+    default: DEFAULT_GERMLINE_ANNOTATION,
+  });
+
+  readonly germlineAnnotationResultByGenomicChange = remoteData<
+    GermlineVariantAnnotation
+  >({
+    await: () => [],
+    invoke: () => {
+      return privateClient.utilVariantAnnotationGermlineGetUsingGET({
+        genomicChange: this.genomicChangeQuery,
+        tumorType: this.tumorTypeQuery,
+        referenceGenome: this.referenceGenomeQuery,
+      });
+    },
+    default: DEFAULT_GERMLINE_ANNOTATION,
   });
 
   readonly portalAlterationSampleCount = remoteData<CancerTypeCount[]>({
@@ -630,21 +707,46 @@ export class AnnotationStore {
   }
 
   @computed
-  get annotationData() {
+  get somaticAnnotationData() {
     switch (this.annotationType) {
       case AnnotationType.GENOMIC_CHANGE:
         return this.annotationResultByGenomicChange;
-        break;
       case AnnotationType.HGVSG:
         return this.annotationResultByHgvsg;
-        break;
       case AnnotationType.PROTEIN_CHANGE:
         return this.annotationResult;
-        break;
       default:
         return this.defaultAnnotationResult;
-        break;
     }
+  }
+
+  @computed
+  get germlineAnnotationData() {
+    switch (this.annotationType) {
+      case AnnotationType.GENOMIC_CHANGE:
+        return this.germlineAnnotationResultByGenomicChange;
+      case AnnotationType.HGVSG:
+        return this.germlineAnnotationResultByHgvsg;
+      case AnnotationType.PROTEIN_CHANGE:
+        return this.germlineAnnotationResult;
+      default:
+        return this.defaultGermlineAnnotationResult;
+    }
+  }
+
+  @computed
+  get selectedAnnotationData() {
+    return this.germline
+      ? this.germlineAnnotationData
+      : this.somaticAnnotationData;
+  }
+
+  @computed
+  get annotationOncogenicity() {
+    if (!this.germline) {
+      return this.somaticAnnotationData.result.oncogenic;
+    }
+    return undefined;
   }
 
   @computed get cancerTypeFilter() {
@@ -706,7 +808,7 @@ export class AnnotationStore {
     ) {
       return this.gene.result.hugoSymbol;
     } else {
-      return this.annotationData.result.query.hugoSymbol;
+      return this.selectedAnnotationData.result.query.hugoSymbol;
     }
   }
 
@@ -739,7 +841,7 @@ export class AnnotationStore {
       this.annotationType,
       this.alteration,
       this.alterationQuery,
-      this.annotationData,
+      this.selectedAnnotationData,
       false
     );
   }
@@ -750,7 +852,7 @@ export class AnnotationStore {
       this.annotationType,
       this.alteration,
       this.alterationQuery,
-      this.annotationData,
+      this.selectedAnnotationData,
       true
     );
   }
@@ -940,15 +1042,20 @@ export class AnnotationStore {
 
   @computed
   get genomicIndicatorsAssociatedWithVariant() {
-    if (this.annotationResult.isPending || this.genomicIndicators.isPending) {
+    if (
+      this.selectedAnnotationData.isPending ||
+      this.genomicIndicators.isPending
+    ) {
       return [];
     }
 
-    const variantGIStrings = this.annotationResult.result.germline
-      .genomicIndicators;
+    const annotation = this.selectedAnnotationData.result;
+    const variantGIs =
+      'genomicIndicators' in annotation ? annotation.genomicIndicators : [];
+    const variantGINames = new Set(variantGIs.map(gi => gi.name));
     const allGeneGIEvidences = this.genomicIndicators.result;
     return allGeneGIEvidences.filter(evidence => {
-      return variantGIStrings.includes(evidence.name);
+      return variantGINames.has(evidence.name);
     });
   }
 
