@@ -2,7 +2,7 @@
   "swagger": "2.0",
   "info": {
     "description": "These endpoints are for private use only.",
-    "version": "v1.4.0",
+    "version": "v1.5.0",
     "title": "OncoKB Private APIs",
     "contact": {
       "name": "OncoKB",
@@ -56,8 +56,8 @@
       "description": "The search endpoints"
     },
     {
-      "name": "Variants",
-      "description": "Endpoints related to OncoKB variants"
+      "name": "Germline Annotations",
+      "description": "Providing germline annotations"
     },
     {
       "name": "Evidences",
@@ -124,24 +124,9 @@
             "type": "string"
           },
           {
-            "name": "germline",
-            "in": "query",
-            "description": "Whether is germline variant",
-            "required": false,
-            "type": "boolean",
-            "default": false
-          },
-          {
-            "name": "alleleState",
-            "in": "query",
-            "description": "Germline variant allele state(monoallelic vs biallelic)",
-            "required": false,
-            "type": "string"
-          },
-          {
             "name": "evidenceType",
             "in": "query",
-            "description": "Evidence type to compute. This could help to improve the performance if you only look for sub-content. Example: ONCOGENIC. All available evidence type are GENE_SUMMARY, MUTATION_SUMMARY, TUMOR_TYPE_SUMMARY, PROGNOSTIC_SUMMARY, DIAGNOSTIC_SUMMARY, ONCOGENIC, MUTATION_EFFECT, PROGNOSTIC_IMPLICATION, DIAGNOSTIC_IMPLICATION, STANDARD_THERAPEUTIC_IMPLICATIONS_FOR_DRUG_SENSITIVITY, STANDARD_THERAPEUTIC_IMPLICATIONS_FOR_DRUG_RESISTANCE, INVESTIGATIONAL_THERAPEUTIC_IMPLICATIONS_DRUG_SENSITIVITY, INVESTIGATIONAL_THERAPEUTIC_IMPLICATIONS_DRUG_RESISTANCE. For multiple evidence types query, use ',' as separator.",
+            "description": "DEPRECATED. We do not recommend using this parameter and it will eventually be removed.",
             "required": false,
             "type": "string"
           }
@@ -150,13 +135,13 @@
           "200": {
             "description": "OK",
             "schema": {
-              "$ref": "#/definitions/IndicatorQueryResp"
+              "$ref": "#/definitions/SomaticIndicatorQueryResp"
             }
           },
           "400": {
             "description": "Error, error message will be given.",
             "schema": {
-              "type": "string"
+              "$ref": "#/definitions/ApiHttpError"
             }
           }
         }
@@ -194,14 +179,14 @@
             "schema": {
               "type": "array",
               "items": {
-                "$ref": "#/definitions/IndicatorQueryResp"
+                "$ref": "#/definitions/SomaticIndicatorQueryResp"
               }
             }
           },
           "400": {
             "description": "Error, error message will be given.",
             "schema": {
-              "type": "string"
+              "$ref": "#/definitions/ApiHttpError"
             }
           }
         }
@@ -225,7 +210,7 @@
           {
             "name": "genomicLocation",
             "in": "query",
-            "description": "Genomic location. Example: 7,140453136,140453136,A,T",
+            "description": "Genomic location following TCGA MAF format. Example: 7,140453136,140453136,A,T",
             "required": true,
             "type": "string"
           },
@@ -238,21 +223,6 @@
             "default": "GRCh37"
           },
           {
-            "name": "germline",
-            "in": "query",
-            "description": "Whether is germline variant",
-            "required": false,
-            "type": "boolean",
-            "default": false
-          },
-          {
-            "name": "alleleState",
-            "in": "query",
-            "description": "Germline variant allele state(monoallelic vs biallelic)",
-            "required": false,
-            "type": "string"
-          },
-          {
             "name": "tumorType",
             "in": "query",
             "description": "OncoTree(http://oncotree.info) tumor type name. The field supports OncoTree Code, OncoTree Name and OncoTree Main type. Example: Melanoma",
@@ -262,7 +232,7 @@
           {
             "name": "evidenceType",
             "in": "query",
-            "description": "Evidence type to compute. This could help to improve the performance if you only look for sub-content. Example: ONCOGENIC. All available evidence type are GENE_SUMMARY, MUTATION_SUMMARY, TUMOR_TYPE_SUMMARY, PROGNOSTIC_SUMMARY, DIAGNOSTIC_SUMMARY, ONCOGENIC, MUTATION_EFFECT, PROGNOSTIC_IMPLICATION, DIAGNOSTIC_IMPLICATION, STANDARD_THERAPEUTIC_IMPLICATIONS_FOR_DRUG_SENSITIVITY, STANDARD_THERAPEUTIC_IMPLICATIONS_FOR_DRUG_RESISTANCE, INVESTIGATIONAL_THERAPEUTIC_IMPLICATIONS_DRUG_SENSITIVITY, INVESTIGATIONAL_THERAPEUTIC_IMPLICATIONS_DRUG_RESISTANCE. For multiple evidence types query, use ',' as separator.",
+            "description": "DEPRECATED. We do not recommend using this parameter and it will eventually be removed.",
             "required": false,
             "type": "string"
           }
@@ -271,13 +241,13 @@
           "200": {
             "description": "OK",
             "schema": {
-              "$ref": "#/definitions/IndicatorQueryResp"
+              "$ref": "#/definitions/SomaticIndicatorQueryResp"
             }
           },
           "400": {
             "description": "Error, error message will be given.",
             "schema": {
-              "type": "string"
+              "$ref": "#/definitions/ApiHttpError"
             }
           }
         }
@@ -315,14 +285,14 @@
             "schema": {
               "type": "array",
               "items": {
-                "$ref": "#/definitions/IndicatorQueryResp"
+                "$ref": "#/definitions/SomaticIndicatorQueryResp"
               }
             }
           },
           "400": {
             "description": "Error, error message will be given.",
             "schema": {
-              "type": "string"
+              "$ref": "#/definitions/ApiHttpError"
             }
           }
         }
@@ -346,7 +316,7 @@
           {
             "name": "hgvsg",
             "in": "query",
-            "description": "HGVS genomic format. Example: 7:g.140453136A>T",
+            "description": "HGVS genomic format following HGVS nomenclature. Example: 7:g.140453136A>T",
             "required": true,
             "type": "string"
           },
@@ -366,24 +336,9 @@
             "type": "string"
           },
           {
-            "name": "germline",
-            "in": "query",
-            "description": "Whether is germline variant",
-            "required": false,
-            "type": "boolean",
-            "default": false
-          },
-          {
-            "name": "alleleState",
-            "in": "query",
-            "description": "Germline variant allele state(monoallelic vs biallelic)",
-            "required": false,
-            "type": "string"
-          },
-          {
             "name": "evidenceType",
             "in": "query",
-            "description": "Evidence type to compute. This could help to improve the performance if you only look for sub-content. Example: ONCOGENIC. All available evidence type are GENE_SUMMARY, MUTATION_SUMMARY, TUMOR_TYPE_SUMMARY, PROGNOSTIC_SUMMARY, DIAGNOSTIC_SUMMARY, ONCOGENIC, MUTATION_EFFECT, PROGNOSTIC_IMPLICATION, DIAGNOSTIC_IMPLICATION, STANDARD_THERAPEUTIC_IMPLICATIONS_FOR_DRUG_SENSITIVITY, STANDARD_THERAPEUTIC_IMPLICATIONS_FOR_DRUG_RESISTANCE, INVESTIGATIONAL_THERAPEUTIC_IMPLICATIONS_DRUG_SENSITIVITY, INVESTIGATIONAL_THERAPEUTIC_IMPLICATIONS_DRUG_RESISTANCE. For multiple evidence types query, use ',' as separator.",
+            "description": "DEPRECATED. We do not recommend using this parameter and it will eventually be removed.",
             "required": false,
             "type": "string"
           }
@@ -392,13 +347,13 @@
           "200": {
             "description": "OK",
             "schema": {
-              "$ref": "#/definitions/IndicatorQueryResp"
+              "$ref": "#/definitions/SomaticIndicatorQueryResp"
             }
           },
           "400": {
             "description": "Error, error message will be given.",
             "schema": {
-              "type": "string"
+              "$ref": "#/definitions/ApiHttpError"
             }
           }
         }
@@ -408,7 +363,7 @@
           "Annotations"
         ],
         "summary": "annotateMutationsByHGVSgPost",
-        "description": "Annotate mutations by genomic change.",
+        "description": "Annotate mutations by HGVSg.",
         "operationId": "annotateMutationsByHGVSgPostUsingPOST",
         "consumes": [
           "application/json"
@@ -436,14 +391,14 @@
             "schema": {
               "type": "array",
               "items": {
-                "$ref": "#/definitions/IndicatorQueryResp"
+                "$ref": "#/definitions/SomaticIndicatorQueryResp"
               }
             }
           },
           "400": {
             "description": "Error, error message will be given.",
             "schema": {
-              "type": "string"
+              "$ref": "#/definitions/ApiHttpError"
             }
           }
         }
@@ -497,7 +452,7 @@
           {
             "name": "consequence",
             "in": "query",
-            "description": "Consequence. Exacmple: missense_variant",
+            "description": "Consequence. Example: missense_variant",
             "required": false,
             "type": "string",
             "enum": [
@@ -530,21 +485,6 @@
             "format": "int32"
           },
           {
-            "name": "isGermline",
-            "in": "query",
-            "description": "Whether is germline variant",
-            "required": false,
-            "type": "boolean",
-            "default": false
-          },
-          {
-            "name": "alleleState",
-            "in": "query",
-            "description": "Germline variant allele state(monoallelic vs biallelic)",
-            "required": false,
-            "type": "string"
-          },
-          {
             "name": "tumorType",
             "in": "query",
             "description": "OncoTree(http://oncotree.info) tumor type name. The field supports OncoTree Code, OncoTree Name and OncoTree Main type. Example: Melanoma",
@@ -554,7 +494,7 @@
           {
             "name": "evidenceType",
             "in": "query",
-            "description": "Evidence type to compute. This could help to improve the performance if you only look for sub-content. Example: ONCOGENIC. All available evidence type are GENE_SUMMARY, MUTATION_SUMMARY, TUMOR_TYPE_SUMMARY, PROGNOSTIC_SUMMARY, DIAGNOSTIC_SUMMARY, ONCOGENIC, MUTATION_EFFECT, PROGNOSTIC_IMPLICATION, DIAGNOSTIC_IMPLICATION, STANDARD_THERAPEUTIC_IMPLICATIONS_FOR_DRUG_SENSITIVITY, STANDARD_THERAPEUTIC_IMPLICATIONS_FOR_DRUG_RESISTANCE, INVESTIGATIONAL_THERAPEUTIC_IMPLICATIONS_DRUG_SENSITIVITY, INVESTIGATIONAL_THERAPEUTIC_IMPLICATIONS_DRUG_RESISTANCE. For multiple evidence types query, use ',' as separator.",
+            "description": "DEPRECATED. We do not recommend using this parameter and it will eventually be removed.",
             "required": false,
             "type": "string"
           }
@@ -563,13 +503,13 @@
           "200": {
             "description": "OK",
             "schema": {
-              "$ref": "#/definitions/IndicatorQueryResp"
+              "$ref": "#/definitions/SomaticIndicatorQueryResp"
             }
           },
           "400": {
             "description": "Error, error message will be given.",
             "schema": {
-              "type": "string"
+              "$ref": "#/definitions/ApiHttpError"
             }
           }
         }
@@ -607,14 +547,61 @@
             "schema": {
               "type": "array",
               "items": {
-                "$ref": "#/definitions/IndicatorQueryResp"
+                "$ref": "#/definitions/SomaticIndicatorQueryResp"
               }
             }
           },
           "400": {
             "description": "Error, error message will be given.",
             "schema": {
-              "type": "string"
+              "$ref": "#/definitions/ApiHttpError"
+            }
+          }
+        }
+      }
+    },
+    "/annotate/sample": {
+      "post": {
+        "tags": [
+          "Annotations"
+        ],
+        "summary": "annotateSamplePost",
+        "description": "Annotate samples.",
+        "operationId": "annotateSamplePostUsingPOST",
+        "consumes": [
+          "application/json"
+        ],
+        "produces": [
+          "application/json"
+        ],
+        "parameters": [
+          {
+            "in": "body",
+            "name": "body",
+            "description": "Sample query. Please see swagger.json for request body format.",
+            "required": true,
+            "schema": {
+              "type": "array",
+              "items": {
+                "$ref": "#/definitions/AnnotateSampleQuery"
+              }
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "schema": {
+              "type": "array",
+              "items": {
+                "$ref": "#/definitions/SampleQueryResp"
+              }
+            }
+          },
+          "400": {
+            "description": "Error, error message will be given.",
+            "schema": {
+              "$ref": "#/definitions/ApiHttpError"
             }
           }
         }
@@ -690,21 +677,6 @@
             "default": false
           },
           {
-            "name": "germline",
-            "in": "query",
-            "description": "Whether is germline variant",
-            "required": false,
-            "type": "boolean",
-            "default": false
-          },
-          {
-            "name": "alleleState",
-            "in": "query",
-            "description": "Germline variant allele state(monoallelic vs biallelic)",
-            "required": false,
-            "type": "string"
-          },
-          {
             "name": "referenceGenome",
             "in": "query",
             "description": "Reference genome, either GRCh37 or GRCh38. The default is GRCh37",
@@ -722,7 +694,7 @@
           {
             "name": "evidenceType",
             "in": "query",
-            "description": "Evidence type to compute. This could help to improve the performance if you only look for sub-content. Example: ONCOGENIC. All available evidence type are GENE_SUMMARY, MUTATION_SUMMARY, TUMOR_TYPE_SUMMARY, PROGNOSTIC_SUMMARY, DIAGNOSTIC_SUMMARY, ONCOGENIC, MUTATION_EFFECT, PROGNOSTIC_IMPLICATION, DIAGNOSTIC_IMPLICATION, STANDARD_THERAPEUTIC_IMPLICATIONS_FOR_DRUG_SENSITIVITY, STANDARD_THERAPEUTIC_IMPLICATIONS_FOR_DRUG_RESISTANCE, INVESTIGATIONAL_THERAPEUTIC_IMPLICATIONS_DRUG_SENSITIVITY, INVESTIGATIONAL_THERAPEUTIC_IMPLICATIONS_DRUG_RESISTANCE. For multiple evidence types query, use ',' as separator.",
+            "description": "DEPRECATED. We do not recommend using this parameter and it will eventually be removed.",
             "required": false,
             "type": "string"
           }
@@ -731,13 +703,13 @@
           "200": {
             "description": "OK",
             "schema": {
-              "$ref": "#/definitions/IndicatorQueryResp"
+              "$ref": "#/definitions/SomaticIndicatorQueryResp"
             }
           },
           "400": {
             "description": "Error, error message will be given.",
             "schema": {
-              "type": "string"
+              "$ref": "#/definitions/ApiHttpError"
             }
           }
         }
@@ -775,14 +747,356 @@
             "schema": {
               "type": "array",
               "items": {
-                "$ref": "#/definitions/IndicatorQueryResp"
+                "$ref": "#/definitions/SomaticIndicatorQueryResp"
               }
             }
           },
           "400": {
             "description": "Error, error message will be given.",
             "schema": {
-              "type": "string"
+              "$ref": "#/definitions/ApiHttpError"
+            }
+          }
+        }
+      }
+    },
+    "/annotation/search": {
+      "get": {
+        "tags": [
+          "Annotations"
+        ],
+        "summary": "annotationSearchGet",
+        "description": "Get annotations based on search",
+        "operationId": "annotationSearchGetUsingGET",
+        "consumes": [
+          "application/json"
+        ],
+        "produces": [
+          "application/json"
+        ],
+        "parameters": [
+          {
+            "name": "query",
+            "in": "query",
+            "description": "The search query, it could be hugoSymbol, variant or cancer type. At least two characters. Maximum two keywords are supported, separated by space",
+            "required": true,
+            "type": "string"
+          },
+          {
+            "name": "limit",
+            "in": "query",
+            "description": "The limit of returned result.",
+            "required": false,
+            "type": "integer",
+            "default": 10,
+            "format": "int32"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "schema": {
+              "type": "array",
+              "items": {
+                "$ref": "#/definitions/AnnotationSearchResult"
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/v1/annotate/germline/mutations/byGenomicChange": {
+      "get": {
+        "tags": [
+          "Germline Annotations"
+        ],
+        "summary": "annotateMutationsByGenomicChangeGet",
+        "description": "Annotate mutation by genomic change.",
+        "operationId": "annotateMutationsByGenomicChangeGetUsingGET_1",
+        "consumes": [
+          "application/json"
+        ],
+        "produces": [
+          "application/json"
+        ],
+        "parameters": [
+          {
+            "name": "genomicLocation",
+            "in": "query",
+            "description": "Genomic location following TCGA MAF format. Example: 7,140453136,140453136,A,T",
+            "required": true,
+            "type": "string"
+          },
+          {
+            "name": "referenceGenome",
+            "in": "query",
+            "description": "Reference genome, either GRCh37 or GRCh38. The default is GRCh37",
+            "required": false,
+            "type": "string",
+            "default": "GRCh37"
+          },
+          {
+            "name": "tumorType",
+            "in": "query",
+            "description": "OncoTree(http://oncotree.info) tumor type name. The field supports OncoTree Code, OncoTree Name and OncoTree Main type. Example: Melanoma",
+            "required": false,
+            "type": "string"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "schema": {
+              "$ref": "#/definitions/GermlineIndicatorQueryResp"
+            }
+          },
+          "400": {
+            "description": "Error, error message will be given.",
+            "schema": {
+              "$ref": "#/definitions/ApiHttpError"
+            }
+          }
+        }
+      },
+      "post": {
+        "tags": [
+          "Germline Annotations"
+        ],
+        "summary": "annotateMutationsByGenomicChangePost",
+        "description": "Annotate mutations by genomic change.",
+        "operationId": "annotateMutationsByGenomicChangePostUsingPOST_1",
+        "consumes": [
+          "application/json"
+        ],
+        "produces": [
+          "application/json"
+        ],
+        "parameters": [
+          {
+            "in": "body",
+            "name": "body",
+            "description": "List of queries. Please see swagger.json for request body format.",
+            "required": true,
+            "schema": {
+              "type": "array",
+              "items": {
+                "$ref": "#/definitions/AnnotateMutationByGenomicChangeQuery"
+              }
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "schema": {
+              "type": "array",
+              "items": {
+                "$ref": "#/definitions/GermlineIndicatorQueryResp"
+              }
+            }
+          },
+          "400": {
+            "description": "Error, error message will be given.",
+            "schema": {
+              "$ref": "#/definitions/ApiHttpError"
+            }
+          }
+        }
+      }
+    },
+    "/api/v1/annotate/germline/mutations/byHGVSc": {
+      "get": {
+        "tags": [
+          "Germline Annotations"
+        ],
+        "summary": "annotateMutationsByHGVScGet",
+        "description": "Annotate mutation by HGVSc.",
+        "operationId": "annotateMutationsByHGVScGetUsingGET_1",
+        "consumes": [
+          "application/json"
+        ],
+        "produces": [
+          "application/json"
+        ],
+        "parameters": [
+          {
+            "name": "hgvsc",
+            "in": "query",
+            "description": "HGVS cDNA format following HGVS nomenclature. Example: EGFR:c.2369C>T",
+            "required": true,
+            "type": "string"
+          },
+          {
+            "name": "referenceGenome",
+            "in": "query",
+            "description": "Reference genome, either GRCh37 or GRCh38. The default is GRCh37",
+            "required": false,
+            "type": "string",
+            "default": "GRCh37"
+          },
+          {
+            "name": "tumorType",
+            "in": "query",
+            "description": "OncoTree(http://oncotree.info) tumor type name. The field supports OncoTree Code, OncoTree Name and OncoTree Main type. Example: Melanoma",
+            "required": false,
+            "type": "string"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "schema": {
+              "$ref": "#/definitions/GermlineIndicatorQueryResp"
+            }
+          },
+          "400": {
+            "description": "Error, error message will be given.",
+            "schema": {
+              "$ref": "#/definitions/ApiHttpError"
+            }
+          }
+        }
+      },
+      "post": {
+        "tags": [
+          "Germline Annotations"
+        ],
+        "summary": "annotateMutationsByHGVScPost",
+        "description": "Annotate mutations by HGVSc.",
+        "operationId": "annotateMutationsByHGVScPostUsingPOST_1",
+        "consumes": [
+          "application/json"
+        ],
+        "produces": [
+          "application/json"
+        ],
+        "parameters": [
+          {
+            "in": "body",
+            "name": "body",
+            "description": "List of queries. Please see swagger.json for request body format.",
+            "required": true,
+            "schema": {
+              "type": "array",
+              "items": {
+                "$ref": "#/definitions/AnnotateMutationByHGVScQuery"
+              }
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "schema": {
+              "type": "array",
+              "items": {
+                "$ref": "#/definitions/GermlineIndicatorQueryResp"
+              }
+            }
+          },
+          "400": {
+            "description": "Error, error message will be given.",
+            "schema": {
+              "$ref": "#/definitions/ApiHttpError"
+            }
+          }
+        }
+      }
+    },
+    "/api/v1/annotate/germline/mutations/byHGVSg": {
+      "get": {
+        "tags": [
+          "Germline Annotations"
+        ],
+        "summary": "annotateMutationsByHGVSgGet",
+        "description": "Annotate mutation by HGVSg.",
+        "operationId": "annotateMutationsByHGVSgGetUsingGET_1",
+        "consumes": [
+          "application/json"
+        ],
+        "produces": [
+          "application/json"
+        ],
+        "parameters": [
+          {
+            "name": "hgvsg",
+            "in": "query",
+            "description": "HGVS genomic format following HGVS nomenclature. Example: 7:g.140453136A>T",
+            "required": true,
+            "type": "string"
+          },
+          {
+            "name": "referenceGenome",
+            "in": "query",
+            "description": "Reference genome, either GRCh37 or GRCh38. The default is GRCh37",
+            "required": false,
+            "type": "string",
+            "default": "GRCh37"
+          },
+          {
+            "name": "tumorType",
+            "in": "query",
+            "description": "OncoTree(http://oncotree.info) tumor type name. The field supports OncoTree Code, OncoTree Name and OncoTree Main type. Example: Melanoma",
+            "required": false,
+            "type": "string"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "schema": {
+              "$ref": "#/definitions/GermlineIndicatorQueryResp"
+            }
+          },
+          "400": {
+            "description": "Error, error message will be given.",
+            "schema": {
+              "$ref": "#/definitions/ApiHttpError"
+            }
+          }
+        }
+      },
+      "post": {
+        "tags": [
+          "Germline Annotations"
+        ],
+        "summary": "annotateMutationsByHGVSgPost",
+        "description": "Annotate mutations by HGVSg.",
+        "operationId": "annotateMutationsByHGVSgPostUsingPOST_1",
+        "consumes": [
+          "application/json"
+        ],
+        "produces": [
+          "application/json"
+        ],
+        "parameters": [
+          {
+            "in": "body",
+            "name": "body",
+            "description": "List of queries. Please see swagger.json for request body format.",
+            "required": true,
+            "schema": {
+              "type": "array",
+              "items": {
+                "$ref": "#/definitions/AnnotateMutationByHGVSgQuery"
+              }
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "schema": {
+              "type": "array",
+              "items": {
+                "$ref": "#/definitions/GermlineIndicatorQueryResp"
+              }
+            }
+          },
+          "400": {
+            "description": "Error, error message will be given.",
+            "schema": {
+              "$ref": "#/definitions/ApiHttpError"
             }
           }
         }
@@ -1725,13 +2039,13 @@
           "200": {
             "description": "OK",
             "schema": {
-              "$ref": "#/definitions/IndicatorQueryResp"
+              "$ref": "#/definitions/SomaticIndicatorQueryResp"
             }
           },
           "400": {
             "description": "Error, error message will be given.",
             "schema": {
-              "$ref": "#/definitions/IndicatorQueryResp"
+              "$ref": "#/definitions/SomaticIndicatorQueryResp"
             }
           }
         }
@@ -1773,14 +2087,14 @@
             "schema": {
               "type": "array",
               "items": {
-                "$ref": "#/definitions/IndicatorQueryResp"
+                "$ref": "#/definitions/SomaticIndicatorQueryResp"
               }
             }
           },
           "400": {
             "description": "Error, error message will be given.",
             "schema": {
-              "$ref": "#/definitions/IndicatorQueryResp"
+              "$ref": "#/definitions/SomaticIndicatorQueryResp"
             }
           }
         }
@@ -1828,7 +2142,7 @@
           "400": {
             "description": "Error",
             "schema": {
-              "type": "string"
+              "$ref": "#/definitions/ApiHttpError"
             }
           }
         }
@@ -1871,8 +2185,11 @@
           "400": {
             "description": "Error",
             "schema": {
-              "type": "string"
+              "$ref": "#/definitions/ApiHttpError"
             }
+          },
+          "404": {
+            "description": "Error"
           }
         }
       }
@@ -1933,7 +2250,7 @@
           "application/json"
         ],
         "produces": [
-          "text/plain"
+          "text/plain;charset=UTF-8"
         ],
         "parameters": [
           {
@@ -2016,7 +2333,7 @@
           "application/json"
         ],
         "produces": [
-          "text/plain"
+          "text/plain;charset=UTF-8"
         ],
         "parameters": [
           {
@@ -2105,7 +2422,7 @@
           "application/json"
         ],
         "produces": [
-          "text/plain"
+          "text/plain;charset=UTF-8"
         ],
         "parameters": [
           {
@@ -2123,6 +2440,71 @@
             "type": "boolean",
             "default": true
           }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "schema": {
+              "type": "string"
+            }
+          },
+          "404": {
+            "description": "Not Found"
+          },
+          "503": {
+            "description": "Service Unavailable"
+          }
+        }
+      }
+    },
+    "/utils/allVariantsOfUnknownSignificance": {
+      "get": {
+        "tags": [
+          "Variants",
+          "Cancer Genes"
+        ],
+        "summary": "utilsAllVariantsOfUnknownSignificanceGet",
+        "description": "Get All Variants of Unknown Significance.",
+        "operationId": "utilsAllVariantsOfUnknownSignificanceGetUsingGET",
+        "consumes": [
+          "application/json"
+        ],
+        "produces": [
+          "application/json"
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "schema": {
+              "type": "array",
+              "items": {
+                "$ref": "#/definitions/VariantOfUnknownSignificance"
+              }
+            }
+          },
+          "404": {
+            "description": "Not Found"
+          },
+          "503": {
+            "description": "Service Unavailable"
+          }
+        }
+      }
+    },
+    "/utils/allVariantsOfUnknownSignificance.txt": {
+      "get": {
+        "tags": [
+          "Variants",
+          "Cancer Genes"
+        ],
+        "summary": "utilsAllVariantsOfUnknownSignificanceTxtGet",
+        "description": "Get All Variants of Unknown Significance in text file.",
+        "operationId": "utilsAllVariantsOfUnknownSignificanceTxtGetUsingGET",
+        "consumes": [
+          "application/json"
+        ],
+        "produces": [
+          "text/plain;charset=UTF-8"
         ],
         "responses": {
           "200": {
@@ -2194,7 +2576,7 @@
           "application/json"
         ],
         "produces": [
-          "text/plain"
+          "text/plain;charset=UTF-8"
         ],
         "parameters": [
           {
@@ -2226,9 +2608,6 @@
     "AnnotateMutationByGenomicChangeQuery": {
       "type": "object",
       "properties": {
-        "alleleState": {
-          "type": "string"
-        },
         "evidenceTypes": {
           "type": "array",
           "items": {
@@ -2252,21 +2631,14 @@
               "INVESTIGATIONAL_THERAPEUTIC_IMPLICATIONS_DRUG_RESISTANCE",
               "PATHOGENIC",
               "GENOMIC_INDICATOR",
-              "GENOMIC_INDICATOR_ALLELE_STATE",
               "GENE_PENETRANCE",
-              "GENE_INHERITANCE_MECHANISM",
-              "GENE_CANCER_RISK",
               "VARIANT_PENETRANCE",
-              "VARIANT_INHERITANCE_MECHANISM",
               "VARIANT_CANCER_RISK"
             ]
           }
         },
         "genomicLocation": {
           "type": "string"
-        },
-        "germline": {
-          "type": "boolean"
         },
         "id": {
           "type": "string"
@@ -2298,41 +2670,464 @@
     "Query": {
       "type": "object",
       "properties": {
-        "alleleState": {
-          "type": "string"
-        },
         "alteration": {
-          "type": "string"
+          "type": "string",
+          "description": "(Nullable) Alteration from original query or the resolved alteration from HGVS variant"
         },
         "alterationType": {
-          "type": "string"
+          "type": "string",
+          "description": "(Nullable) Alteration type",
+          "enum": [
+            "MUTATION",
+            "COPY_NUMBER_ALTERATION",
+            "STRUCTURAL_VARIANT"
+          ]
+        },
+        "canonicalTranscript": {
+          "type": "string",
+          "description": "(Nullable) The OncoKB canonical transcript. See https://www.oncokb.org/cancer-genes"
         },
         "consequence": {
+          "type": "string",
+          "description": "(Nullable) Variant consequence term from Ensembl. See https://useast.ensembl.org/info/genome/variation/prediction/predicted_data.html"
+        },
+        "entrezGeneId": {
+          "type": "integer",
+          "format": "int32",
+          "description": "(Nullable) Unique gene identifiers from NCBI. May be null if omitted from original query, otherwise filled in by OncoKB"
+        },
+        "hgvs": {
+          "type": "string",
+          "description": "(Nullable) The hgvsg or genomic location from original query"
+        },
+        "hgvsInfo": {
+          "type": "string",
+          "description": "(Nullable) Additional message for \"hgvs\" field. May indicate reason for failed hgvs annotation."
+        },
+        "hugoSymbol": {
+          "type": "string",
+          "description": "(Nullable) The gene symbol used in Human Genome Organisation"
+        },
+        "id": {
+          "type": "string",
+          "description": "(Nullable) The id passed in request for the user to distinguish the query."
+        },
+        "proteinEnd": {
+          "type": "integer",
+          "format": "int32",
+          "description": "(Nullable) Protein end position"
+        },
+        "proteinStart": {
+          "type": "integer",
+          "format": "int32",
+          "description": "(Nullable) Protein start position"
+        },
+        "referenceGenome": {
+          "type": "string",
+          "description": "Reference genome build version. Defaulted to GRCh37",
+          "enum": [
+            "GRCh37",
+            "GRCh38"
+          ]
+        },
+        "svType": {
+          "type": "string",
+          "description": "(Nullable) Structural variant type",
+          "enum": [
+            "DELETION",
+            "TRANSLOCATION",
+            "DUPLICATION",
+            "INSERTION",
+            "INVERSION",
+            "FUSION",
+            "UNKNOWN"
+          ]
+        },
+        "tumorType": {
+          "type": "string",
+          "description": "(Nullable) Oncotree tumor type name, code, or main type."
+        }
+      },
+      "description": "Enriched user annotation query"
+    },
+    "ApiHttpError": {
+      "type": "object",
+      "properties": {
+        "detail": {
           "type": "string"
         },
+        "message": {
+          "type": "string"
+        },
+        "path": {
+          "type": "string"
+        },
+        "status": {
+          "type": "integer",
+          "format": "int32"
+        },
+        "title": {
+          "type": "string"
+        }
+      }
+    },
+    "ParsedVersionInfo": {
+      "type": "object",
+      "properties": {
+        "genomeNexusVepVersion": {
+          "type": "string"
+        },
+        "genomeNexusVersion": {
+          "type": "string"
+        },
+        "vepVersion": {
+          "type": "string"
+        }
+      }
+    },
+    "SemVer": {
+      "type": "object",
+      "properties": {
+        "major": {
+          "type": "integer",
+          "format": "int32"
+        },
+        "minor": {
+          "type": "integer",
+          "format": "int32"
+        },
+        "patch": {
+          "type": "integer",
+          "format": "int32"
+        },
+        "stable": {
+          "type": "boolean"
+        },
+        "suffixTokens": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
+        },
+        "version": {
+          "type": "string"
+        }
+      }
+    },
+    "Implication": {
+      "type": "object",
+      "properties": {
+        "abstracts": {
+          "type": "array",
+          "description": "List of abstracts cited to support the level of evidence. Defaulted to empty list",
+          "items": {
+            "$ref": "#/definitions/ArticleAbstract"
+          }
+        },
+        "alterations": {
+          "type": "array",
+          "description": "List of alterations associated with implication",
+          "items": {
+            "type": "string"
+          }
+        },
+        "description": {
+          "type": "string",
+          "description": "DEPRECATED"
+        },
+        "levelOfEvidence": {
+          "type": "string",
+          "description": "Level associated with implication",
+          "enum": [
+            "LEVEL_1",
+            "LEVEL_2",
+            "LEVEL_3A",
+            "LEVEL_3B",
+            "LEVEL_4",
+            "LEVEL_R1",
+            "LEVEL_R2",
+            "LEVEL_Px1",
+            "LEVEL_Px2",
+            "LEVEL_Px3",
+            "LEVEL_Dx1",
+            "LEVEL_Dx2",
+            "LEVEL_Dx3",
+            "LEVEL_Fda1",
+            "LEVEL_Fda2",
+            "LEVEL_Fda3",
+            "NO"
+          ]
+        },
+        "pmids": {
+          "type": "array",
+          "description": "List of PubMed IDs cited to support the level of evidence. Defaulted to empty list",
+          "items": {
+            "type": "string"
+          }
+        },
+        "tumorType": {
+          "description": "Tumor type associated with implication",
+          "$ref": "#/definitions/TumorType"
+        }
+      }
+    },
+    "MutationsQuery": {
+      "type": "object",
+      "properties": {
+        "cDnaChange": {
+          "type": "array",
+          "items": {
+            "$ref": "#/definitions/AnnotateMutationByHGVSgQuery"
+          }
+        },
+        "genomicChange": {
+          "type": "array",
+          "items": {
+            "$ref": "#/definitions/AnnotateMutationByGenomicChangeQuery"
+          }
+        },
+        "hgvsg": {
+          "type": "array",
+          "items": {
+            "$ref": "#/definitions/AnnotateMutationByHGVSgQuery"
+          }
+        },
+        "proteinChange": {
+          "type": "array",
+          "items": {
+            "$ref": "#/definitions/AnnotateMutationByProteinChangeQuery"
+          }
+        }
+      }
+    },
+    "TumorType": {
+      "type": "object",
+      "properties": {
+        "children": {
+          "type": "object",
+          "description": "Map from parent tumor type to children tumor types",
+          "additionalProperties": {
+            "$ref": "#/definitions/TumorType"
+          }
+        },
+        "code": {
+          "type": "string",
+          "description": "Oncotree code"
+        },
+        "color": {
+          "type": "string",
+          "description": "(Nullable) Color of tumor"
+        },
+        "id": {
+          "type": "integer",
+          "format": "int32",
+          "description": "Database TumorType ID"
+        },
+        "level": {
+          "type": "integer",
+          "format": "int32",
+          "description": "Oncotree tumor type level. -1 indicates special tumor types (See SpecialTumorTypes.java)"
+        },
+        "mainType": {
+          "description": "(Nullable) Oncotree tumor main type",
+          "$ref": "#/definitions/MainType"
+        },
+        "name": {
+          "type": "string",
+          "description": "(Nullable) Oncotree sub type"
+        },
+        "parent": {
+          "type": "string",
+          "description": "(Nullable) Parent tumor name"
+        },
+        "tissue": {
+          "type": "string",
+          "description": "(Nullable) Oncotree tumor tissue"
+        },
+        "tumorForm": {
+          "type": "string",
+          "description": "Tumor form",
+          "enum": [
+            "SOLID",
+            "LIQUID",
+            "MIXED"
+          ]
+        }
+      },
+      "description": "OncoTree Detailed Cancer Type. See https://oncotree.mskcc.org/?version=oncotree_2019_12_01"
+    },
+    "Gene": {
+      "type": "object",
+      "properties": {
         "entrezGeneId": {
           "type": "integer",
           "format": "int32"
         },
-        "germline": {
-          "type": "boolean"
+        "geneAliases": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
         },
-        "hgvs": {
+        "geneType": {
+          "type": "string",
+          "enum": [
+            "ONCOGENE_AND_TSG",
+            "ONCOGENE",
+            "TSG",
+            "INSUFFICIENT_EVIDENCE",
+            "NEITHER"
+          ]
+        },
+        "genesets": {
+          "type": "array",
+          "items": {
+            "$ref": "#/definitions/Geneset"
+          }
+        },
+        "grch37Isoform": {
+          "type": "string"
+        },
+        "grch37RefSeq": {
+          "type": "string"
+        },
+        "grch38Isoform": {
+          "type": "string"
+        },
+        "grch38RefSeq": {
           "type": "string"
         },
         "hugoSymbol": {
           "type": "string"
+        }
+      }
+    },
+    "Version": {
+      "type": "object",
+      "properties": {
+        "date": {
+          "type": "string"
+        },
+        "version": {
+          "type": "string"
+        }
+      }
+    },
+    "TreatmentDrugId": {
+      "type": "object",
+      "properties": {
+        "drug": {
+          "$ref": "#/definitions/Drug"
+        }
+      }
+    },
+    "GeneEvidence": {
+      "type": "object",
+      "required": [
+        "evidenceId",
+        "evidenceType"
+      ],
+      "properties": {
+        "articles": {
+          "type": "array",
+          "items": {
+            "$ref": "#/definitions/Article"
+          }
+        },
+        "desc": {
+          "type": "string"
+        },
+        "evidenceId": {
+          "type": "integer",
+          "format": "int32"
+        },
+        "evidenceType": {
+          "type": "string",
+          "enum": [
+            "GENE_SUMMARY",
+            "MUTATION_SUMMARY",
+            "TUMOR_TYPE_SUMMARY",
+            "GENE_TUMOR_TYPE_SUMMARY",
+            "PROGNOSTIC_SUMMARY",
+            "DIAGNOSTIC_SUMMARY",
+            "GENE_BACKGROUND",
+            "ONCOGENIC",
+            "MUTATION_EFFECT",
+            "VUS",
+            "PROGNOSTIC_IMPLICATION",
+            "DIAGNOSTIC_IMPLICATION",
+            "STANDARD_THERAPEUTIC_IMPLICATIONS_FOR_DRUG_SENSITIVITY",
+            "STANDARD_THERAPEUTIC_IMPLICATIONS_FOR_DRUG_RESISTANCE",
+            "INVESTIGATIONAL_THERAPEUTIC_IMPLICATIONS_DRUG_SENSITIVITY",
+            "INVESTIGATIONAL_THERAPEUTIC_IMPLICATIONS_DRUG_RESISTANCE",
+            "PATHOGENIC",
+            "GENOMIC_INDICATOR",
+            "GENE_PENETRANCE",
+            "VARIANT_PENETRANCE",
+            "VARIANT_CANCER_RISK"
+          ]
+        },
+        "gene": {
+          "$ref": "#/definitions/Gene"
         },
         "id": {
           "type": "string"
         },
-        "proteinEnd": {
-          "type": "integer",
-          "format": "int32"
+        "lastEdit": {
+          "type": "string",
+          "format": "date-time"
         },
-        "proteinStart": {
-          "type": "integer",
-          "format": "int32"
+        "shortDesc": {
+          "type": "string"
+        },
+        "status": {
+          "type": "string"
+        }
+      }
+    },
+    "AnnotateStructuralVariantQuery": {
+      "type": "object",
+      "properties": {
+        "evidenceTypes": {
+          "type": "array",
+          "items": {
+            "type": "string",
+            "enum": [
+              "GENE_SUMMARY",
+              "MUTATION_SUMMARY",
+              "TUMOR_TYPE_SUMMARY",
+              "GENE_TUMOR_TYPE_SUMMARY",
+              "PROGNOSTIC_SUMMARY",
+              "DIAGNOSTIC_SUMMARY",
+              "GENE_BACKGROUND",
+              "ONCOGENIC",
+              "MUTATION_EFFECT",
+              "VUS",
+              "PROGNOSTIC_IMPLICATION",
+              "DIAGNOSTIC_IMPLICATION",
+              "STANDARD_THERAPEUTIC_IMPLICATIONS_FOR_DRUG_SENSITIVITY",
+              "STANDARD_THERAPEUTIC_IMPLICATIONS_FOR_DRUG_RESISTANCE",
+              "INVESTIGATIONAL_THERAPEUTIC_IMPLICATIONS_DRUG_SENSITIVITY",
+              "INVESTIGATIONAL_THERAPEUTIC_IMPLICATIONS_DRUG_RESISTANCE",
+              "PATHOGENIC",
+              "GENOMIC_INDICATOR",
+              "GENE_PENETRANCE",
+              "VARIANT_PENETRANCE",
+              "VARIANT_CANCER_RISK"
+            ]
+          }
+        },
+        "functionalFusion": {
+          "type": "boolean"
+        },
+        "geneA": {
+          "$ref": "#/definitions/QueryGene"
+        },
+        "geneB": {
+          "$ref": "#/definitions/QueryGene"
+        },
+        "id": {
+          "type": "string"
         },
         "referenceGenome": {
           "type": "string",
@@ -2341,7 +3136,7 @@
             "GRCh38"
           ]
         },
-        "svType": {
+        "structuralVariantType": {
           "type": "string",
           "enum": [
             "DELETION",
@@ -2355,6 +3150,421 @@
         },
         "tumorType": {
           "type": "string"
+        }
+      }
+    },
+    "ActionableGene": {
+      "type": "object",
+      "properties": {
+        "abstracts": {
+          "type": "string"
+        },
+        "cancerType": {
+          "type": "string"
+        },
+        "description": {
+          "type": "string"
+        },
+        "drugs": {
+          "type": "string"
+        },
+        "entrezGeneId": {
+          "type": "integer",
+          "format": "int32"
+        },
+        "gene": {
+          "type": "string"
+        },
+        "grch37Isoform": {
+          "type": "string"
+        },
+        "grch37RefSeq": {
+          "type": "string"
+        },
+        "grch38Isoform": {
+          "type": "string"
+        },
+        "grch38RefSeq": {
+          "type": "string"
+        },
+        "level": {
+          "type": "string"
+        },
+        "liquidPropagationLevel": {
+          "type": "string"
+        },
+        "pmids": {
+          "type": "string"
+        },
+        "proteinChange": {
+          "type": "string"
+        },
+        "referenceGenome": {
+          "type": "string"
+        },
+        "solidPropagationLevel": {
+          "type": "string"
+        },
+        "variant": {
+          "type": "string"
+        }
+      }
+    },
+    "InfoLevel": {
+      "type": "object",
+      "properties": {
+        "colorHex": {
+          "type": "string"
+        },
+        "description": {
+          "type": "string"
+        },
+        "htmlDescription": {
+          "type": "string"
+        },
+        "levelOfEvidence": {
+          "type": "string",
+          "enum": [
+            "LEVEL_1",
+            "LEVEL_2",
+            "LEVEL_3A",
+            "LEVEL_3B",
+            "LEVEL_4",
+            "LEVEL_R1",
+            "LEVEL_R2",
+            "LEVEL_Px1",
+            "LEVEL_Px2",
+            "LEVEL_Px3",
+            "LEVEL_Dx1",
+            "LEVEL_Dx2",
+            "LEVEL_Dx3",
+            "LEVEL_Fda1",
+            "LEVEL_Fda2",
+            "LEVEL_Fda3",
+            "NO"
+          ]
+        }
+      }
+    },
+    "AnnotateMutationByHGVScQuery": {
+      "type": "object",
+      "properties": {
+        "alteration": {
+          "type": "string"
+        },
+        "evidenceTypes": {
+          "type": "array",
+          "items": {
+            "type": "string",
+            "enum": [
+              "GENE_SUMMARY",
+              "MUTATION_SUMMARY",
+              "TUMOR_TYPE_SUMMARY",
+              "GENE_TUMOR_TYPE_SUMMARY",
+              "PROGNOSTIC_SUMMARY",
+              "DIAGNOSTIC_SUMMARY",
+              "GENE_BACKGROUND",
+              "ONCOGENIC",
+              "MUTATION_EFFECT",
+              "VUS",
+              "PROGNOSTIC_IMPLICATION",
+              "DIAGNOSTIC_IMPLICATION",
+              "STANDARD_THERAPEUTIC_IMPLICATIONS_FOR_DRUG_SENSITIVITY",
+              "STANDARD_THERAPEUTIC_IMPLICATIONS_FOR_DRUG_RESISTANCE",
+              "INVESTIGATIONAL_THERAPEUTIC_IMPLICATIONS_DRUG_SENSITIVITY",
+              "INVESTIGATIONAL_THERAPEUTIC_IMPLICATIONS_DRUG_RESISTANCE",
+              "PATHOGENIC",
+              "GENOMIC_INDICATOR",
+              "GENE_PENETRANCE",
+              "VARIANT_PENETRANCE",
+              "VARIANT_CANCER_RISK"
+            ]
+          }
+        },
+        "gene": {
+          "type": "string"
+        },
+        "germlineQuery": {
+          "$ref": "#/definitions/GermlineQuery"
+        },
+        "hgvsc": {
+          "type": "string"
+        },
+        "id": {
+          "type": "string"
+        },
+        "referenceGenome": {
+          "type": "string",
+          "enum": [
+            "GRCh37",
+            "GRCh38"
+          ]
+        },
+        "tumorType": {
+          "type": "string"
+        }
+      }
+    },
+    "Trial": {
+      "type": "object",
+      "properties": {
+        "arms": {
+          "type": "array",
+          "items": {
+            "$ref": "#/definitions/Arms"
+          }
+        },
+        "briefTitle": {
+          "type": "string"
+        },
+        "currentTrialStatus": {
+          "type": "string"
+        },
+        "isUSTrial": {
+          "type": "boolean"
+        },
+        "nctId": {
+          "type": "string"
+        },
+        "principalInvestigator": {
+          "type": "string"
+        }
+      }
+    },
+    "Arms": {
+      "type": "object",
+      "properties": {
+        "armDescription": {
+          "type": "string"
+        },
+        "drugs": {
+          "type": "array",
+          "items": {
+            "$ref": "#/definitions/Drug"
+          }
+        }
+      }
+    },
+    "OncoKBInfo": {
+      "type": "object",
+      "properties": {
+        "apiVersion": {
+          "$ref": "#/definitions/SemVer"
+        },
+        "appVersion": {
+          "$ref": "#/definitions/SemVer"
+        },
+        "dataVersion": {
+          "$ref": "#/definitions/Version"
+        },
+        "genomeNexus": {
+          "$ref": "#/definitions/ParsedGenomeNexusVersion"
+        },
+        "levels": {
+          "type": "array",
+          "items": {
+            "$ref": "#/definitions/InfoLevel"
+          }
+        },
+        "ncitVersion": {
+          "type": "string"
+        },
+        "oncoTreeVersion": {
+          "type": "string"
+        },
+        "publicInstance": {
+          "type": "boolean"
+        }
+      }
+    },
+    "GermlineQuery": {
+      "type": "object",
+      "properties": {
+        "germline": {
+          "type": "boolean"
+        }
+      }
+    },
+    "VariantConsequence": {
+      "type": "object",
+      "properties": {
+        "description": {
+          "type": "string"
+        },
+        "isGenerallyTruncating": {
+          "type": "boolean"
+        },
+        "term": {
+          "type": "string"
+        }
+      }
+    },
+    "EvidenceQueries": {
+      "type": "object",
+      "properties": {
+        "evidenceTypes": {
+          "type": "string"
+        },
+        "highestLevelOnly": {
+          "type": "boolean"
+        },
+        "levels": {
+          "type": "array",
+          "items": {
+            "type": "string",
+            "enum": [
+              "LEVEL_1",
+              "LEVEL_2",
+              "LEVEL_3A",
+              "LEVEL_3B",
+              "LEVEL_4",
+              "LEVEL_R1",
+              "LEVEL_R2",
+              "LEVEL_Px1",
+              "LEVEL_Px2",
+              "LEVEL_Px3",
+              "LEVEL_Dx1",
+              "LEVEL_Dx2",
+              "LEVEL_Dx3",
+              "LEVEL_Fda1",
+              "LEVEL_Fda2",
+              "LEVEL_Fda3",
+              "NO"
+            ]
+          }
+        },
+        "queries": {
+          "type": "array",
+          "items": {
+            "$ref": "#/definitions/Query"
+          }
+        }
+      }
+    },
+    "AnnotateCopyNumberAlterationQuery": {
+      "type": "object",
+      "properties": {
+        "copyNameAlterationType": {
+          "type": "string",
+          "enum": [
+            "AMPLIFICATION",
+            "DELETION",
+            "GAIN",
+            "LOSS"
+          ]
+        },
+        "evidenceTypes": {
+          "type": "array",
+          "items": {
+            "type": "string",
+            "enum": [
+              "GENE_SUMMARY",
+              "MUTATION_SUMMARY",
+              "TUMOR_TYPE_SUMMARY",
+              "GENE_TUMOR_TYPE_SUMMARY",
+              "PROGNOSTIC_SUMMARY",
+              "DIAGNOSTIC_SUMMARY",
+              "GENE_BACKGROUND",
+              "ONCOGENIC",
+              "MUTATION_EFFECT",
+              "VUS",
+              "PROGNOSTIC_IMPLICATION",
+              "DIAGNOSTIC_IMPLICATION",
+              "STANDARD_THERAPEUTIC_IMPLICATIONS_FOR_DRUG_SENSITIVITY",
+              "STANDARD_THERAPEUTIC_IMPLICATIONS_FOR_DRUG_RESISTANCE",
+              "INVESTIGATIONAL_THERAPEUTIC_IMPLICATIONS_DRUG_SENSITIVITY",
+              "INVESTIGATIONAL_THERAPEUTIC_IMPLICATIONS_DRUG_RESISTANCE",
+              "PATHOGENIC",
+              "GENOMIC_INDICATOR",
+              "GENE_PENETRANCE",
+              "VARIANT_PENETRANCE",
+              "VARIANT_CANCER_RISK"
+            ]
+          }
+        },
+        "gene": {
+          "$ref": "#/definitions/QueryGene"
+        },
+        "id": {
+          "type": "string"
+        },
+        "referenceGenome": {
+          "type": "string",
+          "enum": [
+            "GRCh37",
+            "GRCh38"
+          ]
+        },
+        "tumorType": {
+          "type": "string"
+        }
+      }
+    },
+    "GenomicIndicator": {
+      "type": "object",
+      "properties": {
+        "description": {
+          "type": "string"
+        },
+        "inheritanceMechanism": {
+          "type": "string",
+          "enum": [
+            "AUTOSOMAL_DOMINANT",
+            "AUTOSOMAL_RECESSIVE",
+            "X_LINKED_RECESSIVE",
+            "CARRIER"
+          ]
+        },
+        "name": {
+          "type": "string"
+        }
+      }
+    },
+    "TumorTypeEntity": {
+      "type": "object",
+      "properties": {
+        "code": {
+          "type": "string"
+        },
+        "color": {
+          "type": "string"
+        },
+        "id": {
+          "type": "integer",
+          "format": "int32"
+        },
+        "level": {
+          "type": "integer",
+          "format": "int32"
+        },
+        "mainType": {
+          "type": "string"
+        },
+        "subtype": {
+          "type": "string"
+        },
+        "tissue": {
+          "type": "string"
+        },
+        "tumorForm": {
+          "type": "string",
+          "enum": [
+            "SOLID",
+            "LIQUID",
+            "MIXED"
+          ]
+        }
+      },
+      "description": "OncoTree Detailed Cancer Type"
+    },
+    "ParsedGenomeNexusVersion": {
+      "type": "object",
+      "properties": {
+        "grch37": {
+          "$ref": "#/definitions/ParsedVersionInfo"
+        },
+        "grch38": {
+          "$ref": "#/definitions/ParsedVersionInfo"
         }
       }
     },
@@ -2446,6 +3656,9 @@
     "AnnotatedVariant": {
       "type": "object",
       "properties": {
+        "description": {
+          "type": "string"
+        },
         "entrezGeneId": {
           "type": "integer",
           "format": "int32"
@@ -2488,55 +3701,46 @@
         }
       }
     },
-    "SemVer": {
+    "SomaticIndicatorQueryResp": {
       "type": "object",
       "properties": {
-        "major": {
-          "type": "integer",
-          "format": "int32"
+        "alleleExist": {
+          "type": "boolean",
+          "example": false,
+          "description": "Indicates whether the alternate allele has been curated. See SOP Protocol 9.1"
         },
-        "minor": {
-          "type": "integer",
-          "format": "int32"
-        },
-        "patch": {
-          "type": "integer",
-          "format": "int32"
-        },
-        "stable": {
-          "type": "boolean"
-        },
-        "suffixTokens": {
-          "type": "array",
-          "items": {
-            "type": "string"
-          }
-        },
-        "version": {
-          "type": "string"
-        }
-      }
-    },
-    "Implication": {
-      "type": "object",
-      "properties": {
-        "abstracts": {
-          "type": "array",
-          "items": {
-            "$ref": "#/definitions/ArticleAbstract"
-          }
-        },
-        "alterations": {
-          "type": "array",
-          "items": {
-            "type": "string"
-          }
-        },
-        "description": {
-          "type": "string"
-        },
-        "levelOfEvidence": {
+        "dataVersion": {
           "type": "string",
+          "example": "v4.25",
+          "description": "OncoKB data version. See www.oncokb.org/news"
+        },
+        "diagnosticImplications": {
+          "type": "array",
+          "description": "List of diagnostic implications. Defaulted to empty list",
+          "items": {
+            "$ref": "#/definitions/Implication"
+          }
+        },
+        "diagnosticSummary": {
+          "type": "string",
+          "description": "Diagnostic summary. Defaulted to \"\""
+        },
+        "exon": {
+          "type": "string",
+          "description": "(Nullable) The affected exon of this variant, if applicable (currently only supported when annotating via HGVSg or Genomic Location)"
+        },
+        "geneExist": {
+          "type": "boolean",
+          "example": false,
+          "description": "Indicates whether the gene is curated by OncoKB"
+        },
+        "geneSummary": {
+          "type": "string",
+          "description": "Gene summary. Defaulted to \"\""
+        },
+        "highestDiagnosticImplicationLevel": {
+          "type": "string",
+          "description": "(Nullable) The highest diagnostic level from a list of diagnostic evidences.",
           "enum": [
             "LEVEL_1",
             "LEVEL_2",
@@ -2557,193 +3761,512 @@
             "NO"
           ]
         },
-        "pmids": {
+        "highestFdaLevel": {
+          "type": "string",
+          "description": "(Nullable) The highest FDA level from a list of therapeutic evidences.",
+          "enum": [
+            "LEVEL_1",
+            "LEVEL_2",
+            "LEVEL_3A",
+            "LEVEL_3B",
+            "LEVEL_4",
+            "LEVEL_R1",
+            "LEVEL_R2",
+            "LEVEL_Px1",
+            "LEVEL_Px2",
+            "LEVEL_Px3",
+            "LEVEL_Dx1",
+            "LEVEL_Dx2",
+            "LEVEL_Dx3",
+            "LEVEL_Fda1",
+            "LEVEL_Fda2",
+            "LEVEL_Fda3",
+            "NO"
+          ]
+        },
+        "highestPrognosticImplicationLevel": {
+          "type": "string",
+          "description": "(Nullable) The highest prognostic level from a list of prognostic evidences.",
+          "enum": [
+            "LEVEL_1",
+            "LEVEL_2",
+            "LEVEL_3A",
+            "LEVEL_3B",
+            "LEVEL_4",
+            "LEVEL_R1",
+            "LEVEL_R2",
+            "LEVEL_Px1",
+            "LEVEL_Px2",
+            "LEVEL_Px3",
+            "LEVEL_Dx1",
+            "LEVEL_Dx2",
+            "LEVEL_Dx3",
+            "LEVEL_Fda1",
+            "LEVEL_Fda2",
+            "LEVEL_Fda3",
+            "NO"
+          ]
+        },
+        "highestResistanceLevel": {
+          "type": "string",
+          "description": "(Nullable) The highest resistance level from a list of therapeutic evidences.",
+          "enum": [
+            "LEVEL_1",
+            "LEVEL_2",
+            "LEVEL_3A",
+            "LEVEL_3B",
+            "LEVEL_4",
+            "LEVEL_R1",
+            "LEVEL_R2",
+            "LEVEL_Px1",
+            "LEVEL_Px2",
+            "LEVEL_Px3",
+            "LEVEL_Dx1",
+            "LEVEL_Dx2",
+            "LEVEL_Dx3",
+            "LEVEL_Fda1",
+            "LEVEL_Fda2",
+            "LEVEL_Fda3",
+            "NO"
+          ]
+        },
+        "highestSensitiveLevel": {
+          "type": "string",
+          "description": "(Nullable) The highest sensitivity level from a list of therapeutic evidences.",
+          "enum": [
+            "LEVEL_1",
+            "LEVEL_2",
+            "LEVEL_3A",
+            "LEVEL_3B",
+            "LEVEL_4",
+            "LEVEL_R1",
+            "LEVEL_R2",
+            "LEVEL_Px1",
+            "LEVEL_Px2",
+            "LEVEL_Px3",
+            "LEVEL_Dx1",
+            "LEVEL_Dx2",
+            "LEVEL_Dx3",
+            "LEVEL_Fda1",
+            "LEVEL_Fda2",
+            "LEVEL_Fda3",
+            "NO"
+          ]
+        },
+        "hotspot": {
+          "type": "boolean",
+          "example": false,
+          "description": "Whether variant is recurrently found in cancer with statistical significance, as defined in Chang et al. (2017). See SOP Protocol 9.2"
+        },
+        "lastUpdate": {
+          "type": "string",
+          "example": "01/30/2025",
+          "description": "OncoKB data release date. Formatted as MM/DD/YYYY"
+        },
+        "mutationEffect": {
+          "$ref": "#/definitions/MutationEffectResp"
+        },
+        "oncogenic": {
+          "type": "string",
+          "description": "The oncogenicity status of the variant. Defaulted to \"Unknown\"."
+        },
+        "otherSignificantResistanceLevels": {
+          "type": "array",
+          "description": "DEPRECATED",
+          "items": {
+            "type": "string",
+            "enum": [
+              "LEVEL_1",
+              "LEVEL_2",
+              "LEVEL_3A",
+              "LEVEL_3B",
+              "LEVEL_4",
+              "LEVEL_R1",
+              "LEVEL_R2",
+              "LEVEL_Px1",
+              "LEVEL_Px2",
+              "LEVEL_Px3",
+              "LEVEL_Dx1",
+              "LEVEL_Dx2",
+              "LEVEL_Dx3",
+              "LEVEL_Fda1",
+              "LEVEL_Fda2",
+              "LEVEL_Fda3",
+              "NO"
+            ]
+          }
+        },
+        "otherSignificantSensitiveLevels": {
+          "type": "array",
+          "description": "DEPRECATED",
+          "items": {
+            "type": "string",
+            "enum": [
+              "LEVEL_1",
+              "LEVEL_2",
+              "LEVEL_3A",
+              "LEVEL_3B",
+              "LEVEL_4",
+              "LEVEL_R1",
+              "LEVEL_R2",
+              "LEVEL_Px1",
+              "LEVEL_Px2",
+              "LEVEL_Px3",
+              "LEVEL_Dx1",
+              "LEVEL_Dx2",
+              "LEVEL_Dx3",
+              "LEVEL_Fda1",
+              "LEVEL_Fda2",
+              "LEVEL_Fda3",
+              "NO"
+            ]
+          }
+        },
+        "prognosticImplications": {
+          "type": "array",
+          "description": "List of prognostic implications. Defaulted to empty list",
+          "items": {
+            "$ref": "#/definitions/Implication"
+          }
+        },
+        "prognosticSummary": {
+          "type": "string",
+          "description": "Prognostic summary. Defaulted to \"\""
+        },
+        "query": {
+          "$ref": "#/definitions/Query"
+        },
+        "treatments": {
+          "type": "array",
+          "description": "List of therapeutic implications implications. Defaulted to empty list",
+          "items": {
+            "$ref": "#/definitions/IndicatorQueryTreatment"
+          }
+        },
+        "tumorTypeSummary": {
+          "type": "string",
+          "description": "Tumor type summary. Defaulted to \"\""
+        },
+        "variantExist": {
+          "type": "boolean",
+          "example": false,
+          "description": "Indicates whether an exact match for the queried variant is curated"
+        },
+        "variantSummary": {
+          "type": "string",
+          "description": "Variant summary. Defaulted to \"\""
+        },
+        "vus": {
+          "type": "boolean"
+        }
+      }
+    },
+    "AnnotateSampleQuery": {
+      "type": "object",
+      "properties": {
+        "copyNumberAlterations": {
           "type": "array",
           "items": {
-            "type": "string"
+            "$ref": "#/definitions/AnnotateCopyNumberAlterationQuery"
+          }
+        },
+        "id": {
+          "type": "string"
+        },
+        "mutations": {
+          "$ref": "#/definitions/MutationsQuery"
+        },
+        "structuralVariants": {
+          "type": "array",
+          "items": {
+            "$ref": "#/definitions/AnnotateStructuralVariantQuery"
           }
         },
         "tumorType": {
-          "$ref": "#/definitions/TumorType"
+          "type": "string"
         }
       }
     },
-    "TumorType": {
+    "GermlineIndicatorQueryResp": {
       "type": "object",
       "properties": {
-        "children": {
-          "type": "object",
-          "additionalProperties": {
-            "$ref": "#/definitions/TumorType"
+        "alleleExist": {
+          "type": "boolean",
+          "example": false,
+          "description": "Indicates whether the alternate allele has been curated. See SOP Protocol 9.1"
+        },
+        "clinVarId": {
+          "type": "string"
+        },
+        "dataVersion": {
+          "type": "string",
+          "example": "v4.25",
+          "description": "OncoKB data version. See www.oncokb.org/news"
+        },
+        "diagnosticImplications": {
+          "type": "array",
+          "description": "List of diagnostic implications. Defaulted to empty list",
+          "items": {
+            "$ref": "#/definitions/Implication"
           }
         },
-        "code": {
-          "type": "string"
-        },
-        "color": {
-          "type": "string"
-        },
-        "id": {
-          "type": "integer",
-          "format": "int32"
-        },
-        "level": {
-          "type": "integer",
-          "format": "int32"
-        },
-        "mainType": {
-          "$ref": "#/definitions/MainType"
-        },
-        "name": {
-          "type": "string"
-        },
-        "parent": {
-          "type": "string"
-        },
-        "tissue": {
-          "type": "string"
-        },
-        "tumorForm": {
+        "diagnosticSummary": {
           "type": "string",
-          "enum": [
-            "SOLID",
-            "LIQUID",
-            "MIXED"
-          ]
-        }
-      },
-      "description": "OncoTree Detailed Cancer Type"
-    },
-    "Gene": {
-      "type": "object",
-      "properties": {
-        "entrezGeneId": {
-          "type": "integer",
-          "format": "int32"
+          "description": "Diagnostic summary. Defaulted to \"\""
         },
-        "geneAliases": {
+        "exon": {
+          "type": "string",
+          "description": "(Nullable) The affected exon of this variant, if applicable (currently only supported when annotating via HGVSg or Genomic Location)"
+        },
+        "geneExist": {
+          "type": "boolean",
+          "example": false,
+          "description": "Indicates whether the gene is curated by OncoKB"
+        },
+        "geneSummary": {
+          "type": "string",
+          "description": "Gene summary. Defaulted to \"\""
+        },
+        "genomicIndicators": {
           "type": "array",
           "items": {
-            "type": "string"
+            "$ref": "#/definitions/GenomicIndicator"
           }
         },
-        "geneType": {
+        "highestDiagnosticImplicationLevel": {
           "type": "string",
+          "description": "(Nullable) The highest diagnostic level from a list of diagnostic evidences.",
           "enum": [
-            "INSUFFICIENT_EVIDENCE",
-            "ONCOGENE_AND_TSG",
-            "ONCOGENE",
-            "TSG",
-            "NEITHER"
+            "LEVEL_1",
+            "LEVEL_2",
+            "LEVEL_3A",
+            "LEVEL_3B",
+            "LEVEL_4",
+            "LEVEL_R1",
+            "LEVEL_R2",
+            "LEVEL_Px1",
+            "LEVEL_Px2",
+            "LEVEL_Px3",
+            "LEVEL_Dx1",
+            "LEVEL_Dx2",
+            "LEVEL_Dx3",
+            "LEVEL_Fda1",
+            "LEVEL_Fda2",
+            "LEVEL_Fda3",
+            "NO"
           ]
         },
-        "genesets": {
-          "type": "array",
-          "items": {
-            "$ref": "#/definitions/Geneset"
-          }
-        },
-        "grch37Isoform": {
-          "type": "string"
-        },
-        "grch37RefSeq": {
-          "type": "string"
-        },
-        "grch38Isoform": {
-          "type": "string"
-        },
-        "grch38RefSeq": {
-          "type": "string"
-        },
-        "hugoSymbol": {
-          "type": "string"
-        }
-      }
-    },
-    "Version": {
-      "type": "object",
-      "properties": {
-        "date": {
-          "type": "string"
-        },
-        "version": {
-          "type": "string"
-        }
-      }
-    },
-    "TreatmentDrugId": {
-      "type": "object",
-      "properties": {
-        "drug": {
-          "$ref": "#/definitions/Drug"
-        }
-      }
-    },
-    "GeneEvidence": {
-      "type": "object",
-      "required": [
-        "evidenceId",
-        "evidenceType"
-      ],
-      "properties": {
-        "articles": {
-          "type": "array",
-          "items": {
-            "$ref": "#/definitions/Article"
-          }
-        },
-        "desc": {
-          "type": "string"
-        },
-        "evidenceId": {
-          "type": "integer",
-          "format": "int32"
-        },
-        "evidenceType": {
+        "highestFdaLevel": {
           "type": "string",
+          "description": "(Nullable) The highest FDA level from a list of therapeutic evidences.",
           "enum": [
-            "GENE_SUMMARY",
-            "MUTATION_SUMMARY",
-            "TUMOR_TYPE_SUMMARY",
-            "GENE_TUMOR_TYPE_SUMMARY",
-            "PROGNOSTIC_SUMMARY",
-            "DIAGNOSTIC_SUMMARY",
-            "GENE_BACKGROUND",
-            "ONCOGENIC",
-            "MUTATION_EFFECT",
-            "VUS",
-            "PROGNOSTIC_IMPLICATION",
-            "DIAGNOSTIC_IMPLICATION",
-            "STANDARD_THERAPEUTIC_IMPLICATIONS_FOR_DRUG_SENSITIVITY",
-            "STANDARD_THERAPEUTIC_IMPLICATIONS_FOR_DRUG_RESISTANCE",
-            "INVESTIGATIONAL_THERAPEUTIC_IMPLICATIONS_DRUG_SENSITIVITY",
-            "INVESTIGATIONAL_THERAPEUTIC_IMPLICATIONS_DRUG_RESISTANCE",
-            "PATHOGENIC",
-            "GENOMIC_INDICATOR",
-            "GENOMIC_INDICATOR_ALLELE_STATE",
-            "GENE_PENETRANCE",
-            "GENE_INHERITANCE_MECHANISM",
-            "GENE_CANCER_RISK",
-            "VARIANT_PENETRANCE",
-            "VARIANT_INHERITANCE_MECHANISM",
-            "VARIANT_CANCER_RISK"
+            "LEVEL_1",
+            "LEVEL_2",
+            "LEVEL_3A",
+            "LEVEL_3B",
+            "LEVEL_4",
+            "LEVEL_R1",
+            "LEVEL_R2",
+            "LEVEL_Px1",
+            "LEVEL_Px2",
+            "LEVEL_Px3",
+            "LEVEL_Dx1",
+            "LEVEL_Dx2",
+            "LEVEL_Dx3",
+            "LEVEL_Fda1",
+            "LEVEL_Fda2",
+            "LEVEL_Fda3",
+            "NO"
           ]
         },
-        "gene": {
-          "$ref": "#/definitions/Gene"
-        },
-        "id": {
-          "type": "string"
-        },
-        "lastEdit": {
+        "highestPrognosticImplicationLevel": {
           "type": "string",
-          "format": "date-time"
+          "description": "(Nullable) The highest prognostic level from a list of prognostic evidences.",
+          "enum": [
+            "LEVEL_1",
+            "LEVEL_2",
+            "LEVEL_3A",
+            "LEVEL_3B",
+            "LEVEL_4",
+            "LEVEL_R1",
+            "LEVEL_R2",
+            "LEVEL_Px1",
+            "LEVEL_Px2",
+            "LEVEL_Px3",
+            "LEVEL_Dx1",
+            "LEVEL_Dx2",
+            "LEVEL_Dx3",
+            "LEVEL_Fda1",
+            "LEVEL_Fda2",
+            "LEVEL_Fda3",
+            "NO"
+          ]
         },
-        "shortDesc": {
+        "highestResistanceLevel": {
+          "type": "string",
+          "description": "(Nullable) The highest resistance level from a list of therapeutic evidences.",
+          "enum": [
+            "LEVEL_1",
+            "LEVEL_2",
+            "LEVEL_3A",
+            "LEVEL_3B",
+            "LEVEL_4",
+            "LEVEL_R1",
+            "LEVEL_R2",
+            "LEVEL_Px1",
+            "LEVEL_Px2",
+            "LEVEL_Px3",
+            "LEVEL_Dx1",
+            "LEVEL_Dx2",
+            "LEVEL_Dx3",
+            "LEVEL_Fda1",
+            "LEVEL_Fda2",
+            "LEVEL_Fda3",
+            "NO"
+          ]
+        },
+        "highestSensitiveLevel": {
+          "type": "string",
+          "description": "(Nullable) The highest sensitivity level from a list of therapeutic evidences.",
+          "enum": [
+            "LEVEL_1",
+            "LEVEL_2",
+            "LEVEL_3A",
+            "LEVEL_3B",
+            "LEVEL_4",
+            "LEVEL_R1",
+            "LEVEL_R2",
+            "LEVEL_Px1",
+            "LEVEL_Px2",
+            "LEVEL_Px3",
+            "LEVEL_Dx1",
+            "LEVEL_Dx2",
+            "LEVEL_Dx3",
+            "LEVEL_Fda1",
+            "LEVEL_Fda2",
+            "LEVEL_Fda3",
+            "NO"
+          ]
+        },
+        "lastUpdate": {
+          "type": "string",
+          "example": "01/30/2025",
+          "description": "OncoKB data release date. Formatted as MM/DD/YYYY"
+        },
+        "mutationEffect": {
+          "$ref": "#/definitions/MutationEffectResp"
+        },
+        "otherSignificantResistanceLevels": {
+          "type": "array",
+          "description": "DEPRECATED",
+          "items": {
+            "type": "string",
+            "enum": [
+              "LEVEL_1",
+              "LEVEL_2",
+              "LEVEL_3A",
+              "LEVEL_3B",
+              "LEVEL_4",
+              "LEVEL_R1",
+              "LEVEL_R2",
+              "LEVEL_Px1",
+              "LEVEL_Px2",
+              "LEVEL_Px3",
+              "LEVEL_Dx1",
+              "LEVEL_Dx2",
+              "LEVEL_Dx3",
+              "LEVEL_Fda1",
+              "LEVEL_Fda2",
+              "LEVEL_Fda3",
+              "NO"
+            ]
+          }
+        },
+        "otherSignificantSensitiveLevels": {
+          "type": "array",
+          "description": "DEPRECATED",
+          "items": {
+            "type": "string",
+            "enum": [
+              "LEVEL_1",
+              "LEVEL_2",
+              "LEVEL_3A",
+              "LEVEL_3B",
+              "LEVEL_4",
+              "LEVEL_R1",
+              "LEVEL_R2",
+              "LEVEL_Px1",
+              "LEVEL_Px2",
+              "LEVEL_Px3",
+              "LEVEL_Dx1",
+              "LEVEL_Dx2",
+              "LEVEL_Dx3",
+              "LEVEL_Fda1",
+              "LEVEL_Fda2",
+              "LEVEL_Fda3",
+              "NO"
+            ]
+          }
+        },
+        "pathogenic": {
           "type": "string"
         },
-        "status": {
+        "penetrance": {
           "type": "string"
+        },
+        "prognosticImplications": {
+          "type": "array",
+          "description": "List of prognostic implications. Defaulted to empty list",
+          "items": {
+            "$ref": "#/definitions/Implication"
+          }
+        },
+        "prognosticSummary": {
+          "type": "string",
+          "description": "Prognostic summary. Defaulted to \"\""
+        },
+        "query": {
+          "$ref": "#/definitions/Query"
+        },
+        "treatments": {
+          "type": "array",
+          "description": "List of therapeutic implications implications. Defaulted to empty list",
+          "items": {
+            "$ref": "#/definitions/IndicatorQueryTreatment"
+          }
+        },
+        "tumorTypeSummary": {
+          "type": "string",
+          "description": "Tumor type summary. Defaulted to \"\""
+        },
+        "variantExist": {
+          "type": "boolean",
+          "example": false,
+          "description": "Indicates whether an exact match for the queried variant is curated"
+        },
+        "variantSummary": {
+          "type": "string",
+          "description": "Variant summary. Defaulted to \"\""
+        },
+        "vus": {
+          "type": "boolean"
+        }
+      }
+    },
+    "AnnotationSearchResult": {
+      "type": "object",
+      "properties": {
+        "queryType": {
+          "type": "string",
+          "enum": [
+            "GENE",
+            "VARIANT",
+            "DRUG",
+            "CANCER_TYPE"
+          ]
+        },
+        "somaticIndicatorQueryResp": {
+          "$ref": "#/definitions/SomaticIndicatorQueryResp"
         }
       }
     },
@@ -2768,7 +4291,7 @@
         "cancerTypes": {
           "type": "array",
           "items": {
-            "$ref": "#/definitions/TumorType"
+            "$ref": "#/definitions/TumorTypeEntity"
           }
         },
         "description": {
@@ -2795,19 +4318,15 @@
             "INVESTIGATIONAL_THERAPEUTIC_IMPLICATIONS_DRUG_RESISTANCE",
             "PATHOGENIC",
             "GENOMIC_INDICATOR",
-            "GENOMIC_INDICATOR_ALLELE_STATE",
             "GENE_PENETRANCE",
-            "GENE_INHERITANCE_MECHANISM",
-            "GENE_CANCER_RISK",
             "VARIANT_PENETRANCE",
-            "VARIANT_INHERITANCE_MECHANISM",
             "VARIANT_CANCER_RISK"
           ]
         },
         "excludedCancerTypes": {
           "type": "array",
           "items": {
-            "$ref": "#/definitions/TumorType"
+            "$ref": "#/definitions/TumorTypeEntity"
           }
         },
         "fdaLevel": {
@@ -2900,7 +4419,7 @@
         "relevantCancerTypes": {
           "type": "array",
           "items": {
-            "$ref": "#/definitions/TumorType"
+            "$ref": "#/definitions/TumorTypeEntity"
           }
         },
         "solidPropagationLevel": {
@@ -2936,356 +4455,14 @@
         }
       }
     },
-    "AnnotateStructuralVariantQuery": {
+    "VariantOfUnknownSignificance": {
       "type": "object",
       "properties": {
-        "alleleState": {
-          "type": "string"
-        },
-        "evidenceTypes": {
-          "type": "array",
-          "items": {
-            "type": "string",
-            "enum": [
-              "GENE_SUMMARY",
-              "MUTATION_SUMMARY",
-              "TUMOR_TYPE_SUMMARY",
-              "GENE_TUMOR_TYPE_SUMMARY",
-              "PROGNOSTIC_SUMMARY",
-              "DIAGNOSTIC_SUMMARY",
-              "GENE_BACKGROUND",
-              "ONCOGENIC",
-              "MUTATION_EFFECT",
-              "VUS",
-              "PROGNOSTIC_IMPLICATION",
-              "DIAGNOSTIC_IMPLICATION",
-              "STANDARD_THERAPEUTIC_IMPLICATIONS_FOR_DRUG_SENSITIVITY",
-              "STANDARD_THERAPEUTIC_IMPLICATIONS_FOR_DRUG_RESISTANCE",
-              "INVESTIGATIONAL_THERAPEUTIC_IMPLICATIONS_DRUG_SENSITIVITY",
-              "INVESTIGATIONAL_THERAPEUTIC_IMPLICATIONS_DRUG_RESISTANCE",
-              "PATHOGENIC",
-              "GENOMIC_INDICATOR",
-              "GENOMIC_INDICATOR_ALLELE_STATE",
-              "GENE_PENETRANCE",
-              "GENE_INHERITANCE_MECHANISM",
-              "GENE_CANCER_RISK",
-              "VARIANT_PENETRANCE",
-              "VARIANT_INHERITANCE_MECHANISM",
-              "VARIANT_CANCER_RISK"
-            ]
-          }
-        },
-        "functionalFusion": {
-          "type": "boolean"
-        },
-        "geneA": {
-          "$ref": "#/definitions/QueryGene"
-        },
-        "geneB": {
-          "$ref": "#/definitions/QueryGene"
-        },
-        "germline": {
-          "type": "boolean"
-        },
-        "id": {
-          "type": "string"
-        },
-        "referenceGenome": {
-          "type": "string",
-          "enum": [
-            "GRCh37",
-            "GRCh38"
-          ]
-        },
-        "structuralVariantType": {
-          "type": "string",
-          "enum": [
-            "DELETION",
-            "TRANSLOCATION",
-            "DUPLICATION",
-            "INSERTION",
-            "INVERSION",
-            "FUSION",
-            "UNKNOWN"
-          ]
-        },
-        "tumorType": {
-          "type": "string"
-        }
-      }
-    },
-    "IndicatorQueryResp": {
-      "type": "object",
-      "properties": {
-        "alleleExist": {
-          "type": "boolean"
-        },
-        "dataVersion": {
-          "type": "string"
-        },
-        "diagnosticImplications": {
-          "type": "array",
-          "items": {
-            "$ref": "#/definitions/Implication"
-          }
-        },
-        "diagnosticSummary": {
-          "type": "string"
-        },
-        "geneExist": {
-          "type": "boolean"
-        },
-        "geneSummary": {
-          "type": "string"
-        },
-        "germline": {
-          "$ref": "#/definitions/GermlineVariant"
-        },
-        "highestDiagnosticImplicationLevel": {
-          "type": "string",
-          "enum": [
-            "LEVEL_1",
-            "LEVEL_2",
-            "LEVEL_3A",
-            "LEVEL_3B",
-            "LEVEL_4",
-            "LEVEL_R1",
-            "LEVEL_R2",
-            "LEVEL_Px1",
-            "LEVEL_Px2",
-            "LEVEL_Px3",
-            "LEVEL_Dx1",
-            "LEVEL_Dx2",
-            "LEVEL_Dx3",
-            "LEVEL_Fda1",
-            "LEVEL_Fda2",
-            "LEVEL_Fda3",
-            "NO"
-          ]
-        },
-        "highestFdaLevel": {
-          "type": "string",
-          "enum": [
-            "LEVEL_1",
-            "LEVEL_2",
-            "LEVEL_3A",
-            "LEVEL_3B",
-            "LEVEL_4",
-            "LEVEL_R1",
-            "LEVEL_R2",
-            "LEVEL_Px1",
-            "LEVEL_Px2",
-            "LEVEL_Px3",
-            "LEVEL_Dx1",
-            "LEVEL_Dx2",
-            "LEVEL_Dx3",
-            "LEVEL_Fda1",
-            "LEVEL_Fda2",
-            "LEVEL_Fda3",
-            "NO"
-          ]
-        },
-        "highestPrognosticImplicationLevel": {
-          "type": "string",
-          "enum": [
-            "LEVEL_1",
-            "LEVEL_2",
-            "LEVEL_3A",
-            "LEVEL_3B",
-            "LEVEL_4",
-            "LEVEL_R1",
-            "LEVEL_R2",
-            "LEVEL_Px1",
-            "LEVEL_Px2",
-            "LEVEL_Px3",
-            "LEVEL_Dx1",
-            "LEVEL_Dx2",
-            "LEVEL_Dx3",
-            "LEVEL_Fda1",
-            "LEVEL_Fda2",
-            "LEVEL_Fda3",
-            "NO"
-          ]
-        },
-        "highestResistanceLevel": {
-          "type": "string",
-          "enum": [
-            "LEVEL_1",
-            "LEVEL_2",
-            "LEVEL_3A",
-            "LEVEL_3B",
-            "LEVEL_4",
-            "LEVEL_R1",
-            "LEVEL_R2",
-            "LEVEL_Px1",
-            "LEVEL_Px2",
-            "LEVEL_Px3",
-            "LEVEL_Dx1",
-            "LEVEL_Dx2",
-            "LEVEL_Dx3",
-            "LEVEL_Fda1",
-            "LEVEL_Fda2",
-            "LEVEL_Fda3",
-            "NO"
-          ]
-        },
-        "highestSensitiveLevel": {
-          "type": "string",
-          "enum": [
-            "LEVEL_1",
-            "LEVEL_2",
-            "LEVEL_3A",
-            "LEVEL_3B",
-            "LEVEL_4",
-            "LEVEL_R1",
-            "LEVEL_R2",
-            "LEVEL_Px1",
-            "LEVEL_Px2",
-            "LEVEL_Px3",
-            "LEVEL_Dx1",
-            "LEVEL_Dx2",
-            "LEVEL_Dx3",
-            "LEVEL_Fda1",
-            "LEVEL_Fda2",
-            "LEVEL_Fda3",
-            "NO"
-          ]
-        },
-        "hotspot": {
-          "type": "boolean"
-        },
-        "lastUpdate": {
-          "type": "string"
-        },
-        "mutationEffect": {
-          "$ref": "#/definitions/MutationEffectResp"
-        },
-        "oncogenic": {
-          "type": "string"
-        },
-        "otherSignificantResistanceLevels": {
-          "type": "array",
-          "items": {
-            "type": "string",
-            "enum": [
-              "LEVEL_1",
-              "LEVEL_2",
-              "LEVEL_3A",
-              "LEVEL_3B",
-              "LEVEL_4",
-              "LEVEL_R1",
-              "LEVEL_R2",
-              "LEVEL_Px1",
-              "LEVEL_Px2",
-              "LEVEL_Px3",
-              "LEVEL_Dx1",
-              "LEVEL_Dx2",
-              "LEVEL_Dx3",
-              "LEVEL_Fda1",
-              "LEVEL_Fda2",
-              "LEVEL_Fda3",
-              "NO"
-            ]
-          }
-        },
-        "otherSignificantSensitiveLevels": {
-          "type": "array",
-          "items": {
-            "type": "string",
-            "enum": [
-              "LEVEL_1",
-              "LEVEL_2",
-              "LEVEL_3A",
-              "LEVEL_3B",
-              "LEVEL_4",
-              "LEVEL_R1",
-              "LEVEL_R2",
-              "LEVEL_Px1",
-              "LEVEL_Px2",
-              "LEVEL_Px3",
-              "LEVEL_Dx1",
-              "LEVEL_Dx2",
-              "LEVEL_Dx3",
-              "LEVEL_Fda1",
-              "LEVEL_Fda2",
-              "LEVEL_Fda3",
-              "NO"
-            ]
-          }
-        },
-        "prognosticImplications": {
-          "type": "array",
-          "items": {
-            "$ref": "#/definitions/Implication"
-          }
-        },
-        "prognosticSummary": {
-          "type": "string"
-        },
-        "query": {
-          "$ref": "#/definitions/Query"
-        },
-        "treatments": {
-          "type": "array",
-          "items": {
-            "$ref": "#/definitions/IndicatorQueryTreatment"
-          }
-        },
-        "tumorTypeSummary": {
-          "type": "string"
-        },
-        "variantExist": {
-          "type": "boolean"
-        },
-        "variantSummary": {
-          "type": "string"
-        },
-        "vus": {
-          "type": "boolean"
-        }
-      }
-    },
-    "ActionableGene": {
-      "type": "object",
-      "properties": {
-        "abstracts": {
-          "type": "string"
-        },
-        "cancerType": {
-          "type": "string"
-        },
-        "drugs": {
-          "type": "string"
-        },
         "entrezGeneId": {
           "type": "integer",
           "format": "int32"
         },
         "gene": {
-          "type": "string"
-        },
-        "grch37Isoform": {
-          "type": "string"
-        },
-        "grch37RefSeq": {
-          "type": "string"
-        },
-        "grch38Isoform": {
-          "type": "string"
-        },
-        "grch38RefSeq": {
-          "type": "string"
-        },
-        "level": {
-          "type": "string"
-        },
-        "pmids": {
-          "type": "string"
-        },
-        "proteinChange": {
-          "type": "string"
-        },
-        "referenceGenome": {
           "type": "string"
         },
         "variant": {
@@ -3301,77 +4478,6 @@
         },
         "link": {
           "type": "string"
-        }
-      }
-    },
-    "GermlineVariant": {
-      "type": "object",
-      "properties": {
-        "cancerRisk": {
-          "type": "string"
-        },
-        "clinVarId": {
-          "type": "string"
-        },
-        "description": {
-          "type": "string"
-        },
-        "genomicIndicators": {
-          "type": "array",
-          "items": {
-            "type": "string"
-          }
-        },
-        "inheritanceMechanism": {
-          "type": "string"
-        },
-        "inheritanceMechanismDescription": {
-          "type": "string"
-        },
-        "pathogenic": {
-          "type": "string"
-        },
-        "penetrance": {
-          "type": "string"
-        },
-        "penetranceDescription": {
-          "type": "string"
-        }
-      }
-    },
-    "InfoLevel": {
-      "type": "object",
-      "properties": {
-        "colorHex": {
-          "type": "string"
-        },
-        "description": {
-          "type": "string"
-        },
-        "htmlDescription": {
-          "type": "string"
-        },
-        "levelOfEvidence": {
-          "type": "string",
-          "enum": [
-            "LEVEL_1",
-            "LEVEL_2",
-            "LEVEL_3A",
-            "LEVEL_3B",
-            "LEVEL_4",
-            "LEVEL_R1",
-            "LEVEL_R2",
-            "LEVEL_Px1",
-            "LEVEL_Px2",
-            "LEVEL_Px3",
-            "LEVEL_Dx1",
-            "LEVEL_Dx2",
-            "LEVEL_Dx3",
-            "LEVEL_Fda1",
-            "LEVEL_Fda2",
-            "LEVEL_Fda3",
-            "NO"
-          ]
         }
       }
     },
@@ -3399,10 +4505,10 @@
         "geneType": {
           "type": "string",
           "enum": [
-            "INSUFFICIENT_EVIDENCE",
             "ONCOGENE_AND_TSG",
             "ONCOGENE",
             "TSG",
+            "INSUFFICIENT_EVIDENCE",
             "NEITHER"
           ]
         },
@@ -3460,7 +4566,7 @@
           "$ref": "#/definitions/Alteration"
         },
         "exactMatchedTumorType": {
-          "$ref": "#/definitions/TumorType"
+          "$ref": "#/definitions/TumorTypeEntity"
         },
         "gene": {
           "$ref": "#/definitions/Gene"
@@ -3496,37 +4602,11 @@
         "oncoTreeTypes": {
           "type": "array",
           "items": {
-            "$ref": "#/definitions/TumorType"
+            "$ref": "#/definitions/TumorTypeEntity"
           }
         },
         "query": {
           "$ref": "#/definitions/Query"
-        }
-      }
-    },
-    "Trial": {
-      "type": "object",
-      "properties": {
-        "arms": {
-          "type": "array",
-          "items": {
-            "$ref": "#/definitions/Arms"
-          }
-        },
-        "briefTitle": {
-          "type": "string"
-        },
-        "currentTrialStatus": {
-          "type": "string"
-        },
-        "isUSTrial": {
-          "type": "boolean"
-        },
-        "nctId": {
-          "type": "string"
-        },
-        "principalInvestigator": {
-          "type": "string"
         }
       }
     },
@@ -3575,10 +4655,10 @@
         "geneType": {
           "type": "string",
           "enum": [
-            "INSUFFICIENT_EVIDENCE",
             "ONCOGENE_AND_TSG",
             "ONCOGENE",
             "TSG",
+            "INSUFFICIENT_EVIDENCE",
             "NEITHER"
           ]
         },
@@ -3618,20 +4698,6 @@
         }
       }
     },
-    "Arms": {
-      "type": "object",
-      "properties": {
-        "armDescription": {
-          "type": "string"
-        },
-        "drugs": {
-          "type": "array",
-          "items": {
-            "$ref": "#/definitions/Drug"
-          }
-        }
-      }
-    },
     "MainType": {
       "type": "object",
       "properties": {
@@ -3653,45 +4719,31 @@
       },
       "description": "OncoTree Cancer Type"
     },
-    "OncoKBInfo": {
+    "SampleQueryResp": {
       "type": "object",
       "properties": {
-        "apiVersion": {
-          "$ref": "#/definitions/SemVer"
-        },
-        "appVersion": {
-          "$ref": "#/definitions/SemVer"
-        },
-        "dataVersion": {
-          "$ref": "#/definitions/Version"
-        },
-        "levels": {
+        "copyNumberAlterations": {
           "type": "array",
           "items": {
-            "$ref": "#/definitions/InfoLevel"
+            "$ref": "#/definitions/SomaticIndicatorQueryResp"
           }
         },
-        "ncitVersion": {
+        "id": {
           "type": "string"
         },
-        "oncoTreeVersion": {
-          "type": "string"
+        "mutations": {
+          "type": "array",
+          "items": {
+            "$ref": "#/definitions/SomaticIndicatorQueryResp"
+          }
         },
-        "publicInstance": {
-          "type": "boolean"
-        }
-      }
-    },
-    "VariantConsequence": {
-      "type": "object",
-      "properties": {
-        "description": {
-          "type": "string"
+        "structuralVariants": {
+          "type": "array",
+          "items": {
+            "$ref": "#/definitions/SomaticIndicatorQueryResp"
+          }
         },
-        "isGenerallyTruncating": {
-          "type": "boolean"
-        },
-        "term": {
+        "tumorType": {
           "type": "string"
         }
       }
@@ -3699,9 +4751,6 @@
     "AnnotateMutationByProteinChangeQuery": {
       "type": "object",
       "properties": {
-        "alleleState": {
-          "type": "string"
-        },
         "alteration": {
           "type": "string"
         },
@@ -3731,21 +4780,14 @@
               "INVESTIGATIONAL_THERAPEUTIC_IMPLICATIONS_DRUG_RESISTANCE",
               "PATHOGENIC",
               "GENOMIC_INDICATOR",
-              "GENOMIC_INDICATOR_ALLELE_STATE",
               "GENE_PENETRANCE",
-              "GENE_INHERITANCE_MECHANISM",
-              "GENE_CANCER_RISK",
               "VARIANT_PENETRANCE",
-              "VARIANT_INHERITANCE_MECHANISM",
               "VARIANT_CANCER_RISK"
             ]
           }
         },
         "gene": {
           "$ref": "#/definitions/QueryGene"
-        },
-        "germline": {
-          "type": "boolean"
         },
         "id": {
           "type": "string"
@@ -3775,33 +4817,39 @@
       "properties": {
         "abstracts": {
           "type": "array",
+          "description": "List of abstracts cited in the treatment description. Defaulted to empty list",
           "items": {
             "$ref": "#/definitions/ArticleAbstract"
           }
         },
         "alterations": {
           "type": "array",
+          "description": "List of alterations associated with therapeutic implication",
           "items": {
             "type": "string"
           }
         },
         "approvedIndications": {
           "type": "array",
+          "description": "DEPRECATED",
           "items": {
             "type": "string"
           }
         },
         "description": {
-          "type": "string"
+          "type": "string",
+          "description": "Treatment description. Defaulted to \"\""
         },
         "drugs": {
           "type": "array",
+          "description": "List of drugs associated with therapeutic implication",
           "items": {
             "$ref": "#/definitions/Drug"
           }
         },
         "fdaLevel": {
           "type": "string",
+          "description": "FDA level associated with implication",
           "enum": [
             "LEVEL_1",
             "LEVEL_2",
@@ -3824,6 +4872,7 @@
         },
         "level": {
           "type": "string",
+          "description": "Therapeutic level associated with implication",
           "enum": [
             "LEVEL_1",
             "LEVEL_2",
@@ -3845,16 +4894,19 @@
           ]
         },
         "levelAssociatedCancerType": {
+          "description": "Cancer type associated with level of evidence",
           "$ref": "#/definitions/TumorType"
         },
         "levelExcludedCancerTypes": {
           "type": "array",
+          "description": "Excluded cancer types. Defaulted to empty list",
           "items": {
             "$ref": "#/definitions/TumorType"
           }
         },
         "pmids": {
           "type": "array",
+          "description": "List of PubMed IDs cited in the treatment description. Defaulted to empty list",
           "items": {
             "type": "string"
           }
@@ -3924,6 +4976,7 @@
             "428",
             "429",
             "431",
+            "451",
             "500",
             "501",
             "502",
@@ -3937,6 +4990,10 @@
             "510",
             "511"
           ]
+        },
+        "statusCodeValue": {
+          "type": "integer",
+          "format": "int32"
         }
       }
     },
@@ -3961,176 +5018,26 @@
         }
       }
     },
-    "EvidenceQueries": {
-      "type": "object",
-      "properties": {
-        "evidenceTypes": {
-          "type": "string"
-        },
-        "highestLevelOnly": {
-          "type": "boolean"
-        },
-        "levels": {
-          "type": "array",
-          "items": {
-            "type": "string",
-            "enum": [
-              "LEVEL_1",
-              "LEVEL_2",
-              "LEVEL_3A",
-              "LEVEL_3B",
-              "LEVEL_4",
-              "LEVEL_R1",
-              "LEVEL_R2",
-              "LEVEL_Px1",
-              "LEVEL_Px2",
-              "LEVEL_Px3",
-              "LEVEL_Dx1",
-              "LEVEL_Dx2",
-              "LEVEL_Dx3",
-              "LEVEL_Fda1",
-              "LEVEL_Fda2",
-              "LEVEL_Fda3",
-              "NO"
-            ]
-          }
-        },
-        "queries": {
-          "type": "array",
-          "items": {
-            "$ref": "#/definitions/Query"
-          }
-        }
-      }
-    },
-    "VariantSearchQuery": {
-      "type": "object",
-      "properties": {
-        "consequence": {
-          "type": "string"
-        },
-        "entrezGeneId": {
-          "type": "integer",
-          "format": "int32"
-        },
-        "hgvs": {
-          "type": "string"
-        },
-        "hugoSymbol": {
-          "type": "string"
-        },
-        "proteinEnd": {
-          "type": "integer",
-          "format": "int32"
-        },
-        "proteinStart": {
-          "type": "integer",
-          "format": "int32"
-        },
-        "referenceGenome": {
-          "type": "string",
-          "enum": [
-            "GRCh37",
-            "GRCh38"
-          ]
-        },
-        "variant": {
-          "type": "string"
-        },
-        "variantType": {
-          "type": "string"
-        }
-      }
-    },
     "MutationEffectResp": {
       "type": "object",
       "properties": {
         "citations": {
+          "description": "Mutation effect-relevant PMIDs, Abstracts, and other citation sources",
           "$ref": "#/definitions/Citations"
         },
         "description": {
-          "type": "string"
+          "type": "string",
+          "description": "A brief overview of the biological and oncogenic effect of the variant. Defaulted to \"\""
         },
         "knownEffect": {
-          "type": "string"
-        }
-      }
-    },
-    "AnnotateCopyNumberAlterationQuery": {
-      "type": "object",
-      "properties": {
-        "alleleState": {
-          "type": "string"
-        },
-        "copyNameAlterationType": {
           "type": "string",
-          "enum": [
-            "AMPLIFICATION",
-            "DELETION",
-            "GAIN",
-            "LOSS"
-          ]
-        },
-        "evidenceTypes": {
-          "type": "array",
-          "items": {
-            "type": "string",
-            "enum": [
-              "GENE_SUMMARY",
-              "MUTATION_SUMMARY",
-              "TUMOR_TYPE_SUMMARY",
-              "GENE_TUMOR_TYPE_SUMMARY",
-              "PROGNOSTIC_SUMMARY",
-              "DIAGNOSTIC_SUMMARY",
-              "GENE_BACKGROUND",
-              "ONCOGENIC",
-              "MUTATION_EFFECT",
-              "VUS",
-              "PROGNOSTIC_IMPLICATION",
-              "DIAGNOSTIC_IMPLICATION",
-              "STANDARD_THERAPEUTIC_IMPLICATIONS_FOR_DRUG_SENSITIVITY",
-              "STANDARD_THERAPEUTIC_IMPLICATIONS_FOR_DRUG_RESISTANCE",
-              "INVESTIGATIONAL_THERAPEUTIC_IMPLICATIONS_DRUG_SENSITIVITY",
-              "INVESTIGATIONAL_THERAPEUTIC_IMPLICATIONS_DRUG_RESISTANCE",
-              "PATHOGENIC",
-              "GENOMIC_INDICATOR",
-              "GENOMIC_INDICATOR_ALLELE_STATE",
-              "GENE_PENETRANCE",
-              "GENE_INHERITANCE_MECHANISM",
-              "GENE_CANCER_RISK",
-              "VARIANT_PENETRANCE",
-              "VARIANT_INHERITANCE_MECHANISM",
-              "VARIANT_CANCER_RISK"
-            ]
-          }
-        },
-        "gene": {
-          "$ref": "#/definitions/QueryGene"
-        },
-        "germline": {
-          "type": "boolean"
-        },
-        "id": {
-          "type": "string"
-        },
-        "referenceGenome": {
-          "type": "string",
-          "enum": [
-            "GRCh37",
-            "GRCh38"
-          ]
-        },
-        "tumorType": {
-          "type": "string"
+          "description": "Indicates the effect of the mutation on the gene. Defaulted to \"\""
         }
       }
     },
     "AnnotateMutationByHGVSgQuery": {
       "type": "object",
       "properties": {
-        "alleleState": {
-          "type": "string"
-        },
         "evidenceTypes": {
           "type": "array",
           "items": {
@@ -4154,18 +5061,11 @@
               "INVESTIGATIONAL_THERAPEUTIC_IMPLICATIONS_DRUG_RESISTANCE",
               "PATHOGENIC",
               "GENOMIC_INDICATOR",
-              "GENOMIC_INDICATOR_ALLELE_STATE",
               "GENE_PENETRANCE",
-              "GENE_INHERITANCE_MECHANISM",
-              "GENE_CANCER_RISK",
               "VARIANT_PENETRANCE",
-              "VARIANT_INHERITANCE_MECHANISM",
               "VARIANT_CANCER_RISK"
             ]
           }
-        },
-        "germline": {
-          "type": "boolean"
         },
         "hgvsg": {
           "type": "string"
@@ -4211,12 +5111,14 @@
       "properties": {
         "abstracts": {
           "type": "array",
+          "description": "Set of Abstract sources",
           "items": {
             "$ref": "#/definitions/ArticleAbstract"
           }
         },
         "pmids": {
           "type": "array",
+          "description": "Set of PubMed article ids",
           "items": {
             "type": "string"
           }

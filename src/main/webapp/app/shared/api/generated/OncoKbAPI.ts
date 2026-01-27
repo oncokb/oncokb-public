@@ -2,13 +2,9 @@ import * as request from "superagent";
 
 type CallbackHandler = (err: any, res ? : request.Response) => void;
 export type AnnotateMutationByGenomicChangeQuery = {
-    'alleleState': string
-
-        'evidenceTypes': Array < "GENE_SUMMARY" | "MUTATION_SUMMARY" | "TUMOR_TYPE_SUMMARY" | "GENE_TUMOR_TYPE_SUMMARY" | "PROGNOSTIC_SUMMARY" | "DIAGNOSTIC_SUMMARY" | "GENE_BACKGROUND" | "ONCOGENIC" | "MUTATION_EFFECT" | "VUS" | "PROGNOSTIC_IMPLICATION" | "DIAGNOSTIC_IMPLICATION" | "STANDARD_THERAPEUTIC_IMPLICATIONS_FOR_DRUG_SENSITIVITY" | "STANDARD_THERAPEUTIC_IMPLICATIONS_FOR_DRUG_RESISTANCE" | "INVESTIGATIONAL_THERAPEUTIC_IMPLICATIONS_DRUG_SENSITIVITY" | "INVESTIGATIONAL_THERAPEUTIC_IMPLICATIONS_DRUG_RESISTANCE" | "PATHOGENIC" | "GENOMIC_INDICATOR" | "GENOMIC_INDICATOR_ALLELE_STATE" | "GENE_PENETRANCE" | "GENE_INHERITANCE_MECHANISM" | "GENE_CANCER_RISK" | "VARIANT_PENETRANCE" | "VARIANT_INHERITANCE_MECHANISM" | "VARIANT_CANCER_RISK" >
+    'evidenceTypes': Array < "GENE_SUMMARY" | "MUTATION_SUMMARY" | "TUMOR_TYPE_SUMMARY" | "GENE_TUMOR_TYPE_SUMMARY" | "PROGNOSTIC_SUMMARY" | "DIAGNOSTIC_SUMMARY" | "GENE_BACKGROUND" | "ONCOGENIC" | "MUTATION_EFFECT" | "VUS" | "PROGNOSTIC_IMPLICATION" | "DIAGNOSTIC_IMPLICATION" | "STANDARD_THERAPEUTIC_IMPLICATIONS_FOR_DRUG_SENSITIVITY" | "STANDARD_THERAPEUTIC_IMPLICATIONS_FOR_DRUG_RESISTANCE" | "INVESTIGATIONAL_THERAPEUTIC_IMPLICATIONS_DRUG_SENSITIVITY" | "INVESTIGATIONAL_THERAPEUTIC_IMPLICATIONS_DRUG_RESISTANCE" | "PATHOGENIC" | "GENOMIC_INDICATOR" | "GENE_PENETRANCE" | "VARIANT_PENETRANCE" | "VARIANT_CANCER_RISK" >
 
         'genomicLocation': string
-
-        'germline': boolean
 
         'id': string
 
@@ -24,19 +20,19 @@ export type TreatmentDrug = {
 
 };
 export type Query = {
-    'alleleState': string
-
-        'alteration': string
+    'alteration': string
 
         'alterationType': string
+
+        'canonicalTranscript': string
 
         'consequence': string
 
         'entrezGeneId': number
 
-        'germline': boolean
-
         'hgvs': string
+
+        'hgvsInfo': string
 
         'hugoSymbol': string
 
@@ -51,6 +47,303 @@ export type Query = {
         'svType': "DELETION" | "TRANSLOCATION" | "DUPLICATION" | "INSERTION" | "INVERSION" | "FUSION" | "UNKNOWN"
 
         'tumorType': string
+
+};
+export type ApiHttpError = {
+    'detail': string
+
+        'message': string
+
+        'path': string
+
+        'status': number
+
+        'title': string
+
+};
+export type ParsedVersionInfo = {
+    'genomeNexusVepVersion': string
+
+        'genomeNexusVersion': string
+
+        'vepVersion': string
+
+};
+export type SemVer = {
+    'major': number
+
+        'minor': number
+
+        'patch': number
+
+        'stable': boolean
+
+        'suffixTokens': Array < string >
+
+        'version': string
+
+};
+export type Implication = {
+    'abstracts': Array < ArticleAbstract >
+
+        'alterations': Array < string >
+
+        'description': string
+
+        'levelOfEvidence': "LEVEL_1" | "LEVEL_2" | "LEVEL_3A" | "LEVEL_3B" | "LEVEL_4" | "LEVEL_R1" | "LEVEL_R2" | "LEVEL_Px1" | "LEVEL_Px2" | "LEVEL_Px3" | "LEVEL_Dx1" | "LEVEL_Dx2" | "LEVEL_Dx3" | "LEVEL_Fda1" | "LEVEL_Fda2" | "LEVEL_Fda3" | "NO"
+
+        'pmids': Array < string >
+
+        'tumorType': TumorType
+
+};
+export type MutationsQuery = {
+    'cDnaChange': Array < AnnotateMutationByHGVSgQuery >
+
+        'genomicChange': Array < AnnotateMutationByGenomicChangeQuery >
+
+        'hgvsg': Array < AnnotateMutationByHGVSgQuery >
+
+        'proteinChange': Array < AnnotateMutationByProteinChangeQuery >
+
+};
+
+export type Gene = {
+    'entrezGeneId': number
+
+        'geneAliases': Array < string >
+
+        'geneType': "ONCOGENE_AND_TSG" | "ONCOGENE" | "TSG" | "INSUFFICIENT_EVIDENCE" | "NEITHER"
+
+        'genesets': Array < Geneset >
+
+        'grch37Isoform': string
+
+        'grch37RefSeq': string
+
+        'grch38Isoform': string
+
+        'grch38RefSeq': string
+
+        'hugoSymbol': string
+
+};
+export type Version = {
+    'date': string
+
+        'version': string
+
+};
+export type TreatmentDrugId = {
+    'drug': Drug
+
+};
+export type GeneEvidence = {
+    'articles': Array < Article >
+
+        'desc': string
+
+        'evidenceId': number
+
+        'evidenceType': "GENE_SUMMARY" | "MUTATION_SUMMARY" | "TUMOR_TYPE_SUMMARY" | "GENE_TUMOR_TYPE_SUMMARY" | "PROGNOSTIC_SUMMARY" | "DIAGNOSTIC_SUMMARY" | "GENE_BACKGROUND" | "ONCOGENIC" | "MUTATION_EFFECT" | "VUS" | "PROGNOSTIC_IMPLICATION" | "DIAGNOSTIC_IMPLICATION" | "STANDARD_THERAPEUTIC_IMPLICATIONS_FOR_DRUG_SENSITIVITY" | "STANDARD_THERAPEUTIC_IMPLICATIONS_FOR_DRUG_RESISTANCE" | "INVESTIGATIONAL_THERAPEUTIC_IMPLICATIONS_DRUG_SENSITIVITY" | "INVESTIGATIONAL_THERAPEUTIC_IMPLICATIONS_DRUG_RESISTANCE" | "PATHOGENIC" | "GENOMIC_INDICATOR" | "GENE_PENETRANCE" | "VARIANT_PENETRANCE" | "VARIANT_CANCER_RISK"
+
+        'gene': Gene
+
+        'id': string
+
+        'lastEdit': string
+
+        'shortDesc': string
+
+        'status': string
+
+};
+export type AnnotateStructuralVariantQuery = {
+    'evidenceTypes': Array < "GENE_SUMMARY" | "MUTATION_SUMMARY" | "TUMOR_TYPE_SUMMARY" | "GENE_TUMOR_TYPE_SUMMARY" | "PROGNOSTIC_SUMMARY" | "DIAGNOSTIC_SUMMARY" | "GENE_BACKGROUND" | "ONCOGENIC" | "MUTATION_EFFECT" | "VUS" | "PROGNOSTIC_IMPLICATION" | "DIAGNOSTIC_IMPLICATION" | "STANDARD_THERAPEUTIC_IMPLICATIONS_FOR_DRUG_SENSITIVITY" | "STANDARD_THERAPEUTIC_IMPLICATIONS_FOR_DRUG_RESISTANCE" | "INVESTIGATIONAL_THERAPEUTIC_IMPLICATIONS_DRUG_SENSITIVITY" | "INVESTIGATIONAL_THERAPEUTIC_IMPLICATIONS_DRUG_RESISTANCE" | "PATHOGENIC" | "GENOMIC_INDICATOR" | "GENE_PENETRANCE" | "VARIANT_PENETRANCE" | "VARIANT_CANCER_RISK" >
+
+        'functionalFusion': boolean
+
+        'geneA': QueryGene
+
+        'geneB': QueryGene
+
+        'id': string
+
+        'referenceGenome': "GRCh37" | "GRCh38"
+
+        'structuralVariantType': "DELETION" | "TRANSLOCATION" | "DUPLICATION" | "INSERTION" | "INVERSION" | "FUSION" | "UNKNOWN"
+
+        'tumorType': string
+
+};
+export type ActionableGene = {
+    'abstracts': string
+
+        'cancerType': string
+
+        'description': string
+
+        'drugs': string
+
+        'entrezGeneId': number
+
+        'gene': string
+
+        'grch37Isoform': string
+
+        'grch37RefSeq': string
+
+        'grch38Isoform': string
+
+        'grch38RefSeq': string
+
+        'level': string
+
+        'liquidPropagationLevel': string
+
+        'pmids': string
+
+        'proteinChange': string
+
+        'referenceGenome': string
+
+        'solidPropagationLevel': string
+
+        'variant': string
+
+};
+export type InfoLevel = {
+    'colorHex': string
+
+        'description': string
+
+        'htmlDescription': string
+
+        'levelOfEvidence': "LEVEL_1" | "LEVEL_2" | "LEVEL_3A" | "LEVEL_3B" | "LEVEL_4" | "LEVEL_R1" | "LEVEL_R2" | "LEVEL_Px1" | "LEVEL_Px2" | "LEVEL_Px3" | "LEVEL_Dx1" | "LEVEL_Dx2" | "LEVEL_Dx3" | "LEVEL_Fda1" | "LEVEL_Fda2" | "LEVEL_Fda3" | "NO"
+
+};
+export type AnnotateMutationByHGVScQuery = {
+    'alteration': string
+
+        'evidenceTypes': Array < "GENE_SUMMARY" | "MUTATION_SUMMARY" | "TUMOR_TYPE_SUMMARY" | "GENE_TUMOR_TYPE_SUMMARY" | "PROGNOSTIC_SUMMARY" | "DIAGNOSTIC_SUMMARY" | "GENE_BACKGROUND" | "ONCOGENIC" | "MUTATION_EFFECT" | "VUS" | "PROGNOSTIC_IMPLICATION" | "DIAGNOSTIC_IMPLICATION" | "STANDARD_THERAPEUTIC_IMPLICATIONS_FOR_DRUG_SENSITIVITY" | "STANDARD_THERAPEUTIC_IMPLICATIONS_FOR_DRUG_RESISTANCE" | "INVESTIGATIONAL_THERAPEUTIC_IMPLICATIONS_DRUG_SENSITIVITY" | "INVESTIGATIONAL_THERAPEUTIC_IMPLICATIONS_DRUG_RESISTANCE" | "PATHOGENIC" | "GENOMIC_INDICATOR" | "GENE_PENETRANCE" | "VARIANT_PENETRANCE" | "VARIANT_CANCER_RISK" >
+
+        'gene': string
+
+        'germlineQuery': GermlineQuery
+
+        'hgvsc': string
+
+        'id': string
+
+        'referenceGenome': "GRCh37" | "GRCh38"
+
+        'tumorType': string
+
+};
+export type Trial = {
+    'arms': Array < Arms >
+
+        'briefTitle': string
+
+        'currentTrialStatus': string
+
+        'isUSTrial': boolean
+
+        'nctId': string
+
+        'principalInvestigator': string
+
+};
+export type Arms = {
+    'armDescription': string
+
+        'drugs': Array < Drug >
+
+};
+export type OncoKBInfo = {
+    'apiVersion': SemVer
+
+        'appVersion': SemVer
+
+        'dataVersion': Version
+
+        'genomeNexus': ParsedGenomeNexusVersion
+
+        'levels': Array < InfoLevel >
+
+        'ncitVersion': string
+
+        'oncoTreeVersion': string
+
+        'publicInstance': boolean
+
+};
+export type GermlineQuery = {
+    'germline': boolean
+
+};
+export type VariantConsequence = {
+    'description': string
+
+        'isGenerallyTruncating': boolean
+
+        'term': string
+
+};
+export type EvidenceQueries = {
+    'evidenceTypes': string
+
+        'highestLevelOnly': boolean
+
+        'levels': Array < "LEVEL_1" | "LEVEL_2" | "LEVEL_3A" | "LEVEL_3B" | "LEVEL_4" | "LEVEL_R1" | "LEVEL_R2" | "LEVEL_Px1" | "LEVEL_Px2" | "LEVEL_Px3" | "LEVEL_Dx1" | "LEVEL_Dx2" | "LEVEL_Dx3" | "LEVEL_Fda1" | "LEVEL_Fda2" | "LEVEL_Fda3" | "NO" >
+
+        'queries': Array < Query >
+
+};
+export type AnnotateCopyNumberAlterationQuery = {
+    'copyNameAlterationType': "AMPLIFICATION" | "DELETION" | "GAIN" | "LOSS"
+
+        'evidenceTypes': Array < "GENE_SUMMARY" | "MUTATION_SUMMARY" | "TUMOR_TYPE_SUMMARY" | "GENE_TUMOR_TYPE_SUMMARY" | "PROGNOSTIC_SUMMARY" | "DIAGNOSTIC_SUMMARY" | "GENE_BACKGROUND" | "ONCOGENIC" | "MUTATION_EFFECT" | "VUS" | "PROGNOSTIC_IMPLICATION" | "DIAGNOSTIC_IMPLICATION" | "STANDARD_THERAPEUTIC_IMPLICATIONS_FOR_DRUG_SENSITIVITY" | "STANDARD_THERAPEUTIC_IMPLICATIONS_FOR_DRUG_RESISTANCE" | "INVESTIGATIONAL_THERAPEUTIC_IMPLICATIONS_DRUG_SENSITIVITY" | "INVESTIGATIONAL_THERAPEUTIC_IMPLICATIONS_DRUG_RESISTANCE" | "PATHOGENIC" | "GENOMIC_INDICATOR" | "GENE_PENETRANCE" | "VARIANT_PENETRANCE" | "VARIANT_CANCER_RISK" >
+
+        'gene': QueryGene
+
+        'id': string
+
+        'referenceGenome': "GRCh37" | "GRCh38"
+
+        'tumorType': string
+
+};
+export type GenomicIndicator = {
+    'description': string
+
+        'inheritanceMechanism': "AUTOSOMAL_DOMINANT" | "AUTOSOMAL_RECESSIVE" | "X_LINKED_RECESSIVE" | "CARRIER"
+
+        'name': string
+
+};
+export type TumorType = {
+    'code': string
+
+        'color': string
+
+        'id': number
+
+        'level': number
+
+        'mainType': string
+
+        'subtype': string
+
+        'tissue': string
+
+        'tumorForm': "SOLID" | "LIQUID" | "MIXED"
+
+};
+export type ParsedGenomeNexusVersion = {
+    'grch37': ParsedVersionInfo
+
+        'grch38': ParsedVersionInfo
 
 };
 export type Article = {
@@ -102,7 +395,9 @@ export type Alteration = {
 
 };
 export type AnnotatedVariant = {
-    'entrezGeneId': number
+    'description': string
+
+        'entrezGeneId': number
 
         'gene': string
 
@@ -129,171 +424,7 @@ export type AnnotatedVariant = {
         'variant': string
 
 };
-export type SemVer = {
-    'major': number
-
-        'minor': number
-
-        'patch': number
-
-        'stable': boolean
-
-        'suffixTokens': Array < string >
-
-        'version': string
-
-};
-export type Implication = {
-    'abstracts': Array < ArticleAbstract >
-
-        'alterations': Array < string >
-
-        'description': string
-
-        'levelOfEvidence': "LEVEL_1" | "LEVEL_2" | "LEVEL_3A" | "LEVEL_3B" | "LEVEL_4" | "LEVEL_R1" | "LEVEL_R2" | "LEVEL_Px1" | "LEVEL_Px2" | "LEVEL_Px3" | "LEVEL_Dx1" | "LEVEL_Dx2" | "LEVEL_Dx3" | "LEVEL_Fda1" | "LEVEL_Fda2" | "LEVEL_Fda3" | "NO"
-
-        'pmids': Array < string >
-
-        'tumorType': TumorType
-
-};
-export type TumorType = {
-    'children': {}
-
-    'code': string
-
-        'color': string
-
-        'id': number
-
-        'level': number
-
-        'mainType': MainType
-
-        'name': string
-
-        'parent': string
-
-        'tissue': string
-
-        'tumorForm': "SOLID" | "LIQUID" | "MIXED"
-
-};
-export type Gene = {
-    'entrezGeneId': number
-
-        'geneAliases': Array < string >
-
-        'geneType': "INSUFFICIENT_EVIDENCE" | "ONCOGENE_AND_TSG" | "ONCOGENE" | "TSG" | "NEITHER"
-
-        'genesets': Array < Geneset >
-
-        'grch37Isoform': string
-
-        'grch37RefSeq': string
-
-        'grch38Isoform': string
-
-        'grch38RefSeq': string
-
-        'hugoSymbol': string
-
-};
-export type Version = {
-    'date': string
-
-        'version': string
-
-};
-export type TreatmentDrugId = {
-    'drug': Drug
-
-};
-export type GeneEvidence = {
-    'articles': Array < Article >
-
-        'desc': string
-
-        'evidenceId': number
-
-        'evidenceType': "GENE_SUMMARY" | "MUTATION_SUMMARY" | "TUMOR_TYPE_SUMMARY" | "GENE_TUMOR_TYPE_SUMMARY" | "PROGNOSTIC_SUMMARY" | "DIAGNOSTIC_SUMMARY" | "GENE_BACKGROUND" | "ONCOGENIC" | "MUTATION_EFFECT" | "VUS" | "PROGNOSTIC_IMPLICATION" | "DIAGNOSTIC_IMPLICATION" | "STANDARD_THERAPEUTIC_IMPLICATIONS_FOR_DRUG_SENSITIVITY" | "STANDARD_THERAPEUTIC_IMPLICATIONS_FOR_DRUG_RESISTANCE" | "INVESTIGATIONAL_THERAPEUTIC_IMPLICATIONS_DRUG_SENSITIVITY" | "INVESTIGATIONAL_THERAPEUTIC_IMPLICATIONS_DRUG_RESISTANCE" | "PATHOGENIC" | "GENOMIC_INDICATOR" | "GENOMIC_INDICATOR_ALLELE_STATE" | "GENE_PENETRANCE" | "GENE_INHERITANCE_MECHANISM" | "GENE_CANCER_RISK" | "VARIANT_PENETRANCE" | "VARIANT_INHERITANCE_MECHANISM" | "VARIANT_CANCER_RISK"
-
-        'gene': Gene
-
-        'id': string
-
-        'lastEdit': string
-
-        'shortDesc': string
-
-        'status': string
-
-};
-export type Evidence = {
-    'additionalInfo': string
-
-        'alterations': Array < Alteration >
-
-        'articles': Array < Article >
-
-        'cancerTypes': Array < TumorType >
-
-        'description': string
-
-        'evidenceType': "GENE_SUMMARY" | "MUTATION_SUMMARY" | "TUMOR_TYPE_SUMMARY" | "GENE_TUMOR_TYPE_SUMMARY" | "PROGNOSTIC_SUMMARY" | "DIAGNOSTIC_SUMMARY" | "GENE_BACKGROUND" | "ONCOGENIC" | "MUTATION_EFFECT" | "VUS" | "PROGNOSTIC_IMPLICATION" | "DIAGNOSTIC_IMPLICATION" | "STANDARD_THERAPEUTIC_IMPLICATIONS_FOR_DRUG_SENSITIVITY" | "STANDARD_THERAPEUTIC_IMPLICATIONS_FOR_DRUG_RESISTANCE" | "INVESTIGATIONAL_THERAPEUTIC_IMPLICATIONS_DRUG_SENSITIVITY" | "INVESTIGATIONAL_THERAPEUTIC_IMPLICATIONS_DRUG_RESISTANCE" | "PATHOGENIC" | "GENOMIC_INDICATOR" | "GENOMIC_INDICATOR_ALLELE_STATE" | "GENE_PENETRANCE" | "GENE_INHERITANCE_MECHANISM" | "GENE_CANCER_RISK" | "VARIANT_PENETRANCE" | "VARIANT_INHERITANCE_MECHANISM" | "VARIANT_CANCER_RISK"
-
-        'excludedCancerTypes': Array < TumorType >
-
-        'fdaLevel': "LEVEL_1" | "LEVEL_2" | "LEVEL_3A" | "LEVEL_3B" | "LEVEL_4" | "LEVEL_R1" | "LEVEL_R2" | "LEVEL_Px1" | "LEVEL_Px2" | "LEVEL_Px3" | "LEVEL_Dx1" | "LEVEL_Dx2" | "LEVEL_Dx3" | "LEVEL_Fda1" | "LEVEL_Fda2" | "LEVEL_Fda3" | "NO"
-
-        'gene': Gene
-
-        'id': number
-
-        'knownEffect': string
-
-        'lastEdit': string
-
-        'lastReview': string
-
-        'levelOfEvidence': "LEVEL_1" | "LEVEL_2" | "LEVEL_3A" | "LEVEL_3B" | "LEVEL_4" | "LEVEL_R1" | "LEVEL_R2" | "LEVEL_Px1" | "LEVEL_Px2" | "LEVEL_Px3" | "LEVEL_Dx1" | "LEVEL_Dx2" | "LEVEL_Dx3" | "LEVEL_Fda1" | "LEVEL_Fda2" | "LEVEL_Fda3" | "NO"
-
-        'liquidPropagationLevel': "LEVEL_1" | "LEVEL_2" | "LEVEL_3A" | "LEVEL_3B" | "LEVEL_4" | "LEVEL_R1" | "LEVEL_R2" | "LEVEL_Px1" | "LEVEL_Px2" | "LEVEL_Px3" | "LEVEL_Dx1" | "LEVEL_Dx2" | "LEVEL_Dx3" | "LEVEL_Fda1" | "LEVEL_Fda2" | "LEVEL_Fda3" | "NO"
-
-        'name': string
-
-        'relevantCancerTypes': Array < TumorType >
-
-        'solidPropagationLevel': "LEVEL_1" | "LEVEL_2" | "LEVEL_3A" | "LEVEL_3B" | "LEVEL_4" | "LEVEL_R1" | "LEVEL_R2" | "LEVEL_Px1" | "LEVEL_Px2" | "LEVEL_Px3" | "LEVEL_Dx1" | "LEVEL_Dx2" | "LEVEL_Dx3" | "LEVEL_Fda1" | "LEVEL_Fda2" | "LEVEL_Fda3" | "NO"
-
-        'treatments': Array < Treatment >
-
-        'uuid': string
-
-};
-export type AnnotateStructuralVariantQuery = {
-    'alleleState': string
-
-        'evidenceTypes': Array < "GENE_SUMMARY" | "MUTATION_SUMMARY" | "TUMOR_TYPE_SUMMARY" | "GENE_TUMOR_TYPE_SUMMARY" | "PROGNOSTIC_SUMMARY" | "DIAGNOSTIC_SUMMARY" | "GENE_BACKGROUND" | "ONCOGENIC" | "MUTATION_EFFECT" | "VUS" | "PROGNOSTIC_IMPLICATION" | "DIAGNOSTIC_IMPLICATION" | "STANDARD_THERAPEUTIC_IMPLICATIONS_FOR_DRUG_SENSITIVITY" | "STANDARD_THERAPEUTIC_IMPLICATIONS_FOR_DRUG_RESISTANCE" | "INVESTIGATIONAL_THERAPEUTIC_IMPLICATIONS_DRUG_SENSITIVITY" | "INVESTIGATIONAL_THERAPEUTIC_IMPLICATIONS_DRUG_RESISTANCE" | "PATHOGENIC" | "GENOMIC_INDICATOR" | "GENOMIC_INDICATOR_ALLELE_STATE" | "GENE_PENETRANCE" | "GENE_INHERITANCE_MECHANISM" | "GENE_CANCER_RISK" | "VARIANT_PENETRANCE" | "VARIANT_INHERITANCE_MECHANISM" | "VARIANT_CANCER_RISK" >
-
-        'functionalFusion': boolean
-
-        'geneA': QueryGene
-
-        'geneB': QueryGene
-
-        'germline': boolean
-
-        'id': string
-
-        'referenceGenome': "GRCh37" | "GRCh38"
-
-        'structuralVariantType': "DELETION" | "TRANSLOCATION" | "DUPLICATION" | "INSERTION" | "INVERSION" | "FUSION" | "UNKNOWN"
-
-        'tumorType': string
-
-};
-export type IndicatorQueryResp = {
+export type SomaticIndicatorQueryResp = {
     'alleleExist': boolean
 
         'dataVersion': string
@@ -302,11 +433,11 @@ export type IndicatorQueryResp = {
 
         'diagnosticSummary': string
 
+        'exon': string
+
         'geneExist': boolean
 
         'geneSummary': string
-
-        'germline': GermlineVariant
 
         'highestDiagnosticImplicationLevel': "LEVEL_1" | "LEVEL_2" | "LEVEL_3A" | "LEVEL_3B" | "LEVEL_4" | "LEVEL_R1" | "LEVEL_R2" | "LEVEL_Px1" | "LEVEL_Px2" | "LEVEL_Px3" | "LEVEL_Dx1" | "LEVEL_Dx2" | "LEVEL_Dx3" | "LEVEL_Fda1" | "LEVEL_Fda2" | "LEVEL_Fda3" | "NO"
 
@@ -347,32 +478,128 @@ export type IndicatorQueryResp = {
         'vus': boolean
 
 };
-export type ActionableGene = {
-    'abstracts': string
+export type AnnotateSampleQuery = {
+    'copyNumberAlterations': Array < AnnotateCopyNumberAlterationQuery >
 
-        'cancerType': string
+        'id': string
 
-        'drugs': string
+        'mutations': MutationsQuery
 
-        'entrezGeneId': number
+        'structuralVariants': Array < AnnotateStructuralVariantQuery >
+
+        'tumorType': string
+
+};
+export type GermlineIndicatorQueryResp = {
+    'alleleExist': boolean
+
+        'clinVarId': string
+
+        'dataVersion': string
+
+        'diagnosticImplications': Array < Implication >
+
+        'diagnosticSummary': string
+
+        'exon': string
+
+        'geneExist': boolean
+
+        'geneSummary': string
+
+        'genomicIndicators': Array < GenomicIndicator >
+
+        'highestDiagnosticImplicationLevel': "LEVEL_1" | "LEVEL_2" | "LEVEL_3A" | "LEVEL_3B" | "LEVEL_4" | "LEVEL_R1" | "LEVEL_R2" | "LEVEL_Px1" | "LEVEL_Px2" | "LEVEL_Px3" | "LEVEL_Dx1" | "LEVEL_Dx2" | "LEVEL_Dx3" | "LEVEL_Fda1" | "LEVEL_Fda2" | "LEVEL_Fda3" | "NO"
+
+        'highestFdaLevel': "LEVEL_1" | "LEVEL_2" | "LEVEL_3A" | "LEVEL_3B" | "LEVEL_4" | "LEVEL_R1" | "LEVEL_R2" | "LEVEL_Px1" | "LEVEL_Px2" | "LEVEL_Px3" | "LEVEL_Dx1" | "LEVEL_Dx2" | "LEVEL_Dx3" | "LEVEL_Fda1" | "LEVEL_Fda2" | "LEVEL_Fda3" | "NO"
+
+        'highestPrognosticImplicationLevel': "LEVEL_1" | "LEVEL_2" | "LEVEL_3A" | "LEVEL_3B" | "LEVEL_4" | "LEVEL_R1" | "LEVEL_R2" | "LEVEL_Px1" | "LEVEL_Px2" | "LEVEL_Px3" | "LEVEL_Dx1" | "LEVEL_Dx2" | "LEVEL_Dx3" | "LEVEL_Fda1" | "LEVEL_Fda2" | "LEVEL_Fda3" | "NO"
+
+        'highestResistanceLevel': "LEVEL_1" | "LEVEL_2" | "LEVEL_3A" | "LEVEL_3B" | "LEVEL_4" | "LEVEL_R1" | "LEVEL_R2" | "LEVEL_Px1" | "LEVEL_Px2" | "LEVEL_Px3" | "LEVEL_Dx1" | "LEVEL_Dx2" | "LEVEL_Dx3" | "LEVEL_Fda1" | "LEVEL_Fda2" | "LEVEL_Fda3" | "NO"
+
+        'highestSensitiveLevel': "LEVEL_1" | "LEVEL_2" | "LEVEL_3A" | "LEVEL_3B" | "LEVEL_4" | "LEVEL_R1" | "LEVEL_R2" | "LEVEL_Px1" | "LEVEL_Px2" | "LEVEL_Px3" | "LEVEL_Dx1" | "LEVEL_Dx2" | "LEVEL_Dx3" | "LEVEL_Fda1" | "LEVEL_Fda2" | "LEVEL_Fda3" | "NO"
+
+        'lastUpdate': string
+
+        'mutationEffect': MutationEffectResp
+
+        'otherSignificantResistanceLevels': Array < "LEVEL_1" | "LEVEL_2" | "LEVEL_3A" | "LEVEL_3B" | "LEVEL_4" | "LEVEL_R1" | "LEVEL_R2" | "LEVEL_Px1" | "LEVEL_Px2" | "LEVEL_Px3" | "LEVEL_Dx1" | "LEVEL_Dx2" | "LEVEL_Dx3" | "LEVEL_Fda1" | "LEVEL_Fda2" | "LEVEL_Fda3" | "NO" >
+
+        'otherSignificantSensitiveLevels': Array < "LEVEL_1" | "LEVEL_2" | "LEVEL_3A" | "LEVEL_3B" | "LEVEL_4" | "LEVEL_R1" | "LEVEL_R2" | "LEVEL_Px1" | "LEVEL_Px2" | "LEVEL_Px3" | "LEVEL_Dx1" | "LEVEL_Dx2" | "LEVEL_Dx3" | "LEVEL_Fda1" | "LEVEL_Fda2" | "LEVEL_Fda3" | "NO" >
+
+        'pathogenic': string
+
+        'penetrance': string
+
+        'prognosticImplications': Array < Implication >
+
+        'prognosticSummary': string
+
+        'query': Query
+
+        'treatments': Array < IndicatorQueryTreatment >
+
+        'tumorTypeSummary': string
+
+        'variantExist': boolean
+
+        'variantSummary': string
+
+        'vus': boolean
+
+};
+export type AnnotationSearchResult = {
+    'queryType': "GENE" | "VARIANT" | "DRUG" | "CANCER_TYPE"
+
+        'somaticIndicatorQueryResp': SomaticIndicatorQueryResp
+
+};
+export type Evidence = {
+    'additionalInfo': string
+
+        'alterations': Array < Alteration >
+
+        'articles': Array < Article >
+
+        'cancerTypes': Array < TumorType >
+
+        'description': string
+
+        'evidenceType': "GENE_SUMMARY" | "MUTATION_SUMMARY" | "TUMOR_TYPE_SUMMARY" | "GENE_TUMOR_TYPE_SUMMARY" | "PROGNOSTIC_SUMMARY" | "DIAGNOSTIC_SUMMARY" | "GENE_BACKGROUND" | "ONCOGENIC" | "MUTATION_EFFECT" | "VUS" | "PROGNOSTIC_IMPLICATION" | "DIAGNOSTIC_IMPLICATION" | "STANDARD_THERAPEUTIC_IMPLICATIONS_FOR_DRUG_SENSITIVITY" | "STANDARD_THERAPEUTIC_IMPLICATIONS_FOR_DRUG_RESISTANCE" | "INVESTIGATIONAL_THERAPEUTIC_IMPLICATIONS_DRUG_SENSITIVITY" | "INVESTIGATIONAL_THERAPEUTIC_IMPLICATIONS_DRUG_RESISTANCE" | "PATHOGENIC" | "GENOMIC_INDICATOR" | "GENE_PENETRANCE" | "VARIANT_PENETRANCE" | "VARIANT_CANCER_RISK"
+
+        'excludedCancerTypes': Array < TumorType >
+
+        'fdaLevel': "LEVEL_1" | "LEVEL_2" | "LEVEL_3A" | "LEVEL_3B" | "LEVEL_4" | "LEVEL_R1" | "LEVEL_R2" | "LEVEL_Px1" | "LEVEL_Px2" | "LEVEL_Px3" | "LEVEL_Dx1" | "LEVEL_Dx2" | "LEVEL_Dx3" | "LEVEL_Fda1" | "LEVEL_Fda2" | "LEVEL_Fda3" | "NO"
+
+        'gene': Gene
+
+        'id': number
+
+        'knownEffect': string
+
+        'lastEdit': string
+
+        'lastReview': string
+
+        'levelOfEvidence': "LEVEL_1" | "LEVEL_2" | "LEVEL_3A" | "LEVEL_3B" | "LEVEL_4" | "LEVEL_R1" | "LEVEL_R2" | "LEVEL_Px1" | "LEVEL_Px2" | "LEVEL_Px3" | "LEVEL_Dx1" | "LEVEL_Dx2" | "LEVEL_Dx3" | "LEVEL_Fda1" | "LEVEL_Fda2" | "LEVEL_Fda3" | "NO"
+
+        'liquidPropagationLevel': "LEVEL_1" | "LEVEL_2" | "LEVEL_3A" | "LEVEL_3B" | "LEVEL_4" | "LEVEL_R1" | "LEVEL_R2" | "LEVEL_Px1" | "LEVEL_Px2" | "LEVEL_Px3" | "LEVEL_Dx1" | "LEVEL_Dx2" | "LEVEL_Dx3" | "LEVEL_Fda1" | "LEVEL_Fda2" | "LEVEL_Fda3" | "NO"
+
+        'name': string
+
+        'relevantCancerTypes': Array < TumorType >
+
+        'solidPropagationLevel': "LEVEL_1" | "LEVEL_2" | "LEVEL_3A" | "LEVEL_3B" | "LEVEL_4" | "LEVEL_R1" | "LEVEL_R2" | "LEVEL_Px1" | "LEVEL_Px2" | "LEVEL_Px3" | "LEVEL_Dx1" | "LEVEL_Dx2" | "LEVEL_Dx3" | "LEVEL_Fda1" | "LEVEL_Fda2" | "LEVEL_Fda3" | "NO"
+
+        'treatments': Array < Treatment >
+
+        'uuid': string
+
+};
+export type VariantOfUnknownSignificance = {
+    'entrezGeneId': number
 
         'gene': string
-
-        'grch37Isoform': string
-
-        'grch37RefSeq': string
-
-        'grch38Isoform': string
-
-        'grch38RefSeq': string
-
-        'level': string
-
-        'pmids': string
-
-        'proteinChange': string
-
-        'referenceGenome': string
 
         'variant': string
 
@@ -381,36 +608,6 @@ export type ArticleAbstract = {
     'abstract': string
 
         'link': string
-
-};
-export type GermlineVariant = {
-    'cancerRisk': string
-
-        'clinVarId': string
-
-        'description': string
-
-        'genomicIndicators': Array < string >
-
-        'inheritanceMechanism': string
-
-        'inheritanceMechanismDescription': string
-
-        'pathogenic': string
-
-        'penetrance': string
-
-        'penetranceDescription': string
-
-};
-export type InfoLevel = {
-    'colorHex': string
-
-        'description': string
-
-        'htmlDescription': string
-
-        'levelOfEvidence': "LEVEL_1" | "LEVEL_2" | "LEVEL_3A" | "LEVEL_3B" | "LEVEL_4" | "LEVEL_R1" | "LEVEL_R2" | "LEVEL_Px1" | "LEVEL_Px2" | "LEVEL_Px3" | "LEVEL_Dx1" | "LEVEL_Dx2" | "LEVEL_Dx3" | "LEVEL_Fda1" | "LEVEL_Fda2" | "LEVEL_Fda3" | "NO"
 
 };
 export type Drug = {
@@ -424,7 +621,7 @@ export type CuratedGene = {
 
         'entrezGeneId': number
 
-        'geneType': "INSUFFICIENT_EVIDENCE" | "ONCOGENE_AND_TSG" | "ONCOGENE" | "TSG" | "NEITHER"
+        'geneType': "ONCOGENE_AND_TSG" | "ONCOGENE" | "TSG" | "INSUFFICIENT_EVIDENCE" | "NEITHER"
 
         'grch37Isoform': string
 
@@ -467,20 +664,6 @@ export type EvidenceQueryRes = {
         'query': Query
 
 };
-export type Trial = {
-    'arms': Array < Arms >
-
-        'briefTitle': string
-
-        'currentTrialStatus': string
-
-        'isUSTrial': boolean
-
-        'nctId': string
-
-        'principalInvestigator': string
-
-};
 export type QueryGene = {
     'entrezGeneId': number
 
@@ -500,7 +683,7 @@ export type CancerGene = {
 
         'geneAliases': Array < string >
 
-        'geneType': "INSUFFICIENT_EVIDENCE" | "ONCOGENE_AND_TSG" | "ONCOGENE" | "TSG" | "NEITHER"
+        'geneType': "ONCOGENE_AND_TSG" | "ONCOGENE" | "TSG" | "INSUFFICIENT_EVIDENCE" | "NEITHER"
 
         'grch37Isoform': string
 
@@ -525,12 +708,6 @@ export type CancerGene = {
         'vogelstein': boolean
 
 };
-export type Arms = {
-    'armDescription': string
-
-        'drugs': Array < Drug >
-
-};
 export type MainType = {
     'id': number
 
@@ -539,42 +716,26 @@ export type MainType = {
         'tumorForm': "SOLID" | "LIQUID" | "MIXED"
 
 };
-export type OncoKBInfo = {
-    'apiVersion': SemVer
+export type SampleQueryResp = {
+    'copyNumberAlterations': Array < SomaticIndicatorQueryResp >
 
-        'appVersion': SemVer
+        'id': string
 
-        'dataVersion': Version
+        'mutations': Array < SomaticIndicatorQueryResp >
 
-        'levels': Array < InfoLevel >
+        'structuralVariants': Array < SomaticIndicatorQueryResp >
 
-        'ncitVersion': string
-
-        'oncoTreeVersion': string
-
-        'publicInstance': boolean
-
-};
-export type VariantConsequence = {
-    'description': string
-
-        'isGenerallyTruncating': boolean
-
-        'term': string
+        'tumorType': string
 
 };
 export type AnnotateMutationByProteinChangeQuery = {
-    'alleleState': string
-
-        'alteration': string
+    'alteration': string
 
         'consequence': string
 
-        'evidenceTypes': Array < "GENE_SUMMARY" | "MUTATION_SUMMARY" | "TUMOR_TYPE_SUMMARY" | "GENE_TUMOR_TYPE_SUMMARY" | "PROGNOSTIC_SUMMARY" | "DIAGNOSTIC_SUMMARY" | "GENE_BACKGROUND" | "ONCOGENIC" | "MUTATION_EFFECT" | "VUS" | "PROGNOSTIC_IMPLICATION" | "DIAGNOSTIC_IMPLICATION" | "STANDARD_THERAPEUTIC_IMPLICATIONS_FOR_DRUG_SENSITIVITY" | "STANDARD_THERAPEUTIC_IMPLICATIONS_FOR_DRUG_RESISTANCE" | "INVESTIGATIONAL_THERAPEUTIC_IMPLICATIONS_DRUG_SENSITIVITY" | "INVESTIGATIONAL_THERAPEUTIC_IMPLICATIONS_DRUG_RESISTANCE" | "PATHOGENIC" | "GENOMIC_INDICATOR" | "GENOMIC_INDICATOR_ALLELE_STATE" | "GENE_PENETRANCE" | "GENE_INHERITANCE_MECHANISM" | "GENE_CANCER_RISK" | "VARIANT_PENETRANCE" | "VARIANT_INHERITANCE_MECHANISM" | "VARIANT_CANCER_RISK" >
+        'evidenceTypes': Array < "GENE_SUMMARY" | "MUTATION_SUMMARY" | "TUMOR_TYPE_SUMMARY" | "GENE_TUMOR_TYPE_SUMMARY" | "PROGNOSTIC_SUMMARY" | "DIAGNOSTIC_SUMMARY" | "GENE_BACKGROUND" | "ONCOGENIC" | "MUTATION_EFFECT" | "VUS" | "PROGNOSTIC_IMPLICATION" | "DIAGNOSTIC_IMPLICATION" | "STANDARD_THERAPEUTIC_IMPLICATIONS_FOR_DRUG_SENSITIVITY" | "STANDARD_THERAPEUTIC_IMPLICATIONS_FOR_DRUG_RESISTANCE" | "INVESTIGATIONAL_THERAPEUTIC_IMPLICATIONS_DRUG_SENSITIVITY" | "INVESTIGATIONAL_THERAPEUTIC_IMPLICATIONS_DRUG_RESISTANCE" | "PATHOGENIC" | "GENOMIC_INDICATOR" | "GENE_PENETRANCE" | "VARIANT_PENETRANCE" | "VARIANT_CANCER_RISK" >
 
         'gene': QueryGene
-
-        'germline': boolean
 
         'id': string
 
@@ -612,7 +773,9 @@ export type IndicatorQueryTreatment = {
 export type ResponseEntity = {
     'body': {}
 
-    'statusCode': "100" | "101" | "102" | "103" | "200" | "201" | "202" | "203" | "204" | "205" | "206" | "207" | "208" | "226" | "300" | "301" | "302" | "302" | "303" | "304" | "305" | "307" | "308" | "400" | "401" | "402" | "403" | "404" | "405" | "406" | "407" | "408" | "409" | "410" | "411" | "412" | "413" | "413" | "414" | "414" | "415" | "416" | "417" | "418" | "419" | "420" | "421" | "422" | "423" | "424" | "426" | "428" | "429" | "431" | "500" | "501" | "502" | "503" | "504" | "505" | "506" | "507" | "508" | "509" | "510" | "511"
+    'statusCode': "100" | "101" | "102" | "103" | "200" | "201" | "202" | "203" | "204" | "205" | "206" | "207" | "208" | "226" | "300" | "301" | "302" | "302" | "303" | "304" | "305" | "307" | "308" | "400" | "401" | "402" | "403" | "404" | "405" | "406" | "407" | "408" | "409" | "410" | "411" | "412" | "413" | "413" | "414" | "414" | "415" | "416" | "417" | "418" | "419" | "420" | "421" | "422" | "423" | "424" | "426" | "428" | "429" | "431" | "451" | "500" | "501" | "502" | "503" | "504" | "505" | "506" | "507" | "508" | "509" | "510" | "511"
+
+        'statusCodeValue': number
 
 };
 export type Treatment = {
@@ -623,36 +786,6 @@ export type Treatment = {
         'priority': number
 
 };
-export type EvidenceQueries = {
-    'evidenceTypes': string
-
-        'highestLevelOnly': boolean
-
-        'levels': Array < "LEVEL_1" | "LEVEL_2" | "LEVEL_3A" | "LEVEL_3B" | "LEVEL_4" | "LEVEL_R1" | "LEVEL_R2" | "LEVEL_Px1" | "LEVEL_Px2" | "LEVEL_Px3" | "LEVEL_Dx1" | "LEVEL_Dx2" | "LEVEL_Dx3" | "LEVEL_Fda1" | "LEVEL_Fda2" | "LEVEL_Fda3" | "NO" >
-
-        'queries': Array < Query >
-
-};
-export type VariantSearchQuery = {
-    'consequence': string
-
-        'entrezGeneId': number
-
-        'hgvs': string
-
-        'hugoSymbol': string
-
-        'proteinEnd': number
-
-        'proteinStart': number
-
-        'referenceGenome': "GRCh37" | "GRCh38"
-
-        'variant': string
-
-        'variantType': string
-
-};
 export type MutationEffectResp = {
     'citations': Citations
 
@@ -661,30 +794,8 @@ export type MutationEffectResp = {
         'knownEffect': string
 
 };
-export type AnnotateCopyNumberAlterationQuery = {
-    'alleleState': string
-
-        'copyNameAlterationType': "AMPLIFICATION" | "DELETION" | "GAIN" | "LOSS"
-
-        'evidenceTypes': Array < "GENE_SUMMARY" | "MUTATION_SUMMARY" | "TUMOR_TYPE_SUMMARY" | "GENE_TUMOR_TYPE_SUMMARY" | "PROGNOSTIC_SUMMARY" | "DIAGNOSTIC_SUMMARY" | "GENE_BACKGROUND" | "ONCOGENIC" | "MUTATION_EFFECT" | "VUS" | "PROGNOSTIC_IMPLICATION" | "DIAGNOSTIC_IMPLICATION" | "STANDARD_THERAPEUTIC_IMPLICATIONS_FOR_DRUG_SENSITIVITY" | "STANDARD_THERAPEUTIC_IMPLICATIONS_FOR_DRUG_RESISTANCE" | "INVESTIGATIONAL_THERAPEUTIC_IMPLICATIONS_DRUG_SENSITIVITY" | "INVESTIGATIONAL_THERAPEUTIC_IMPLICATIONS_DRUG_RESISTANCE" | "PATHOGENIC" | "GENOMIC_INDICATOR" | "GENOMIC_INDICATOR_ALLELE_STATE" | "GENE_PENETRANCE" | "GENE_INHERITANCE_MECHANISM" | "GENE_CANCER_RISK" | "VARIANT_PENETRANCE" | "VARIANT_INHERITANCE_MECHANISM" | "VARIANT_CANCER_RISK" >
-
-        'gene': QueryGene
-
-        'germline': boolean
-
-        'id': string
-
-        'referenceGenome': "GRCh37" | "GRCh38"
-
-        'tumorType': string
-
-};
 export type AnnotateMutationByHGVSgQuery = {
-    'alleleState': string
-
-        'evidenceTypes': Array < "GENE_SUMMARY" | "MUTATION_SUMMARY" | "TUMOR_TYPE_SUMMARY" | "GENE_TUMOR_TYPE_SUMMARY" | "PROGNOSTIC_SUMMARY" | "DIAGNOSTIC_SUMMARY" | "GENE_BACKGROUND" | "ONCOGENIC" | "MUTATION_EFFECT" | "VUS" | "PROGNOSTIC_IMPLICATION" | "DIAGNOSTIC_IMPLICATION" | "STANDARD_THERAPEUTIC_IMPLICATIONS_FOR_DRUG_SENSITIVITY" | "STANDARD_THERAPEUTIC_IMPLICATIONS_FOR_DRUG_RESISTANCE" | "INVESTIGATIONAL_THERAPEUTIC_IMPLICATIONS_DRUG_SENSITIVITY" | "INVESTIGATIONAL_THERAPEUTIC_IMPLICATIONS_DRUG_RESISTANCE" | "PATHOGENIC" | "GENOMIC_INDICATOR" | "GENOMIC_INDICATOR_ALLELE_STATE" | "GENE_PENETRANCE" | "GENE_INHERITANCE_MECHANISM" | "GENE_CANCER_RISK" | "VARIANT_PENETRANCE" | "VARIANT_INHERITANCE_MECHANISM" | "VARIANT_CANCER_RISK" >
-
-        'germline': boolean
+    'evidenceTypes': Array < "GENE_SUMMARY" | "MUTATION_SUMMARY" | "TUMOR_TYPE_SUMMARY" | "GENE_TUMOR_TYPE_SUMMARY" | "PROGNOSTIC_SUMMARY" | "DIAGNOSTIC_SUMMARY" | "GENE_BACKGROUND" | "ONCOGENIC" | "MUTATION_EFFECT" | "VUS" | "PROGNOSTIC_IMPLICATION" | "DIAGNOSTIC_IMPLICATION" | "STANDARD_THERAPEUTIC_IMPLICATIONS_FOR_DRUG_SENSITIVITY" | "STANDARD_THERAPEUTIC_IMPLICATIONS_FOR_DRUG_RESISTANCE" | "INVESTIGATIONAL_THERAPEUTIC_IMPLICATIONS_DRUG_SENSITIVITY" | "INVESTIGATIONAL_THERAPEUTIC_IMPLICATIONS_DRUG_RESISTANCE" | "PATHOGENIC" | "GENOMIC_INDICATOR" | "GENE_PENETRANCE" | "VARIANT_PENETRANCE" | "VARIANT_CANCER_RISK" >
 
         'hgvsg': string
 
@@ -772,8 +883,6 @@ export default class OncoKbAPI {
         'copyNameAlterationType': "AMPLIFICATION" | "DELETION" | "GAIN" | "LOSS",
         'referenceGenome' ? : string,
         'tumorType' ? : string,
-        'germline' ? : boolean,
-        'alleleState' ? : string,
         'evidenceType' ? : string,
         $queryParameters ? : any
     }): string {
@@ -799,14 +908,6 @@ export default class OncoKbAPI {
             queryParameters['tumorType'] = parameters['tumorType'];
         }
 
-        if (parameters['germline'] !== undefined) {
-            queryParameters['germline'] = parameters['germline'];
-        }
-
-        if (parameters['alleleState'] !== undefined) {
-            queryParameters['alleleState'] = parameters['alleleState'];
-        }
-
         if (parameters['evidenceType'] !== undefined) {
             queryParameters['evidenceType'] = parameters['evidenceType'];
         }
@@ -830,9 +931,7 @@ export default class OncoKbAPI {
      * @param {string} copyNameAlterationType - Copy number alteration type
      * @param {string} referenceGenome - Reference genome, either GRCh37 or GRCh38. The default is GRCh37
      * @param {string} tumorType - OncoTree(http://oncotree.info) tumor type name. The field supports OncoTree Code, OncoTree Name and OncoTree Main type. Example: Melanoma
-     * @param {boolean} germline - Whether is germline variant
-     * @param {string} alleleState - Germline variant allele state(monoallelic vs biallelic)
-     * @param {string} evidenceType - Evidence type to compute. This could help to improve the performance if you only look for sub-content. Example: ONCOGENIC. All available evidence type are GENE_SUMMARY, MUTATION_SUMMARY, TUMOR_TYPE_SUMMARY, PROGNOSTIC_SUMMARY, DIAGNOSTIC_SUMMARY, ONCOGENIC, MUTATION_EFFECT, PROGNOSTIC_IMPLICATION, DIAGNOSTIC_IMPLICATION, STANDARD_THERAPEUTIC_IMPLICATIONS_FOR_DRUG_SENSITIVITY, STANDARD_THERAPEUTIC_IMPLICATIONS_FOR_DRUG_RESISTANCE, INVESTIGATIONAL_THERAPEUTIC_IMPLICATIONS_DRUG_SENSITIVITY, INVESTIGATIONAL_THERAPEUTIC_IMPLICATIONS_DRUG_RESISTANCE. For multiple evidence types query, use ',' as separator.
+     * @param {string} evidenceType - DEPRECATED. We do not recommend using this parameter and it will eventually be removed.
      */
     annotateCopyNumberAlterationsGetUsingGETWithHttpInfo(parameters: {
         'hugoSymbol' ? : string,
@@ -840,8 +939,6 @@ export default class OncoKbAPI {
         'copyNameAlterationType': "AMPLIFICATION" | "DELETION" | "GAIN" | "LOSS",
         'referenceGenome' ? : string,
         'tumorType' ? : string,
-        'germline' ? : boolean,
-        'alleleState' ? : string,
         'evidenceType' ? : string,
         $queryParameters ? : any,
             $domain ? : string
@@ -883,14 +980,6 @@ export default class OncoKbAPI {
                 queryParameters['tumorType'] = parameters['tumorType'];
             }
 
-            if (parameters['germline'] !== undefined) {
-                queryParameters['germline'] = parameters['germline'];
-            }
-
-            if (parameters['alleleState'] !== undefined) {
-                queryParameters['alleleState'] = parameters['alleleState'];
-            }
-
             if (parameters['evidenceType'] !== undefined) {
                 queryParameters['evidenceType'] = parameters['evidenceType'];
             }
@@ -916,9 +1005,7 @@ export default class OncoKbAPI {
      * @param {string} copyNameAlterationType - Copy number alteration type
      * @param {string} referenceGenome - Reference genome, either GRCh37 or GRCh38. The default is GRCh37
      * @param {string} tumorType - OncoTree(http://oncotree.info) tumor type name. The field supports OncoTree Code, OncoTree Name and OncoTree Main type. Example: Melanoma
-     * @param {boolean} germline - Whether is germline variant
-     * @param {string} alleleState - Germline variant allele state(monoallelic vs biallelic)
-     * @param {string} evidenceType - Evidence type to compute. This could help to improve the performance if you only look for sub-content. Example: ONCOGENIC. All available evidence type are GENE_SUMMARY, MUTATION_SUMMARY, TUMOR_TYPE_SUMMARY, PROGNOSTIC_SUMMARY, DIAGNOSTIC_SUMMARY, ONCOGENIC, MUTATION_EFFECT, PROGNOSTIC_IMPLICATION, DIAGNOSTIC_IMPLICATION, STANDARD_THERAPEUTIC_IMPLICATIONS_FOR_DRUG_SENSITIVITY, STANDARD_THERAPEUTIC_IMPLICATIONS_FOR_DRUG_RESISTANCE, INVESTIGATIONAL_THERAPEUTIC_IMPLICATIONS_DRUG_SENSITIVITY, INVESTIGATIONAL_THERAPEUTIC_IMPLICATIONS_DRUG_RESISTANCE. For multiple evidence types query, use ',' as separator.
+     * @param {string} evidenceType - DEPRECATED. We do not recommend using this parameter and it will eventually be removed.
      */
     annotateCopyNumberAlterationsGetUsingGET(parameters: {
         'hugoSymbol' ? : string,
@@ -926,12 +1013,10 @@ export default class OncoKbAPI {
         'copyNameAlterationType': "AMPLIFICATION" | "DELETION" | "GAIN" | "LOSS",
         'referenceGenome' ? : string,
         'tumorType' ? : string,
-        'germline' ? : boolean,
-        'alleleState' ? : string,
         'evidenceType' ? : string,
         $queryParameters ? : any,
             $domain ? : string
-    }): Promise < IndicatorQueryResp > {
+    }): Promise < SomaticIndicatorQueryResp > {
         return this.annotateCopyNumberAlterationsGetUsingGETWithHttpInfo(parameters).then(function(response: request.Response) {
             return response.body;
         });
@@ -1007,7 +1092,7 @@ export default class OncoKbAPI {
             'body': Array < AnnotateCopyNumberAlterationQuery > ,
             $queryParameters ? : any,
             $domain ? : string
-        }): Promise < Array < IndicatorQueryResp >
+        }): Promise < Array < SomaticIndicatorQueryResp >
         > {
             return this.annotateCopyNumberAlterationsPostUsingPOSTWithHttpInfo(parameters).then(function(response: request.Response) {
                 return response.body;
@@ -1016,8 +1101,6 @@ export default class OncoKbAPI {
     annotateMutationsByGenomicChangeGetUsingGETURL(parameters: {
         'genomicLocation': string,
         'referenceGenome' ? : string,
-        'germline' ? : boolean,
-        'alleleState' ? : string,
         'tumorType' ? : string,
         'evidenceType' ? : string,
         $queryParameters ? : any
@@ -1030,14 +1113,6 @@ export default class OncoKbAPI {
 
         if (parameters['referenceGenome'] !== undefined) {
             queryParameters['referenceGenome'] = parameters['referenceGenome'];
-        }
-
-        if (parameters['germline'] !== undefined) {
-            queryParameters['germline'] = parameters['germline'];
-        }
-
-        if (parameters['alleleState'] !== undefined) {
-            queryParameters['alleleState'] = parameters['alleleState'];
         }
 
         if (parameters['tumorType'] !== undefined) {
@@ -1062,18 +1137,14 @@ export default class OncoKbAPI {
      * Annotate mutation by genomic change.
      * @method
      * @name OncoKbAPI#annotateMutationsByGenomicChangeGetUsingGET
-     * @param {string} genomicLocation - Genomic location. Example: 7,140453136,140453136,A,T
+     * @param {string} genomicLocation - Genomic location following TCGA MAF format. Example: 7,140453136,140453136,A,T
      * @param {string} referenceGenome - Reference genome, either GRCh37 or GRCh38. The default is GRCh37
-     * @param {boolean} germline - Whether is germline variant
-     * @param {string} alleleState - Germline variant allele state(monoallelic vs biallelic)
      * @param {string} tumorType - OncoTree(http://oncotree.info) tumor type name. The field supports OncoTree Code, OncoTree Name and OncoTree Main type. Example: Melanoma
-     * @param {string} evidenceType - Evidence type to compute. This could help to improve the performance if you only look for sub-content. Example: ONCOGENIC. All available evidence type are GENE_SUMMARY, MUTATION_SUMMARY, TUMOR_TYPE_SUMMARY, PROGNOSTIC_SUMMARY, DIAGNOSTIC_SUMMARY, ONCOGENIC, MUTATION_EFFECT, PROGNOSTIC_IMPLICATION, DIAGNOSTIC_IMPLICATION, STANDARD_THERAPEUTIC_IMPLICATIONS_FOR_DRUG_SENSITIVITY, STANDARD_THERAPEUTIC_IMPLICATIONS_FOR_DRUG_RESISTANCE, INVESTIGATIONAL_THERAPEUTIC_IMPLICATIONS_DRUG_SENSITIVITY, INVESTIGATIONAL_THERAPEUTIC_IMPLICATIONS_DRUG_RESISTANCE. For multiple evidence types query, use ',' as separator.
+     * @param {string} evidenceType - DEPRECATED. We do not recommend using this parameter and it will eventually be removed.
      */
     annotateMutationsByGenomicChangeGetUsingGETWithHttpInfo(parameters: {
         'genomicLocation': string,
         'referenceGenome' ? : string,
-        'germline' ? : boolean,
-        'alleleState' ? : string,
         'tumorType' ? : string,
         'evidenceType' ? : string,
         $queryParameters ? : any,
@@ -1104,14 +1175,6 @@ export default class OncoKbAPI {
                 queryParameters['referenceGenome'] = parameters['referenceGenome'];
             }
 
-            if (parameters['germline'] !== undefined) {
-                queryParameters['germline'] = parameters['germline'];
-            }
-
-            if (parameters['alleleState'] !== undefined) {
-                queryParameters['alleleState'] = parameters['alleleState'];
-            }
-
             if (parameters['tumorType'] !== undefined) {
                 queryParameters['tumorType'] = parameters['tumorType'];
             }
@@ -1136,23 +1199,19 @@ export default class OncoKbAPI {
      * Annotate mutation by genomic change.
      * @method
      * @name OncoKbAPI#annotateMutationsByGenomicChangeGetUsingGET
-     * @param {string} genomicLocation - Genomic location. Example: 7,140453136,140453136,A,T
+     * @param {string} genomicLocation - Genomic location following TCGA MAF format. Example: 7,140453136,140453136,A,T
      * @param {string} referenceGenome - Reference genome, either GRCh37 or GRCh38. The default is GRCh37
-     * @param {boolean} germline - Whether is germline variant
-     * @param {string} alleleState - Germline variant allele state(monoallelic vs biallelic)
      * @param {string} tumorType - OncoTree(http://oncotree.info) tumor type name. The field supports OncoTree Code, OncoTree Name and OncoTree Main type. Example: Melanoma
-     * @param {string} evidenceType - Evidence type to compute. This could help to improve the performance if you only look for sub-content. Example: ONCOGENIC. All available evidence type are GENE_SUMMARY, MUTATION_SUMMARY, TUMOR_TYPE_SUMMARY, PROGNOSTIC_SUMMARY, DIAGNOSTIC_SUMMARY, ONCOGENIC, MUTATION_EFFECT, PROGNOSTIC_IMPLICATION, DIAGNOSTIC_IMPLICATION, STANDARD_THERAPEUTIC_IMPLICATIONS_FOR_DRUG_SENSITIVITY, STANDARD_THERAPEUTIC_IMPLICATIONS_FOR_DRUG_RESISTANCE, INVESTIGATIONAL_THERAPEUTIC_IMPLICATIONS_DRUG_SENSITIVITY, INVESTIGATIONAL_THERAPEUTIC_IMPLICATIONS_DRUG_RESISTANCE. For multiple evidence types query, use ',' as separator.
+     * @param {string} evidenceType - DEPRECATED. We do not recommend using this parameter and it will eventually be removed.
      */
     annotateMutationsByGenomicChangeGetUsingGET(parameters: {
         'genomicLocation': string,
         'referenceGenome' ? : string,
-        'germline' ? : boolean,
-        'alleleState' ? : string,
         'tumorType' ? : string,
         'evidenceType' ? : string,
         $queryParameters ? : any,
         $domain ? : string
-    }): Promise < IndicatorQueryResp > {
+    }): Promise < SomaticIndicatorQueryResp > {
         return this.annotateMutationsByGenomicChangeGetUsingGETWithHttpInfo(parameters).then(function(response: request.Response) {
             return response.body;
         });
@@ -1228,7 +1287,7 @@ export default class OncoKbAPI {
             'body': Array < AnnotateMutationByGenomicChangeQuery > ,
             $queryParameters ? : any,
             $domain ? : string
-        }): Promise < Array < IndicatorQueryResp >
+        }): Promise < Array < SomaticIndicatorQueryResp >
         > {
             return this.annotateMutationsByGenomicChangePostUsingPOSTWithHttpInfo(parameters).then(function(response: request.Response) {
                 return response.body;
@@ -1238,8 +1297,6 @@ export default class OncoKbAPI {
         'hgvsg': string,
         'referenceGenome' ? : string,
         'tumorType' ? : string,
-        'germline' ? : boolean,
-        'alleleState' ? : string,
         'evidenceType' ? : string,
         $queryParameters ? : any
     }): string {
@@ -1255,14 +1312,6 @@ export default class OncoKbAPI {
 
         if (parameters['tumorType'] !== undefined) {
             queryParameters['tumorType'] = parameters['tumorType'];
-        }
-
-        if (parameters['germline'] !== undefined) {
-            queryParameters['germline'] = parameters['germline'];
-        }
-
-        if (parameters['alleleState'] !== undefined) {
-            queryParameters['alleleState'] = parameters['alleleState'];
         }
 
         if (parameters['evidenceType'] !== undefined) {
@@ -1283,19 +1332,15 @@ export default class OncoKbAPI {
      * Annotate mutation by HGVSg.
      * @method
      * @name OncoKbAPI#annotateMutationsByHGVSgGetUsingGET
-     * @param {string} hgvsg - HGVS genomic format. Example: 7:g.140453136A>T
+     * @param {string} hgvsg - HGVS genomic format following HGVS nomenclature. Example: 7:g.140453136A>T
      * @param {string} referenceGenome - Reference genome, either GRCh37 or GRCh38. The default is GRCh37
      * @param {string} tumorType - OncoTree(http://oncotree.info) tumor type name. The field supports OncoTree Code, OncoTree Name and OncoTree Main type. Example: Melanoma
-     * @param {boolean} germline - Whether is germline variant
-     * @param {string} alleleState - Germline variant allele state(monoallelic vs biallelic)
-     * @param {string} evidenceType - Evidence type to compute. This could help to improve the performance if you only look for sub-content. Example: ONCOGENIC. All available evidence type are GENE_SUMMARY, MUTATION_SUMMARY, TUMOR_TYPE_SUMMARY, PROGNOSTIC_SUMMARY, DIAGNOSTIC_SUMMARY, ONCOGENIC, MUTATION_EFFECT, PROGNOSTIC_IMPLICATION, DIAGNOSTIC_IMPLICATION, STANDARD_THERAPEUTIC_IMPLICATIONS_FOR_DRUG_SENSITIVITY, STANDARD_THERAPEUTIC_IMPLICATIONS_FOR_DRUG_RESISTANCE, INVESTIGATIONAL_THERAPEUTIC_IMPLICATIONS_DRUG_SENSITIVITY, INVESTIGATIONAL_THERAPEUTIC_IMPLICATIONS_DRUG_RESISTANCE. For multiple evidence types query, use ',' as separator.
+     * @param {string} evidenceType - DEPRECATED. We do not recommend using this parameter and it will eventually be removed.
      */
     annotateMutationsByHGVSgGetUsingGETWithHttpInfo(parameters: {
         'hgvsg': string,
         'referenceGenome' ? : string,
         'tumorType' ? : string,
-        'germline' ? : boolean,
-        'alleleState' ? : string,
         'evidenceType' ? : string,
         $queryParameters ? : any,
         $domain ? : string
@@ -1329,14 +1374,6 @@ export default class OncoKbAPI {
                 queryParameters['tumorType'] = parameters['tumorType'];
             }
 
-            if (parameters['germline'] !== undefined) {
-                queryParameters['germline'] = parameters['germline'];
-            }
-
-            if (parameters['alleleState'] !== undefined) {
-                queryParameters['alleleState'] = parameters['alleleState'];
-            }
-
             if (parameters['evidenceType'] !== undefined) {
                 queryParameters['evidenceType'] = parameters['evidenceType'];
             }
@@ -1357,23 +1394,19 @@ export default class OncoKbAPI {
      * Annotate mutation by HGVSg.
      * @method
      * @name OncoKbAPI#annotateMutationsByHGVSgGetUsingGET
-     * @param {string} hgvsg - HGVS genomic format. Example: 7:g.140453136A>T
+     * @param {string} hgvsg - HGVS genomic format following HGVS nomenclature. Example: 7:g.140453136A>T
      * @param {string} referenceGenome - Reference genome, either GRCh37 or GRCh38. The default is GRCh37
      * @param {string} tumorType - OncoTree(http://oncotree.info) tumor type name. The field supports OncoTree Code, OncoTree Name and OncoTree Main type. Example: Melanoma
-     * @param {boolean} germline - Whether is germline variant
-     * @param {string} alleleState - Germline variant allele state(monoallelic vs biallelic)
-     * @param {string} evidenceType - Evidence type to compute. This could help to improve the performance if you only look for sub-content. Example: ONCOGENIC. All available evidence type are GENE_SUMMARY, MUTATION_SUMMARY, TUMOR_TYPE_SUMMARY, PROGNOSTIC_SUMMARY, DIAGNOSTIC_SUMMARY, ONCOGENIC, MUTATION_EFFECT, PROGNOSTIC_IMPLICATION, DIAGNOSTIC_IMPLICATION, STANDARD_THERAPEUTIC_IMPLICATIONS_FOR_DRUG_SENSITIVITY, STANDARD_THERAPEUTIC_IMPLICATIONS_FOR_DRUG_RESISTANCE, INVESTIGATIONAL_THERAPEUTIC_IMPLICATIONS_DRUG_SENSITIVITY, INVESTIGATIONAL_THERAPEUTIC_IMPLICATIONS_DRUG_RESISTANCE. For multiple evidence types query, use ',' as separator.
+     * @param {string} evidenceType - DEPRECATED. We do not recommend using this parameter and it will eventually be removed.
      */
     annotateMutationsByHGVSgGetUsingGET(parameters: {
         'hgvsg': string,
         'referenceGenome' ? : string,
         'tumorType' ? : string,
-        'germline' ? : boolean,
-        'alleleState' ? : string,
         'evidenceType' ? : string,
         $queryParameters ? : any,
         $domain ? : string
-    }): Promise < IndicatorQueryResp > {
+    }): Promise < SomaticIndicatorQueryResp > {
         return this.annotateMutationsByHGVSgGetUsingGETWithHttpInfo(parameters).then(function(response: request.Response) {
             return response.body;
         });
@@ -1396,7 +1429,7 @@ export default class OncoKbAPI {
     };
 
     /**
-     * Annotate mutations by genomic change.
+     * Annotate mutations by HGVSg.
      * @method
      * @name OncoKbAPI#annotateMutationsByHGVSgPostUsingPOST
      * @param {} body - List of queries. Please see swagger.json for request body format.
@@ -1440,7 +1473,7 @@ export default class OncoKbAPI {
     };
 
     /**
-     * Annotate mutations by genomic change.
+     * Annotate mutations by HGVSg.
      * @method
      * @name OncoKbAPI#annotateMutationsByHGVSgPostUsingPOST
      * @param {} body - List of queries. Please see swagger.json for request body format.
@@ -1449,7 +1482,7 @@ export default class OncoKbAPI {
             'body': Array < AnnotateMutationByHGVSgQuery > ,
             $queryParameters ? : any,
             $domain ? : string
-        }): Promise < Array < IndicatorQueryResp >
+        }): Promise < Array < SomaticIndicatorQueryResp >
         > {
             return this.annotateMutationsByHGVSgPostUsingPOSTWithHttpInfo(parameters).then(function(response: request.Response) {
                 return response.body;
@@ -1463,8 +1496,6 @@ export default class OncoKbAPI {
         'consequence' ? : "feature_truncation" | "frameshift_variant" | "inframe_deletion" | "inframe_insertion" | "start_lost" | "missense_variant" | "splice_region_variant" | "stop_gained" | "synonymous_variant" | "intron_variant",
         'proteinStart' ? : number,
         'proteinEnd' ? : number,
-        'isGermline' ? : boolean,
-        'alleleState' ? : string,
         'tumorType' ? : string,
         'evidenceType' ? : string,
         $queryParameters ? : any
@@ -1499,14 +1530,6 @@ export default class OncoKbAPI {
             queryParameters['proteinEnd'] = parameters['proteinEnd'];
         }
 
-        if (parameters['isGermline'] !== undefined) {
-            queryParameters['isGermline'] = parameters['isGermline'];
-        }
-
-        if (parameters['alleleState'] !== undefined) {
-            queryParameters['alleleState'] = parameters['alleleState'];
-        }
-
         if (parameters['tumorType'] !== undefined) {
             queryParameters['tumorType'] = parameters['tumorType'];
         }
@@ -1533,13 +1556,11 @@ export default class OncoKbAPI {
      * @param {integer} entrezGeneId - The entrez gene ID. (Higher priority than hugoSymbol). Example: 673
      * @param {string} alteration - Protein Change. Example: V600E
      * @param {string} referenceGenome - Reference genome, either GRCh37 or GRCh38. The default is GRCh37
-     * @param {string} consequence - Consequence. Exacmple: missense_variant
+     * @param {string} consequence - Consequence. Example: missense_variant
      * @param {integer} proteinStart - Protein Start. Example: 600
      * @param {integer} proteinEnd - Protein End. Example: 600
-     * @param {boolean} isGermline - Whether is germline variant
-     * @param {string} alleleState - Germline variant allele state(monoallelic vs biallelic)
      * @param {string} tumorType - OncoTree(http://oncotree.info) tumor type name. The field supports OncoTree Code, OncoTree Name and OncoTree Main type. Example: Melanoma
-     * @param {string} evidenceType - Evidence type to compute. This could help to improve the performance if you only look for sub-content. Example: ONCOGENIC. All available evidence type are GENE_SUMMARY, MUTATION_SUMMARY, TUMOR_TYPE_SUMMARY, PROGNOSTIC_SUMMARY, DIAGNOSTIC_SUMMARY, ONCOGENIC, MUTATION_EFFECT, PROGNOSTIC_IMPLICATION, DIAGNOSTIC_IMPLICATION, STANDARD_THERAPEUTIC_IMPLICATIONS_FOR_DRUG_SENSITIVITY, STANDARD_THERAPEUTIC_IMPLICATIONS_FOR_DRUG_RESISTANCE, INVESTIGATIONAL_THERAPEUTIC_IMPLICATIONS_DRUG_SENSITIVITY, INVESTIGATIONAL_THERAPEUTIC_IMPLICATIONS_DRUG_RESISTANCE. For multiple evidence types query, use ',' as separator.
+     * @param {string} evidenceType - DEPRECATED. We do not recommend using this parameter and it will eventually be removed.
      */
     annotateMutationsByProteinChangeGetUsingGETWithHttpInfo(parameters: {
         'hugoSymbol' ? : string,
@@ -1549,8 +1570,6 @@ export default class OncoKbAPI {
         'consequence' ? : "feature_truncation" | "frameshift_variant" | "inframe_deletion" | "inframe_insertion" | "start_lost" | "missense_variant" | "splice_region_variant" | "stop_gained" | "synonymous_variant" | "intron_variant",
         'proteinStart' ? : number,
         'proteinEnd' ? : number,
-        'isGermline' ? : boolean,
-        'alleleState' ? : string,
         'tumorType' ? : string,
         'evidenceType' ? : string,
         $queryParameters ? : any,
@@ -1596,14 +1615,6 @@ export default class OncoKbAPI {
                 queryParameters['proteinEnd'] = parameters['proteinEnd'];
             }
 
-            if (parameters['isGermline'] !== undefined) {
-                queryParameters['isGermline'] = parameters['isGermline'];
-            }
-
-            if (parameters['alleleState'] !== undefined) {
-                queryParameters['alleleState'] = parameters['alleleState'];
-            }
-
             if (parameters['tumorType'] !== undefined) {
                 queryParameters['tumorType'] = parameters['tumorType'];
             }
@@ -1632,13 +1643,11 @@ export default class OncoKbAPI {
      * @param {integer} entrezGeneId - The entrez gene ID. (Higher priority than hugoSymbol). Example: 673
      * @param {string} alteration - Protein Change. Example: V600E
      * @param {string} referenceGenome - Reference genome, either GRCh37 or GRCh38. The default is GRCh37
-     * @param {string} consequence - Consequence. Exacmple: missense_variant
+     * @param {string} consequence - Consequence. Example: missense_variant
      * @param {integer} proteinStart - Protein Start. Example: 600
      * @param {integer} proteinEnd - Protein End. Example: 600
-     * @param {boolean} isGermline - Whether is germline variant
-     * @param {string} alleleState - Germline variant allele state(monoallelic vs biallelic)
      * @param {string} tumorType - OncoTree(http://oncotree.info) tumor type name. The field supports OncoTree Code, OncoTree Name and OncoTree Main type. Example: Melanoma
-     * @param {string} evidenceType - Evidence type to compute. This could help to improve the performance if you only look for sub-content. Example: ONCOGENIC. All available evidence type are GENE_SUMMARY, MUTATION_SUMMARY, TUMOR_TYPE_SUMMARY, PROGNOSTIC_SUMMARY, DIAGNOSTIC_SUMMARY, ONCOGENIC, MUTATION_EFFECT, PROGNOSTIC_IMPLICATION, DIAGNOSTIC_IMPLICATION, STANDARD_THERAPEUTIC_IMPLICATIONS_FOR_DRUG_SENSITIVITY, STANDARD_THERAPEUTIC_IMPLICATIONS_FOR_DRUG_RESISTANCE, INVESTIGATIONAL_THERAPEUTIC_IMPLICATIONS_DRUG_SENSITIVITY, INVESTIGATIONAL_THERAPEUTIC_IMPLICATIONS_DRUG_RESISTANCE. For multiple evidence types query, use ',' as separator.
+     * @param {string} evidenceType - DEPRECATED. We do not recommend using this parameter and it will eventually be removed.
      */
     annotateMutationsByProteinChangeGetUsingGET(parameters: {
         'hugoSymbol' ? : string,
@@ -1648,13 +1657,11 @@ export default class OncoKbAPI {
         'consequence' ? : "feature_truncation" | "frameshift_variant" | "inframe_deletion" | "inframe_insertion" | "start_lost" | "missense_variant" | "splice_region_variant" | "stop_gained" | "synonymous_variant" | "intron_variant",
         'proteinStart' ? : number,
         'proteinEnd' ? : number,
-        'isGermline' ? : boolean,
-        'alleleState' ? : string,
         'tumorType' ? : string,
         'evidenceType' ? : string,
         $queryParameters ? : any,
             $domain ? : string
-    }): Promise < IndicatorQueryResp > {
+    }): Promise < SomaticIndicatorQueryResp > {
         return this.annotateMutationsByProteinChangeGetUsingGETWithHttpInfo(parameters).then(function(response: request.Response) {
             return response.body;
         });
@@ -1730,9 +1737,86 @@ export default class OncoKbAPI {
             'body': Array < AnnotateMutationByProteinChangeQuery > ,
             $queryParameters ? : any,
             $domain ? : string
-        }): Promise < Array < IndicatorQueryResp >
+        }): Promise < Array < SomaticIndicatorQueryResp >
         > {
             return this.annotateMutationsByProteinChangePostUsingPOSTWithHttpInfo(parameters).then(function(response: request.Response) {
+                return response.body;
+            });
+        };
+    annotateSamplePostUsingPOSTURL(parameters: {
+        'body': Array < AnnotateSampleQuery > ,
+        $queryParameters ? : any
+    }): string {
+        let queryParameters: any = {};
+        let path = '/annotate/sample';
+
+        if (parameters.$queryParameters) {
+            Object.keys(parameters.$queryParameters).forEach(function(parameterName) {
+                var parameter = parameters.$queryParameters[parameterName];
+                queryParameters[parameterName] = parameter;
+            });
+        }
+        let keys = Object.keys(queryParameters);
+        return this.domain + path + (keys.length > 0 ? '?' + (keys.map(key => key + '=' + encodeURIComponent(queryParameters[key])).join('&')) : '');
+    };
+
+    /**
+     * Annotate samples.
+     * @method
+     * @name OncoKbAPI#annotateSamplePostUsingPOST
+     * @param {} body - Sample query. Please see swagger.json for request body format.
+     */
+    annotateSamplePostUsingPOSTWithHttpInfo(parameters: {
+        'body': Array < AnnotateSampleQuery > ,
+        $queryParameters ? : any,
+        $domain ? : string
+    }): Promise < request.Response > {
+        const domain = parameters.$domain ? parameters.$domain : this.domain;
+        const errorHandlers = this.errorHandlers;
+        const request = this.request;
+        let path = '/annotate/sample';
+        let body: any;
+        let queryParameters: any = {};
+        let headers: any = {};
+        let form: any = {};
+        return new Promise(function(resolve, reject) {
+            headers['Accept'] = 'application/json';
+            headers['Content-Type'] = 'application/json';
+
+            if (parameters['body'] !== undefined) {
+                body = parameters['body'];
+            }
+
+            if (parameters['body'] === undefined) {
+                reject(new Error('Missing required  parameter: body'));
+                return;
+            }
+
+            if (parameters.$queryParameters) {
+                Object.keys(parameters.$queryParameters).forEach(function(parameterName) {
+                    var parameter = parameters.$queryParameters[parameterName];
+                    queryParameters[parameterName] = parameter;
+                });
+            }
+
+            request('POST', domain + path, body, headers, queryParameters, form, reject, resolve, errorHandlers);
+
+        });
+    };
+
+    /**
+     * Annotate samples.
+     * @method
+     * @name OncoKbAPI#annotateSamplePostUsingPOST
+     * @param {} body - Sample query. Please see swagger.json for request body format.
+     */
+    annotateSamplePostUsingPOST(parameters: {
+            'body': Array < AnnotateSampleQuery > ,
+            $queryParameters ? : any,
+            $domain ? : string
+        }): Promise < Array < SampleQueryResp >
+        > {
+            return this.annotateSamplePostUsingPOSTWithHttpInfo(parameters).then(function(response: request.Response) {
                 return response.body;
             });
         };
@@ -1743,8 +1827,6 @@ export default class OncoKbAPI {
         'entrezGeneIdB' ? : number,
         'structuralVariantType': "DELETION" | "TRANSLOCATION" | "DUPLICATION" | "INSERTION" | "INVERSION" | "FUSION" | "UNKNOWN",
         'isFunctionalFusion': boolean,
-        'germline' ? : boolean,
-        'alleleState' ? : string,
         'referenceGenome' ? : string,
         'tumorType' ? : string,
         'evidenceType' ? : string,
@@ -1774,14 +1856,6 @@ export default class OncoKbAPI {
 
         if (parameters['isFunctionalFusion'] !== undefined) {
             queryParameters['isFunctionalFusion'] = parameters['isFunctionalFusion'];
-        }
-
-        if (parameters['germline'] !== undefined) {
-            queryParameters['germline'] = parameters['germline'];
-        }
-
-        if (parameters['alleleState'] !== undefined) {
-            queryParameters['alleleState'] = parameters['alleleState'];
         }
 
         if (parameters['referenceGenome'] !== undefined) {
@@ -1816,11 +1890,9 @@ export default class OncoKbAPI {
      * @param {integer} entrezGeneIdB - The entrez gene ID B. (Higher priority than hugoSymbolB) Example: 613
      * @param {string} structuralVariantType - Structural variant type
      * @param {boolean} isFunctionalFusion - Whether is functional fusion
-     * @param {boolean} germline - Whether is germline variant
-     * @param {string} alleleState - Germline variant allele state(monoallelic vs biallelic)
      * @param {string} referenceGenome - Reference genome, either GRCh37 or GRCh38. The default is GRCh37
      * @param {string} tumorType - OncoTree(http://oncotree.info) tumor type name. The field supports OncoTree Code, OncoTree Name and OncoTree Main type. Example: Melanoma
-     * @param {string} evidenceType - Evidence type to compute. This could help to improve the performance if you only look for sub-content. Example: ONCOGENIC. All available evidence type are GENE_SUMMARY, MUTATION_SUMMARY, TUMOR_TYPE_SUMMARY, PROGNOSTIC_SUMMARY, DIAGNOSTIC_SUMMARY, ONCOGENIC, MUTATION_EFFECT, PROGNOSTIC_IMPLICATION, DIAGNOSTIC_IMPLICATION, STANDARD_THERAPEUTIC_IMPLICATIONS_FOR_DRUG_SENSITIVITY, STANDARD_THERAPEUTIC_IMPLICATIONS_FOR_DRUG_RESISTANCE, INVESTIGATIONAL_THERAPEUTIC_IMPLICATIONS_DRUG_SENSITIVITY, INVESTIGATIONAL_THERAPEUTIC_IMPLICATIONS_DRUG_RESISTANCE. For multiple evidence types query, use ',' as separator.
+     * @param {string} evidenceType - DEPRECATED. We do not recommend using this parameter and it will eventually be removed.
      */
     annotateStructuralVariantsGetUsingGETWithHttpInfo(parameters: {
         'hugoSymbolA' ? : string,
@@ -1829,8 +1901,6 @@ export default class OncoKbAPI {
         'entrezGeneIdB' ? : number,
         'structuralVariantType': "DELETION" | "TRANSLOCATION" | "DUPLICATION" | "INSERTION" | "INVERSION" | "FUSION" | "UNKNOWN",
         'isFunctionalFusion': boolean,
-        'germline' ? : boolean,
-        'alleleState' ? : string,
         'referenceGenome' ? : string,
         'tumorType' ? : string,
         'evidenceType' ? : string,
@@ -1883,14 +1953,6 @@ export default class OncoKbAPI {
                 return;
             }
 
-            if (parameters['germline'] !== undefined) {
-                queryParameters['germline'] = parameters['germline'];
-            }
-
-            if (parameters['alleleState'] !== undefined) {
-                queryParameters['alleleState'] = parameters['alleleState'];
-            }
-
             if (parameters['referenceGenome'] !== undefined) {
                 queryParameters['referenceGenome'] = parameters['referenceGenome'];
             }
@@ -1925,11 +1987,9 @@ export default class OncoKbAPI {
      * @param {integer} entrezGeneIdB - The entrez gene ID B. (Higher priority than hugoSymbolB) Example: 613
      * @param {string} structuralVariantType - Structural variant type
      * @param {boolean} isFunctionalFusion - Whether is functional fusion
-     * @param {boolean} germline - Whether is germline variant
-     * @param {string} alleleState - Germline variant allele state(monoallelic vs biallelic)
      * @param {string} referenceGenome - Reference genome, either GRCh37 or GRCh38. The default is GRCh37
      * @param {string} tumorType - OncoTree(http://oncotree.info) tumor type name. The field supports OncoTree Code, OncoTree Name and OncoTree Main type. Example: Melanoma
-     * @param {string} evidenceType - Evidence type to compute. This could help to improve the performance if you only look for sub-content. Example: ONCOGENIC. All available evidence type are GENE_SUMMARY, MUTATION_SUMMARY, TUMOR_TYPE_SUMMARY, PROGNOSTIC_SUMMARY, DIAGNOSTIC_SUMMARY, ONCOGENIC, MUTATION_EFFECT, PROGNOSTIC_IMPLICATION, DIAGNOSTIC_IMPLICATION, STANDARD_THERAPEUTIC_IMPLICATIONS_FOR_DRUG_SENSITIVITY, STANDARD_THERAPEUTIC_IMPLICATIONS_FOR_DRUG_RESISTANCE, INVESTIGATIONAL_THERAPEUTIC_IMPLICATIONS_DRUG_SENSITIVITY, INVESTIGATIONAL_THERAPEUTIC_IMPLICATIONS_DRUG_RESISTANCE. For multiple evidence types query, use ',' as separator.
+     * @param {string} evidenceType - DEPRECATED. We do not recommend using this parameter and it will eventually be removed.
      */
     annotateStructuralVariantsGetUsingGET(parameters: {
         'hugoSymbolA' ? : string,
@@ -1938,14 +1998,12 @@ export default class OncoKbAPI {
         'entrezGeneIdB' ? : number,
         'structuralVariantType': "DELETION" | "TRANSLOCATION" | "DUPLICATION" | "INSERTION" | "INVERSION" | "FUSION" | "UNKNOWN",
         'isFunctionalFusion': boolean,
-        'germline' ? : boolean,
-        'alleleState' ? : string,
         'referenceGenome' ? : string,
         'tumorType' ? : string,
         'evidenceType' ? : string,
         $queryParameters ? : any,
             $domain ? : string
-    }): Promise < IndicatorQueryResp > {
+    }): Promise < SomaticIndicatorQueryResp > {
         return this.annotateStructuralVariantsGetUsingGETWithHttpInfo(parameters).then(function(response: request.Response) {
             return response.body;
         });
@@ -2021,9 +2079,648 @@ export default class OncoKbAPI {
             'body': Array < AnnotateStructuralVariantQuery > ,
             $queryParameters ? : any,
             $domain ? : string
-        }): Promise < Array < IndicatorQueryResp >
+        }): Promise < Array < SomaticIndicatorQueryResp >
         > {
             return this.annotateStructuralVariantsPostUsingPOSTWithHttpInfo(parameters).then(function(response: request.Response) {
+                return response.body;
+            });
+        };
+    annotationSearchGetUsingGETURL(parameters: {
+        'query': string,
+        'limit' ? : number,
+        $queryParameters ? : any
+    }): string {
+        let queryParameters: any = {};
+        let path = '/annotation/search';
+        if (parameters['query'] !== undefined) {
+            queryParameters['query'] = parameters['query'];
+        }
+
+        if (parameters['limit'] !== undefined) {
+            queryParameters['limit'] = parameters['limit'];
+        }
+
+        if (parameters.$queryParameters) {
+            Object.keys(parameters.$queryParameters).forEach(function(parameterName) {
+                var parameter = parameters.$queryParameters[parameterName];
+                queryParameters[parameterName] = parameter;
+            });
+        }
+        let keys = Object.keys(queryParameters);
+        return this.domain + path + (keys.length > 0 ? '?' + (keys.map(key => key + '=' + encodeURIComponent(queryParameters[key])).join('&')) : '');
+    };
+
+    /**
+     * Get annotations based on search
+     * @method
+     * @name OncoKbAPI#annotationSearchGetUsingGET
+     * @param {string} query - The search query, it could be hugoSymbol, variant or cancer type. At least two characters. Maximum two keywords are supported, separated by space
+     * @param {integer} limit - The limit of returned result.
+     */
+    annotationSearchGetUsingGETWithHttpInfo(parameters: {
+        'query': string,
+        'limit' ? : number,
+        $queryParameters ? : any,
+        $domain ? : string
+    }): Promise < request.Response > {
+        const domain = parameters.$domain ? parameters.$domain : this.domain;
+        const errorHandlers = this.errorHandlers;
+        const request = this.request;
+        let path = '/annotation/search';
+        let body: any;
+        let queryParameters: any = {};
+        let headers: any = {};
+        let form: any = {};
+        return new Promise(function(resolve, reject) {
+            headers['Accept'] = 'application/json';
+            headers['Content-Type'] = 'application/json';
+
+            if (parameters['query'] !== undefined) {
+                queryParameters['query'] = parameters['query'];
+            }
+
+            if (parameters['query'] === undefined) {
+                reject(new Error('Missing required  parameter: query'));
+                return;
+            }
+
+            if (parameters['limit'] !== undefined) {
+                queryParameters['limit'] = parameters['limit'];
+            }
+
+            if (parameters.$queryParameters) {
+                Object.keys(parameters.$queryParameters).forEach(function(parameterName) {
+                    var parameter = parameters.$queryParameters[parameterName];
+                    queryParameters[parameterName] = parameter;
+                });
+            }
+
+            request('GET', domain + path, body, headers, queryParameters, form, reject, resolve, errorHandlers);
+
+        });
+    };
+
+    /**
+     * Get annotations based on search
+     * @method
+     * @name OncoKbAPI#annotationSearchGetUsingGET
+     * @param {string} query - The search query, it could be hugoSymbol, variant or cancer type. At least two characters. Maximum two keywords are supported, separated by space
+     * @param {integer} limit - The limit of returned result.
+     */
+    annotationSearchGetUsingGET(parameters: {
+            'query': string,
+            'limit' ? : number,
+            $queryParameters ? : any,
+            $domain ? : string
+        }): Promise < Array < AnnotationSearchResult >
+        > {
+            return this.annotationSearchGetUsingGETWithHttpInfo(parameters).then(function(response: request.Response) {
+                return response.body;
+            });
+        };
+    annotateMutationsByGenomicChangeGetUsingGET_1URL(parameters: {
+        'genomicLocation': string,
+        'referenceGenome' ? : string,
+        'tumorType' ? : string,
+        $queryParameters ? : any
+    }): string {
+        let queryParameters: any = {};
+        let path = '/api/v1/annotate/germline/mutations/byGenomicChange';
+        if (parameters['genomicLocation'] !== undefined) {
+            queryParameters['genomicLocation'] = parameters['genomicLocation'];
+        }
+
+        if (parameters['referenceGenome'] !== undefined) {
+            queryParameters['referenceGenome'] = parameters['referenceGenome'];
+        }
+
+        if (parameters['tumorType'] !== undefined) {
+            queryParameters['tumorType'] = parameters['tumorType'];
+        }
+
+        if (parameters.$queryParameters) {
+            Object.keys(parameters.$queryParameters).forEach(function(parameterName) {
+                var parameter = parameters.$queryParameters[parameterName];
+                queryParameters[parameterName] = parameter;
+            });
+        }
+        let keys = Object.keys(queryParameters);
+        return this.domain + path + (keys.length > 0 ? '?' + (keys.map(key => key + '=' + encodeURIComponent(queryParameters[key])).join('&')) : '');
+    };
+
+    /**
+     * Annotate mutation by genomic change.
+     * @method
+     * @name OncoKbAPI#annotateMutationsByGenomicChangeGetUsingGET_1
+     * @param {string} genomicLocation - Genomic location following TCGA MAF format. Example: 7,140453136,140453136,A,T
+     * @param {string} referenceGenome - Reference genome, either GRCh37 or GRCh38. The default is GRCh37
+     * @param {string} tumorType - OncoTree(http://oncotree.info) tumor type name. The field supports OncoTree Code, OncoTree Name and OncoTree Main type. Example: Melanoma
+     */
+    annotateMutationsByGenomicChangeGetUsingGET_1WithHttpInfo(parameters: {
+        'genomicLocation': string,
+        'referenceGenome' ? : string,
+        'tumorType' ? : string,
+        $queryParameters ? : any,
+        $domain ? : string
+    }): Promise < request.Response > {
+        const domain = parameters.$domain ? parameters.$domain : this.domain;
+        const errorHandlers = this.errorHandlers;
+        const request = this.request;
+        let path = '/api/v1/annotate/germline/mutations/byGenomicChange';
+        let body: any;
+        let queryParameters: any = {};
+        let headers: any = {};
+        let form: any = {};
+        return new Promise(function(resolve, reject) {
+            headers['Accept'] = 'application/json';
+            headers['Content-Type'] = 'application/json';
+
+            if (parameters['genomicLocation'] !== undefined) {
+                queryParameters['genomicLocation'] = parameters['genomicLocation'];
+            }
+
+            if (parameters['genomicLocation'] === undefined) {
+                reject(new Error('Missing required  parameter: genomicLocation'));
+                return;
+            }
+
+            if (parameters['referenceGenome'] !== undefined) {
+                queryParameters['referenceGenome'] = parameters['referenceGenome'];
+            }
+
+            if (parameters['tumorType'] !== undefined) {
+                queryParameters['tumorType'] = parameters['tumorType'];
+            }
+
+            if (parameters.$queryParameters) {
+                Object.keys(parameters.$queryParameters).forEach(function(parameterName) {
+                    var parameter = parameters.$queryParameters[parameterName];
+                    queryParameters[parameterName] = parameter;
+                });
+            }
+
+            request('GET', domain + path, body, headers, queryParameters, form, reject, resolve, errorHandlers);
+
+        });
+    };
+
+    /**
+     * Annotate mutation by genomic change.
+     * @method
+     * @name OncoKbAPI#annotateMutationsByGenomicChangeGetUsingGET_1
+     * @param {string} genomicLocation - Genomic location following TCGA MAF format. Example: 7,140453136,140453136,A,T
+     * @param {string} referenceGenome - Reference genome, either GRCh37 or GRCh38. The default is GRCh37
+     * @param {string} tumorType - OncoTree(http://oncotree.info) tumor type name. The field supports OncoTree Code, OncoTree Name and OncoTree Main type. Example: Melanoma
+     */
+    annotateMutationsByGenomicChangeGetUsingGET_1(parameters: {
+        'genomicLocation': string,
+        'referenceGenome' ? : string,
+        'tumorType' ? : string,
+        $queryParameters ? : any,
+        $domain ? : string
+    }): Promise < GermlineIndicatorQueryResp > {
+        return this.annotateMutationsByGenomicChangeGetUsingGET_1WithHttpInfo(parameters).then(function(response: request.Response) {
+            return response.body;
+        });
+    };
+    annotateMutationsByGenomicChangePostUsingPOST_1URL(parameters: {
+        'body': Array < AnnotateMutationByGenomicChangeQuery > ,
+        $queryParameters ? : any
+    }): string {
+        let queryParameters: any = {};
+        let path = '/api/v1/annotate/germline/mutations/byGenomicChange';
+
+        if (parameters.$queryParameters) {
+            Object.keys(parameters.$queryParameters).forEach(function(parameterName) {
+                var parameter = parameters.$queryParameters[parameterName];
+                queryParameters[parameterName] = parameter;
+            });
+        }
+        let keys = Object.keys(queryParameters);
+        return this.domain + path + (keys.length > 0 ? '?' + (keys.map(key => key + '=' + encodeURIComponent(queryParameters[key])).join('&')) : '');
+    };
+
+    /**
+     * Annotate mutations by genomic change.
+     * @method
+     * @name OncoKbAPI#annotateMutationsByGenomicChangePostUsingPOST_1
+     * @param {} body - List of queries. Please see swagger.json for request body format.
+     */
+    annotateMutationsByGenomicChangePostUsingPOST_1WithHttpInfo(parameters: {
+        'body': Array < AnnotateMutationByGenomicChangeQuery > ,
+        $queryParameters ? : any,
+        $domain ? : string
+    }): Promise < request.Response > {
+        const domain = parameters.$domain ? parameters.$domain : this.domain;
+        const errorHandlers = this.errorHandlers;
+        const request = this.request;
+        let path = '/api/v1/annotate/germline/mutations/byGenomicChange';
+        let body: any;
+        let queryParameters: any = {};
+        let headers: any = {};
+        let form: any = {};
+        return new Promise(function(resolve, reject) {
+            headers['Accept'] = 'application/json';
+            headers['Content-Type'] = 'application/json';
+
+            if (parameters['body'] !== undefined) {
+                body = parameters['body'];
+            }
+
+            if (parameters['body'] === undefined) {
+                reject(new Error('Missing required  parameter: body'));
+                return;
+            }
+
+            if (parameters.$queryParameters) {
+                Object.keys(parameters.$queryParameters).forEach(function(parameterName) {
+                    var parameter = parameters.$queryParameters[parameterName];
+                    queryParameters[parameterName] = parameter;
+                });
+            }
+
+            request('POST', domain + path, body, headers, queryParameters, form, reject, resolve, errorHandlers);
+
+        });
+    };
+
+    /**
+     * Annotate mutations by genomic change.
+     * @method
+     * @name OncoKbAPI#annotateMutationsByGenomicChangePostUsingPOST_1
+     * @param {} body - List of queries. Please see swagger.json for request body format.
+     */
+    annotateMutationsByGenomicChangePostUsingPOST_1(parameters: {
+            'body': Array < AnnotateMutationByGenomicChangeQuery > ,
+            $queryParameters ? : any,
+            $domain ? : string
+        }): Promise < Array < GermlineIndicatorQueryResp >
+        > {
+            return this.annotateMutationsByGenomicChangePostUsingPOST_1WithHttpInfo(parameters).then(function(response: request.Response) {
+                return response.body;
+            });
+        };
+    annotateMutationsByHGVScGetUsingGET_1URL(parameters: {
+        'hgvsc': string,
+        'referenceGenome' ? : string,
+        'tumorType' ? : string,
+        $queryParameters ? : any
+    }): string {
+        let queryParameters: any = {};
+        let path = '/api/v1/annotate/germline/mutations/byHGVSc';
+        if (parameters['hgvsc'] !== undefined) {
+            queryParameters['hgvsc'] = parameters['hgvsc'];
+        }
+
+        if (parameters['referenceGenome'] !== undefined) {
+            queryParameters['referenceGenome'] = parameters['referenceGenome'];
+        }
+
+        if (parameters['tumorType'] !== undefined) {
+            queryParameters['tumorType'] = parameters['tumorType'];
+        }
+
+        if (parameters.$queryParameters) {
+            Object.keys(parameters.$queryParameters).forEach(function(parameterName) {
+                var parameter = parameters.$queryParameters[parameterName];
+                queryParameters[parameterName] = parameter;
+            });
+        }
+        let keys = Object.keys(queryParameters);
+        return this.domain + path + (keys.length > 0 ? '?' + (keys.map(key => key + '=' + encodeURIComponent(queryParameters[key])).join('&')) : '');
+    };
+
+    /**
+     * Annotate mutation by HGVSc.
+     * @method
+     * @name OncoKbAPI#annotateMutationsByHGVScGetUsingGET_1
+     * @param {string} hgvsc - HGVS cDNA format following HGVS nomenclature. Example: EGFR:c.2369C>T
+     * @param {string} referenceGenome - Reference genome, either GRCh37 or GRCh38. The default is GRCh37
+     * @param {string} tumorType - OncoTree(http://oncotree.info) tumor type name. The field supports OncoTree Code, OncoTree Name and OncoTree Main type. Example: Melanoma
+     */
+    annotateMutationsByHGVScGetUsingGET_1WithHttpInfo(parameters: {
+        'hgvsc': string,
+        'referenceGenome' ? : string,
+        'tumorType' ? : string,
+        $queryParameters ? : any,
+        $domain ? : string
+    }): Promise < request.Response > {
+        const domain = parameters.$domain ? parameters.$domain : this.domain;
+        const errorHandlers = this.errorHandlers;
+        const request = this.request;
+        let path = '/api/v1/annotate/germline/mutations/byHGVSc';
+        let body: any;
+        let queryParameters: any = {};
+        let headers: any = {};
+        let form: any = {};
+        return new Promise(function(resolve, reject) {
+            headers['Accept'] = 'application/json';
+            headers['Content-Type'] = 'application/json';
+
+            if (parameters['hgvsc'] !== undefined) {
+                queryParameters['hgvsc'] = parameters['hgvsc'];
+            }
+
+            if (parameters['hgvsc'] === undefined) {
+                reject(new Error('Missing required  parameter: hgvsc'));
+                return;
+            }
+
+            if (parameters['referenceGenome'] !== undefined) {
+                queryParameters['referenceGenome'] = parameters['referenceGenome'];
+            }
+
+            if (parameters['tumorType'] !== undefined) {
+                queryParameters['tumorType'] = parameters['tumorType'];
+            }
+
+            if (parameters.$queryParameters) {
+                Object.keys(parameters.$queryParameters).forEach(function(parameterName) {
+                    var parameter = parameters.$queryParameters[parameterName];
+                    queryParameters[parameterName] = parameter;
+                });
+            }
+
+            request('GET', domain + path, body, headers, queryParameters, form, reject, resolve, errorHandlers);
+
+        });
+    };
+
+    /**
+     * Annotate mutation by HGVSc.
+     * @method
+     * @name OncoKbAPI#annotateMutationsByHGVScGetUsingGET_1
+     * @param {string} hgvsc - HGVS cDNA format following HGVS nomenclature. Example: EGFR:c.2369C>T
+     * @param {string} referenceGenome - Reference genome, either GRCh37 or GRCh38. The default is GRCh37
+     * @param {string} tumorType - OncoTree(http://oncotree.info) tumor type name. The field supports OncoTree Code, OncoTree Name and OncoTree Main type. Example: Melanoma
+     */
+    annotateMutationsByHGVScGetUsingGET_1(parameters: {
+        'hgvsc': string,
+        'referenceGenome' ? : string,
+        'tumorType' ? : string,
+        $queryParameters ? : any,
+        $domain ? : string
+    }): Promise < GermlineIndicatorQueryResp > {
+        return this.annotateMutationsByHGVScGetUsingGET_1WithHttpInfo(parameters).then(function(response: request.Response) {
+            return response.body;
+        });
+    };
+    annotateMutationsByHGVScPostUsingPOST_1URL(parameters: {
+        'body': Array < AnnotateMutationByHGVScQuery > ,
+        $queryParameters ? : any
+    }): string {
+        let queryParameters: any = {};
+        let path = '/api/v1/annotate/germline/mutations/byHGVSc';
+
+        if (parameters.$queryParameters) {
+            Object.keys(parameters.$queryParameters).forEach(function(parameterName) {
+                var parameter = parameters.$queryParameters[parameterName];
+                queryParameters[parameterName] = parameter;
+            });
+        }
+        let keys = Object.keys(queryParameters);
+        return this.domain + path + (keys.length > 0 ? '?' + (keys.map(key => key + '=' + encodeURIComponent(queryParameters[key])).join('&')) : '');
+    };
+
+    /**
+     * Annotate mutations by HGVSc.
+     * @method
+     * @name OncoKbAPI#annotateMutationsByHGVScPostUsingPOST_1
+     * @param {} body - List of queries. Please see swagger.json for request body format.
+     */
+    annotateMutationsByHGVScPostUsingPOST_1WithHttpInfo(parameters: {
+        'body': Array < AnnotateMutationByHGVScQuery > ,
+        $queryParameters ? : any,
+        $domain ? : string
+    }): Promise < request.Response > {
+        const domain = parameters.$domain ? parameters.$domain : this.domain;
+        const errorHandlers = this.errorHandlers;
+        const request = this.request;
+        let path = '/api/v1/annotate/germline/mutations/byHGVSc';
+        let body: any;
+        let queryParameters: any = {};
+        let headers: any = {};
+        let form: any = {};
+        return new Promise(function(resolve, reject) {
+            headers['Accept'] = 'application/json';
+            headers['Content-Type'] = 'application/json';
+
+            if (parameters['body'] !== undefined) {
+                body = parameters['body'];
+            }
+
+            if (parameters['body'] === undefined) {
+                reject(new Error('Missing required  parameter: body'));
+                return;
+            }
+
+            if (parameters.$queryParameters) {
+                Object.keys(parameters.$queryParameters).forEach(function(parameterName) {
+                    var parameter = parameters.$queryParameters[parameterName];
+                    queryParameters[parameterName] = parameter;
+                });
+            }
+
+            request('POST', domain + path, body, headers, queryParameters, form, reject, resolve, errorHandlers);
+
+        });
+    };
+
+    /**
+     * Annotate mutations by HGVSc.
+     * @method
+     * @name OncoKbAPI#annotateMutationsByHGVScPostUsingPOST_1
+     * @param {} body - List of queries. Please see swagger.json for request body format.
+     */
+    annotateMutationsByHGVScPostUsingPOST_1(parameters: {
+            'body': Array < AnnotateMutationByHGVScQuery > ,
+            $queryParameters ? : any,
+            $domain ? : string
+        }): Promise < Array < GermlineIndicatorQueryResp >
+        > {
+            return this.annotateMutationsByHGVScPostUsingPOST_1WithHttpInfo(parameters).then(function(response: request.Response) {
+                return response.body;
+            });
+        };
+    annotateMutationsByHGVSgGetUsingGET_1URL(parameters: {
+        'hgvsg': string,
+        'referenceGenome' ? : string,
+        'tumorType' ? : string,
+        $queryParameters ? : any
+    }): string {
+        let queryParameters: any = {};
+        let path = '/api/v1/annotate/germline/mutations/byHGVSg';
+        if (parameters['hgvsg'] !== undefined) {
+            queryParameters['hgvsg'] = parameters['hgvsg'];
+        }
+
+        if (parameters['referenceGenome'] !== undefined) {
+            queryParameters['referenceGenome'] = parameters['referenceGenome'];
+        }
+
+        if (parameters['tumorType'] !== undefined) {
+            queryParameters['tumorType'] = parameters['tumorType'];
+        }
+
+        if (parameters.$queryParameters) {
+            Object.keys(parameters.$queryParameters).forEach(function(parameterName) {
+                var parameter = parameters.$queryParameters[parameterName];
+                queryParameters[parameterName] = parameter;
+            });
+        }
+        let keys = Object.keys(queryParameters);
+        return this.domain + path + (keys.length > 0 ? '?' + (keys.map(key => key + '=' + encodeURIComponent(queryParameters[key])).join('&')) : '');
+    };
+
+    /**
+     * Annotate mutation by HGVSg.
+     * @method
+     * @name OncoKbAPI#annotateMutationsByHGVSgGetUsingGET_1
+     * @param {string} hgvsg - HGVS genomic format following HGVS nomenclature. Example: 7:g.140453136A>T
+     * @param {string} referenceGenome - Reference genome, either GRCh37 or GRCh38. The default is GRCh37
+     * @param {string} tumorType - OncoTree(http://oncotree.info) tumor type name. The field supports OncoTree Code, OncoTree Name and OncoTree Main type. Example: Melanoma
+     */
+    annotateMutationsByHGVSgGetUsingGET_1WithHttpInfo(parameters: {
+        'hgvsg': string,
+        'referenceGenome' ? : string,
+        'tumorType' ? : string,
+        $queryParameters ? : any,
+        $domain ? : string
+    }): Promise < request.Response > {
+        const domain = parameters.$domain ? parameters.$domain : this.domain;
+        const errorHandlers = this.errorHandlers;
+        const request = this.request;
+        let path = '/api/v1/annotate/germline/mutations/byHGVSg';
+        let body: any;
+        let queryParameters: any = {};
+        let headers: any = {};
+        let form: any = {};
+        return new Promise(function(resolve, reject) {
+            headers['Accept'] = 'application/json';
+            headers['Content-Type'] = 'application/json';
+
+            if (parameters['hgvsg'] !== undefined) {
+                queryParameters['hgvsg'] = parameters['hgvsg'];
+            }
+
+            if (parameters['hgvsg'] === undefined) {
+                reject(new Error('Missing required  parameter: hgvsg'));
+                return;
+            }
+
+            if (parameters['referenceGenome'] !== undefined) {
+                queryParameters['referenceGenome'] = parameters['referenceGenome'];
+            }
+
+            if (parameters['tumorType'] !== undefined) {
+                queryParameters['tumorType'] = parameters['tumorType'];
+            }
+
+            if (parameters.$queryParameters) {
+                Object.keys(parameters.$queryParameters).forEach(function(parameterName) {
+                    var parameter = parameters.$queryParameters[parameterName];
+                    queryParameters[parameterName] = parameter;
+                });
+            }
+
+            request('GET', domain + path, body, headers, queryParameters, form, reject, resolve, errorHandlers);
+
+        });
+    };
+
+    /**
+     * Annotate mutation by HGVSg.
+     * @method
+     * @name OncoKbAPI#annotateMutationsByHGVSgGetUsingGET_1
+     * @param {string} hgvsg - HGVS genomic format following HGVS nomenclature. Example: 7:g.140453136A>T
+     * @param {string} referenceGenome - Reference genome, either GRCh37 or GRCh38. The default is GRCh37
+     * @param {string} tumorType - OncoTree(http://oncotree.info) tumor type name. The field supports OncoTree Code, OncoTree Name and OncoTree Main type. Example: Melanoma
+     */
+    annotateMutationsByHGVSgGetUsingGET_1(parameters: {
+        'hgvsg': string,
+        'referenceGenome' ? : string,
+        'tumorType' ? : string,
+        $queryParameters ? : any,
+        $domain ? : string
+    }): Promise < GermlineIndicatorQueryResp > {
+        return this.annotateMutationsByHGVSgGetUsingGET_1WithHttpInfo(parameters).then(function(response: request.Response) {
+            return response.body;
+        });
+    };
+    annotateMutationsByHGVSgPostUsingPOST_1URL(parameters: {
+        'body': Array < AnnotateMutationByHGVSgQuery > ,
+        $queryParameters ? : any
+    }): string {
+        let queryParameters: any = {};
+        let path = '/api/v1/annotate/germline/mutations/byHGVSg';
+
+        if (parameters.$queryParameters) {
+            Object.keys(parameters.$queryParameters).forEach(function(parameterName) {
+                var parameter = parameters.$queryParameters[parameterName];
+                queryParameters[parameterName] = parameter;
+            });
+        }
+        let keys = Object.keys(queryParameters);
+        return this.domain + path + (keys.length > 0 ? '?' + (keys.map(key => key + '=' + encodeURIComponent(queryParameters[key])).join('&')) : '');
+    };
+
+    /**
+     * Annotate mutations by HGVSg.
+     * @method
+     * @name OncoKbAPI#annotateMutationsByHGVSgPostUsingPOST_1
+     * @param {} body - List of queries. Please see swagger.json for request body format.
+     */
+    annotateMutationsByHGVSgPostUsingPOST_1WithHttpInfo(parameters: {
+        'body': Array < AnnotateMutationByHGVSgQuery > ,
+        $queryParameters ? : any,
+        $domain ? : string
+    }): Promise < request.Response > {
+        const domain = parameters.$domain ? parameters.$domain : this.domain;
+        const errorHandlers = this.errorHandlers;
+        const request = this.request;
+        let path = '/api/v1/annotate/germline/mutations/byHGVSg';
+        let body: any;
+        let queryParameters: any = {};
+        let headers: any = {};
+        let form: any = {};
+        return new Promise(function(resolve, reject) {
+            headers['Accept'] = 'application/json';
+            headers['Content-Type'] = 'application/json';
+
+            if (parameters['body'] !== undefined) {
+                body = parameters['body'];
+            }
+
+            if (parameters['body'] === undefined) {
+                reject(new Error('Missing required  parameter: body'));
+                return;
+            }
+
+            if (parameters.$queryParameters) {
+                Object.keys(parameters.$queryParameters).forEach(function(parameterName) {
+                    var parameter = parameters.$queryParameters[parameterName];
+                    queryParameters[parameterName] = parameter;
+                });
+            }
+
+            request('POST', domain + path, body, headers, queryParameters, form, reject, resolve, errorHandlers);
+
+        });
+    };
+
+    /**
+     * Annotate mutations by HGVSg.
+     * @method
+     * @name OncoKbAPI#annotateMutationsByHGVSgPostUsingPOST_1
+     * @param {} body - List of queries. Please see swagger.json for request body format.
+     */
+    annotateMutationsByHGVSgPostUsingPOST_1(parameters: {
+            'body': Array < AnnotateMutationByHGVSgQuery > ,
+            $queryParameters ? : any,
+            $domain ? : string
+        }): Promise < Array < GermlineIndicatorQueryResp >
+        > {
+            return this.annotateMutationsByHGVSgPostUsingPOST_1WithHttpInfo(parameters).then(function(response: request.Response) {
                 return response.body;
             });
         };
@@ -3987,7 +4684,7 @@ export default class OncoKbAPI {
         'fields' ? : string,
         $queryParameters ? : any,
             $domain ? : string
-    }): Promise < IndicatorQueryResp > {
+    }): Promise < SomaticIndicatorQueryResp > {
         return this.searchGetUsingGETWithHttpInfo(parameters).then(function(response: request.Response) {
             return response.body;
         });
@@ -4076,7 +4773,7 @@ export default class OncoKbAPI {
             'fields' ? : string,
             $queryParameters ? : any,
             $domain ? : string
-        }): Promise < Array < IndicatorQueryResp >
+        }): Promise < Array < SomaticIndicatorQueryResp >
         > {
             return this.searchPostUsingPOSTWithHttpInfo(parameters).then(function(response: request.Response) {
                 return response.body;
@@ -4366,7 +5063,7 @@ export default class OncoKbAPI {
         let headers: any = {};
         let form: any = {};
         return new Promise(function(resolve, reject) {
-            headers['Accept'] = 'text/plain';
+            headers['Accept'] = 'text/plain;charset=UTF-8';
             headers['Content-Type'] = 'application/json';
 
             if (parameters['version'] !== undefined) {
@@ -4515,7 +5212,7 @@ export default class OncoKbAPI {
         let headers: any = {};
         let form: any = {};
         return new Promise(function(resolve, reject) {
-            headers['Accept'] = 'text/plain';
+            headers['Accept'] = 'text/plain;charset=UTF-8';
             headers['Content-Type'] = 'application/json';
 
             if (parameters['version'] !== undefined) {
@@ -4684,7 +5381,7 @@ export default class OncoKbAPI {
         let headers: any = {};
         let form: any = {};
         return new Promise(function(resolve, reject) {
-            headers['Accept'] = 'text/plain';
+            headers['Accept'] = 'text/plain;charset=UTF-8';
             headers['Content-Type'] = 'application/json';
 
             if (parameters['version'] !== undefined) {
@@ -4721,6 +5418,131 @@ export default class OncoKbAPI {
             $domain ? : string
     }): Promise < string > {
         return this.utilsAllCuratedGenesTxtGetUsingGETWithHttpInfo(parameters).then(function(response: request.Response) {
+            return response.body;
+        });
+    };
+    utilsAllVariantsOfUnknownSignificanceGetUsingGETURL(parameters: {
+        $queryParameters ? : any
+    }): string {
+        let queryParameters: any = {};
+        let path = '/utils/allVariantsOfUnknownSignificance';
+
+        if (parameters.$queryParameters) {
+            Object.keys(parameters.$queryParameters).forEach(function(parameterName) {
+                var parameter = parameters.$queryParameters[parameterName];
+                queryParameters[parameterName] = parameter;
+            });
+        }
+        let keys = Object.keys(queryParameters);
+        return this.domain + path + (keys.length > 0 ? '?' + (keys.map(key => key + '=' + encodeURIComponent(queryParameters[key])).join('&')) : '');
+    };
+
+    /**
+     * Get All Variants of Unknown Significance.
+     * @method
+     * @name OncoKbAPI#utilsAllVariantsOfUnknownSignificanceGetUsingGET
+     */
+    utilsAllVariantsOfUnknownSignificanceGetUsingGETWithHttpInfo(parameters: {
+        $queryParameters ? : any,
+            $domain ? : string
+    }): Promise < request.Response > {
+        const domain = parameters.$domain ? parameters.$domain : this.domain;
+        const errorHandlers = this.errorHandlers;
+        const request = this.request;
+        let path = '/utils/allVariantsOfUnknownSignificance';
+        let body: any;
+        let queryParameters: any = {};
+        let headers: any = {};
+        let form: any = {};
+        return new Promise(function(resolve, reject) {
+            headers['Accept'] = 'application/json';
+            headers['Content-Type'] = 'application/json';
+
+            if (parameters.$queryParameters) {
+                Object.keys(parameters.$queryParameters).forEach(function(parameterName) {
+                    var parameter = parameters.$queryParameters[parameterName];
+                    queryParameters[parameterName] = parameter;
+                });
+            }
+
+            request('GET', domain + path, body, headers, queryParameters, form, reject, resolve, errorHandlers);
+
+        });
+    };
+
+    /**
+     * Get All Variants of Unknown Significance.
+     * @method
+     * @name OncoKbAPI#utilsAllVariantsOfUnknownSignificanceGetUsingGET
+     */
+    utilsAllVariantsOfUnknownSignificanceGetUsingGET(parameters: {
+            $queryParameters ? : any,
+                $domain ? : string
+        }): Promise < Array < VariantOfUnknownSignificance >
+        > {
+            return this.utilsAllVariantsOfUnknownSignificanceGetUsingGETWithHttpInfo(parameters).then(function(response: request.Response) {
+                return response.body;
+            });
+        };
+    utilsAllVariantsOfUnknownSignificanceTxtGetUsingGETURL(parameters: {
+        $queryParameters ? : any
+    }): string {
+        let queryParameters: any = {};
+        let path = '/utils/allVariantsOfUnknownSignificance.txt';
+
+        if (parameters.$queryParameters) {
+            Object.keys(parameters.$queryParameters).forEach(function(parameterName) {
+                var parameter = parameters.$queryParameters[parameterName];
+                queryParameters[parameterName] = parameter;
+            });
+        }
+        let keys = Object.keys(queryParameters);
+        return this.domain + path + (keys.length > 0 ? '?' + (keys.map(key => key + '=' + encodeURIComponent(queryParameters[key])).join('&')) : '');
+    };
+
+    /**
+     * Get All Variants of Unknown Significance in text file.
+     * @method
+     * @name OncoKbAPI#utilsAllVariantsOfUnknownSignificanceTxtGetUsingGET
+     */
+    utilsAllVariantsOfUnknownSignificanceTxtGetUsingGETWithHttpInfo(parameters: {
+        $queryParameters ? : any,
+            $domain ? : string
+    }): Promise < request.Response > {
+        const domain = parameters.$domain ? parameters.$domain : this.domain;
+        const errorHandlers = this.errorHandlers;
+        const request = this.request;
+        let path = '/utils/allVariantsOfUnknownSignificance.txt';
+        let body: any;
+        let queryParameters: any = {};
+        let headers: any = {};
+        let form: any = {};
+        return new Promise(function(resolve, reject) {
+            headers['Accept'] = 'text/plain;charset=UTF-8';
+            headers['Content-Type'] = 'application/json';
+
+            if (parameters.$queryParameters) {
+                Object.keys(parameters.$queryParameters).forEach(function(parameterName) {
+                    var parameter = parameters.$queryParameters[parameterName];
+                    queryParameters[parameterName] = parameter;
+                });
+            }
+
+            request('GET', domain + path, body, headers, queryParameters, form, reject, resolve, errorHandlers);
+
+        });
+    };
+
+    /**
+     * Get All Variants of Unknown Significance in text file.
+     * @method
+     * @name OncoKbAPI#utilsAllVariantsOfUnknownSignificanceTxtGetUsingGET
+     */
+    utilsAllVariantsOfUnknownSignificanceTxtGetUsingGET(parameters: {
+        $queryParameters ? : any,
+            $domain ? : string
+    }): Promise < string > {
+        return this.utilsAllVariantsOfUnknownSignificanceTxtGetUsingGETWithHttpInfo(parameters).then(function(response: request.Response) {
             return response.body;
         });
     };
@@ -4839,7 +5661,7 @@ export default class OncoKbAPI {
         let headers: any = {};
         let form: any = {};
         return new Promise(function(resolve, reject) {
-            headers['Accept'] = 'text/plain';
+            headers['Accept'] = 'text/plain;charset=UTF-8';
             headers['Content-Type'] = 'application/json';
 
             if (parameters['version'] !== undefined) {
