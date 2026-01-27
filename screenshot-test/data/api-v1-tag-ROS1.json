@@ -1,0 +1,182 @@
+{
+    "name": "Oncogenic Mutations Range Alias",
+    "description": "Custom Description",
+    "start": 599,
+    "end": 700,
+    "oncogenicities": [
+        {
+            "oncogenicity": "YES"
+        },
+        {
+            "oncogenicity": "LIKELY"
+        }
+    ],
+    "mutationTypes": [],
+    "evidences": [
+        {
+            "id": 21742,
+            "uuid": "e60b0c6b-3c55-4bc1-b07a-ddc2b867c2bd",
+            "evidenceType": "PROGNOSTIC_IMPLICATION",
+            "cancerTypes": [
+                {
+                    "id": 494,
+                    "subtype": "Acute Leukemias of Ambiguous Lineage",
+                    "code": "ALAL",
+                    "color": "LightSalmon",
+                    "mainType": "Leukemia",
+                    "level": 3,
+                    "tissue": "Myeloid",
+                    "tumorForm": "LIQUID"
+                }
+            ],
+            "excludedCancerTypes": [],
+            "relevantCancerTypes": [],
+            "gene": {
+                "entrezGeneId": 673,
+                "hugoSymbol": "BRAF",
+                "geneType": "ONCOGENE",
+                "grch37Isoform": "ENST00000288602",
+                "grch37RefSeq": "",
+                "grch38Isoform": "ENST00000646891",
+                "grch38RefSeq": "",
+                "geneAliases": [
+                    "BRAF1"
+                ],
+                "genesets": []
+            },
+            "alterations": [],
+            "name": null,
+            "description": "Prognostic test 1",
+            "additionalInfo": null,
+            "treatments": [],
+            "knownEffect": null,
+            "lastEdit": 1769641714000,
+            "lastReview": null,
+            "levelOfEvidence": "LEVEL_Px1",
+            "fdaLevel": null,
+            "solidPropagationLevel": null,
+            "liquidPropagationLevel": null,
+            "articles": []
+        },
+        {
+            "id": 21744,
+            "uuid": "5a6d5157-f715-4367-a6eb-6b2acab67386",
+            "evidenceType": "DIAGNOSTIC_IMPLICATION",
+            "cancerTypes": [
+                {
+                    "id": 494,
+                    "subtype": "Acute Leukemias of Ambiguous Lineage",
+                    "code": "ALAL",
+                    "color": "LightSalmon",
+                    "mainType": "Leukemia",
+                    "level": 3,
+                    "tissue": "Myeloid",
+                    "tumorForm": "LIQUID"
+                }
+            ],
+            "excludedCancerTypes": [],
+            "relevantCancerTypes": [
+                {
+                    "id": 494,
+                    "subtype": "Acute Leukemias of Ambiguous Lineage",
+                    "code": "ALAL",
+                    "color": "LightSalmon",
+                    "mainType": "Leukemia",
+                    "level": 3,
+                    "tissue": "Myeloid",
+                    "tumorForm": "LIQUID"
+                }
+            ],
+            "gene": {
+                "entrezGeneId": 673,
+                "hugoSymbol": "BRAF",
+                "geneType": "ONCOGENE",
+                "grch37Isoform": "ENST00000288602",
+                "grch37RefSeq": "",
+                "grch38Isoform": "ENST00000646891",
+                "grch38RefSeq": "",
+                "geneAliases": [
+                    "BRAF1"
+                ],
+                "genesets": []
+            },
+            "alterations": [],
+            "name": null,
+            "description": "Diagnostic Test 1",
+            "additionalInfo": null,
+            "treatments": [],
+            "knownEffect": null,
+            "lastEdit": 1769641680000,
+            "lastReview": null,
+            "levelOfEvidence": "LEVEL_Dx1",
+            "fdaLevel": null,
+            "solidPropagationLevel": null,
+            "liquidPropagationLevel": null,
+            "articles": []
+        },
+        {
+            "id": 21745,
+            "uuid": "2c85304e-9395-450e-aa0a-e0b1ee06c357",
+            "evidenceType": "STANDARD_THERAPEUTIC_IMPLICATIONS_FOR_DRUG_SENSITIVITY",
+            "cancerTypes": [
+                {
+                    "id": 494,
+                    "subtype": "Acute Leukemias of Ambiguous Lineage",
+                    "code": "ALAL",
+                    "color": "LightSalmon",
+                    "mainType": "Leukemia",
+                    "level": 3,
+                    "tissue": "Myeloid",
+                    "tumorForm": "LIQUID"
+                }
+            ],
+            "excludedCancerTypes": [],
+            "relevantCancerTypes": [],
+            "gene": {
+                "entrezGeneId": 673,
+                "hugoSymbol": "BRAF",
+                "geneType": "ONCOGENE",
+                "grch37Isoform": "ENST00000288602",
+                "grch37RefSeq": "",
+                "grch38Isoform": "ENST00000646891",
+                "grch38RefSeq": "",
+                "geneAliases": [
+                    "BRAF1"
+                ],
+                "genesets": []
+            },
+            "alterations": [],
+            "name": null,
+            "description": "Test 1",
+            "additionalInfo": null,
+            "treatments": [
+                {
+                    "approvedIndications": [],
+                    "priority": 1,
+                    "drugs": [
+                        {
+                            "ncitCode": "C49176",
+                            "drugName": "Palbociclib",
+                            "priority": 1
+                        }
+                    ]
+                }
+            ],
+            "knownEffect": "Sensitive",
+            "lastEdit": 1769631407000,
+            "lastReview": null,
+            "levelOfEvidence": "LEVEL_1",
+            "fdaLevel": "LEVEL_Fda2",
+            "solidPropagationLevel": "LEVEL_3B",
+            "liquidPropagationLevel": "LEVEL_3B",
+            "articles": []
+        }
+    ],
+    "highestLevels": {
+        "highestSensitiveLevel": "LEVEL_1",
+        "highestResistanceLevel": null,
+        "highestDiagnosticLevel": "LEVEL_Dx1",
+        "highestPrognosticLevel": "LEVEL_Px1",
+        "highestFDALevel": "LEVEL_Fda2"
+    }
+}

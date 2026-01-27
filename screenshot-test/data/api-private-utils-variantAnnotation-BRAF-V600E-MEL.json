@@ -701,7 +701,8 @@
               "reference": "Kilburn LB et al. Nature medicine. 2024 Jan;30(1)207-217.",
               "abstract": null
             }
-          ]
+          ],
+          "tags": []
         }
       ]
     },
@@ -1065,7 +1066,8 @@
               "reference": "Long GV et al. The New England journal of medicine. 2014 Nov 13;371(20)1877-88.",
               "abstract": null
             }
-          ]
+          ],
+          "tags": []
         },
         {
           "id": 3690,
@@ -1325,7 +1327,8 @@
               "reference": "Long GV et al. The New England journal of medicine. 2014 Nov 13;371(20)1877-88.",
               "abstract": null
             }
-          ]
+          ],
+          "tags": []
         },
         {
           "id": 3691,
@@ -1576,7 +1579,8 @@
               "reference": "Larkin J et al. The New England journal of medicine. 2014 Nov 13;371(20)1867-76.",
               "abstract": null
             }
-          ]
+          ],
+          "tags": []
         },
         {
           "id": 3692,
@@ -1813,7 +1817,8 @@
               "reference": "Dummer R et al. The Lancet. Oncology. 2018 May;19(5)603-615.",
               "abstract": null
             }
-          ]
+          ],
+          "tags": []
         },
         {
           "id": 3632,
@@ -2028,7 +2033,8 @@
               "reference": "Hauschild A et al. Lancet (London, England). 2012 Jul 28;380(9839)358-65.",
               "abstract": null
             }
-          ]
+          ],
+          "tags": []
         },
         {
           "id": 3633,
@@ -2243,7 +2249,8 @@
               "reference": "Chapman PB et al. Annals of oncology : official journal of the European Society for Medical Oncology. 2017 Oct 1;28(10)2581-2587.",
               "abstract": null
             }
-          ]
+          ],
+          "tags": []
         },
         {
           "id": 3677,
@@ -2438,7 +2445,8 @@
               "reference": "Gutzmer R et al. Lancet (London, England). 2020 Jun 13;395(10240)1835-1844.",
               "abstract": null
             }
-          ]
+          ],
+          "tags": []
         }
       ]
     },
@@ -2643,7 +2651,8 @@
               "reference": "Kopetz S et al. The New England journal of medicine. 2019 Oct 24;381(17)1632-1643.",
               "abstract": null
             }
-          ]
+          ],
+          "tags": []
         },
         {
           "id": 3641,
@@ -2847,7 +2856,8 @@
               "reference": "Corcoran RB et al. Cancer discovery. 2018 Apr;8(4)428-443.",
               "abstract": null
             }
-          ]
+          ],
+          "tags": []
         },
         {
           "id": 3642,
@@ -3042,7 +3052,8 @@
               "reference": "Kopetz S et al. Nature medicine. 2025 Jan 25;().",
               "abstract": null
             }
-          ]
+          ],
+          "tags": []
         }
       ]
     },
@@ -3172,7 +3183,8 @@
               "reference": "Fangusaro J et al. The Lancet. Oncology. 2019 Jul;20(7)1011-1022.",
               "abstract": null
             }
-          ]
+          ],
+          "tags": []
         }
       ]
     }
