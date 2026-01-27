@@ -2,8 +2,9 @@ import { Gene, OncoKBInfo } from 'app/shared/api/generated/OncoKbAPI';
 import {
   Alteration,
   GeneNumber,
+  GermlineVariantAnnotation,
   MainNumber,
-  VariantAnnotation,
+  SomaticVariantAnnotation,
 } from 'app/shared/api/generated/OncoKbPrivateAPI';
 import React from 'react';
 import { Link } from 'react-router-dom';
@@ -423,6 +424,18 @@ export const DEFAULT_ONCOKB_INFO: OncoKBInfo = {
   },
   publicInstance: false,
   oncoTreeVersion: '',
+  genomeNexus: {
+    grch37: {
+      genomeNexusVepVersion: '',
+      genomeNexusVersion: '',
+      vepVersion: '',
+    },
+    grch38: {
+      genomeNexusVepVersion: '',
+      genomeNexusVersion: '',
+      vepVersion: '',
+    },
+  },
 };
 
 export const DEFAULT_MAIN_NUMBERS: MainNumber = {
@@ -454,7 +467,6 @@ export const DEFAULT_GENE_NUMBER: GeneNumber = {
   highestPrognosticImplicationLevel: '',
   highestFdaLevel: '',
   penetrance: '',
-  inheritanceMechanism: '',
   tumorType: 0,
 };
 
@@ -466,7 +478,7 @@ export const DEFAULT_MUTATION_EFFECT = {
 
   description: '',
 
-  knownEffect: '',
+  knownEffect: 'Unknown',
 };
 
 export const DEFAULT_GERMLINE_VARIANT = {
@@ -487,6 +499,7 @@ export const DEFAULT_QUERY = {
   consequence: '',
   entrezGeneId: -1,
   hgvs: '',
+  hgvsInfo: '',
   hugoSymbol: '',
   id: '',
   proteinEnd: -1,
@@ -497,6 +510,7 @@ export const DEFAULT_QUERY = {
   type: '',
   germline: false,
   alleleState: '',
+  canonicalTranscript: '',
 };
 
 const DEFAULT_ALTERATION: Alteration = {
@@ -526,7 +540,7 @@ const DEFAULT_ALTERATION: Alteration = {
   variantResidues: '',
 };
 
-export const DEFAULT_ANNOTATION: VariantAnnotation = {
+export const DEFAULT_ANNOTATION: SomaticVariantAnnotation = {
   alleleExist: false,
   alteration: DEFAULT_ALTERATION,
   background: '',
@@ -544,6 +558,7 @@ export const DEFAULT_ANNOTATION: VariantAnnotation = {
   lastUpdate: '',
   mutationEffect: DEFAULT_MUTATION_EFFECT,
   oncogenic: '',
+  exon: '',
   otherSignificantResistanceLevels: [],
   otherSignificantSensitiveLevels: [],
   prognosticImplications: [],
@@ -559,8 +574,38 @@ export const DEFAULT_ANNOTATION: VariantAnnotation = {
 
   vue: false,
   vus: false,
-  germline: DEFAULT_GERMLINE_VARIANT,
 };
+
+export const DEFAULT_GERMLINE_ANNOTATION: GermlineVariantAnnotation = {
+  alleleExist: false,
+  clinVarId: '',
+  dataVersion: '',
+  diagnosticImplications: [],
+  diagnosticSummary: '',
+  exon: '',
+  geneExist: false,
+  geneSummary: '',
+  genomicIndicators: [],
+  highestDiagnosticImplicationLevel: 'NO',
+  highestFdaLevel: 'NO',
+  highestPrognosticImplicationLevel: 'NO',
+  highestResistanceLevel: 'NO',
+  highestSensitiveLevel: 'NO',
+  lastUpdate: '',
+  mutationEffect: DEFAULT_MUTATION_EFFECT,
+  otherSignificantResistanceLevels: [],
+  otherSignificantSensitiveLevels: [],
+  pathogenic: '',
+  penetrance: '',
+  prognosticImplications: [],
+  prognosticSummary: '',
+  query: DEFAULT_QUERY,
+  treatments: [],
+  tumorTypeSummary: '',
+  variantExist: false,
+  variantSummary: '',
+  vus: false
+}
 
 export enum PAGE_TITLE {
   ABOUT = 'About OncoKB™',
