@@ -17,7 +17,7 @@ export enum TabKey {
   YEAR_END_SUMMARY = PAGE_ROUTE.YEAR_END_SUMMARY,
 }
 
-export const YEAR_END_SUMMARY_RANGE = ['2024', '2023', '2022'] as const;
+export const YEAR_END_SUMMARY_RANGE = ['2025', '2024', '2023', '2022'] as const;
 const HASH_KEY_DIVIDER = '+';
 
 @inject('appStore', 'routing')
