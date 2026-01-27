@@ -19,6 +19,7 @@ import {
   isCategoricalAlteration,
   isPositionalAlteration,
   getCategoricalAlterationDescription,
+  getImplicationsFromTags,
 } from 'app/shared/utils/Utils';
 import {
   getAlterationPageLink,
@@ -362,13 +363,16 @@ export class SomaticGermlineAlterationPage extends React.Component<
 
   getEvidenceByEvidenceTypes(
     cancerTypes: VariantAnnotationTumorType[],
-    evidenceTypes: EVIDENCE_TYPES[]
+    evidenceTypes: EVIDENCE_TYPES[],
+    ignoredEvidenceIds: number[] = []
   ): Evidence[] {
     let uniqueEvidences: Evidence[] = [];
     cancerTypes.forEach(cancerType => {
       uniqueEvidences = uniqueEvidences.concat(
-        cancerType.evidences.filter(evidence =>
-          evidenceTypes.includes(evidence.evidenceType as EVIDENCE_TYPES)
+        cancerType.evidences.filter(
+          evidence =>
+            evidenceTypes.includes(evidence.evidenceType as EVIDENCE_TYPES) &&
+            !ignoredEvidenceIds.includes(evidence.id)
         )
       );
     });
@@ -378,12 +382,20 @@ export class SomaticGermlineAlterationPage extends React.Component<
 
   @computed
   get therapeuticImplications(): TherapeuticImplication[] {
-    return this.getImplications(
-      this.getEvidenceByEvidenceTypes(
-        this.store.annotationData.result.tumorTypes,
-        TREATMENT_EVIDENCE_TYPES
-      )
+    const [tagImplications, usedEvidenceIds] = getImplicationsFromTags(
+      this.store.tags.result,
+      TREATMENT_EVIDENCE_TYPES
     );
+    return [
+      ...tagImplications,
+      ...this.getImplications(
+        this.getEvidenceByEvidenceTypes(
+          this.store.annotationData.result.tumorTypes,
+          TREATMENT_EVIDENCE_TYPES,
+          usedEvidenceIds
+        )
+      ),
+    ];
   }
 
   @computed
@@ -580,9 +592,7 @@ export class SomaticGermlineAlterationPage extends React.Component<
                     }}
                     appStore={this.props.appStore}
                     alteration={this.store.alterationNameWithDiff}
-                    proteinAlteration={
-                      this.store.alteration?.proteinChange
-                    }
+                    proteinAlteration={this.store.alteration?.proteinChange}
                     isGermline={this.store.germline}
                   />
                   <GeneAdditionalInfoSection

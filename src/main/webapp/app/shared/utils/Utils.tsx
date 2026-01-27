@@ -18,6 +18,7 @@ import {
   APP_TIMESTAMP_FORMAT,
   CATEGORICAL_ALTERATIONS,
   DELETION,
+  EVIDENCE_TYPES,
   FUSIONS,
   GENERAL_ONCOGENICITY,
   GENERAL_PATHOGENICITY,
@@ -41,6 +42,7 @@ import classnames from 'classnames';
 import {
   Alteration,
   EnsemblGene,
+  Tag,
   Treatment,
   TumorType,
 } from 'app/shared/api/generated/OncoKbPrivateAPI';
@@ -69,6 +71,7 @@ import { Version } from 'app/pages/LevelOfEvidencePage';
 import { Link } from 'react-router-dom';
 import { LevelOfEvidencePageLink } from 'app/shared/links/LevelOfEvidencePageLink';
 import { sortBy, sortByKey } from 'app/shared/utils/LodashUtils';
+import { TherapeuticImplication } from 'app/store/AnnotationStore';
 
 // Likely Oncogenic, Predicted Oncogenic will be converted to Oncogenic
 // Likely Neutral will be converted to Neutral
@@ -969,4 +972,64 @@ export const getFdaSubmissionNumber = (
   return supplementNumber
     ? `${primaryNumber}/${supplementNumber}`
     : primaryNumber;
+};
+
+const getImplicationsFromTag = (
+  tag: Tag,
+  evidenceTypes: EVIDENCE_TYPES[]
+): [TherapeuticImplication[], number[]] => {
+  // TODO: filter by tx
+  const implications: TherapeuticImplication[] = [];
+  const usedEvidenceIds: number[] = [];
+  for (const evidence of tag.evidences) {
+    if (!evidenceTypes.includes(evidence.evidenceType as EVIDENCE_TYPES)) {
+      continue;
+    }
+
+    usedEvidenceIds.push(evidence.id);
+
+    const level = levelOfEvidence2Level(evidence.levelOfEvidence);
+    const fdaLevel = levelOfEvidence2Level(evidence.fdaLevel);
+    const cancerTypes = evidence.cancerTypes.map(cancerType =>
+      getCancerTypeNameFromOncoTreeType(cancerType)
+    );
+    const excludedCancerTypes = evidence.excludedCancerTypes.map(ct =>
+      getCancerTypeNameFromOncoTreeType(ct)
+    );
+    const cancerTypesName = getCancerTypesName(
+      cancerTypes,
+      excludedCancerTypes
+    );
+
+    evidence.treatments.forEach(treatment => {
+      implications.push({
+        level,
+        fdaLevel,
+        drugDescription: evidence.description,
+        alterations: '', // TODO
+        alterationsView: <span>{tag.name}</span>,
+        drugs: getTreatmentNameByPriority(treatment),
+        cancerTypes: cancerTypesName,
+        cancerTypesArray: cancerTypes,
+        cancerTypesView: <span>{cancerTypesName}</span>,
+        citations: articles2Citations(evidence.articles),
+      });
+    });
+  }
+
+  return [implications, usedEvidenceIds];
+};
+
+export const getImplicationsFromTags = (
+  tags: Tag[],
+  evidenceTypes: EVIDENCE_TYPES[]
+): [TherapeuticImplication[], number[]] => {
+  const implications: TherapeuticImplication[] = [];
+  const usedEvidenceIds: number[] = [];
+  for (const tag of tags) {
+    const [imps, ids] = getImplicationsFromTag(tag, evidenceTypes);
+    implications.push(...imps);
+    usedEvidenceIds.push(...ids);
+  }
+  return [implications, usedEvidenceIds];
 };
