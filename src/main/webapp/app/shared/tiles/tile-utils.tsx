@@ -1,10 +1,10 @@
 import HighestLevelEvidence from 'app/pages/somaticGermlineAlterationPage/HighestLevelEvidence';
 import {
-  VariantAnnotation,
+  GermlineVariantAnnotation,
   MutationEffectResp,
-  GermlineVariant,
   GeneNumber,
 } from '../api/generated/OncoKbPrivateAPI';
+import type { VariantAnnotation } from 'app/store/AnnotationStore';
 import React, { useEffect, useState } from 'react';
 import classnames from 'classnames';
 import SomaticGermlineTiles, {
@@ -170,7 +170,10 @@ function createMutationEffectTileProps(
     query.proteinEnd,
     query.consequence
   );
-  const { mutationEffect, oncogenic, vus } = variantAnnotation;
+  const mutationEffect = variantAnnotation.mutationEffect;
+  const oncogenic =
+    'oncogenic' in variantAnnotation ? variantAnnotation.oncogenic : undefined;
+  const vus = variantAnnotation.vus;
 
   const isUnknownOncogenicity =
     !oncogenic || oncogenic === ONCOGENICITY.UNKNOWN;
@@ -203,7 +206,7 @@ function createMutationEffectTileProps(
 }
 
 function createPathogenicityTileProps(
-  variantAnnotation: GermlineVariant,
+  variantAnnotation: GermlineVariantAnnotation,
   clinvarData: ClinvarData | undefined | null,
   includeTitle: boolean
 ): AlterationTileProps {
@@ -241,7 +244,7 @@ function createPathogenicityTileProps(
 }
 
 function createGeneticRiskTileProps(
-  variantAnnotation: GermlineVariant,
+  variantAnnotation: GermlineVariantAnnotation,
   includeTitle: boolean
 ): AlterationTileProps {
   return {
@@ -272,10 +275,13 @@ export function SomaticGermlineAlterationTiles({
 }: SomaticGermlineAlterationTilesProps) {
   const tiles: AlterationTileProps[] = [];
   const isGermline = rest.isGermline;
-  const hasPathogenicity = !!rest.variantAnnotation.germline?.pathogenic;
+  const germlineAnnotation = isGermline
+    ? (rest.variantAnnotation as GermlineVariantAnnotation)
+    : undefined;
+  const hasPathogenicity = !!germlineAnnotation?.pathogenic;
   const hasMutationEffect = !!rest.variantAnnotation.mutationEffect
     ?.knownEffect;
-  const hasPenetrance = !!rest.variantAnnotation.germline?.penetrance;
+  const hasPenetrance = !!germlineAnnotation?.penetrance;
 
   const [clinvar, setClinvar] = useState<ClinvarData | undefined | null>(
     undefined
@@ -317,7 +323,7 @@ export function SomaticGermlineAlterationTiles({
     if (hasPathogenicity) {
       tiles.push(
         createPathogenicityTileProps(
-          rest.variantAnnotation.germline,
+          germlineAnnotation!,
           clinvar,
           includeTitle
         )
@@ -334,7 +340,7 @@ export function SomaticGermlineAlterationTiles({
     if (hasPenetrance) {
       tiles.push(
         createGeneticRiskTileProps(
-          rest.variantAnnotation.germline,
+          germlineAnnotation!,
           includeTitle
         )
       );

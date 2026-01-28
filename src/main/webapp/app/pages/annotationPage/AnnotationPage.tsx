@@ -286,7 +286,7 @@ export default class AnnotationPage extends React.Component<
   get therapeuticImplications(): TherapeuticImplication[] {
     return this.getImplications(
       this.getEvidenceByEvidenceTypes(
-        this.props.store.annotationData.result.tumorTypes,
+        this.props.store.somaticAnnotationData.result.tumorTypes,
         TREATMENT_EVIDENCE_TYPES
       )
     );
@@ -295,7 +295,7 @@ export default class AnnotationPage extends React.Component<
   @computed
   get fdaImplication(): FdaImplication[] {
     const evidences = this.getEvidenceByEvidenceTypes(
-      this.props.store.annotationData.result.tumorTypes,
+      this.props.store.somaticAnnotationData.result.tumorTypes,
       TREATMENT_EVIDENCE_TYPES
     );
     const fdaImplications: FdaImplication[] = [];
@@ -386,7 +386,7 @@ export default class AnnotationPage extends React.Component<
   get diagnosticImplications(): TherapeuticImplication[] {
     return this.getImplications(
       this.getEvidenceByEvidenceTypes(
-        this.props.store.annotationData.result.tumorTypes,
+        this.props.store.somaticAnnotationData.result.tumorTypes,
         [EVIDENCE_TYPES.DIAGNOSTIC_IMPLICATION]
       )
     );
@@ -396,7 +396,7 @@ export default class AnnotationPage extends React.Component<
   get prognosticImplications(): TherapeuticImplication[] {
     return this.getImplications(
       this.getEvidenceByEvidenceTypes(
-        this.props.store.annotationData.result.tumorTypes,
+        this.props.store.somaticAnnotationData.result.tumorTypes,
         [EVIDENCE_TYPES.PROGNOSTIC_IMPLICATION]
       )
     );
@@ -409,7 +409,7 @@ export default class AnnotationPage extends React.Component<
       orderedSummaries.push(SummaryKey.ALTERATION_SUMMARY);
     }
     return getSummaries(
-      this.props.store.annotationData.result,
+      this.props.store.somaticAnnotationData.result,
       orderedSummaries
     );
   }
@@ -427,17 +427,17 @@ export default class AnnotationPage extends React.Component<
         this.props.store.ensemblGenes.isComplete &&
         this.props.store.clinicalAlterations.isComplete &&
         this.props.store.biologicalAlterations.isComplete &&
-        this.props.store.annotationData.isComplete
+        this.props.store.somaticAnnotationData.isComplete
       );
     } else {
-      return this.props.store.annotationData.isComplete;
+      return this.props.store.somaticAnnotationData.isComplete;
     }
   }
 
   @computed
   get annotationPageMetaDescription() {
     if (this.pageShouldBeRendered) {
-      return `${this.props.store.annotationData.result.geneSummary} ${this.props.store.annotationData.result.variantSummary} ${this.props.store.annotationData.result.tumorTypeSummary}`;
+      return `${this.props.store.somaticAnnotationData.result.geneSummary} ${this.props.store.somaticAnnotationData.result.variantSummary} ${this.props.store.somaticAnnotationData.result.tumorTypeSummary}`;
     } else {
       return '';
     }
@@ -610,7 +610,7 @@ export default class AnnotationPage extends React.Component<
                     alterationSummaries={this.alterationSummaries}
                     hugoSymbol={this.props.store.hugoSymbol}
                     alteration={
-                      this.props.store.annotationData.result.query.alteration
+                      this.props.store.somaticAnnotationData.result.query.alteration
                     }
                     geneType={this.props.store.gene.result.geneType}
                   />
@@ -631,7 +631,7 @@ export default class AnnotationPage extends React.Component<
                   url={'genomenexus.org'}
                   logo={gnLogo}
                 />
-                {this.props.store.annotationData.result.vue && (
+                {this.props.store.somaticAnnotationData.result.vue && (
                   <PowerBySource
                     name={'reVUE'}
                     url={'cancerrevue.org'}
@@ -641,7 +641,7 @@ export default class AnnotationPage extends React.Component<
               </Col>
             )}
           </Row>
-          {this.props.store.annotationData.result.mutationEffect
+          {this.props.store.somaticAnnotationData.result.mutationEffect
             .description && (
             <Row>
               <Col>
@@ -652,7 +652,7 @@ export default class AnnotationPage extends React.Component<
                     <MutationEffectDescription
                       hugoSymbol={this.props.store.hugoSymbol}
                       description={
-                        this.props.store.annotationData.result.mutationEffect
+                        this.props.store.somaticAnnotationData.result.mutationEffect
                           .description
                       }
                     />
@@ -668,7 +668,7 @@ export default class AnnotationPage extends React.Component<
             <Col>
               <SomaticGermlineAlterationTiles
                 includeTitle
-                variantAnnotation={this.props.store.annotationData.result}
+                variantAnnotation={this.props.store.somaticAnnotationData.result}
                 isGermline={this.props.store.germline}
                 grch37Isoform={this.props.store.gene.result.grch37Isoform}
               />
@@ -701,7 +701,7 @@ export default class AnnotationPage extends React.Component<
               matchedAlteration={this.props.store.alteration}
               tumorType={this.props.store.cancerTypeName}
               onChangeTumorType={this.props.onChangeTumorType}
-              annotation={this.props.store.annotationData.result}
+              annotation={this.props.store.somaticAnnotationData.result}
               biologicalAlterations={
                 this.props.store.biologicalAlterations.result
               }
@@ -723,7 +723,7 @@ export default class AnnotationPage extends React.Component<
               matchedAlteration={this.props.store.alteration}
               tumorType={this.props.store.cancerTypeName}
               onChangeTumorType={this.props.onChangeTumorType}
-              annotation={this.props.store.annotationData.result}
+              annotation={this.props.store.somaticAnnotationData.result}
               biologicalAlterations={
                 this.props.store.biologicalAlterations.result
               }
@@ -751,7 +751,7 @@ export default class AnnotationPage extends React.Component<
       <>
         {this.navBreadcrumbs}
         {this.pageShouldBeRendered ? (
-          this.props.store.annotationData.result.query.hugoSymbol ? (
+          this.props.store.somaticAnnotationData.result.query.hugoSymbol ? (
             this.getAnnotationComponents()
           ) : (
             <Alert variant="warning" className={'text-center'}>
@@ -759,7 +759,7 @@ export default class AnnotationPage extends React.Component<
             </Alert>
           )
         ) : (
-          <If condition={this.props.store.annotationData.isError}>
+          <If condition={this.props.store.somaticAnnotationData.isError}>
             <Then>
               <Alert variant="warning" className={'text-center'}>
                 An error occurred while annotating your variant.

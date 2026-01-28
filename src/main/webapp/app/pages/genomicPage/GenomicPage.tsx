@@ -147,12 +147,12 @@ export default class GenomicPage extends React.Component<GenomicPageProps> {
   @computed
   get documentTitle() {
     const content = [];
-    if (this.store.annotationData.isComplete) {
-      if (this.store.annotationData.result.query.hugoSymbol) {
-        content.push(this.store.annotationData.result.query.hugoSymbol);
+    if (this.store.somaticAnnotationData.isComplete) {
+      if (this.store.somaticAnnotationData.result.query.hugoSymbol) {
+        content.push(this.store.somaticAnnotationData.result.query.hugoSymbol);
       }
-      if (this.store.annotationData.result.query.alteration) {
-        content.push(this.store.annotationData.result.query.alteration);
+      if (this.store.somaticAnnotationData.result.query.alteration) {
+        content.push(this.store.somaticAnnotationData.result.query.alteration);
       }
       if (this.store.tumorTypeQuery) {
         content.push(`in ${this.store.tumorTypeQuery}`);

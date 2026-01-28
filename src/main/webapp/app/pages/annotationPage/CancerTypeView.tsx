@@ -3,9 +3,9 @@ import AppStore from 'app/store/AppStore';
 import { Alteration } from 'app/shared/api/generated/OncoKbAPI';
 import {
   BiologicalVariant,
-  VariantAnnotation,
 } from 'app/shared/api/generated/OncoKbPrivateAPI';
-import {
+import type {
+  VariantAnnotation,
   FdaImplication,
   TherapeuticImplication,
 } from 'app/store/AnnotationStore';

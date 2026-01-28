@@ -158,6 +158,8 @@ export type GermlineVariantAnnotation = {
 
         'treatments': Array < IndicatorQueryTreatment >
 
+        'tumorTypes': Array < VariantAnnotationTumorType >
+
         'tumorTypeSummary': string
 
         'variantExist': boolean

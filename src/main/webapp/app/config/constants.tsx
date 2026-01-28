@@ -602,10 +602,11 @@ export const DEFAULT_GERMLINE_ANNOTATION: GermlineVariantAnnotation = {
   query: DEFAULT_QUERY,
   treatments: [],
   tumorTypeSummary: '',
+  tumorTypes: [],
   variantExist: false,
   variantSummary: '',
-  vus: false
-}
+  vus: false,
+};
 
 export enum PAGE_TITLE {
   ABOUT = 'About OncoKB™',
