@@ -13,16 +13,15 @@ export default function NewsContent012026() {
     <>
       <ul>
         <li>
-          Happy New Year! As of January 29, 2026, fifteen Level 1, eight Level
-          2, one Level 3 and one Level 4 treatments for unique
-          biomarker-selected indications were added to OncoKB. A table
-          summarizing these changes can be found{' '}
-          <Link to="/year-end-summary#2025">here</Link>. The “Precision
-          Oncology: 2025 in Review” article can be found{' '}
+          We hope everyone is having a great start to the new year! In 2025
+          OncoKB added fifteen Level 1, eight Level 2, one Level 3 and one Level
+          4 treatments for unique biomarker-selected indications to the
+          database. A table summarizing these changes can be found{' '}
+          <Link to="/year-end-summary#2025">here</Link>. For more details,
+          please see the “Precision Oncology: 2025 in Review” article, found{' '}
           <a href="https://aacrjournals.org/cancerdiscovery/article-abstract/15/12/2414/767704/Precision-Oncology-2025-in-ReviewPrecision?">
             here
           </a>
-          .
         </li>
       </ul>
       <p>
