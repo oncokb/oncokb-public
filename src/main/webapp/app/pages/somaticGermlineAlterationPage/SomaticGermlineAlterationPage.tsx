@@ -222,8 +222,12 @@ export class SomaticGermlineAlterationPage extends React.Component<
     this.store.tumorTypeQuery = newTumorType;
   }
 
-  getImplications(evidences: Evidence[]) {
+  getImplications(evidences: Evidence[], ignoredEvidenceIds: number[] = []) {
     return evidences.reduce((acc, evidence) => {
+      if (ignoredEvidenceIds.includes(evidence.id)) {
+        return acc;
+      }
+
       const level = levelOfEvidence2Level(evidence.levelOfEvidence);
       const fdaLevel = levelOfEvidence2Level(evidence.fdaLevel);
       const alterations = evidence.alterations.filter(alteration =>
@@ -363,16 +367,13 @@ export class SomaticGermlineAlterationPage extends React.Component<
 
   getEvidenceByEvidenceTypes(
     cancerTypes: VariantAnnotationTumorType[],
-    evidenceTypes: EVIDENCE_TYPES[],
-    ignoredEvidenceIds: number[] = []
+    evidenceTypes: EVIDENCE_TYPES[]
   ): Evidence[] {
     let uniqueEvidences: Evidence[] = [];
     cancerTypes.forEach(cancerType => {
       uniqueEvidences = uniqueEvidences.concat(
-        cancerType.evidences.filter(
-          evidence =>
-            evidenceTypes.includes(evidence.evidenceType as EVIDENCE_TYPES) &&
-            !ignoredEvidenceIds.includes(evidence.id)
+        cancerType.evidences.filter(evidence =>
+          evidenceTypes.includes(evidence.evidenceType as EVIDENCE_TYPES)
         )
       );
     });
@@ -382,18 +383,19 @@ export class SomaticGermlineAlterationPage extends React.Component<
 
   @computed
   get therapeuticImplications(): TherapeuticImplication[] {
-    const [tagImplications, usedEvidenceIds] = getImplicationsFromTags(
+    const [tagImplications, ignoredEvidenceIds] = getImplicationsFromTags(
       this.store.tags.result,
       TREATMENT_EVIDENCE_TYPES
     );
+
     return [
       ...tagImplications,
       ...this.getImplications(
         this.getEvidenceByEvidenceTypes(
           this.store.annotationData.result.tumorTypes,
-          TREATMENT_EVIDENCE_TYPES,
-          usedEvidenceIds
-        )
+          TREATMENT_EVIDENCE_TYPES
+        ),
+        ignoredEvidenceIds
       ),
     ];
   }
@@ -488,22 +490,40 @@ export class SomaticGermlineAlterationPage extends React.Component<
 
   @computed
   get diagnosticImplications(): TherapeuticImplication[] {
-    return this.getImplications(
-      this.getEvidenceByEvidenceTypes(
-        this.store.annotationData.result.tumorTypes,
-        [EVIDENCE_TYPES.DIAGNOSTIC_IMPLICATION]
-      )
+    const [tagImplications, ignoredEvidenceIds] = getImplicationsFromTags(
+      this.store.tags.result,
+      [EVIDENCE_TYPES.DIAGNOSTIC_IMPLICATION]
     );
+
+    return [
+      ...tagImplications,
+      ...this.getImplications(
+        this.getEvidenceByEvidenceTypes(
+          this.store.annotationData.result.tumorTypes,
+          [EVIDENCE_TYPES.DIAGNOSTIC_IMPLICATION]
+        ),
+        ignoredEvidenceIds
+      ),
+    ];
   }
 
   @computed
   get prognosticImplications(): TherapeuticImplication[] {
-    return this.getImplications(
-      this.getEvidenceByEvidenceTypes(
-        this.store.annotationData.result.tumorTypes,
-        [EVIDENCE_TYPES.PROGNOSTIC_IMPLICATION]
-      )
+    const [tagImplications, ignoredEvidenceIds] = getImplicationsFromTags(
+      this.store.tags.result,
+      [EVIDENCE_TYPES.PROGNOSTIC_IMPLICATION]
     );
+
+    return [
+      ...tagImplications,
+      ...this.getImplications(
+        this.getEvidenceByEvidenceTypes(
+          this.store.annotationData.result.tumorTypes,
+          [EVIDENCE_TYPES.PROGNOSTIC_IMPLICATION]
+        ),
+        ignoredEvidenceIds
+      ),
+    ];
   }
 
   @computed

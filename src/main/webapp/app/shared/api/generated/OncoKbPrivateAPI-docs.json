@@ -2748,6 +2748,10 @@
             "type": "string"
           }
         },
+        "evidenceId": {
+          "type": "integer",
+          "format": "int32"
+        },
         "excludedCancerTypes": {
           "type": "array",
           "items": {
@@ -3716,6 +3720,9 @@
     "Tag": {
       "type": "object",
       "properties": {
+        "description": {
+          "type": "string"
+        },
         "evidences": {
           "type": "array",
           "items": {

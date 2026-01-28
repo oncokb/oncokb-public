@@ -330,6 +330,8 @@ export type ClinicalVariant = {
 
         'drugPmids': Array < string >
 
+        'evidenceId': number
+
         'excludedCancerTypes': Array < TumorType >
 
         'fdaLevel': string
@@ -712,7 +714,9 @@ export type BiologicalVariant = {
 
 };
 export type Tag = {
-    'evidences': Array < Evidence >
+    'description': string
+
+        'evidences': Array < Evidence >
 
         'name': string
 

@@ -978,7 +978,6 @@ const getImplicationsFromTag = (
   tag: Tag,
   evidenceTypes: EVIDENCE_TYPES[]
 ): [TherapeuticImplication[], number[]] => {
-  // TODO: filter by tx
   const implications: TherapeuticImplication[] = [];
   const usedEvidenceIds: number[] = [];
   for (const evidence of tag.evidences) {
@@ -1001,20 +1000,51 @@ const getImplicationsFromTag = (
       excludedCancerTypes
     );
 
-    evidence.treatments.forEach(treatment => {
+    if (evidence.treatments.length > 0) {
+      evidence.treatments.forEach(treatment => {
+        implications.push({
+          level,
+          fdaLevel,
+          drugDescription: evidence.description,
+          alterations: tag.name,
+          alterationsView: (
+            <>
+              <span>{tag.name}</span>
+              <InfoIcon
+                className="ml-2"
+                overlay={<span>{tag.description}</span>}
+              />
+            </>
+          ),
+          drugs: getTreatmentNameByPriority(treatment),
+          cancerTypes: cancerTypesName,
+          cancerTypesArray: cancerTypes,
+          cancerTypesView: <span>{cancerTypesName}</span>,
+          citations: articles2Citations(evidence.articles),
+        });
+      });
+    } else {
       implications.push({
         level,
         fdaLevel,
         drugDescription: evidence.description,
-        alterations: '', // TODO
-        alterationsView: <span>{tag.name}</span>,
-        drugs: getTreatmentNameByPriority(treatment),
+        alterations: tag.name,
+        alterationsView: (
+          <>
+            <span>{tag.name}</span>
+            <InfoIcon
+              className="ml-2"
+              overlay={<span>{tag.description}</span>}
+            />
+          </>
+        ),
+        drugs: '',
         cancerTypes: cancerTypesName,
         cancerTypesArray: cancerTypes,
         cancerTypesView: <span>{cancerTypesName}</span>,
         citations: articles2Citations(evidence.articles),
-      });
-    });
+      } as TherapeuticImplication);
+    }
   }
 
   return [implications, usedEvidenceIds];
