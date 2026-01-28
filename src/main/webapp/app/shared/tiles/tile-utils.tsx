@@ -3,6 +3,7 @@ import {
   GermlineVariantAnnotation,
   MutationEffectResp,
   GeneNumber,
+  SomaticVariantAnnotation,
 } from '../api/generated/OncoKbPrivateAPI';
 import type { VariantAnnotation } from 'app/store/AnnotationStore';
 import React, { useEffect, useState } from 'react';
@@ -171,8 +172,9 @@ function createMutationEffectTileProps(
     query.consequence
   );
   const mutationEffect = variantAnnotation.mutationEffect;
-  const oncogenic =
-    'oncogenic' in variantAnnotation ? variantAnnotation.oncogenic : undefined;
+  const oncogenic = isGermline
+    ? undefined
+    : (variantAnnotation as SomaticVariantAnnotation).oncogenic;
   const vus = variantAnnotation.vus;
 
   const isUnknownOncogenicity =
@@ -322,11 +324,7 @@ export function SomaticGermlineAlterationTiles({
   if (isGermline) {
     if (hasPathogenicity) {
       tiles.push(
-        createPathogenicityTileProps(
-          germlineAnnotation!,
-          clinvar,
-          includeTitle
-        )
+        createPathogenicityTileProps(germlineAnnotation!, clinvar, includeTitle)
       );
     } else if (hasMutationEffect) {
       tiles.push(
@@ -338,12 +336,7 @@ export function SomaticGermlineAlterationTiles({
       );
     }
     if (hasPenetrance) {
-      tiles.push(
-        createGeneticRiskTileProps(
-          germlineAnnotation!,
-          includeTitle
-        )
-      );
+      tiles.push(createGeneticRiskTileProps(germlineAnnotation!, includeTitle));
     }
   } else {
     tiles.push(
