@@ -7,6 +7,166 @@ import {
 import { LEVELS } from 'app/config/constants';
 
 export const DATA: { [key in TableKey]: TableData } = {
+  '2025': {
+    [LEVELS.Tx1]: [
+      [
+        'ALK Fusions',
+        'Non-Small Cell Lung Cancer',
+        'Ensartinib',
+        'Addition of a novel drug to an existing Level 1 clinically actionable biomarker',
+      ],
+      [
+        'KRAS G12C',
+        'Colorectal Cancer',
+        'Sotorasib + Panitumumab',
+        'Addition of a novel drug to an existing Level 1 clinically actionable biomarker',
+      ],
+      [
+        'BRAF V600E',
+        'Colorectal Cancer',
+        'Encorafenib + Cetuximab + FOLFOX Regimen',
+        'Addition of a novel drug to an existing Level 1 clinically actionable biomarker',
+      ],
+      [
+        'NF1 Oncogenic mutations',
+        'Neurofibroma',
+        'Mirdametinib',
+        'Addition of a novel drug to an existing Level 1 clinically actionable biomarker',
+      ],
+      [
+        'KRAS Oncogenic mutations',
+        'Low-Grade Serous Ovarian Cancer',
+        'Avutometinib + Defactinib',
+        'Novel Level 1 clinically actionable biomarker',
+      ],
+      [
+        'ROS1 Fusions',
+        'Non-Small Cell Lung Cancer',
+        'Taletrectinib',
+        'Addition of a novel drug to an existing Level 1 clinically actionable biomarker',
+      ],
+      [
+        'EGFR Oncogenic mutations ',
+        'Non-Small Cell Lung Cancer',
+        'Datopotamab Deruxtecan',
+        'Addition of a novel drug to an existing Level 1 clinically actionable biomarker *note previously only select EGFR oncogenic mutations were Level 1',
+      ],
+      [
+        'EGFR Exon 20 in-frame insertions',
+        'Non-Small Cell Lung Cancer',
+        'Sunvozertinib',
+        'Addition of a novel drug to an existing Level 1 clinically actionable biomarker',
+      ],
+      [
+        'ERBB2 Activating mutations in the tyrosine kinase domain ',
+        'Non-Small Cell Lung Cancer',
+        'Zongertinib, Sevabertinib',
+        'Addition of a novel drug to an existing Level 1 clinically actionable biomarker',
+      ],
+      [
+        'H3-3A K28M',
+        'Diffuse Midline Glioma, H3 K27-Altered',
+        'Dordaviprone',
+        'Novel Level 1 clinically actionable biomarker',
+      ],
+
+      [
+        'H3C2 K28M',
+        'Diffuse Midline Glioma, H3 K27-Altered',
+        'Dordaviprone',
+        'Novel Level 1 clinically actionable biomarker',
+      ],
+
+      [
+        'H3C3 K28M',
+        'Diffuse Midline Glioma, H3 K27-Altered',
+        'Dordaviprone',
+        'Novel Level 1 clinically actionable biomarker',
+      ],
+
+      [
+        'ESR1 S463P, L469V, L536, Y537, D538, E380, 	V422del, S463F',
+        'Breast Cancer',
+        'Imlunestrant',
+        'Addition of a novel drug to an existing Level 1 clinically actionable biomarker',
+      ],
+
+      [
+        'NPM1 Susceptible mutations (Truncating mutations in exons 5, 9, 11; Select exon 5 indels; Select NPM1 fusions) ',
+        'Acute Myeloid Leukemia',
+        'Ziftomenib, Revumenib',
+        'Novel Level 1 clinically actionable biomarker',
+      ],
+    ],
+    [LEVELS.Tx2]: [
+      [
+        'ERBB2 Oncogenic mutations',
+        'Cervical Cancer',
+        'Neratinib',
+        'Novel clinically actionable biomarker in this cancer type',
+      ],
+
+      [
+        'KRAS G12C',
+        'Small Bowel Cancer',
+        'Adagrasib, Sotorasib',
+        'Level promotion for an existing biomarker-tumor type-drug association',
+      ],
+      [
+        'FGFR1 Fusions',
+        'Pancreatic Cancer',
+        'Erdafitinib',
+        'Level promotion for an existing biomarker-tumor type-drug association',
+      ],
+      [
+        'FGFR2 Fusions',
+        'Pancreatic Cancer',
+        'Erdafitinib',
+        'Level promotion for an existing biomarker-tumor type-drug association',
+      ],
+      [
+        'FGFR2 Oncogenic mutations',
+        'Non-Small Cell Lung Cancer',
+        'Erdafitinib',
+        'Level promotion for an existing biomarker-tumor type-drug association',
+      ],
+      [
+        'FGFR3 Oncogenic mutations',
+        'Non-Small Cell Lung Cancer',
+        'Erdafitinib',
+        'Level promotion for an existing biomarker-tumor type-drug association',
+      ],
+      [
+        'ERBB2 Oncogenic mutations',
+        'Breast Cancer',
+        'Neratinib + Trastuzumab + Fulvestrant',
+        'Addition of a novel drug to an existing clinically actionable biomarker',
+      ],
+
+      [
+        'ERBB2 Oncogenic mutations (excluding select activating mutations in the tyrosine kinase domain)',
+        'Non-Small Cell Lung Cancer',
+        'Zongertinib',
+        'Addition of a novel drug to an existing clinically actionable biomarker',
+      ],
+    ],
+    [LEVELS.Tx3]: [
+      [
+        'ERBB2 Oncogenic mutations (excluding select activating mutations in the tyrosine kinase domain)',
+        'Non-Small Cell Lung Cancer',
+        'Sevabertinib',
+        'Addition of a novel drug to an existing clinically actionable biomarker',
+      ],
+    ],
+    [LEVELS.Tx4]: [
+      [
+        'ERBB2 Oncogenic mutations',
+        'Biliary Tract Cancer',
+        'Neratinib, Trastuzumab Deruxtecan, Pertuzumab + Trastuzumab',
+        'Novel clinically actionable biomarker in this cancer type',
+      ],
+    ],
+  },
   '2024': {
     [LEVELS.Tx1]: [
       [
