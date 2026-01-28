@@ -12,7 +12,7 @@ export const DATA: { [key in TableKey]: TableData } = {
       [
         'ALK Fusions',
         'Non-Small Cell Lung Cancer',
-        'Neratinib',
+        'Ensartinib',
         'Addition of a novel drug to an existing Level 1 clinically actionable biomarker',
       ],
       [
@@ -110,31 +110,31 @@ export const DATA: { [key in TableKey]: TableData } = {
         'KRAS G12C',
         'Small Bowel Cancer',
         'Adagrasib, Sotorasib',
-        'Addition of a novel drug to an existing clinically actionable biomarker',
+        'Promotion of a drug for an existing clinically actionable biomarker',
       ],
       [
         'FGFR1 Fusions',
         'Pancreatic Cancer',
         'Erdafitinib',
-        'Addition of a novel drug to an existing clinically actionable biomarker',
+        'Promotion of a drug for an existing clinically actionable biomarker',
       ],
       [
         'FGFR2 Fusions',
         'Pancreatic Cancer',
         'Erdafitinib',
-        'Addition of a novel drug to an existing clinically actionable biomarker',
+        'Promotion of a drug for an existing clinically actionable biomarker',
       ],
       [
         'FGFR2 Oncogenic mutations',
         'Non-Small Cell Lung Cancer',
         'Erdafitinib',
-        'Addition of a novel drug to an existing clinically actionable biomarker',
+        'Promotion of a drug for an existing clinically actionable biomarker',
       ],
       [
         'FGFR3 Oncogenic mutations',
         'Non-Small Cell Lung Cancer',
         'Erdafitinib',
-        'Addition of a novel drug to an existing clinically actionable biomarker',
+        'Promotion of a drug for an existing clinically actionable biomarker',
       ],
       [
         'ERBB2 Oncogenic mutations',
