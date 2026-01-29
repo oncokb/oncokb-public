@@ -32,6 +32,9 @@ const AccountMenuItemsAuthenticated: React.FunctionComponent<{
         <MenuItem icon="bar-chart" to={PAGE_ROUTE.ADMIN_USAGE_ANALYSIS}>
           {PAGE_TITLE.ADMIN_USAGE_ANALYSIS}
         </MenuItem>
+        <MenuItem icon="warning" to={PAGE_ROUTE.ADMIN_USER_BANNER_MESSAGES}>
+          {PAGE_TITLE.ADMIN_USER_BANNER_MESSAGES}
+        </MenuItem>
       </>
     ) : null}
     <MenuItem icon="sign-out" to={PAGE_ROUTE.LOGOUT}>
