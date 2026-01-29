@@ -18,6 +18,7 @@ import { Button, Col, Container, Row } from 'react-bootstrap';
 import {
   getCancerTypeNameFromOncoTreeType,
   getCancerTypesName,
+  getFdaImplicationsFromTags,
   getImplicationsFromTags,
   getPageTitle,
 } from 'app/shared/utils/Utils';
@@ -272,8 +273,16 @@ export default class SomaticGermlineGenePage extends React.Component<
   }
 
   getFdaImplication(clinicalVariants: ClinicalVariant[]): FdaImplication[] {
+    const [tagImplications, ignoredEvidenceIds] = getFdaImplicationsFromTags(
+      this.store.tags.result
+    );
+
     const fdaImplications: FdaImplication[] = [];
     clinicalVariants.forEach(clinicalVariant => {
+      if (ignoredEvidenceIds.includes(clinicalVariant.evidenceId)) {
+        return;
+      }
+
       let variants: ClinicalVariant[] = [clinicalVariant];
       // we want to link all oncogenic mutations with Oncogenic Mutations clinical variant
       if (clinicalVariant.variant.name === ONCOGENIC_MUTATIONS) {
@@ -342,7 +351,7 @@ export default class SomaticGermlineGenePage extends React.Component<
         });
       });
     });
-    return getUniqueFdaImplications(fdaImplications);
+    return getUniqueFdaImplications([...tagImplications, ...fdaImplications]);
   }
 
   @computed

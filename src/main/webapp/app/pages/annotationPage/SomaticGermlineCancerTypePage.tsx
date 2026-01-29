@@ -19,6 +19,7 @@ import {
   isCategoricalAlteration,
   isPositionalAlteration,
   getImplicationsFromTags,
+  getFdaImplicationsFromTags,
 } from 'app/shared/utils/Utils';
 import {
   getAlterationPageLink,
@@ -396,12 +397,20 @@ export class SomaticGermlineCancerTypePage extends React.Component<
 
   @computed
   get fdaImplication(): FdaImplication[] {
+    const [tagImplications, ignoredEvidenceIds] = getFdaImplicationsFromTags(
+      this.store.tags.result
+    );
+
     const evidences = this.getEvidenceByEvidenceTypes(
       this.store.annotationData.result.tumorTypes,
       TREATMENT_EVIDENCE_TYPES
     );
     const fdaImplications: FdaImplication[] = [];
     evidences.forEach(evidence => {
+      if (ignoredEvidenceIds.includes(evidence.id)) {
+        return;
+      }
+
       const fdaLevel = levelOfEvidence2Level(evidence.fdaLevel);
       const alterations = evidence.alterations.filter(alteration =>
         alteration.referenceGenomes.includes(this.store.referenceGenomeQuery)
@@ -477,7 +486,7 @@ export class SomaticGermlineCancerTypePage extends React.Component<
         });
       });
     });
-    return getUniqueFdaImplications(fdaImplications);
+    return getUniqueFdaImplications([...tagImplications, ...fdaImplications]);
   }
 
   @computed
