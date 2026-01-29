@@ -1,19 +1,24 @@
 package org.mskcc.cbio.oncokb.security;
 
+import java.time.Duration;
+import java.time.Instant;
+import java.time.temporal.ChronoUnit;
+import java.util.Optional;
+import java.util.UUID;
+import java.util.stream.Stream;
+import org.mskcc.cbio.oncokb.domain.User;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.context.SecurityContext;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.UserDetails;
 
-import java.util.Optional;
-import java.util.UUID;
-import java.util.stream.Stream;
-
 /**
  * Utility class for Spring Security.
  */
 public final class SecurityUtils {
+
+    private static final Duration ACTIVATION_GRACE_PERIOD = Duration.ofDays(14);
 
     private SecurityUtils() {
     }
@@ -83,4 +88,29 @@ public final class SecurityUtils {
             .map(GrantedAuthority::getAuthority);
     }
 
+    public static boolean isWithinActivationGracePeriod(User user) {
+        return getGracePeriodEnd(user)
+            .map(end -> Instant.now().isBefore(end))
+            .orElse(false);
+    }
+
+    public static long getActivationGracePeriodDaysRemaining(User user) {
+        Optional<Instant> gracePeriodEnd = getGracePeriodEnd(user);
+        if (!gracePeriodEnd.isPresent()) {
+            return 0;
+        }
+        Instant now = Instant.now();
+        Instant end = gracePeriodEnd.get();
+        if (!now.isBefore(end)) {
+            return 0;
+        }
+        return ChronoUnit.DAYS.between(now, end);
+    }
+
+    private static Optional<Instant> getGracePeriodEnd(User user) {
+        if (user == null || user.getCreatedDate() == null) {
+            return Optional.empty();
+        }
+        return Optional.of(user.getCreatedDate().plus(ACTIVATION_GRACE_PERIOD));
+    }
 }

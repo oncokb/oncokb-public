@@ -64,7 +64,11 @@ export default class ActivateAccount extends React.Component<{
             <p>
               We are reviewing your registration information and will contact
               you about your account&apos;s approval status within two business
-              days.
+              days. You will have limited access until then.{' '}
+              <span>
+                You can now <Link to={PAGE_ROUTE.LOGIN}>login</Link> to your{' '}
+                {ONCOKB_TM} account.
+              </span>
             </p>
           )}
           <MessageToContact
