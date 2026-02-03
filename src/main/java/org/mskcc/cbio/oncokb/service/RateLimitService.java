@@ -19,7 +19,7 @@ import java.util.concurrent.ConcurrentHashMap;
 @Service
 public class RateLimitService {
     private static final String CACHE_KEY_PREFIX = "rate-limit-";
-    private static final Bandwidth DEFAULT_BUCKET_BANDWIDTH = Bandwidth.simple(10, Duration.ofSeconds(1));
+    private static final Bandwidth DEFAULT_BUCKET_BANDWIDTH = Bandwidth.simple(30, Duration.ofSeconds(5));
     private static final BucketConfiguration DEFAULT_BUCKET_CONFIG = BucketConfiguration.builder()
         .addLimit(DEFAULT_BUCKET_BANDWIDTH)
         .build();
