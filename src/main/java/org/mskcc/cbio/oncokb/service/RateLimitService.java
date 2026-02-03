@@ -4,6 +4,8 @@ import io.github.bucket4j.Bandwidth;
 import io.github.bucket4j.Bucket;
 import io.github.bucket4j.BucketConfiguration;
 import io.github.jhipster.config.JHipsterProperties;
+import org.mskcc.cbio.oncokb.config.application.ApplicationProperties;
+import org.mskcc.cbio.oncokb.config.application.RateLimitProperties;
 import org.mskcc.cbio.oncokb.config.cache.CacheNameResolver;
 import org.mskcc.cbio.oncokb.config.cache.Buckert4jProxyManager;
 import org.redisson.config.Config;
@@ -19,10 +21,11 @@ import java.util.concurrent.ConcurrentHashMap;
 @Service
 public class RateLimitService {
     private static final String CACHE_KEY_PREFIX = "rate-limit-";
-    private static final Bandwidth DEFAULT_BUCKET_BANDWIDTH = Bandwidth.simple(30, Duration.ofSeconds(5));
-    private static final BucketConfiguration DEFAULT_BUCKET_CONFIG = BucketConfiguration.builder()
-        .addLimit(DEFAULT_BUCKET_BANDWIDTH)
-        .build();
+    private static final long DEFAULT_CAPACITY = 10L;
+    private static final Duration DEFAULT_REFILL_PERIOD = Duration.ofSeconds(1);
+
+    private final Bandwidth bucketBandwidth;
+    private final BucketConfiguration bucketConfiguration;
 
     // local bucket when redis is not available
     private final Map<String, Bucket> cache = new ConcurrentHashMap<>();
@@ -30,8 +33,27 @@ public class RateLimitService {
     private CacheNameResolver cacheNameResolver;
     private Buckert4jProxyManager proxyManager;
 
-    public RateLimitService(Optional<Config> redissonConfigOptional, CacheNameResolver cacheNameResolver, JHipsterProperties jHipsterProperties) {
+    public RateLimitService(Optional<Config> redissonConfigOptional,
+                            CacheNameResolver cacheNameResolver,
+                            JHipsterProperties jHipsterProperties,
+                            ApplicationProperties applicationProperties) {
         this.cacheNameResolver = cacheNameResolver;
+
+        Optional<RateLimitProperties> rateLimitProperties = Optional.ofNullable(applicationProperties != null ? applicationProperties.getRateLimit() : null);
+        long configuredCapacity = rateLimitProperties.map(RateLimitProperties::getCapacity).orElse(DEFAULT_CAPACITY);
+        Duration configuredRefillPeriod = rateLimitProperties.map(RateLimitProperties::getRefillPeriod).orElse(DEFAULT_REFILL_PERIOD);
+
+        if (configuredCapacity <= 0) {
+            configuredCapacity = DEFAULT_CAPACITY;
+        }
+        if (configuredRefillPeriod == null || configuredRefillPeriod.isZero() || configuredRefillPeriod.isNegative()) {
+            configuredRefillPeriod = DEFAULT_REFILL_PERIOD;
+        }
+
+        this.bucketBandwidth = Bandwidth.simple(configuredCapacity, configuredRefillPeriod);
+        this.bucketConfiguration = BucketConfiguration.builder()
+            .addLimit(this.bucketBandwidth)
+            .build();
 
         if (redissonConfigOptional.isPresent()) {
             ConnectionManager manager = ConfigSupport.createConnectionManager(redissonConfigOptional.get());
@@ -41,13 +63,13 @@ public class RateLimitService {
 
     public Bucket resolveBucket(String key) {
         if (proxyManager != null) {
-            return proxyManager.builder().build(this.cacheNameResolver.getCacheName(CACHE_KEY_PREFIX + key), DEFAULT_BUCKET_CONFIG);
+            return proxyManager.builder().build(this.cacheNameResolver.getCacheName(CACHE_KEY_PREFIX + key), this.bucketConfiguration);
         } else {
             return cache.computeIfAbsent(key, this::newBucket);
         }
     }
 
     private Bucket newBucket(String apiKey) {
-        return Bucket.builder().addLimit(DEFAULT_BUCKET_BANDWIDTH).build();
+        return Bucket.builder().addLimit(this.bucketBandwidth).build();
     }
 }

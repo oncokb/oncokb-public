@@ -182,3 +182,6 @@ application:
     project-id:
     site-key:
     threshold: 0.1
+  rate-limit:
+    capacity: 1
+    refill-period: 10s
