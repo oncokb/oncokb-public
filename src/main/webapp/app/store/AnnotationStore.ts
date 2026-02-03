@@ -445,7 +445,7 @@ export class AnnotationStore {
     invoke: () => {
       return privateClient.utilVariantAnnotationGetUsingGET({
         hgvsg: this.hgvsgQuery,
-        tumorType: this.tumorTypeQuery,
+        tumorType: this.tumorTypeQuery ?? undefined,
         referenceGenome: this.referenceGenomeQuery,
       });
     },
