@@ -432,7 +432,7 @@ export class AnnotationStore {
       return privateClient.utilVariantAnnotationGetUsingGET({
         hugoSymbol: this.gene.result.hugoSymbol,
         alteration: this.alterationQuery,
-        tumorType: this.tumorTypeQuery,
+        tumorType: this.tumorTypeQuery ? this.tumorTypeQuery : undefined,
         referenceGenome: this.referenceGenomeQuery,
         germline: this.germline,
       });
@@ -445,7 +445,7 @@ export class AnnotationStore {
     invoke: () => {
       return privateClient.utilVariantAnnotationGetUsingGET({
         hgvsg: this.hgvsgQuery,
-        tumorType: this.tumorTypeQuery ?? undefined,
+        tumorType: this.tumorTypeQuery ? this.tumorTypeQuery : undefined,
         referenceGenome: this.referenceGenomeQuery,
       });
     },
@@ -457,7 +457,7 @@ export class AnnotationStore {
     invoke: () => {
       return privateClient.utilVariantAnnotationGetUsingGET({
         genomicChange: this.genomicChangeQuery,
-        tumorType: this.tumorTypeQuery,
+        tumorType: this.tumorTypeQuery ? this.tumorTypeQuery : undefined,
         referenceGenome: this.referenceGenomeQuery,
       });
     },
