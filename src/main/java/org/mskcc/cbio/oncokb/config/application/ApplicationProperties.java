@@ -37,6 +37,7 @@ public class ApplicationProperties {
     private String githubToken;
     private Boolean dbReadOnly;
     private RecaptchaProperties recaptcha;
+    private RateLimitProperties rateLimit = new RateLimitProperties();
 
     public String getName() {
         return name;
@@ -187,5 +188,13 @@ public class ApplicationProperties {
 
     public void setRecaptcha(RecaptchaProperties recaptcha) {
         this.recaptcha = recaptcha;
+    }
+
+    public RateLimitProperties getRateLimit() {
+        return rateLimit;
+    }
+
+    public void setRateLimit(RateLimitProperties rateLimit) {
+        this.rateLimit = rateLimit;
     }
 }

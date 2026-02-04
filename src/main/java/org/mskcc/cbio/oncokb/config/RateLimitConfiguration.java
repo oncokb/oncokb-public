@@ -17,6 +17,8 @@ public class RateLimitConfiguration implements WebMvcConfigurer {
     @Override
     public void addInterceptors(InterceptorRegistry registry) {
         registry.addInterceptor(interceptor)
+            .addPathPatterns("/api/v1/annotate/**")
+            .addPathPatterns("/api/v1/utils/**")
             .addPathPatterns("/api/tokens/**");
     }
 }
