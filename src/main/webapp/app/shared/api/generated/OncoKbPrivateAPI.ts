@@ -2,13 +2,9 @@ import * as request from "superagent";
 
 type CallbackHandler = (err: any, res ? : request.Response) => void;
 export type AnnotateMutationByGenomicChangeQuery = {
-    'alleleState': string
-
-        'evidenceTypes': Array < "GENE_SUMMARY" | "MUTATION_SUMMARY" | "TUMOR_TYPE_SUMMARY" | "GENE_TUMOR_TYPE_SUMMARY" | "PROGNOSTIC_SUMMARY" | "DIAGNOSTIC_SUMMARY" | "GENE_BACKGROUND" | "ONCOGENIC" | "MUTATION_EFFECT" | "VUS" | "PROGNOSTIC_IMPLICATION" | "DIAGNOSTIC_IMPLICATION" | "STANDARD_THERAPEUTIC_IMPLICATIONS_FOR_DRUG_SENSITIVITY" | "STANDARD_THERAPEUTIC_IMPLICATIONS_FOR_DRUG_RESISTANCE" | "INVESTIGATIONAL_THERAPEUTIC_IMPLICATIONS_DRUG_SENSITIVITY" | "INVESTIGATIONAL_THERAPEUTIC_IMPLICATIONS_DRUG_RESISTANCE" | "PATHOGENIC" | "GENOMIC_INDICATOR" | "GENOMIC_INDICATOR_ALLELE_STATE" | "GENE_PENETRANCE" | "GENE_INHERITANCE_MECHANISM" | "GENE_CANCER_RISK" | "VARIANT_PENETRANCE" | "VARIANT_INHERITANCE_MECHANISM" | "VARIANT_CANCER_RISK" >
+    'evidenceTypes': Array < "GENE_SUMMARY" | "MUTATION_SUMMARY" | "TUMOR_TYPE_SUMMARY" | "GENE_TUMOR_TYPE_SUMMARY" | "PROGNOSTIC_SUMMARY" | "DIAGNOSTIC_SUMMARY" | "GENE_BACKGROUND" | "ONCOGENIC" | "MUTATION_EFFECT" | "VUS" | "PROGNOSTIC_IMPLICATION" | "DIAGNOSTIC_IMPLICATION" | "STANDARD_THERAPEUTIC_IMPLICATIONS_FOR_DRUG_SENSITIVITY" | "STANDARD_THERAPEUTIC_IMPLICATIONS_FOR_DRUG_RESISTANCE" | "INVESTIGATIONAL_THERAPEUTIC_IMPLICATIONS_DRUG_SENSITIVITY" | "INVESTIGATIONAL_THERAPEUTIC_IMPLICATIONS_DRUG_RESISTANCE" | "PATHOGENIC" | "GENOMIC_INDICATOR" | "GENE_PENETRANCE" | "VARIANT_PENETRANCE" | "VARIANT_CANCER_RISK" >
 
         'genomicLocation': string
-
-        'germline': boolean
 
         'id': string
 
@@ -34,19 +30,19 @@ export type TreatmentDrug = {
 
 };
 export type Query = {
-    'alleleState': string
-
-        'alteration': string
+    'alteration': string
 
         'alterationType': string
+
+        'canonicalTranscript': string
 
         'consequence': string
 
         'entrezGeneId': number
 
-        'germline': boolean
-
         'hgvs': string
+
+        'hgvsInfo': string
 
         'hugoSymbol': string
 
@@ -67,6 +63,249 @@ export type MatchVariant = {
     'alteration': string
 
         'hugoSymbol': string
+
+};
+export type ApiHttpError = {
+    'detail': string
+
+        'message': string
+
+        'path': string
+
+        'status': number
+
+        'title': string
+
+};
+export type MainNumber = {
+    'alteration': number
+
+        'drug': number
+
+        'gene': number
+
+        'level': Array < MainNumberLevel >
+
+        'tumorType': number
+
+};
+export type CancerTypeCount = {
+    'cancerType': string
+
+        'count': number
+
+};
+export type Implication = {
+    'abstracts': Array < ArticleAbstract >
+
+        'alterations': Array < string >
+
+        'description': string
+
+        'levelOfEvidence': "LEVEL_1" | "LEVEL_2" | "LEVEL_3A" | "LEVEL_3B" | "LEVEL_4" | "LEVEL_R1" | "LEVEL_R2" | "LEVEL_Px1" | "LEVEL_Px2" | "LEVEL_Px3" | "LEVEL_Dx1" | "LEVEL_Dx2" | "LEVEL_Dx3" | "LEVEL_Fda1" | "LEVEL_Fda2" | "LEVEL_Fda3" | "NO"
+
+        'pmids': Array < string >
+
+        'tumorType': TumorType
+
+};
+export type GermlineVariantAnnotation = {
+    'alleleExist': boolean
+
+        'clinVarId': string
+
+        'dataVersion': string
+
+        'diagnosticImplications': Array < Implication >
+
+        'diagnosticSummary': string
+
+        'exon': string
+
+        'geneExist': boolean
+
+        'geneSummary': string
+
+        'genomicIndicators': Array < GenomicIndicator >
+
+        'highestDiagnosticImplicationLevel': "LEVEL_1" | "LEVEL_2" | "LEVEL_3A" | "LEVEL_3B" | "LEVEL_4" | "LEVEL_R1" | "LEVEL_R2" | "LEVEL_Px1" | "LEVEL_Px2" | "LEVEL_Px3" | "LEVEL_Dx1" | "LEVEL_Dx2" | "LEVEL_Dx3" | "LEVEL_Fda1" | "LEVEL_Fda2" | "LEVEL_Fda3" | "NO"
+
+        'highestFdaLevel': "LEVEL_1" | "LEVEL_2" | "LEVEL_3A" | "LEVEL_3B" | "LEVEL_4" | "LEVEL_R1" | "LEVEL_R2" | "LEVEL_Px1" | "LEVEL_Px2" | "LEVEL_Px3" | "LEVEL_Dx1" | "LEVEL_Dx2" | "LEVEL_Dx3" | "LEVEL_Fda1" | "LEVEL_Fda2" | "LEVEL_Fda3" | "NO"
+
+        'highestPrognosticImplicationLevel': "LEVEL_1" | "LEVEL_2" | "LEVEL_3A" | "LEVEL_3B" | "LEVEL_4" | "LEVEL_R1" | "LEVEL_R2" | "LEVEL_Px1" | "LEVEL_Px2" | "LEVEL_Px3" | "LEVEL_Dx1" | "LEVEL_Dx2" | "LEVEL_Dx3" | "LEVEL_Fda1" | "LEVEL_Fda2" | "LEVEL_Fda3" | "NO"
+
+        'highestResistanceLevel': "LEVEL_1" | "LEVEL_2" | "LEVEL_3A" | "LEVEL_3B" | "LEVEL_4" | "LEVEL_R1" | "LEVEL_R2" | "LEVEL_Px1" | "LEVEL_Px2" | "LEVEL_Px3" | "LEVEL_Dx1" | "LEVEL_Dx2" | "LEVEL_Dx3" | "LEVEL_Fda1" | "LEVEL_Fda2" | "LEVEL_Fda3" | "NO"
+
+        'highestSensitiveLevel': "LEVEL_1" | "LEVEL_2" | "LEVEL_3A" | "LEVEL_3B" | "LEVEL_4" | "LEVEL_R1" | "LEVEL_R2" | "LEVEL_Px1" | "LEVEL_Px2" | "LEVEL_Px3" | "LEVEL_Dx1" | "LEVEL_Dx2" | "LEVEL_Dx3" | "LEVEL_Fda1" | "LEVEL_Fda2" | "LEVEL_Fda3" | "NO"
+
+        'lastUpdate': string
+
+        'mutationEffect': MutationEffectResp
+
+        'otherSignificantResistanceLevels': Array < "LEVEL_1" | "LEVEL_2" | "LEVEL_3A" | "LEVEL_3B" | "LEVEL_4" | "LEVEL_R1" | "LEVEL_R2" | "LEVEL_Px1" | "LEVEL_Px2" | "LEVEL_Px3" | "LEVEL_Dx1" | "LEVEL_Dx2" | "LEVEL_Dx3" | "LEVEL_Fda1" | "LEVEL_Fda2" | "LEVEL_Fda3" | "NO" >
+
+        'otherSignificantSensitiveLevels': Array < "LEVEL_1" | "LEVEL_2" | "LEVEL_3A" | "LEVEL_3B" | "LEVEL_4" | "LEVEL_R1" | "LEVEL_R2" | "LEVEL_Px1" | "LEVEL_Px2" | "LEVEL_Px3" | "LEVEL_Dx1" | "LEVEL_Dx2" | "LEVEL_Dx3" | "LEVEL_Fda1" | "LEVEL_Fda2" | "LEVEL_Fda3" | "NO" >
+
+        'pathogenic': string
+
+        'penetrance': string
+
+        'prognosticImplications': Array < Implication >
+
+        'prognosticSummary': string
+
+        'query': Query
+
+        'treatments': Array < IndicatorQueryTreatment >
+
+        'tumorTypes': Array < VariantAnnotationTumorType >
+
+        'tumorTypeSummary': string
+
+        'variantExist': boolean
+
+        'variantSummary': string
+
+        'vus': boolean
+
+};
+export type Gene = {
+    'entrezGeneId': number
+
+        'geneAliases': Array < string >
+
+        'geneType': "ONCOGENE_AND_TSG" | "ONCOGENE" | "TSG" | "INSUFFICIENT_EVIDENCE" | "NEITHER"
+
+        'genesets': Array < Geneset >
+
+        'grch37Isoform': string
+
+        'grch37RefSeq': string
+
+        'grch38Isoform': string
+
+        'grch38RefSeq': string
+
+        'hugoSymbol': string
+
+};
+
+export type EnsemblTranscript = {
+    'ccdsId': string
+
+        'exons': Array < Exon >
+
+        'geneId': string
+
+        'hugoSymbols': Array < string >
+
+        'pfamDomains': Array < PfamDomainRange >
+
+        'proteinId': string
+
+        'proteinLength': number
+
+        'refseqMrnaId': string
+
+        'transcriptId': string
+
+        'uniprotId': string
+
+        'utrs': Array < UntranslatedRegion >
+
+};
+export type TreatmentDrugId = {
+    'drug': Drug
+
+};
+export type MatchVariantResult = {
+    'query': Query
+
+        'result': Array < MatchVariant >
+
+};
+export type MatchVariantRequest = {
+    'oncokbVariants': Array < MatchVariant >
+
+        'queries': Array < Query >
+
+};
+export type VariantConsequence = {
+    'description': string
+
+        'isGenerallyTruncating': boolean
+
+        'term': string
+
+};
+export type PfamDomainRange = {
+    'pfamDomainEnd': number
+
+        'pfamDomainId': string
+
+        'pfamDomainStart': number
+
+};
+export type DrugSynonym = {
+    'drug': Drug
+
+        'id': number
+
+        'name': string
+
+};
+export type BiologicalVariant = {
+    'cancerRisk': string
+
+        'mutationEffect': string
+
+        'mutationEffectAbstracts': Array < ArticleAbstract >
+
+        'mutationEffectDescription': string
+
+        'mutationEffectPmids': Array < string >
+
+        'oncogenic': string
+
+        'oncogenicAbstracts': Array < ArticleAbstract >
+
+        'oncogenicPmids': Array < string >
+
+        'pathogenic': string
+
+        'pathogenicAbstracts': Array < ArticleAbstract >
+
+        'pathogenicPmids': Array < string >
+
+        'penetrance': string
+
+        'variant': Alteration
+
+};
+export type GenomicIndicator = {
+    'description': string
+
+        'inheritanceMechanism': "AUTOSOMAL_DOMINANT" | "AUTOSOMAL_RECESSIVE" | "X_LINKED_RECESSIVE" | "CARRIER"
+
+        'name': string
+
+};
+export type TumorType = {
+    'code': string
+
+        'color': string
+
+        'id': number
+
+        'level': number
+
+        'mainType': string
+
+        'subtype': string
+
+        'tissue': string
+
+        'tumorForm': "SOLID" | "LIQUID" | "MIXED"
 
 };
 export type Article = {
@@ -133,88 +372,10 @@ export type DownloadAvailability = {
         'version': string
 
 };
-export type MainNumber = {
-    'alteration': number
-
-        'drug': number
-
-        'gene': number
-
-        'level': Array < MainNumberLevel >
-
-        'tumorType': number
-
-};
-export type CancerTypeCount = {
-    'cancerType': string
-
-        'count': number
-
-};
-export type VariantAnnotation = {
-    'alleleExist': boolean
-
-        'alteration': Alteration
-
-        'background': string
-
-        'dataVersion': string
-
-        'diagnosticImplications': Array < Implication >
-
-        'diagnosticSummary': string
-
-        'geneExist': boolean
-
-        'geneSummary': string
-
-        'germline': GermlineVariant
-
-        'highestDiagnosticImplicationLevel': "LEVEL_1" | "LEVEL_2" | "LEVEL_3A" | "LEVEL_3B" | "LEVEL_4" | "LEVEL_R1" | "LEVEL_R2" | "LEVEL_Px1" | "LEVEL_Px2" | "LEVEL_Px3" | "LEVEL_Dx1" | "LEVEL_Dx2" | "LEVEL_Dx3" | "LEVEL_Fda1" | "LEVEL_Fda2" | "LEVEL_Fda3" | "NO"
-
-        'highestFdaLevel': "LEVEL_1" | "LEVEL_2" | "LEVEL_3A" | "LEVEL_3B" | "LEVEL_4" | "LEVEL_R1" | "LEVEL_R2" | "LEVEL_Px1" | "LEVEL_Px2" | "LEVEL_Px3" | "LEVEL_Dx1" | "LEVEL_Dx2" | "LEVEL_Dx3" | "LEVEL_Fda1" | "LEVEL_Fda2" | "LEVEL_Fda3" | "NO"
-
-        'highestPrognosticImplicationLevel': "LEVEL_1" | "LEVEL_2" | "LEVEL_3A" | "LEVEL_3B" | "LEVEL_4" | "LEVEL_R1" | "LEVEL_R2" | "LEVEL_Px1" | "LEVEL_Px2" | "LEVEL_Px3" | "LEVEL_Dx1" | "LEVEL_Dx2" | "LEVEL_Dx3" | "LEVEL_Fda1" | "LEVEL_Fda2" | "LEVEL_Fda3" | "NO"
-
-        'highestResistanceLevel': "LEVEL_1" | "LEVEL_2" | "LEVEL_3A" | "LEVEL_3B" | "LEVEL_4" | "LEVEL_R1" | "LEVEL_R2" | "LEVEL_Px1" | "LEVEL_Px2" | "LEVEL_Px3" | "LEVEL_Dx1" | "LEVEL_Dx2" | "LEVEL_Dx3" | "LEVEL_Fda1" | "LEVEL_Fda2" | "LEVEL_Fda3" | "NO"
-
-        'highestSensitiveLevel': "LEVEL_1" | "LEVEL_2" | "LEVEL_3A" | "LEVEL_3B" | "LEVEL_4" | "LEVEL_R1" | "LEVEL_R2" | "LEVEL_Px1" | "LEVEL_Px2" | "LEVEL_Px3" | "LEVEL_Dx1" | "LEVEL_Dx2" | "LEVEL_Dx3" | "LEVEL_Fda1" | "LEVEL_Fda2" | "LEVEL_Fda3" | "NO"
-
-        'hotspot': boolean
-
-        'lastUpdate': string
-
-        'mutationEffect': MutationEffectResp
-
-        'oncogenic': string
-
-        'otherSignificantResistanceLevels': Array < "LEVEL_1" | "LEVEL_2" | "LEVEL_3A" | "LEVEL_3B" | "LEVEL_4" | "LEVEL_R1" | "LEVEL_R2" | "LEVEL_Px1" | "LEVEL_Px2" | "LEVEL_Px3" | "LEVEL_Dx1" | "LEVEL_Dx2" | "LEVEL_Dx3" | "LEVEL_Fda1" | "LEVEL_Fda2" | "LEVEL_Fda3" | "NO" >
-
-        'otherSignificantSensitiveLevels': Array < "LEVEL_1" | "LEVEL_2" | "LEVEL_3A" | "LEVEL_3B" | "LEVEL_4" | "LEVEL_R1" | "LEVEL_R2" | "LEVEL_Px1" | "LEVEL_Px2" | "LEVEL_Px3" | "LEVEL_Dx1" | "LEVEL_Dx2" | "LEVEL_Dx3" | "LEVEL_Fda1" | "LEVEL_Fda2" | "LEVEL_Fda3" | "NO" >
-
-        'prognosticImplications': Array < Implication >
-
-        'prognosticSummary': string
-
-        'query': Query
-
-        'treatments': Array < IndicatorQueryTreatment >
-
-        'tumorTypeSummary': string
-
-        'tumorTypes': Array < VariantAnnotationTumorType >
-
-        'variantExist': boolean
-
-        'variantSummary': string
-
-        'vue': boolean
-
-        'vus': boolean
-
-};
 export type AnnotatedVariant = {
-    'entrezGeneId': number
+    'description': string
+
+        'entrezGeneId': number
 
         'gene': string
 
@@ -239,20 +400,6 @@ export type AnnotatedVariant = {
         'referenceGenome': string
 
         'variant': string
-
-};
-export type Implication = {
-    'abstracts': Array < ArticleAbstract >
-
-        'alterations': Array < string >
-
-        'description': string
-
-        'levelOfEvidence': "LEVEL_1" | "LEVEL_2" | "LEVEL_3A" | "LEVEL_3B" | "LEVEL_4" | "LEVEL_R1" | "LEVEL_R2" | "LEVEL_Px1" | "LEVEL_Px2" | "LEVEL_Px3" | "LEVEL_Dx1" | "LEVEL_Dx2" | "LEVEL_Dx3" | "LEVEL_Fda1" | "LEVEL_Fda2" | "LEVEL_Fda3" | "NO"
-
-        'pmids': Array < string >
-
-        'tumorType': TumorType
 
 };
 export type MainNumberLevel = {
@@ -281,44 +428,6 @@ export type Exon = {
         'version': number
 
 };
-export type Gene = {
-    'entrezGeneId': number
-
-        'geneAliases': Array < string >
-
-        'geneType': "INSUFFICIENT_EVIDENCE" | "ONCOGENE_AND_TSG" | "ONCOGENE" | "TSG" | "NEITHER"
-
-        'genesets': Array < Geneset >
-
-        'grch37Isoform': string
-
-        'grch37RefSeq': string
-
-        'grch38Isoform': string
-
-        'grch38RefSeq': string
-
-        'hugoSymbol': string
-
-};
-export type TumorType = {
-    'code': string
-
-        'color': string
-
-        'id': number
-
-        'level': number
-
-        'mainType': string
-
-        'subtype': string
-
-        'tissue': string
-
-        'tumorForm': "SOLID" | "LIQUID" | "MIXED"
-
-};
 export type ClinicalVariant = {
     'cancerTypes': Array < TumorType >
 
@@ -336,7 +445,11 @@ export type ClinicalVariant = {
 
         'level': string
 
+        'liquidPropagationLevel': string
+
         'oncogenic': string
+
+        'solidPropagationLevel': string
 
         'variant': Alteration
 
@@ -359,40 +472,6 @@ export type PortalAlteration = {
         'sampleId': string
 
 };
-export type EnsemblTranscript = {
-    'ccdsId': string
-
-        'exons': Array < Exon >
-
-        'geneId': string
-
-        'hugoSymbols': Array < string >
-
-        'pfamDomains': Array < PfamDomainRange >
-
-        'proteinId': string
-
-        'proteinLength': number
-
-        'refseqMrnaId': string
-
-        'transcriptId': string
-
-        'uniprotId': string
-
-        'utrs': Array < UntranslatedRegion >
-
-};
-export type TreatmentDrugId = {
-    'drug': Drug
-
-};
-export type MatchVariantResult = {
-    'query': Query
-
-        'result': Array < MatchVariant >
-
-};
 export type Evidence = {
     'additionalInfo': string
 
@@ -404,7 +483,7 @@ export type Evidence = {
 
         'description': string
 
-        'evidenceType': "GENE_SUMMARY" | "MUTATION_SUMMARY" | "TUMOR_TYPE_SUMMARY" | "GENE_TUMOR_TYPE_SUMMARY" | "PROGNOSTIC_SUMMARY" | "DIAGNOSTIC_SUMMARY" | "GENE_BACKGROUND" | "ONCOGENIC" | "MUTATION_EFFECT" | "VUS" | "PROGNOSTIC_IMPLICATION" | "DIAGNOSTIC_IMPLICATION" | "STANDARD_THERAPEUTIC_IMPLICATIONS_FOR_DRUG_SENSITIVITY" | "STANDARD_THERAPEUTIC_IMPLICATIONS_FOR_DRUG_RESISTANCE" | "INVESTIGATIONAL_THERAPEUTIC_IMPLICATIONS_DRUG_SENSITIVITY" | "INVESTIGATIONAL_THERAPEUTIC_IMPLICATIONS_DRUG_RESISTANCE" | "PATHOGENIC" | "GENOMIC_INDICATOR" | "GENOMIC_INDICATOR_ALLELE_STATE" | "GENE_PENETRANCE" | "GENE_INHERITANCE_MECHANISM" | "GENE_CANCER_RISK" | "VARIANT_PENETRANCE" | "VARIANT_INHERITANCE_MECHANISM" | "VARIANT_CANCER_RISK"
+        'evidenceType': "GENE_SUMMARY" | "MUTATION_SUMMARY" | "TUMOR_TYPE_SUMMARY" | "GENE_TUMOR_TYPE_SUMMARY" | "PROGNOSTIC_SUMMARY" | "DIAGNOSTIC_SUMMARY" | "GENE_BACKGROUND" | "ONCOGENIC" | "MUTATION_EFFECT" | "VUS" | "PROGNOSTIC_IMPLICATION" | "DIAGNOSTIC_IMPLICATION" | "STANDARD_THERAPEUTIC_IMPLICATIONS_FOR_DRUG_SENSITIVITY" | "STANDARD_THERAPEUTIC_IMPLICATIONS_FOR_DRUG_RESISTANCE" | "INVESTIGATIONAL_THERAPEUTIC_IMPLICATIONS_DRUG_SENSITIVITY" | "INVESTIGATIONAL_THERAPEUTIC_IMPLICATIONS_DRUG_RESISTANCE" | "PATHOGENIC" | "GENOMIC_INDICATOR" | "GENE_PENETRANCE" | "VARIANT_PENETRANCE" | "VARIANT_CANCER_RISK"
 
         'excludedCancerTypes': Array < TumorType >
 
@@ -501,34 +580,10 @@ export type ArticleAbstract = {
         'link': string
 
 };
-export type GermlineVariant = {
-    'cancerRisk': string
-
-        'clinVarId': string
-
-        'description': string
-
-        'genomicIndicators': Array < string >
-
-        'inheritanceMechanism': string
-
-        'inheritanceMechanismDescription': string
-
-        'pathogenic': string
-
-        'penetrance': string
-
-        'penetranceDescription': string
-
-};
 export type Drug = {
     'drugName': string
 
         'ncitCode': string
-
-        'synonyms': Array < string >
-
-        'uuid': string
 
 };
 export type RelevantCancerTypeQuery = {
@@ -545,26 +600,12 @@ export type TranscriptResult = {
         'note': string
 
 };
-export type MatchVariantRequest = {
-    'oncokbVariants': Array < MatchVariant >
-
-        'queries': Array < Query >
-
-};
 export type MainType = {
     'id': number
 
         'name': string
 
         'tumorForm': "SOLID" | "LIQUID" | "MIXED"
-
-};
-export type VariantConsequence = {
-    'description': string
-
-        'isGenerallyTruncating': boolean
-
-        'term': string
 
 };
 export type TranscriptCoverageFilterResult = {
@@ -604,27 +645,9 @@ export type GeneNumber = {
 
         'highestSensitiveLevel': string
 
-        'inheritanceMechanism': string
-
         'penetrance': string
 
         'tumorType': number
-
-};
-export type PfamDomainRange = {
-    'pfamDomainEnd': number
-
-        'pfamDomainId': string
-
-        'pfamDomainStart': number
-
-};
-export type DrugSynonym = {
-    'drug': Drug
-
-        'id': number
-
-        'name': string
 
 };
 export type IndicatorQueryTreatment = {
@@ -666,11 +689,7 @@ export type MutationEffectResp = {
 
 };
 export type AnnotateMutationByHGVSgQuery = {
-    'alleleState': string
-
-        'evidenceTypes': Array < "GENE_SUMMARY" | "MUTATION_SUMMARY" | "TUMOR_TYPE_SUMMARY" | "GENE_TUMOR_TYPE_SUMMARY" | "PROGNOSTIC_SUMMARY" | "DIAGNOSTIC_SUMMARY" | "GENE_BACKGROUND" | "ONCOGENIC" | "MUTATION_EFFECT" | "VUS" | "PROGNOSTIC_IMPLICATION" | "DIAGNOSTIC_IMPLICATION" | "STANDARD_THERAPEUTIC_IMPLICATIONS_FOR_DRUG_SENSITIVITY" | "STANDARD_THERAPEUTIC_IMPLICATIONS_FOR_DRUG_RESISTANCE" | "INVESTIGATIONAL_THERAPEUTIC_IMPLICATIONS_DRUG_SENSITIVITY" | "INVESTIGATIONAL_THERAPEUTIC_IMPLICATIONS_DRUG_RESISTANCE" | "PATHOGENIC" | "GENOMIC_INDICATOR" | "GENOMIC_INDICATOR_ALLELE_STATE" | "GENE_PENETRANCE" | "GENE_INHERITANCE_MECHANISM" | "GENE_CANCER_RISK" | "VARIANT_PENETRANCE" | "VARIANT_INHERITANCE_MECHANISM" | "VARIANT_CANCER_RISK" >
-
-        'germline': boolean
+    'evidenceTypes': Array < "GENE_SUMMARY" | "MUTATION_SUMMARY" | "TUMOR_TYPE_SUMMARY" | "GENE_TUMOR_TYPE_SUMMARY" | "PROGNOSTIC_SUMMARY" | "DIAGNOSTIC_SUMMARY" | "GENE_BACKGROUND" | "ONCOGENIC" | "MUTATION_EFFECT" | "VUS" | "PROGNOSTIC_IMPLICATION" | "DIAGNOSTIC_IMPLICATION" | "STANDARD_THERAPEUTIC_IMPLICATIONS_FOR_DRUG_SENSITIVITY" | "STANDARD_THERAPEUTIC_IMPLICATIONS_FOR_DRUG_RESISTANCE" | "INVESTIGATIONAL_THERAPEUTIC_IMPLICATIONS_DRUG_SENSITIVITY" | "INVESTIGATIONAL_THERAPEUTIC_IMPLICATIONS_DRUG_RESISTANCE" | "PATHOGENIC" | "GENOMIC_INDICATOR" | "GENE_PENETRANCE" | "VARIANT_PENETRANCE" | "VARIANT_CANCER_RISK" >
 
         'hgvsg': string
 
@@ -679,36 +698,6 @@ export type AnnotateMutationByHGVSgQuery = {
         'referenceGenome': "GRCh37" | "GRCh38"
 
         'tumorType': string
-
-};
-export type BiologicalVariant = {
-    'cancerRisk': string
-
-        'inheritanceMechanism': string
-
-        'mutationEffect': string
-
-        'mutationEffectAbstracts': Array < ArticleAbstract >
-
-        'mutationEffectDescription': string
-
-        'mutationEffectPmids': Array < string >
-
-        'oncogenic': string
-
-        'oncogenicAbstracts': Array < ArticleAbstract >
-
-        'oncogenicPmids': Array < string >
-
-        'pathogenic': string
-
-        'pathogenicAbstracts': Array < ArticleAbstract >
-
-        'pathogenicPmids': Array < string >
-
-        'penetrance': string
-
-        'variant': Alteration
 
 };
 export type Geneset = {
@@ -725,6 +714,68 @@ export type Citations = {
     'abstracts': Array < ArticleAbstract >
 
         'pmids': Array < string >
+
+};
+export type SomaticVariantAnnotation = {
+    'alleleExist': boolean
+
+        'alteration': Alteration
+
+        'background': string
+
+        'dataVersion': string
+
+        'diagnosticImplications': Array < Implication >
+
+        'diagnosticSummary': string
+
+        'exon': string
+
+        'geneExist': boolean
+
+        'geneSummary': string
+
+        'highestDiagnosticImplicationLevel': "LEVEL_1" | "LEVEL_2" | "LEVEL_3A" | "LEVEL_3B" | "LEVEL_4" | "LEVEL_R1" | "LEVEL_R2" | "LEVEL_Px1" | "LEVEL_Px2" | "LEVEL_Px3" | "LEVEL_Dx1" | "LEVEL_Dx2" | "LEVEL_Dx3" | "LEVEL_Fda1" | "LEVEL_Fda2" | "LEVEL_Fda3" | "NO"
+
+        'highestFdaLevel': "LEVEL_1" | "LEVEL_2" | "LEVEL_3A" | "LEVEL_3B" | "LEVEL_4" | "LEVEL_R1" | "LEVEL_R2" | "LEVEL_Px1" | "LEVEL_Px2" | "LEVEL_Px3" | "LEVEL_Dx1" | "LEVEL_Dx2" | "LEVEL_Dx3" | "LEVEL_Fda1" | "LEVEL_Fda2" | "LEVEL_Fda3" | "NO"
+
+        'highestPrognosticImplicationLevel': "LEVEL_1" | "LEVEL_2" | "LEVEL_3A" | "LEVEL_3B" | "LEVEL_4" | "LEVEL_R1" | "LEVEL_R2" | "LEVEL_Px1" | "LEVEL_Px2" | "LEVEL_Px3" | "LEVEL_Dx1" | "LEVEL_Dx2" | "LEVEL_Dx3" | "LEVEL_Fda1" | "LEVEL_Fda2" | "LEVEL_Fda3" | "NO"
+
+        'highestResistanceLevel': "LEVEL_1" | "LEVEL_2" | "LEVEL_3A" | "LEVEL_3B" | "LEVEL_4" | "LEVEL_R1" | "LEVEL_R2" | "LEVEL_Px1" | "LEVEL_Px2" | "LEVEL_Px3" | "LEVEL_Dx1" | "LEVEL_Dx2" | "LEVEL_Dx3" | "LEVEL_Fda1" | "LEVEL_Fda2" | "LEVEL_Fda3" | "NO"
+
+        'highestSensitiveLevel': "LEVEL_1" | "LEVEL_2" | "LEVEL_3A" | "LEVEL_3B" | "LEVEL_4" | "LEVEL_R1" | "LEVEL_R2" | "LEVEL_Px1" | "LEVEL_Px2" | "LEVEL_Px3" | "LEVEL_Dx1" | "LEVEL_Dx2" | "LEVEL_Dx3" | "LEVEL_Fda1" | "LEVEL_Fda2" | "LEVEL_Fda3" | "NO"
+
+        'hotspot': boolean
+
+        'lastUpdate': string
+
+        'mutationEffect': MutationEffectResp
+
+        'oncogenic': string
+
+        'otherSignificantResistanceLevels': Array < "LEVEL_1" | "LEVEL_2" | "LEVEL_3A" | "LEVEL_3B" | "LEVEL_4" | "LEVEL_R1" | "LEVEL_R2" | "LEVEL_Px1" | "LEVEL_Px2" | "LEVEL_Px3" | "LEVEL_Dx1" | "LEVEL_Dx2" | "LEVEL_Dx3" | "LEVEL_Fda1" | "LEVEL_Fda2" | "LEVEL_Fda3" | "NO" >
+
+        'otherSignificantSensitiveLevels': Array < "LEVEL_1" | "LEVEL_2" | "LEVEL_3A" | "LEVEL_3B" | "LEVEL_4" | "LEVEL_R1" | "LEVEL_R2" | "LEVEL_Px1" | "LEVEL_Px2" | "LEVEL_Px3" | "LEVEL_Dx1" | "LEVEL_Dx2" | "LEVEL_Dx3" | "LEVEL_Fda1" | "LEVEL_Fda2" | "LEVEL_Fda3" | "NO" >
+
+        'prognosticImplications': Array < Implication >
+
+        'prognosticSummary': string
+
+        'query': Query
+
+        'treatments': Array < IndicatorQueryTreatment >
+
+        'tumorTypeSummary': string
+
+        'tumorTypes': Array < VariantAnnotationTumorType >
+
+        'variantExist': boolean
+
+        'variantSummary': string
+
+        'vue': boolean
+
+        'vus': boolean
 
 };
 
@@ -3552,7 +3603,6 @@ export default class OncoKbPrivateAPI {
         'hgvsg' ? : string,
         'genomicChange' ? : string,
         'tumorType' ? : string,
-        'germline' ? : boolean,
         $queryParameters ? : any
     }): string {
         let queryParameters: any = {};
@@ -3585,10 +3635,6 @@ export default class OncoKbPrivateAPI {
             queryParameters['tumorType'] = parameters['tumorType'];
         }
 
-        if (parameters['germline'] !== undefined) {
-            queryParameters['germline'] = parameters['germline'];
-        }
-
         if (parameters.$queryParameters) {
             Object.keys(parameters.$queryParameters).forEach(function(parameterName) {
                 var parameter = parameters.$queryParameters[parameterName];
@@ -3610,7 +3656,6 @@ export default class OncoKbPrivateAPI {
      * @param {string} hgvsg - HGVS genomic format. Example: 7:g.140453136A>T
      * @param {string} genomicChange - Genomic change format. Example: 7,140453136,140453136,A,T
      * @param {string} tumorType - OncoTree tumor type name/main type/code
-     * @param {boolean} germline - false
      */
     utilVariantAnnotationGetUsingGETWithHttpInfo(parameters: {
         'hugoSymbol' ? : string,
@@ -3620,7 +3665,6 @@ export default class OncoKbPrivateAPI {
         'hgvsg' ? : string,
         'genomicChange' ? : string,
         'tumorType' ? : string,
-        'germline' ? : boolean,
         $queryParameters ? : any,
             $domain ? : string
     }): Promise < request.Response > {
@@ -3664,10 +3708,6 @@ export default class OncoKbPrivateAPI {
                 queryParameters['tumorType'] = parameters['tumorType'];
             }
 
-            if (parameters['germline'] !== undefined) {
-                queryParameters['germline'] = parameters['germline'];
-            }
-
             if (parameters.$queryParameters) {
                 Object.keys(parameters.$queryParameters).forEach(function(parameterName) {
                     var parameter = parameters.$queryParameters[parameterName];
@@ -3691,7 +3731,6 @@ export default class OncoKbPrivateAPI {
      * @param {string} hgvsg - HGVS genomic format. Example: 7:g.140453136A>T
      * @param {string} genomicChange - Genomic change format. Example: 7,140453136,140453136,A,T
      * @param {string} tumorType - OncoTree tumor type name/main type/code
-     * @param {boolean} germline - false
      */
     utilVariantAnnotationGetUsingGET(parameters: {
         'hugoSymbol' ? : string,
@@ -3701,11 +3740,162 @@ export default class OncoKbPrivateAPI {
         'hgvsg' ? : string,
         'genomicChange' ? : string,
         'tumorType' ? : string,
-        'germline' ? : boolean,
         $queryParameters ? : any,
             $domain ? : string
-    }): Promise < VariantAnnotation > {
+    }): Promise < SomaticVariantAnnotation > {
         return this.utilVariantAnnotationGetUsingGETWithHttpInfo(parameters).then(function(response: request.Response) {
+            return response.body;
+        });
+    };
+    utilVariantAnnotationGermlineGetUsingGETURL(parameters: {
+        'hugoSymbol' ? : string,
+        'entrezGeneId' ? : number,
+        'referenceGenome' ? : string,
+        'alteration' ? : string,
+        'hgvsg' ? : string,
+        'genomicChange' ? : string,
+        'tumorType' ? : string,
+        $queryParameters ? : any
+    }): string {
+        let queryParameters: any = {};
+        let path = '/utils/variantAnnotation/germline';
+        if (parameters['hugoSymbol'] !== undefined) {
+            queryParameters['hugoSymbol'] = parameters['hugoSymbol'];
+        }
+
+        if (parameters['entrezGeneId'] !== undefined) {
+            queryParameters['entrezGeneId'] = parameters['entrezGeneId'];
+        }
+
+        if (parameters['referenceGenome'] !== undefined) {
+            queryParameters['referenceGenome'] = parameters['referenceGenome'];
+        }
+
+        if (parameters['alteration'] !== undefined) {
+            queryParameters['alteration'] = parameters['alteration'];
+        }
+
+        if (parameters['hgvsg'] !== undefined) {
+            queryParameters['hgvsg'] = parameters['hgvsg'];
+        }
+
+        if (parameters['genomicChange'] !== undefined) {
+            queryParameters['genomicChange'] = parameters['genomicChange'];
+        }
+
+        if (parameters['tumorType'] !== undefined) {
+            queryParameters['tumorType'] = parameters['tumorType'];
+        }
+
+        if (parameters.$queryParameters) {
+            Object.keys(parameters.$queryParameters).forEach(function(parameterName) {
+                var parameter = parameters.$queryParameters[parameterName];
+                queryParameters[parameterName] = parameter;
+            });
+        }
+        let keys = Object.keys(queryParameters);
+        return this.domain + path + (keys.length > 0 ? '?' + (keys.map(key => key + '=' + encodeURIComponent(queryParameters[key])).join('&')) : '');
+    };
+
+    /**
+     * Get all the info for the germline query
+     * @method
+     * @name OncoKbPrivateAPI#utilVariantAnnotationGermlineGetUsingGET
+     * @param {string} hugoSymbol - hugoSymbol
+     * @param {integer} entrezGeneId - entrezGeneId
+     * @param {string} referenceGenome - Reference genome, either GRCh37 or GRCh38. The default is GRCh37
+     * @param {string} alteration - Alteration
+     * @param {string} hgvsg - HGVS genomic format. Example: 7:g.140453136A>T
+     * @param {string} genomicChange - Genomic change format. Example: 7,140453136,140453136,A,T
+     * @param {string} tumorType - OncoTree tumor type name/main type/code
+     */
+    utilVariantAnnotationGermlineGetUsingGETWithHttpInfo(parameters: {
+        'hugoSymbol' ? : string,
+        'entrezGeneId' ? : number,
+        'referenceGenome' ? : string,
+        'alteration' ? : string,
+        'hgvsg' ? : string,
+        'genomicChange' ? : string,
+        'tumorType' ? : string,
+        $queryParameters ? : any,
+            $domain ? : string
+    }): Promise < request.Response > {
+        const domain = parameters.$domain ? parameters.$domain : this.domain;
+        const errorHandlers = this.errorHandlers;
+        const request = this.request;
+        let path = '/utils/variantAnnotation/germline';
+        let body: any;
+        let queryParameters: any = {};
+        let headers: any = {};
+        let form: any = {};
+        return new Promise(function(resolve, reject) {
+            headers['Accept'] = 'application/json';
+            headers['Content-Type'] = 'application/json';
+
+            if (parameters['hugoSymbol'] !== undefined) {
+                queryParameters['hugoSymbol'] = parameters['hugoSymbol'];
+            }
+
+            if (parameters['entrezGeneId'] !== undefined) {
+                queryParameters['entrezGeneId'] = parameters['entrezGeneId'];
+            }
+
+            if (parameters['referenceGenome'] !== undefined) {
+                queryParameters['referenceGenome'] = parameters['referenceGenome'];
+            }
+
+            if (parameters['alteration'] !== undefined) {
+                queryParameters['alteration'] = parameters['alteration'];
+            }
+
+            if (parameters['hgvsg'] !== undefined) {
+                queryParameters['hgvsg'] = parameters['hgvsg'];
+            }
+
+            if (parameters['genomicChange'] !== undefined) {
+                queryParameters['genomicChange'] = parameters['genomicChange'];
+            }
+
+            if (parameters['tumorType'] !== undefined) {
+                queryParameters['tumorType'] = parameters['tumorType'];
+            }
+
+            if (parameters.$queryParameters) {
+                Object.keys(parameters.$queryParameters).forEach(function(parameterName) {
+                    var parameter = parameters.$queryParameters[parameterName];
+                    queryParameters[parameterName] = parameter;
+                });
+            }
+
+            request('GET', domain + path, body, headers, queryParameters, form, reject, resolve, errorHandlers);
+
+        });
+    };
+
+    /**
+     * Get all the info for the germline query
+     * @method
+     * @name OncoKbPrivateAPI#utilVariantAnnotationGermlineGetUsingGET
+     * @param {string} hugoSymbol - hugoSymbol
+     * @param {integer} entrezGeneId - entrezGeneId
+     * @param {string} referenceGenome - Reference genome, either GRCh37 or GRCh38. The default is GRCh37
+     * @param {string} alteration - Alteration
+     * @param {string} hgvsg - HGVS genomic format. Example: 7:g.140453136A>T
+     * @param {string} genomicChange - Genomic change format. Example: 7,140453136,140453136,A,T
+     * @param {string} tumorType - OncoTree tumor type name/main type/code
+     */
+    utilVariantAnnotationGermlineGetUsingGET(parameters: {
+        'hugoSymbol' ? : string,
+        'entrezGeneId' ? : number,
+        'referenceGenome' ? : string,
+        'alteration' ? : string,
+        'hgvsg' ? : string,
+        'genomicChange' ? : string,
+        'tumorType' ? : string,
+        $queryParameters ? : any,
+            $domain ? : string
+    }): Promise < GermlineVariantAnnotation > {
+        return this.utilVariantAnnotationGermlineGetUsingGETWithHttpInfo(parameters).then(function(response: request.Response) {
             return response.body;
         });
     };
