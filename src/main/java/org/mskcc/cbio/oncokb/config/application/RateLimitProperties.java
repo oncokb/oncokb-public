@@ -6,12 +6,12 @@ import java.time.Duration;
 import java.time.temporal.ChronoUnit;
 
 public class RateLimitProperties {
-    private long capacity = 30L;
+    private Long capacity;
 
     @DurationUnit(ChronoUnit.SECONDS)
-    private Duration refillPeriod = Duration.ofSeconds(5);
+    private Duration refillPeriod;
 
-    public long getCapacity() {
+    public Long getCapacity() {
         return capacity;
     }
 
