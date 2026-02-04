@@ -20,9 +20,23 @@
     display: flex;
     justify-content: space-between;
     align-items: center;
+    max-width: 80ch;
   }
 
   i.close {
     cursor: pointer;
+  }
+}
+
+.alert {
+  background: $warning;
+  color: $black;
+
+  a {
+    color: $black;
+  }
+
+  a:hover {
+    color: darken($black, 10%);
   }
 }

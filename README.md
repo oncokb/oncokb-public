@@ -110,6 +110,68 @@ Note: There are still a few other things remaining to do for Leaflet that we won
 
 For further instructions on how to develop with JHipster, have a look at [Using JHipster in development][].
 
+### Local Database Migrations
+
+> [!NOTE]
+> All arguments for liquibase must start with `-Dliquibase.`. So for example,
+> if you see `rollbackCount` as an argument, then you must put `-Dliquibase.rollbackCount=1`.
+> See `./mvnw liquibase:help` for a list of commands.
+
+1. Add liquibase migrations (Used an LLM to put together the xml file)
+   `src/main/resources/config/liquibase/changelog/XXXXXXXXXXXXXX.xml`
+2. Add you `xml` file to the `src/main/resources/config/liquibase/master.xml` list.
+3. Update the `pom.xml` file with your database configurations
+4. Run the migration. [Docs for more info](https://web.archive.org/web/20120101085541/http://www.liquibase.org/manual/maven_update)
+
+   ```sh
+   ./mvnw liquibase:update
+   ```
+
+#### Create and Run a SQL Script for production
+
+1. Rollback create rollback script.
+   (If your local database has the migrations added already)
+
+   > [!NOTE]
+   > I couldn't find a way to just make a script for a specific tag without doing
+   > the rollback. Ideally we shouldn't need to rollback to create the sql script.
+
+   1. Create the script [Docs for more info](https://web.archive.org/web/20130326200820/http://liquibase.org/manual/maven_rollbacksql)
+
+      ```sh
+      # Generates a rollback sql script
+      ./mvnw liquibase:rollbackSQL -Dliquibase.rollbackCount=1
+      ```
+
+   2. Copy the migration script. The location is `target/liquibase/migrate.sql`
+      by default.
+
+      ```sh
+      # Puts the sql script into your clipboard and you paste it where you need it
+      cat ./target/liquibase/migrate.sql | pbcopy
+      ```
+
+   3. Run the script
+
+2. Make your database changes
+
+   1. Create the script [Docs for more info](https://web.archive.org/web/20130326200820/http://liquibase.org/manual/maven_updatesql)
+
+      ```sh
+      # Generates a migration sql script
+      ./mvnw liquibase:updateSQL
+      ```
+
+   2. Copy the migration script. The location is `target/liquibase/migrate.sql`
+      by default.
+
+      ```sh
+      # Puts the sql script into your clipboard and you paste it where you need it
+      cat ./target/liquibase/migrate.sql | pbcopy
+      ```
+
+   3. Run the script.
+
 ## Building for production
 
 ### Packaging as jar

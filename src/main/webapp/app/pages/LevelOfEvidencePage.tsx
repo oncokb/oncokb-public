@@ -296,16 +296,15 @@ export default class LevelOfEvidencePage extends React.Component<
             </Col>
             <Col className={'col-auto'}>
               {this.version !== Version.FDA_NGS && (
-                <Button
-                  size={'sm'}
-                  className={classnames('ml-1')}
+                <a
+                  className={classnames('btn', 'btn-primary', 'btn-sm', 'ml-1')}
                   href={`content/files/levelOfEvidence/${this.version}/${
                     LEVEL_FILE_NAME[this.version]
                   }.ppt`}
                 >
                   <i className={'fa fa-cloud-download mr-1'} />
                   Download Slide
-                </Button>
+                </a>
               )}
               <DownloadButton
                 className={classnames('ml-1 btn-sm')}

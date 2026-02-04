@@ -280,6 +280,22 @@ export type User = {
         'resetDate': string
 
 };
+export type UserBannerMessageDTO = {
+    'bannerType': "INFO" | "ALERT"
+
+        'content': string
+
+        'endDate': string
+
+        'id': number
+
+        'lastUpdated': string
+
+        'startDate': string
+
+        'status': "SCHEDULED" | "ACTIVE" | "EXPIRED" | "UNKNOWN"
+
+};
 export type UserCompany = {
     'anticipatedReports': string
 
@@ -851,7 +867,6 @@ export default class API {
         });
     };
     authenticateGenomicReportUsingGETURL(parameters: {
-        'authorization': string,
         $queryParameters ? : any
     }): string {
         let queryParameters: any = {};
@@ -871,12 +886,10 @@ export default class API {
      * authenticateGenomicReport
      * @method
      * @name API#authenticateGenomicReportUsingGET
-     * @param {string} authorization - Authorization
      */
     authenticateGenomicReportUsingGETWithHttpInfo(parameters: {
-        'authorization': string,
         $queryParameters ? : any,
-        $domain ? : string
+            $domain ? : string
     }): Promise < request.Response > {
         const domain = parameters.$domain ? parameters.$domain : this.domain;
         const errorHandlers = this.errorHandlers;
@@ -888,15 +901,6 @@ export default class API {
         let form: any = {};
         return new Promise(function(resolve, reject) {
             headers['Accept'] = '*/*';
-
-            if (parameters['authorization'] !== undefined) {
-                headers['Authorization'] = parameters['authorization'];
-            }
-
-            if (parameters['authorization'] === undefined) {
-                reject(new Error('Missing required  parameter: authorization'));
-                return;
-            }
 
             if (parameters.$queryParameters) {
                 Object.keys(parameters.$queryParameters).forEach(function(parameterName) {
@@ -914,12 +918,10 @@ export default class API {
      * authenticateGenomicReport
      * @method
      * @name API#authenticateGenomicReportUsingGET
-     * @param {string} authorization - Authorization
      */
     authenticateGenomicReportUsingGET(parameters: {
-        'authorization': string,
         $queryParameters ? : any,
-        $domain ? : string
+            $domain ? : string
     }): Promise < any > {
         return this.authenticateGenomicReportUsingGETWithHttpInfo(parameters).then(function(response: request.Response) {
             return response.body;
@@ -5054,6 +5056,432 @@ export default class API {
         $domain ? : string
     }): Promise < UserUsage > {
         return this.userUsageGetUsingGETWithHttpInfo(parameters).then(function(response: request.Response) {
+            return response.body;
+        });
+    };
+    getAllUserBannerMessagesUsingGETURL(parameters: {
+        $queryParameters ? : any
+    }): string {
+        let queryParameters: any = {};
+        let path = '/api/user-banner-messages';
+
+        if (parameters.$queryParameters) {
+            Object.keys(parameters.$queryParameters).forEach(function(parameterName) {
+                var parameter = parameters.$queryParameters[parameterName];
+                queryParameters[parameterName] = parameter;
+            });
+        }
+        let keys = Object.keys(queryParameters);
+        return this.domain + path + (keys.length > 0 ? '?' + (keys.map(key => key + '=' + encodeURIComponent(queryParameters[key])).join('&')) : '');
+    };
+
+    /**
+     * getAllUserBannerMessages
+     * @method
+     * @name API#getAllUserBannerMessagesUsingGET
+     */
+    getAllUserBannerMessagesUsingGETWithHttpInfo(parameters: {
+        $queryParameters ? : any,
+            $domain ? : string
+    }): Promise < request.Response > {
+        const domain = parameters.$domain ? parameters.$domain : this.domain;
+        const errorHandlers = this.errorHandlers;
+        const request = this.request;
+        let path = '/api/user-banner-messages';
+        let body: any;
+        let queryParameters: any = {};
+        let headers: any = {};
+        let form: any = {};
+        return new Promise(function(resolve, reject) {
+            headers['Accept'] = '*/*';
+
+            if (parameters.$queryParameters) {
+                Object.keys(parameters.$queryParameters).forEach(function(parameterName) {
+                    var parameter = parameters.$queryParameters[parameterName];
+                    queryParameters[parameterName] = parameter;
+                });
+            }
+
+            request('GET', domain + path, body, headers, queryParameters, form, reject, resolve, errorHandlers);
+
+        });
+    };
+
+    /**
+     * getAllUserBannerMessages
+     * @method
+     * @name API#getAllUserBannerMessagesUsingGET
+     */
+    getAllUserBannerMessagesUsingGET(parameters: {
+            $queryParameters ? : any,
+                $domain ? : string
+        }): Promise < Array < UserBannerMessageDTO >
+        > {
+            return this.getAllUserBannerMessagesUsingGETWithHttpInfo(parameters).then(function(response: request.Response) {
+                return response.body;
+            });
+        };
+    createUserBannerMessageUsingPOSTURL(parameters: {
+        'userBannerMessageDto': UserBannerMessageDTO,
+        $queryParameters ? : any
+    }): string {
+        let queryParameters: any = {};
+        let path = '/api/user-banner-messages';
+
+        if (parameters.$queryParameters) {
+            Object.keys(parameters.$queryParameters).forEach(function(parameterName) {
+                var parameter = parameters.$queryParameters[parameterName];
+                queryParameters[parameterName] = parameter;
+            });
+        }
+        let keys = Object.keys(queryParameters);
+        return this.domain + path + (keys.length > 0 ? '?' + (keys.map(key => key + '=' + encodeURIComponent(queryParameters[key])).join('&')) : '');
+    };
+
+    /**
+     * createUserBannerMessage
+     * @method
+     * @name API#createUserBannerMessageUsingPOST
+     * @param {} userBannerMessageDto - userBannerMessageDTO
+     */
+    createUserBannerMessageUsingPOSTWithHttpInfo(parameters: {
+        'userBannerMessageDto': UserBannerMessageDTO,
+        $queryParameters ? : any,
+        $domain ? : string
+    }): Promise < request.Response > {
+        const domain = parameters.$domain ? parameters.$domain : this.domain;
+        const errorHandlers = this.errorHandlers;
+        const request = this.request;
+        let path = '/api/user-banner-messages';
+        let body: any;
+        let queryParameters: any = {};
+        let headers: any = {};
+        let form: any = {};
+        return new Promise(function(resolve, reject) {
+            headers['Accept'] = '*/*';
+            headers['Content-Type'] = 'application/json';
+
+            if (parameters['userBannerMessageDto'] !== undefined) {
+                body = parameters['userBannerMessageDto'];
+            }
+
+            if (parameters['userBannerMessageDto'] === undefined) {
+                reject(new Error('Missing required  parameter: userBannerMessageDto'));
+                return;
+            }
+
+            if (parameters.$queryParameters) {
+                Object.keys(parameters.$queryParameters).forEach(function(parameterName) {
+                    var parameter = parameters.$queryParameters[parameterName];
+                    queryParameters[parameterName] = parameter;
+                });
+            }
+
+            request('POST', domain + path, body, headers, queryParameters, form, reject, resolve, errorHandlers);
+
+        });
+    };
+
+    /**
+     * createUserBannerMessage
+     * @method
+     * @name API#createUserBannerMessageUsingPOST
+     * @param {} userBannerMessageDto - userBannerMessageDTO
+     */
+    createUserBannerMessageUsingPOST(parameters: {
+        'userBannerMessageDto': UserBannerMessageDTO,
+        $queryParameters ? : any,
+        $domain ? : string
+    }): Promise < UserBannerMessageDTO > {
+        return this.createUserBannerMessageUsingPOSTWithHttpInfo(parameters).then(function(response: request.Response) {
+            return response.body;
+        });
+    };
+    updateUserBannerMessageUsingPUTURL(parameters: {
+        'userBannerMessageDto': UserBannerMessageDTO,
+        $queryParameters ? : any
+    }): string {
+        let queryParameters: any = {};
+        let path = '/api/user-banner-messages';
+
+        if (parameters.$queryParameters) {
+            Object.keys(parameters.$queryParameters).forEach(function(parameterName) {
+                var parameter = parameters.$queryParameters[parameterName];
+                queryParameters[parameterName] = parameter;
+            });
+        }
+        let keys = Object.keys(queryParameters);
+        return this.domain + path + (keys.length > 0 ? '?' + (keys.map(key => key + '=' + encodeURIComponent(queryParameters[key])).join('&')) : '');
+    };
+
+    /**
+     * updateUserBannerMessage
+     * @method
+     * @name API#updateUserBannerMessageUsingPUT
+     * @param {} userBannerMessageDto - userBannerMessageDTO
+     */
+    updateUserBannerMessageUsingPUTWithHttpInfo(parameters: {
+        'userBannerMessageDto': UserBannerMessageDTO,
+        $queryParameters ? : any,
+        $domain ? : string
+    }): Promise < request.Response > {
+        const domain = parameters.$domain ? parameters.$domain : this.domain;
+        const errorHandlers = this.errorHandlers;
+        const request = this.request;
+        let path = '/api/user-banner-messages';
+        let body: any;
+        let queryParameters: any = {};
+        let headers: any = {};
+        let form: any = {};
+        return new Promise(function(resolve, reject) {
+            headers['Accept'] = '*/*';
+            headers['Content-Type'] = 'application/json';
+
+            if (parameters['userBannerMessageDto'] !== undefined) {
+                body = parameters['userBannerMessageDto'];
+            }
+
+            if (parameters['userBannerMessageDto'] === undefined) {
+                reject(new Error('Missing required  parameter: userBannerMessageDto'));
+                return;
+            }
+
+            if (parameters.$queryParameters) {
+                Object.keys(parameters.$queryParameters).forEach(function(parameterName) {
+                    var parameter = parameters.$queryParameters[parameterName];
+                    queryParameters[parameterName] = parameter;
+                });
+            }
+
+            request('PUT', domain + path, body, headers, queryParameters, form, reject, resolve, errorHandlers);
+
+        });
+    };
+
+    /**
+     * updateUserBannerMessage
+     * @method
+     * @name API#updateUserBannerMessageUsingPUT
+     * @param {} userBannerMessageDto - userBannerMessageDTO
+     */
+    updateUserBannerMessageUsingPUT(parameters: {
+        'userBannerMessageDto': UserBannerMessageDTO,
+        $queryParameters ? : any,
+        $domain ? : string
+    }): Promise < UserBannerMessageDTO > {
+        return this.updateUserBannerMessageUsingPUTWithHttpInfo(parameters).then(function(response: request.Response) {
+            return response.body;
+        });
+    };
+    getActiveUserBannerMessagesUsingGETURL(parameters: {
+        $queryParameters ? : any
+    }): string {
+        let queryParameters: any = {};
+        let path = '/api/user-banner-messages/active';
+
+        if (parameters.$queryParameters) {
+            Object.keys(parameters.$queryParameters).forEach(function(parameterName) {
+                var parameter = parameters.$queryParameters[parameterName];
+                queryParameters[parameterName] = parameter;
+            });
+        }
+        let keys = Object.keys(queryParameters);
+        return this.domain + path + (keys.length > 0 ? '?' + (keys.map(key => key + '=' + encodeURIComponent(queryParameters[key])).join('&')) : '');
+    };
+
+    /**
+     * getActiveUserBannerMessages
+     * @method
+     * @name API#getActiveUserBannerMessagesUsingGET
+     */
+    getActiveUserBannerMessagesUsingGETWithHttpInfo(parameters: {
+        $queryParameters ? : any,
+            $domain ? : string
+    }): Promise < request.Response > {
+        const domain = parameters.$domain ? parameters.$domain : this.domain;
+        const errorHandlers = this.errorHandlers;
+        const request = this.request;
+        let path = '/api/user-banner-messages/active';
+        let body: any;
+        let queryParameters: any = {};
+        let headers: any = {};
+        let form: any = {};
+        return new Promise(function(resolve, reject) {
+            headers['Accept'] = '*/*';
+
+            if (parameters.$queryParameters) {
+                Object.keys(parameters.$queryParameters).forEach(function(parameterName) {
+                    var parameter = parameters.$queryParameters[parameterName];
+                    queryParameters[parameterName] = parameter;
+                });
+            }
+
+            request('GET', domain + path, body, headers, queryParameters, form, reject, resolve, errorHandlers);
+
+        });
+    };
+
+    /**
+     * getActiveUserBannerMessages
+     * @method
+     * @name API#getActiveUserBannerMessagesUsingGET
+     */
+    getActiveUserBannerMessagesUsingGET(parameters: {
+            $queryParameters ? : any,
+                $domain ? : string
+        }): Promise < Array < UserBannerMessageDTO >
+        > {
+            return this.getActiveUserBannerMessagesUsingGETWithHttpInfo(parameters).then(function(response: request.Response) {
+                return response.body;
+            });
+        };
+    getUserBannerMessageUsingGETURL(parameters: {
+        'id': number,
+        $queryParameters ? : any
+    }): string {
+        let queryParameters: any = {};
+        let path = '/api/user-banner-messages/{id}';
+
+        path = path.replace('{id}', parameters['id'] + '');
+
+        if (parameters.$queryParameters) {
+            Object.keys(parameters.$queryParameters).forEach(function(parameterName) {
+                var parameter = parameters.$queryParameters[parameterName];
+                queryParameters[parameterName] = parameter;
+            });
+        }
+        let keys = Object.keys(queryParameters);
+        return this.domain + path + (keys.length > 0 ? '?' + (keys.map(key => key + '=' + encodeURIComponent(queryParameters[key])).join('&')) : '');
+    };
+
+    /**
+     * getUserBannerMessage
+     * @method
+     * @name API#getUserBannerMessageUsingGET
+     * @param {integer} id - id
+     */
+    getUserBannerMessageUsingGETWithHttpInfo(parameters: {
+        'id': number,
+        $queryParameters ? : any,
+        $domain ? : string
+    }): Promise < request.Response > {
+        const domain = parameters.$domain ? parameters.$domain : this.domain;
+        const errorHandlers = this.errorHandlers;
+        const request = this.request;
+        let path = '/api/user-banner-messages/{id}';
+        let body: any;
+        let queryParameters: any = {};
+        let headers: any = {};
+        let form: any = {};
+        return new Promise(function(resolve, reject) {
+            headers['Accept'] = '*/*';
+
+            path = path.replace('{id}', parameters['id'] + '');
+
+            if (parameters['id'] === undefined) {
+                reject(new Error('Missing required  parameter: id'));
+                return;
+            }
+
+            if (parameters.$queryParameters) {
+                Object.keys(parameters.$queryParameters).forEach(function(parameterName) {
+                    var parameter = parameters.$queryParameters[parameterName];
+                    queryParameters[parameterName] = parameter;
+                });
+            }
+
+            request('GET', domain + path, body, headers, queryParameters, form, reject, resolve, errorHandlers);
+
+        });
+    };
+
+    /**
+     * getUserBannerMessage
+     * @method
+     * @name API#getUserBannerMessageUsingGET
+     * @param {integer} id - id
+     */
+    getUserBannerMessageUsingGET(parameters: {
+        'id': number,
+        $queryParameters ? : any,
+        $domain ? : string
+    }): Promise < UserBannerMessageDTO > {
+        return this.getUserBannerMessageUsingGETWithHttpInfo(parameters).then(function(response: request.Response) {
+            return response.body;
+        });
+    };
+    deleteUserBannerMessageUsingDELETEURL(parameters: {
+        'id': number,
+        $queryParameters ? : any
+    }): string {
+        let queryParameters: any = {};
+        let path = '/api/user-banner-messages/{id}';
+
+        path = path.replace('{id}', parameters['id'] + '');
+
+        if (parameters.$queryParameters) {
+            Object.keys(parameters.$queryParameters).forEach(function(parameterName) {
+                var parameter = parameters.$queryParameters[parameterName];
+                queryParameters[parameterName] = parameter;
+            });
+        }
+        let keys = Object.keys(queryParameters);
+        return this.domain + path + (keys.length > 0 ? '?' + (keys.map(key => key + '=' + encodeURIComponent(queryParameters[key])).join('&')) : '');
+    };
+
+    /**
+     * deleteUserBannerMessage
+     * @method
+     * @name API#deleteUserBannerMessageUsingDELETE
+     * @param {integer} id - id
+     */
+    deleteUserBannerMessageUsingDELETEWithHttpInfo(parameters: {
+        'id': number,
+        $queryParameters ? : any,
+        $domain ? : string
+    }): Promise < request.Response > {
+        const domain = parameters.$domain ? parameters.$domain : this.domain;
+        const errorHandlers = this.errorHandlers;
+        const request = this.request;
+        let path = '/api/user-banner-messages/{id}';
+        let body: any;
+        let queryParameters: any = {};
+        let headers: any = {};
+        let form: any = {};
+        return new Promise(function(resolve, reject) {
+            headers['Accept'] = '*/*';
+
+            path = path.replace('{id}', parameters['id'] + '');
+
+            if (parameters['id'] === undefined) {
+                reject(new Error('Missing required  parameter: id'));
+                return;
+            }
+
+            if (parameters.$queryParameters) {
+                Object.keys(parameters.$queryParameters).forEach(function(parameterName) {
+                    var parameter = parameters.$queryParameters[parameterName];
+                    queryParameters[parameterName] = parameter;
+                });
+            }
+
+            request('DELETE', domain + path, body, headers, queryParameters, form, reject, resolve, errorHandlers);
+
+        });
+    };
+
+    /**
+     * deleteUserBannerMessage
+     * @method
+     * @name API#deleteUserBannerMessageUsingDELETE
+     * @param {integer} id - id
+     */
+    deleteUserBannerMessageUsingDELETE(parameters: {
+        'id': number,
+        $queryParameters ? : any,
+        $domain ? : string
+    }): Promise < any > {
+        return this.deleteUserBannerMessageUsingDELETEWithHttpInfo(parameters).then(function(response: request.Response) {
             return response.body;
         });
     };

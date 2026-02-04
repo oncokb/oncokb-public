@@ -191,7 +191,7 @@
     "start": "yarn run webpack:dev",
     "start-tls": "yarn run webpack:dev -- --env.tls",
     "updateAPI": "yarn run fetchAPI && yarn run buildAPI",
-    "fetchAPI": "curl http://localhost:9095/v2/api-docs | json | grep -v basePath | grep -v termsOfService | grep -v host > src/main/webapp/app/shared/api/generated/API-docs.json",
+    "fetchAPI": "curl http://localhost:9090/v2/api-docs | json | grep -v basePath | grep -v termsOfService | grep -v host > src/main/webapp/app/shared/api/generated/API-docs.json",
     "buildAPI": "node scripts/generate-api.js src/main/webapp/app/shared/api/generated API",
     "buildNewsPages": "node scripts/generate-markdown.js -f src/main/webapp/app/pages/newsPage/markdown -o src/main/webapp/app/pages/newsPage/code-generated && yarn run prettier --write \"{,src/main/webapp/app/pages/newsPage/code-generated/**/}*.{md,json,ts,tsx,css,scss,yml}\"",
     "buildPrivacyNotice": "node scripts/generate-markdown.js -f src/main/webapp/app/pages/privacyNotice/markdown -o src/main/webapp/app/pages/privacyNotice/code-generated && yarn run prettier --write \"{,src/main/webapp/app/pages/privacyNotice/code-generated/**/}*.{md,json,ts,tsx,css,scss,yml}\"",

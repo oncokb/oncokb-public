@@ -31,6 +31,7 @@ const apiV1Info = fs.readFileSync(`${DATA_DIR}api-v1-info.json`).toString();
 const numbersMain = fs.readFileSync(`${DATA_DIR}private-utils-numbers-main.json`).toString();
 const numbersLevels = fs.readFileSync(`${DATA_DIR}private-utils-numbers-levels.json`).toString();
 const tumorTypes = fs.readFileSync(`${DATA_DIR}private-utils-tumorTypes.json`).toString();
+const activeBannerMessages = fs.readFileSync(`${DATA_DIR}api-user-banner-messages-active.json`).toString();
 
 // ROS1 gene page - API response data
 const rose1GeneQuery = fs.readFileSync(`${DATA_DIR}api-v1-genes-ROS1.json`).toString();
@@ -122,6 +123,13 @@ function getMockResponse(url){
         status: 200,
         contentType: 'application/json',
         body: apiAccountToken
+      };
+      break;
+    case `${SERVER_URL}api/user-banner-messages/active`:
+      res = {
+        status: 200,
+        contentType: 'application/json',
+        body: activeBannerMessages,
       };
       break;
     case `${SERVER_URL}api/v1/info`:
@@ -623,4 +631,3 @@ describe('Tests on mobile view (< large grid)', () => {
   })
 
 })
-
