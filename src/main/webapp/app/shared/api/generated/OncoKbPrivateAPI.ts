@@ -330,6 +330,8 @@ export type ClinicalVariant = {
 
         'drugPmids': Array < string >
 
+        'evidenceId': number
+
         'excludedCancerTypes': Array < TumorType >
 
         'fdaLevel': string
@@ -709,6 +711,14 @@ export type BiologicalVariant = {
         'penetrance': string
 
         'variant': Alteration
+
+};
+export type Tag = {
+    'description': string
+
+        'evidences': Array < Evidence >
+
+        'name': string
 
 };
 export type Geneset = {
@@ -1477,6 +1487,83 @@ export default class OncoKbPrivateAPI {
         }): Promise < Array < ClinicalVariant >
         > {
             return this.searchVariantsClinicalGetUsingGETWithHttpInfo(parameters).then(function(response: request.Response) {
+                return response.body;
+            });
+        };
+    getTagsByEntrezGeneIdUsingGETURL(parameters: {
+        'entrezGeneId': number,
+        $queryParameters ? : any
+    }): string {
+        let queryParameters: any = {};
+        let path = '/tags/{entrezGeneId}';
+
+        path = path.replace('{entrezGeneId}', parameters['entrezGeneId'] + '');
+
+        if (parameters.$queryParameters) {
+            Object.keys(parameters.$queryParameters).forEach(function(parameterName) {
+                var parameter = parameters.$queryParameters[parameterName];
+                queryParameters[parameterName] = parameter;
+            });
+        }
+        let keys = Object.keys(queryParameters);
+        return this.domain + path + (keys.length > 0 ? '?' + (keys.map(key => key + '=' + encodeURIComponent(queryParameters[key])).join('&')) : '');
+    };
+
+    /**
+     * getTagsByEntrezGeneId
+     * @method
+     * @name OncoKbPrivateAPI#getTagsByEntrezGeneIdUsingGET
+     * @param {integer} entrezGeneId - entrezGeneId
+     */
+    getTagsByEntrezGeneIdUsingGETWithHttpInfo(parameters: {
+        'entrezGeneId': number,
+        $queryParameters ? : any,
+        $domain ? : string
+    }): Promise < request.Response > {
+        const domain = parameters.$domain ? parameters.$domain : this.domain;
+        const errorHandlers = this.errorHandlers;
+        const request = this.request;
+        let path = '/tags/{entrezGeneId}';
+        let body: any;
+        let queryParameters: any = {};
+        let headers: any = {};
+        let form: any = {};
+        return new Promise(function(resolve, reject) {
+            headers['Accept'] = 'application/json';
+            headers['Content-Type'] = 'application/json';
+
+            path = path.replace('{entrezGeneId}', parameters['entrezGeneId'] + '');
+
+            if (parameters['entrezGeneId'] === undefined) {
+                reject(new Error('Missing required  parameter: entrezGeneId'));
+                return;
+            }
+
+            if (parameters.$queryParameters) {
+                Object.keys(parameters.$queryParameters).forEach(function(parameterName) {
+                    var parameter = parameters.$queryParameters[parameterName];
+                    queryParameters[parameterName] = parameter;
+                });
+            }
+
+            request('GET', domain + path, body, headers, queryParameters, form, reject, resolve, errorHandlers);
+
+        });
+    };
+
+    /**
+     * getTagsByEntrezGeneId
+     * @method
+     * @name OncoKbPrivateAPI#getTagsByEntrezGeneIdUsingGET
+     * @param {integer} entrezGeneId - entrezGeneId
+     */
+    getTagsByEntrezGeneIdUsingGET(parameters: {
+            'entrezGeneId': number,
+            $queryParameters ? : any,
+            $domain ? : string
+        }): Promise < Array < Tag >
+        > {
+            return this.getTagsByEntrezGeneIdUsingGETWithHttpInfo(parameters).then(function(response: request.Response) {
                 return response.body;
             });
         };

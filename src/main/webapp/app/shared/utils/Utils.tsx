@@ -18,6 +18,7 @@ import {
   APP_TIMESTAMP_FORMAT,
   CATEGORICAL_ALTERATIONS,
   DELETION,
+  EVIDENCE_TYPES,
   FUSIONS,
   GENERAL_ONCOGENICITY,
   GENERAL_PATHOGENICITY,
@@ -35,12 +36,14 @@ import {
   PAGE_ROUTE,
   SHORTEN_TEXT_FROM_LIST_THRESHOLD,
   TABLE_COLUMN_KEY,
+  TREATMENT_EVIDENCE_TYPES,
   TRUNCATING_MUTATIONS,
 } from 'app/config/constants';
 import classnames from 'classnames';
 import {
   Alteration,
   EnsemblGene,
+  Tag,
   Treatment,
   TumorType,
 } from 'app/shared/api/generated/OncoKbPrivateAPI';
@@ -69,6 +72,10 @@ import { Version } from 'app/pages/LevelOfEvidencePage';
 import { Link } from 'react-router-dom';
 import { LevelOfEvidencePageLink } from 'app/shared/links/LevelOfEvidencePageLink';
 import { sortBy, sortByKey } from 'app/shared/utils/LodashUtils';
+import {
+  FdaImplication,
+  TherapeuticImplication,
+} from 'app/store/AnnotationStore';
 
 // Likely Oncogenic, Predicted Oncogenic will be converted to Oncogenic
 // Likely Neutral will be converted to Neutral
@@ -969,4 +976,164 @@ export const getFdaSubmissionNumber = (
   return supplementNumber
     ? `${primaryNumber}/${supplementNumber}`
     : primaryNumber;
+};
+
+const getImplicationsFromTag = (
+  tag: Tag,
+  evidenceTypes: EVIDENCE_TYPES[]
+): [TherapeuticImplication[], number[]] => {
+  const implications: TherapeuticImplication[] = [];
+  const usedEvidenceIds: number[] = [];
+  for (const evidence of tag.evidences) {
+    if (!evidenceTypes.includes(evidence.evidenceType as EVIDENCE_TYPES)) {
+      continue;
+    }
+
+    usedEvidenceIds.push(evidence.id);
+
+    const level = levelOfEvidence2Level(evidence.levelOfEvidence);
+    const fdaLevel = levelOfEvidence2Level(evidence.fdaLevel);
+    const cancerTypes = evidence.cancerTypes.map(cancerType =>
+      getCancerTypeNameFromOncoTreeType(cancerType)
+    );
+    const excludedCancerTypes = evidence.excludedCancerTypes.map(ct =>
+      getCancerTypeNameFromOncoTreeType(ct)
+    );
+    const cancerTypesName = getCancerTypesName(
+      cancerTypes,
+      excludedCancerTypes
+    );
+
+    if (evidence.treatments.length > 0) {
+      evidence.treatments.forEach(treatment => {
+        implications.push({
+          level,
+          fdaLevel,
+          drugDescription: evidence.description,
+          alterations: tag.name,
+          alterationsView: (
+            <>
+              <span>{tag.name}</span>
+              <InfoIcon
+                className="ml-2"
+                overlay={<span>{tag.description}</span>}
+              />
+            </>
+          ),
+          drugs: getTreatmentNameByPriority(treatment),
+          cancerTypes: cancerTypesName,
+          cancerTypesArray: cancerTypes,
+          cancerTypesView: <span>{cancerTypesName}</span>,
+          citations: articles2Citations(evidence.articles),
+        });
+      });
+    } else {
+      implications.push({
+        level,
+        fdaLevel,
+        drugDescription: evidence.description,
+        alterations: tag.name,
+        alterationsView: (
+          <>
+            <span>{tag.name}</span>
+            <InfoIcon
+              className="ml-2"
+              overlay={<span>{tag.description}</span>}
+            />
+          </>
+        ),
+        drugs: '',
+        cancerTypes: cancerTypesName,
+        cancerTypesArray: cancerTypes,
+        cancerTypesView: <span>{cancerTypesName}</span>,
+        citations: articles2Citations(evidence.articles),
+      } as TherapeuticImplication);
+    }
+  }
+
+  return [implications, usedEvidenceIds];
+};
+
+export const getImplicationsFromTags = (
+  tags: Tag[],
+  evidenceTypes: EVIDENCE_TYPES[]
+): [TherapeuticImplication[], number[]] => {
+  const implications: TherapeuticImplication[] = [];
+  const usedEvidenceIds: number[] = [];
+  for (const tag of tags) {
+    const [imps, ids] = getImplicationsFromTag(tag, evidenceTypes);
+    implications.push(...imps);
+    usedEvidenceIds.push(...ids);
+  }
+  return [implications, usedEvidenceIds];
+};
+
+const getFdaImplicationsFromTag = (tag: Tag): [FdaImplication[], number[]] => {
+  const fdaImplications: FdaImplication[] = [];
+  const usedEvidenceIds: number[] = [];
+  for (const evidence of tag.evidences) {
+    if (
+      !TREATMENT_EVIDENCE_TYPES.includes(
+        evidence.evidenceType as EVIDENCE_TYPES
+      )
+    ) {
+      continue;
+    }
+
+    usedEvidenceIds.push(evidence.id);
+
+    const fdaLevel = levelOfEvidence2Level(evidence.fdaLevel);
+    const cancerTypes = evidence.cancerTypes.map(cancerType =>
+      getCancerTypeNameFromOncoTreeType(cancerType)
+    );
+    const excludedCancerTypes = evidence.excludedCancerTypes.map(ct =>
+      getCancerTypeNameFromOncoTreeType(ct)
+    );
+    const cancerTypesName = getCancerTypesName(
+      cancerTypes,
+      excludedCancerTypes
+    );
+
+    fdaImplications.push({
+      level: fdaLevel,
+      alteration: {
+        alteration: tag.name,
+        consequence: {
+          description: '',
+          isGenerallyTruncating: false,
+          term: '',
+        },
+        gene: evidence.gene,
+        name: tag.name,
+        proteinChange: '',
+        proteinEnd: 0,
+        proteinStart: 0,
+        refResidues: '',
+        referenceGenomes: [],
+        variantResidues: '',
+      },
+      alterationView: (
+        <>
+          <span>{tag.name}</span>
+          <InfoIcon className="ml-2" overlay={<span>{tag.description}</span>} />
+        </>
+      ),
+      cancerType: cancerTypesName,
+      cancerTypeView: <span>{cancerTypesName}</span>,
+    });
+  }
+  return [fdaImplications, usedEvidenceIds];
+};
+
+export const getFdaImplicationsFromTags = (
+  tags: Tag[]
+): [FdaImplication[], number[]] => {
+  const implications: FdaImplication[] = [];
+  const ignoredEvidenceIds: number[] = [];
+  for (const tag of tags) {
+    const [imps, ids] = getFdaImplicationsFromTag(tag);
+    implications.push(...imps);
+    ignoredEvidenceIds.push(...ids);
+  }
+  return [implications, ignoredEvidenceIds];
 };
