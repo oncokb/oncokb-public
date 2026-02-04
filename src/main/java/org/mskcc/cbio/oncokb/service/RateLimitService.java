@@ -1,25 +1,29 @@
 package org.mskcc.cbio.oncokb.service;
 
-import io.github.bucket4j.Bandwidth;
-import io.github.bucket4j.Bucket;
-import io.github.bucket4j.BucketConfiguration;
-import io.github.jhipster.config.JHipsterProperties;
-import org.mskcc.cbio.oncokb.config.application.ApplicationProperties;
-import org.mskcc.cbio.oncokb.config.application.RateLimitProperties;
-import org.mskcc.cbio.oncokb.config.cache.CacheNameResolver;
-import org.mskcc.cbio.oncokb.config.cache.Buckert4jProxyManager;
-import org.redisson.config.Config;
-import org.redisson.config.ConfigSupport;
-import org.redisson.connection.ConnectionManager;
-import org.springframework.stereotype.Service;
-
 import java.time.Duration;
 import java.util.Map;
 import java.util.Optional;
 import java.util.concurrent.ConcurrentHashMap;
 
+import org.mskcc.cbio.oncokb.config.application.ApplicationProperties;
+import org.mskcc.cbio.oncokb.config.application.RateLimitProperties;
+import org.mskcc.cbio.oncokb.config.cache.Buckert4jProxyManager;
+import org.mskcc.cbio.oncokb.config.cache.CacheNameResolver;
+import org.redisson.config.Config;
+import org.redisson.config.ConfigSupport;
+import org.redisson.connection.ConnectionManager;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+import org.springframework.stereotype.Service;
+
+import io.github.bucket4j.Bandwidth;
+import io.github.bucket4j.Bucket;
+import io.github.bucket4j.BucketConfiguration;
+import io.github.jhipster.config.JHipsterProperties;
+
 @Service
 public class RateLimitService {
+    private static final Logger log = LoggerFactory.getLogger(RateLimitService.class);
     private static final String CACHE_KEY_PREFIX = "rate-limit-";
     private static final long DEFAULT_CAPACITY = 10L;
     private static final Duration DEFAULT_REFILL_PERIOD = Duration.ofSeconds(1);
@@ -54,6 +58,11 @@ public class RateLimitService {
         this.bucketConfiguration = BucketConfiguration.builder()
             .addLimit(this.bucketBandwidth)
             .build();
+
+        log.info("Rate limit bucket configured for capacity={} tokens with refill period={} (from config: {})",
+            configuredCapacity,
+            configuredRefillPeriod,
+            rateLimitProperties.isPresent());
 
         if (redissonConfigOptional.isPresent()) {
             ConnectionManager manager = ConfigSupport.createConnectionManager(redissonConfigOptional.get());
