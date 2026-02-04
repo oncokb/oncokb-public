@@ -155,7 +155,7 @@ For further instructions on how to develop with JHipster, have a look at [Using 
 
 2. Make your database changes
 
-   1. Create the script [Docs for more info](https://web.archive.org/web/20130326200820/http://liquibase.org/manual/maven_rollbacksql)
+   1. Create the script [Docs for more info](https://web.archive.org/web/20130326200820/http://liquibase.org/manual/maven_updatesql)
 
       ```sh
       # Generates a migration sql script
