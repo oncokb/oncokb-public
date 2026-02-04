@@ -121,7 +121,7 @@ For further instructions on how to develop with JHipster, have a look at [Using 
    `src/main/resources/config/liquibase/changelog/XXXXXXXXXXXXXX.xml`
 2. Add you `xml` file to the `src/main/resources/config/liquibase/master.xml` list.
 3. Update the `pom.xml` file with your database configurations
-4. Run the migration. [Docs for more info](https://web.archive.org/web/20120101085541/http://www.liquibase.org/manual/maven_update)
+4. Run the migration. [Docs for more info](https://web.archive.org/web/20120101085541/https://www.liquibase.org/manual/maven_update)
 
    ```sh
    ./mvnw liquibase:update
@@ -136,7 +136,7 @@ For further instructions on how to develop with JHipster, have a look at [Using 
    > I couldn't find a way to just make a script for a specific tag without doing
    > the rollback. Ideally we shouldn't need to rollback to create the sql script.
 
-   1. Create the script [Docs for more info](https://web.archive.org/web/20130326200820/http://liquibase.org/manual/maven_rollbacksql)
+   1. Create the script [Docs for more info](https://web.archive.org/web/20130326200820/https://liquibase.org/manual/maven_rollbacksql)
 
       ```sh
       # Generates a rollback sql script
@@ -155,7 +155,7 @@ For further instructions on how to develop with JHipster, have a look at [Using 
 
 2. Make your database changes
 
-   1. Create the script [Docs for more info](https://web.archive.org/web/20130326200820/http://liquibase.org/manual/maven_updatesql)
+   1. Create the script [Docs for more info](https://web.archive.org/web/20130326200820/https://liquibase.org/manual/maven_updatesql)
 
       ```sh
       # Generates a migration sql script
