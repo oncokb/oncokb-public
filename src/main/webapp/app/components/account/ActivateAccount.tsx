@@ -62,9 +62,14 @@ export default class ActivateAccount extends React.Component<{
 
           {!this.activateAccount.result && (
             <p>
-              We are reviewing your registration information and will contact
-              you about your account&apos;s approval status within two business
-              days.
+              We are currently reviewing your registration and will notify you
+              of your account approval status within two business days. In the
+              meantime, you have a two-week grace period to access the OncoKB
+              website while your application is under review.{' '}
+              <span>
+                You may now <Link to={PAGE_ROUTE.LOGIN}>log in</Link> to your{' '}
+                {ONCOKB_TM} account.
+              </span>
             </p>
           )}
           <MessageToContact

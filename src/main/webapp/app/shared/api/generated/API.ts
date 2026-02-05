@@ -150,6 +150,8 @@ export type MailTypeInfo = {
 export type ManagedUserVM = {
     'activated': boolean
 
+        'activationGracePeriodDaysRemaining': number
+
         'activationKey': string
 
         'additionalInfo': AdditionalInfoDTO
@@ -310,6 +312,8 @@ export type UserCompany = {
 };
 export type UserDTO = {
     'activated': boolean
+
+        'activationGracePeriodDaysRemaining': number
 
         'activationKey': string
 
