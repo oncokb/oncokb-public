@@ -30,6 +30,8 @@ public class RateLimitService {
 
     private final Bandwidth bucketBandwidth;
     private final BucketConfiguration bucketConfiguration;
+    private final long configuredCapacity;
+    private final Duration configuredRefillPeriod;
 
     // local bucket when redis is not available
     private final Map<String, Bucket> cache = new ConcurrentHashMap<>();
@@ -54,14 +56,16 @@ public class RateLimitService {
             configuredRefillPeriod = DEFAULT_REFILL_PERIOD;
         }
 
-        this.bucketBandwidth = Bandwidth.simple(configuredCapacity, configuredRefillPeriod);
+        this.configuredCapacity = configuredCapacity;
+        this.configuredRefillPeriod = configuredRefillPeriod;
+        this.bucketBandwidth = Bandwidth.simple(this.configuredCapacity, this.configuredRefillPeriod);
         this.bucketConfiguration = BucketConfiguration.builder()
             .addLimit(this.bucketBandwidth)
             .build();
 
         log.info("Rate limit bucket configured for capacity={} tokens with refill period={} (from config: {})",
-            configuredCapacity,
-            configuredRefillPeriod,
+            this.configuredCapacity,
+            this.configuredRefillPeriod,
             rateLimitProperties.isPresent());
 
         if (redissonConfigOptional.isPresent()) {
@@ -80,5 +84,13 @@ public class RateLimitService {
 
     private Bucket newBucket(String apiKey) {
         return Bucket.builder().addLimit(this.bucketBandwidth).build();
+    }
+
+    public long getConfiguredCapacity() {
+        return configuredCapacity;
+    }
+
+    public Duration getConfiguredRefillPeriod() {
+        return configuredRefillPeriod;
     }
 }
