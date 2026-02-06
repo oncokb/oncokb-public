@@ -55,7 +55,6 @@ public class RateLimitInterceptor implements HandlerInterceptor {
         return SecurityUtils.getCurrentUserLogin()
             .filter(StringUtils::isNotBlank)
             .filter(login -> !Constants.ANONYMOUS_USER.equalsIgnoreCase(login))
-            .filter(login -> !"anonymousUser".equalsIgnoreCase(login))
             .map(login -> "user:" + login)
             .orElseGet(() -> {
                 String address = request.getRemoteAddr();
