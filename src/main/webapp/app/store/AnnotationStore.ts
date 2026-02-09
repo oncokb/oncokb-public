@@ -227,7 +227,10 @@ export class AnnotationStore {
       if (matched.length > 0) {
         return matched[0].variant;
       }
-      return this.selectedAnnotationData.result.alteration;
+      if (!this.germline) {
+        return this.somaticAnnotationData.result.alteration;
+      }
+      return undefined;
     } catch (e) {
       notifyError(e, 'Error finding alteration');
       return undefined;
@@ -399,7 +402,11 @@ export class AnnotationStore {
   });
 
   readonly relevantAlterations = remoteData<Alteration[]>({
-    await: () => [this.gene, this.biologicalAlterations, this.selectedAnnotationData],
+    await: () => [
+      this.gene,
+      this.biologicalAlterations,
+      this.selectedAnnotationData,
+    ],
     invoke: async () => {
       if (!this.gene.result.entrezGeneId || !this.alteration) {
         return [];
@@ -445,8 +452,9 @@ export class AnnotationStore {
     default: DEFAULT_ANNOTATION,
   });
 
-  readonly defaultGermlineAnnotationResult =
-    remoteData<GermlineVariantAnnotation>({
+  readonly defaultGermlineAnnotationResult = remoteData<
+    GermlineVariantAnnotation
+  >({
     invoke() {
       return Promise.resolve(DEFAULT_GERMLINE_ANNOTATION);
     },
@@ -478,8 +486,9 @@ export class AnnotationStore {
     default: DEFAULT_ANNOTATION,
   });
 
-  readonly annotationResultByGenomicChange =
-    remoteData<SomaticVariantAnnotation>({
+  readonly annotationResultByGenomicChange = remoteData<
+    SomaticVariantAnnotation
+  >({
     await: () => [],
     invoke: () => {
       return privateClient.utilVariantAnnotationGetUsingGET({
@@ -504,8 +513,9 @@ export class AnnotationStore {
     default: DEFAULT_GERMLINE_ANNOTATION,
   });
 
-  readonly germlineAnnotationResultByHgvsg =
-    remoteData<GermlineVariantAnnotation>({
+  readonly germlineAnnotationResultByHgvsg = remoteData<
+    GermlineVariantAnnotation
+  >({
     await: () => [],
     invoke: () => {
       return privateClient.utilVariantAnnotationGermlineGetUsingGET({
@@ -517,8 +527,9 @@ export class AnnotationStore {
     default: DEFAULT_GERMLINE_ANNOTATION,
   });
 
-  readonly germlineAnnotationResultByGenomicChange =
-    remoteData<GermlineVariantAnnotation>({
+  readonly germlineAnnotationResultByGenomicChange = remoteData<
+    GermlineVariantAnnotation
+  >({
     await: () => [],
     invoke: () => {
       return privateClient.utilVariantAnnotationGermlineGetUsingGET({
@@ -706,8 +717,10 @@ export class AnnotationStore {
 
   @computed
   get annotationOncogenicity() {
-    const annotation = this.selectedAnnotationData.result;
-    return 'oncogenic' in annotation ? annotation.oncogenic : undefined;
+    if (!this.germline) {
+      return this.somaticAnnotationData.result.oncogenic;
+    }
+    return undefined;
   }
 
   @computed get cancerTypeFilter() {
