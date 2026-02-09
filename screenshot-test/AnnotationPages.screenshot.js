@@ -51,6 +51,8 @@ const tp53BiologicalVariants = fs.readFileSync(`${DATA_DIR}api-private-search-va
 const tp53ClinicalVariants = fs.readFileSync(`${DATA_DIR}api-private-search-variants-cli-TP53.json`).toString();
 const tp53DeletionVariantAnnotation = fs.readFileSync(`${DATA_DIR}api-private-utils-variantAnnotation-TP53-DELETION.json`).toString();
 const tp53DeletionQuery = fs.readFileSync(`${DATA_DIR}api-v1-variants-TP53-DELETION.json`).toString();
+const tp53GermlineVariantAnnotation = fs.readFileSync(`${DATA_DIR}api-private-utils-variantAnnotation-germline-TP53-c.1000G-C.json`).toString();
+const tp53GermlineVariantQuery = fs.readFileSync(`${DATA_DIR}api-v1-variants-TP53-c.1000G-C.json`).toString();
 
 // BRAF V600E shared API response data
 const brafGeneQuery = fs.readFileSync(`${DATA_DIR}api-v1-genes-BRAF.json`).toString();
@@ -79,6 +81,10 @@ const brafV600eHairyCellLeukemiaVariantAnnotation = fs.readFileSync(`${DATA_DIR}
 // BRAF V600E Melanoma Leukemia page - API response data
 // Mainly test the therapeutic/fda data for solid disease
 const brafV600eMelanomaVariantAnnotation = fs.readFileSync(`${DATA_DIR}api-private-utils-variantAnnotation-BRAF-V600E-MEL.json`).toString();
+
+const genomeNexusClinvarTp53 = fs.readFileSync(
+  `${DATA_DIR}genome-nexus-clinvar-TP53-c.1000G-C.json`
+).toString();
 
 // # Fix the time to expiration date.
 function updateTokenExpirationDate(current){
@@ -144,6 +150,13 @@ function getMockResponse(url){
         status: 200,
         contentType: 'application/json',
         body: numbersMain
+      };
+      break;
+    case `https://www.genomenexus.org/annotation/ENST00000269305:c.1000G%3EC?fields=clinvar`:
+      res = {
+        status: 200,
+        contentType: 'application/json',
+        body: genomeNexusClinvarTp53
       };
       break;
     case `${SERVER_URL}api/private/utils/numbers/levels/`:
@@ -262,6 +275,13 @@ function getMockResponse(url){
         body: tp53GeneNumbers
       };
       break;
+    case `${SERVER_URL}api/private/utils/numbers/gene/TP53?germline=true`:
+      res = {
+        status: 200,
+        contentType: 'application/json',
+        body: tp53GeneNumbers
+      };
+      break;
     case `${SERVER_URL}api/v1/genes/lookup?query=TP53`:
       res = {
         status: 200,
@@ -276,7 +296,21 @@ function getMockResponse(url){
         body: tp53BiologicalVariants
       };
       break;
+    case `${SERVER_URL}api/private/search/variants/biological?hugoSymbol=TP53&germline=true`:
+      res = {
+        status: 200,
+        contentType: 'application/json',
+        body: tp53BiologicalVariants
+      };
+      break;
     case `${SERVER_URL}api/private/search/variants/clinical?hugoSymbol=TP53&germline=false`:
+      res = {
+        status: 200,
+        contentType: 'application/json',
+        body: tp53ClinicalVariants
+      };
+      break;
+    case `${SERVER_URL}api/private/search/variants/clinical?hugoSymbol=TP53&germline=true`:
       res = {
         status: 200,
         contentType: 'application/json',
@@ -297,11 +331,32 @@ function getMockResponse(url){
         body: tp53DeletionVariantAnnotation
       };
       break;
+    case `${SERVER_URL}api/private/utils/variantAnnotation/germline?hugoSymbol=TP53&referenceGenome=GRCh37&alteration=c.1000G%3EC`:
+      res = {
+        status: 200,
+        contentType: 'application/json',
+        body: tp53GermlineVariantAnnotation
+      };
+      break;
+    case `${SERVER_URL}api/private/utils/variantAnnotation?hugoSymbol=TP53&referenceGenome=GRCh37&alteration=Deletion`:
+      res = {
+        status: 200,
+        contentType: 'application/json',
+        body: tp53DeletionVariantAnnotation
+      };
+      break;
     case `${SERVER_URL}api/v1/variants/lookup?hugoSymbol=TP53&variant=Deletion`:
       res = {
         status: 200,
         contentType: 'application/json',
         body: tp53DeletionQuery
+      };
+      break;
+    case `${SERVER_URL}api/v1/variants/lookup?hugoSymbol=TP53&variant=c.1000G%3EC`:
+      res = {
+        status: 200,
+        contentType: 'application/json',
+        body: tp53GermlineVariantQuery
       };
       break;
     case `${SERVER_URL}api/private/utils/relevantAlterations?referenceGenome=GRCh37&entrezGeneId=7157&alteration=Deletion`:
@@ -369,7 +424,21 @@ function getMockResponse(url){
         body: brafV600eMelanomaVariantAnnotation
       };
       break;
+    case `${SERVER_URL}api/private/utils/variantAnnotation?hugoSymbol=BRAF&referenceGenome=GRCh37&alteration=V600E&tumorType=MEL`:
+      res = {
+        status: 200,
+        contentType: 'application/json',
+        body: brafV600eMelanomaVariantAnnotation
+      };
+      break;
     case `${SERVER_URL}api/private/utils/variantAnnotation?hugoSymbol=BRAF&referenceGenome=GRCh37&alteration=V600E&tumorType=HCL&germline=false`:
+      res = {
+        status: 200,
+        contentType: 'application/json',
+        body: brafV600eHairyCellLeukemiaVariantAnnotation
+      };
+      break;
+    case `${SERVER_URL}api/private/utils/variantAnnotation?hugoSymbol=BRAF&referenceGenome=GRCh37&alteration=V600E&tumorType=HCL`:
       res = {
         status: 200,
         contentType: 'application/json',
@@ -462,6 +531,14 @@ describe('Tests with login', () => {
     await page.waitFor(WAITING_TIME);
     let image = await page.screenshot(getScreenshotConfig('Alteration Page with Login'));
     expect(image).toMatchImageSnapshot({ customSnapshotIdentifier: 'Alteration Page with Login' });
+  })
+
+  it('Alteration Page - Germline', async() => {
+    await page.goto(`${CLIENT_URL}gene/TP53/germline/c.1000G>C`);
+    await page.setViewport(VIEW_PORT_1080);
+    await page.waitFor(WAITING_TIME);
+    let image = await page.screenshot(getScreenshotConfig('Alteration Page - Germline TP53 with Login'));
+    expect(image).toMatchImageSnapshot({ customSnapshotIdentifier: 'Alteration Page - Germline TP53 with Login' });
   })
 
   it('Alteration Page with Cancer Type - Solid', async() => {
