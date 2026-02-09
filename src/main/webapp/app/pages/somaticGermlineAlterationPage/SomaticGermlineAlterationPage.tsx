@@ -77,10 +77,15 @@ import { SomaticGermlineAlterationTiles } from 'app/shared/tiles/tile-utils';
 import GeneticTypeTag from 'app/components/tag/GeneticTypeTag';
 import VariantOverView from 'app/shared/sections/VariantOverview';
 import GeneAdditionalInfoSection from 'app/shared/sections/GeneAdditionalInfoSection';
+import { Search } from ‘history’;
 
 type MatchParams = {
   hugoSymbol: string;
   alteration: string;
+};
+
+type SearchParams = {
+  refGenome: REFERENCE_GENOME;
 };
 
 type SomaticGermlineAlterationPageProps = {
@@ -105,19 +110,21 @@ export class SomaticGermlineAlterationPage extends React.Component<
   @observable showAdditionalGeneInfo = false;
 
   constructor(props: SomaticGermlineAlterationPageProps) {
-    super(props);
-    const alterationQuery = decodeSlash(props.match.params.alteration);
-    this.store = new AnnotationStore({
-      type: alterationQuery
-        ? AnnotationType.PROTEIN_CHANGE
-        : AnnotationType.GENE,
-      hugoSymbolQuery: props.match.params.hugoSymbol,
-      alterationQuery,
-      germline: this.geneticType === GENETIC_TYPE.GERMLINE,
-    });
-    if (this.store.cancerTypeName) {
-      this.showMutationEffect = false;
-    }
+      super(props);
+      const alterationQuery = decodeSlash(props.match.params.alteration);
+      const searchParams = QueryString.parse(props.location.search) as SearchParams;
+      this.store = new AnnotationStore({
+        type: alterationQuery
+          ? AnnotationType.PROTEIN_CHANGE
+          : AnnotationType.GENE,
+        hugoSymbolQuery: props.match.params.hugoSymbol,
+        alterationQuery,
+        germline: this.geneticType === GENETIC_TYPE.GERMLINE,
+        referenceGenomeQuery: searchParams.refGenome,
+      });
+      if (this.store.cancerTypeName) {
+        this.showMutationEffect = false;
+      }
 
     reaction(
       () => [props.location.hash],
