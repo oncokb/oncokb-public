@@ -72,7 +72,8 @@ public class ApiProxy {
             .map(api -> api.trim())
             .filter(api -> !api.isEmpty())
             .collect(Collectors.toList());
-        tokenUsageCheckWhitelist = Arrays.stream(applicationProperties.getTokenUsageCheckWhitelist().split(","))
+        tokenUsageCheckWhitelist = Arrays.stream(Optional.ofNullable(applicationProperties.getTokenUsageCheckWhitelist()).orElse("")
+                .split(","))
             .map(api -> api.trim())
             .filter(api -> !api.isEmpty())
             .collect(Collectors.toList());
