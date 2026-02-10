@@ -1982,6 +1982,22 @@
         }
       }
     },
+    "OncogenicityEntity": {
+      "type": "object",
+      "properties": {
+        "oncogenicity": {
+          "type": "string",
+          "enum": [
+            "YES",
+            "LIKELY",
+            "LIKELY_NEUTRAL",
+            "INCONCLUSIVE",
+            "RESISTANCE",
+            "UNKNOWN"
+          ]
+        }
+      }
+    },
     "Query": {
       "type": "object",
       "properties": {
@@ -3069,6 +3085,12 @@
             "NO"
           ]
         },
+        "tags": {
+          "type": "array",
+          "items": {
+            "$ref": "#/definitions/Tag"
+          }
+        },
         "treatments": {
           "type": "array",
           "items": {
@@ -3578,6 +3600,20 @@
         }
       }
     },
+    "MutationTypeEntity": {
+      "type": "object",
+      "properties": {
+        "mutationType": {
+          "type": "string",
+          "enum": [
+            "MISSENSE",
+            "INSERTION",
+            "DELETION",
+            "OTHER"
+          ]
+        }
+      }
+    },
     "MutationEffectResp": {
       "type": "object",
       "properties": {
@@ -3717,20 +3753,34 @@
         }
       }
     },
-    "Tag": {
+     "Tag": {
       "type": "object",
       "properties": {
         "description": {
           "type": "string"
         },
-        "evidences": {
+        "end": {
+          "type": "integer",
+          "format": "int32"
+        },
+        "mutationTypes": {
           "type": "array",
           "items": {
-            "$ref": "#/definitions/Evidence"
+            "$ref": "#/definitions/MutationTypeEntity"
           }
         },
         "name": {
           "type": "string"
+        },
+        "oncogenicities": {
+          "type": "array",
+          "items": {
+            "$ref": "#/definitions/OncogenicityEntity"
+          }
+        },
+        "start": {
+          "type": "integer",
+          "format": "int32"
         }
       }
     },

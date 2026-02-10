@@ -23,6 +23,10 @@ export type TreatmentDrug = {
         'treatmentDrugId': TreatmentDrugId
 
 };
+export type OncogenicityEntity = {
+    'oncogenicity': "YES" | "LIKELY" | "LIKELY_NEUTRAL" | "INCONCLUSIVE" | "RESISTANCE" | "UNKNOWN"
+
+};
 export type Query = {
     'alleleState': string
 
@@ -265,6 +269,8 @@ export type Evidence = {
         'relevantCancerTypes': Array < TumorType >
 
         'solidPropagationLevel': "LEVEL_1" | "LEVEL_2" | "LEVEL_3A" | "LEVEL_3B" | "LEVEL_4" | "LEVEL_R1" | "LEVEL_R2" | "LEVEL_Px1" | "LEVEL_Px2" | "LEVEL_Px3" | "LEVEL_Dx1" | "LEVEL_Dx2" | "LEVEL_Dx3" | "LEVEL_Fda1" | "LEVEL_Fda2" | "LEVEL_Fda3" | "NO"
+
+        'tags': Array < Tag >
 
         'treatments': Array < Treatment >
 
@@ -653,6 +659,10 @@ export type VariantSearchQuery = {
         'variantType': string
 
 };
+export type MutationTypeEntity = {
+    'mutationType': "MISSENSE" | "INSERTION" | "DELETION" | "OTHER"
+
+};
 export type MutationEffectResp = {
     'citations': Citations
 
@@ -693,6 +703,20 @@ export type AnnotateMutationByHGVSgQuery = {
         'referenceGenome': "GRCh37" | "GRCh38"
 
         'tumorType': string
+
+};
+export type Tag = {
+    'description': string
+
+        'end': number
+
+        'mutationTypes': Array < MutationTypeEntity >
+
+        'name': string
+
+        'oncogenicities': Array < OncogenicityEntity >
+
+        'start': number
 
 };
 export type Geneset = {
