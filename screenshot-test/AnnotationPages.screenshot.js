@@ -53,6 +53,7 @@ const tp53DeletionVariantAnnotation = fs.readFileSync(`${DATA_DIR}api-private-ut
 const tp53DeletionQuery = fs.readFileSync(`${DATA_DIR}api-v1-variants-TP53-DELETION.json`).toString();
 const tp53GermlineVariantAnnotation = fs.readFileSync(`${DATA_DIR}api-private-utils-variantAnnotation-germline-TP53-c.1000G-C.json`).toString();
 const tp53GermlineVariantQuery = fs.readFileSync(`${DATA_DIR}api-v1-variants-TP53-c.1000G-C.json`).toString();
+const tp53GenomicIndicators = fs.readFileSync(`${DATA_DIR}api-v1-evidences-TP53-genomic-indicator.json`).toString();
 
 // BRAF V600E shared API response data
 const brafGeneQuery = fs.readFileSync(`${DATA_DIR}api-v1-genes-BRAF.json`).toString();
@@ -229,6 +230,13 @@ function getMockResponse(url){
         status: 200,
         contentType: 'application/json',
         body: ros1EvidenceBackground
+      };
+      break;
+    case `${SERVER_URL}api/v1/evidences/lookup?hugoSymbol=TP53&evidenceTypes=GENOMIC_INDICATOR&germline=true`:
+      res = {
+        status: 200,
+        contentType: 'application/json',
+        body: tp53GenomicIndicators
       };
       break;
     case `https://www.genomenexus.org//ensembl/transcript`:
