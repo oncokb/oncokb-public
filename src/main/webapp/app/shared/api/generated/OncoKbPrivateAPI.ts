@@ -1585,6 +1585,96 @@ export default class OncoKbPrivateAPI {
                 return response.body;
             });
         };
+    getTagByHugoSymbolAndNameUsingGETURL(parameters: {
+        'hugoSymbol': string,
+        'name': string,
+        $queryParameters ? : any
+    }): string {
+        let queryParameters: any = {};
+        let path = '/tags/{hugoSymbol}/{name}';
+
+        path = path.replace('{hugoSymbol}', parameters['hugoSymbol'] + '');
+
+        path = path.replace('{name}', parameters['name'] + '');
+
+        if (parameters.$queryParameters) {
+            Object.keys(parameters.$queryParameters).forEach(function(parameterName) {
+                var parameter = parameters.$queryParameters[parameterName];
+                queryParameters[parameterName] = parameter;
+            });
+        }
+        let keys = Object.keys(queryParameters);
+        return this.domain + path + (keys.length > 0 ? '?' + (keys.map(key => key + '=' + encodeURIComponent(queryParameters[key])).join('&')) : '');
+    };
+
+    /**
+     * getTagByHugoSymbolAndName
+     * @method
+     * @name OncoKbPrivateAPI#getTagByHugoSymbolAndNameUsingGET
+     * @param {string} hugoSymbol - hugoSymbol
+     * @param {string} name - name
+     */
+    getTagByHugoSymbolAndNameUsingGETWithHttpInfo(parameters: {
+        'hugoSymbol': string,
+        'name': string,
+        $queryParameters ? : any,
+        $domain ? : string
+    }): Promise < request.Response > {
+        const domain = parameters.$domain ? parameters.$domain : this.domain;
+        const errorHandlers = this.errorHandlers;
+        const request = this.request;
+        let path = '/tags/{hugoSymbol}/{name}';
+        let body: any;
+        let queryParameters: any = {};
+        let headers: any = {};
+        let form: any = {};
+        return new Promise(function(resolve, reject) {
+            headers['Accept'] = 'application/json';
+            headers['Content-Type'] = 'application/json';
+
+            path = path.replace('{hugoSymbol}', parameters['hugoSymbol'] + '');
+
+            if (parameters['hugoSymbol'] === undefined) {
+                reject(new Error('Missing required  parameter: hugoSymbol'));
+                return;
+            }
+
+            path = path.replace('{name}', parameters['name'] + '');
+
+            if (parameters['name'] === undefined) {
+                reject(new Error('Missing required  parameter: name'));
+                return;
+            }
+
+            if (parameters.$queryParameters) {
+                Object.keys(parameters.$queryParameters).forEach(function(parameterName) {
+                    var parameter = parameters.$queryParameters[parameterName];
+                    queryParameters[parameterName] = parameter;
+                });
+            }
+
+            request('GET', domain + path, body, headers, queryParameters, form, reject, resolve, errorHandlers);
+
+        });
+    };
+
+    /**
+     * getTagByHugoSymbolAndName
+     * @method
+     * @name OncoKbPrivateAPI#getTagByHugoSymbolAndNameUsingGET
+     * @param {string} hugoSymbol - hugoSymbol
+     * @param {string} name - name
+     */
+    getTagByHugoSymbolAndNameUsingGET(parameters: {
+        'hugoSymbol': string,
+        'name': string,
+        $queryParameters ? : any,
+        $domain ? : string
+    }): Promise < Tag > {
+        return this.getTagByHugoSymbolAndNameUsingGETWithHttpInfo(parameters).then(function(response: request.Response) {
+            return response.body;
+        });
+    };
     getTranscriptUsingGETURL(parameters: {
         'hugoSymbol': string,
         $queryParameters ? : any
