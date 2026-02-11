@@ -3753,7 +3753,7 @@
         }
       }
     },
-     "Tag": {
+    "Tag": {
       "type": "object",
       "properties": {
         "description": {
@@ -3762,6 +3762,12 @@
         "end": {
           "type": "integer",
           "format": "int32"
+        },
+        "evidences": {
+          "type": "array",
+          "items": {
+            "$ref": "#/definitions/Evidence"
+          }
         },
         "mutationTypes": {
           "type": "array",

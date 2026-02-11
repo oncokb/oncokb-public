@@ -4231,6 +4231,12 @@
           "type": "integer",
           "format": "int32"
         },
+        "evidences": {
+          "type": "array",
+          "items": {
+            "$ref": "#/definitions/Evidence"
+          }
+        },
         "mutationTypes": {
           "type": "array",
           "items": {

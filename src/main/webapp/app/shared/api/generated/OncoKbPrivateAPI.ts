@@ -728,6 +728,8 @@ export type Tag = {
 
         'end': number
 
+        'evidences': Array < Evidence >
+
         'mutationTypes': Array < MutationTypeEntity >
 
         'name': string
