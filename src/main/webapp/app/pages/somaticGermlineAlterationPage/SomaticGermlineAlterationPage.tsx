@@ -170,34 +170,7 @@ export class SomaticGermlineAlterationPage extends React.Component<
   }
 
   componentDidUpdate(prevProps: SomaticGermlineAlterationPageProps) {
-    // eslint-disable-next-line no-console
-    console.log('Prev search:', prevProps.location.search);
-    // eslint-disable-next-line no-console
-    console.log('Current search:', this.props.location.search);
-
     this.updateQuery(prevProps);
-
-    if (this.props.location.search !== prevProps.location.search) {
-      const searchParams = QueryString.parse(
-        this.props.location.search
-      ) as SearchParams;
-
-      // eslint-disable-next-line no-console
-      console.log('Parsed searchParams:', searchParams);
-      // eslint-disable-next-line no-console
-      console.log('searchParams.refGenome:', searchParams.refGenome);
-
-      if (searchParams.refGenome) {
-        // eslint-disable-next-line no-console
-        console.log('Setting referenceGenomeQuery to:', searchParams.refGenome);
-        this.store.referenceGenomeQuery = searchParams.refGenome;
-      }
-    }
-    // eslint-disable-next-line no-console
-    console.log(
-      'Final store.referenceGenomeQuery:',
-      this.store.referenceGenomeQuery
-    );
   }
 
   @computed
