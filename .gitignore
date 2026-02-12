@@ -4,8 +4,6 @@
 /src/main/webapp/content/css/main.css
 /target/classes/static/**
 /src/test/javascript/coverage/
-/webpack/webpack.dev.js
-/src/main/resources/config/application-dev.yml
 
 ######################
 # Node

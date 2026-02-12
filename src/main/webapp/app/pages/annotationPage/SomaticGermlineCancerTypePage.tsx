@@ -82,6 +82,10 @@ type MatchParams = {
   tumorType: string;
 };
 
+type SearchParams = {
+  refGenome: REFERENCE_GENOME;
+};
+
 type SomaticGermlineCancerTypePageProps = {
   appStore: AppStore;
   windowStore: WindowStore;
@@ -106,6 +110,9 @@ export class SomaticGermlineCancerTypePage extends React.Component<
   constructor(props: SomaticGermlineCancerTypePageProps) {
     super(props);
     const alterationQuery = decodeSlash(props.match.params.alteration);
+    const searchParams = QueryString.parse(
+      props.location.search
+    ) as SearchParams;
 
     reaction(
       () => [this.props.routing.location.pathname],
@@ -128,6 +135,7 @@ export class SomaticGermlineCancerTypePage extends React.Component<
             tumorTypeQuery: props.match.params.tumorType
               ? decodeSlash(props.match.params.tumorType)
               : props.match.params.tumorType,
+            referenceGenomeQuery: searchParams.refGenome,
           });
           if (this.store.cancerTypeName) {
             this.showMutationEffect = false;
@@ -582,9 +590,7 @@ export class SomaticGermlineCancerTypePage extends React.Component<
                     }}
                     appStore={this.props.appStore}
                     alteration={this.store.alterationNameWithDiff}
-                    proteinAlteration={
-                      this.store.alteration?.proteinChange
-                    }
+                    proteinAlteration={this.store.alteration?.proteinChange}
                     isGermline={this.store.germline}
                     extra={
                       <SomaticGermlineCancerTypeSelect

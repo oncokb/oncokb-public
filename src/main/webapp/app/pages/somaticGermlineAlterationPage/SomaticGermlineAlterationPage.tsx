@@ -77,7 +77,6 @@ import { SomaticGermlineAlterationTiles } from 'app/shared/tiles/tile-utils';
 import GeneticTypeTag from 'app/components/tag/GeneticTypeTag';
 import VariantOverView from 'app/shared/sections/VariantOverview';
 import GeneAdditionalInfoSection from 'app/shared/sections/GeneAdditionalInfoSection';
-import { Search } from ‘history’;
 
 type MatchParams = {
   hugoSymbol: string;
@@ -112,7 +111,9 @@ export class SomaticGermlineAlterationPage extends React.Component<
   constructor(props: SomaticGermlineAlterationPageProps) {
     super(props);
     const alterationQuery = decodeSlash(props.match.params.alteration);
-    const searchParams = QueryString.parse(props.location.search) as SearchParams;
+    const searchParams = QueryString.parse(
+      props.location.search
+    ) as SearchParams;
     this.store = new AnnotationStore({
       type: alterationQuery
         ? AnnotationType.PROTEIN_CHANGE
@@ -169,7 +170,34 @@ export class SomaticGermlineAlterationPage extends React.Component<
   }
 
   componentDidUpdate(prevProps: SomaticGermlineAlterationPageProps) {
+    // eslint-disable-next-line no-console
+    console.log('Prev search:', prevProps.location.search);
+    // eslint-disable-next-line no-console
+    console.log('Current search:', this.props.location.search);
+
     this.updateQuery(prevProps);
+
+    if (this.props.location.search !== prevProps.location.search) {
+      const searchParams = QueryString.parse(
+        this.props.location.search
+      ) as SearchParams;
+
+      // eslint-disable-next-line no-console
+      console.log('Parsed searchParams:', searchParams);
+      // eslint-disable-next-line no-console
+      console.log('searchParams.refGenome:', searchParams.refGenome);
+
+      if (searchParams.refGenome) {
+        // eslint-disable-next-line no-console
+        console.log('Setting referenceGenomeQuery to:', searchParams.refGenome);
+        this.store.referenceGenomeQuery = searchParams.refGenome;
+      }
+    }
+    // eslint-disable-next-line no-console
+    console.log(
+      'Final store.referenceGenomeQuery:',
+      this.store.referenceGenomeQuery
+    );
   }
 
   @computed
@@ -587,9 +615,7 @@ export class SomaticGermlineAlterationPage extends React.Component<
                     }}
                     appStore={this.props.appStore}
                     alteration={this.store.alterationNameWithDiff}
-                    proteinAlteration={
-                      this.store.alteration?.proteinChange
-                    }
+                    proteinAlteration={this.store.alteration?.proteinChange}
                     isGermline={this.store.germline}
                   />
                   <GeneAdditionalInfoSection
