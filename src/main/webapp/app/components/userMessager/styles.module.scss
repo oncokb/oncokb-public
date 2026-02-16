@@ -18,13 +18,25 @@
   }
   .messageContainer {
     display: flex;
-    justify-content: space-between;
+    justify-content: center;
     align-items: center;
+    margin: 0 auto;
+    position: relative;
+    padding: 0 2rem;
+  }
+
+  .messageText {
     max-width: 80ch;
+    margin: 0 auto;
+    text-align: center;
   }
 
   i.close {
     cursor: pointer;
+    position: absolute;
+    right: 0.75rem;
+    top: 50%;
+    transform: translateY(-50%);
   }
 }
 

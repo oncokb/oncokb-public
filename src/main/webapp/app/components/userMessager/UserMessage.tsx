@@ -116,7 +116,7 @@ export function UserBannerMessage({
       })}
     >
       <Container fluid={!isXLscreen} className={styles.messageContainer}>
-        <div>{renderBannerContent(content)}</div>
+        <div className={styles.messageText}>{renderBannerContent(content)}</div>
         <i
           className={classNames(styles.close, 'fa', 'fa-close')}
           onClick={onDismiss}
