@@ -4,7 +4,10 @@ import org.mskcc.cbio.oncokb.OncokbPublicApp;
 import org.mskcc.cbio.oncokb.config.Constants;
 import org.mskcc.cbio.oncokb.domain.Token;
 import org.mskcc.cbio.oncokb.domain.User;
+import org.mskcc.cbio.oncokb.domain.UserDetails;
+import org.mskcc.cbio.oncokb.domain.enumeration.AccountRequestStatus;
 import org.mskcc.cbio.oncokb.domain.enumeration.LicenseType;
+import org.mskcc.cbio.oncokb.repository.UserDetailsRepository;
 import org.mskcc.cbio.oncokb.repository.UserRepository;
 import org.mskcc.cbio.oncokb.service.dto.UserDTO;
 import org.mskcc.cbio.oncokb.service.dto.useradditionalinfo.AdditionalInfoDTO;
@@ -64,6 +67,9 @@ public class UserServiceIT {
 
     @Autowired
     private UserRepository userRepository;
+
+    @Autowired
+    private UserDetailsRepository userDetailsRepository;
 
     @Autowired
     private UserService userService;
@@ -218,6 +224,66 @@ public class UserServiceIT {
         assertThat(tokens.stream()
             .allMatch(token -> token.isRenewable().equals(false)))
             .isTrue();
+    }
+
+    @Test
+    @Transactional
+    public void assertThatActivateRegistrationKeepsPendingAccountRequestStatus() {
+        User pendingUser = new User();
+        pendingUser.setLogin("pending-activation-" + UUID.randomUUID().toString().substring(0, 8));
+        pendingUser.setPassword(RandomStringUtils.random(60));
+        pendingUser.setActivated(false);
+        pendingUser.setEmail("pending-" + UUID.randomUUID().toString().substring(0, 8) + "@example.com");
+        pendingUser.setFirstName("pending");
+        pendingUser.setLastName("user");
+        pendingUser.setImageUrl(DEFAULT_IMAGEURL);
+        pendingUser.setLangKey(DEFAULT_LANGKEY);
+        String activationKey = RandomUtil.generateActivationKey();
+        pendingUser.setActivationKey(activationKey);
+        pendingUser = userRepository.saveAndFlush(pendingUser);
+
+        UserDetails pendingUserDetails = new UserDetails();
+        pendingUserDetails.setUser(pendingUser);
+        pendingUserDetails.setAccountRequestStatus(AccountRequestStatus.PENDING);
+        userDetailsRepository.saveAndFlush(pendingUserDetails);
+
+        Optional<User> activatedUser = userService.activateRegistration(activationKey);
+        assertThat(activatedUser).isPresent();
+        assertThat(activatedUser.get().getActivationKey()).isNull();
+        assertThat(activatedUser.get().getActivated()).isFalse();
+
+        Optional<UserDetails> updatedUserDetails = userDetailsRepository.findOneByUser(activatedUser.get());
+        assertThat(updatedUserDetails).isPresent();
+        assertThat(updatedUserDetails.get().getAccountRequestStatus()).isEqualTo(AccountRequestStatus.PENDING);
+    }
+
+    @Test
+    @Transactional
+    public void assertThatApproveUserSetsApprovedAccountRequestStatus() {
+        User pendingUser = new User();
+        pendingUser.setLogin("pending-approval-" + UUID.randomUUID().toString().substring(0, 8));
+        pendingUser.setPassword(RandomStringUtils.random(60));
+        pendingUser.setActivated(false);
+        pendingUser.setEmail("approval-" + UUID.randomUUID().toString().substring(0, 8) + "@example.com");
+        pendingUser.setFirstName("pending");
+        pendingUser.setLastName("approval");
+        pendingUser.setImageUrl(DEFAULT_IMAGEURL);
+        pendingUser.setLangKey(DEFAULT_LANGKEY);
+        pendingUser = userRepository.saveAndFlush(pendingUser);
+
+        UserDetails pendingUserDetails = new UserDetails();
+        pendingUserDetails.setUser(pendingUser);
+        pendingUserDetails.setAccountRequestStatus(AccountRequestStatus.PENDING);
+        userDetailsRepository.saveAndFlush(pendingUserDetails);
+
+        Optional<UserDTO> approvedUserDTO = userService.approveUser(userMapper.userToUserDTO(pendingUser), false);
+        assertThat(approvedUserDTO).isPresent();
+        assertThat(approvedUserDTO.get().isActivated()).isTrue();
+
+        User updatedUser = userRepository.findById(pendingUser.getId()).get();
+        Optional<UserDetails> updatedUserDetails = userDetailsRepository.findOneByUser(updatedUser);
+        assertThat(updatedUserDetails).isPresent();
+        assertThat(updatedUserDetails.get().getAccountRequestStatus()).isEqualTo(AccountRequestStatus.APPROVED);
     }
 
     @Test
@@ -478,5 +544,55 @@ public class UserServiceIT {
             new Pair<>("Anthony", "Gal")
         );
         testDuplicates(originalUserName, similarNames, dissimilarNames);
+    }
+
+    @Test
+    @Transactional
+    public void testUpdateUserBeforeTrialAccountActivationPersistsActivatedState() {
+        // Create a user
+        User testUser = new User();
+        testUser.setLogin("trial-activation-test");
+        testUser.setEmail("trial-test@example.com");
+        testUser.setPassword(RandomStringUtils.random(60));
+        testUser.setActivated(false);
+        testUser.setFirstName("Test");
+        testUser.setLastName("User");
+        testUser.setLangKey(Constants.DEFAULT_LANGUAGE);
+
+        User savedUser = userRepository.saveAndFlush(testUser);
+
+        // Initiate trial activation
+        Optional<User> initiatedUser = userService.initiateTrialAccountActivation(savedUser.getLogin());
+        assertThat(initiatedUser).isPresent();
+
+        // Create UserDTO for updating
+        UserDTO userDTO = userMapper.userToUserDTO(initiatedUser.get());
+        userDTO.setLicenseType(LicenseType.ACADEMIC);
+
+        // Call updateUserBeforeTrialAccountActivation (simulates the flow where the bug was)
+        Optional<UserDTO> result = userService.updateUserBeforeTrialAccountActivation(userDTO);
+
+        // Verify the result UserDTO
+        assertThat(result).isPresent();
+        UserDTO resultDTO = result.get();
+        assertThat(resultDTO.isActivated()).isFalse();
+        assertThat(resultDTO.getLogin()).isEqualTo("trial-activation-test");
+        assertThat(resultDTO.getEmail()).isEqualTo("trial-test@example.com");
+        assertThat(resultDTO.getFirstName()).isEqualTo("Test");
+        assertThat(resultDTO.getLastName()).isEqualTo("User");
+        assertThat(resultDTO.getLicenseType()).isEqualTo(LicenseType.ACADEMIC);
+        assertThat(resultDTO.getAdditionalInfo()).isNotNull();
+        assertThat(resultDTO.getAdditionalInfo().getTrialAccount()).isNotNull();
+
+        // Critical assertion: Reload user from database to verify activation state is persisted
+        Optional<User> reloadedUser = userRepository.findOneWithAuthoritiesByLogin("trial-activation-test");
+        assertThat(reloadedUser).isPresent();
+        assertThat(reloadedUser.get().getActivated())
+            .withFailMessage("User activation state must be persisted to database, not just set in memory")
+            .isFalse();
+        assertThat(reloadedUser.get().getLogin()).isEqualTo("trial-activation-test");
+        assertThat(reloadedUser.get().getEmail()).isEqualTo("trial-test@example.com");
+        assertThat(reloadedUser.get().getFirstName()).isEqualTo("Test");
+        assertThat(reloadedUser.get().getLastName()).isEqualTo("User");
     }
 }

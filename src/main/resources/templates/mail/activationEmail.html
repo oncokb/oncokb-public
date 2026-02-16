@@ -18,7 +18,8 @@
             th:text="${url}">Verification link</a>
         </p>
         <p>
-          After validating your email address, please allow 1-2 business days for us to review your request. Thank you for your patience.
+          After validating your email address, please allow 1-2 business days for us to review your request. In the meantime, you can access the OncoKB website during your
+          <span th:text="${activationGracePeriodDays}"></span>-day grace period. Thank you for your patience.
         </p>
         <p>
             <div th:text="#{email.closing}">Sincerely, </div>
