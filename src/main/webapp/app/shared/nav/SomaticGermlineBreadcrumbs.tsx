@@ -14,12 +14,14 @@ export default function SomaticGermlineBreadcrumbs({
   alterationName,
   cancerTypeName,
   germline,
+  isTag = false,
 }: {
   hugoSymbol: string;
   alterationNameWithDiff: string;
   alterationName: string;
   cancerTypeName: string | undefined;
   germline?: boolean;
+  isTag?: boolean;
 }) {
   const breadcrumbs: (
     | ITextBreadcrumb
@@ -44,6 +46,7 @@ export default function SomaticGermlineBreadcrumbs({
         hugoSymbol,
         alteration: alterationName,
         germline,
+        isTag,
       }),
     } as ILinkBreadcrumb,
   ];

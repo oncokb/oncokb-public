@@ -361,7 +361,7 @@ export class AnnotationStore {
   readonly tags = remoteData<Tag[]>({
     await: () => [],
     invoke: async () => {
-      if (!this.gene.result.entrezGeneId) {
+      if (this.germline || !this.gene.result.entrezGeneId) {
         return [];
       }
       return await privateClient.getTagsByEntrezGeneIdUsingGET({
@@ -886,7 +886,7 @@ export class AnnotationStore {
   @computed
   get filteredTags() {
     if (!this.isFiltered) {
-      return this.tags.result;
+      return this.tags.result; // TODO
     }
     return this.tags.result;
   }

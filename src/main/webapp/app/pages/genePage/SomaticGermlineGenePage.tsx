@@ -161,22 +161,18 @@ export default class SomaticGermlineGenePage extends React.Component<
   }
 
   @computed
-  get txTagsAndIgnoredEvidenceIds() {
+  get tagTxImplications() {
     return getImplicationsFromTags(
       this.store.tags.result,
-      TREATMENT_EVIDENCE_TYPES
+      TREATMENT_EVIDENCE_TYPES,
+      this.store.hugoSymbol
     );
   }
 
   getClinicalImplications(
-    clinicalVariants: ClinicalVariant[],
-    ignoredEvidenceIds: number[] = []
+    clinicalVariants: ClinicalVariant[]
   ): TherapeuticImplication[] {
     return clinicalVariants.reduce((acc, variant) => {
-      if (ignoredEvidenceIds.includes(variant.evidenceId)) {
-        return acc;
-      }
-
       const cancerTypeNames = variant.cancerTypes.map(cancerType =>
         getCancerTypeNameFromOncoTreeType(cancerType)
       );
@@ -273,16 +269,8 @@ export default class SomaticGermlineGenePage extends React.Component<
   }
 
   getFdaImplication(clinicalVariants: ClinicalVariant[]): FdaImplication[] {
-    const [tagImplications, ignoredEvidenceIds] = getFdaImplicationsFromTags(
-      this.store.tags.result
-    );
-
     const fdaImplications: FdaImplication[] = [];
     clinicalVariants.forEach(clinicalVariant => {
-      if (ignoredEvidenceIds.includes(clinicalVariant.evidenceId)) {
-        return;
-      }
-
       let variants: ClinicalVariant[] = [clinicalVariant];
       // we want to link all oncogenic mutations with Oncogenic Mutations clinical variant
       if (clinicalVariant.variant.name === ONCOGENIC_MUTATIONS) {
@@ -351,7 +339,7 @@ export default class SomaticGermlineGenePage extends React.Component<
         });
       });
     });
-    return getUniqueFdaImplications([...tagImplications, ...fdaImplications]);
+    return getUniqueFdaImplications(fdaImplications);
   }
 
   @computed
@@ -366,10 +354,12 @@ export default class SomaticGermlineGenePage extends React.Component<
   }
 
   @computed
-  get dxTagsAndIgnoredEvidenceIds() {
-    return getImplicationsFromTags(this.store.tags.result, [
-      EVIDENCE_TYPES.DIAGNOSTIC_IMPLICATION,
-    ]);
+  get tagDxImplications() {
+    return getImplicationsFromTags(
+      this.store.tags.result,
+      [EVIDENCE_TYPES.DIAGNOSTIC_IMPLICATION],
+      this.store.hugoSymbol
+    );
   }
 
   @computed
@@ -384,10 +374,20 @@ export default class SomaticGermlineGenePage extends React.Component<
   }
 
   @computed
-  get pxTagsAndIgnoredEvidenceIds() {
-    return getImplicationsFromTags(this.store.tags.result, [
-      EVIDENCE_TYPES.PROGNOSTIC_IMPLICATION,
-    ]);
+  get tagPxImplications() {
+    return getImplicationsFromTags(
+      this.store.tags.result,
+      [EVIDENCE_TYPES.PROGNOSTIC_IMPLICATION],
+      this.store.hugoSymbol
+    );
+  }
+
+  @computed
+  get tagFdaImplications() {
+    return getFdaImplicationsFromTags(
+      this.store.tags.result,
+      this.store.hugoSymbol
+    );
   }
 
   @computed
@@ -396,9 +396,9 @@ export default class SomaticGermlineGenePage extends React.Component<
       this.filteredTxAlterations.length > 0 ||
       this.filteredDxAlterations.length > 0 ||
       this.filteredPxAlterations.length > 0 ||
-      this.txTagsAndIgnoredEvidenceIds[0].length > 0 ||
-      this.pxTagsAndIgnoredEvidenceIds[0].length > 0 ||
-      this.dxTagsAndIgnoredEvidenceIds[0].length > 0
+      this.tagTxImplications.length > 0 ||
+      this.tagDxImplications.length > 0 ||
+      this.tagPxImplications.length > 0
     );
   }
 
@@ -863,32 +863,29 @@ export default class SomaticGermlineGenePage extends React.Component<
                                         hugoSymbol={this.store.hugoSymbol}
                                         biological={[]}
                                         tx={[
-                                          ...this
-                                            .txTagsAndIgnoredEvidenceIds[0],
+                                          ...this.tagTxImplications,
                                           ...this.getClinicalImplications(
-                                            this.filteredTxAlterations,
-                                            this.txTagsAndIgnoredEvidenceIds[1]
+                                            this.filteredTxAlterations
                                           ),
                                         ]}
                                         dx={[
-                                          ...this
-                                            .dxTagsAndIgnoredEvidenceIds[0],
+                                          ...this.tagDxImplications,
                                           ...this.getClinicalImplications(
-                                            this.filteredDxAlterations,
-                                            this.dxTagsAndIgnoredEvidenceIds[1]
+                                            this.filteredDxAlterations
                                           ),
                                         ]}
                                         px={[
-                                          ...this
-                                            .pxTagsAndIgnoredEvidenceIds[0],
+                                          ...this.tagPxImplications,
                                           ...this.getClinicalImplications(
-                                            this.filteredPxAlterations,
-                                            this.pxTagsAndIgnoredEvidenceIds[1]
+                                            this.filteredPxAlterations
                                           ),
                                         ]}
-                                        fda={this.getFdaImplication(
-                                          this.filteredTxAlterations
-                                        )}
+                                        fda={[
+                                          ...this.tagFdaImplications,
+                                          ...this.getFdaImplication(
+                                            this.filteredTxAlterations
+                                          ),
+                                        ]}
                                         onChangeTab={this.onChangeTab}
                                       />
                                     </>

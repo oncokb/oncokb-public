@@ -18,8 +18,6 @@ import {
   articles2Citations,
   isCategoricalAlteration,
   isPositionalAlteration,
-  getImplicationsFromTags,
-  getFdaImplicationsFromTags,
 } from 'app/shared/utils/Utils';
 import {
   getAlterationPageLink,
@@ -221,12 +219,8 @@ export class SomaticGermlineCancerTypePage extends React.Component<
     this.store.tumorTypeQuery = newTumorType;
   }
 
-  getImplications(evidences: Evidence[], ignoredEvidenceIds: number[] = []) {
+  getImplications(evidences: Evidence[]) {
     return evidences.reduce((acc, evidence) => {
-      if (ignoredEvidenceIds.includes(evidence.id)) {
-        return acc;
-      }
-
       const level = levelOfEvidence2Level(evidence.levelOfEvidence);
       const fdaLevel = levelOfEvidence2Level(evidence.fdaLevel);
       const alterations = evidence.alterations.filter(alteration =>
@@ -378,39 +372,22 @@ export class SomaticGermlineCancerTypePage extends React.Component<
 
   @computed
   get therapeuticImplications(): TherapeuticImplication[] {
-    const [tagImplications, ignoredEvidenceIds] = getImplicationsFromTags(
-      this.store.tags.result,
-      TREATMENT_EVIDENCE_TYPES
+    return this.getImplications(
+      this.getEvidenceByEvidenceTypes(
+        this.store.annotationData.result.tumorTypes,
+        TREATMENT_EVIDENCE_TYPES
+      )
     );
-
-    return [
-      ...tagImplications,
-      ...this.getImplications(
-        this.getEvidenceByEvidenceTypes(
-          this.store.annotationData.result.tumorTypes,
-          TREATMENT_EVIDENCE_TYPES
-        ),
-        ignoredEvidenceIds
-      ),
-    ];
   }
 
   @computed
   get fdaImplication(): FdaImplication[] {
-    const [tagImplications, ignoredEvidenceIds] = getFdaImplicationsFromTags(
-      this.store.tags.result
-    );
-
     const evidences = this.getEvidenceByEvidenceTypes(
       this.store.annotationData.result.tumorTypes,
       TREATMENT_EVIDENCE_TYPES
     );
     const fdaImplications: FdaImplication[] = [];
     evidences.forEach(evidence => {
-      if (ignoredEvidenceIds.includes(evidence.id)) {
-        return;
-      }
-
       const fdaLevel = levelOfEvidence2Level(evidence.fdaLevel);
       const alterations = evidence.alterations.filter(alteration =>
         alteration.referenceGenomes.includes(this.store.referenceGenomeQuery)
@@ -486,45 +463,27 @@ export class SomaticGermlineCancerTypePage extends React.Component<
         });
       });
     });
-    return getUniqueFdaImplications([...tagImplications, ...fdaImplications]);
+    return getUniqueFdaImplications(fdaImplications);
   }
 
   @computed
   get diagnosticImplications(): TherapeuticImplication[] {
-    const [tagImplications, ignoredEvidenceIds] = getImplicationsFromTags(
-      this.store.tags.result,
-      [EVIDENCE_TYPES.DIAGNOSTIC_IMPLICATION]
+    return this.getImplications(
+      this.getEvidenceByEvidenceTypes(
+        this.store.annotationData.result.tumorTypes,
+        [EVIDENCE_TYPES.DIAGNOSTIC_IMPLICATION]
+      )
     );
-
-    return [
-      ...tagImplications,
-      ...this.getImplications(
-        this.getEvidenceByEvidenceTypes(
-          this.store.annotationData.result.tumorTypes,
-          [EVIDENCE_TYPES.DIAGNOSTIC_IMPLICATION]
-        ),
-        ignoredEvidenceIds
-      ),
-    ];
   }
 
   @computed
   get prognosticImplications(): TherapeuticImplication[] {
-    const [tagImplications, ignoredEvidenceIds] = getImplicationsFromTags(
-      this.store.tags.result,
-      [EVIDENCE_TYPES.PROGNOSTIC_IMPLICATION]
+    return this.getImplications(
+      this.getEvidenceByEvidenceTypes(
+        this.store.annotationData.result.tumorTypes,
+        [EVIDENCE_TYPES.PROGNOSTIC_IMPLICATION]
+      )
     );
-
-    return [
-      ...tagImplications,
-      ...this.getImplications(
-        this.getEvidenceByEvidenceTypes(
-          this.store.annotationData.result.tumorTypes,
-          [EVIDENCE_TYPES.PROGNOSTIC_IMPLICATION]
-        ),
-        ignoredEvidenceIds
-      ),
-    ];
   }
 
   @computed

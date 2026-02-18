@@ -1,17 +1,8 @@
+import { CitationTooltip } from 'app/components/CitationTooltip';
+import { LevelWithDescription } from 'app/components/LevelWithDescription';
 import {
-  Article,
-  Citations,
-  Evidence,
-  Gene,
-  TreatmentDrug,
-} from 'app/shared/api/generated/OncoKbAPI';
-import React, { ReactNode } from 'react';
-import {
-  ALLELE_STATE_BIALLELEIC,
-  ALLELE_STATE_CARRIER,
-  ALLELE_STATE_MONOALLELIC,
-  AlleleState,
   AMPLIFICATION,
+  ANNOTATION_PAGE_TAB_KEYS,
   APP_LOCAL_DATE_FORMAT,
   APP_LOCAL_DATETIME_FORMAT,
   APP_LOCAL_DATETIME_FORMAT_Z,
@@ -22,24 +13,30 @@ import {
   FUSIONS,
   GENERAL_ONCOGENICITY,
   GENERAL_PATHOGENICITY,
-  InheritanceMechanism,
   LEVEL_PRIORITY,
   LEVEL_TYPES,
   LEVELS,
-  MECHANISM_OF_INHERITANCE_AUTOSOMAL_DOMINANT,
-  MECHANISM_OF_INHERITANCE_AUTOSOMAL_RECESSIVE,
   ONCOGENIC_MUTATIONS,
   ONCOGENICITY,
   ONCOGENICITY_CLASS_NAMES,
   ONCOKB,
   ONCOKB_TM,
   PAGE_ROUTE,
+  REFERENCE_GENOME,
   SHORTEN_TEXT_FROM_LIST_THRESHOLD,
   TABLE_COLUMN_KEY,
   TREATMENT_EVIDENCE_TYPES,
   TRUNCATING_MUTATIONS,
 } from 'app/config/constants';
-import classnames from 'classnames';
+import { COLOR_BLUE } from 'app/config/theme';
+import * as styles from 'app/index.module.scss';
+import {
+  Article,
+  Citations,
+  Evidence,
+  Gene,
+  TreatmentDrug,
+} from 'app/shared/api/generated/OncoKbAPI';
 import {
   Alteration,
   EnsemblGene,
@@ -47,6 +44,9 @@ import {
   Treatment,
   TumorType,
 } from 'app/shared/api/generated/OncoKbPrivateAPI';
+import InfoIcon from 'app/shared/icons/InfoIcon';
+import { LevelOfEvidencePageLink } from 'app/shared/links/LevelOfEvidencePageLink';
+import { sortBy, sortByKey } from 'app/shared/utils/LodashUtils';
 import {
   citationsSortMethod,
   defaultSortMethod,
@@ -54,28 +54,22 @@ import {
   oncogenicitySortMethod,
   sortByAlteration,
 } from 'app/shared/utils/ReactTableUtils';
-import { TableCellRenderer } from 'react-table';
-import { LevelWithDescription } from 'app/components/LevelWithDescription';
-import { DefaultTooltip } from 'cbioportal-frontend-commons';
-import { CitationTooltip } from 'app/components/CitationTooltip';
 import {
   AlterationPageLink,
   GenePageLink,
   OncoTreeLink,
   SopPageLink,
 } from 'app/shared/utils/UrlUtils';
-import moment from 'moment';
-import InfoIcon from 'app/shared/icons/InfoIcon';
-import { COLOR_BLUE } from 'app/config/theme';
-import * as styles from 'app/index.module.scss';
-import { Version } from 'app/pages/LevelOfEvidencePage';
-import { Link } from 'react-router-dom';
-import { LevelOfEvidencePageLink } from 'app/shared/links/LevelOfEvidencePageLink';
-import { sortBy, sortByKey } from 'app/shared/utils/LodashUtils';
 import {
   FdaImplication,
   TherapeuticImplication,
 } from 'app/store/AnnotationStore';
+import { DefaultTooltip } from 'cbioportal-frontend-commons';
+import classnames from 'classnames';
+import moment from 'moment';
+import React, { ReactNode } from 'react';
+import { TableCellRenderer } from 'react-table';
+import WithSeparator from 'react-with-separator';
 
 // Likely Oncogenic, Predicted Oncogenic will be converted to Oncogenic
 // Likely Neutral will be converted to Neutral
@@ -980,16 +974,14 @@ export const getFdaSubmissionNumber = (
 
 const getImplicationsFromTag = (
   tag: Tag,
-  evidenceTypes: EVIDENCE_TYPES[]
-): [TherapeuticImplication[], number[]] => {
+  evidenceTypes: EVIDENCE_TYPES[],
+  hugoSymbol: string
+) => {
   const implications: TherapeuticImplication[] = [];
-  const usedEvidenceIds: number[] = [];
   for (const evidence of tag.evidences) {
     if (!evidenceTypes.includes(evidence.evidenceType as EVIDENCE_TYPES)) {
       continue;
     }
-
-    usedEvidenceIds.push(evidence.id);
 
     const level = levelOfEvidence2Level(evidence.levelOfEvidence);
     const fdaLevel = levelOfEvidence2Level(evidence.fdaLevel);
@@ -1012,18 +1004,54 @@ const getImplicationsFromTag = (
           drugDescription: evidence.description,
           alterations: tag.name,
           alterationsView: (
-            <>
+            <AlterationPageLink
+              key={tag.name}
+              hugoSymbol={hugoSymbol}
+              alteration={tag.name}
+              alterationRefGenomes={[
+                REFERENCE_GENOME.GRCh37,
+                REFERENCE_GENOME.GRCh38,
+              ]}
+              germline={false}
+              isTag
+            >
               <span>{tag.name}</span>
               <InfoIcon
                 className="ml-2"
                 overlay={<span>{tag.description}</span>}
               />
-            </>
+            </AlterationPageLink>
           ),
           drugs: getTreatmentNameByPriority(treatment),
           cancerTypes: cancerTypesName,
           cancerTypesArray: cancerTypes,
-          cancerTypesView: <span>{cancerTypesName}</span>,
+          cancerTypesView: (
+            <>
+              <WithSeparator separator={', '}>
+                {cancerTypes.map(cancerType => (
+                  <AlterationPageLink
+                    key={`${tag.name}-${cancerType}`}
+                    hugoSymbol={hugoSymbol}
+                    alteration={tag.name}
+                    alterationRefGenomes={[
+                      REFERENCE_GENOME.GRCh37,
+                      REFERENCE_GENOME.GRCh38,
+                    ]}
+                    cancerType={cancerType}
+                    germline={false}
+                    isTag
+                  >
+                    {cancerType}
+                  </AlterationPageLink>
+                ))}
+              </WithSeparator>
+              {excludedCancerTypes.length > 0 ? (
+                <span> (excluding {excludedCancerTypes.join(', ')})</span>
+              ) : (
+                <></>
+              )}
+            </>
+          ),
           citations: articles2Citations(evidence.articles),
         });
       });
@@ -1034,43 +1062,78 @@ const getImplicationsFromTag = (
         drugDescription: evidence.description,
         alterations: tag.name,
         alterationsView: (
-          <>
+          <AlterationPageLink
+            key={tag.name}
+            hugoSymbol={hugoSymbol}
+            alteration={tag.name}
+            alterationRefGenomes={[
+              REFERENCE_GENOME.GRCh37,
+              REFERENCE_GENOME.GRCh38,
+            ]}
+            germline={false}
+            isTag
+          >
             <span>{tag.name}</span>
             <InfoIcon
               className="ml-2"
               overlay={<span>{tag.description}</span>}
             />
-          </>
+          </AlterationPageLink>
         ),
         drugs: '',
         cancerTypes: cancerTypesName,
         cancerTypesArray: cancerTypes,
-        cancerTypesView: <span>{cancerTypesName}</span>,
+        cancerTypesView: (
+          <>
+            <WithSeparator separator={', '}>
+              {cancerTypes.map(cancerType => (
+                <AlterationPageLink
+                  key={`${tag.name}-${cancerType}`}
+                  hugoSymbol={hugoSymbol}
+                  alteration={tag.name}
+                  alterationRefGenomes={[
+                    REFERENCE_GENOME.GRCh37,
+                    REFERENCE_GENOME.GRCh38,
+                  ]}
+                  cancerType={cancerType}
+                  germline={false}
+                  isTag
+                >
+                  {cancerType}
+                </AlterationPageLink>
+              ))}
+            </WithSeparator>
+            {excludedCancerTypes.length > 0 ? (
+              <span> (excluding {excludedCancerTypes.join(', ')})</span>
+            ) : (
+              <></>
+            )}
+          </>
+        ),
         citations: articles2Citations(evidence.articles),
       } as TherapeuticImplication);
     }
   }
 
-  return [implications, usedEvidenceIds];
+  return implications;
 };
 
 export const getImplicationsFromTags = (
   tags: Tag[],
-  evidenceTypes: EVIDENCE_TYPES[]
-): [TherapeuticImplication[], number[]] => {
+  evidenceTypes: EVIDENCE_TYPES[],
+  hugoSymbol: string
+) => {
   const implications: TherapeuticImplication[] = [];
-  const usedEvidenceIds: number[] = [];
   for (const tag of tags) {
-    const [imps, ids] = getImplicationsFromTag(tag, evidenceTypes);
-    implications.push(...imps);
-    usedEvidenceIds.push(...ids);
+    implications.push(
+      ...getImplicationsFromTag(tag, evidenceTypes, hugoSymbol)
+    );
   }
-  return [implications, usedEvidenceIds];
+  return implications;
 };
 
-const getFdaImplicationsFromTag = (tag: Tag): [FdaImplication[], number[]] => {
+const getFdaImplicationsFromTag = (tag: Tag, hugoSymbol: string) => {
   const fdaImplications: FdaImplication[] = [];
-  const usedEvidenceIds: number[] = [];
   for (const evidence of tag.evidences) {
     if (
       !TREATMENT_EVIDENCE_TYPES.includes(
@@ -1079,8 +1142,6 @@ const getFdaImplicationsFromTag = (tag: Tag): [FdaImplication[], number[]] => {
     ) {
       continue;
     }
-
-    usedEvidenceIds.push(evidence.id);
 
     const fdaLevel = levelOfEvidence2Level(evidence.fdaLevel);
     const cancerTypes = evidence.cancerTypes.map(cancerType =>
@@ -1092,6 +1153,32 @@ const getFdaImplicationsFromTag = (tag: Tag): [FdaImplication[], number[]] => {
     const cancerTypesName = getCancerTypesName(
       cancerTypes,
       excludedCancerTypes
+    );
+
+    const cancerTypeView = (
+      <>
+        <WithSeparator separator={', '}>
+          {cancerTypes.map(cancerType => (
+            <AlterationPageLink
+              key={`${tag.name}-${cancerType}`}
+              hugoSymbol={hugoSymbol}
+              alteration={tag.name}
+              alterationRefGenomes={[
+                REFERENCE_GENOME.GRCh37,
+                REFERENCE_GENOME.GRCh38,
+              ]}
+              cancerType={cancerType}
+              hashQueries={{
+                tab: ANNOTATION_PAGE_TAB_KEYS.FDA,
+              }}
+              germline={false}
+              isTag
+            >
+              {cancerType}
+            </AlterationPageLink>
+          ))}
+        </WithSeparator>
+      </>
     );
 
     fdaImplications.push({
@@ -1113,27 +1200,35 @@ const getFdaImplicationsFromTag = (tag: Tag): [FdaImplication[], number[]] => {
         variantResidues: '',
       },
       alterationView: (
-        <>
+        <AlterationPageLink
+          key={tag.name}
+          hugoSymbol={hugoSymbol}
+          alteration={tag.name}
+          alterationRefGenomes={[
+            REFERENCE_GENOME.GRCh37,
+            REFERENCE_GENOME.GRCh38,
+          ]}
+          hashQueries={{
+            tab: ANNOTATION_PAGE_TAB_KEYS.FDA,
+          }}
+          germline={false}
+          isTag
+        >
           <span>{tag.name}</span>
           <InfoIcon className="ml-2" overlay={<span>{tag.description}</span>} />
-        </>
+        </AlterationPageLink>
       ),
       cancerType: cancerTypesName,
-      cancerTypeView: <span>{cancerTypesName}</span>,
+      cancerTypeView,
     });
   }
-  return [fdaImplications, usedEvidenceIds];
+  return fdaImplications;
 };
 
-export const getFdaImplicationsFromTags = (
-  tags: Tag[]
-): [FdaImplication[], number[]] => {
+export const getFdaImplicationsFromTags = (tags: Tag[], hugoSymbol: string) => {
   const implications: FdaImplication[] = [];
-  const ignoredEvidenceIds: number[] = [];
   for (const tag of tags) {
-    const [imps, ids] = getFdaImplicationsFromTag(tag);
-    implications.push(...imps);
-    ignoredEvidenceIds.push(...ids);
+    implications.push(...getFdaImplicationsFromTag(tag, hugoSymbol));
   }
-  return [implications, ignoredEvidenceIds];
+  return implications;
 };

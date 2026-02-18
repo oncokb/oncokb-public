@@ -570,6 +570,61 @@
         }
       }
     },
+     "/tags/{hugoSymbol}/{name}/{tumorType}": {
+      "get": {
+        "tags": [
+          "tags-controller"
+        ],
+        "summary": "getTagByHugoSymbolAndNameAndTumorType",
+        "operationId": "getTagByHugoSymbolAndNameAndTumorTypeUsingGET",
+        "consumes": [
+          "application/json"
+        ],
+        "produces": [
+          "application/json"
+        ],
+        "parameters": [
+          {
+            "name": "hugoSymbol",
+            "in": "path",
+            "description": "hugoSymbol",
+            "required": true,
+            "type": "string"
+          },
+          {
+            "name": "name",
+            "in": "path",
+            "description": "name",
+            "required": true,
+            "type": "string"
+          },
+          {
+            "name": "tumorType",
+            "in": "path",
+            "description": "tumorType",
+            "required": true,
+            "type": "string"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "schema": {
+              "$ref": "#/definitions/Tag"
+            }
+          },
+          "401": {
+            "description": "Unauthorized"
+          },
+          "403": {
+            "description": "Forbidden"
+          },
+          "404": {
+            "description": "Not Found"
+          }
+        }
+      }
+    },
     "/transcripts/{hugoSymbol}": {
       "get": {
         "tags": [

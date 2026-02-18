@@ -54,6 +54,7 @@ export type IAlterationView = {
     newTabKey: ANNOTATION_PAGE_TAB_KEYS
   ) => void;
   routing: RouterStore;
+  isTag?: boolean;
 };
 @observer
 export default class SomaticGermlineAlterationView extends React.Component<
@@ -139,6 +140,7 @@ export default class SomaticGermlineAlterationView extends React.Component<
                     ...this.props.diagnosticImplications,
                     ...this.props.prognosticImplications,
                   ])}
+                  isTag={this.props.isTag}
                 />
               </span>
             </div>
