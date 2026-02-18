@@ -83,6 +83,10 @@ type MatchParams = {
   alteration: string;
 };
 
+type SearchParams = {
+  refGenome: REFERENCE_GENOME;
+};
+
 type SomaticGermlineAlterationPageProps = {
   routing: RouterStore;
   appStore: AppStore;
@@ -107,6 +111,9 @@ export class SomaticGermlineAlterationPage extends React.Component<
   constructor(props: SomaticGermlineAlterationPageProps) {
     super(props);
     const alterationQuery = decodeSlash(props.match.params.alteration);
+    const searchParams = QueryString.parse(
+      props.location.search
+    ) as SearchParams;
     this.store = new AnnotationStore({
       type: alterationQuery
         ? AnnotationType.PROTEIN_CHANGE
@@ -114,6 +121,7 @@ export class SomaticGermlineAlterationPage extends React.Component<
       hugoSymbolQuery: props.match.params.hugoSymbol,
       alterationQuery,
       germline: this.geneticType === GENETIC_TYPE.GERMLINE,
+      referenceGenomeQuery: searchParams.refGenome,
     });
     if (this.store.cancerTypeName) {
       this.showMutationEffect = false;
@@ -580,9 +588,7 @@ export class SomaticGermlineAlterationPage extends React.Component<
                     }}
                     appStore={this.props.appStore}
                     alteration={this.store.alterationNameWithDiff}
-                    proteinAlteration={
-                      this.store.alteration?.proteinChange
-                    }
+                    proteinAlteration={this.store.alteration?.proteinChange}
                     isGermline={this.store.germline}
                   />
                   <GeneAdditionalInfoSection
