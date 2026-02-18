@@ -181,7 +181,7 @@ public class CronJobController {
                 tokenStatsService.clearTokenStats(tokenUsageDateBefore);
             }
         } catch (ParseException e) {
-            log.error("Unable to parse instant. Java.time.Instant formatting may have changed.");
+            log.error("Unable to parse instant. Java.time.Instant formatting may have changed.", e);
         }
 
         log.info("Finished the cronjob to move token stats to s3.");
@@ -244,7 +244,7 @@ public class CronJobController {
                 List<GHContent> gitRes = github.searchContent().q(q).list().toList();
                 githubCount = gitRes.size();
             } catch (Exception e) {
-                e.printStackTrace();
+                log.error("Error when searching token on GitHub", e);
             }
 
             UserDTO user = userMapper.userToUserDTO(token.getUser());
@@ -255,10 +255,9 @@ public class CronJobController {
                 updateExposedToken(token);
                 mailService.sendMailToUserWhenTokenExposed(user, t);
             }
-            // Wait for 2s for each call. The search endpoint has 30 calls per minute limit.
-            // We assume one call takes some time, the timeout needs to set to 2s to make sure we will not get the 403 rate limitation error.
+            // Wait between calls to avoid getting rate limited.
             // For more info about rate limit, please see https://docs.github.com/en/rest/reference/rate-limit
-            sleep(2000);
+            sleep(applicationProperties.getGithubSearchSleepMs());
         }
         log.info("Searching exposed tokens pipeline finished!");
         // If any potential exposed tokens were be found, send notification to dev team.

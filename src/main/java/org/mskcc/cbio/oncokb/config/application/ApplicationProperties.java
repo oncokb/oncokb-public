@@ -35,6 +35,7 @@ public class ApplicationProperties {
     private FrontendProperties frontend;
     private SamlAwsProperties samlAws;
     private String githubToken;
+    private int githubSearchSleepMs = 10000;
     private Boolean dbReadOnly;
     private RecaptchaProperties recaptcha;
     private RateLimitProperties rateLimit = new RateLimitProperties();
@@ -172,6 +173,14 @@ public class ApplicationProperties {
 
     public void setGithubToken(String githubToken) {
         this.githubToken = githubToken;
+    }
+
+    public int getGithubSearchSleepMs() {
+        return githubSearchSleepMs;
+    }
+
+    public void setGithubSearchSleepMs(int githubSearchSleepMs) {
+        this.githubSearchSleepMs = githubSearchSleepMs;
     }
 
     public Boolean getDbReadOnly() {

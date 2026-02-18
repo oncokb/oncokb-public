@@ -52,7 +52,7 @@ public class CreateAssessment {
       RecaptchaEnterpriseServiceClient client = RecaptchaEnterpriseServiceClient.create();
       return client;
     } catch (Exception e) {
-      e.printStackTrace();
+      LOGGER.error("Error creating RecaptchaEnterpriseServiceClient", e);
       throw new ValidationException(RECAPTCHA_VALIDATION_ERROR);
     }
   }

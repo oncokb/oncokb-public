@@ -11,6 +11,8 @@ import org.mskcc.cbio.oncokb.security.SecurityUtils;
 import org.mskcc.cbio.oncokb.security.uuid.TokenProvider;
 import org.mskcc.cbio.oncokb.service.*;
 import org.mskcc.cbio.oncokb.web.rest.errors.BadRequestAlertException;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.*;
 import org.springframework.http.converter.ByteArrayHttpMessageConverter;
@@ -41,6 +43,8 @@ import java.util.stream.Collectors;
 @RestController
 @RequestMapping("/api")
 public class ApiProxy {
+    private final Logger log = LoggerFactory.getLogger(ApiProxy.class);
+
     @Autowired
     private ApiProxyService apiProxyService;
 
@@ -134,7 +138,7 @@ public class ApiProxy {
                                 false
                             );
                         } catch (MessagingException e) {
-                            e.printStackTrace();
+                            log.error("Failed to send email for public website token usage alert", e);
                         }
                     }
                 });
