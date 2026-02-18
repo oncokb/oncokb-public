@@ -38,6 +38,7 @@ public class ApplicationProperties {
     private Boolean dbReadOnly;
     private RecaptchaProperties recaptcha;
     private RateLimitProperties rateLimit = new RateLimitProperties();
+    private TokenStatsProperties tokenStats = new TokenStatsProperties();
 
     public String getName() {
         return name;
@@ -196,5 +197,13 @@ public class ApplicationProperties {
 
     public void setRateLimit(RateLimitProperties rateLimit) {
         this.rateLimit = rateLimit;
+    }
+
+    public TokenStatsProperties getTokenStats() {
+        return tokenStats;
+    }
+
+    public void setTokenStats(TokenStatsProperties tokenStats) {
+        this.tokenStats = tokenStats;
     }
 }
