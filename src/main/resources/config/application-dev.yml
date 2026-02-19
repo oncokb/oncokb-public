@@ -177,6 +177,7 @@ application:
     principal-arn: # "arn:aws:iam::[account number]:saml-provider/PingFed"
     role-arn: # "arn:aws:iam::[account number]:role/mskAutomationUser"
   github-token:
+  github-search-sleep-ms: 10000
   db-read-only: false # Certain endpoints will be disabled when readonly is set to true
   recaptcha:
     project-id:

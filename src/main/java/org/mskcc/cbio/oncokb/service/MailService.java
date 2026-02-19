@@ -124,8 +124,7 @@ public class MailService {
                 try {
                     message.addAttachment(filename, new File(getClass().getClassLoader().getResource("files/" + filename).getFile()));
                 } catch (MessagingException e) {
-                    // having issue attach the file
-                    e.printStackTrace();
+                    log.error("Failed to attach file '{}' for email to '{}'", filename, to, e);
                 }
             });
         }

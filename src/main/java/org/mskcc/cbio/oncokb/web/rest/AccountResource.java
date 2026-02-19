@@ -117,13 +117,9 @@ public class AccountResource {
             String recaptchaToken = createAssess.getRecaptchaToken(request);
             ResponseEntity<String> rs = createAssess.createAssessment(client, recaptchaToken);
         } catch (ValidationException e) {
-            e.printStackTrace();
-            String errorMessage = e.getMessage();
-            if (errorMessage.contains("Unable to retrieve recaptcha token.")) {
-                log.info(errorMessage);
-            }
+            log.error("Error during reCAPTCHA validation", e);
         } catch (ConfigurationException e) {
-            log.warn(e.getMessage());
+            log.warn("Error during reCAPTCHA configuration", e);
         }
         // if (rs.getStatusCode() == HttpStatus.OK) {
         if (!checkPasswordLength(managedUserVM.getPassword())) {
@@ -390,13 +386,9 @@ public class AccountResource {
             String recaptchaToken = createAssess.getRecaptchaToken(request);
             ResponseEntity<String> rs = createAssess.createAssessment(client, recaptchaToken);
         } catch (ValidationException e) {
-            e.printStackTrace();
-            String errorMessage = e.getMessage();
-            if (errorMessage.contains("Unable to retrieve recaptcha token.")) {
-                log.info(errorMessage);
-            }
+            log.error("Error during reCAPTCHA validation", e);
         } catch (ConfigurationException e) {
-            log.warn(e.getMessage());
+            log.warn("Error during reCAPTCHA configuration", e);
         }
         // if (rs.getStatusCode() == HttpStatus.OK) {
         Optional<User> user = userService.getUserWithAuthoritiesByEmailIgnoreCase(mail);
@@ -487,13 +479,9 @@ public class AccountResource {
             String recaptchaToken = createAssess.getRecaptchaToken(request);
             ResponseEntity<String> rs = createAssess.createAssessment(client, recaptchaToken);
         } catch (ValidationException e) {
-            e.printStackTrace();
-            String errorMessage = e.getMessage();
-            if (errorMessage.contains("Unable to retrieve recaptcha token.")) {
-                log.info(errorMessage);
-            }
+            log.error("Error during reCAPTCHA validation", e);
         } catch (ConfigurationException e) {
-            log.warn(e.getMessage());
+            log.warn("Error during reCAPTCHA configuration", e);
         }
         // if (rs.getStatusCode() == HttpStatus.OK) {
         Optional<User> userOptional = userService.getUserWithAuthoritiesByLogin(loginVM.getUsername());
