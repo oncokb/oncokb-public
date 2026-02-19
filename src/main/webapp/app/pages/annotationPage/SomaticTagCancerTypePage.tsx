@@ -42,6 +42,7 @@ import { AlterationPageHashQueries } from 'app/shared/route/types';
 import * as QueryString from 'query-string';
 import VariantOverView from 'app/shared/sections/VariantOverview';
 import styles from './SomaticGermlineCancerTypePage.module.scss';
+import { getAlterationPageLink } from 'app/shared/utils/UrlUtils';
 
 enum LoadState {
   Loading,
@@ -166,13 +167,13 @@ const SomaticTagCancerTypePage = inject(
         <link
           id="canonical"
           rel="canonical"
-          // href={getAlterationPageLink({
-          //   hugoSymbol: this.store.hugoSymbol,
-          //   alteration: this.store.alterationQuery,
-          //   cancerType: this.store.cancerTypeName,
-          //   withProtocolHostPrefix: true,
-          //   germline: this.store.germline,
-          // })}
+          href={getAlterationPageLink({
+            hugoSymbol,
+            alteration: tagName,
+            cancerType: tumorType,
+            withProtocolHostPrefix: true,
+            germline: false,
+          })}
         />
       </Helmet>
       {pageLoadState.state === LoadState.Success ? (

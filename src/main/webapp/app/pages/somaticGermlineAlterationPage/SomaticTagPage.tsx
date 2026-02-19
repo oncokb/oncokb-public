@@ -42,6 +42,7 @@ import SomaticGermlineAlterationView from '../annotationPage/SomaticGermlineAlte
 import VariantOverView from 'app/shared/sections/VariantOverview';
 import styles from './SomaticGermlineAlterationPage.module.scss';
 import classnames from 'classnames';
+import { getAlterationPageLink } from 'app/shared/utils/UrlUtils';
 
 type MatchParams = {
   hugoSymbol: string;
@@ -171,12 +172,12 @@ const SomaticTagPage = inject(
         <link
           id="canonical"
           rel="canonical"
-          // href={getAlterationPageLink({
-          //   hugoSymbol: this.store.hugoSymbol,
-          //   alteration: this.store.alterationQuery,
-          //   cancerType: this.store.cancerTypeName,
-          //   withProtocolHostPrefix: true,
-          // })}
+          href={getAlterationPageLink({
+            hugoSymbol,
+            alteration: tagName,
+            cancerType: undefined,
+            withProtocolHostPrefix: true,
+          })}
         />
       </Helmet>
       {pageLoadState.state === LoadState.Success ? (
