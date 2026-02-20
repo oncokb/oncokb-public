@@ -98,7 +98,6 @@ export class SomaticGermlineCancerTypePage extends React.Component<
   SomaticGermlineCancerTypePageState
 > {
   private store: AnnotationStore;
-  private selectedTab: ANNOTATION_PAGE_TAB_KEYS;
 
   @observable showMutationEffect = true;
   @observable showAdditionalGeneInfo = false;
@@ -143,7 +142,6 @@ export class SomaticGermlineCancerTypePage extends React.Component<
           hash
         ) as AlterationPageHashQueries;
         if (queryStrings.tab) {
-          this.selectedTab = queryStrings.tab;
           if (queryStrings.tab === ANNOTATION_PAGE_TAB_KEYS.FDA) {
             this.props.appStore.inFdaRecognizedContent = true;
           }
@@ -499,26 +497,6 @@ export class SomaticGermlineCancerTypePage extends React.Component<
     return isCategoricalAlteration(this.store.alterationName);
   }
 
-  @autobind
-  onChangeTab(
-    selectedTabKey: ANNOTATION_PAGE_TAB_KEYS,
-    newTabKey: ANNOTATION_PAGE_TAB_KEYS
-  ) {
-    if (newTabKey === ANNOTATION_PAGE_TAB_KEYS.FDA) {
-      this.props.appStore.inFdaRecognizedContent = true;
-    }
-    if (
-      selectedTabKey === ANNOTATION_PAGE_TAB_KEYS.FDA &&
-      newTabKey !== ANNOTATION_PAGE_TAB_KEYS.FDA
-    ) {
-      this.props.appStore.showFdaModal = true;
-    } else {
-      const newHash: AlterationPageHashQueries = { tab: newTabKey };
-      window.location.hash = QueryString.stringify(newHash);
-    }
-    this.selectedTab = newTabKey;
-  }
-
   @computed
   get isPositionalAlteration() {
     return isPositionalAlteration(
@@ -742,8 +720,6 @@ export class SomaticGermlineCancerTypePage extends React.Component<
                     therapeuticImplications={this.therapeuticImplications}
                     diagnosticImplications={this.diagnosticImplications}
                     prognosticImplications={this.prognosticImplications}
-                    defaultSelectedTab={this.selectedTab}
-                    onChangeTab={this.onChangeTab}
                   />
                 </Col>
               </Row>
