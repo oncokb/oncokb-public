@@ -172,6 +172,13 @@ export class SomaticGermlineCancerTypePage extends React.Component<
   }
 
   @computed
+  get annotationData() {
+    return this.store.germline
+      ? this.store.germlineAnnotationData
+      : this.store.somaticAnnotationData;
+  }
+
+  @computed
   get pageShouldBeRendered() {
     return (
       this.store.gene.isComplete &&
@@ -179,7 +186,7 @@ export class SomaticGermlineCancerTypePage extends React.Component<
       this.store.ensemblGenes.isComplete &&
       this.store.clinicalAlterations.isComplete &&
       this.store.biologicalAlterations.isComplete &&
-      this.store.annotationData.isComplete
+      this.annotationData.isComplete
     );
   }
 
@@ -191,7 +198,7 @@ export class SomaticGermlineCancerTypePage extends React.Component<
       this.store.ensemblGenes.isError ||
       this.store.clinicalAlterations.isError ||
       this.store.biologicalAlterations.isError ||
-      this.store.annotationData.isError
+      this.annotationData.isError
     );
   }
 
@@ -382,7 +389,7 @@ export class SomaticGermlineCancerTypePage extends React.Component<
   get therapeuticImplications(): TherapeuticImplication[] {
     return this.getImplications(
       this.getEvidenceByEvidenceTypes(
-        this.store.annotationData.result.tumorTypes,
+        this.annotationData.result.tumorTypes,
         TREATMENT_EVIDENCE_TYPES
       )
     );
@@ -391,7 +398,7 @@ export class SomaticGermlineCancerTypePage extends React.Component<
   @computed
   get fdaImplication(): FdaImplication[] {
     const evidences = this.getEvidenceByEvidenceTypes(
-      this.store.annotationData.result.tumorTypes,
+      this.annotationData.result.tumorTypes,
       TREATMENT_EVIDENCE_TYPES
     );
     const fdaImplications: FdaImplication[] = [];
@@ -478,7 +485,7 @@ export class SomaticGermlineCancerTypePage extends React.Component<
   get diagnosticImplications(): TherapeuticImplication[] {
     return this.getImplications(
       this.getEvidenceByEvidenceTypes(
-        this.store.annotationData.result.tumorTypes,
+        this.annotationData.result.tumorTypes,
         [EVIDENCE_TYPES.DIAGNOSTIC_IMPLICATION]
       )
     );
@@ -488,7 +495,7 @@ export class SomaticGermlineCancerTypePage extends React.Component<
   get prognosticImplications(): TherapeuticImplication[] {
     return this.getImplications(
       this.getEvidenceByEvidenceTypes(
-        this.store.annotationData.result.tumorTypes,
+        this.annotationData.result.tumorTypes,
         [EVIDENCE_TYPES.PROGNOSTIC_IMPLICATION]
       )
     );
@@ -500,7 +507,7 @@ export class SomaticGermlineCancerTypePage extends React.Component<
     if (!this.isCategoricalAlteration) {
       orderedSummaries.push(SummaryKey.ALTERATION_SUMMARY);
     }
-    return getSummaries(this.store.annotationData.result, orderedSummaries);
+    return getSummaries(this.annotationData.result, orderedSummaries);
   }
 
   @computed get isCategoricalAlteration() {
@@ -530,16 +537,16 @@ export class SomaticGermlineCancerTypePage extends React.Component<
   @computed
   get isPositionalAlteration() {
     return isPositionalAlteration(
-      this.store.annotationData.result.query.proteinStart,
-      this.store.annotationData.result.query.proteinEnd,
-      this.store.annotationData.result.query.consequence
+      this.annotationData.result.query.proteinStart,
+      this.annotationData.result.query.proteinEnd,
+      this.annotationData.result.query.consequence
     );
   }
 
   get isUnknownOncogenicity() {
+    const oncogenicity = this.store.annotationOncogenicity;
     return (
-      !this.store.annotationData.result.oncogenic ||
-      this.store.annotationData.result.oncogenic === ONCOGENICITY.UNKNOWN
+      !oncogenicity || oncogenicity === ONCOGENICITY.UNKNOWN
     );
   }
 
@@ -640,13 +647,13 @@ export class SomaticGermlineCancerTypePage extends React.Component<
                         alterationSummaries={this.alterationSummaries}
                         hugoSymbol={this.store.hugoSymbol}
                         alteration={
-                          this.store.annotationData.result.query.alteration
+                          this.annotationData.result.query.alteration
                         }
                         geneType={this.store.gene.result.geneType}
                       />
                     </Col>
                   </Row>
-                  {this.store.annotationData.result.mutationEffect
+                  {this.annotationData.result.mutationEffect
                     .description && (
                     <Row>
                       <Col>
@@ -657,7 +664,7 @@ export class SomaticGermlineCancerTypePage extends React.Component<
                             <MutationEffectDescription
                               hugoSymbol={this.store.hugoSymbol}
                               description={
-                                this.store.annotationData.result.mutationEffect
+                                this.annotationData.result.mutationEffect
                                   .description
                               }
                             />
@@ -678,7 +685,7 @@ export class SomaticGermlineCancerTypePage extends React.Component<
                   <SomaticGermlineAlterationTiles
                     includeTitle={false}
                     isGermline={this.store.germline}
-                    variantAnnotation={this.store.annotationData.result}
+                    variantAnnotation={this.annotationData.result}
                     grch37Isoform={this.store.gene.result.grch37Isoform}
                   />
                 </Col>
@@ -695,7 +702,7 @@ export class SomaticGermlineCancerTypePage extends React.Component<
                             this.store.genomicIndicatorsAssociatedWithVariant
                           }
                           isPending={
-                            this.store.annotationResult.isPending ||
+                            this.annotationData.isPending ||
                             this.store.genomicIndicators.isPending
                           }
                         />
@@ -741,7 +748,7 @@ export class SomaticGermlineCancerTypePage extends React.Component<
                     matchedAlteration={this.store.alteration}
                     tumorType={this.store.cancerTypeName}
                     onChangeTumorType={this.onChangeTumorType.bind(this)}
-                    annotation={this.store.annotationData.result}
+                    annotation={this.annotationData.result}
                     biologicalAlterations={
                       this.store.biologicalAlterations.result
                     }
