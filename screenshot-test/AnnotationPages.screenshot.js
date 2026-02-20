@@ -343,14 +343,14 @@ function getMockResponse(url){
         body: brafEnsemblGenes
       };
       break;
-    case `${SERVER_URL}api/v1/tags/ROS1/TEST_TAG`:
+    case `${SERVER_URL}api/private/tags/ROS1/TEST_TAG`:
       res = {
         status: 200,
         contentType: 'application/json',
         body: ros1Tag,
       };
       break;
-    case `${SERVER_URL}api/v1/tags/ROS1/TEST_TAG/ALAL`:
+    case `${SERVER_URL}api/private/tags/ROS1/TEST_TAG/ALAL`:
       res = {
         status: 200,
         contentType: 'application/json',
