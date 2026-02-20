@@ -884,14 +884,6 @@ export class AnnotationStore {
   }
 
   @computed
-  get filteredTags() {
-    if (!this.isFiltered) {
-      return this.tags.result; // TODO
-    }
-    return this.tags.result;
-  }
-
-  @computed
   get filteredBiologicalAlterations() {
     if (this.isFiltered) {
       return this.biologicalAlterations.result.filter(alteration => {

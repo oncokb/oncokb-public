@@ -72,6 +72,7 @@ type PageLoadState =
         gene: Gene;
         ensemblGenes: EnsemblGene[];
         geneSummary: string;
+        cancerTypeCode: string;
       };
     }
   | { state: LoadState.Error };
@@ -91,21 +92,19 @@ const SomaticTagCancerTypePage = inject(
   const [pageLoadState, setPageLoadState] = useState<PageLoadState>({
     state: LoadState.Loading,
   });
-  const [selectedTab, setSelectedTab] = useState<
-    ANNOTATION_PAGE_TAB_KEYS | undefined
-  >();
 
   useEffect(() => {
     async function fetchInfo() {
       setPageLoadState({ state: LoadState.Loading });
       try {
-        const [fetchedTag, genes] = await Promise.all([
+        const [fetchedTag, genes, tumorTypes] = await Promise.all([
           privateClient.getTagByHugoSymbolAndNameAndTumorTypeUsingGET({
             hugoSymbol,
             name: tagName,
             tumorType,
           }),
           client.genesLookupGetUsingGET({ query: hugoSymbol }),
+          privateClient.utilsTumorTypesGetUsingGET({}),
         ]);
 
         if (genes.length !== 1) {
@@ -131,6 +130,8 @@ const SomaticTagCancerTypePage = inject(
             gene,
             ensemblGenes,
             geneSummary: geneSummaryEvidences[0].description,
+            cancerTypeCode:
+              tumorTypes.find(tt => tt.subtype === tumorType)?.code ?? '',
           },
         });
       } catch {
@@ -140,25 +141,6 @@ const SomaticTagCancerTypePage = inject(
 
     fetchInfo();
   }, [tumorType]);
-
-  function onChangeTab(
-    selectedTabKey: ANNOTATION_PAGE_TAB_KEYS,
-    newTabKey: ANNOTATION_PAGE_TAB_KEYS
-  ) {
-    if (newTabKey === ANNOTATION_PAGE_TAB_KEYS.FDA) {
-      props.appStore.inFdaRecognizedContent = true;
-    }
-    if (
-      selectedTabKey === ANNOTATION_PAGE_TAB_KEYS.FDA &&
-      newTabKey !== ANNOTATION_PAGE_TAB_KEYS.FDA
-    ) {
-      props.appStore.showFdaModal = true;
-    } else {
-      const newHash: AlterationPageHashQueries = { tab: newTabKey };
-      window.location.hash = QueryString.stringify(newHash);
-    }
-    setSelectedTab(newTabKey);
-  }
 
   return (
     <div className="view-wrapper">
@@ -178,7 +160,13 @@ const SomaticTagCancerTypePage = inject(
       </Helmet>
       {pageLoadState.state === LoadState.Success ? (
         (() => {
-          const { tag, gene, ensemblGenes, geneSummary } = pageLoadState.data;
+          const {
+            tag,
+            gene,
+            ensemblGenes,
+            geneSummary,
+            cancerTypeCode,
+          } = pageLoadState.data;
           return (
             <StickyMiniNavBarContextProvider>
               <Container>
@@ -267,7 +255,7 @@ const SomaticTagCancerTypePage = inject(
                   <Col md={11}>
                     <h3>
                       Clinical Implications of This Biomarker in {tumorType}
-                      {/* {cancerTypeCode && ` (${cancerTypeCode})`} */}
+                      {cancerTypeCode && ` (${cancerTypeCode})`}
                     </h3>
                   </Col>
                 </Row>
@@ -319,8 +307,6 @@ const SomaticTagCancerTypePage = inject(
                         [EVIDENCE_TYPES.PROGNOSTIC_IMPLICATION],
                         gene.hugoSymbol
                       )}
-                      defaultSelectedTab={selectedTab}
-                      onChangeTab={onChangeTab}
                     />
                   </Col>
                 </Row>
