@@ -60,6 +60,9 @@ const brafClinicalVariants = fs.readFileSync(`${DATA_DIR}api-private-search-vari
 const brafV600eQuery = fs.readFileSync(`${DATA_DIR}api-v1-variants-BRAF-V600E.json`).toString();
 const brafV600eRelevantAlterations = fs.readFileSync(`${DATA_DIR}api-private-utils-relevantAlterations-BRAF-V600E.json`).toString();
 
+// ROS1 tag (new pages: SomaticTagPage & SomaticTagCancerTypePage)
+const ros1Tag = fs.readFileSync(`${DATA_DIR}api-v1-tag-ROS1.json`).toString();
+
 // BRAF V600E HGVSg page - API response data
 // Mainly test the therapeutic/fda data for solid disease
 const brafV600eHgvsgVariantAnnotation = fs.readFileSync(`${DATA_DIR}api-private-utils-variantAnnotation-BRAF-V600E-HGVSG.json`).toString();
@@ -340,6 +343,20 @@ function getMockResponse(url){
         body: brafEnsemblGenes
       };
       break;
+    case `${SERVER_URL}api/v1/tags/ROS1/TEST_TAG`:
+      res = {
+        status: 200,
+        contentType: 'application/json',
+        body: ros1Tag,
+      };
+      break;
+    case `${SERVER_URL}api/v1/tags/ROS1/TEST_TAG/ALAL`:
+      res = {
+        status: 200,
+        contentType: 'application/json',
+        body: ros1Tag,
+      };
+      break;
     case `${SERVER_URL}api/v1/variants/lookup?hugoSymbol=BRAF&variant=V600E`:
       res = {
         status: 200,
@@ -489,6 +506,22 @@ describe('Tests with login', () => {
     expect(image).toMatchImageSnapshot({ customSnapshotIdentifier: 'HGVSg Page on VUE variant with Login' });
   })
 
+  it('Tag Page', async() => {
+    await page.goto(`${CLIENT_URL}gene/ROS1/somatic/tag/TEST_TAG`);
+    await page.setViewport(VIEW_PORT_1080);
+    await page.waitFor(WAITING_TIME);
+    let image = await page.screenshot(getScreenshotConfig('Tag Page with Login'));
+    expect(image).toMatchImageSnapshot({ customSnapshotIdentifier: 'Tag Page with Login' });
+  })
+
+  it('Tag Page with Cancer Type - Solid', async() => {
+    await page.goto(`${CLIENT_URL}gene/ROS1/somatic/tag/TEST_TAG/ALAL`);
+    await page.setViewport(VIEW_PORT_1080);
+    await page.waitFor(WAITING_TIME);
+    let image = await page.screenshot(getScreenshotConfig('Tag Page with Cancer Type - Solid with Login'));
+    expect(image).toMatchImageSnapshot({ customSnapshotIdentifier: 'Tag Page with Cancer Type - Solid with Login' });
+  })
+
   afterAll(async () => {
     await browser.close();
   })
@@ -563,6 +596,22 @@ describe('Tests without login', () => {
     await page.waitFor(WAITING_TIME);
     let image = await page.screenshot(getScreenshotConfig('HGVSg Page without Login'));
     expect(image).toMatchImageSnapshot({ customSnapshotIdentifier: 'HGVSg Page without Login' });
+  })
+
+  it('Tag Page', async() => {
+    await page.goto(`${CLIENT_URL}gene/ROS1/somatic/tag/TEST_TAG`);
+    await page.setViewport(VIEW_PORT_1080);
+    await page.waitFor(WAITING_TIME);
+    let image = await page.screenshot(getScreenshotConfig('Tag Page without Login'));
+    expect(image).toMatchImageSnapshot({ customSnapshotIdentifier: 'Tag Page without Login' });
+  })
+
+  it('Tag Page with Cancer Type - Solid', async() => {
+    await page.goto(`${CLIENT_URL}gene/ROS1/somatic/tag/TEST_TAG/ALAL`);
+    await page.setViewport(VIEW_PORT_1080);
+    await page.waitFor(WAITING_TIME);
+    let image = await page.screenshot(getScreenshotConfig('Tag Page with Cancer Type - Solid without Login'));
+    expect(image).toMatchImageSnapshot({ customSnapshotIdentifier: 'Tag Page with Cancer Type - Solid without Login' });
   })
 
   afterAll(async () => {

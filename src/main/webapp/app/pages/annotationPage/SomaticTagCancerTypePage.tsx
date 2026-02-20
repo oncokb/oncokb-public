@@ -3,6 +3,11 @@ import LoadingIndicator, {
   LoaderSize,
 } from 'app/components/loadingIndicator/LoadingIndicator';
 import GeneticTypeTag from 'app/components/tag/GeneticTypeTag';
+import {
+  DEFAULT_ANNOTATION,
+  EVIDENCE_TYPES,
+  TREATMENT_EVIDENCE_TYPES,
+} from 'app/config/constants';
 import { COLOR_BLUE } from 'app/config/theme';
 import { Gene } from 'app/shared/api/generated/OncoKbAPI';
 import { EnsemblGene, Tag } from 'app/shared/api/generated/OncoKbPrivateAPI';
@@ -15,34 +20,26 @@ import StickyMiniNavBar, {
   StickyMiniNavBarContextProvider,
 } from 'app/shared/nav/StickyMiniNavBar';
 import GeneAdditionalInfoSection from 'app/shared/sections/GeneAdditionalInfoSection';
+import VariantOverView from 'app/shared/sections/VariantOverview';
 import { upperFirst } from 'app/shared/utils/LodashUtils';
+import { getAlterationPageLink } from 'app/shared/utils/UrlUtils';
+import {
+  getFdaImplicationsFromTags,
+  getImplicationsFromTags,
+} from 'app/shared/utils/Utils';
+import AppStore from 'app/store/AppStore';
+import AuthenticationStore from 'app/store/AuthenticationStore';
+import WindowStore from 'app/store/WindowStore';
+import classnames from 'classnames';
+import { inject } from 'mobx-react';
+import { RouterStore } from 'mobx-react-router';
 import React, { useEffect, useState } from 'react';
 import { Alert, Col, Container, Row } from 'react-bootstrap';
 import { Helmet } from 'react-helmet-async';
 import { Else, If, Then } from 'react-if';
 import { RouteComponentProps } from 'react-router';
 import { CancerTypeView } from './CancerTypeView';
-import { inject } from 'mobx-react';
-import AppStore from 'app/store/AppStore';
-import { RouterStore } from 'mobx-react-router';
-import classnames from 'classnames';
-import WindowStore from 'app/store/WindowStore';
-import AuthenticationStore from 'app/store/AuthenticationStore';
-import {
-  ANNOTATION_PAGE_TAB_KEYS,
-  DEFAULT_ANNOTATION,
-  EVIDENCE_TYPES,
-  TREATMENT_EVIDENCE_TYPES,
-} from 'app/config/constants';
-import {
-  getFdaImplicationsFromTags,
-  getImplicationsFromTags,
-} from 'app/shared/utils/Utils';
-import { AlterationPageHashQueries } from 'app/shared/route/types';
-import * as QueryString from 'query-string';
-import VariantOverView from 'app/shared/sections/VariantOverview';
 import styles from './SomaticGermlineCancerTypePage.module.scss';
-import { getAlterationPageLink } from 'app/shared/utils/UrlUtils';
 
 enum LoadState {
   Loading,
