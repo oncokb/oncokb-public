@@ -60,7 +60,7 @@
         <p class="browserupgrade">You are using an <strong>outdated</strong> browser. Please <a href="https://browsehappy.com/?locale=en">upgrade your browser</a> to improve your experience.</p>
     <![endif]-->
     <div id="root">
-        <div class="app-loading">
+        <div class="app-loading app-loading-spinner">
           <div class="sk-circle">
             <div class="sk-circle1 sk-child"></div>
             <div class="sk-circle2 sk-child"></div>
@@ -76,37 +76,84 @@
             <div class="sk-circle12 sk-child"></div>
           </div>
         </div>
-        <div class="app-loading">
-            <div id="oncokb-error" style="display:none">
+        <div class="app-loading app-loading-fallback">
+            <div id="oncokb-error" class="oncokb-fallback-card" style="display:none">
                 <!-- This content is for troubleshooting purpose and will be removed when app renders -->
-                <h1>An error has occurred :-(</h1>
-                <h2>Usual error causes</h2>
-                <ol>
-                    <li>You started the application from an IDE and you didn't run <code style="color:red">yarn start</code> or <code style="color:red">yarn run webpack:build</code>.</li>
-                    <li>You had a network error while running <code style="color:red">yarn install</code>. If you are behind a corporate proxy, it is likely that this error was caused by your proxy. Have a look at the OncoKB™ error logs, you will probably have the cause of the error.</li>
-                    <li>You installed a Node.js version that doesn't work with OncoKB™: please use an LTS (long-term support) version, as it's the only version we support.</li>
-                </ol>
-                <h2>Building the client side code again</h2>
-                <p>If you want to go fast, run <code style="color:red">./mvnw</code> to build and run everything.</p>
-                <p>If you want to have more control, so you can debug your issue more easily, you should follow the following steps:</p>
-                <ol>
-                    <li>Install yarn dependencies with the command <code style="color:red">yarn install</code></li>
-                    <li>Build the client with the command <code style="color:red">yarn run webpack:build</code> or <code style="color:red">yarn start</code></li>
-                    <li>Start the server with <code style="color:red">./mvnw</code> or using your IDE</li>
-                </ol>
-
-                <h2>Getting more help</h2>
-
+                <div class="oncokb-fallback-logo" aria-hidden="true"><svg version="1.1" xmlns:x="http://ns.adobe.com/Extensibility/1.0/" xmlns:i="http://ns.adobe.com/AdobeIllustrator/10.0/" xmlns:graph="http://ns.adobe.com/Graphs/1.0/"
+                 xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" x="0px" y="0px" width="601.069519px"
+                 height="108.5462646px" viewBox="0 0 601.069519 108.5462646" style="enable-background:new 0 0 601.069519 108.5462646;"
+                 xml:space="preserve">
+<style type="text/css">
+    .st0{fill:#0968C3;}
+    .st1{fill-rule:evenodd;clip-rule:evenodd;fill:#0968C3;}
+</style>
+<switch>
+    <g i:extraneous="self">
+        <g id="Logo">
+            <path id="Legal_Mark" class="st0" d="M577.7462769,4.1751089h-4.1806641V1.7991323h10.9575195v2.3759766h-4.1806641v11.1777344
+                h-2.5961914V4.1751089z M587.4279175,1.7991323h2.7719727l4.0927734,6.4248047l4.0927734-6.4248047h2.684082v13.5537109
+                h-2.5083008v-9.637207l-4.1806641,6.46875h-0.2636719l-4.1806641-6.46875v9.637207h-2.5083008V1.7991323z"/>
+            <path id="Wordmark" class="st1" d="M55.9221191,0C23.5383301,0,0,24.4378662,0,54.2730713v0.2997437
+                c0,29.8352051,23.2384644,53.9733276,55.6223755,53.9733276s55.9221191-24.4379272,55.9221191-54.2730713v-0.2997437
+                C111.5444946,24.1380615,88.3060303,0,55.9221191,0z M87.4067383,54.5728149
+                c0,17.9911499-12.8936157,32.684082-31.4846191,32.684082c-18.5906372,0-31.7841187-14.9926758-31.7841187-32.9838257v-0.2997437
+                c0-17.9911499,12.8936157-32.6838379,31.484375-32.6838379c18.5905762,0,31.7843628,14.9925537,31.7843628,32.9835815V54.5728149
+                z M171.4561157,24.8876953c-11.5443115,0-18.2908936,6.1469116-23.538269,12.8935547V26.3869019h-22.7883911v80.3602905
+                h22.7883911V61.9193115c0-10.7944946,5.5471802-16.342041,14.242981-16.342041s13.7932739,5.5475464,13.7932739,16.342041
+                v44.8278809h22.7888184V54.7227173C198.7429199,36.2820435,188.6978149,24.8876953,171.4561157,24.8876953z
+                 M253.0227661,88.9060669c-12.4436035,0-20.3895874-9.8952637-20.3895874-22.1889648v-0.3001709
+                c0-11.8440552,8.0958862-21.8891602,19.4902954-21.8891602c8.0958862,0,13.1934204,3.4484253,18.2908936,8.8457031
+                l13.9431763-14.9924927c-7.4963989-8.395813-16.9415283-13.4932861-32.0841675-13.4932861
+                c-24.5878296,0-42.1293335,18.890686-42.1293335,41.8294067v0.2998047c0,22.9387207,17.6913452,41.5293579,41.8295288,41.5293579
+                c16.0419312,0,25.0374756-6.1470337,32.8336182-14.6925659l-13.3432617-13.4935303
+                C265.9163818,85.6075439,260.6690063,88.9060669,253.0227661,88.9060669z M476.8640137,1.7991333h-28.3347168
+                l-42.279541,45.8772583V1.7991333h-23.088623v104.9480591h23.088623V74.6630859l12.144165-12.5938721l32.5317383,44.6779785
+                h27.7377319l-44.6793213-60.420105L476.8640137,1.7991333z M556.3615112,51.8742065
+                c7.4938354-4.1978149,13.7937012-10.7945557,13.7937012-22.6387329v-0.2998047
+                c0-7.1964722-2.4005127-13.0435181-7.1974487-17.8411255c-5.9950562-5.9970703-15.442749-9.2954102-27.4371338-9.2954102
+                h-48.7246704v104.9480591h49.9228516c23.6881104,0,39.281189-9.595459,39.281189-28.7860107V77.661438
+                C576,63.5684204,568.5061646,56.5220947,556.3615112,51.8742065z M509.2858887,22.0391235h22.7863159
+                c9.7440796,0,15.1422119,3.8980103,15.1422119,10.7946167v0.2998047c0,7.7962036-6.4459839,11.0944214-16.6409912,11.0944214
+                h-21.2875366V22.0391235z M553.0633545,75.1126709c0,7.7961426-6.1495361,11.3944702-16.3445435,11.3944702h-27.4329224
+                v-23.088623h26.6856689c11.8440552,0,17.0917969,4.3477173,17.0917969,11.3944092V75.1126709z M330.8258057,41.6193848
+                c-13.861084,0-25.0975952,11.2368164-25.0975952,25.0978394c0,13.8608398,11.2365112,25.0975952,25.0975952,25.0975952
+                c13.8610229,0,25.0975952-11.2367554,25.0975952-25.0975952
+                C355.9234009,52.8562012,344.6868286,41.6193848,330.8258057,41.6193848z M330.8258057,81.3574829
+                c-8.0855713,0-14.6402588-6.5546875-14.6402588-14.6402588c0-8.0857544,6.5546875-14.6405029,14.6402588-14.6405029
+                c8.0855103,0,14.6402588,6.5547485,14.6402588,14.6405029C345.4660645,74.8027954,338.9113159,81.3574829,330.8258057,81.3574829
+                z M330.8258057,24.8876953c-23.1013184,0-41.8292847,18.7279663-41.8292847,41.8292847
+                c0,23.1016235,18.7279663,41.8292847,41.8292847,41.8292847c23.1018677,0,41.8292847-18.7276611,41.8292847-41.8292847
+                C372.6550903,43.6156616,353.9276733,24.8876953,330.8258057,24.8876953z M330.8258057,98.0889282
+                c-17.3260498,0-31.3719482-14.0458984-31.3719482-31.3719482s14.0458984-31.3719482,31.3719482-31.3719482
+                c17.3265991,0,31.3719482,14.0458984,31.3719482,31.3719482S348.1524048,98.0889282,330.8258057,98.0889282z
+                 M330.8258057,58.3511353c-4.6199951,0-8.3658447,3.7456055-8.3658447,8.3660889
+                c0,4.6203003,3.7458496,8.3658447,8.3658447,8.3658447c4.6205444,0,8.3658447-3.7455444,8.3658447-8.3658447
+                C339.1916504,62.0967407,335.4463501,58.3511353,330.8258057,58.3511353z"/>
+        </g>
+        <g id="Art">
+        </g>
+    </g>
+</switch>
+</svg></div>
+                <h1>We are having trouble loading this page</h1>
                 <p>
-                    Please send us an email at <a
-                  href='mailto:contact@oncokb.org?subject=Cannot load the page'
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  title='Cannot load the page'
-                >
-                  contact@oncokb.org
-                </a>
+                    OncoKB could not finish loading in your browser. Please try reloading the page.
                 </p>
+                <p class="oncokb-fallback-secondary">
+                    If the issue continues, contact us and include any browser error details.
+                </p>
+                <div class="oncokb-fallback-actions">
+                    <button type="button" onclick="window.location.reload()">Reload page</button>
+                    <a
+                      href='mailto:contact@oncokb.org?subject=Cannot load the page'
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      title='Cannot load the page'
+                    >
+                      Contact support
+                    </a>
+                </div>
+
                 <!-- end of troubleshooting content -->
             </div>
         </div>
@@ -145,6 +192,10 @@
         };
         function showError() {
             var errorElm = document.getElementById('oncokb-error');
+            var loadingElm = document.querySelector('.app-loading-spinner');
+            if (loadingElm && loadingElm.style) {
+                loadingElm.style.display = 'none';
+            }
             if (errorElm && errorElm.style) {
                 errorElm.style.display = 'block';
             }
