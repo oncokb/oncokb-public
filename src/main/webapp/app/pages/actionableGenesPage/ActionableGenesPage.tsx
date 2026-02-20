@@ -71,6 +71,7 @@ import {
   uniqBy,
 } from 'app/shared/utils/LodashUtils';
 import { Helmet } from 'react-helmet-async';
+import InfoIcon from 'app/shared/icons/InfoIcon';
 
 type Treatment = {
   level: string;
@@ -260,15 +261,39 @@ export default class ActionableGenesPage extends React.Component<
   }
 
   getTreatments(evidences: Evidence[]) {
-    const treatments: Treatment[] = [];
+    const treatments: (Treatment & { isTag?: boolean })[] = [];
     evidences.forEach((item: Evidence) => {
       const matchedAlterations = item.alterations.filter(alteration =>
         alteration.referenceGenomes.includes(this.refGenome)
       );
-      if (matchedAlterations.length > 0) {
+      if (matchedAlterations.length > 0 || item.tags.length > 0) {
+        const isTag = item.tags.length > 0;
         const level = levelOfEvidence2Level(item.levelOfEvidence, true);
         const fdaLevel = levelOfEvidence2Level(item.fdaLevel, true);
-        const sortedAlts = sortByKey(matchedAlterations, 'name');
+
+        let sortedAlts: Alteration[] = [];
+        if (matchedAlterations.length > 0) {
+          sortedAlts = sortByKey(matchedAlterations, 'name');
+        } else if (isTag) {
+          sortedAlts = item.tags
+            .sort((a, b) => a.name.localeCompare(b.name))
+            .map<Alteration>(tag => ({
+              alteration: tag.name,
+              consequence: {
+                description: tag.description,
+                isGenerallyTruncating: false,
+                term: '',
+              },
+              gene: item.gene,
+              name: tag.name,
+              proteinChange: '',
+              proteinEnd: 0,
+              proteinStart: 0,
+              refResidues: '',
+              referenceGenomes: [],
+              variantResidues: '',
+            }));
+        }
         const sortedAltsName = sortedAlts
           .map(alteration => alteration.name)
           .sort()
@@ -294,6 +319,7 @@ export default class ActionableGenesPage extends React.Component<
                 treatment.drugs.map(drug => getDrugNameFromTreatment(drug))
               ),
               drugs: getTreatmentNameByPriority(treatment),
+              isTag,
             });
           });
         } else {
@@ -310,6 +336,7 @@ export default class ActionableGenesPage extends React.Component<
             treatment: undefined,
             uniqueDrugs: [],
             drugs: '',
+            isTag,
           });
         }
       }
@@ -366,7 +393,7 @@ export default class ActionableGenesPage extends React.Component<
 
   @computed
   get allOncokbTreatments() {
-    let treatments: Treatment[] = [];
+    let treatments: (Treatment & { isTag?: boolean })[] = [];
     Object.keys(this.evidencesByLevel.result).forEach(levelOfEvidence => {
       const content = this.evidencesByLevel.result[levelOfEvidence];
       treatments = treatments.concat(this.getTreatments(content));
@@ -380,7 +407,7 @@ export default class ActionableGenesPage extends React.Component<
 
   @computed
   get allFdaTreatments() {
-    const treatments: Treatment[] = [];
+    const treatments: (Treatment & { isTag?: boolean })[] = [];
     this.allOncokbTreatments
       .filter(treatment => treatment.fdaLevel)
       .map(treatment => {
@@ -397,7 +424,7 @@ export default class ActionableGenesPage extends React.Component<
   }
 
   @computed
-  get filteredTreatments(): Treatment[] {
+  get filteredTreatments(): (Treatment & { isTag?: boolean })[] {
     return this.allTreatments.filter(treatment => {
       let match = true;
       if (
@@ -630,34 +657,67 @@ export default class ActionableGenesPage extends React.Component<
     return Promise.resolve(content.join('\n'));
   }
 
-  getAlterationCell(hugoSymbol: string, alterations: Alteration[]) {
+  getAlterationCell(
+    hugoSymbol: string,
+    alterations: Alteration[],
+    isTag?: boolean
+  ) {
     const alterationPageHashQueries: AlterationPageHashQueries = {};
     if (this.fdaSectionIsOpen) {
       alterationPageHashQueries.tab = ANNOTATION_PAGE_TAB_KEYS.FDA;
     }
     const linkedAlts = alterations.map<JSX.Element>(
-      (alteration, index: number) =>
-        alteration.consequence ? (
-          <AlterationPageLink
-            key={index}
-            hugoSymbol={hugoSymbol}
-            alteration={{
-              alteration: alteration.alteration,
-              name: alteration.name,
-            }}
-            alterationRefGenomes={
-              alteration.referenceGenomes as REFERENCE_GENOME[]
-            }
-            hashQueries={alterationPageHashQueries}
-            onClick={() => {
-              if (this.fdaSectionIsOpen) {
-                this.props.appStore.toFdaRecognizedContent = true;
+      (alteration, index: number) => {
+        if (alteration.consequence && isTag) {
+          return (
+            <AlterationPageLink
+              key={index}
+              hugoSymbol={hugoSymbol}
+              alteration={alteration.name}
+              alterationRefGenomes={
+                alteration.referenceGenomes as REFERENCE_GENOME[]
               }
-            }}
-          />
-        ) : (
-          <span>{alteration.name}</span>
-        )
+              hashQueries={alterationPageHashQueries}
+              onClick={() => {
+                if (this.fdaSectionIsOpen) {
+                  this.props.appStore.toFdaRecognizedContent = true;
+                }
+              }}
+              isTag
+            >
+              <span>{alteration.name}</span>
+              <InfoIcon
+                className="ml-2"
+                overlay={<span>{alteration.consequence.description}</span>}
+              />
+            </AlterationPageLink>
+          );
+        }
+
+        if (alteration.consequence) {
+          return (
+            <AlterationPageLink
+              key={index}
+              hugoSymbol={hugoSymbol}
+              alteration={{
+                alteration: alteration.alteration,
+                name: alteration.name,
+              }}
+              alterationRefGenomes={
+                alteration.referenceGenomes as REFERENCE_GENOME[]
+              }
+              hashQueries={alterationPageHashQueries}
+              onClick={() => {
+                if (this.fdaSectionIsOpen) {
+                  this.props.appStore.toFdaRecognizedContent = true;
+                }
+              }}
+            />
+          );
+        }
+
+        return <span>{alteration.name}</span>;
+      }
     );
     const shortenTextKey = `${hugoSymbol}-${alterations
       .map(a => a.alteration)
@@ -746,13 +806,14 @@ export default class ActionableGenesPage extends React.Component<
             .join(', ')
             .localeCompare(b.map(datum => datum.name).join(', '));
         },
-        Cell: (props: { original: Treatment }) => {
+        Cell: (props: { original: Treatment & { isTag?: boolean } }) => {
           return (
             <div style={{ display: 'block' }}>
               {' '}
               {this.getAlterationCell(
                 props.original.hugoSymbol,
-                props.original.alterations
+                props.original.alterations,
+                props.original.isTag
               )}
             </div>
           );

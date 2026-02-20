@@ -33,6 +33,10 @@ export type TreatmentDrug = {
         'treatmentDrugId': TreatmentDrugId
 
 };
+export type OncogenicityEntity = {
+    'oncogenicity': "YES" | "LIKELY" | "LIKELY_NEUTRAL" | "INCONCLUSIVE" | "RESISTANCE" | "UNKNOWN"
+
+};
 export type Query = {
     'alleleState': string
 
@@ -131,6 +135,18 @@ export type DownloadAvailability = {
         'hasSqlDump': boolean
 
         'version': string
+
+};
+export type LevelInfo = {
+    'highestDiagnosticLevel': "LEVEL_1" | "LEVEL_2" | "LEVEL_3A" | "LEVEL_3B" | "LEVEL_4" | "LEVEL_R1" | "LEVEL_R2" | "LEVEL_Px1" | "LEVEL_Px2" | "LEVEL_Px3" | "LEVEL_Dx1" | "LEVEL_Dx2" | "LEVEL_Dx3" | "LEVEL_Fda1" | "LEVEL_Fda2" | "LEVEL_Fda3" | "NO"
+
+        'highestFDALevel': "LEVEL_1" | "LEVEL_2" | "LEVEL_3A" | "LEVEL_3B" | "LEVEL_4" | "LEVEL_R1" | "LEVEL_R2" | "LEVEL_Px1" | "LEVEL_Px2" | "LEVEL_Px3" | "LEVEL_Dx1" | "LEVEL_Dx2" | "LEVEL_Dx3" | "LEVEL_Fda1" | "LEVEL_Fda2" | "LEVEL_Fda3" | "NO"
+
+        'highestPrognosticLevel': "LEVEL_1" | "LEVEL_2" | "LEVEL_3A" | "LEVEL_3B" | "LEVEL_4" | "LEVEL_R1" | "LEVEL_R2" | "LEVEL_Px1" | "LEVEL_Px2" | "LEVEL_Px3" | "LEVEL_Dx1" | "LEVEL_Dx2" | "LEVEL_Dx3" | "LEVEL_Fda1" | "LEVEL_Fda2" | "LEVEL_Fda3" | "NO"
+
+        'highestResistanceLevel': "LEVEL_1" | "LEVEL_2" | "LEVEL_3A" | "LEVEL_3B" | "LEVEL_4" | "LEVEL_R1" | "LEVEL_R2" | "LEVEL_Px1" | "LEVEL_Px2" | "LEVEL_Px3" | "LEVEL_Dx1" | "LEVEL_Dx2" | "LEVEL_Dx3" | "LEVEL_Fda1" | "LEVEL_Fda2" | "LEVEL_Fda3" | "NO"
+
+        'highestSensitiveLevel': "LEVEL_1" | "LEVEL_2" | "LEVEL_3A" | "LEVEL_3B" | "LEVEL_4" | "LEVEL_R1" | "LEVEL_R2" | "LEVEL_Px1" | "LEVEL_Px2" | "LEVEL_Px3" | "LEVEL_Dx1" | "LEVEL_Dx2" | "LEVEL_Dx3" | "LEVEL_Fda1" | "LEVEL_Fda2" | "LEVEL_Fda3" | "NO"
 
 };
 export type MainNumber = {
@@ -330,6 +346,8 @@ export type ClinicalVariant = {
 
         'drugPmids': Array < string >
 
+        'evidenceId': number
+
         'excludedCancerTypes': Array < TumorType >
 
         'fdaLevel': string
@@ -429,6 +447,8 @@ export type Evidence = {
         'relevantCancerTypes': Array < TumorType >
 
         'solidPropagationLevel': "LEVEL_1" | "LEVEL_2" | "LEVEL_3A" | "LEVEL_3B" | "LEVEL_4" | "LEVEL_R1" | "LEVEL_R2" | "LEVEL_Px1" | "LEVEL_Px2" | "LEVEL_Px3" | "LEVEL_Dx1" | "LEVEL_Dx2" | "LEVEL_Dx3" | "LEVEL_Fda1" | "LEVEL_Fda2" | "LEVEL_Fda3" | "NO"
+
+        'tags': Array < Tag >
 
         'treatments': Array < Treatment >
 
@@ -657,6 +677,10 @@ export type Treatment = {
         'priority': number
 
 };
+export type MutationTypeEntity = {
+    'mutationType': "MISSENSE" | "INSERTION" | "DELETION" | "OTHER"
+
+};
 export type MutationEffectResp = {
     'citations': Citations
 
@@ -709,6 +733,24 @@ export type BiologicalVariant = {
         'penetrance': string
 
         'variant': Alteration
+
+};
+export type Tag = {
+    'description': string
+
+        'end': number
+
+        'evidences': Array < Evidence >
+
+        'highestLevels': LevelInfo
+
+        'mutationTypes': Array < MutationTypeEntity >
+
+        'name': string
+
+        'oncogenicities': Array < OncogenicityEntity >
+
+        'start': number
 
 };
 export type Geneset = {
@@ -1480,6 +1522,277 @@ export default class OncoKbPrivateAPI {
                 return response.body;
             });
         };
+    getTagsByEntrezGeneIdUsingGETURL(parameters: {
+        'entrezGeneId': number,
+        $queryParameters ? : any
+    }): string {
+        let queryParameters: any = {};
+        let path = '/tags/{entrezGeneId}';
+
+        path = path.replace('{entrezGeneId}', parameters['entrezGeneId'] + '');
+
+        if (parameters.$queryParameters) {
+            Object.keys(parameters.$queryParameters).forEach(function(parameterName) {
+                var parameter = parameters.$queryParameters[parameterName];
+                queryParameters[parameterName] = parameter;
+            });
+        }
+        let keys = Object.keys(queryParameters);
+        return this.domain + path + (keys.length > 0 ? '?' + (keys.map(key => key + '=' + encodeURIComponent(queryParameters[key])).join('&')) : '');
+    };
+
+    /**
+     * getTagsByEntrezGeneId
+     * @method
+     * @name OncoKbPrivateAPI#getTagsByEntrezGeneIdUsingGET
+     * @param {integer} entrezGeneId - entrezGeneId
+     */
+    getTagsByEntrezGeneIdUsingGETWithHttpInfo(parameters: {
+        'entrezGeneId': number,
+        $queryParameters ? : any,
+        $domain ? : string
+    }): Promise < request.Response > {
+        const domain = parameters.$domain ? parameters.$domain : this.domain;
+        const errorHandlers = this.errorHandlers;
+        const request = this.request;
+        let path = '/tags/{entrezGeneId}';
+        let body: any;
+        let queryParameters: any = {};
+        let headers: any = {};
+        let form: any = {};
+        return new Promise(function(resolve, reject) {
+            headers['Accept'] = 'application/json';
+            headers['Content-Type'] = 'application/json';
+
+            path = path.replace('{entrezGeneId}', parameters['entrezGeneId'] + '');
+
+            if (parameters['entrezGeneId'] === undefined) {
+                reject(new Error('Missing required  parameter: entrezGeneId'));
+                return;
+            }
+
+            if (parameters.$queryParameters) {
+                Object.keys(parameters.$queryParameters).forEach(function(parameterName) {
+                    var parameter = parameters.$queryParameters[parameterName];
+                    queryParameters[parameterName] = parameter;
+                });
+            }
+
+            request('GET', domain + path, body, headers, queryParameters, form, reject, resolve, errorHandlers);
+
+        });
+    };
+
+    /**
+     * getTagsByEntrezGeneId
+     * @method
+     * @name OncoKbPrivateAPI#getTagsByEntrezGeneIdUsingGET
+     * @param {integer} entrezGeneId - entrezGeneId
+     */
+    getTagsByEntrezGeneIdUsingGET(parameters: {
+            'entrezGeneId': number,
+            $queryParameters ? : any,
+            $domain ? : string
+        }): Promise < Array < Tag >
+        > {
+            return this.getTagsByEntrezGeneIdUsingGETWithHttpInfo(parameters).then(function(response: request.Response) {
+                return response.body;
+            });
+        };
+    getTagByHugoSymbolAndNameUsingGETURL(parameters: {
+        'hugoSymbol': string,
+        'name': string,
+        $queryParameters ? : any
+    }): string {
+        let queryParameters: any = {};
+        let path = '/tags/{hugoSymbol}/{name}';
+
+        path = path.replace('{hugoSymbol}', parameters['hugoSymbol'] + '');
+
+        path = path.replace('{name}', parameters['name'] + '');
+
+        if (parameters.$queryParameters) {
+            Object.keys(parameters.$queryParameters).forEach(function(parameterName) {
+                var parameter = parameters.$queryParameters[parameterName];
+                queryParameters[parameterName] = parameter;
+            });
+        }
+        let keys = Object.keys(queryParameters);
+        return this.domain + path + (keys.length > 0 ? '?' + (keys.map(key => key + '=' + encodeURIComponent(queryParameters[key])).join('&')) : '');
+    };
+
+    /**
+     * getTagByHugoSymbolAndName
+     * @method
+     * @name OncoKbPrivateAPI#getTagByHugoSymbolAndNameUsingGET
+     * @param {string} hugoSymbol - hugoSymbol
+     * @param {string} name - name
+     */
+    getTagByHugoSymbolAndNameUsingGETWithHttpInfo(parameters: {
+        'hugoSymbol': string,
+        'name': string,
+        $queryParameters ? : any,
+        $domain ? : string
+    }): Promise < request.Response > {
+        const domain = parameters.$domain ? parameters.$domain : this.domain;
+        const errorHandlers = this.errorHandlers;
+        const request = this.request;
+        let path = '/tags/{hugoSymbol}/{name}';
+        let body: any;
+        let queryParameters: any = {};
+        let headers: any = {};
+        let form: any = {};
+        return new Promise(function(resolve, reject) {
+            headers['Accept'] = 'application/json';
+            headers['Content-Type'] = 'application/json';
+
+            path = path.replace('{hugoSymbol}', parameters['hugoSymbol'] + '');
+
+            if (parameters['hugoSymbol'] === undefined) {
+                reject(new Error('Missing required  parameter: hugoSymbol'));
+                return;
+            }
+
+            path = path.replace('{name}', parameters['name'] + '');
+
+            if (parameters['name'] === undefined) {
+                reject(new Error('Missing required  parameter: name'));
+                return;
+            }
+
+            if (parameters.$queryParameters) {
+                Object.keys(parameters.$queryParameters).forEach(function(parameterName) {
+                    var parameter = parameters.$queryParameters[parameterName];
+                    queryParameters[parameterName] = parameter;
+                });
+            }
+
+            request('GET', domain + path, body, headers, queryParameters, form, reject, resolve, errorHandlers);
+
+        });
+    };
+
+    /**
+     * getTagByHugoSymbolAndName
+     * @method
+     * @name OncoKbPrivateAPI#getTagByHugoSymbolAndNameUsingGET
+     * @param {string} hugoSymbol - hugoSymbol
+     * @param {string} name - name
+     */
+    getTagByHugoSymbolAndNameUsingGET(parameters: {
+        'hugoSymbol': string,
+        'name': string,
+        $queryParameters ? : any,
+        $domain ? : string
+    }): Promise < Tag > {
+        return this.getTagByHugoSymbolAndNameUsingGETWithHttpInfo(parameters).then(function(response: request.Response) {
+            return response.body;
+        });
+    };
+    getTagByHugoSymbolAndNameAndTumorTypeUsingGETURL(parameters: {
+        'hugoSymbol': string,
+        'name': string,
+        'tumorType': string,
+        $queryParameters ? : any
+    }): string {
+        let queryParameters: any = {};
+        let path = '/tags/{hugoSymbol}/{name}/{tumorType}';
+
+        path = path.replace('{hugoSymbol}', parameters['hugoSymbol'] + '');
+
+        path = path.replace('{name}', parameters['name'] + '');
+
+        path = path.replace('{tumorType}', parameters['tumorType'] + '');
+
+        if (parameters.$queryParameters) {
+            Object.keys(parameters.$queryParameters).forEach(function(parameterName) {
+                var parameter = parameters.$queryParameters[parameterName];
+                queryParameters[parameterName] = parameter;
+            });
+        }
+        let keys = Object.keys(queryParameters);
+        return this.domain + path + (keys.length > 0 ? '?' + (keys.map(key => key + '=' + encodeURIComponent(queryParameters[key])).join('&')) : '');
+    };
+
+    /**
+     * getTagByHugoSymbolAndNameAndTumorType
+     * @method
+     * @name OncoKbPrivateAPI#getTagByHugoSymbolAndNameAndTumorTypeUsingGET
+     * @param {string} hugoSymbol - hugoSymbol
+     * @param {string} name - name
+     * @param {string} tumorType - tumorType
+     */
+    getTagByHugoSymbolAndNameAndTumorTypeUsingGETWithHttpInfo(parameters: {
+        'hugoSymbol': string,
+        'name': string,
+        'tumorType': string,
+        $queryParameters ? : any,
+        $domain ? : string
+    }): Promise < request.Response > {
+        const domain = parameters.$domain ? parameters.$domain : this.domain;
+        const errorHandlers = this.errorHandlers;
+        const request = this.request;
+        let path = '/tags/{hugoSymbol}/{name}/{tumorType}';
+        let body: any;
+        let queryParameters: any = {};
+        let headers: any = {};
+        let form: any = {};
+        return new Promise(function(resolve, reject) {
+            headers['Accept'] = 'application/json';
+            headers['Content-Type'] = 'application/json';
+
+            path = path.replace('{hugoSymbol}', parameters['hugoSymbol'] + '');
+
+            if (parameters['hugoSymbol'] === undefined) {
+                reject(new Error('Missing required  parameter: hugoSymbol'));
+                return;
+            }
+
+            path = path.replace('{name}', parameters['name'] + '');
+
+            if (parameters['name'] === undefined) {
+                reject(new Error('Missing required  parameter: name'));
+                return;
+            }
+
+            path = path.replace('{tumorType}', parameters['tumorType'] + '');
+
+            if (parameters['tumorType'] === undefined) {
+                reject(new Error('Missing required  parameter: tumorType'));
+                return;
+            }
+
+            if (parameters.$queryParameters) {
+                Object.keys(parameters.$queryParameters).forEach(function(parameterName) {
+                    var parameter = parameters.$queryParameters[parameterName];
+                    queryParameters[parameterName] = parameter;
+                });
+            }
+
+            request('GET', domain + path, body, headers, queryParameters, form, reject, resolve, errorHandlers);
+
+        });
+    };
+
+    /**
+     * getTagByHugoSymbolAndNameAndTumorType
+     * @method
+     * @name OncoKbPrivateAPI#getTagByHugoSymbolAndNameAndTumorTypeUsingGET
+     * @param {string} hugoSymbol - hugoSymbol
+     * @param {string} name - name
+     * @param {string} tumorType - tumorType
+     */
+    getTagByHugoSymbolAndNameAndTumorTypeUsingGET(parameters: {
+        'hugoSymbol': string,
+        'name': string,
+        'tumorType': string,
+        $queryParameters ? : any,
+        $domain ? : string
+    }): Promise < Tag > {
+        return this.getTagByHugoSymbolAndNameAndTumorTypeUsingGETWithHttpInfo(parameters).then(function(response: request.Response) {
+            return response.body;
+        });
+    };
     getTranscriptUsingGETURL(parameters: {
         'hugoSymbol': string,
         $queryParameters ? : any

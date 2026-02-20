@@ -96,7 +96,7 @@ function MutationEffectIcon({
     </span>
   );
 }
-function createHighestLevelOfEvidenceTileProps(
+export function createHighestLevelOfEvidenceTileProps(
   variantAnnotation: VariantAnnotation | GeneNumber,
   includeTitle: boolean
 ): AlterationTileProps {

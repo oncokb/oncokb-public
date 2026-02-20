@@ -30,6 +30,7 @@ import {
   EnsemblGene,
   GeneNumber,
   PortalAlteration,
+  Tag,
   TumorType,
   VariantAnnotation,
 } from 'app/shared/api/generated/OncoKbPrivateAPI';
@@ -364,6 +365,19 @@ export class AnnotationStore {
         notifyError(e, 'Error loading clinical alterations');
         return [];
       }
+    },
+    default: [],
+  });
+
+  readonly tags = remoteData<Tag[]>({
+    await: () => [],
+    invoke: async () => {
+      if (this.germline || !this.gene.result.entrezGeneId) {
+        return [];
+      }
+      return await privateClient.getTagsByEntrezGeneIdUsingGET({
+        entrezGeneId: this.gene.result.entrezGeneId,
+      });
     },
     default: [],
   });

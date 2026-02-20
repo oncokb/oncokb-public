@@ -52,7 +52,7 @@ export type AlterationTileProps = {
   items: AlterationItemProps[][];
 };
 
-function SomaticGermlineTile({
+export function SomaticGermlineTile({
   title,
   items,
 }: AlterationTileProps): JSX.Element {

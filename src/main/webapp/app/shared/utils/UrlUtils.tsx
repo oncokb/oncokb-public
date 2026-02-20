@@ -94,6 +94,7 @@ export const getAlterationPageLink = (props: {
   hashQueries?: AlterationPageHashQueries;
   withProtocolHostPrefix?: boolean;
   germline?: boolean;
+  isTag?: boolean;
 }): string => {
   const linkoutAltName = getCategoricalAlteration(
     typeof props.alteration === 'string'
@@ -106,7 +107,9 @@ export const getAlterationPageLink = (props: {
       ? `/${props.germline ? 'germline' : 'somatic'}`
       : '';
 
-  let pageLink = `${PAGE_ROUTE.GENE_HEADER}/${props.hugoSymbol}${geneTypePath}/${linkoutAltName}`;
+  let pageLink = `${PAGE_ROUTE.GENE_HEADER}/${props.hugoSymbol}${geneTypePath}${
+    props.isTag ? '/tag' : ''
+  }/${linkoutAltName}`;
   if (props.cancerType) {
     pageLink = `${pageLink}/${encodeSlash(props.cancerType)}`;
   }
@@ -140,7 +143,8 @@ export const AlterationPageLink: React.FunctionComponent<{
   showGene?: boolean;
   germline?: boolean;
   onClick?: () => void;
-}> = ({ germline = false, ...props }) => {
+  isTag?: boolean;
+}> = ({ germline = false, isTag = false, ...props }) => {
   const alterationName = getAlterationName(props.alteration, true);
   const pageLink = getAlterationPageLink({
     hugoSymbol: props.hugoSymbol,
@@ -150,6 +154,7 @@ export const AlterationPageLink: React.FunctionComponent<{
     searchQueries: props.searchQueries,
     hashQueries: props.hashQueries,
     germline,
+    isTag,
   });
   return (
     <>

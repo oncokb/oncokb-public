@@ -25,6 +25,7 @@ export default function SomaticGermlineCancerTypeSelect({
   germline,
   onchange,
   prioritizedCancerTypes,
+  isTag = false,
 }: {
   cancerType?: string;
   selectStyles?: StylesConfig;
@@ -37,6 +38,7 @@ export default function SomaticGermlineCancerTypeSelect({
   germline: boolean;
   onchange?: (cancerType: string) => void;
   prioritizedCancerTypes?: string[];
+  isTag?: boolean;
 }) {
   const [isOverflowing, setIsOverflowing] = useState(false);
 
@@ -217,6 +219,7 @@ export default function SomaticGermlineCancerTypeSelect({
                   germline,
                   cancerType: selectedValue,
                   withProtocolHostPrefix: false,
+                  isTag,
                 })
               );
               onchange?.(selectedValue);

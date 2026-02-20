@@ -18,6 +18,8 @@ import { Button, Col, Container, Row } from 'react-bootstrap';
 import {
   getCancerTypeNameFromOncoTreeType,
   getCancerTypesName,
+  getFdaImplicationsFromTags,
+  getImplicationsFromTags,
   getPageTitle,
 } from 'app/shared/utils/Utils';
 import LoadingIndicator, {
@@ -29,12 +31,14 @@ import { DefaultTooltip } from 'cbioportal-frontend-commons';
 import {
   ANNOTATION_PAGE_TAB_KEYS,
   DEFAULT_GENE,
+  EVIDENCE_TYPES,
   LEVEL_CLASSIFICATION,
   LEVEL_TYPES,
   ONCOGENIC_MUTATIONS,
   ONCOKB_NEWS_GROUP_SUBSCRIPTION_LINK,
   PAGE_ROUTE,
   REFERENCE_GENOME,
+  TREATMENT_EVIDENCE_TYPES,
 } from 'app/config/constants';
 import { ClinicalVariant } from 'app/shared/api/generated/OncoKbPrivateAPI';
 import {
@@ -153,6 +157,15 @@ export default class SomaticGermlineGenePage extends React.Component<
     return this.getAlterationsByLevelType(
       this.store.filteredClinicalAlterations,
       LEVEL_TYPES.TX
+    );
+  }
+
+  @computed
+  get tagTxImplications() {
+    return getImplicationsFromTags(
+      this.store.tags.result,
+      TREATMENT_EVIDENCE_TYPES,
+      this.store.hugoSymbol
     );
   }
 
@@ -341,6 +354,15 @@ export default class SomaticGermlineGenePage extends React.Component<
   }
 
   @computed
+  get tagDxImplications() {
+    return getImplicationsFromTags(
+      this.store.tags.result,
+      [EVIDENCE_TYPES.DIAGNOSTIC_IMPLICATION],
+      this.store.hugoSymbol
+    );
+  }
+
+  @computed
   get filteredPxAlterations() {
     if (this.store.filteredClinicalAlterations.length === 0) {
       return [];
@@ -352,11 +374,31 @@ export default class SomaticGermlineGenePage extends React.Component<
   }
 
   @computed
+  get tagPxImplications() {
+    return getImplicationsFromTags(
+      this.store.tags.result,
+      [EVIDENCE_TYPES.PROGNOSTIC_IMPLICATION],
+      this.store.hugoSymbol
+    );
+  }
+
+  @computed
+  get tagFdaImplications() {
+    return getFdaImplicationsFromTags(
+      this.store.tags.result,
+      this.store.hugoSymbol
+    );
+  }
+
+  @computed
   get hasClinicalImplications() {
     return (
       this.filteredTxAlterations.length > 0 ||
       this.filteredDxAlterations.length > 0 ||
-      this.filteredPxAlterations.length > 0
+      this.filteredPxAlterations.length > 0 ||
+      this.tagTxImplications.length > 0 ||
+      this.tagDxImplications.length > 0 ||
+      this.tagPxImplications.length > 0
     );
   }
 
@@ -820,18 +862,30 @@ export default class SomaticGermlineGenePage extends React.Component<
                                         selectedTab={this.defaultSelectedTab}
                                         hugoSymbol={this.store.hugoSymbol}
                                         biological={[]}
-                                        tx={this.getClinicalImplications(
-                                          this.filteredTxAlterations
-                                        )}
-                                        dx={this.getClinicalImplications(
-                                          this.filteredDxAlterations
-                                        )}
-                                        px={this.getClinicalImplications(
-                                          this.filteredPxAlterations
-                                        )}
-                                        fda={this.getFdaImplication(
-                                          this.filteredTxAlterations
-                                        )}
+                                        tx={[
+                                          ...this.tagTxImplications,
+                                          ...this.getClinicalImplications(
+                                            this.filteredTxAlterations
+                                          ),
+                                        ]}
+                                        dx={[
+                                          ...this.tagDxImplications,
+                                          ...this.getClinicalImplications(
+                                            this.filteredDxAlterations
+                                          ),
+                                        ]}
+                                        px={[
+                                          ...this.tagPxImplications,
+                                          ...this.getClinicalImplications(
+                                            this.filteredPxAlterations
+                                          ),
+                                        ]}
+                                        fda={[
+                                          ...this.tagFdaImplications,
+                                          ...this.getFdaImplication(
+                                            this.filteredTxAlterations
+                                          ),
+                                        ]}
                                         onChangeTab={this.onChangeTab}
                                       />
                                     </>
