@@ -111,6 +111,7 @@ export default class SearchInfoIcon extends React.Component<
           <div>
             <ul style={{ marginBottom: 0 }}>
               <li>The search box supports blurry search</li>
+              <li>Three letter amino acid codes are case sensitive</li>
               <li>
                 HGVSg and GC searches default to GRCh37. To search variants in
                 GRCh38, please add GRCh38 as prefix. Example:{' '}

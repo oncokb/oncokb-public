@@ -96,9 +96,22 @@ export default class OncoKBSearch extends React.Component<IOncoKBSearch, {}> {
     };
     const NoOptionsMessage: React.FunctionComponent<any> = (props: any) => {
       if (this.keyword) {
+        const keyword = this.keyword.trim();
+        const isSingleWord =
+          keyword.length > 0 && keyword.split(/\s+/).length === 1;
         return (
           <components.Option {...props}>
             <span>No result found</span>
+            {isSingleWord && (
+              <div className="small text-muted mt-1">
+                If you are searching for a variant, include the gene name to
+                refine your search.
+                <div>
+                  If you are using 3-letter amino acid codes, make sure they are
+                  properly capitalized (eg. "Val")
+                </div>
+              </div>
+            )}
           </components.Option>
         );
       } else {
