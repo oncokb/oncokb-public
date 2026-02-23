@@ -9,6 +9,7 @@ type VariantOverViewProps = {
   hugoSymbol: string;
   alteration: string;
   geneType: Gene['geneType'];
+  isOverviewOnly?: boolean;
 };
 
 export default function VariantOverView({
@@ -16,6 +17,7 @@ export default function VariantOverView({
   hugoSymbol,
   alteration,
   geneType,
+  isOverviewOnly = false,
 }: VariantOverViewProps) {
   const categoricalAlterationDescription = getCategoricalAlterationDescription(
     hugoSymbol,
@@ -24,7 +26,7 @@ export default function VariantOverView({
   );
   return (
     <div style={{ wordWrap: 'break-word' }}>
-      <h3>Variant Overview</h3>
+      <h3>{isOverviewOnly ? 'Overview' : 'Variant Overview'}</h3>
 
       {categoricalAlterationDescription && (
         <div className={classnames(DEFAULT_MARGIN_TOP_LG)}>

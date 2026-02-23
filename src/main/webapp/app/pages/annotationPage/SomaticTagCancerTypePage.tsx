@@ -10,7 +10,11 @@ import {
 } from 'app/config/constants';
 import { COLOR_BLUE } from 'app/config/theme';
 import { Gene } from 'app/shared/api/generated/OncoKbAPI';
-import { EnsemblGene, Tag } from 'app/shared/api/generated/OncoKbPrivateAPI';
+import {
+  EnsemblGene,
+  Tag,
+  VariantAnnotation,
+} from 'app/shared/api/generated/OncoKbPrivateAPI';
 import client from 'app/shared/api/oncokbClientInstance';
 import privateClient from 'app/shared/api/oncokbPrivateClientInstance';
 import SomaticGermlineCancerTypeSelect from 'app/shared/dropdown/SomaticGermlineCancerTypeSelect';
@@ -40,6 +44,8 @@ import { Else, If, Then } from 'react-if';
 import { RouteComponentProps } from 'react-router';
 import { CancerTypeView } from './CancerTypeView';
 import styles from './SomaticGermlineCancerTypePage.module.scss';
+import { SomaticGermlineTile } from 'app/shared/tiles/SomaticGermlineTiles';
+import { createHighestLevelOfEvidenceTileProps } from 'app/shared/tiles/tile-utils';
 
 enum LoadState {
   Loading,
@@ -164,6 +170,18 @@ const SomaticTagCancerTypePage = inject(
             geneSummary,
             cancerTypeCode,
           } = pageLoadState.data;
+
+          const highestLevelInfo: VariantAnnotation = {
+            ...DEFAULT_ANNOTATION,
+            highestSensitiveLevel: tag.highestLevels.highestSensitiveLevel,
+            highestDiagnosticImplicationLevel:
+              tag.highestLevels.highestDiagnosticLevel,
+            highestPrognosticImplicationLevel:
+              tag.highestLevels.highestPrognosticLevel,
+            highestResistanceLevel: tag.highestLevels.highestResistanceLevel,
+            highestFdaLevel: tag.highestLevels.highestFDALevel,
+          };
+
           return (
             <StickyMiniNavBarContextProvider>
               <Container>
@@ -248,6 +266,16 @@ const SomaticTagCancerTypePage = inject(
                 </Row>
               </Container>
               <Container>
+                <Row className="justify-content-center">
+                  <Col md={11}>
+                    <SomaticGermlineTile
+                      {...createHighestLevelOfEvidenceTileProps(
+                        highestLevelInfo,
+                        true
+                      )}
+                    />
+                  </Col>
+                </Row>
                 <Row className={classnames('justify-content-center', 'mt-5')}>
                   <Col md={11}>
                     <h3>
