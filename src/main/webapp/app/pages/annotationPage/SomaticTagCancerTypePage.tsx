@@ -259,6 +259,7 @@ const SomaticTagCancerTypePage = inject(
                           hugoSymbol={gene.hugoSymbol}
                           alteration={tag.name}
                           geneType={gene.geneType}
+                          isOverviewOnly
                         />
                       </Col>
                     </Row>
