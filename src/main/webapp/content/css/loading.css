@@ -7,6 +7,118 @@
   justify-content: center;
   top: 10em;
 }
+
+.oncokb-fallback-card {
+  width: min(760px, calc(100vw - 40px));
+  margin: 0 auto;
+  padding: 64px 24px;
+  background: #ffffff;
+  color: #111111;
+  text-align: left;
+}
+
+.oncokb-fallback-logo {
+  margin-bottom: 28px;
+}
+
+.oncokb-fallback-logo svg {
+  display: block;
+  width: min(320px, 100%);
+  height: auto;
+}
+
+.oncokb-fallback-card h1 {
+  margin: 0 0 16px;
+  font-family: 'Gotham Medium', Arial, sans-serif;
+  font-size: 2rem;
+  line-height: 1.2;
+}
+
+.oncokb-fallback-secondary {
+  margin-top: 12px;
+  color: #333333;
+}
+
+.oncokb-fallback-card p {
+  margin: 0;
+  font-size: 1.1rem;
+  line-height: 1.5;
+}
+
+.oncokb-fallback-actions {
+  display: flex;
+  gap: 10px;
+  flex-wrap: wrap;
+  margin-top: 24px;
+  margin-bottom: 0;
+}
+
+.oncokb-fallback-actions button,
+.oncokb-fallback-actions a {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 4px;
+  font-family: 'Gotham Medium', Arial, sans-serif;
+  font-size: 14px;
+  min-height: 38px;
+  text-decoration: none;
+  cursor: pointer;
+  padding: 0 14px;
+}
+
+.oncokb-fallback-actions button {
+  border: 1px solid #0b63c9;
+  background-color: #0968c3;
+  color: #ffffff;
+}
+
+.oncokb-fallback-actions button:hover {
+  background-color: #0a5aa8;
+}
+
+.oncokb-fallback-actions a {
+  border: 1px solid transparent;
+  color: #0b63c9;
+  background-color: transparent;
+  text-decoration: underline;
+  text-decoration-thickness: 1px;
+  text-underline-offset: 2px;
+}
+
+.oncokb-fallback-actions a:hover,
+.oncokb-fallback-actions a:focus-visible {
+  text-decoration-thickness: 2px;
+}
+
+@media (max-width: 768px) {
+  .app-loading {
+    top: 2em;
+  }
+
+  .app-loading .sk-circle {
+    margin: 48px auto;
+  }
+
+  .oncokb-fallback-card {
+    width: calc(100vw - 40px);
+    padding: 40px 20px;
+  }
+
+  .oncokb-fallback-card h1 {
+    font-size: 1.6rem;
+  }
+
+  .oncokb-fallback-logo {
+    margin-bottom: 22px;
+  }
+}
+
+.app-loading-fallback {
+  top: 0;
+  min-height: 100vh;
+  justify-content: flex-start;
+}
 .app-loading p {
   display: block;
   font-size: 1.17em;
