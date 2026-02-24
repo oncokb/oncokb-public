@@ -148,7 +148,11 @@ export type MailTypeInfo = {
 
 };
 export type ManagedUserVM = {
-    'activated': boolean
+    'accountRequestStatus': "UNKNOWN" | "PENDING" | "APPROVED" | "REJECTED"
+
+        'activated': boolean
+
+        'activationGracePeriodDaysRemaining': number
 
         'activationKey': string
 
@@ -309,7 +313,11 @@ export type UserCompany = {
 
 };
 export type UserDTO = {
-    'activated': boolean
+    'accountRequestStatus': "UNKNOWN" | "PENDING" | "APPROVED" | "REJECTED"
+
+        'activated': boolean
+
+        'activationGracePeriodDaysRemaining': number
 
         'activationKey': string
 
@@ -359,7 +367,9 @@ export type UserDTO = {
 
 };
 export type UserDetailsDTO = {
-    'additionalInfo': AdditionalInfoDTO
+    'accountRequestStatus': "UNKNOWN" | "PENDING" | "APPROVED" | "REJECTED"
+
+        'additionalInfo': AdditionalInfoDTO
 
         'address': string
 

@@ -3944,8 +3944,21 @@
     "ManagedUserVM": {
       "type": "object",
       "properties": {
+        "accountRequestStatus": {
+          "type": "string",
+          "enum": [
+            "UNKNOWN",
+            "PENDING",
+            "APPROVED",
+            "REJECTED"
+          ]
+        },
         "activated": {
           "type": "boolean"
+        },
+        "activationGracePeriodDaysRemaining": {
+          "type": "integer",
+          "format": "int64"
         },
         "activationKey": {
           "type": "string"
@@ -4325,8 +4338,21 @@
     "UserDTO": {
       "type": "object",
       "properties": {
+        "accountRequestStatus": {
+          "type": "string",
+          "enum": [
+            "UNKNOWN",
+            "PENDING",
+            "APPROVED",
+            "REJECTED"
+          ]
+        },
         "activated": {
           "type": "boolean"
+        },
+        "activationGracePeriodDaysRemaining": {
+          "type": "integer",
+          "format": "int64"
         },
         "activationKey": {
           "type": "string"
@@ -4435,6 +4461,15 @@
     "UserDetailsDTO": {
       "type": "object",
       "properties": {
+        "accountRequestStatus": {
+          "type": "string",
+          "enum": [
+            "UNKNOWN",
+            "PENDING",
+            "APPROVED",
+            "REJECTED"
+          ]
+        },
         "additionalInfo": {
           "$ref": "#/definitions/AdditionalInfoDTO"
         },

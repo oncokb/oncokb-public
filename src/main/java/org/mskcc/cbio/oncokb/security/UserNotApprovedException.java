@@ -3,7 +3,7 @@ package org.mskcc.cbio.oncokb.security;
 import org.springframework.security.core.AuthenticationException;
 
 /**
- * This exception is thrown in case of a not activated user trying to authenticate.
+ * This exception is thrown when a user is not approved to authenticate.
  */
 public class UserNotApprovedException extends AuthenticationException {
 

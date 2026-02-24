@@ -83,6 +83,7 @@ import { sortBy } from 'app/shared/utils/LodashUtils';
 import { Helmet } from 'react-helmet-async';
 import { ToggleValue } from '../usageAnalysisPage/usage-analysis-utils';
 import UsageAnalysisTable from '../usageAnalysisPage/UsageAnalysisTable';
+import styles from './UserPage.module.scss';
 
 export enum AccountStatus {
   ACTIVATED = 'Activated',
@@ -201,6 +202,27 @@ export default class UserPage extends React.Component<IUserPage> {
     this.userTokens = await client.getUserTokensUsingGET({
       login: this.props.match.params.login,
     });
+  }
+
+  private getRequestStatusLabel(status: UserDTO['accountRequestStatus']) {
+    if (status === undefined || status === null) {
+      return 'Unknown';
+    }
+    return status.charAt(0) + status.slice(1).toLowerCase();
+  }
+
+  private getRequestStatusClass(status: UserDTO['accountRequestStatus']) {
+    switch (status) {
+      case 'APPROVED':
+        return styles.requestStatusApproved;
+      case 'PENDING':
+        return styles.requestStatusPending;
+      case 'REJECTED':
+        return styles.requestStatusRejected;
+      case 'UNKNOWN':
+      default:
+        return styles.requestStatusUnknown;
+    }
   }
 
   @computed
@@ -992,8 +1014,24 @@ export default class UserPage extends React.Component<IUserPage> {
                               />
                             </div>
                           ) : null}
+                          <div className={'mb-2'}>
+                            <span className="mr-2 font-weight-bold">
+                              Account Request Status
+                            </span>
+                            <span
+                              className={`${
+                                styles.requestStatusBadge
+                              } ${this.getRequestStatusClass(
+                                this.user.accountRequestStatus
+                              )}`}
+                            >
+                              {this.getRequestStatusLabel(
+                                this.user.accountRequestStatus
+                              )}
+                            </span>
+                          </div>
                           <div className={'mb-2 mt-1 font-weight-bold'}>
-                            <span>Account Status</span>
+                            <span>Account Activation Status</span>
                             <InfoIcon
                               className={'ml-2'}
                               overlay={

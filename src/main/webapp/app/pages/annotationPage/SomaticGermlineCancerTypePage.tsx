@@ -734,7 +734,8 @@ export class SomaticGermlineCancerTypePage extends React.Component<
                     appStore={this.props.appStore}
                     isLargeScreen={this.props.windowStore.isLargeScreen}
                     userAuthenticated={
-                      this.props.authenticationStore.isUserAuthenticated
+                      this.props.authenticationStore
+                        .isAuthenticatedAndApprovedUser
                     }
                     hugoSymbol={this.store.hugoSymbol}
                     alteration={this.store.alterationName}

@@ -3,8 +3,8 @@ package org.mskcc.cbio.oncokb.service.mapper;
 
 import com.google.gson.Gson;
 import org.mskcc.cbio.oncokb.domain.*;
-import org.mskcc.cbio.oncokb.service.dto.useradditionalinfo.AdditionalInfoDTO;
 import org.mskcc.cbio.oncokb.service.dto.UserDetailsDTO;
+import org.mskcc.cbio.oncokb.service.dto.useradditionalinfo.AdditionalInfoDTO;
 
 import org.mapstruct.*;
 

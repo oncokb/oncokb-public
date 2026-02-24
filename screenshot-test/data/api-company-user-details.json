@@ -26,6 +26,7 @@
   "emailVerified": true,
   "imageUrl": "",
   "activated": true,
+  "accountRequestStatus": "APPROVED",
   "langKey": "en",
   "activationKey": null,
   "resetKey": null,

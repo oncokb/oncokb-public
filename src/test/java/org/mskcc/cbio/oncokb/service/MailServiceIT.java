@@ -2,27 +2,35 @@ package org.mskcc.cbio.oncokb.service;
 
 import org.mskcc.cbio.oncokb.config.Constants;
 
-import org.mskcc.cbio.oncokb.RedisTestContainerExtension;
 import org.mskcc.cbio.oncokb.OncokbPublicApp;
 import org.mskcc.cbio.oncokb.config.application.ApplicationProperties;
 import org.mskcc.cbio.oncokb.config.application.EmailAddresses;
 import org.mskcc.cbio.oncokb.domain.User;
+import org.mskcc.cbio.oncokb.domain.UserDetails;
+import org.mskcc.cbio.oncokb.domain.Token;
 import io.github.jhipster.config.JHipsterProperties;
 import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.params.ParameterizedTest;
+import org.junit.jupiter.params.provider.EnumSource;
 import org.junit.jupiter.api.Test;
-import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.ArgumentCaptor;
 import org.mockito.Captor;
 import org.mockito.MockitoAnnotations;
 import org.mockito.Spy;
+import org.mskcc.cbio.oncokb.domain.enumeration.AccountRequestStatus;
 import org.mskcc.cbio.oncokb.domain.enumeration.MailType;
+import org.mskcc.cbio.oncokb.repository.UserDetailsRepository;
+import org.mskcc.cbio.oncokb.repository.UserRepository;
+import org.mskcc.cbio.oncokb.repository.TokenRepository;
 import org.mskcc.cbio.oncokb.service.dto.UserDTO;
+import org.mskcc.cbio.oncokb.service.TokenService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.context.MessageSource;
 import org.springframework.mail.MailSendException;
 import org.springframework.mail.javamail.JavaMailSenderImpl;
 import org.thymeleaf.spring5.SpringTemplateEngine;
+import org.apache.commons.lang3.RandomStringUtils;
 
 import javax.mail.Message;
 import javax.mail.MessagingException;
@@ -34,7 +42,9 @@ import java.io.*;
 import java.net.URI;
 import java.net.URL;
 import java.nio.charset.Charset;
+import java.time.Instant;
 import java.util.Properties;
+import java.util.UUID;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
@@ -75,6 +85,18 @@ public class MailServiceIT {
     @Autowired
     private UserMailsService userMailsService;
 
+    @Autowired
+    private TokenService tokenService;
+
+    @Autowired
+    private UserRepository userRepository;
+
+    @Autowired
+    private UserDetailsRepository userDetailsRepository;
+
+    @Autowired
+    private TokenRepository tokenRepository;
+
     @Spy
     private JavaMailSenderImpl javaMailSender;
 
@@ -95,7 +117,10 @@ public class MailServiceIT {
         applicationProperties.getEmailAddresses().setRegistrationAddress(REGISTRATION_ADDR);
         applicationProperties.getEmailAddresses().setTechDevAddress(TECH_DEV_ADDR);
 
-        mailService = new MailService(jHipsterProperties, javaMailSender, messageSource, templateEngine, userMailsService, applicationProperties);
+        mailService = new MailService(
+            jHipsterProperties, javaMailSender, messageSource, templateEngine,
+            userMailsService, tokenService, userRepository, userDetailsRepository, applicationProperties
+        );
     }
 
     @Test
@@ -172,6 +197,97 @@ public class MailServiceIT {
         assertThat(message.getFrom()[0].toString()).isEqualTo(jHipsterProperties.getMail().getFrom());
         assertThat(message.getContent().toString()).isEqualToNormalizingNewlines("<html>test title, http://127.0.0.1:9095, john</html>\n");
         assertThat(message.getDataHandler().getContentType()).isEqualTo("text/html;charset=UTF-8");
+    }
+
+    @ParameterizedTest
+    @EnumSource(value = MailType.class, names = {
+        "REJECTION",
+        "REJECTION_US_SANCTION",
+        "REJECT_ALUMNI_ADDRESS"
+    })
+    public void testRejectionEmailUpdatesUserDetailsStatus(MailType mailType) {
+        User user = new User();
+        user.setLogin("reject." + mailType.name().toLowerCase());
+        user.setEmail("reject." + mailType.name().toLowerCase() + "@example.com");
+        user.setFirstName("Reject");
+        user.setLastName("User");
+        user.setLangKey("en");
+        user.setActivated(true);
+        user.setPassword(RandomStringUtils.random(60));
+        user = userRepository.save(user);
+
+        UserDetails userDetails = new UserDetails();
+        userDetails.setUser(user);
+        userDetails.setAccountRequestStatus(AccountRequestStatus.PENDING);
+        userDetailsRepository.save(userDetails);
+
+        UserDTO userDTO = new UserDTO(user, userDetails);
+        mailService.sendEmailFromSlack(userDTO, "Rejected", "Rejected body", mailType, "tester");
+
+        UserDetails updated = userDetailsRepository.findOneByUser(user).orElseThrow(AssertionError::new);
+        assertThat(updated.getAccountRequestStatus()).isEqualTo(AccountRequestStatus.REJECTED);
+        assertThat(userRepository.findOneById(user.getId()).orElseThrow(AssertionError::new).getActivated()).isFalse();
+    }
+
+    @Test
+    public void testRejectionEmailDeletesTokens() {
+        User user = new User();
+        user.setLogin("reject.tokens");
+        user.setEmail("reject.tokens@example.com");
+        user.setFirstName("Reject");
+        user.setLastName("Tokens");
+        user.setLangKey("en");
+        user.setActivated(true);
+        user.setPassword(RandomStringUtils.random(60));
+        user = userRepository.save(user);
+
+        UserDetails userDetails = new UserDetails();
+        userDetails.setUser(user);
+        userDetails.setAccountRequestStatus(AccountRequestStatus.PENDING);
+        userDetailsRepository.save(userDetails);
+
+        Token token = new Token();
+        token.setUser(user);
+        token.setToken(UUID.randomUUID());
+        token.setCreation(Instant.now());
+        token.setExpiration(Instant.now().plusSeconds(3600));
+        token.setCurrentUsage(0);
+        token.setRenewable(true);
+        tokenRepository.save(token);
+
+        UserDTO userDTO = new UserDTO(user, userDetails);
+        mailService.sendEmailFromSlack(userDTO, "Rejected", "Rejected body", MailType.REJECTION, "tester");
+
+        assertThat(tokenRepository.findByUserLogin(user.getLogin())).isEmpty();
+        assertThat(userRepository.findOneById(user.getId()).orElseThrow(AssertionError::new).getActivated()).isFalse();
+    }
+
+    @ParameterizedTest
+    @EnumSource(
+        value = MailType.class,
+        mode = EnumSource.Mode.EXCLUDE,
+        names = {"REJECTION", "REJECTION_US_SANCTION", "REJECT_ALUMNI_ADDRESS"}
+    )
+    public void testNonRejectionEmailDoesNotUpdateUserDetailsStatus(MailType mailType) {
+        User user = new User();
+        user.setLogin("nonreject." + mailType.name().toLowerCase());
+        user.setEmail("nonreject." + mailType.name().toLowerCase() + "@example.com");
+        user.setFirstName("NonReject");
+        user.setLastName("User");
+        user.setLangKey("en");
+        user.setPassword(RandomStringUtils.random(60));
+        user = userRepository.save(user);
+
+        UserDetails userDetails = new UserDetails();
+        userDetails.setUser(user);
+        userDetails.setAccountRequestStatus(AccountRequestStatus.PENDING);
+        userDetailsRepository.save(userDetails);
+
+        UserDTO userDTO = new UserDTO(user, userDetails);
+        mailService.sendEmailFromSlack(userDTO, "Subject", "Body", mailType, "tester");
+
+        UserDetails updated = userDetailsRepository.findOneByUser(user).orElseThrow(AssertionError::new);
+        assertThat(updated.getAccountRequestStatus()).isEqualTo(AccountRequestStatus.PENDING);
     }
 
     @Test

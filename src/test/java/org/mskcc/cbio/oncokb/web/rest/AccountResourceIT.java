@@ -6,6 +6,8 @@ import org.mskcc.cbio.oncokb.config.application.ApplicationProperties;
 import org.mskcc.cbio.oncokb.config.application.RecaptchaProperties;
 import org.mskcc.cbio.oncokb.domain.Company;
 import org.mskcc.cbio.oncokb.domain.User;
+import org.mskcc.cbio.oncokb.domain.UserDetails;
+import org.mskcc.cbio.oncokb.domain.enumeration.AccountRequestStatus;
 import org.mskcc.cbio.oncokb.domain.enumeration.CompanyType;
 import org.mskcc.cbio.oncokb.domain.enumeration.LicenseModel;
 import org.mskcc.cbio.oncokb.domain.enumeration.LicenseStatus;
@@ -178,6 +180,11 @@ public class AccountResourceIT {
             .andExpect(status().isCreated());
 
         assertThat(userRepository.findOneWithAuthoritiesByLogin("test-register-valid").isPresent()).isTrue();
+        User user = userRepository.findOneWithAuthoritiesByLogin("test-register-valid").orElse(null);
+        assertThat(user).isNotNull();
+        UserDetails userDetails = userDetailsRepository.findOneByUser(user).orElse(null);
+        assertThat(userDetails).isNotNull();
+        assertThat(userDetails.getAccountRequestStatus()).isEqualTo(AccountRequestStatus.PENDING);
     }
 
     @Test
@@ -446,11 +453,18 @@ public class AccountResourceIT {
         user.setActivationKey(activationKey);
 
         userRepository.saveAndFlush(user);
+        UserDetails userDetails = new UserDetails();
+        userDetails.setUser(user);
+        userDetails.setAccountRequestStatus(AccountRequestStatus.PENDING);
+        userDetailsRepository.saveAndFlush(userDetails);
 
         restAccountMockMvc.perform(get("/api/activate?key={activationKey}&login={userLogin}", activationKey, userLogin))
             .andExpect(status().isOk());
 
         user = userRepository.findOneWithAuthoritiesByLogin(user.getLogin()).orElse(null);
+        userDetails = userDetailsRepository.findOneByUser(user).orElse(null);
+        assertThat(userDetails).isNotNull();
+        assertThat(userDetails.getAccountRequestStatus()).isEqualTo(AccountRequestStatus.PENDING);
         // Users are not activated until either their email matches a FULL company
         // or approved manually.
         assertThat(user.getActivated()).isFalse();
@@ -610,6 +624,7 @@ public class AccountResourceIT {
         apiAccessRequest.setJustification("random request");
         additionalInfoDTO.setApiAccessRequest(apiAccessRequest);
         userDetailsDTO.setAdditionalInfo(additionalInfoDTO);
+        userDetailsDTO.setAccountRequestStatus(AccountRequestStatus.PENDING);
         userDetailsRepository.saveAndFlush(userDetailsMapper.toEntity(userDetailsDTO));
 
         restAccountMockMvc.perform(get("/api/activate?key={activationKey}&login={userLogin}", activationKey, userLogin))
@@ -656,6 +671,7 @@ public class AccountResourceIT {
         apiAccessRequest.setJustification("random request");
         additionalInfoDTO.setApiAccessRequest(apiAccessRequest);
         userDetailsDTO.setAdditionalInfo(additionalInfoDTO);
+        userDetailsDTO.setAccountRequestStatus(AccountRequestStatus.PENDING);
         userDetailsRepository.saveAndFlush(userDetailsMapper.toEntity(userDetailsDTO));
 
         restAccountMockMvc.perform(get("/api/activate?key={activationKey}&login={userLogin}", activationKey, userLogin))
@@ -702,6 +718,7 @@ public class AccountResourceIT {
         apiAccessRequest.setJustification("random request");
         additionalInfoDTO.setApiAccessRequest(apiAccessRequest);
         userDetailsDTO.setAdditionalInfo(additionalInfoDTO);
+        userDetailsDTO.setAccountRequestStatus(AccountRequestStatus.PENDING);
         userDetailsRepository.saveAndFlush(userDetailsMapper.toEntity(userDetailsDTO));
 
         restAccountMockMvc.perform(get("/api/activate?key={activationKey}&login={userLogin}", activationKey, userLogin))
@@ -755,6 +772,45 @@ public class AccountResourceIT {
 
     @Test
     @Transactional
+    @WithMockUser("activate-via-save-account")
+    public void testSaveAccountSetsAccountRequestStatusApprovedOnActivation() throws Exception {
+        User user = new User();
+        user.setLogin("activate-via-save-account");
+        user.setEmail("activate-via-save-account@example.com");
+        user.setPassword(RandomStringUtils.random(60));
+        user.setActivated(false);
+        userRepository.saveAndFlush(user);
+
+        UserDetails userDetails = new UserDetails();
+        userDetails.setUser(user);
+        userDetails.setAccountRequestStatus(AccountRequestStatus.PENDING);
+        userDetailsRepository.saveAndFlush(userDetails);
+
+        UserDTO userDTO = new UserDTO();
+        userDTO.setId(user.getId());
+        userDTO.setLogin("not-used");
+        userDTO.setFirstName("firstname");
+        userDTO.setLastName("lastname");
+        userDTO.setEmail("activate-via-save-account@example.com");
+        userDTO.setActivated(true);
+        userDTO.setImageUrl("http://placehold.it/50x50");
+        userDTO.setLangKey(Constants.DEFAULT_LANGUAGE);
+        userDTO.setAuthorities(Collections.singleton(AuthoritiesConstants.ADMIN));
+
+        restAccountMockMvc.perform(
+                post("/api/account")
+                    .contentType(MediaType.APPLICATION_JSON)
+                    .content(TestUtil.convertObjectToJsonBytes(userDTO)))
+            .andExpect(status().isOk());
+
+        User updatedUser = userRepository.findOneWithAuthoritiesByLogin(user.getLogin()).orElse(null);
+        UserDetails updatedUserDetails = userDetailsRepository.findOneByUser(updatedUser).orElse(null);
+        assertThat(updatedUserDetails).isNotNull();
+        assertThat(updatedUserDetails.getAccountRequestStatus()).isEqualTo(AccountRequestStatus.APPROVED);
+    }
+
+    @Test
+    @Transactional
     @WithMockUser("save-invalid-email")
     public void testSaveInvalidEmail() throws Exception {
         User user = new User();
@@ -782,6 +838,29 @@ public class AccountResourceIT {
             .andExpect(status().isBadRequest());
 
         assertThat(userRepository.findOneWithAuthoritiesByEmailIgnoreCase("invalid email")).isNotPresent();
+    }
+
+    @Test
+    @Transactional
+    @WithMockUser(authorities = AuthoritiesConstants.ADMIN)
+    public void testInitiateTrialAccountActivationSetsAccountRequestStatusApproved() throws Exception {
+        User user = new User();
+        user.setLogin("trial-init");
+        user.setEmail("trial-init@example.com");
+        user.setPassword(RandomStringUtils.random(60));
+        user.setActivated(false);
+        userRepository.saveAndFlush(user);
+
+        restAccountMockMvc.perform(
+                post("/api/account/active-trial/init")
+                    .contentType(MediaType.TEXT_PLAIN)
+                    .content(user.getLogin()))
+            .andExpect(status().isOk());
+
+        User updatedUser = userRepository.findOneWithAuthoritiesByLogin(user.getLogin()).orElse(null);
+        UserDetails userDetails = userDetailsRepository.findOneByUser(updatedUser).orElse(null);
+        assertThat(userDetails).isNotNull();
+        assertThat(userDetails.getAccountRequestStatus()).isEqualTo(AccountRequestStatus.APPROVED);
     }
 
     @Test

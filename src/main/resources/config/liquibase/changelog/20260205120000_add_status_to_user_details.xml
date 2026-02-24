@@ -1,0 +1,37 @@
+<databaseChangeLog
+  xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+  xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+  xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog
+          http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-latest.xsd">
+
+  <changeSet author="oncokb" id="20260205120000-1">
+    <addColumn tableName="user_details">
+      <column name="account_request_status" type="varchar(50)">
+        <constraints nullable="true" />
+      </column>
+    </addColumn>
+  </changeSet>
+
+  <changeSet author="oncokb" id="20260205120000-2">
+    <sql>
+      UPDATE user_details
+      SET account_request_status = CASE
+        WHEN EXISTS (
+          SELECT 1
+          FROM user_mails um
+          WHERE um.user_id = user_details.user_id
+            AND um.mail_type IN ('REJECTION', 'REJECTION_US_SANCTION', 'REJECT_ALUMNI_ADDRESS')
+        ) THEN 'REJECTED'
+        WHEN (SELECT u.activated FROM jhi_user u WHERE u.id = user_details.user_id) = true THEN 'APPROVED'
+        ELSE 'PENDING'
+      END
+      WHERE account_request_status IS NULL;
+    </sql>
+  </changeSet>
+
+  <changeSet author="oncokb" id="20260205120000-3">
+    <addDefaultValue tableName="user_details" columnName="account_request_status" columnDataType="varchar(50)" defaultValue="PENDING"/>
+    <addNotNullConstraint tableName="user_details" columnName="account_request_status" columnDataType="varchar(50)"/>
+  </changeSet>
+
+</databaseChangeLog>
