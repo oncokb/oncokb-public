@@ -163,3 +163,9 @@ application:
   rate-limit:
     capacity: 10
     refill-period: 1s
+  token-stats:
+    executor:
+      core-pool-size: 2
+      max-pool-size: 4
+      queue-capacity: 500
+      thread-name-prefix: token-stats-
