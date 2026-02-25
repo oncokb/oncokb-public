@@ -1,5 +1,6 @@
 import React from 'react';
 import { Button } from 'react-bootstrap';
+import classnames from 'classnames';
 
 import InfoIcon from 'app/shared/icons/InfoIcon';
 import { SimpleTable } from 'app/components/SimpleTable';
@@ -8,6 +9,8 @@ import styles from './index.module.scss';
 
 export interface ISearchInfoIcon {
   onSelectQuery: (query: string) => void;
+  highlight?: boolean;
+  className?: string;
 }
 
 export default class SearchInfoIcon extends React.Component<
@@ -60,7 +63,12 @@ export default class SearchInfoIcon extends React.Component<
                 { key: 'alteration-0', content: 'Alteration' },
                 {
                   key: 'alteration-1',
-                  content: this.getQueryLink('BRAF V600E'),
+                  content: (
+                    <>
+                      <div>{this.getQueryLink('BRAF V600E')}</div>
+                      <div>{this.getQueryLink('BRAF Val600Glu')}</div>
+                    </>
+                  ),
                 },
               ],
             },
@@ -111,7 +119,14 @@ export default class SearchInfoIcon extends React.Component<
           <div>
             <ul style={{ marginBottom: 0 }}>
               <li>The search box supports blurry search</li>
-              <li>Three letter amino acid codes are case sensitive</li>
+              <li>
+                Three letter amino acid codes are case sensitive. Capitalize the
+                first letter (e.g., Val).
+              </li>
+              <li>
+                If an amino acid sequence is not capitalized properly, it will
+                be treated as single letter amino acid codes.
+              </li>
               <li>
                 HGVSg and GC searches default to GRCh37. To search variants in
                 GRCh38, please add GRCh38 as prefix. Example:{' '}
@@ -132,6 +147,9 @@ export default class SearchInfoIcon extends React.Component<
         placement={'top'}
         overlay={this.getOverlay()}
         overlayClassName={'oncokb-search-overlay'}
+        className={classnames(this.props.className, {
+          [styles.infoIconHighlight]: this.props.highlight,
+        })}
       />
     );
   }
