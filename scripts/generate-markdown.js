@@ -99,6 +99,17 @@ function fixHtmlString(htmlString) {
  *
  * @throws {Error} If a mutation is found in a row without an associated gene.
  */
+function isNewlyAddedGenesTrigger(text) {
+  const lower = text.toLowerCase();
+  if (!lower.includes('new gene')) {
+    return false;
+  }
+  if (lower.includes('new gene page layout')) {
+    return false;
+  }
+  return lower.includes('addition of') || lower.includes('newly added');
+}
+
 function newlyAddedGenes(md, state) {
   let foundNewlyAddedGenes = false;
   let index = 0;
@@ -107,8 +118,8 @@ function newlyAddedGenes(md, state) {
   const genes = [];
   for (const token of state.tokens) {
     if (
-      token.content.toLowerCase().includes('new gene') &&
-      !token.content.toLowerCase().includes('new gene page layout')
+      token.type === 'inline' &&
+      isNewlyAddedGenesTrigger(token.content)
     ) {
       foundNewlyAddedGenes = true;
       toRemoveStart = index;

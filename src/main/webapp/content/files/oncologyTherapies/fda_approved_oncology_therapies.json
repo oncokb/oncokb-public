@@ -2488,5 +2488,15 @@
     "targetedTx": "Y",
     "pxTx": "Y",
     "ngsTest": "Y"
+  },
+  {
+    "year": "2025",
+    "tx": "Trastuzumab deruxtecan + Pertuzumab",
+    "biomarker": "HER2+ (ERBB2 Amplification)",
+    "agentClass": "Antibody drug conjugate and monocolonal antibody",
+    "drugTarget": "HER2 (ERBB2)-directed antibody and topoisomerase inhibitor conjugate + anti-HER2 (ERBB2) antibody",
+    "targetedTx": "Y",
+    "pxTx": "Y",
+    "ngsTest": "Y"
   }
 ]
