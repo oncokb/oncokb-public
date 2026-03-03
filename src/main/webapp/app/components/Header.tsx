@@ -215,7 +215,7 @@ class Header extends React.Component<IHeaderProps> {
                             className={'position-absolute'}
                             style={{ width: 500, right: 0, color: 'black' }}
                           >
-                            <OncoKBSearch />
+                            <OncoKBSearch infoIconClassName="text-white" />
                           </span>
                         </span>
                       )}

@@ -17,11 +17,13 @@ import { observable } from 'mobx';
 import AppStore from 'app/store/AppStore';
 import SearchInfoIcon from 'app/components/oncokbSearch/SearchInfoIcon';
 import { remoteData } from 'cbioportal-frontend-commons';
+import { SearchSuggestions } from 'app/components/oncokbSearch/SearchSuggestions';
 
 interface IOncoKBSearch {
   routing?: RouterStore;
   styles?: CSSRule;
   appStore?: AppStore;
+  infoIconClassName?: string;
 }
 
 @inject('routing', 'appStore')
@@ -30,8 +32,10 @@ export default class OncoKBSearch extends React.Component<IOncoKBSearch, {}> {
   @observable keyword: string;
   @observable selectInput: string;
   @observable selectedOption: ExtendedTypeaheadSearchResp | null;
+  @observable infoIconHighlighted = false;
 
   private timeout: any;
+  private infoIconHighlightTimeout: number | undefined;
 
   readonly options = remoteData<ExtendedTypeaheadSearchResp[]>({
     invoke: async () => {
@@ -77,6 +81,16 @@ export default class OncoKBSearch extends React.Component<IOncoKBSearch, {}> {
     }, 500);
   };
 
+  private highlightInfoIcon = () => {
+    if (this.infoIconHighlightTimeout) {
+      window.clearTimeout(this.infoIconHighlightTimeout);
+    }
+    this.infoIconHighlighted = true;
+    this.infoIconHighlightTimeout = window.setTimeout(() => {
+      this.infoIconHighlighted = false;
+    }, 1200);
+  };
+
   render() {
     const Option: React.FunctionComponent<any> = (props: any) => {
       return (
@@ -105,6 +119,17 @@ export default class OncoKBSearch extends React.Component<IOncoKBSearch, {}> {
         return null;
       }
     };
+    const MenuList: React.FunctionComponent<any> = (props: any) => {
+      const showSuggestions = !this.options.isPending;
+      return (
+        <components.MenuList {...props}>
+          {props.children}
+          {showSuggestions && (
+            <SearchSuggestions onInfoIconClick={this.highlightInfoIcon} />
+          )}
+        </components.MenuList>
+      );
+    };
 
     return (
       <div className={'d-flex align-items-center'}>
@@ -116,6 +141,7 @@ export default class OncoKBSearch extends React.Component<IOncoKBSearch, {}> {
               DropdownIndicator: () => null,
               IndicatorSeparator: () => null,
               NoOptionsMessage,
+              MenuList,
             }}
             styles={{
               input(styles) {
@@ -159,6 +185,8 @@ export default class OncoKBSearch extends React.Component<IOncoKBSearch, {}> {
         </div>
         <div className={'ml-2'}>
           <SearchInfoIcon
+            highlight={this.infoIconHighlighted}
+            className={this.props.infoIconClassName}
             onSelectQuery={newQuery => {
               this.selectInput = newQuery;
               this.keyword = newQuery;
