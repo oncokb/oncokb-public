@@ -30,6 +30,7 @@ import { getAlterationPageLink } from 'app/shared/utils/UrlUtils';
 import {
   getFdaImplicationsFromTags,
   getImplicationsFromTags,
+  getTagVariantOverview,
 } from 'app/shared/utils/Utils';
 import AppStore from 'app/store/AppStore';
 import AuthenticationStore from 'app/store/AuthenticationStore';
@@ -254,7 +255,7 @@ const SomaticTagCancerTypePage = inject(
                         <VariantOverView
                           alterationSummaries={[
                             { content: geneSummary },
-                            { content: tag.description },
+                            { content: getTagVariantOverview(tag) },
                           ]}
                           hugoSymbol={gene.hugoSymbol}
                           alteration={tag.name}

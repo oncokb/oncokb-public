@@ -28,6 +28,7 @@ import { upperFirst } from 'app/shared/utils/LodashUtils';
 import {
   getFdaImplicationsFromTags,
   getImplicationsFromTags,
+  getTagVariantOverview,
 } from 'app/shared/utils/Utils';
 import AppStore from 'app/store/AppStore';
 import { inject } from 'mobx-react';
@@ -231,7 +232,7 @@ const SomaticTagPage = inject(
                         <VariantOverView
                           alterationSummaries={[
                             { content: geneSummary },
-                            { content: tag.description },
+                            { content: getTagVariantOverview(tag) },
                           ]}
                           hugoSymbol={gene.hugoSymbol}
                           alteration={tag.name}
