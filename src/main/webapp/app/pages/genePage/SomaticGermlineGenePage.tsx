@@ -563,7 +563,13 @@ export default class SomaticGermlineGenePage extends React.Component<
               <Then>
                 {this.store.gene.isError ||
                 this.store.gene.result === DEFAULT_GENE ? (
-                  <UnknownGeneAlert />
+                  <Container>
+                    <Row className="justify-content-center">
+                      <Col md={11}>
+                        <UnknownGeneAlert />
+                      </Col>
+                    </Row>
+                  </Container>
                 ) : (
                   <If condition={this.pageShouldBeRendered}>
                     <Then>

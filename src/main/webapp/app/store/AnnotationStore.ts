@@ -187,7 +187,10 @@ export class AnnotationStore {
         }
 
         const genes = await apiClient.genesLookupGetUsingGET({ query });
-        return genes && genes.length > 0 ? genes[0] : DEFAULT_GENE;
+        const exactMatch = genes?.find(
+          gene => gene.hugoSymbol?.toUpperCase() === query?.toUpperCase()
+        );
+        return exactMatch ?? DEFAULT_GENE;
       } catch (e) {
         notifyError(e, 'Error finding gene');
         return DEFAULT_GENE;
