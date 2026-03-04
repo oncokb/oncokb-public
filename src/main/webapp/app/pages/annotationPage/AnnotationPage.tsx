@@ -16,7 +16,7 @@ import {
   TREATMENT_EVIDENCE_TYPES,
 } from 'app/config/constants';
 import styles from 'app/pages/alterationPage/AlterationPage.module.scss';
-import { Col, Row, Alert } from 'react-bootstrap';
+import { Col, Row, Alert, Container } from 'react-bootstrap';
 import classnames from 'classnames';
 import { action, computed, observable } from 'mobx';
 import * as QueryString from 'querystring';
@@ -558,9 +558,7 @@ export default class AnnotationPage extends React.Component<
                 }}
                 appStore={this.props.appStore}
                 alteration={this.props.store.alterationNameWithDiff}
-                proteinAlteration={
-                  this.props.store.alteration?.proteinChange
-                }
+                proteinAlteration={this.props.store.alteration?.proteinChange}
                 isGermline={this.props.store.germline}
                 extra={
                   this.props.store.cancerTypeName && (
@@ -746,7 +744,13 @@ export default class AnnotationPage extends React.Component<
     return this.props.annotationType === AnnotationType.GENE &&
       (this.props.store.gene.isError ||
         this.props.store.gene.result === DEFAULT_GENE) ? (
-      <UnknownGeneAlert />
+      <Container>
+        <Row className="justify-content-center">
+          <Col md={11}>
+            <UnknownGeneAlert />
+          </Col>
+        </Row>
+      </Container>
     ) : (
       <>
         {this.navBreadcrumbs}

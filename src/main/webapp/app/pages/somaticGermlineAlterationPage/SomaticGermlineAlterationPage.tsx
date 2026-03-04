@@ -47,6 +47,7 @@ import {
   ONCOGENICITY,
   DEFAULT_MARGIN_BOTTOM_LG,
   DEFAULT_MARGIN_TOP_LG,
+  DEFAULT_GENE,
 } from 'app/config/constants';
 import { Alteration } from 'app/shared/api/generated/OncoKbAPI';
 import {
@@ -77,6 +78,7 @@ import { SomaticGermlineAlterationTiles } from 'app/shared/tiles/tile-utils';
 import GeneticTypeTag from 'app/components/tag/GeneticTypeTag';
 import VariantOverView from 'app/shared/sections/VariantOverview';
 import GeneAdditionalInfoSection from 'app/shared/sections/GeneAdditionalInfoSection';
+import { UnknownGeneAlert } from 'app/shared/alert/UnknownGeneAlert';
 
 type MatchParams = {
   hugoSymbol: string;
@@ -552,6 +554,9 @@ export class SomaticGermlineAlterationPage extends React.Component<
   }
 
   render() {
+    const showUnknownGene =
+      this.store.gene.isComplete &&
+      (this.store.gene.isError || this.store.gene.result === DEFAULT_GENE);
     return (
       <div className="view-wrapper">
         <Helmet>
@@ -567,7 +572,15 @@ export class SomaticGermlineAlterationPage extends React.Component<
             })}
           />
         </Helmet>
-        {this.pageShouldBeRendered ? (
+        {showUnknownGene ? (
+          <Container>
+            <Row className="justify-content-center">
+              <Col md={11}>
+                <UnknownGeneAlert />
+              </Col>
+            </Row>
+          </Container>
+        ) : this.pageShouldBeRendered ? (
           <StickyMiniNavBarContextProvider>
             <Container>
               <Row className="justify-content-center">

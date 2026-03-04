@@ -44,6 +44,7 @@ import {
   ANNOTATION_PAGE_TAB_KEYS,
   TREATMENT_EVIDENCE_TYPES,
   ONCOGENICITY,
+  DEFAULT_GENE,
 } from 'app/config/constants';
 import { Alteration } from 'app/shared/api/generated/OncoKbAPI';
 import {
@@ -75,6 +76,7 @@ import GeneticTypeTag from 'app/components/tag/GeneticTypeTag';
 import VariantOverView from 'app/shared/sections/VariantOverview';
 import styles from './SomaticGermlineCancerTypePage.module.scss';
 import GeneAdditionalInfoSection from 'app/shared/sections/GeneAdditionalInfoSection';
+import { UnknownGeneAlert } from 'app/shared/alert/UnknownGeneAlert';
 
 type MatchParams = {
   hugoSymbol: string;
@@ -553,6 +555,9 @@ export class SomaticGermlineCancerTypePage extends React.Component<
       this.therapeuticImplications.length > 0 ||
       this.diagnosticImplications.length > 0 ||
       this.prognosticImplications.length > 0;
+    const showUnknownGene =
+      this.store.gene.isComplete &&
+      (this.store.gene.isError || this.store.gene.result === DEFAULT_GENE);
     return (
       <div className="view-wrapper">
         <Helmet>
@@ -569,7 +574,15 @@ export class SomaticGermlineCancerTypePage extends React.Component<
             })}
           />
         </Helmet>
-        {this.pageShouldBeRendered ? (
+        {showUnknownGene ? (
+          <Container>
+            <Row className="justify-content-center">
+              <Col md={11}>
+                <UnknownGeneAlert />
+              </Col>
+            </Row>
+          </Container>
+        ) : this.pageShouldBeRendered ? (
           <StickyMiniNavBarContextProvider>
             <Container>
               <Row className="justify-content-center">
