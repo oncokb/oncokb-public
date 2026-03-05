@@ -20,6 +20,7 @@ export default class ActivateAccount extends React.Component<{
 }> {
   @observable activateKey: string;
   @observable login: string;
+  @observable hasGracePeriod?: boolean;
 
   constructor(props: Readonly<{ routing: RouterStore }>) {
     super(props);
@@ -30,6 +31,14 @@ export default class ActivateAccount extends React.Component<{
     }
     if (queryStrings.login) {
       this.login = queryStrings.login as string;
+    }
+    if (queryStrings.hasGracePeriod) {
+      const hasGracePeriod = (queryStrings.hasGracePeriod as string).toLowerCase();
+      if (hasGracePeriod === 'true') {
+        this.hasGracePeriod = true;
+      } else if (hasGracePeriod === 'false') {
+        this.hasGracePeriod = false;
+      }
     }
   }
 
@@ -63,9 +72,18 @@ export default class ActivateAccount extends React.Component<{
           {!this.activateAccount.result && (
             <p>
               We are currently reviewing your registration and will notify you
-              of your account approval status within two business days. In the
-              meantime, if your account is new and under review, you have
-              temporary grace-period access to the OncoKB website.{' '}
+              of your account approval status within two business days.{' '}
+              {this.hasGracePeriod === true ? (
+                <span>
+                  You have temporary grace-period access while your request is
+                  under review.
+                </span>
+              ) : (
+                <span>
+                  You do not have a grace period. Access will be enabled after
+                  approval.
+                </span>
+              )}{' '}
               <span>
                 You may now <Link to={PAGE_ROUTE.LOGIN}>log in</Link> to your{' '}
                 {ONCOKB_TM} account.

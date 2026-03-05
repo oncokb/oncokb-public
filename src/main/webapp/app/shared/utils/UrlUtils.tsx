@@ -345,9 +345,10 @@ export const TrialActivationPageLink: React.FunctionComponent<{
 
 export const getAccountActivationLink = (
   activationKey: string,
-  login: string
+  login: string,
+  hasGracePeriod = false
 ) => {
-  return `${PAGE_ROUTE.ACCOUNT_VERIFY}?key=${activationKey}&login=${login}`;
+  return `${PAGE_ROUTE.ACCOUNT_VERIFY}?key=${activationKey}&login=${login}&hasGracePeriod=${hasGracePeriod}`;
 };
 export const getPasswordResetLink = (resetKey: string) => {
   return `${PAGE_ROUTE.ACCOUNT_PASSWORD_RESET_FINISH}?key=${resetKey}`;

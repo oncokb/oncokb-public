@@ -95,6 +95,7 @@ public class UserService {
     private final CompanyDomainRepository companyDomainRepository;
 
     private final CompanyRepository companyRepository;
+    private final GracePeriodBlackListService gracePeriodBlackListService;
 
     private final AuditEventService auditEventService;
 
@@ -121,7 +122,8 @@ public class UserService {
         UserMailsService userMailsService,
         AuditEventService auditEventService,
         CompanyDomainRepository companyDomainRepository,
-        CompanyRepository companyRepository) {
+        CompanyRepository companyRepository,
+        GracePeriodBlackListService gracePeriodBlackListService) {
         this.userRepository = userRepository;
         this.userDetailsRepository = userDetailsRepository;
         this.passwordEncoder = passwordEncoder;
@@ -139,6 +141,7 @@ public class UserService {
         this.auditEventService = auditEventService;
         this.companyDomainRepository = companyDomainRepository;
         this.companyRepository = companyRepository;
+        this.gracePeriodBlackListService = gracePeriodBlackListService;
     }
 
     public Optional<User> activateRegistration(String key) {
@@ -300,7 +303,11 @@ public class UserService {
 
         UserDetails userDetails = new UserDetails();
         userDetails.setUser(newUser);
-        userDetails.setAccountRequestStatus(AccountRequestStatus.PENDING);
+        AccountRequestStatus accountRequestStatus =
+            gracePeriodBlackListService.shouldSkipGracePeriod(newUser.getEmail())
+                ? AccountRequestStatus.PENDING_NO_GRACE_PERIOD
+                : AccountRequestStatus.PENDING;
+        userDetails.setAccountRequestStatus(accountRequestStatus);
         userDetails.setLicenseType(userDTO.getLicenseType());
         userDetails.setJobTitle(userDTO.getJobTitle());
         userDetails.setCompanyName(userDTO.getCompanyName());
@@ -415,7 +422,16 @@ public class UserService {
             this.clearUserCaches(user);
             log.debug("Changed Information for User: {}", user);
             UserDetails updatedUserDetails = getUpdatedUserDetails(
-                user, userDTO.getLicenseType(), userDTO.getJobTitle(), userDTO.getCompanyName(), userDTO.getCompany(), new Gson().toJson(userDTO.getAdditionalInfo()), userDTO.getCity(), userDTO.getCountry());
+                user,
+                userDTO.getLicenseType(),
+                userDTO.getJobTitle(),
+                userDTO.getCompanyName(),
+                userDTO.getCompany(),
+                new Gson().toJson(userDTO.getAdditionalInfo()),
+                userDTO.getCity(),
+                userDTO.getCountry(),
+                userDTO.getAccountRequestStatus()
+            );
             if (activatingAccount) {
                 updatedUserDetails.setAccountRequestStatus(AccountRequestStatus.APPROVED);
                 userDetailsRepository.save(updatedUserDetails);
@@ -456,7 +472,17 @@ public class UserService {
         return updateUserFromUserDTO(userDTO);
     }
 
-    private UserDetails getUpdatedUserDetails(User user, LicenseType licenseType, String jobTitle, String companyName, CompanyDTO companyDTO, String additionalInfo, String city, String country) {
+    private UserDetails getUpdatedUserDetails(
+        User user,
+        LicenseType licenseType,
+        String jobTitle,
+        String companyName,
+        CompanyDTO companyDTO,
+        String additionalInfo,
+        String city,
+        String country,
+        AccountRequestStatus accountRequestStatus
+    ) {
         Optional<UserDetails> userDetails = userDetailsRepository.findOneByUser(user);
         LicenseType alignedLicenseType = companyDTO != null ? companyDTO.getLicenseType() : licenseType;
         Company company = companyMapper.toEntity(companyDTO);
@@ -469,6 +495,9 @@ public class UserService {
             userDetails.get().setAdditionalInfo(additionalInfo);
             userDetails.get().setCity(city);
             userDetails.get().setCountry(country);
+            if (accountRequestStatus != null) {
+                userDetails.get().setAccountRequestStatus(accountRequestStatus);
+            }
             userDetailsRepository.save(userDetails.get());
             return userDetails.get();
         } else {
@@ -482,7 +511,9 @@ public class UserService {
             newUserDetails.setCity(city);
             newUserDetails.setCountry(country);
             newUserDetails.setUser(user);
-            newUserDetails.setAccountRequestStatus(AccountRequestStatus.UNKNOWN);
+            newUserDetails.setAccountRequestStatus(
+                accountRequestStatus == null ? AccountRequestStatus.UNKNOWN : accountRequestStatus
+            );
             userDetailsRepository.save(newUserDetails);
             return newUserDetails;
         }

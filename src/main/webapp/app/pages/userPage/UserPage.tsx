@@ -54,7 +54,11 @@ import LoadingIndicator from 'app/components/loadingIndicator/LoadingIndicator';
 import { RouteComponentProps } from 'react-router';
 import autobind from 'autobind-decorator';
 import InfoIcon from 'app/shared/icons/InfoIcon';
-import { daysDiff, getPageTitle } from 'app/shared/utils/Utils';
+import {
+  daysDiff,
+  formatEnumLabel,
+  getPageTitle,
+} from 'app/shared/utils/Utils';
 import { notifyError, notifySuccess } from 'app/shared/utils/NotificationUtils';
 import TokenInputGroups from 'app/components/tokenInputGroups/TokenInputGroups';
 import { EmailTable } from 'app/shared/table/EmailTable';
@@ -204,18 +208,12 @@ export default class UserPage extends React.Component<IUserPage> {
     });
   }
 
-  private getRequestStatusLabel(status: UserDTO['accountRequestStatus']) {
-    if (status === undefined || status === null) {
-      return 'Unknown';
-    }
-    return status.charAt(0) + status.slice(1).toLowerCase();
-  }
-
   private getRequestStatusClass(status: UserDTO['accountRequestStatus']) {
     switch (status) {
       case 'APPROVED':
         return styles.requestStatusApproved;
       case 'PENDING':
+      case 'PENDING_NO_GRACE_PERIOD':
         return styles.requestStatusPending;
       case 'REJECTED':
         return styles.requestStatusRejected;
@@ -223,6 +221,19 @@ export default class UserPage extends React.Component<IUserPage> {
       default:
         return styles.requestStatusUnknown;
     }
+  }
+
+  @computed
+  get canRevokeGracePeriod() {
+    return !this.user.activated && this.user.accountRequestStatus === 'PENDING';
+  }
+
+  @computed
+  get canSetPendingWithGracePeriod() {
+    return (
+      !this.user.activated &&
+      this.user.accountRequestStatus === 'PENDING_NO_GRACE_PERIOD'
+    );
   }
 
   @computed
@@ -549,6 +560,36 @@ export default class UserPage extends React.Component<IUserPage> {
     );
   }
 
+  @autobind
+  @action
+  revokeGracePeriod() {
+    if (!this.canRevokeGracePeriod) {
+      return;
+    }
+
+    const updatedUser: UserDTO = {
+      ...this.user,
+      accountRequestStatus: 'PENDING_NO_GRACE_PERIOD',
+    };
+    this.getUserStatus = PromiseStatus.pending;
+    this.updateUserUsingPUT(updatedUser);
+  }
+
+  @autobind
+  @action
+  setPendingWithGracePeriod() {
+    if (!this.canSetPendingWithGracePeriod) {
+      return;
+    }
+
+    const updatedUser: UserDTO = {
+      ...this.user,
+      accountRequestStatus: 'PENDING',
+    };
+    this.getUserStatus = PromiseStatus.pending;
+    this.updateUserUsingPUT(updatedUser);
+  }
+
   @computed
   get isTrialAccount() {
     return (
@@ -583,7 +624,11 @@ export default class UserPage extends React.Component<IUserPage> {
         <b>Account Activation Link</b>
         <div>
           {this.props.windowStore.baseUrl}
-          {getAccountActivationLink(this.user.activationKey, this.user.login)}
+          {getAccountActivationLink(
+            this.user.activationKey,
+            this.user.login,
+            this.user.accountRequestStatus === 'PENDING'
+          )}
         </div>
       </>
     );
@@ -1025,10 +1070,40 @@ export default class UserPage extends React.Component<IUserPage> {
                                 this.user.accountRequestStatus
                               )}`}
                             >
-                              {this.getRequestStatusLabel(
-                                this.user.accountRequestStatus
-                              )}
+                              {formatEnumLabel(this.user.accountRequestStatus)}
                             </span>
+                            {this.canRevokeGracePeriod && (
+                              <ButtonWithTooltip
+                                tooltipProps={{
+                                  placement: 'top',
+                                  overlay:
+                                    'Revoke temporary grace-period access for pending users.',
+                                }}
+                                buttonProps={{
+                                  variant: 'outline-primary',
+                                  size: 'sm',
+                                  className: 'ml-2',
+                                  onClick: this.revokeGracePeriod,
+                                }}
+                                buttonContent={'Revoke Grace Period'}
+                              />
+                            )}
+                            {this.canSetPendingWithGracePeriod && (
+                              <ButtonWithTooltip
+                                tooltipProps={{
+                                  placement: 'top',
+                                  overlay:
+                                    'Switch user back to pending with temporary grace-period access.',
+                                }}
+                                buttonProps={{
+                                  variant: 'outline-primary',
+                                  size: 'sm',
+                                  className: 'ml-2',
+                                  onClick: this.setPendingWithGracePeriod,
+                                }}
+                                buttonContent={'Set Pending'}
+                              />
+                            )}
                           </div>
                           <div className={'mb-2 mt-1 font-weight-bold'}>
                             <span>Account Activation Status</span>

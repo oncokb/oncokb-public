@@ -107,9 +107,13 @@ export default class AccountMenu extends React.Component<IAccountMenuProps> {
     const {
       activated = false,
       activationGracePeriodDaysRemaining: graceDaysRemaining = 0,
+      accountRequestStatus,
     } = this.props.account ?? {};
     const showGraceIndicator =
-      this.props.isAuthenticated && !activated && graceDaysRemaining > 0;
+      this.props.isAuthenticated &&
+      !activated &&
+      accountRequestStatus === 'PENDING' &&
+      graceDaysRemaining > 0;
     const dayLabel = graceDaysRemaining === 1 ? 'day' : 'days';
     const reviewLicenseText = `We are reviewing your license application. Meanwhile, you can view limited content for ${graceDaysRemaining} ${dayLabel}.`;
     return (

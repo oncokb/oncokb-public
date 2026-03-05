@@ -12,7 +12,11 @@ import OncoKBTable, {
 } from 'app/components/oncokbTable/OncoKBTable';
 import { getSectionClassName } from 'app/pages/account/AccountUtils';
 import { notifyError, notifySuccess } from 'app/shared/utils/NotificationUtils';
-import { filterByKeyword, toAppLocalDateFormat } from 'app/shared/utils/Utils';
+import {
+  filterByKeyword,
+  formatEnumLabel,
+  toAppLocalDateFormat,
+} from 'app/shared/utils/Utils';
 import { AUTHORITIES, LicenseType, USER_AUTHORITY } from 'app/config/constants';
 import styles from './UserDetailsPage.module.scss';
 import LoadingIndicator, {
@@ -206,18 +210,12 @@ export default class UserDetailsPage extends React.Component<{
     return activated ? 'Activated' : 'Inactivated';
   }
 
-  private getRequestStatusLabel(status: UserDTO['accountRequestStatus']) {
-    if (status === undefined || status === null) {
-      return 'Unknown';
-    }
-    return status.charAt(0) + status.slice(1).toLowerCase();
-  }
-
   private getRequestStatusClass(status: UserDTO['accountRequestStatus']) {
     switch (status) {
       case 'APPROVED':
         return styles.requestStatusApproved;
       case 'PENDING':
+      case 'PENDING_NO_GRACE_PERIOD':
         return styles.requestStatusPending;
       case 'REJECTED':
         return styles.requestStatusRejected;
@@ -307,13 +305,10 @@ export default class UserDetailsPage extends React.Component<{
       defaultSortDesc: false,
       className: 'justify-content-center',
       onFilter: (data: UserDTO, keyword) =>
-        filterByKeyword(
-          this.getRequestStatusLabel(data.accountRequestStatus),
-          keyword
-        ),
+        filterByKeyword(formatEnumLabel(data.accountRequestStatus), keyword),
       Cell: (props: { original: UserDTO }) => {
         const status = props.original.accountRequestStatus;
-        const label = this.getRequestStatusLabel(status);
+        const label = formatEnumLabel(status);
         const className = `${
           styles.requestStatusBadge
         } ${this.getRequestStatusClass(status)}`;

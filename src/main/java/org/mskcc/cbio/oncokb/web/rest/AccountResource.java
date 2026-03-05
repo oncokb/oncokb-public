@@ -68,6 +68,7 @@ public class AccountResource {
     private final PasswordEncoder passwordEncoder;
 
     private final ApplicationProperties applicationProperties;
+    private final GracePeriodBlackListService gracePeriodBlackListService;
 
     private CreateAssessment createAssess;
 
@@ -83,7 +84,8 @@ public class AccountResource {
                            SlackService slackService, EmailService emailService,
                            AuthenticationManagerBuilder authenticationManagerBuilder,
                            PasswordEncoder passwordEncoder, UserDetailsService userDetailsService,
-                           TokenService tokenService, ApplicationProperties applicationProperties
+                           TokenService tokenService, ApplicationProperties applicationProperties,
+                           GracePeriodBlackListService gracePeriodBlackListService
     ) {
 
         this.userRepository = userRepository;
@@ -96,6 +98,7 @@ public class AccountResource {
         this.passwordEncoder = passwordEncoder;
         this.tokenService = tokenService;
         this.applicationProperties = applicationProperties;
+        this.gracePeriodBlackListService = gracePeriodBlackListService;
         this.createAssess = new CreateAssessment(applicationProperties);
     }
 
@@ -128,6 +131,11 @@ public class AccountResource {
         User user = userService.registerUser(managedUserVM, managedUserVM.getPassword());
         mailService.sendActivationEmail(userMapper.userToUserDTO(user));
         // }
+    }
+
+    @GetMapping("/register/grace-period-blacklist")
+    public GracePeriodBlacklistVM getGracePeriodBlacklist() {
+        return new GracePeriodBlacklistVM(gracePeriodBlackListService.getBlacklistedDomains());
     }
 
     /**

@@ -113,6 +113,10 @@ export type Contact = {
         'phone': string
 
 };
+export type GracePeriodBlacklistVM = {
+    'domains': Array < string >
+
+};
 export type KeyAndPasswordVM = {
     'key': string
 
@@ -148,7 +152,7 @@ export type MailTypeInfo = {
 
 };
 export type ManagedUserVM = {
-    'accountRequestStatus': "UNKNOWN" | "PENDING" | "APPROVED" | "REJECTED"
+    'accountRequestStatus': "UNKNOWN" | "PENDING" | "PENDING_NO_GRACE_PERIOD" | "APPROVED" | "REJECTED"
 
         'activated': boolean
 
@@ -313,7 +317,7 @@ export type UserCompany = {
 
 };
 export type UserDTO = {
-    'accountRequestStatus': "UNKNOWN" | "PENDING" | "APPROVED" | "REJECTED"
+    'accountRequestStatus': "UNKNOWN" | "PENDING" | "PENDING_NO_GRACE_PERIOD" | "APPROVED" | "REJECTED"
 
         'activated': boolean
 
@@ -367,7 +371,7 @@ export type UserDTO = {
 
 };
 export type UserDetailsDTO = {
-    'accountRequestStatus': "UNKNOWN" | "PENDING" | "APPROVED" | "REJECTED"
+    'accountRequestStatus': "UNKNOWN" | "PENDING" | "PENDING_NO_GRACE_PERIOD" | "APPROVED" | "REJECTED"
 
         'additionalInfo': AdditionalInfoDTO
 
@@ -4414,6 +4418,67 @@ export default class API {
         $domain ? : string
     }): Promise < any > {
         return this.registerAccountUsingPOSTWithHttpInfo(parameters).then(function(response: request.Response) {
+            return response.body;
+        });
+    };
+    getGracePeriodBlacklistUsingGETURL(parameters: {
+        $queryParameters ? : any
+    }): string {
+        let queryParameters: any = {};
+        let path = '/api/register/grace-period-blacklist';
+
+        if (parameters.$queryParameters) {
+            Object.keys(parameters.$queryParameters).forEach(function(parameterName) {
+                var parameter = parameters.$queryParameters[parameterName];
+                queryParameters[parameterName] = parameter;
+            });
+        }
+        let keys = Object.keys(queryParameters);
+        return this.domain + path + (keys.length > 0 ? '?' + (keys.map(key => key + '=' + encodeURIComponent(queryParameters[key])).join('&')) : '');
+    };
+
+    /**
+     * getGracePeriodBlacklist
+     * @method
+     * @name API#getGracePeriodBlacklistUsingGET
+     */
+    getGracePeriodBlacklistUsingGETWithHttpInfo(parameters: {
+        $queryParameters ? : any,
+            $domain ? : string
+    }): Promise < request.Response > {
+        const domain = parameters.$domain ? parameters.$domain : this.domain;
+        const errorHandlers = this.errorHandlers;
+        const request = this.request;
+        let path = '/api/register/grace-period-blacklist';
+        let body: any;
+        let queryParameters: any = {};
+        let headers: any = {};
+        let form: any = {};
+        return new Promise(function(resolve, reject) {
+            headers['Accept'] = '*/*';
+
+            if (parameters.$queryParameters) {
+                Object.keys(parameters.$queryParameters).forEach(function(parameterName) {
+                    var parameter = parameters.$queryParameters[parameterName];
+                    queryParameters[parameterName] = parameter;
+                });
+            }
+
+            request('GET', domain + path, body, headers, queryParameters, form, reject, resolve, errorHandlers);
+
+        });
+    };
+
+    /**
+     * getGracePeriodBlacklist
+     * @method
+     * @name API#getGracePeriodBlacklistUsingGET
+     */
+    getGracePeriodBlacklistUsingGET(parameters: {
+        $queryParameters ? : any,
+            $domain ? : string
+    }): Promise < GracePeriodBlacklistVM > {
+        return this.getGracePeriodBlacklistUsingGETWithHttpInfo(parameters).then(function(response: request.Response) {
             return response.body;
         });
     };
