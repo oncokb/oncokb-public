@@ -2,8 +2,11 @@ import React from 'react';
 import {
   AvCheckbox,
   AvCheckboxGroup,
+  AvFeedback,
   AvField,
   AvForm,
+  AvGroup,
+  AvInput,
   AvRadio,
   AvRadioGroup,
 } from 'availity-reactstrap-validation';
@@ -46,6 +49,9 @@ import {
   textValidation,
 } from 'app/shared/utils/FormValidationUtils';
 import { NOT_USED_IN_AI_MODELS } from 'app/config/constants/terms';
+import UseCaseExamples from './UseCaseExamples';
+import ImportantNotes from './ImportantNotes';
+import styles from './NewAccountForm.module.scss';
 
 export enum FormSection {
   LICENSE = 'LICENSE',
@@ -376,6 +382,7 @@ export class NewAccountForm extends React.Component<INewAccountForm> {
   render() {
     return (
       <AvForm
+        className={styles.form}
         onValidSubmit={this.handleValidSubmit}
         model={this.defaultFormValue}
       >
@@ -579,7 +586,7 @@ export class NewAccountForm extends React.Component<INewAccountForm> {
                     />
                   ) : null}
                   {this.selectedCompanyOption ? null : (
-                    <div>
+                    <div className={styles.companySection}>
                       {this.selectedLicense !== LicenseType.ACADEMIC && (
                         <p>
                           Please feel free to skip this section if your{' '}
@@ -665,20 +672,31 @@ export class NewAccountForm extends React.Component<INewAccountForm> {
                           />
                         </>
                       )}
-                      <AvField
-                        name={FormKey.USE_CASE}
-                        label={`Describe how you plan to use ${ONCOKB_TM}`}
-                        type={'textarea'}
-                        placeholder={this.useCasePlaceholder}
-                        rows={6}
-                        validate={{
-                          ...SLACK_TEXT_VAL,
-                          required: {
-                            value: true,
-                            errorMessage: 'Your use case is required.',
-                          },
-                        }}
-                      />
+                      <AvGroup className={styles.useCaseSection}>
+                        {/* index.scss appends "*" only when a label is immediately
+                          followed by an element with the `required` attribute. */}
+                        <label htmlFor={FormKey.USE_CASE}>
+                          {`Describe how you plan to use ${ONCOKB_TM} *`}
+                        </label>
+                        <UseCaseExamples />
+                        <AvInput
+                          id={FormKey.USE_CASE}
+                          name={FormKey.USE_CASE}
+                          type={'textarea'}
+                          placeholder={this.useCasePlaceholder}
+                          rows={6}
+                          required
+                          validate={{
+                            ...SLACK_TEXT_VAL,
+                            required: {
+                              value: true,
+                              errorMessage: 'Your use case is required.',
+                            },
+                          }}
+                        />
+                        <AvFeedback>Your use case is required.</AvFeedback>
+                      </AvGroup>
+                      <ImportantNotes />
                       {[LicenseType.COMMERCIAL, LicenseType.HOSPITAL].includes(
                         this.selectedLicense
                       ) && (

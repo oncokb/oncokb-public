@@ -102,6 +102,20 @@ function getScreenshotConfig(name) {
   };
 }
 
+async function resetRegistrationCookies(page) {
+  if (!page || page.isClosed()) {
+    return;
+  }
+  try {
+    await page.evaluate(() => {
+      document.cookie = 'page_visit_count=0; Path=/; Max-Age=2592000; SameSite=Lax';
+      document.cookie = 'registration_hover_count=0; Path=/; Max-Age=2592000; SameSite=Lax';
+    });
+  } catch (_error) {
+    // Ignore cleanup errors so they do not mask screenshot assertion failures.
+  }
+}
+
 if (!fs.existsSync(LATEST_SNAPSHOTS_DIR)) {
   fs.mkdirSync(LATEST_SNAPSHOTS_DIR);
 }
@@ -391,6 +405,10 @@ describe('Tests without ROLE_API and requested', () => {
     });
   });
 
+  afterEach(async () => {
+    await resetRegistrationCookies(page);
+  });
+
   it('Account Settings Page', async () => {
     await page.goto(`${CLIENT_URL}account/settings`);
     await page.setViewport(VIEW_PORT_1080);
@@ -434,6 +452,10 @@ describe('Tests without ROLE_API and not requested', () => {
     });
   });
 
+  afterEach(async () => {
+    await resetRegistrationCookies(page);
+  });
+
   it('Account Settings Page', async () => {
     await page.goto(`${CLIENT_URL}account/settings`);
     await page.setViewport(VIEW_PORT_1080);
@@ -475,6 +497,10 @@ describe('Tests with login', () => {
         'oncokb-public-demo-admin-token'
       );
     });
+  });
+
+  afterEach(async () => {
+    await resetRegistrationCookies(page);
   });
 
   it('Account Settings Page', async () => {
@@ -626,6 +652,10 @@ describe('Tests without login', () => {
       localStorage.setItem('localdev', 'true');
       localStorage.setItem('disablebanner', 'true');
     });
+  });
+
+  afterEach(async () => {
+    await resetRegistrationCookies(page);
   });
 
   it('Home Page', async () => {
