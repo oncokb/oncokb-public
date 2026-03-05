@@ -41,7 +41,7 @@ import WindowStore from 'app/store/WindowStore';
 import PageContainer from 'app/components/PageContainer';
 import GenomicReport from 'app/pages/patientReport/GenomicReport';
 
-const REGISTRATION_HOVER_GENE_PAGE_LIMIT = 10;
+const REGISTRATION_HOVER_GENE_PAGE_LIMIT = 5;
 
 const getOldLevelsRedirectRoute = (hash: string) => {
   const queryStrings = QueryString.parse(hash) as {
