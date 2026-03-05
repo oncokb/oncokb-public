@@ -41,6 +41,8 @@ import WindowStore from 'app/store/WindowStore';
 import PageContainer from 'app/components/PageContainer';
 import GenomicReport from 'app/pages/patientReport/GenomicReport';
 
+const REGISTRATION_HOVER_GENE_PAGE_LIMIT = 10;
+
 const getOldLevelsRedirectRoute = (hash: string) => {
   const queryStrings = QueryString.parse(hash) as {
     version: Version;
@@ -190,6 +192,7 @@ const AppRoutes = (props: {
           windowStore={props.windowStore}
           authenticationStore={props.authenticationStore}
           pageContainer={PageContainer}
+          registrationHoverLimit={0}
         />
         <RecaptchaBoundaryRoute
           exact
@@ -200,6 +203,7 @@ const AppRoutes = (props: {
           windowStore={props.windowStore}
           authenticationStore={props.authenticationStore}
           pageContainer={PageContainer}
+          registrationHoverLimit={0}
         />
         <RecaptchaBoundaryRoute
           exact
@@ -210,6 +214,7 @@ const AppRoutes = (props: {
           windowStore={props.windowStore}
           authenticationStore={props.authenticationStore}
           pageContainer={PageContainer}
+          registrationHoverLimit={0}
         />
         <RecaptchaBoundaryRoute
           exact
@@ -220,7 +225,7 @@ const AppRoutes = (props: {
           windowStore={props.windowStore}
           authenticationStore={props.authenticationStore}
           pageContainer={({ children }) => children}
-          hasRegistrationLock
+          registrationHoverLimit={REGISTRATION_HOVER_GENE_PAGE_LIMIT}
         />
         <RecaptchaBoundaryRoute
           exact
@@ -231,7 +236,7 @@ const AppRoutes = (props: {
           windowStore={props.windowStore}
           authenticationStore={props.authenticationStore}
           pageContainer={({ children }) => children}
-          hasRegistrationLock
+          registrationHoverLimit={REGISTRATION_HOVER_GENE_PAGE_LIMIT}
         />
         <Redirect // need to be sure not matching new gene route
           exact
@@ -247,7 +252,7 @@ const AppRoutes = (props: {
           windowStore={props.windowStore}
           authenticationStore={props.authenticationStore}
           pageContainer={({ children }) => children}
-          hasRegistrationLock
+          registrationHoverLimit={REGISTRATION_HOVER_GENE_PAGE_LIMIT}
         />
         <RecaptchaBoundaryRoute
           exact
@@ -258,7 +263,7 @@ const AppRoutes = (props: {
           windowStore={props.windowStore}
           authenticationStore={props.authenticationStore}
           pageContainer={({ children }) => children}
-          hasRegistrationLock
+          registrationHoverLimit={REGISTRATION_HOVER_GENE_PAGE_LIMIT}
         />
         <Redirect // need to be sure not matching new alteration route
           exact
@@ -274,7 +279,7 @@ const AppRoutes = (props: {
           windowStore={props.windowStore}
           authenticationStore={props.authenticationStore}
           pageContainer={({ children }) => children}
-          hasRegistrationLock
+          registrationHoverLimit={REGISTRATION_HOVER_GENE_PAGE_LIMIT}
         />
         <RecaptchaBoundaryRoute
           exact
@@ -285,7 +290,7 @@ const AppRoutes = (props: {
           windowStore={props.windowStore}
           authenticationStore={props.authenticationStore}
           pageContainer={({ children }) => children}
-          hasRegistrationLock
+          registrationHoverLimit={REGISTRATION_HOVER_GENE_PAGE_LIMIT}
         />
         <RecaptchaBoundaryRoute
           exact

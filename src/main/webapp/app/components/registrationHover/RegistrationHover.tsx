@@ -2,12 +2,9 @@ import React, { useEffect, useState } from 'react';
 import styles from './styles.module.scss';
 import classNames from 'classnames';
 import { Link, useLocation } from 'react-router-dom';
-import { PAGE_ROUTE } from 'app/config/constants';
-import { inject, observer } from 'mobx-react';
 import AuthenticationStore from 'app/store/AuthenticationStore';
 
 const REGISTRATION_HOVER_COOKIE = 'registration_hover_count';
-const REGISTRATION_HOVER_THRESHOLD = 10;
 const REGISTRATION_HOVER_COOKIE_MAX_AGE_SECONDS = 60 * 60 * 24 * 30;
 
 export function parseCookieNumber(
@@ -75,10 +72,6 @@ function useRegistrationHoverCookieCount(
   }, [count]);
 
   useEffect(() => {
-    if (!pathName.startsWith('/gene')) {
-      return;
-    }
-
     if (isUserAuthenticated) {
       setCount(0);
     } else {
@@ -91,10 +84,12 @@ function useRegistrationHoverCookieCount(
 
 type RegistrationHoverProps = {
   authenticationStore: AuthenticationStore;
+  registrationHoverLimit: number;
 };
 
 export default function RegistrationHover({
   authenticationStore,
+  registrationHoverLimit,
 }: RegistrationHoverProps) {
   const location = useLocation();
   const cookieCount = useRegistrationHoverCookieCount(
@@ -103,7 +98,7 @@ export default function RegistrationHover({
   );
   const shouldShow =
     !authenticationStore.isUserAuthenticated &&
-    cookieCount > REGISTRATION_HOVER_THRESHOLD;
+    (registrationHoverLimit <= 0 || cookieCount > registrationHoverLimit);
 
   useEffect(() => {
     if (typeof document === 'undefined') {

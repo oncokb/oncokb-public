@@ -11,7 +11,7 @@ export type OncokbRouteProps = RouteProps & {
   }>;
   windowStore: WindowStore;
   authenticationStore: AuthenticationStore;
-  hasRegistrationLock?: boolean;
+  registrationHoverLimit?: number;
 };
 
 export default function OncokbRoute({
@@ -20,7 +20,7 @@ export default function OncokbRoute({
   windowStore,
   authenticationStore,
   pageContainer = props => props.children,
-  hasRegistrationLock = false,
+  registrationHoverLimit,
   ...rest
 }: OncokbRouteProps) {
   const newRender = (props: RouteComponentProps) => {
@@ -34,8 +34,11 @@ export default function OncokbRoute({
   const routeElement = <Route render={newRender} {...rest} />;
   const children = (
     <>
-      {hasRegistrationLock && (
-        <RegistrationHover authenticationStore={authenticationStore} />
+      {registrationHoverLimit !== undefined && (
+        <RegistrationHover
+          authenticationStore={authenticationStore}
+          registrationHoverLimit={registrationHoverLimit}
+        />
       )}
       {routeElement}
     </>
