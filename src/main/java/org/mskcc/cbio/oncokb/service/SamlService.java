@@ -2,6 +2,7 @@ package org.mskcc.cbio.oncokb.service;
 
 import java.util.function.Supplier;
 import javax.annotation.PostConstruct;
+import org.apache.commons.lang3.StringUtils;
 import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
 import org.jsoup.nodes.Element;
@@ -35,9 +36,15 @@ public class SamlService {
     private final Integer SESSION_DURATION_IN_SECONDS = 28800;  // 8 hours, the maximum allowable 
 
     private final ApplicationProperties applicationProperties;
+    private final RestTemplate restTemplate;
 
     public SamlService(ApplicationProperties applicationProperties) {
+        this(applicationProperties, new RestTemplate());
+    }
+
+    SamlService(ApplicationProperties applicationProperties, RestTemplate restTemplate) {
         this.applicationProperties = applicationProperties;
+        this.restTemplate = restTemplate;
     }
 
     @PostConstruct
@@ -71,11 +78,13 @@ public class SamlService {
     }
 
     private String getSamlResponse() throws RuntimeException {
-
-        RestTemplate restTemplate = new RestTemplate();
-
         HttpHeaders headers = new HttpHeaders();
         headers.setContentType(MediaType.APPLICATION_FORM_URLENCODED);
+
+        String httpUserAgent = applicationProperties.getSamlAws().getHttpUserAgent();
+        if (StringUtils.isNotBlank(httpUserAgent)) {
+            headers.set(HttpHeaders.USER_AGENT, httpUserAgent);
+        }
 
         MultiValueMap<String, String> map = new LinkedMultiValueMap<String, String>();
         map.add(MSK_USERNAME_FIELD, applicationProperties.getSamlAws().getServiceAccountUsername());

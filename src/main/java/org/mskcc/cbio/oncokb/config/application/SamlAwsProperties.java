@@ -7,6 +7,7 @@ public class SamlAwsProperties {
     private String principalArn; // The Amazon Resource Name (ARN) of the SAML provider in IAM that describes the IdP.
     private String roleArn; // The Amazon Resource Name (ARN) of the role that the caller is assuming.
     private String region = "us-east-1";
+    private String httpUserAgent;
 
 
     public String getServiceAccountUsername() {
@@ -47,6 +48,14 @@ public class SamlAwsProperties {
 
     public void setRegion(String region) {
         this.region = region;
+    }
+
+    public String getHttpUserAgent() {
+        return this.httpUserAgent;
+    }
+
+    public void setHttpUserAgent(String httpUserAgent) {
+        this.httpUserAgent = httpUserAgent;
     }
 
 }

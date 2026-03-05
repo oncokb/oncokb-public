@@ -177,6 +177,7 @@ application:
     service-account-password:
     principal-arn: # "arn:aws:iam::[account number]:saml-provider/PingFed"
     role-arn: # "arn:aws:iam::[account number]:role/mskAutomationUser"
+    http-user-agent: # required for S3 allow-listing in AWS
   github-token:
   github-search-sleep-ms: 10000
   db-read-only: false # Certain endpoints will be disabled when readonly is set to true
