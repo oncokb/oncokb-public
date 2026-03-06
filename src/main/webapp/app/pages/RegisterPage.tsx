@@ -10,7 +10,10 @@ import {
 import autobind from 'autobind-decorator';
 import { Redirect } from 'react-router-dom';
 import client from 'app/shared/api/clientInstance';
-import { ManagedUserVM } from 'app/shared/api/generated/API';
+import {
+  GracePeriodBlacklistVM,
+  ManagedUserVM,
+} from 'app/shared/api/generated/API';
 import {
   LicenseType,
   ONCOKB_TM,
@@ -61,6 +64,8 @@ export class RegisterPage extends React.Component<IRegisterProps> {
   @observable registerError: OncoKBError;
   @observable selectedLicense: LicenseType | undefined;
   @observable visibleSections: FormSection[] | undefined;
+  @observable registeredEmail: string | undefined;
+  @observable blacklistedDomains: string[] = [];
 
   readonly reactions: IReactionDisposer[] = [];
 
@@ -125,9 +130,29 @@ export class RegisterPage extends React.Component<IRegisterProps> {
     this.reactions.forEach(componentReaction => componentReaction());
   }
 
+  componentDidMount(): void {
+    this.fetchGracePeriodBlacklist();
+  }
+
+  @autobind
+  @action
+  async fetchGracePeriodBlacklist() {
+    try {
+      const response: GracePeriodBlacklistVM = await client.getGracePeriodBlacklistUsingGET(
+        {}
+      );
+      this.blacklistedDomains = (response.domains || []).map(domain =>
+        domain.toLowerCase()
+      );
+    } catch (error) {
+      this.blacklistedDomains = [];
+    }
+  }
+
   @autobind
   @action
   async handleValidSubmit(newAccount: Partial<ManagedUserVM>) {
+    this.registeredEmail = newAccount.email?.toLowerCase();
     const token: string = await this.recaptcha.getToken();
     setRecaptchaToken(token);
     client
@@ -173,12 +198,26 @@ export class RegisterPage extends React.Component<IRegisterProps> {
     this.selectedLicense = license;
   }
 
+  isNoGracePeriodEmail(email?: string) {
+    if (!email) {
+      return false;
+    }
+    const normalizedEmail = email.toLowerCase();
+    const atIndex = normalizedEmail.lastIndexOf('@');
+    if (atIndex < 0 || atIndex === normalizedEmail.length - 1) {
+      return false;
+    }
+    const domain = normalizedEmail.substring(atIndex + 1);
+    return this.blacklistedDomains.includes(domain);
+  }
+
   getRegisteredMessage(licenseType: LicenseType | undefined) {
     if (licenseType === undefined) {
       return '';
     }
     const companyName =
       licenseType === LicenseType.HOSPITAL ? 'hospital' : 'company';
+    const noGracePeriod = this.isNoGracePeriodEmail(this.registeredEmail);
     return (
       <>
         <p>
@@ -188,9 +227,18 @@ export class RegisterPage extends React.Component<IRegisterProps> {
         </p>
         <p>
           After validating your email address, please allow 1-2 business days
-          for us to review your request. Your activation email also includes
-          more details about the temporary grace-period access available while
-          your license request is under review.{' '}
+          for us to review your request.{' '}
+          {noGracePeriod ? (
+            <span>
+              You will not have a grace period since you are using a personal
+              email address.
+            </span>
+          ) : (
+            <span>
+              You will have a temporary grace period while your license request
+              is under review.
+            </span>
+          )}{' '}
           {licenseType === LicenseType.ACADEMIC ? (
             ''
           ) : (
@@ -231,6 +279,7 @@ export class RegisterPage extends React.Component<IRegisterProps> {
           defaultLicense={this.selectedLicense}
           onSubmit={this.handleValidSubmit}
           visibleSections={this.visibleSections}
+          gracePeriodBlacklistedDomains={this.blacklistedDomains}
           byAdmin={false}
           onSelectLicense={this.onSelectLicense}
         />

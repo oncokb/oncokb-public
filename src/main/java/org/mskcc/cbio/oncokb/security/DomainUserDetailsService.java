@@ -79,6 +79,10 @@ public class DomainUserDetailsService implements UserDetailsService {
                 throw new UserNotActivatedException(lowercaseLogin);
             }
 
+            if (AccountRequestStatus.PENDING_NO_GRACE_PERIOD.equals(accountRequestStatus)) {
+                throw new UserNotApprovedException(lowercaseLogin);
+            }
+
             if (!SecurityUtils.isWithinActivationGracePeriod(user)) {
                 throw new ExpiredGracePeriodException(lowercaseLogin);
             }

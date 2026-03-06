@@ -90,6 +90,7 @@ public class SecurityConfiguration extends WebSecurityConfigurerAdapter {
             .antMatchers("/api/v1/prognostic-levels/**").permitAll()
             .antMatchers("/api/authenticate").permitAll()
             .antMatchers("/api/register").permitAll()
+            .antMatchers("/api/register/grace-period-blacklist").permitAll()
             .antMatchers("/api/activate").permitAll()
             .antMatchers("/api/slack").permitAll()
             // Permits the api swagger definitions through proxy

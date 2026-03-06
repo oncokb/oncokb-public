@@ -296,13 +296,32 @@ public class MailServiceIT {
         user.setLangKey(Constants.DEFAULT_LANGUAGE);
         user.setLogin("john");
         user.setEmail("john.doe@example.com");
+        user.setAccountRequestStatus(AccountRequestStatus.PENDING);
         mailService.sendActivationEmail(user);
         verify(javaMailSender).send(messageCaptor.capture());
         MimeMessage message = messageCaptor.getValue();
+        String content = message.getContent().toString();
         assertThat(message.getAllRecipients()[0].toString()).isEqualTo(user.getEmail());
         assertThat(message.getFrom()[0].toString()).isEqualTo(jHipsterProperties.getMail().getFrom());
-        assertThat(message.getContent().toString()).isNotEmpty();
+        assertThat(content).isNotEmpty();
+        assertThat(content).contains("hasGracePeriod=true");
+        assertThat(content).contains("day grace period");
         assertThat(message.getDataHandler().getContentType()).isEqualTo("text/html;charset=UTF-8");
+    }
+
+    @Test
+    public void testSendActivationEmailNoGracePeriod() throws Exception {
+        UserDTO user = new UserDTO();
+        user.setLangKey(Constants.DEFAULT_LANGUAGE);
+        user.setLogin("john");
+        user.setEmail("john.doe@example.com");
+        user.setAccountRequestStatus(AccountRequestStatus.PENDING_NO_GRACE_PERIOD);
+        mailService.sendActivationEmail(user);
+        verify(javaMailSender).send(messageCaptor.capture());
+        MimeMessage message = messageCaptor.getValue();
+        String content = message.getContent().toString();
+        assertThat(content).contains("hasGracePeriod=false");
+        assertThat(content).contains("Access will be enabled after approval is complete");
     }
 
     @Test
