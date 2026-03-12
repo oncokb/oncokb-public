@@ -548,6 +548,47 @@ public class UserServiceIT {
 
     @Test
     @Transactional
+    public void assertThatRegisterUserUsesPendingForNonBlacklistedEmail() {
+        UserDTO userDTO = createRegistrationUserDTO(
+            "register-non-blacklist-" + UUID.randomUUID().toString().substring(0, 8),
+            "register-non-blacklist-" + UUID.randomUUID().toString().substring(0, 8) + "@example.org"
+        );
+
+        User user = userService.registerUser(userDTO, "test-password");
+        Optional<UserDetails> userDetails = userDetailsRepository.findOneByUser(user);
+
+        assertThat(userDetails).isPresent();
+        assertThat(userDetails.get().getAccountRequestStatus()).isEqualTo(AccountRequestStatus.PENDING);
+    }
+
+    @Test
+    @Transactional
+    public void assertThatRegisterUserUsesPendingNoGraceForBlacklistedEmailDomain() {
+        UserDTO userDTO = createRegistrationUserDTO(
+            "register-blacklist-" + UUID.randomUUID().toString().substring(0, 8),
+            "register-blacklist-" + UUID.randomUUID().toString().substring(0, 8) + "@gmail.com"
+        );
+
+        User user = userService.registerUser(userDTO, "test-password");
+        Optional<UserDetails> userDetails = userDetailsRepository.findOneByUser(user);
+
+        assertThat(userDetails).isPresent();
+        assertThat(userDetails.get().getAccountRequestStatus()).isEqualTo(AccountRequestStatus.PENDING_NO_GRACE_PERIOD);
+    }
+
+    private UserDTO createRegistrationUserDTO(String login, String email) {
+        UserDTO userDTO = new UserDTO();
+        userDTO.setLogin(login);
+        userDTO.setEmail(email);
+        userDTO.setFirstName("register");
+        userDTO.setLastName("user");
+        userDTO.setLangKey(Constants.DEFAULT_LANGUAGE);
+        userDTO.setLicenseType(LicenseType.ACADEMIC);
+        return userDTO;
+    }
+
+    @Test
+    @Transactional
     public void testUpdateUserBeforeTrialAccountActivationPersistsActivatedState() {
         // Create a user
         User testUser = new User();

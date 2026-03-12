@@ -109,6 +109,17 @@ export function getCancerTypesName(
   return name;
 }
 
+export function formatEnumLabel(value?: string | null): string {
+  if (value === undefined || value === null) {
+    return 'Unknown';
+  }
+  return value
+    .toLowerCase()
+    .split('_')
+    .map(segment => segment.charAt(0).toUpperCase() + segment.slice(1))
+    .join(' ');
+}
+
 export function getCancerTypesNameFromOncoTreeType(
   cancerTypes: TumorType[],
   excludedCancerTypes?: TumorType[]

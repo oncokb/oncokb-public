@@ -49,6 +49,8 @@ public class DomainUserDetailsServiceIT {
     private static final String USER_SEVEN_EMAIL = "test-user-seven@localhost";
     private static final String USER_EIGHT_LOGIN = "test-user-eight";
     private static final String USER_EIGHT_EMAIL = "test-user-eight@localhost";
+    private static final String USER_NINE_LOGIN = "test-user-nine";
+    private static final String USER_NINE_EMAIL = "test-user-nine@localhost";
 
     @Autowired
     private UserRepository userRepository;
@@ -185,6 +187,22 @@ public class DomainUserDetailsServiceIT {
         userEightDetails.setUser(userEight);
         userEightDetails.setAccountRequestStatus(AccountRequestStatus.PENDING);
         userDetailsRepository.save(userEightDetails);
+
+        User userNine = new User();
+        userNine.setLogin(USER_NINE_LOGIN);
+        userNine.setPassword(RandomStringUtils.random(60));
+        userNine.setActivated(false);
+        userNine.setEmail(USER_NINE_EMAIL);
+        userNine.setFirstName("userNine");
+        userNine.setLastName("doe");
+        userNine.setLangKey("en");
+        userRepository.save(userNine);
+        userNine.setCreatedDate(Instant.now().minus(Duration.ofDays(3)));
+        userRepository.save(userNine);
+        org.mskcc.cbio.oncokb.domain.UserDetails userNineDetails = new org.mskcc.cbio.oncokb.domain.UserDetails();
+        userNineDetails.setUser(userNine);
+        userNineDetails.setAccountRequestStatus(AccountRequestStatus.PENDING_NO_GRACE_PERIOD);
+        userDetailsRepository.save(userNineDetails);
     }
 
     @Test
@@ -257,6 +275,12 @@ public class DomainUserDetailsServiceIT {
         UserDetails userDetails = domainUserDetailsService.loadUserByUsername(USER_EIGHT_LOGIN);
         assertThat(userDetails).isNotNull();
         assertThat(userDetails.getUsername()).isEqualTo(USER_EIGHT_LOGIN);
+    }
+
+    @Test
+    public void assertThatPendingNoGracePeriodUserCannotLogin() {
+        assertThatExceptionOfType(UserNotApprovedException.class)
+            .isThrownBy(() -> domainUserDetailsService.loadUserByUsername(USER_NINE_LOGIN));
     }
 
     @Test

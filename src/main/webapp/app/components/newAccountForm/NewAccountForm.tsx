@@ -57,6 +57,7 @@ export type INewAccountForm = {
   byAdmin: boolean;
   defaultLicense?: LicenseType;
   visibleSections?: FormSection[];
+  gracePeriodBlacklistedDomains?: string[];
   onSelectLicense?: (newLicenseType: LicenseType | undefined) => void;
   onSubmit: (newUser: Partial<ManagedUserVM>) => void;
 };
@@ -102,6 +103,7 @@ export class NewAccountForm extends React.Component<INewAccountForm> {
 
   public static defaultProps = {
     visibleSections: Object.values(FormSection),
+    gracePeriodBlacklistedDomains: [],
   };
 
   constructor(props: INewAccountForm) {
@@ -373,6 +375,20 @@ export class NewAccountForm extends React.Component<INewAccountForm> {
     );
   }
 
+  @computed
+  get showNoGracePeriodWarning() {
+    if (!this.email) {
+      return false;
+    }
+    const normalizedEmail = this.email.toLowerCase();
+    const atIndex = normalizedEmail.lastIndexOf('@');
+    if (atIndex < 0 || atIndex === normalizedEmail.length - 1) {
+      return false;
+    }
+    const domain = normalizedEmail.substring(atIndex + 1);
+    return this.props.gracePeriodBlacklistedDomains?.includes(domain) ?? false;
+  }
+
   render() {
     return (
       <AvForm
@@ -483,6 +499,16 @@ export class NewAccountForm extends React.Component<INewAccountForm> {
                     }}
                     validate={EMAIL_VAL}
                   />
+                  {this.showNoGracePeriodWarning ? (
+                    <Alert variant={'warning'}>
+                      <i className={'mr-2 fa fa-exclamation-triangle'}></i>
+                      <span>
+                        You are using a personal email address. You will not get
+                        a grace period while your account request is under
+                        review.
+                      </span>
+                    </Alert>
+                  ) : null}
                   {this.showEmailMismatchConfirmation ? (
                     <Alert variant={'warning'}>
                       <i className={'mr-2 fa fa-exclamation-triangle'}></i>

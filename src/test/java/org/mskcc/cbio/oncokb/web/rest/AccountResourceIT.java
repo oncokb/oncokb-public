@@ -14,6 +14,7 @@ import org.mskcc.cbio.oncokb.domain.enumeration.LicenseStatus;
 import org.mskcc.cbio.oncokb.domain.enumeration.LicenseType;
 import org.mskcc.cbio.oncokb.repository.*;
 import org.mskcc.cbio.oncokb.security.AuthoritiesConstants;
+import org.mskcc.cbio.oncokb.service.GracePeriodBlackListService;
 import org.mskcc.cbio.oncokb.service.UserService;
 import org.mskcc.cbio.oncokb.service.dto.CompanyDTO;
 import org.mskcc.cbio.oncokb.service.dto.PasswordChangeDTO;
@@ -87,6 +88,9 @@ public class AccountResourceIT {
     @Autowired
     private ApplicationProperties applicationProperties;
 
+    @Autowired
+    private GracePeriodBlackListService gracePeriodBlackListService;
+
     RecaptchaProperties recaptchaProp;
 
     private AccountResource accountResource;
@@ -99,7 +103,20 @@ public class AccountResourceIT {
         recaptchaProp.setThreshold((float) 0.5);
         applicationProperties.setRecaptcha(recaptchaProp);
 
-        accountResource = new AccountResource(userRepository, userService, null, null, null, null, null, passwordEncoder, null, null, applicationProperties);
+        accountResource = new AccountResource(
+            userRepository,
+            userService,
+            null,
+            null,
+            null,
+            null,
+            null,
+            passwordEncoder,
+            null,
+            null,
+            applicationProperties,
+            gracePeriodBlackListService
+        );
     }
 
     @Test
@@ -185,6 +202,15 @@ public class AccountResourceIT {
         UserDetails userDetails = userDetailsRepository.findOneByUser(user).orElse(null);
         assertThat(userDetails).isNotNull();
         assertThat(userDetails.getAccountRequestStatus()).isEqualTo(AccountRequestStatus.PENDING);
+    }
+
+    @Test
+    public void testGetGracePeriodBlacklist() throws Exception {
+        restAccountMockMvc.perform(get("/api/register/grace-period-blacklist")
+                .accept(MediaType.APPLICATION_JSON))
+            .andExpect(status().isOk())
+            .andExpect(jsonPath("$.domains").isArray())
+            .andExpect(jsonPath("$.domains").value(org.hamcrest.Matchers.hasItem("gmail.com")));
     }
 
     @Test
