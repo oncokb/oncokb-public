@@ -14,7 +14,7 @@
         </p>
         <p>
             <a th:with="verifyUrl=${baseUrl} + '/account/verify',
-              url=(@{${verifyUrl}(key=${user.activationKey},login=${user.login},hasGracePeriod=${hasGracePeriod})})" th:href="${url}"
+              url=(@{${verifyUrl}(key=${user.activationKey},login=${user.login})})" th:href="${url}"
             th:text="${url}">Verification link</a>
         </p>
         <p>
