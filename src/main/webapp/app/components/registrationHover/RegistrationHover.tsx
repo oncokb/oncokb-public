@@ -2,6 +2,7 @@ import React, { useEffect, useState } from 'react';
 import styles from './styles.module.scss';
 import classNames from 'classnames';
 import { Link, useLocation } from 'react-router-dom';
+import { PAGE_ROUTE } from 'app/config/constants';
 import AuthenticationStore from 'app/store/AuthenticationStore';
 
 const REGISTRATION_HOVER_COOKIE = 'registration_hover_count';
