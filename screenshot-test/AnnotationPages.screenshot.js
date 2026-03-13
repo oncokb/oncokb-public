@@ -32,6 +32,7 @@ const numbersMain = fs.readFileSync(`${DATA_DIR}private-utils-numbers-main.json`
 const numbersLevels = fs.readFileSync(`${DATA_DIR}private-utils-numbers-levels.json`).toString();
 const tumorTypes = fs.readFileSync(`${DATA_DIR}private-utils-tumorTypes.json`).toString();
 const activeBannerMessages = fs.readFileSync(`${DATA_DIR}api-user-banner-messages-active.json`).toString();
+const gracePeriodBlacklist = fs.readFileSync(`${DATA_DIR}api-register-grace-period-blacklist.json`).toString();
 
 // ROS1 gene page - API response data
 const rose1GeneQuery = fs.readFileSync(`${DATA_DIR}api-v1-genes-ROS1.json`).toString();
@@ -162,6 +163,13 @@ function getMockResponse(url){
           status: 200,
           contentType: 'application/json',
           body: apiV1Info
+      };
+      break;
+    case `${SERVER_URL}api/register/grace-period-blacklist`:
+      res = {
+        status: 200,
+        contentType: 'application/json',
+        body: gracePeriodBlacklist
       };
       break;
     case `${SERVER_URL}api/private/utils/numbers/main/`:

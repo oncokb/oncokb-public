@@ -70,6 +70,9 @@ const usageUserDetail = fs
 const usageResourceDetail = fs
   .readFileSync(`${DATA_DIR}api-usage-resources-example.json`)
   .toString();
+const gracePeriodBlacklist = fs
+  .readFileSync(`${DATA_DIR}api-register-grace-period-blacklist.json`)
+  .toString();
 
 // # Fix the time to expiration date.
 function updateTokenExpirationDate(current) {
@@ -142,6 +145,13 @@ function getMockResponse(url) {
         status: 200,
         contentType: 'application/json',
         body: apiV1Info,
+      };
+      break;
+    case `${SERVER_URL}api/register/grace-period-blacklist`:
+      res = {
+        status: 200,
+        contentType: 'application/json',
+        body: gracePeriodBlacklist,
       };
       break;
     case `${SERVER_URL}api/private/utils/numbers/main/`:
