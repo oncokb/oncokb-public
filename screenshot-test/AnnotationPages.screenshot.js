@@ -32,6 +32,7 @@ const numbersMain = fs.readFileSync(`${DATA_DIR}private-utils-numbers-main.json`
 const numbersLevels = fs.readFileSync(`${DATA_DIR}private-utils-numbers-levels.json`).toString();
 const tumorTypes = fs.readFileSync(`${DATA_DIR}private-utils-tumorTypes.json`).toString();
 const activeBannerMessages = fs.readFileSync(`${DATA_DIR}api-user-banner-messages-active.json`).toString();
+const gracePeriodBlacklist = fs.readFileSync(`${DATA_DIR}api-register-grace-period-blacklist.json`).toString();
 
 // ROS1 gene page - API response data
 const rose1GeneQuery = fs.readFileSync(`${DATA_DIR}api-v1-genes-ROS1.json`).toString();
@@ -104,11 +105,36 @@ function getScreenshotConfig(name){
   }
 }
 
+async function resetRegistrationCookies(page) {
+  if (!page || page.isClosed()) {
+    return;
+  }
+  try {
+    await page.evaluate(() => {
+      document.cookie = 'page_visit_count=0; Path=/; Max-Age=2592000; SameSite=Lax';
+      document.cookie = 'registration_hover_count=0; Path=/; Max-Age=2592000; SameSite=Lax';
+    });
+  } catch (_error) {
+    // Ignore cleanup errors so they do not mask screenshot assertion failures.
+  }
+}
+
 if (!fs.existsSync(LATEST_SNAPSHOTS_DIR)){
   fs.mkdirSync(LATEST_SNAPSHOTS_DIR);
 }
 
 function getMockResponse(url){
+  if (
+    url.startsWith(`${SERVER_URL}api/v1/evidences/lookup?`) &&
+    url.includes('evidenceTypes=GENOMIC_INDICATOR')
+  ) {
+    return {
+      status: 200,
+      contentType: 'application/json',
+      body: '[]'
+    };
+  }
+
   let res = undefined
   switch (url) {
     case `${SERVER_URL}api/account`:
@@ -137,6 +163,13 @@ function getMockResponse(url){
           status: 200,
           contentType: 'application/json',
           body: apiV1Info
+      };
+      break;
+    case `${SERVER_URL}api/register/grace-period-blacklist`:
+      res = {
+        status: 200,
+        contentType: 'application/json',
+        body: gracePeriodBlacklist
       };
       break;
     case `${SERVER_URL}api/private/utils/numbers/main/`:
@@ -448,6 +481,10 @@ describe('Tests with login', () => {
     });
   })
 
+  afterEach(async () => {
+    await resetRegistrationCookies(page);
+  })
+
   it('Gene Page', async() => {
     await page.goto(`${CLIENT_URL}gene/ROS1/somatic`);
     await page.setViewport(VIEW_PORT_1080);
@@ -532,12 +569,42 @@ describe('Tests without login', () => {
     });
   })
 
+  afterEach(async () => {
+    await resetRegistrationCookies(page);
+  })
+
   it('Gene Page', async() => {
     await page.goto(`${CLIENT_URL}gene/ROS1/somatic`);
     await page.setViewport(VIEW_PORT_1080);
     await page.waitFor(LONG_WAITING_TIME);
     let image = await page.screenshot(getScreenshotConfig('Gene Page without Login'));
     expect(image).toMatchImageSnapshot({ customSnapshotIdentifier: 'Gene Page without Login' });
+  })
+
+  it('Gene Page without Login - Registration Nudge', async() => {
+    await page.goto(`${CLIENT_URL}`);
+    await page.evaluate(() => {
+      document.cookie = 'page_visit_count=11; Path=/; Max-Age=2592000; SameSite=Lax';
+      document.cookie = 'registration_hover_count=0; Path=/; Max-Age=2592000; SameSite=Lax';
+    });
+    await page.goto(`${CLIENT_URL}gene/ROS1/somatic`);
+    await page.setViewport(VIEW_PORT_1080);
+    await page.waitFor(LONG_WAITING_TIME);
+    let image = await page.screenshot(getScreenshotConfig('Gene Page without Login - Registration Nudge'));
+    expect(image).toMatchImageSnapshot({ customSnapshotIdentifier: 'Gene Page without Login - Registration Nudge' });
+  })
+
+  it('Gene Page without Login - Registration Hover', async() => {
+    await page.goto(`${CLIENT_URL}`);
+    await page.evaluate(() => {
+      document.cookie = 'page_visit_count=0; Path=/; Max-Age=2592000; SameSite=Lax';
+      document.cookie = 'registration_hover_count=11; Path=/; Max-Age=2592000; SameSite=Lax';
+    });
+    await page.goto(`${CLIENT_URL}gene/ROS1/somatic`);
+    await page.setViewport(VIEW_PORT_1080);
+    await page.waitFor(LONG_WAITING_TIME);
+    let image = await page.screenshot(getScreenshotConfig('Gene Page without Login - Registration Hover'));
+    expect(image).toMatchImageSnapshot({ customSnapshotIdentifier: 'Gene Page without Login - Registration Hover' });
   })
 
   it('Alteration Page', async() => {
@@ -604,6 +671,10 @@ describe('Tests on mobile view (< large grid)', () => {
     });
   })
 
+  afterEach(async () => {
+    await resetRegistrationCookies(page);
+  })
+
   it('Alteration Page with Cancer Type - With login - Mobile', async() => {
     await page.evaluate(() => {
       localStorage.setItem('oncokb-user-token', 'oncokb-public-demo-admin-token');
@@ -624,6 +695,19 @@ describe('Tests on mobile view (< large grid)', () => {
     await page.waitFor(WAITING_TIME);
     let image = await page.screenshot(getScreenshotConfig('Alteration Page with Cancer Type - Without login - Mobile'));
     expect(image).toMatchImageSnapshot({ customSnapshotIdentifier: 'Alteration Page with Cancer Type - Without login - Mobile' });
+  })
+
+  it('Gene Page without Login - Registration Hover - Mobile', async() => {
+    await page.evaluate(() => {
+      localStorage.removeItem('oncokb-user-token');
+      document.cookie = 'page_visit_count=0; Path=/; Max-Age=2592000; SameSite=Lax';
+      document.cookie = 'registration_hover_count=11; Path=/; Max-Age=2592000; SameSite=Lax';
+    });
+    await page.goto(`${CLIENT_URL}gene/ROS1/somatic`);
+    await page.setViewport(MOBILE_VIEW_PORT);
+    await page.waitFor(WAITING_TIME);
+    let image = await page.screenshot(getScreenshotConfig('Gene Page without Login - Registration Hover - Mobile'));
+    expect(image).toMatchImageSnapshot({ customSnapshotIdentifier: 'Gene Page without Login - Registration Hover - Mobile' });
   })
 
   afterAll(async () => {

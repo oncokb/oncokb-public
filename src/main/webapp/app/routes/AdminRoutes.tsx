@@ -16,8 +16,15 @@ import WindowStore from 'app/store/WindowStore';
 import UserBannerPage from 'app/pages/userBannerManagement/UserBannerPage';
 import CreateUserBannerMessagePage from 'app/pages/CreateUserBannerMessagePage';
 import EditUserBannerMessagePage from 'app/pages/EditUserBannerMessagePage';
+import AuthenticationStore from 'app/store/AuthenticationStore';
 
-const AdminRoutes = ({ windowStore }: { windowStore: WindowStore }) => {
+const AdminRoutes = ({
+  authenticationStore,
+  windowStore,
+}: {
+  authenticationStore: AuthenticationStore;
+  windowStore: WindowStore;
+}) => {
   return (
     <Switch>
       <ErrorBoundaryRoute
@@ -25,68 +32,83 @@ const AdminRoutes = ({ windowStore }: { windowStore: WindowStore }) => {
         path={PAGE_ROUTE.ADMIN_USER_DETAILS}
         component={UserDetailsPage}
         windowStore={windowStore}
+        authenticationStore={authenticationStore}
       />
       <ErrorBoundaryRoute
         exact
         path={PAGE_ROUTE.ADMIN_USAGE_ANALYSIS}
         component={UsageAnalysisPage}
         windowStore={windowStore}
+        authenticationStore={authenticationStore}
       />
       <ErrorBoundaryRoute
         exact
         path={PAGE_ROUTE.ADMIN_USER_USAGE_DETAILS}
         component={UserUsageDetailsPage}
         windowStore={windowStore}
+        authenticationStore={authenticationStore}
       />
       <ErrorBoundaryRoute
         exact
         path={PAGE_ROUTE.ADMIN_RESOURCE_DETAILS}
         component={ResourceUsageDetailsPage}
         windowStore={windowStore}
+        authenticationStore={authenticationStore}
       />
       <ErrorBoundaryRoute
         exact
         path={PAGE_ROUTE.ADMIN_SEND_EMAILS}
         component={ReadOnlyMode(SendEmailsPage)}
         windowStore={windowStore}
+        authenticationStore={authenticationStore}
       />
       <ErrorBoundaryRoute
         exact
         path={PAGE_ROUTE.ADMIN_CREATE_ACCOUNT}
         component={ReadOnlyMode(CreateAccountPage)}
         windowStore={windowStore}
+        authenticationStore={authenticationStore}
       />
       <ErrorBoundaryRoute
         exact
         path={PAGE_ROUTE.ADMIN_ADD_COMPANY}
         component={ReadOnlyMode(CreateCompanyPage)}
         windowStore={windowStore}
+        authenticationStore={authenticationStore}
       />
       <ErrorBoundaryRoute
         exact
         path={PAGE_ROUTE.ADMIN_ADD_USER_BANNER_MESSAGE}
         component={CreateUserBannerMessagePage}
         windowStore={windowStore}
+        authenticationStore={authenticationStore}
       />
       <ErrorBoundaryRoute
         exact
         path={PAGE_ROUTE.ADMIN_EDIT_USER_BANNER_MESSAGE}
         component={EditUserBannerMessagePage}
         windowStore={windowStore}
+        authenticationStore={authenticationStore}
       />
       <ErrorBoundaryRoute
         exact
         path={PAGE_ROUTE.ADMIN_COMPANY_DETAILS}
         component={CompanyDetailsPage}
         windowStore={windowStore}
+        authenticationStore={authenticationStore}
       />
       <ErrorBoundaryRoute
         exact
         path={PAGE_ROUTE.ADMIN_USER_BANNER_MESSAGES}
         component={UserBannerPage}
         windowStore={windowStore}
+        authenticationStore={authenticationStore}
       />
-      <ErrorBoundaryRoute component={PageNotFound} windowStore={windowStore} />
+      <ErrorBoundaryRoute
+        component={PageNotFound}
+        authenticationStore={authenticationStore}
+        windowStore={windowStore}
+      />
     </Switch>
   );
 };

@@ -1,0 +1,14 @@
+@import '../../variables';
+
+.form {
+  :global(.form-group),
+  :global(#important-notes) {
+    margin-bottom: 2.25rem;
+  }
+}
+
+.useCaseSection {
+  display: flex;
+  flex-direction: column;
+  gap: 0.75rem;
+}

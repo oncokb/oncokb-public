@@ -1,0 +1,19 @@
+@import '../../variables';
+
+.container {
+  h2 {
+    font-size: 1rem;
+    font-weight: 400;
+    font-family: 'Gotham Book', serif;
+    line-height: 1.5;
+    color: #684e00;
+  }
+  img {
+    margin-left: 0.5rem;
+  }
+}
+
+.aiMlEmphasis {
+  font-family: 'Gotham Bold', serif;
+  font-weight: 700;
+}
