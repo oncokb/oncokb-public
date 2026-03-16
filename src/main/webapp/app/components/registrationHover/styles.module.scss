@@ -1,5 +1,14 @@
 @import '../../variables';
 
+// prevent people from clicking around the paywall
+.backgroundLock {
+  position: absolute;
+  top: 0px;
+  height: 100%;
+  width: 100%;
+  z-index: 999;
+}
+
 .registerDialog {
   position: fixed;
   bottom: 0;

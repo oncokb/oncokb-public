@@ -131,30 +131,37 @@ export default function RegistrationHover({
     };
 
     return (
-      <dialog className={classNames(styles.registerDialog)} open={shouldShow}>
-        <div className={classNames('text-center', 'text-muted', 'mb-3')}>
-          <p>
-            This curated data requires you to create an account to get full
-            access
-          </p>
-          <div className={classNames(styles.headlineRule)}></div>
-        </div>
-        <div className={classNames(styles.registerContent)}>
-          <div>
-            <p className="h4 mb-3 fw-semibold">{content.title}</p>
-            <small className="text-muted d-block">{content.body}</small>
+      <>
+        <div className={classNames(styles.backgroundLock)}></div>
+        <dialog className={classNames(styles.registerDialog)} open={shouldShow}>
+          <div className={classNames('text-center', 'text-muted', 'mb-3')}>
+            <p>
+              This curated data requires you to create an account to get full
+              access
+            </p>
+            <div className={classNames(styles.headlineRule)}></div>
           </div>
-          <div className={styles.linkColumn}>
-            <Link
-              className={classNames(styles.registerLink, 'btn', 'btn-primary')}
-              to={PAGE_ROUTE.REGISTER}
-            >
-              {content.button}
-            </Link>
-            <Link to={PAGE_ROUTE.LOGIN}>Already have an account? Log In</Link>
+          <div className={classNames(styles.registerContent)}>
+            <div>
+              <p className="h4 mb-3 fw-semibold">{content.title}</p>
+              <small className="text-muted d-block">{content.body}</small>
+            </div>
+            <div className={styles.linkColumn}>
+              <Link
+                className={classNames(
+                  styles.registerLink,
+                  'btn',
+                  'btn-primary'
+                )}
+                to={PAGE_ROUTE.REGISTER}
+              >
+                {content.button}
+              </Link>
+              <Link to={PAGE_ROUTE.LOGIN}>Already have an account? Log In</Link>
+            </div>
           </div>
-        </div>
-      </dialog>
+        </dialog>
+      </>
     );
   }
 }
