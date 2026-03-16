@@ -704,7 +704,10 @@ export class NewAccountForm extends React.Component<INewAccountForm> {
                         <label htmlFor={FormKey.USE_CASE}>
                           {`Describe how you plan to use ${ONCOKB_TM} *`}
                         </label>
-                        <UseCaseExamples />
+                        {[
+                          LicenseType.RESEARCH_IN_COMMERCIAL,
+                          LicenseType.ACADEMIC,
+                        ].includes(this.selectedLicense) && <UseCaseExamples />}
                         <AvInput
                           id={FormKey.USE_CASE}
                           name={FormKey.USE_CASE}
