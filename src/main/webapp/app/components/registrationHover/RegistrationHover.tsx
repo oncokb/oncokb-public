@@ -125,8 +125,22 @@ export default function RegistrationHover({
   } else {
     const content = {
       title: 'Thanks for using OncoKB!',
-      body:
-        'Help us grow by creating an account or logging in to continue accessing our evidence-based precision oncology content',
+      body: (
+        <div className={classNames(styles.contentBody)}>
+          <p>
+            Help us grow by creating an account or logging in to continue
+            accessing our evidence-based precision oncology content.
+          </p>
+          <ul>
+            <li>Academic user? Registration is free!</li>
+            <li>Hospital or commercial use requires a paid license.</li>
+          </ul>
+          <p>
+            As always, please review our{' '}
+            <Link to={PAGE_ROUTE.TERMS}>terms of use</Link> before using OncoKB.
+          </p>
+        </div>
+      ),
       button: 'Register Now',
     };
 
