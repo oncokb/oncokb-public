@@ -145,9 +145,17 @@ export default function RegistrationHover({
     };
 
     return (
+      // Be careful changing id's. They are used by heap for reporting.
       <>
-        <div className={classNames(styles.backgroundLock)}></div>
-        <dialog className={classNames(styles.registerDialog)} open={shouldShow}>
+        <div
+          id="hover-lock"
+          className={classNames(styles.backgroundLock)}
+        ></div>
+        <dialog
+          id="hover-modal"
+          className={classNames(styles.registerDialog)}
+          open={shouldShow}
+        >
           <div className={classNames('text-center', 'text-muted', 'mb-3')}>
             <p>
               This curated data requires you to create an account to get full
@@ -162,6 +170,7 @@ export default function RegistrationHover({
             </div>
             <div className={styles.linkColumn}>
               <Link
+                id="hover-register-link"
                 className={classNames(
                   styles.registerLink,
                   'btn',
@@ -171,7 +180,9 @@ export default function RegistrationHover({
               >
                 {content.button}
               </Link>
-              <Link to={PAGE_ROUTE.LOGIN}>Already have an account? Log In</Link>
+              <Link id="hover-login-link" to={PAGE_ROUTE.LOGIN}>
+                Already have an account? Log In
+              </Link>
             </div>
           </div>
         </dialog>

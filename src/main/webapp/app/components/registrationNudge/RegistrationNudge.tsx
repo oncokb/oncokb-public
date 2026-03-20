@@ -99,14 +99,22 @@ export default function RegistrationNudgeInternal({
     authStore.isUserAuthenticated
   );
   return shouldNudge ? (
-    <div className={classNames(styles.container, 'bg-dark', 'text-white')}>
+    // Be careful changing id's. They are used by heap for reporting.
+    <div
+      id="nudge"
+      className={classNames(styles.container, 'bg-dark', 'text-white')}
+    >
       <Container fluid={!windowStore.isXLscreen}>
         <div className={classNames(styles.grid)}>
           <i className={classNames('fa', 'fa-bullhorn')}></i>
           <aside>
             <p>
               Enjoying OncoKB?{' '}
-              <Link to={PAGE_ROUTE.REGISTER} onClick={dismissNudge}>
+              <Link
+                id="nudge-register-link"
+                to={PAGE_ROUTE.REGISTER}
+                onClick={dismissNudge}
+              >
                 Register
               </Link>{' '}
               for an account to unlock more.
