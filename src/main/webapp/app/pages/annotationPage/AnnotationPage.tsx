@@ -708,8 +708,6 @@ export default class AnnotationPage extends React.Component<
               therapeuticImplications={this.therapeuticImplications}
               diagnosticImplications={this.diagnosticImplications}
               prognosticImplications={this.prognosticImplications}
-              defaultSelectedTab={this.props.defaultSelectedTab}
-              onChangeTab={this.props.onChangeTab}
             />
           ) : (
             <SomaticGermlineAlterationView
