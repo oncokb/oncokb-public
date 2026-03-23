@@ -19,6 +19,7 @@ import {
   isCategoricalAlteration,
   isPositionalAlteration,
   getCategoricalAlterationDescription,
+  getImplicationsFromTags,
 } from 'app/shared/utils/Utils';
 import {
   getAlterationPageLink,
@@ -78,6 +79,7 @@ import { SomaticGermlineAlterationTiles } from 'app/shared/tiles/tile-utils';
 import GeneticTypeTag from 'app/components/tag/GeneticTypeTag';
 import VariantOverView from 'app/shared/sections/VariantOverview';
 import GeneAdditionalInfoSection from 'app/shared/sections/GeneAdditionalInfoSection';
+import InfoIcon from 'app/shared/icons/InfoIcon';
 import { UnknownGeneAlert } from 'app/shared/alert/UnknownGeneAlert';
 
 type MatchParams = {
@@ -238,9 +240,60 @@ export class SomaticGermlineAlterationPage extends React.Component<
       const alterations = evidence.alterations.filter(alteration =>
         alteration.referenceGenomes.includes(this.store.referenceGenomeQuery)
       );
-      const alterationsName = alterations
-        .map(alteration => alteration.name)
-        .join(', ');
+      let alterationsName = '';
+      let alterationsView: JSX.Element | undefined = undefined;
+      if (evidence.alterations.length > 0) {
+        alterationsName = alterations
+          .map(alteration => alteration.name)
+          .join(', ');
+        alterationsView = (
+          <WithSeparator separator={', '}>
+            {alterations.map(alteration =>
+              alteration.consequence ? (
+                <AlterationPageLink
+                  key={alteration.name}
+                  hugoSymbol={this.store.hugoSymbol}
+                  alteration={{
+                    alteration: alteration.alteration,
+                    name: alteration.name,
+                  }}
+                  alterationRefGenomes={
+                    alteration.referenceGenomes as REFERENCE_GENOME[]
+                  }
+                  germline={this.store.germline}
+                />
+              ) : (
+                <span>{alteration.name}</span>
+              )
+            )}
+          </WithSeparator>
+        );
+      } else {
+        alterationsName = evidence.tags.map(tag => tag.name).join(', ');
+        alterationsView = (
+          <WithSeparator separator={', '}>
+            {evidence.tags.map(tag => (
+              <AlterationPageLink
+                key={tag.name}
+                hugoSymbol={this.store.hugoSymbol}
+                alteration={tag.name}
+                alterationRefGenomes={[
+                  REFERENCE_GENOME.GRCh37,
+                  REFERENCE_GENOME.GRCh38,
+                ]}
+                germline={this.store.germline}
+                isTag
+              >
+                <span>{tag.name}</span>
+                <InfoIcon
+                  className="ml-2"
+                  overlay={<span>{tag.description}</span>}
+                />
+              </AlterationPageLink>
+            ))}
+          </WithSeparator>
+        );
+      }
       const cancerTypes = evidence.cancerTypes.map(cancerType =>
         getCancerTypeNameFromOncoTreeType(cancerType)
       );
@@ -258,28 +311,7 @@ export class SomaticGermlineAlterationPage extends React.Component<
             fdaLevel,
             drugDescription: evidence.description,
             alterations: alterationsName,
-            alterationsView: (
-              <WithSeparator separator={', '}>
-                {alterations.map(alteration =>
-                  alteration.consequence ? (
-                    <AlterationPageLink
-                      key={alteration.name}
-                      hugoSymbol={this.store.hugoSymbol}
-                      alteration={{
-                        alteration: alteration.alteration,
-                        name: alteration.name,
-                      }}
-                      alterationRefGenomes={
-                        alteration.referenceGenomes as REFERENCE_GENOME[]
-                      }
-                      germline={this.store.germline}
-                    />
-                  ) : (
-                    <span>{alteration.name}</span>
-                  )
-                )}
-              </WithSeparator>
-            ),
+            alterationsView,
             drugs: getTreatmentNameByPriority(treatment),
             cancerTypes: cancerTypesName,
             cancerTypesArray: cancerTypes,
@@ -315,28 +347,7 @@ export class SomaticGermlineAlterationPage extends React.Component<
           fdaLevel,
           drugDescription: evidence.description,
           alterations: alterationsName,
-          alterationsView: (
-            <WithSeparator separator={', '}>
-              {alterations.map(alteration =>
-                alteration.consequence ? (
-                  <AlterationPageLink
-                    key={alteration.name}
-                    hugoSymbol={this.store.hugoSymbol}
-                    alteration={{
-                      alteration: alteration.alteration,
-                      name: alteration.name,
-                    }}
-                    alterationRefGenomes={
-                      alteration.referenceGenomes as REFERENCE_GENOME[]
-                    }
-                    germline={this.store.germline}
-                  />
-                ) : (
-                  <span>{alteration.name}</span>
-                )
-              )}
-            </WithSeparator>
-          ),
+          alterationsView,
           drugs: '',
           cancerTypes: cancerTypesName,
           cancerTypesArray: cancerTypes,
@@ -409,6 +420,38 @@ export class SomaticGermlineAlterationPage extends React.Component<
       const alterations = evidence.alterations.filter(alteration =>
         alteration.referenceGenomes.includes(this.store.referenceGenomeQuery)
       );
+      const ctNames = evidence.cancerTypes.map(ct =>
+        getCancerTypeNameFromOncoTreeType(ct)
+      );
+      const excludedCtNames = evidence.excludedCancerTypes.map(ct =>
+        getCancerTypeNameFromOncoTreeType(ct)
+      );
+      const cancerTypeView = (
+        <>
+          <WithSeparator separator={', '}>
+            {ctNames.map(cancerType => (
+              <AlterationPageLink
+                key={`${this.store.alterationName}-${cancerType}`}
+                hugoSymbol={this.store.hugoSymbol}
+                alteration={this.store.alterationName}
+                alterationRefGenomes={[this.store.referenceGenomeQuery]}
+                cancerType={cancerType}
+                hashQueries={{
+                  tab: ANNOTATION_PAGE_TAB_KEYS.FDA,
+                }}
+                germline={this.store.germline}
+              >
+                {cancerType}
+              </AlterationPageLink>
+            ))}
+          </WithSeparator>
+          {excludedCtNames.length > 0 ? (
+            <span> (excluding {excludedCtNames.join(', ')})</span>
+          ) : (
+            <></>
+          )}
+        </>
+      );
       alterations.forEach(alt => {
         // convert all alterations to matchedAlteration/alteration query if not positional variant
         let mappedAlteration = {} as Alteration;
@@ -425,12 +468,6 @@ export class SomaticGermlineAlterationPage extends React.Component<
             mappedAlteration.name = mappedAlteration.alteration = this.store.alterationName;
           }
         }
-        const ctNames = evidence.cancerTypes.map(ct =>
-          getCancerTypeNameFromOncoTreeType(ct)
-        );
-        const excludedCtNames = evidence.excludedCancerTypes.map(ct =>
-          getCancerTypeNameFromOncoTreeType(ct)
-        );
         fdaImplications.push({
           level: fdaLevel,
           alteration: mappedAlteration,
@@ -452,35 +489,63 @@ export class SomaticGermlineAlterationPage extends React.Component<
             />
           ),
           cancerType: getCancerTypesName(ctNames, excludedCtNames),
-          cancerTypeView: (
-            <>
-              <WithSeparator separator={', '}>
-                {ctNames.map(cancerType => (
-                  <AlterationPageLink
-                    key={`${this.store.alterationName}-${cancerType}`}
-                    hugoSymbol={this.store.hugoSymbol}
-                    alteration={this.store.alterationName}
-                    alterationRefGenomes={[this.store.referenceGenomeQuery]}
-                    cancerType={cancerType}
-                    hashQueries={{
-                      tab: ANNOTATION_PAGE_TAB_KEYS.FDA,
-                    }}
-                    germline={this.store.germline}
-                  >
-                    {cancerType}
-                  </AlterationPageLink>
-                ))}
-              </WithSeparator>
-              {excludedCtNames.length > 0 ? (
-                <span> (excluding {excludedCtNames.join(', ')})</span>
-              ) : (
-                <></>
-              )}
-            </>
+          cancerTypeView,
+        });
+      });
+      evidence.tags.forEach(tag => {
+        let mappedAlteration = {} as Alteration;
+        if (this.store.alteration) {
+          mappedAlteration = this.store.alteration;
+        } else {
+          mappedAlteration.name = mappedAlteration.alteration = this.store.alterationName;
+        }
+
+        fdaImplications.push({
+          level: fdaLevel,
+          alteration: {
+            alteration: tag.name,
+            consequence: {
+              description: '',
+              isGenerallyTruncating: false,
+              term: '',
+            },
+            gene: evidence.gene,
+            name: tag.name,
+            proteinChange: '',
+            proteinEnd: 0,
+            proteinStart: 0,
+            refResidues: '',
+            referenceGenomes: [],
+            variantResidues: '',
+          },
+          alterationView: (
+            <AlterationPageLink
+              key={mappedAlteration.name}
+              hugoSymbol={this.store.hugoSymbol}
+              alteration={tag.name}
+              alterationRefGenomes={
+                mappedAlteration.referenceGenomes as REFERENCE_GENOME[]
+              }
+              hashQueries={{
+                tab: ANNOTATION_PAGE_TAB_KEYS.FDA,
+              }}
+              germline={this.store.germline}
+              isTag
+            >
+              <span>{tag.name}</span>
+              <InfoIcon
+                className="ml-2"
+                overlay={<span>{tag.description}</span>}
+              />
+            </AlterationPageLink>
           ),
+          cancerType: getCancerTypesName(ctNames, excludedCtNames),
+          cancerTypeView,
         });
       });
     });
+    /* eslint-disable no-console */
+    console.log(fdaImplications);
     return getUniqueFdaImplications(fdaImplications);
   }
 

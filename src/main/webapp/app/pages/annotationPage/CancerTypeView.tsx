@@ -41,11 +41,6 @@ export type ICancerTypeView = {
   therapeuticImplications: TherapeuticImplication[];
   diagnosticImplications: TherapeuticImplication[];
   prognosticImplications: TherapeuticImplication[];
-  defaultSelectedTab?: ANNOTATION_PAGE_TAB_KEYS;
-  onChangeTab?: (
-    selectedTabKey: ANNOTATION_PAGE_TAB_KEYS,
-    newTabKey: ANNOTATION_PAGE_TAB_KEYS
-  ) => void;
   isGermline?: boolean;
 };
 

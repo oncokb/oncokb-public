@@ -40,6 +40,8 @@ import { SomaticGermlineCancerTypePage } from 'app/pages/annotationPage/SomaticG
 import WindowStore from 'app/store/WindowStore';
 import PageContainer from 'app/components/PageContainer';
 import GenomicReport from 'app/pages/patientReport/GenomicReport';
+import SomaticTagPage from 'app/pages/somaticGermlineAlterationPage/SomaticTagPage';
+import SomaticTagCancerTypePage from 'app/pages/annotationPage/SomaticTagCancerTypePage';
 
 const getOldLevelsRedirectRoute = (hash: string) => {
   const queryStrings = QueryString.parse(hash) as {
@@ -126,6 +128,24 @@ const AppRoutes = (props: {
       />
       <Redirect exact from={PAGE_ROUTE.PO_TX} to={PAGE_ROUTE.ONCOLOGY_TX} />
       <Switch>
+        <RecaptchaBoundaryRoute
+          exact
+          isUserAuthenticated={props.authenticationStore.isUserAuthenticated}
+          appStore={props.appStore}
+          path={PAGE_ROUTE.SOMATIC_TAG}
+          component={SomaticTagPage}
+          windowStore={props.windowStore}
+          pageContainer={({ children }) => children}
+        />
+        <RecaptchaBoundaryRoute
+          exact
+          isUserAuthenticated={props.authenticationStore.isUserAuthenticated}
+          appStore={props.appStore}
+          path={PAGE_ROUTE.SOMATIC_TAG_TUMOR_TYPE}
+          component={SomaticTagCancerTypePage}
+          windowStore={props.windowStore}
+          pageContainer={({ children }) => children}
+        />
         <RecaptchaBoundaryRoute
           exact
           isUserAuthenticated={props.authenticationStore.isUserAuthenticated}
