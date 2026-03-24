@@ -1,0 +1,35 @@
+@import '../../variables';
+
+$action-color: #fff;
+
+.container {
+  font-size: $oncokb-font-font-size;
+  padding: 10px 0;
+}
+
+.grid {
+  display: grid;
+  gap: 1rem;
+  grid-template-columns: min-content auto min-content;
+  place-items: center;
+  max-width: fit-content;
+  margin: auto;
+  aside p {
+    margin: 0;
+  }
+  a {
+    color: $action-color;
+    text-decoration-line: underline;
+  }
+  a:hover {
+    color: $action-color;
+  }
+  button {
+    color: $action-color;
+  }
+}
+
+.close {
+  background: none;
+  border: none;
+}

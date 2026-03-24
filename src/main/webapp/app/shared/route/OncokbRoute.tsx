@@ -1,7 +1,8 @@
 import React from 'react';
 import { RouteProps, Route, RouteComponentProps } from 'react-router';
-import PageContainer from 'app/components/PageContainer';
 import WindowStore from 'app/store/WindowStore';
+import AuthenticationStore from 'app/store/AuthenticationStore';
+import RegistrationHover from 'app/components/registrationHover/RegistrationHover';
 
 export type OncokbRouteProps = RouteProps & {
   pageContainer?: React.FunctionComponent<{
@@ -9,13 +10,17 @@ export type OncokbRouteProps = RouteProps & {
     children: JSX.Element;
   }>;
   windowStore: WindowStore;
+  authenticationStore: AuthenticationStore;
+  registrationHoverLimit?: number;
 };
 
 export default function OncokbRoute({
   render,
   component,
   windowStore,
+  authenticationStore,
   pageContainer = props => props.children,
+  registrationHoverLimit,
   ...rest
 }: OncokbRouteProps) {
   const newRender = (props: RouteComponentProps) => {
@@ -26,8 +31,21 @@ export default function OncokbRoute({
       <>{React.createElement(component!, newProps)}</>
     );
   };
+  const routeElement = <Route render={newRender} {...rest} />;
+  const children = (
+    <>
+      {registrationHoverLimit !== undefined && (
+        <RegistrationHover
+          authenticationStore={authenticationStore}
+          registrationHoverLimit={registrationHoverLimit}
+        />
+      )}
+      {routeElement}
+    </>
+  );
+
   return pageContainer({
     windowStore,
-    children: <Route render={newRender} {...rest} />,
+    children,
   });
 }

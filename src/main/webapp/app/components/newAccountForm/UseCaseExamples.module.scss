@@ -1,0 +1,47 @@
+@import '../../variables';
+
+.container {
+  h2,
+  h3 {
+    font-size: 1rem;
+    font-weight: 400;
+    font-family: 'Gotham Book', serif;
+    line-height: 1.5;
+  }
+  margin-bottom: 1rem;
+}
+
+.examples {
+  display: grid;
+  gap: 1rem;
+  grid-template-columns: repeat(auto-fit, minmax(350px, 1fr));
+  grid-auto-rows: auto;
+  container-type: inline-size;
+  @media (max-width: 349px) {
+    grid-template-columns: 1fr;
+  }
+  section {
+    display: flex;
+    flex-direction: column;
+    .goodHeader,
+    .badHeader {
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+    }
+
+    div {
+      flex-grow: 1;
+      height: max-content;
+      background-color: #f8fafc;
+      border: 1px solid #d9e2ec;
+      border-radius: 4px;
+      padding: 18px;
+      color: #4d5358;
+    }
+
+    img {
+      margin-left: 0.5rem;
+    }
+  }
+}
