@@ -139,6 +139,8 @@ const AppRoutes = (props: {
           component={SomaticTagPage}
           windowStore={props.windowStore}
           pageContainer={({ children }) => children}
+          authenticationStore={props.authenticationStore}
+          registrationHoverLimit={REGISTRATION_HOVER_GENE_PAGE_LIMIT}
         />
         <RecaptchaBoundaryRoute
           exact
@@ -148,6 +150,8 @@ const AppRoutes = (props: {
           component={SomaticTagCancerTypePage}
           windowStore={props.windowStore}
           pageContainer={({ children }) => children}
+          authenticationStore={props.authenticationStore}
+          registrationHoverLimit={REGISTRATION_HOVER_GENE_PAGE_LIMIT}
         />
         <RecaptchaBoundaryRoute
           exact
