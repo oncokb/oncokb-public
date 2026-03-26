@@ -10,6 +10,7 @@ type ServerConfig = {
   sentryProjectId: string;
   readonly: boolean;
   enableAuth: boolean;
+  paywallEnabled: boolean;
   recaptchaProjectId: string;
   recaptchaSiteKey: string;
   recaptchaThreshold: string;
