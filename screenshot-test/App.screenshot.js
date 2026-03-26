@@ -105,13 +105,6 @@ function getScreenshotConfig(name) {
   };
 }
 
-async function enablePaywallForScreenshots(page) {
-  await page.evaluateOnNewDocument(() => {
-    window.serverConfig = window.serverConfig || {};
-    window.serverConfig.paywallEnabled = true;
-  });
-}
-
 async function resetRegistrationCookies(page) {
   if (!page || page.isClosed()) {
     return;
@@ -403,7 +396,6 @@ describe('Tests without ROLE_API and requested', () => {
   beforeAll(async () => {
     browser = await puppeteer.launch(browserConfig);
     page = await browser.newPage();
-    await enablePaywallForScreenshots(page);
     await page.setRequestInterception(true); // Handle UnhandledPromiseRejectionWarning: Error: Request Interception is not enabled!
     page.on('request', request => {
       let url = request.url();
@@ -451,7 +443,6 @@ describe('Tests without ROLE_API and not requested', () => {
   beforeAll(async () => {
     browser = await puppeteer.launch(browserConfig);
     page = await browser.newPage();
-    await enablePaywallForScreenshots(page);
     await page.setRequestInterception(true); // Handle UnhandledPromiseRejectionWarning: Error: Request Interception is not enabled!
     page.on('request', request => {
       let url = request.url();
@@ -499,7 +490,6 @@ describe('Tests with login', () => {
   beforeAll(async () => {
     browser = await puppeteer.launch(browserConfig);
     page = await browser.newPage();
-    await enablePaywallForScreenshots(page);
     await page.setRequestInterception(true); // Handle UnhandledPromiseRejectionWarning: Error: Request Interception is not enabled!
     page.on('request', request => {
       let url = request.url();
@@ -655,7 +645,6 @@ describe('Tests without login', () => {
   beforeAll(async () => {
     browser = await puppeteer.launch(browserConfig);
     page = await browser.newPage();
-    await enablePaywallForScreenshots(page);
     await page.setRequestInterception(true); // Handle UnhandledPromiseRejectionWarning: Error: Request Interception is not enabled!
     page.on('request', request => {
       let url = request.url();
