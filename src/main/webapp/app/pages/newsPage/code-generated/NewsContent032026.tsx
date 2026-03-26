@@ -123,13 +123,13 @@ export default function NewsContent032026() {
                     <td>Elascetrant</td>
                   </tr>
                   <tr>
-                    <td rowSpan="2">2</td>
-                    <td rowSpan="2">{getAlternativeGenePageLinks('POLD1')}</td>
-                    <td rowSpan="2">D402N, E318K, L474P, S478N</td>
-                    <td rowSpan="2">
+                    <td rowSpan={2}>2</td>
+                    <td rowSpan={2}>{getAlternativeGenePageLinks('POLD1')}</td>
+                    <td rowSpan={2}>D402N, E318K, L474P, S478N</td>
+                    <td rowSpan={2}>
                       Oncogenic missense mutations in the exonuclease domain
                     </td>
-                    <td rowSpan="2">
+                    <td rowSpan={2}>
                       Oncogenic and likely oncogenic missense mutations in the
                       range 304-533 (the exonuclease domain)
                     </td>
@@ -147,19 +147,19 @@ export default function NewsContent032026() {
                     </td>
                   </tr>
                   <tr>
-                    <td rowSpan="2">2</td>
-                    <td rowSpan="2">{getAlternativeGenePageLinks('POLE')}</td>
-                    <td rowSpan="2">
+                    <td rowSpan={2}>2</td>
+                    <td rowSpan={2}>{getAlternativeGenePageLinks('POLE')}</td>
+                    <td rowSpan={2}>
                       A288V, A456P, A463D, A463T, A463V, D275A, D275G, D275V,
                       D368N, D368Y, F367L, F367S, F367V, L424I, L424V, M295R,
                       M444K, P286H, P286L, P286R, P286S, P436H, P436R, P436S,
                       S297F, S297Y, S459F, S459Y, S461L, S461P, S461T, V411L,
                       V411M, V464A, Y458C, Y458H
                     </td>
-                    <td rowSpan="2">
+                    <td rowSpan={2}>
                       Oncogenic missense mutations in the exonuclease domain
                     </td>
-                    <td rowSpan="2">
+                    <td rowSpan={2}>
                       Oncogenic and likely oncogenic missense mutations in the
                       range 268-471 (the exonuclease domain)
                     </td>
