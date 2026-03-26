@@ -89,11 +89,10 @@ export default function NewsContent022026() {
                   </tr>
                 </tbody>
               </table>
-            </div>
+            </div>{' '}
           </details>
         </li>
       </ul>
-
       <p>
         <strong>Updated Therapeutic Implications</strong>
       </p>

@@ -913,6 +913,8 @@ export type DataRelease = {
 };
 
 export const DATA_RELEASES: DataRelease[] = [
+  { date: '03302026', version: 'v6.3' },
+  { date: '02272026', version: 'v6.2' },
   { date: '01292026', version: 'v6.1' },
   { date: '12182025', version: 'v6.0' },
   { date: '11242025', version: 'v5.4' },

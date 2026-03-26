@@ -58,6 +58,7 @@ import NewsContent112025 from './code-generated/NewsContent112025';
 import NewsContent122025 from './code-generated/NewsContent122025';
 import NewsContent012026 from './code-generated/NewsContent012026';
 import NewsContent022026 from './code-generated/NewsContent022026';
+import NewsContent032026 from './code-generated/NewsContent032026';
 
 export type ChangedAnnotation = {
   content: (ElementType | ElementType[])[][];
@@ -315,6 +316,9 @@ const EVIDENCE_COLUMN_SEPARATOR = '; ';
 // https://stackoverflow.com/questions/41947168/is-it-possible-to-use-keyof-operator-on-literals-instead-of-interfaces
 
 export const NEWS_BY_DATE: { [date: string]: NewsData } = {
+  '03302026': {
+    rawComponent: <NewsContent032026 />,
+  },
   '02272026': {
     rawComponent: <NewsContent022026 />,
   },
