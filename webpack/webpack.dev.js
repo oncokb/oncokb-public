@@ -20,7 +20,10 @@ module.exports = options =>
     {
       devtool: 'cheap-module-source-map', // https://reactjs.org/docs/cross-origin-errors.html
       mode: ENV,
-      entry: ['./src/main/webapp/app/index'],
+      entry: [
+        './src/main/webapp/app/devServerConfig',
+        './src/main/webapp/app/index',
+      ],
       output: {
         path: utils.root('target/classes/static/'),
         filename: 'app/[name].bundle.js',

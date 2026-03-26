@@ -41,6 +41,10 @@ The following steps is one way to set up the redis. As long as you have redis se
 2. Change `api-proxy-url` to the URL where oncokb running. For example, `http://localhost:8888/oncokb`
 3. Make sure the password for your Redis as same as the password for Redis defined in this file
 
+For webpack frontend development, frontend-only runtime flags are initialized in
+`/src/main/webapp/app/devServerConfig.ts`.
+If a frontend change depends on `window.serverConfig` in local webpack dev, update that file instead of editing `index.html`.
+
 ### Building
 
 Before you can build this project, you must install and configure the following dependencies on your machine:

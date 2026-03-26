@@ -7,6 +7,7 @@ public class FrontendProperties {
     private String googleAnalyticsProjectId;
     private String sentryProjectId;
     private Boolean enableAuth = true;
+    private Boolean paywallEnabled = true;
     private String recaptchaProjectId;
     private String recaptchaSiteKey;
     private Float recaptchaThreshold;
@@ -57,5 +58,13 @@ public class FrontendProperties {
 
     public void setEnableAuth(Boolean enableAuth) {
         this.enableAuth = enableAuth;
+    }
+
+    public Boolean getPaywallEnabled() {
+        return paywallEnabled;
+    }
+
+    public void setPaywallEnabled(Boolean paywallEnabled) {
+        this.paywallEnabled = paywallEnabled;
     }
 }
