@@ -8,7 +8,7 @@ Object.assign(existingServerConfig, {
   appProfile: 'DEV',
   readonly: false,
   enableAuth: true,
-  paywallEnabled: false,
+  paywallEnabled: true,
   recaptchaProjectId: '',
   recaptchaSiteKey: '',
   recaptchaThreshold: 0.1,

@@ -168,6 +168,7 @@ application:
     sentry-project-id:
     google-analytics-project-id:
     enable-auth: true
+    paywall-enabled: true
     recaptcha-project-id:
     recaptcha-site-key:
     recaptcha-threshold: 0.1
