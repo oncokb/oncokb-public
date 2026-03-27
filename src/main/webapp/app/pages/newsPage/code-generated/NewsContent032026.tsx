@@ -8,6 +8,8 @@ import {
 import { NewlyAddedGenesListItem } from 'app/pages/newsPage/NewlyAddedGenesListItem';
 import { TableOfContents } from 'app/pages/privacyNotice/TableOfContents';
 
+// removed the corresponding markdown file for this componeent
+// since you cannot represent rowspan in markdown tables.
 export default function NewsContent032026() {
   return (
     <>
