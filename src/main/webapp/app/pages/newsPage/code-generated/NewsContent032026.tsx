@@ -69,11 +69,10 @@ export default function NewsContent032026() {
       </div>
       <ul>
         <li>
-          Replaced enumerated mutation lists with range-based biomarker
+          Replaced lists of individual mutations with range-based biomarker
           definitions that group oncogenic and likely oncogenic variants within
-          defined functional domains for select therapeutic associations. Note
-          that changes are to variant nomenclature only and levels of evidence
-          are unchanged for the listed variants
+          defined functional domains for select therapeutic associations. Levels
+          of evidence remain unchanged for listed variants.
           <details>
             <summary>View Updated Variant Nomenclature</summary>
             <div className="table-responsive">
