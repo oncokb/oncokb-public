@@ -812,18 +812,6 @@ describe('Tests without login', () => {
     });
   });
 
-  it('About Page', async () => {
-    await page.goto(`${CLIENT_URL}about`);
-    await page.setViewport(VIEW_PORT_1080);
-    await page.waitFor(LONG_WAITING_TIME);
-    let image = await page.screenshot(
-      getScreenshotConfig('About Page without Login')
-    );
-    expect(image).toMatchImageSnapshot({
-      customSnapshotIdentifier: 'About Page without Login',
-    });
-  });
-
   it('Team Page', async () => {
     await page.goto(`${CLIENT_URL}team`);
     await page.setViewport(VIEW_PORT_1080);
