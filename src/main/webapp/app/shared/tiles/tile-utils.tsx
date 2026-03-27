@@ -99,7 +99,8 @@ function MutationEffectIcon({
 }
 export function createHighestLevelOfEvidenceTileProps(
   variantAnnotation: VariantAnnotation | GeneNumber,
-  includeTitle: boolean
+  includeTitle: boolean,
+  hideFda = false
 ): AlterationTileProps {
   const {
     highestDiagnosticImplicationLevel,
@@ -152,7 +153,7 @@ export function createHighestLevelOfEvidenceTileProps(
         },
         {
           title: 'FDA',
-          show: !!highestFdaLevel,
+          show: !hideFda && !!highestFdaLevel,
           value: <HighestLevelEvidence type="Fda" level={highestFdaLevel} />,
         },
       ],
@@ -338,6 +339,13 @@ export function SomaticGermlineAlterationTiles({
     if (hasPenetrance) {
       tiles.push(createGeneticRiskTileProps(germlineAnnotation!, includeTitle));
     }
+    tiles.push(
+      createHighestLevelOfEvidenceTileProps(
+        rest.variantAnnotation,
+        includeTitle,
+        isGermline
+      )
+    );
   } else {
     tiles.push(
       createMutationEffectTileProps(
@@ -406,7 +414,9 @@ export function SomaticGermlineGeneInfoTiles({
     });
   }
 
-  tiles.push(createHighestLevelOfEvidenceTileProps(geneNumber, true));
+  tiles.push(
+    createHighestLevelOfEvidenceTileProps(geneNumber, true, isGermline)
+  );
 
   const annotatedTitle = `Annotated ${isGermline ? 'Variants' : 'Alterations'}`;
   let annotatedItems: { title: string; value: string }[] = [];

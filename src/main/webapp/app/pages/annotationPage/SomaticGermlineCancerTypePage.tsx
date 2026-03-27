@@ -547,20 +547,18 @@ export class SomaticGermlineCancerTypePage extends React.Component<
   @computed
   get diagnosticImplications(): TherapeuticImplication[] {
     return this.getImplications(
-      this.getEvidenceByEvidenceTypes(
-        this.annotationData.result.tumorTypes,
-        [EVIDENCE_TYPES.DIAGNOSTIC_IMPLICATION]
-      )
+      this.getEvidenceByEvidenceTypes(this.annotationData.result.tumorTypes, [
+        EVIDENCE_TYPES.DIAGNOSTIC_IMPLICATION,
+      ])
     );
   }
 
   @computed
   get prognosticImplications(): TherapeuticImplication[] {
     return this.getImplications(
-      this.getEvidenceByEvidenceTypes(
-        this.annotationData.result.tumorTypes,
-        [EVIDENCE_TYPES.PROGNOSTIC_IMPLICATION]
-      )
+      this.getEvidenceByEvidenceTypes(this.annotationData.result.tumorTypes, [
+        EVIDENCE_TYPES.PROGNOSTIC_IMPLICATION,
+      ])
     );
   }
 
@@ -588,9 +586,7 @@ export class SomaticGermlineCancerTypePage extends React.Component<
 
   get isUnknownOncogenicity() {
     const oncogenicity = this.store.annotationOncogenicity;
-    return (
-      !oncogenicity || oncogenicity === ONCOGENICITY.UNKNOWN
-    );
+    return !oncogenicity || oncogenicity === ONCOGENICITY.UNKNOWN;
   }
 
   render() {
@@ -599,7 +595,7 @@ export class SomaticGermlineCancerTypePage extends React.Component<
         x => x.subtype === this.store.cancerTypeName
       )?.code ?? '';
     const hasImplications =
-      this.fdaImplication.length > 0 ||
+      (!this.store.germline && this.fdaImplication.length > 0) ||
       this.therapeuticImplications.length > 0 ||
       this.diagnosticImplications.length > 0 ||
       this.prognosticImplications.length > 0;
@@ -700,15 +696,12 @@ export class SomaticGermlineCancerTypePage extends React.Component<
                       <VariantOverView
                         alterationSummaries={this.alterationSummaries}
                         hugoSymbol={this.store.hugoSymbol}
-                        alteration={
-                          this.annotationData.result.query.alteration
-                        }
+                        alteration={this.annotationData.result.query.alteration}
                         geneType={this.store.gene.result.geneType}
                       />
                     </Col>
                   </Row>
-                  {this.annotationData.result.mutationEffect
-                    .description && (
+                  {this.annotationData.result.mutationEffect.description && (
                     <Row>
                       <Col>
                         <ShowHideText
