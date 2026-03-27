@@ -1245,5 +1245,5 @@ export const getFdaImplicationsFromTags = (tags: Tag[], hugoSymbol: string) => {
 };
 
 export const getTagVariantOverview = (tag: Tag) => {
-  return `The term ${tag.name} includes ${tag.description}.`;
+  return `The term ${tag.name} includes: ${tag.description}.`;
 };
