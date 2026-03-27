@@ -1,7 +1,8 @@
-- Update to our [FDA-Approved Oncology Therapies](https://www.oncokb.org/oncology-therapies) page
-- Updates to the functional classification of the following genes:
-
-<details>
+<ul>
+  <li>Update to our <Link to="/oncology-therapies">FDA-Approved Oncology Therapies</Link> page
+  </li>
+  <li>Updates to the functional classification of the following genes:
+  <details>
   <summary>View gene classification updates.</summary>
 
 | Gene     | Previous Gene Classification | New Gene Classification                                              |
@@ -17,7 +18,9 @@
 | SOX9     | Oncogene, Tumor Suppressor   | Tumor Suppressor                                                     |
 | ZBTB20   | Oncogene, Tumor Suppressor   | Oncogene                                                             |
 
-</details>
+  </details>
+  </li>
+</ul>
 
 **Updated Therapeutic Implications**
 
