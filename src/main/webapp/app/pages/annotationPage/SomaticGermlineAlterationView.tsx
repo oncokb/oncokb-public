@@ -184,6 +184,7 @@ export default class SomaticGermlineAlterationView extends React.Component<
               dx={this.props.diagnosticImplications}
               px={this.props.prognosticImplications}
               fda={this.props.fdaImplication}
+              hideFda={this.props.germline}
               onChangeTab={this.props.onChangeTab}
             />
           </Col>

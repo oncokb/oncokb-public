@@ -1,9 +1,7 @@
 import React from 'react';
 import AppStore from 'app/store/AppStore';
 import { Alteration } from 'app/shared/api/generated/OncoKbAPI';
-import {
-  BiologicalVariant,
-} from 'app/shared/api/generated/OncoKbPrivateAPI';
+import { BiologicalVariant } from 'app/shared/api/generated/OncoKbPrivateAPI';
 import type {
   VariantAnnotation,
   FdaImplication,
@@ -285,7 +283,7 @@ export const CancerTypeView: React.FunctionComponent<ICancerTypeView> = props =>
           isGermline={props.isGermline}
         />
       )}
-      {props.fdaImplication.length > 0 && (
+      {!props.isGermline && props.fdaImplication.length > 0 && (
         <FdaView
           isLargeScreen={props.isLargeScreen}
           userAuthenticated={props.userAuthenticated}
