@@ -25,6 +25,10 @@ import LoadingIndicator, {
 import { isAuthorized } from 'app/shared/auth/AuthUtils';
 import { Link } from 'react-router-dom';
 import { UserStatusModal } from 'app/shared/modal/UserStatusModal';
+import {
+  getGracePeriodDaysRemaining,
+  hasGracePeriodAccess,
+} from 'app/shared/utils/GracePeriodUtils';
 
 enum USER_BUTTON_TYPE {
   COMMERCIAL = 'Commercial Users',
@@ -225,6 +229,14 @@ export default class UserDetailsPage extends React.Component<{
     }
   }
 
+  private getGracePeriodActiveLabel(user: UserDTO) {
+    if (!hasGracePeriodAccess(user)) {
+      return 'No';
+    }
+
+    return `Yes (${getGracePeriodDaysRemaining(user)} days)`;
+  }
+
   private columns: SearchColumn<UserDTO>[] = [
     {
       id: 'createdDate',
@@ -313,6 +325,44 @@ export default class UserDetailsPage extends React.Component<{
           styles.requestStatusBadge
         } ${this.getRequestStatusClass(status)}`;
         return <span className={className}>{label}</span>;
+      },
+    },
+    {
+      id: 'gracePeriodActive',
+      Header: <span className={styles.tableHeader}>Grace Period Active</span>,
+      accessor: (user: UserDTO) => user,
+      minWidth: 120,
+      defaultSortDesc: false,
+      sortMethod(a: UserDTO, b: UserDTO) {
+        if (a === undefined && b === undefined) {
+          return 0;
+        }
+        if (a === undefined) {
+          return 1;
+        }
+        if (b === undefined) {
+          return -1;
+        }
+
+        if (hasGracePeriodAccess(a) && !hasGracePeriodAccess(b)) {
+          return 1;
+        }
+        if (!hasGracePeriodAccess(a) && hasGracePeriodAccess(b)) {
+          return -1;
+        }
+        if (!hasGracePeriodAccess(a) && !hasGracePeriodAccess(b)) {
+          return 0;
+        }
+
+        const aRemainingDays = getGracePeriodDaysRemaining(a);
+        const bRemainingDays = getGracePeriodDaysRemaining(b);
+        return bRemainingDays - aRemainingDays;
+      },
+      className: 'justify-content-center',
+      onFilter: (data: UserDTO, keyword) =>
+        filterByKeyword(this.getGracePeriodActiveLabel(data), keyword),
+      Cell: (props: { original: UserDTO }) => {
+        return <span>{this.getGracePeriodActiveLabel(props.original)}</span>;
       },
     },
     {

@@ -9,6 +9,10 @@ import { RouterStore } from 'mobx-react-router';
 import AuthenticationStore from 'app/store/AuthenticationStore';
 import { IReactionDisposer, reaction } from 'mobx';
 import { getPublicWebsiteToken } from 'app/indexUtils';
+import {
+  getGracePeriodDaysRemaining,
+  hasGracePeriodAccess,
+} from 'app/shared/utils/GracePeriodUtils';
 
 const AccountMenuItemsAuthenticated: React.FunctionComponent<{
   isAdmin: boolean;
@@ -104,16 +108,9 @@ export default class AccountMenu extends React.Component<IAccountMenuProps> {
   }
 
   render() {
-    const {
-      activated = false,
-      activationGracePeriodDaysRemaining: graceDaysRemaining = 0,
-      accountRequestStatus,
-    } = this.props.account ?? {};
+    const graceDaysRemaining = getGracePeriodDaysRemaining(this.props.account);
     const showGraceIndicator =
-      this.props.isAuthenticated &&
-      !activated &&
-      accountRequestStatus === 'PENDING' &&
-      graceDaysRemaining > 0;
+      this.props.isAuthenticated && hasGracePeriodAccess(this.props.account);
     const dayLabel = graceDaysRemaining === 1 ? 'day' : 'days';
     const reviewLicenseText = `We are reviewing your license application. Meanwhile, you can view limited content for ${graceDaysRemaining} ${dayLabel}.`;
     return (

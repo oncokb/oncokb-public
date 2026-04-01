@@ -59,6 +59,10 @@ import {
   formatEnumLabel,
   getPageTitle,
 } from 'app/shared/utils/Utils';
+import {
+  getGracePeriodDaysRemaining,
+  hasGracePeriodAccess,
+} from 'app/shared/utils/GracePeriodUtils';
 import { notifyError, notifySuccess } from 'app/shared/utils/NotificationUtils';
 import TokenInputGroups from 'app/components/tokenInputGroups/TokenInputGroups';
 import { EmailTable } from 'app/shared/table/EmailTable';
@@ -225,14 +229,18 @@ export default class UserPage extends React.Component<IUserPage> {
 
   @computed
   get canRevokeGracePeriod() {
-    return !this.user.activated && this.user.accountRequestStatus === 'PENDING';
+    return (
+      hasGracePeriodAccess(this.user) &&
+      (this.user.activationGracePeriodDaysRemaining ?? 0) > 0
+    );
   }
 
   @computed
   get canSetPendingWithGracePeriod() {
     return (
       !this.user.activated &&
-      this.user.accountRequestStatus === 'PENDING_NO_GRACE_PERIOD'
+      this.user.accountRequestStatus === 'PENDING_NO_GRACE_PERIOD' &&
+      (this.user.activationGracePeriodDaysRemaining ?? 0) > 0
     );
   }
 
@@ -1101,9 +1109,23 @@ export default class UserPage extends React.Component<IUserPage> {
                                   className: 'ml-2',
                                   onClick: this.setPendingWithGracePeriod,
                                 }}
-                                buttonContent={'Set Pending'}
+                                buttonContent={'Grant Grace Period'}
                               />
                             )}
+                          </div>
+                          <div className={'mb-2'}>
+                            <span className="mr-2 font-weight-bold">
+                              Grace Period Access
+                            </span>
+                            <span>
+                              {hasGracePeriodAccess(this.user) ? 'Yes' : 'No'}
+                            </span>
+                            <span className="ml-3 mr-2 font-weight-bold">
+                              Days Remaining
+                            </span>
+                            <span>
+                              {getGracePeriodDaysRemaining(this.user)}
+                            </span>
                           </div>
                           <div className={'mb-2 mt-1 font-weight-bold'}>
                             <span>Account Activation Status</span>

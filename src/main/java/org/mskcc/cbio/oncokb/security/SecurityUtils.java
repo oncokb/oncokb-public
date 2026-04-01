@@ -2,6 +2,8 @@ package org.mskcc.cbio.oncokb.security;
 
 import java.time.Duration;
 import java.time.Instant;
+import java.time.LocalDate;
+import java.time.ZoneOffset;
 import java.time.temporal.ChronoUnit;
 import java.util.Optional;
 import java.util.UUID;
@@ -18,7 +20,12 @@ import org.springframework.security.core.userdetails.UserDetails;
  */
 public final class SecurityUtils {
 
-    private static final Duration ACTIVATION_GRACE_PERIOD = Duration.ofDays(14);
+    private static final Duration ACTIVATION_GRACE_PERIOD = Duration.ofDays(30);
+    // For users created before April 1, 2026, we will use April 1, 2026 as the created date for calculating the grace period end
+    // This is to ensure that all users have at least 30 days of grace period, even if they were created a long time ago
+    // This should be removed 30 days after April 1st, 2026
+    private static final Instant ACTIVATION_GRACE_PERIOD_CREATED_DATE_FLOOR =
+        LocalDate.of(2026, 4, 1).atStartOfDay().toInstant(ZoneOffset.UTC);
 
     private SecurityUtils() {
     }
@@ -126,6 +133,9 @@ public final class SecurityUtils {
         if (user == null || user.getCreatedDate() == null) {
             return Optional.empty();
         }
-        return Optional.of(user.getCreatedDate().plus(ACTIVATION_GRACE_PERIOD));
+        Instant effectiveCreatedDate = user.getCreatedDate().isBefore(ACTIVATION_GRACE_PERIOD_CREATED_DATE_FLOOR)
+            ? ACTIVATION_GRACE_PERIOD_CREATED_DATE_FLOOR
+            : user.getCreatedDate();
+        return Optional.of(effectiveCreatedDate.plus(ACTIVATION_GRACE_PERIOD));
     }
 }
