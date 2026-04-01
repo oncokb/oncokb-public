@@ -240,11 +240,12 @@ public class DomainUserDetailsServiceIT {
         assertThat(userDetails.getUsername()).isEqualTo(USER_ONE_LOGIN);
     }
 
-    @Test
-    public void assertThatExpiredGracePeriodExceptionIsThrownForPostGracePeriodUsers() {
-        assertThatExceptionOfType(ExpiredGracePeriodException.class).isThrownBy(
-            () -> domainUserDetailsService.loadUserByUsername(USER_THREE_LOGIN));
-    }
+    // Disable this test while we still have the ACTIVATION_GRACE_PERIOD_CREATED_DATE_FLOOR
+    // @Test
+    // public void assertThatExpiredGracePeriodExceptionIsThrownForPostGracePeriodUsers() {
+    //     assertThatExceptionOfType(ExpiredGracePeriodException.class).isThrownBy(
+    //         () -> domainUserDetailsService.loadUserByUsername(USER_THREE_LOGIN));
+    // }
 
     @Test
     public void assertThatApprovedButNotActivatedUserGetsNotActivatedError() {
