@@ -10,7 +10,7 @@ import AuthenticationStore from 'app/store/AuthenticationStore';
 import { IReactionDisposer, reaction } from 'mobx';
 import { getPublicWebsiteToken } from 'app/indexUtils';
 import {
-  getGracePeriodAccessDaysRemaining,
+  getGracePeriodDaysRemaining,
   hasGracePeriodAccess,
 } from 'app/shared/utils/GracePeriodUtils';
 
@@ -108,9 +108,7 @@ export default class AccountMenu extends React.Component<IAccountMenuProps> {
   }
 
   render() {
-    const graceDaysRemaining = getGracePeriodAccessDaysRemaining(
-      this.props.account
-    );
+    const graceDaysRemaining = getGracePeriodDaysRemaining(this.props.account);
     const showGraceIndicator =
       this.props.isAuthenticated && hasGracePeriodAccess(this.props.account);
     const dayLabel = graceDaysRemaining === 1 ? 'day' : 'days';

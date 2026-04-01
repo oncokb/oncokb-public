@@ -26,7 +26,7 @@ import { isAuthorized } from 'app/shared/auth/AuthUtils';
 import { Link } from 'react-router-dom';
 import { UserStatusModal } from 'app/shared/modal/UserStatusModal';
 import {
-  getGracePeriodAccessDaysRemaining,
+  getGracePeriodDaysRemaining,
   hasGracePeriodAccess,
 } from 'app/shared/utils/GracePeriodUtils';
 
@@ -234,7 +234,7 @@ export default class UserDetailsPage extends React.Component<{
       return 'No';
     }
 
-    return `Yes (${getGracePeriodAccessDaysRemaining(user)} days)`;
+    return `Yes (${getGracePeriodDaysRemaining(user)} days)`;
   }
 
   private columns: SearchColumn<UserDTO>[] = [
@@ -354,8 +354,8 @@ export default class UserDetailsPage extends React.Component<{
           return 0;
         }
 
-        const aRemainingDays = getGracePeriodAccessDaysRemaining(a);
-        const bRemainingDays = getGracePeriodAccessDaysRemaining(b);
+        const aRemainingDays = getGracePeriodDaysRemaining(a);
+        const bRemainingDays = getGracePeriodDaysRemaining(b);
         return bRemainingDays - aRemainingDays;
       },
       className: 'justify-content-center',

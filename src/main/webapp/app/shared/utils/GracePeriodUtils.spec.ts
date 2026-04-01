@@ -1,11 +1,10 @@
 import {
-  getGracePeriodAccessDaysRemaining,
-  getGracePeriodWindowDaysRemaining,
+  getGracePeriodDaysRemaining,
   hasGracePeriodAccess,
 } from 'app/shared/utils/GracePeriodUtils';
 
 describe('GracePeriodUtils', () => {
-  it('returns active grace-period access for pending users in the window', () => {
+  it('returns active grace-period access and remaining days for pending users', () => {
     const user = {
       activated: false,
       accountRequestStatus: 'PENDING' as const,
@@ -13,11 +12,10 @@ describe('GracePeriodUtils', () => {
     };
 
     expect(hasGracePeriodAccess(user)).toBe(true);
-    expect(getGracePeriodAccessDaysRemaining(user)).toBe(12);
-    expect(getGracePeriodWindowDaysRemaining(user)).toBe(12);
+    expect(getGracePeriodDaysRemaining(user)).toBe(12);
   });
 
-  it('keeps the grace-period window for pending users without grace-period access', () => {
+  it('returns no active grace-period access when the grace period was revoked', () => {
     const user = {
       activated: false,
       accountRequestStatus: 'PENDING_NO_GRACE_PERIOD' as const,
@@ -25,13 +23,12 @@ describe('GracePeriodUtils', () => {
     };
 
     expect(hasGracePeriodAccess(user)).toBe(false);
-    expect(getGracePeriodAccessDaysRemaining(user)).toBe(0);
-    expect(getGracePeriodWindowDaysRemaining(user)).toBe(12);
+    expect(getGracePeriodDaysRemaining(user)).toBe(0);
   });
 
-  it('returns zero for activated users or expired windows', () => {
+  it('returns no active grace-period access for activated users or expired grace periods', () => {
     expect(
-      getGracePeriodWindowDaysRemaining({
+      getGracePeriodDaysRemaining({
         activated: true,
         accountRequestStatus: 'PENDING',
         activationGracePeriodDaysRemaining: 10,
@@ -39,7 +36,7 @@ describe('GracePeriodUtils', () => {
     ).toBe(0);
 
     expect(
-      getGracePeriodWindowDaysRemaining({
+      getGracePeriodDaysRemaining({
         activated: false,
         accountRequestStatus: 'PENDING',
         activationGracePeriodDaysRemaining: 0,

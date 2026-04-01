@@ -21,6 +21,9 @@ import org.springframework.security.core.userdetails.UserDetails;
 public final class SecurityUtils {
 
     private static final Duration ACTIVATION_GRACE_PERIOD = Duration.ofDays(30);
+    // For users created before April 1, 2026, we will use April 1, 2026 as the created date for calculating the grace period end
+    // This is to ensure that all users have at least 30 days of grace period, even if they were created a long time ago
+    // This should be removed 30 days after April 1st, 2026
     private static final Instant ACTIVATION_GRACE_PERIOD_CREATED_DATE_FLOOR =
         LocalDate.of(2026, 4, 1).atStartOfDay().toInstant(ZoneOffset.UTC);
 

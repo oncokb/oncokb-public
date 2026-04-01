@@ -60,8 +60,7 @@ import {
   getPageTitle,
 } from 'app/shared/utils/Utils';
 import {
-  getGracePeriodAccessDaysRemaining,
-  getGracePeriodWindowDaysRemaining,
+  getGracePeriodDaysRemaining,
   hasGracePeriodAccess,
 } from 'app/shared/utils/GracePeriodUtils';
 import { notifyError, notifySuccess } from 'app/shared/utils/NotificationUtils';
@@ -232,15 +231,16 @@ export default class UserPage extends React.Component<IUserPage> {
   get canRevokeGracePeriod() {
     return (
       hasGracePeriodAccess(this.user) &&
-      getGracePeriodWindowDaysRemaining(this.user) > 0
+      (this.user.activationGracePeriodDaysRemaining ?? 0) > 0
     );
   }
 
   @computed
   get canSetPendingWithGracePeriod() {
     return (
+      !this.user.activated &&
       this.user.accountRequestStatus === 'PENDING_NO_GRACE_PERIOD' &&
-      getGracePeriodWindowDaysRemaining(this.user) > 0
+      (this.user.activationGracePeriodDaysRemaining ?? 0) > 0
     );
   }
 
@@ -1124,7 +1124,7 @@ export default class UserPage extends React.Component<IUserPage> {
                               Days Remaining
                             </span>
                             <span>
-                              {getGracePeriodAccessDaysRemaining(this.user)}
+                              {getGracePeriodDaysRemaining(this.user)}
                             </span>
                           </div>
                           <div className={'mb-2 mt-1 font-weight-bold'}>
