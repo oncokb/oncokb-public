@@ -1184,7 +1184,7 @@ public class AccountResourceIT {
         user.setLogin("password-reset-info");
         user.setEmail("password-reset-info@example.com");
         user.setResetDate(Instant.now().plusSeconds(60));
-        user.setResetKey("password reset info key");
+        user.setResetKey("reset-info-key");
         userRepository.saveAndFlush(user);
 
         restAccountMockMvc.perform(
