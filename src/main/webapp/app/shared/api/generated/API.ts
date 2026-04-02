@@ -1321,6 +1321,84 @@ export default class API {
             return response.body;
         });
     };
+    getPasswordResetInfoUsingGETURL(parameters: {
+        'key': string,
+        $queryParameters ? : any
+    }): string {
+        let queryParameters: any = {};
+        let path = '/api/account/reset-password/info';
+        if (parameters['key'] !== undefined) {
+            queryParameters['key'] = parameters['key'];
+        }
+
+        if (parameters.$queryParameters) {
+            Object.keys(parameters.$queryParameters).forEach(function(parameterName) {
+                var parameter = parameters.$queryParameters[parameterName];
+                queryParameters[parameterName] = parameter;
+            });
+        }
+        let keys = Object.keys(queryParameters);
+        return this.domain + path + (keys.length > 0 ? '?' + (keys.map(key => key + '=' + encodeURIComponent(queryParameters[key])).join('&')) : '');
+    };
+
+    /**
+     * getPasswordResetInfo
+     * @method
+     * @name API#getPasswordResetInfoUsingGET
+     * @param {string} key - key
+     */
+    getPasswordResetInfoUsingGETWithHttpInfo(parameters: {
+        'key': string,
+        $queryParameters ? : any,
+        $domain ? : string
+    }): Promise < request.Response > {
+        const domain = parameters.$domain ? parameters.$domain : this.domain;
+        const errorHandlers = this.errorHandlers;
+        const request = this.request;
+        let path = '/api/account/reset-password/info';
+        let body: any;
+        let queryParameters: any = {};
+        let headers: any = {};
+        let form: any = {};
+        return new Promise(function(resolve, reject) {
+            headers['Accept'] = '*/*';
+
+            if (parameters['key'] !== undefined) {
+                queryParameters['key'] = parameters['key'];
+            }
+
+            if (parameters['key'] === undefined) {
+                reject(new Error('Missing required  parameter: key'));
+                return;
+            }
+
+            if (parameters.$queryParameters) {
+                Object.keys(parameters.$queryParameters).forEach(function(parameterName) {
+                    var parameter = parameters.$queryParameters[parameterName];
+                    queryParameters[parameterName] = parameter;
+                });
+            }
+
+            request('GET', domain + path, body, headers, queryParameters, form, reject, resolve, errorHandlers);
+
+        });
+    };
+
+    /**
+     * getPasswordResetInfo
+     * @method
+     * @name API#getPasswordResetInfoUsingGET
+     * @param {string} key - key
+     */
+    getPasswordResetInfoUsingGET(parameters: {
+        'key': string,
+        $queryParameters ? : any,
+        $domain ? : string
+    }): Promise < boolean > {
+        return this.getPasswordResetInfoUsingGETWithHttpInfo(parameters).then(function(response: request.Response) {
+            return response.body;
+        });
+    };
     requestPasswordResetUsingPOSTURL(parameters: {
         'mail': string,
         $queryParameters ? : any

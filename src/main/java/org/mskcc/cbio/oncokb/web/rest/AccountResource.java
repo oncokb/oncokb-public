@@ -429,8 +429,16 @@ public class AccountResource {
         Optional<User> user = userService.completePasswordReset(keyAndPassword.getNewPassword(), keyAndPassword.getKey());
 
         if (!user.isPresent()) {
-            throw new CustomMessageRuntimeException("No user was found for this reset key");
+            throw new CustomMessageRuntimeException("Password reset link is invalid or has already been used. It can only be used once. Please request a new password reset email and try again.");
         }
+    }
+
+    @GetMapping(path = "/account/reset-password/info")
+    public boolean getPasswordResetInfo(@RequestParam String key) {
+        if (userService.isPasswordResetKeyValid(key)) {
+            return true;
+        }
+        throw new CustomMessageRuntimeException("Password reset link is invalid or has already been used. It can only be used once. Please request a new password reset email and try again.");
     }
 
     @PostMapping(path = "/account/generate-reset-key")

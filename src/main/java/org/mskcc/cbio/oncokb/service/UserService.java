@@ -183,6 +183,10 @@ public class UserService {
             });
     }
 
+    public boolean isPasswordResetKeyValid(String key) {
+        return userRepository.findOneByResetKey(key).isPresent();
+    }
+
     public Optional<User> requestPasswordReset(String login) {
         return userRepository.findOneWithAuthoritiesByLogin(login)
             .map(user -> {
