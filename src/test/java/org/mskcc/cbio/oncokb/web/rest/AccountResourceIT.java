@@ -1173,6 +1173,34 @@ public class AccountResourceIT {
                 post("/api/account/reset-password/finish")
                     .contentType(MediaType.APPLICATION_JSON)
                     .content(TestUtil.convertObjectToJsonBytes(keyAndPassword)))
-            .andExpect(status().isInternalServerError());
+            .andExpect(status().isInternalServerError())
+            .andExpect(jsonPath("$.detail").value("Password reset link is invalid or has already been used. It can only be used once. Please request a new password reset email and try again."));
+    }
+    @Test
+    @Transactional
+    public void testGetPasswordResetInfo() throws Exception {
+        User user = new User();
+        user.setPassword(RandomStringUtils.random(60));
+        user.setLogin("password-reset-info");
+        user.setEmail("password-reset-info@example.com");
+        user.setResetDate(Instant.now().plusSeconds(60));
+        user.setResetKey("password reset info key");
+        userRepository.saveAndFlush(user);
+
+        restAccountMockMvc.perform(
+                get("/api/account/reset-password/info")
+                    .param("key", user.getResetKey()))
+            .andExpect(status().isOk())
+            .andExpect(content().string("true"));
+    }
+
+    @Test
+    @Transactional
+    public void testGetPasswordResetInfoWrongKey() throws Exception {
+        restAccountMockMvc.perform(
+                get("/api/account/reset-password/info")
+                    .param("key", "wrong reset key"))
+            .andExpect(status().isInternalServerError())
+            .andExpect(jsonPath("$.detail").value("Password reset link is invalid or has already been used. It can only be used once. Please request a new password reset email and try again."));
     }
 }

@@ -10,7 +10,7 @@ import { Alert, Button } from 'react-bootstrap';
 import SmallPageContainer from '../SmallPageContainer';
 import { AvField, AvForm } from 'availity-reactstrap-validation';
 import PasswordStrengthBar from 'app/shared/password/password-strength-bar';
-import { ErrorAlert } from 'app/shared/alert/ErrorAlert';
+import LoadingIndicator from 'app/components/loadingIndicator/LoadingIndicator';
 
 @inject('routing')
 @observer
@@ -21,6 +21,8 @@ export default class PasswordResetFinish extends React.Component<{
   @observable password = '';
   @observable resetStatus: API_CALL_STATUS;
   @observable error: Error;
+  @observable isCheckingResetKey = false;
+  @observable isResetKeyValid = false;
 
   constructor(props: Readonly<{ routing: RouterStore }>) {
     super(props);
@@ -29,6 +31,27 @@ export default class PasswordResetFinish extends React.Component<{
     if (queryStrings.key) {
       this.activateKey = queryStrings.key as string;
     }
+  }
+
+  componentDidMount() {
+    if (!this.activateKey) {
+      return;
+    }
+
+    this.isCheckingResetKey = true;
+    client
+      .getPasswordResetInfoUsingGET({
+        key: this.activateKey,
+      })
+      .then(() => {
+        this.isResetKeyValid = true;
+        this.isCheckingResetKey = false;
+      })
+      .catch(error => {
+        this.error = error;
+        this.isCheckingResetKey = false;
+        this.resetStatus = API_CALL_STATUS.FAILURE;
+      });
   }
 
   handleValidSubmit = (event: any, values: any) => {
@@ -58,7 +81,21 @@ export default class PasswordResetFinish extends React.Component<{
   };
 
   getFailureMessage = () => {
-    return <ErrorAlert error={this.error} />;
+    return (
+      <>
+        <Alert variant="danger">
+          <div>
+            This password reset link has already been used or is invalid.
+          </div>
+        </Alert>
+        <Link
+          className="btn btn-primary"
+          to={PAGE_ROUTE.ACCOUNT_PASSWORD_RESET_REQUEST}
+        >
+          Request a new reset link
+        </Link>
+      </>
+    );
   };
 
   getResetForm = () => {
@@ -121,18 +158,32 @@ export default class PasswordResetFinish extends React.Component<{
     );
   };
 
+  renderContent = () => {
+    if (this.isCheckingResetKey) {
+      return <LoadingIndicator isLoading />;
+    }
+
+    if (this.resetStatus === API_CALL_STATUS.SUCCESSFUL) {
+      return this.getSuccessfulMessage();
+    }
+
+    if (!this.activateKey || this.resetStatus === API_CALL_STATUS.FAILURE) {
+      return this.getFailureMessage();
+    }
+
+    if (this.isResetKeyValid) {
+      return (
+        <>
+          <h1>Reset password</h1>
+          {this.getResetForm()}
+        </>
+      );
+    }
+
+    return null;
+  };
+
   render() {
-    return (
-      <SmallPageContainer>
-        {this.resetStatus === API_CALL_STATUS.SUCCESSFUL
-          ? this.getSuccessfulMessage()
-          : null}
-        {this.resetStatus === API_CALL_STATUS.FAILURE
-          ? this.getFailureMessage()
-          : null}
-        <h1>Reset password</h1>
-        <div>{this.activateKey ? this.getResetForm() : null}</div>
-      </SmallPageContainer>
-    );
+    return <SmallPageContainer>{this.renderContent()}</SmallPageContainer>;
   }
 }
