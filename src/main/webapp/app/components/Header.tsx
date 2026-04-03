@@ -120,7 +120,12 @@ class Header extends React.Component<IHeaderProps> {
 
   @action
   closeNav(event: any) {
-    if (event.target.text !== PAGE_TITLE.ACCOUNT) {
+    const target = event.target as HTMLElement | null;
+    // Only close the nav if the click is outside of the account menu or dropdown menu
+    const isAccountMenuInteraction =
+      !!target?.closest('#account-menu') || !!target?.closest('.dropdown-menu');
+
+    if (!isAccountMenuInteraction) {
       this.isNavExpanded = false;
     }
   }
