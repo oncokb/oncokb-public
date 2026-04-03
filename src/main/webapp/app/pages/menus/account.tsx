@@ -16,48 +16,96 @@ import {
 
 const AccountMenuItemsAuthenticated: React.FunctionComponent<{
   isAdmin: boolean;
+  onItemClick: () => void;
 }> = props => (
   <>
-    <MenuItem icon="wrench" to={PAGE_ROUTE.ACCOUNT_SETTINGS}>
+    <MenuItem
+      icon="wrench"
+      to={PAGE_ROUTE.ACCOUNT_SETTINGS}
+      onClick={props.onItemClick}
+    >
       {PAGE_TITLE.ACCOUNT_SETTINGS}
     </MenuItem>
-    <MenuItem icon="lock" to={PAGE_ROUTE.ACCOUNT_PASSWORD}>
+    <MenuItem
+      icon="lock"
+      to={PAGE_ROUTE.ACCOUNT_PASSWORD}
+      onClick={props.onItemClick}
+    >
       {PAGE_TITLE.ACCOUNT_PASSWORD}
     </MenuItem>
     {props.isAdmin ? (
       <>
-        <MenuItem icon="id-card-o" to={PAGE_ROUTE.ADMIN_USER_DETAILS}>
+        <MenuItem
+          icon="id-card-o"
+          to={PAGE_ROUTE.ADMIN_USER_DETAILS}
+          onClick={props.onItemClick}
+        >
           {PAGE_TITLE.ADMIN_USER_DETAILS}
         </MenuItem>
-        <MenuItem icon="envelope" to={PAGE_ROUTE.ADMIN_SEND_EMAILS}>
+        <MenuItem
+          icon="envelope"
+          to={PAGE_ROUTE.ADMIN_SEND_EMAILS}
+          onClick={props.onItemClick}
+        >
           {PAGE_TITLE.ADMIN_SEND_EMAILS}
         </MenuItem>
-        <MenuItem icon="user-plus" to={PAGE_ROUTE.ADMIN_CREATE_ACCOUNT}>
+        <MenuItem
+          icon="user-plus"
+          to={PAGE_ROUTE.ADMIN_CREATE_ACCOUNT}
+          onClick={props.onItemClick}
+        >
           {PAGE_TITLE.ADMIN_CREATE_ACCOUNT}
         </MenuItem>
-        <MenuItem icon="building" to={PAGE_ROUTE.ADMIN_COMPANY_DETAILS}>
+        <MenuItem
+          icon="building"
+          to={PAGE_ROUTE.ADMIN_COMPANY_DETAILS}
+          onClick={props.onItemClick}
+        >
           {PAGE_TITLE.ADMIN_COMPANY_DETAILS}
         </MenuItem>
-        <MenuItem icon="bar-chart" to={PAGE_ROUTE.ADMIN_USAGE_ANALYSIS}>
+        <MenuItem
+          icon="bar-chart"
+          to={PAGE_ROUTE.ADMIN_USAGE_ANALYSIS}
+          onClick={props.onItemClick}
+        >
           {PAGE_TITLE.ADMIN_USAGE_ANALYSIS}
         </MenuItem>
-        <MenuItem icon="warning" to={PAGE_ROUTE.ADMIN_USER_BANNER_MESSAGES}>
+        <MenuItem
+          icon="warning"
+          to={PAGE_ROUTE.ADMIN_USER_BANNER_MESSAGES}
+          onClick={props.onItemClick}
+        >
           {PAGE_TITLE.ADMIN_USER_BANNER_MESSAGES}
         </MenuItem>
       </>
     ) : null}
-    <MenuItem icon="sign-out" to={PAGE_ROUTE.LOGOUT}>
+    <MenuItem
+      icon="sign-out"
+      to={PAGE_ROUTE.LOGOUT}
+      onClick={props.onItemClick}
+    >
       {PAGE_TITLE.LOGOUT}
     </MenuItem>
   </>
 );
 
-const AccountMenuItems: React.FunctionComponent<{}> = () => (
+const AccountMenuItems: React.FunctionComponent<{
+  onItemClick: () => void;
+}> = props => (
   <>
-    <MenuItem id="login-item" icon="sign-in" to={PAGE_ROUTE.LOGIN}>
+    <MenuItem
+      id="login-item"
+      icon="sign-in"
+      to={PAGE_ROUTE.LOGIN}
+      onClick={props.onItemClick}
+    >
       {PAGE_TITLE.LOGIN}
     </MenuItem>
-    <MenuItem icon="sign-in" to={PAGE_ROUTE.REGISTER}>
+    <MenuItem
+      icon="sign-in"
+      to={PAGE_ROUTE.REGISTER}
+      onClick={props.onItemClick}
+    >
       {PAGE_TITLE.REGISTER}
     </MenuItem>
   </>
@@ -68,6 +116,7 @@ interface IAccountMenuProps {
   isAdmin: boolean;
   showAccountText?: boolean;
   account?: UserDTO;
+  onMenuItemClick?: () => void;
   routing?: RouterStore;
   authenticationStore?: AuthenticationStore;
 }
@@ -76,6 +125,9 @@ interface IAccountMenuProps {
 @observer
 export default class AccountMenu extends React.Component<IAccountMenuProps> {
   private routeDisposer?: IReactionDisposer;
+  state = {
+    isOpen: false,
+  };
 
   constructor(props: Readonly<IAccountMenuProps>) {
     super(props);
@@ -107,6 +159,15 @@ export default class AccountMenu extends React.Component<IAccountMenuProps> {
     this.routeDisposer?.();
   }
 
+  handleToggle = (isOpen: boolean) => {
+    this.setState({ isOpen });
+  };
+
+  handleItemClick = () => {
+    this.setState({ isOpen: false });
+    this.props.onMenuItemClick?.();
+  };
+
   render() {
     const graceDaysRemaining = getGracePeriodDaysRemaining(this.props.account);
     const showGraceIndicator =
@@ -114,7 +175,11 @@ export default class AccountMenu extends React.Component<IAccountMenuProps> {
     const dayLabel = graceDaysRemaining === 1 ? 'day' : 'days';
     const reviewLicenseText = `We are reviewing your license application. Meanwhile, you can view limited content for ${graceDaysRemaining} ${dayLabel}.`;
     return (
-      <Dropdown as={NavItem}>
+      <Dropdown
+        as={NavItem}
+        show={this.state.isOpen}
+        onToggle={this.handleToggle}
+      >
         <Dropdown.Toggle id={'account-menu'} as={NavLink}>
           <i className={'fa fa-user-o mr-1'} />
           {this.props.showAccountText ? PAGE_TITLE.ACCOUNT : undefined}
@@ -143,9 +208,12 @@ export default class AccountMenu extends React.Component<IAccountMenuProps> {
             </>
           )}
           {this.props.isAuthenticated ? (
-            <AccountMenuItemsAuthenticated isAdmin={this.props.isAdmin} />
+            <AccountMenuItemsAuthenticated
+              isAdmin={this.props.isAdmin}
+              onItemClick={this.handleItemClick}
+            />
           ) : (
-            <AccountMenuItems />
+            <AccountMenuItems onItemClick={this.handleItemClick} />
           )}
         </Dropdown.Menu>
       </Dropdown>
