@@ -6,7 +6,7 @@ export interface IMenuItem {
   icon: string;
   to: string;
   id?: string;
-  onClick?: React.MouseEventHandler<HTMLElement>;
+  onClick?: () => void;
 }
 
 export default class MenuItem extends React.Component<IMenuItem> {

@@ -16,7 +16,7 @@ import {
 
 const AccountMenuItemsAuthenticated: React.FunctionComponent<{
   isAdmin: boolean;
-  onItemClick: React.MouseEventHandler<HTMLElement>;
+  onItemClick: () => void;
 }> = props => (
   <>
     <MenuItem
@@ -90,7 +90,7 @@ const AccountMenuItemsAuthenticated: React.FunctionComponent<{
 );
 
 const AccountMenuItems: React.FunctionComponent<{
-  onItemClick: React.MouseEventHandler<HTMLElement>;
+  onItemClick: () => void;
 }> = props => (
   <>
     <MenuItem
@@ -163,7 +163,7 @@ export default class AccountMenu extends React.Component<IAccountMenuProps> {
     this.setState({ isOpen });
   };
 
-  handleItemClick: React.MouseEventHandler<HTMLElement> = () => {
+  handleItemClick = () => {
     this.setState({ isOpen: false });
     this.props.onMenuItemClick?.();
   };
