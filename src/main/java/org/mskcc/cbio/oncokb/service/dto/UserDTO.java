@@ -39,6 +39,8 @@ public class UserDTO implements Serializable {
 
     private LicenseType licenseType;
 
+    @NotBlank
+    @Size(min = 2, max = 255)
     private String jobTitle;
 
     private CompanyDTO company;
