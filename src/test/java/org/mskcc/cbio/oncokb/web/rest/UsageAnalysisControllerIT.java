@@ -1,7 +1,6 @@
 package org.mskcc.cbio.oncokb.web.rest;
 
 import static org.mockito.ArgumentMatchers.any;
-import static org.mockito.ArgumentMatchers.eq;
 import static org.mskcc.cbio.oncokb.config.Constants.*;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.content;
@@ -128,10 +127,10 @@ public class UsageAnalysisControllerIT {
       );
 
     Mockito
-      .when(s3Service.getObject(eq(Constants.ONCOKB_S3_BUCKET), any()))
+      .when(s3Service.getObject(any()))
       .thenAnswer(
         i -> {
-          String filePath = (String) i.getArguments()[1];
+          String filePath = (String) i.getArguments()[0];
           JsonElement element = data.files.get(filePath);
           String fileContents = gson.toJson(element);
           InputStream objectStream = IOUtils.toInputStream(

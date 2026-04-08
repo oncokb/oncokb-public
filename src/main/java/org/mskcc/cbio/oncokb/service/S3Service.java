@@ -42,14 +42,13 @@ public class S3Service {
 
     /**
      * Save an object to aws s3
-     * @param bucket s3 bucket name
      * @param objectPath the path where the object will be saved
      * @param file the object
      */
-    public void saveObject(String bucket, String objectPath, File file){
+    public void saveObject(String objectPath, File file){
         PutObjectRequest putObjectRequest = PutObjectRequest
             .builder()
-            .bucket(bucket)
+            .bucket(applicationProperties.getS3Bucket())
             .key(objectPath)
             .build();
         s3Client.putObject(putObjectRequest, Paths.get(file.getPath()));
@@ -57,14 +56,13 @@ public class S3Service {
 
     /**
      * Get an object from aws s3
-     * @param bucket s3 bucket name
      * @param objectPath the path of the object
      * @return a S3 object
      */
-    public Optional<ResponseInputStream<GetObjectResponse>> getObject(String bucket, String objectPath){
+    public Optional<ResponseInputStream<GetObjectResponse>> getObject(String objectPath){
         try {
             ResponseInputStream<GetObjectResponse> s3object = s3Client.getObject(GetObjectRequest.builder()
-                .bucket(bucket)
+                .bucket(applicationProperties.getS3Bucket())
                 .key(objectPath)
                 .build(), ResponseTransformer.toInputStream());
             return Optional.of(s3object);

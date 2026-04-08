@@ -1,19 +1,16 @@
 package org.mskcc.cbio.oncokb.web.rest;
 
 import org.apache.commons.lang3.StringUtils;
-import org.mskcc.cbio.oncokb.config.Constants;
 import org.mskcc.cbio.oncokb.config.application.ApplicationProperties;
 import org.mskcc.cbio.oncokb.domain.*;
 import org.mskcc.cbio.oncokb.domain.enumeration.FileExtension;
 import org.mskcc.cbio.oncokb.querydomain.UserTokenUsage;
-import org.mskcc.cbio.oncokb.repository.UserDetailsRepository;
 import org.mskcc.cbio.oncokb.security.AuthoritiesConstants;
 import org.mskcc.cbio.oncokb.security.uuid.TokenProvider;
 import org.mskcc.cbio.oncokb.service.*;
 import org.mskcc.cbio.oncokb.service.dto.UserDTO;
 import org.mskcc.cbio.oncokb.service.mapper.UserMapper;
 import org.mskcc.cbio.oncokb.web.rest.vm.ExposedToken;
-import org.mskcc.cbio.oncokb.web.rest.vm.usageAnalysis.UsageSummary;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -27,13 +24,9 @@ import java.time.temporal.ChronoUnit;
 import java.util.*;
 import java.util.stream.Collectors;
 
-import software.amazon.awssdk.services.s3.S3Client;
-
 import java.io.*;
 import java.util.zip.ZipEntry;
 import java.util.zip.ZipOutputStream;
-
-import org.json.simple.JSONObject;
 
 import org.kohsuke.github.*;
 
@@ -58,8 +51,6 @@ public class CronJobController {
 
     private final TokenStatsService tokenStatsService;
 
-    private final UserDetailsRepository userDetailsRepository;
-
     @Autowired
     private UserMapper userMapper;
 
@@ -79,7 +70,7 @@ public class CronJobController {
                              MailService mailService, TokenProvider tokenProvider,
                              TokenService tokenService, AuditEventService auditEventService,
                              TokenStatsService tokenStatsService, UserMailsService userMailsService,
-                             ApplicationProperties applicationProperties, UserDetailsRepository userDetailsRepository,
+                             ApplicationProperties applicationProperties,
                              S3Service s3Service
     ) {
 
@@ -91,7 +82,6 @@ public class CronJobController {
         this.tokenStatsService = tokenStatsService;
         this.userMailsService = userMailsService;
         this.applicationProperties = applicationProperties;
-        this.userDetailsRepository = userDetailsRepository;
         this.s3Service = s3Service;
     }
 
@@ -170,13 +160,13 @@ public class CronJobController {
             SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd");
             String dateWrapped = dateFormat.format(dateFormat.parse(tokenUsageDateBefore.minus(1, ChronoUnit.DAYS).toString()));
             String datedFile = TOKEN_STATS_STORAGE_FILE_PREFIX + dateWrapped + FileExtension.ZIPPED_FILE.getExtension();
-            if (s3Service.getObject(Constants.ONCOKB_S3_BUCKET, datedFile).isPresent()) {
+            if (s3Service.getObject(datedFile).isPresent()) {
                 log.info("Token stats have already been wrapped today. Skipping this request.");
             } else {
                 // Update tokenStats in database
                 updateTokenUsage(tokenUsageDateBefore);
                 // Send tokenStats to s3
-                s3Service.saveObject(Constants.ONCOKB_S3_BUCKET, datedFile, createWrappedFile(tokenUsageDateBefore, dateWrapped + FileExtension.TEXT_FILE.getExtension()));
+                s3Service.saveObject(datedFile, createWrappedFile(tokenUsageDateBefore, dateWrapped + FileExtension.TEXT_FILE.getExtension()));
                 // Delete old tokenStats
                 tokenStatsService.clearTokenStats(tokenUsageDateBefore);
             }
