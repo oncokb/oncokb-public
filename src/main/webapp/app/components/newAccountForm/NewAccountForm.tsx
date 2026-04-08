@@ -490,11 +490,7 @@ export class NewAccountForm extends React.Component<INewAccountForm> {
                       this.selectedLicense
                     )}
                     validate={{
-                      required: {
-                        value: true,
-                        errorMessage: 'Your Job Title is required.',
-                      },
-                      ...TEXT_VAL,
+                      ...OPTIONAL_TEXT_VAL,
                     }}
                   />
                   <AvField

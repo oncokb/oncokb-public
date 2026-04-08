@@ -27,7 +27,6 @@ import org.mskcc.cbio.oncokb.service.mapper.UserDetailsMapper;
 import org.mskcc.cbio.oncokb.web.rest.vm.KeyAndPasswordVM;
 import org.mskcc.cbio.oncokb.web.rest.vm.ManagedUserVM;
 import org.apache.commons.lang3.RandomStringUtils;
-import org.apache.commons.lang3.StringUtils;
 
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -184,7 +183,6 @@ public class AccountResourceIT {
         validUser.setPassword("password");
         validUser.setFirstName("Alice");
         validUser.setLastName("Test");
-        validUser.setJobTitle("Researcher");
         validUser.setEmail("test-register-valid@example.com");
         validUser.setImageUrl("http://placehold.it/50x50");
         validUser.setLangKey(Constants.DEFAULT_LANGUAGE);
@@ -223,7 +221,6 @@ public class AccountResourceIT {
         invalidUser.setPassword("password");
         invalidUser.setFirstName("Funky");
         invalidUser.setLastName("One");
-        invalidUser.setJobTitle("Researcher");
         invalidUser.setEmail("funky@example.com");
         invalidUser.setActivated(true);
         invalidUser.setImageUrl("http://placehold.it/50x50");
@@ -249,7 +246,6 @@ public class AccountResourceIT {
         invalidUser.setPassword("password");
         invalidUser.setFirstName("Bob");
         invalidUser.setLastName("Green");
-        invalidUser.setJobTitle("Researcher");
         invalidUser.setEmail("invalid");// <-- invalid
         invalidUser.setActivated(true);
         invalidUser.setImageUrl("http://placehold.it/50x50");
@@ -275,7 +271,6 @@ public class AccountResourceIT {
         invalidUser.setPassword("123");// password with only 3 digits
         invalidUser.setFirstName("Bob");
         invalidUser.setLastName("Green");
-        invalidUser.setJobTitle("Researcher");
         invalidUser.setEmail("bob@example.com");
         invalidUser.setActivated(true);
         invalidUser.setImageUrl("http://placehold.it/50x50");
@@ -301,7 +296,6 @@ public class AccountResourceIT {
         invalidUser.setPassword(null);// invalid null password
         invalidUser.setFirstName("Bob");
         invalidUser.setLastName("Green");
-        invalidUser.setJobTitle("Researcher");
         invalidUser.setEmail("bob@example.com");
         invalidUser.setActivated(true);
         invalidUser.setImageUrl("http://placehold.it/50x50");
@@ -321,58 +315,6 @@ public class AccountResourceIT {
 
     @Test
     @Transactional
-    public void testRegisterBlankJobTitle() throws Exception {
-        ManagedUserVM invalidUser = new ManagedUserVM();
-        invalidUser.setLogin("blank-job-title");
-        invalidUser.setPassword("password");
-        invalidUser.setFirstName("Bob");
-        invalidUser.setLastName("Green");
-        invalidUser.setJobTitle("   ");
-        invalidUser.setEmail("blank-job-title@example.com");
-        invalidUser.setActivated(true);
-        invalidUser.setImageUrl("http://placehold.it/50x50");
-        invalidUser.setLangKey(Constants.DEFAULT_LANGUAGE);
-        invalidUser.setAuthorities(Collections.singleton(AuthoritiesConstants.USER));
-
-        restAccountMockMvc.perform(
-                post("/api/register")
-                    .contentType(MediaType.APPLICATION_JSON)
-                    .content(TestUtil.convertObjectToJsonBytes(invalidUser))
-                    .header("g-recaptcha-response", Constants.TESTING_TOKEN))
-            .andExpect(status().isBadRequest());
-
-        Optional<User> user = userRepository.findOneWithAuthoritiesByLogin("blank-job-title");
-        assertThat(user.isPresent()).isFalse();
-    }
-
-    @Test
-    @Transactional
-    public void testRegisterTooLongJobTitle() throws Exception {
-        ManagedUserVM invalidUser = new ManagedUserVM();
-        invalidUser.setLogin("long-job-title");
-        invalidUser.setPassword("password");
-        invalidUser.setFirstName("Bob");
-        invalidUser.setLastName("Green");
-        invalidUser.setJobTitle(StringUtils.repeat("a", 256));
-        invalidUser.setEmail("long-job-title@example.com");
-        invalidUser.setActivated(true);
-        invalidUser.setImageUrl("http://placehold.it/50x50");
-        invalidUser.setLangKey(Constants.DEFAULT_LANGUAGE);
-        invalidUser.setAuthorities(Collections.singleton(AuthoritiesConstants.USER));
-
-        restAccountMockMvc.perform(
-                post("/api/register")
-                    .contentType(MediaType.APPLICATION_JSON)
-                    .content(TestUtil.convertObjectToJsonBytes(invalidUser))
-                    .header("g-recaptcha-response", Constants.TESTING_TOKEN))
-            .andExpect(status().isBadRequest());
-
-        Optional<User> user = userRepository.findOneWithAuthoritiesByLogin("long-job-title");
-        assertThat(user.isPresent()).isFalse();
-    }
-
-    @Test
-    @Transactional
     public void testRegisterDuplicateLogin() throws Exception {
         // First registration
         ManagedUserVM firstUser = new ManagedUserVM();
@@ -380,7 +322,6 @@ public class AccountResourceIT {
         firstUser.setPassword("password");
         firstUser.setFirstName("Alice");
         firstUser.setLastName("Something");
-        firstUser.setJobTitle("Researcher");
         firstUser.setEmail("alice@example.com");
         firstUser.setImageUrl("http://placehold.it/50x50");
         firstUser.setLangKey(Constants.DEFAULT_LANGUAGE);
@@ -392,7 +333,6 @@ public class AccountResourceIT {
         secondUser.setPassword(firstUser.getPassword());
         secondUser.setFirstName(firstUser.getFirstName());
         secondUser.setLastName(firstUser.getLastName());
-        secondUser.setJobTitle(firstUser.getJobTitle());
         secondUser.setEmail("alice2@example.com");
         secondUser.setImageUrl(firstUser.getImageUrl());
         secondUser.setLangKey(firstUser.getLangKey());
@@ -434,7 +374,6 @@ public class AccountResourceIT {
         firstUser.setPassword("password");
         firstUser.setFirstName("Alice");
         firstUser.setLastName("Test");
-        firstUser.setJobTitle("Researcher");
         firstUser.setEmail("test-register-duplicate-email@example.com");
         firstUser.setImageUrl("http://placehold.it/50x50");
         firstUser.setLangKey(Constants.DEFAULT_LANGUAGE);
@@ -457,7 +396,6 @@ public class AccountResourceIT {
         secondUser.setPassword(firstUser.getPassword());
         secondUser.setFirstName(firstUser.getFirstName());
         secondUser.setLastName(firstUser.getLastName());
-        secondUser.setJobTitle(firstUser.getJobTitle());
         secondUser.setEmail(firstUser.getEmail());
         secondUser.setImageUrl(firstUser.getImageUrl());
         secondUser.setLangKey(firstUser.getLangKey());
@@ -484,7 +422,6 @@ public class AccountResourceIT {
         userWithUpperCaseEmail.setPassword(firstUser.getPassword());
         userWithUpperCaseEmail.setFirstName(firstUser.getFirstName());
         userWithUpperCaseEmail.setLastName(firstUser.getLastName());
-        userWithUpperCaseEmail.setJobTitle(firstUser.getJobTitle());
         userWithUpperCaseEmail.setEmail("TEST-register-duplicate-email@example.com");
         userWithUpperCaseEmail.setImageUrl(firstUser.getImageUrl());
         userWithUpperCaseEmail.setLangKey(firstUser.getLangKey());
@@ -510,7 +447,6 @@ public class AccountResourceIT {
         validUser.setPassword("password");
         validUser.setFirstName("Bad");
         validUser.setLastName("Guy");
-        validUser.setJobTitle("Researcher");
         validUser.setEmail("badguy@example.com");
         validUser.setActivated(true);
         validUser.setImageUrl("http://placehold.it/50x50");
@@ -837,7 +773,6 @@ public class AccountResourceIT {
         userDTO.setLogin("not-used");
         userDTO.setFirstName("firstname");
         userDTO.setLastName("lastname");
-        userDTO.setJobTitle("Researcher");
         userDTO.setEmail("save-account@example.com");
         userDTO.setActivated(false);
         userDTO.setImageUrl("http://placehold.it/50x50");
@@ -882,7 +817,6 @@ public class AccountResourceIT {
         userDTO.setLogin("not-used");
         userDTO.setFirstName("firstname");
         userDTO.setLastName("lastname");
-        userDTO.setJobTitle("Researcher");
         userDTO.setEmail("activate-via-save-account@example.com");
         userDTO.setActivated(true);
         userDTO.setImageUrl("http://placehold.it/50x50");
@@ -1011,7 +945,6 @@ public class AccountResourceIT {
         userDTO.setLogin("not-used");
         userDTO.setFirstName("firstname");
         userDTO.setLastName("lastname");
-        userDTO.setJobTitle("Researcher");
         userDTO.setEmail("save-existing-email-and-login@example.com");
         userDTO.setActivated(false);
         userDTO.setImageUrl("http://placehold.it/50x50");
