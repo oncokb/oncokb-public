@@ -837,6 +837,7 @@ public class AccountResourceIT {
         userDTO.setLogin("not-used");
         userDTO.setFirstName("firstname");
         userDTO.setLastName("lastname");
+        userDTO.setJobTitle("Researcher");
         userDTO.setEmail("save-account@example.com");
         userDTO.setActivated(false);
         userDTO.setImageUrl("http://placehold.it/50x50");
@@ -881,6 +882,7 @@ public class AccountResourceIT {
         userDTO.setLogin("not-used");
         userDTO.setFirstName("firstname");
         userDTO.setLastName("lastname");
+        userDTO.setJobTitle("Researcher");
         userDTO.setEmail("activate-via-save-account@example.com");
         userDTO.setActivated(true);
         userDTO.setImageUrl("http://placehold.it/50x50");
@@ -1009,6 +1011,7 @@ public class AccountResourceIT {
         userDTO.setLogin("not-used");
         userDTO.setFirstName("firstname");
         userDTO.setLastName("lastname");
+        userDTO.setJobTitle("Researcher");
         userDTO.setEmail("save-existing-email-and-login@example.com");
         userDTO.setActivated(false);
         userDTO.setImageUrl("http://placehold.it/50x50");
