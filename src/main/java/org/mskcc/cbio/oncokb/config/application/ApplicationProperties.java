@@ -22,6 +22,7 @@ public class ApplicationProperties {
     private String name;
     private String baseUrl = "";
     private String apiProxyUrl;
+    private String s3Bucket = "oncokb-v2";
     private SlackProperties slack;
     private ProjectProfile profile;
     private Boolean sitemapEnabled;
@@ -63,6 +64,14 @@ public class ApplicationProperties {
 
     public void setApiProxyUrl(String apiProxyUrl) {
         this.apiProxyUrl = apiProxyUrl;
+    }
+
+    public String getS3Bucket() {
+        return s3Bucket;
+    }
+
+    public void setS3Bucket(String s3Bucket) {
+        this.s3Bucket = s3Bucket;
     }
 
     public SlackProperties getSlack() { return slack; }

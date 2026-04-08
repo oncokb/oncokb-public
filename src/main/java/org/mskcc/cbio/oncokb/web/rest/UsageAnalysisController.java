@@ -18,7 +18,6 @@ import javax.validation.constraints.NotNull;
 import org.json.simple.JSONObject;
 import org.json.simple.parser.JSONParser;
 import org.json.simple.parser.ParseException;
-import org.mskcc.cbio.oncokb.config.Constants;
 import org.mskcc.cbio.oncokb.domain.User;
 import org.mskcc.cbio.oncokb.domain.enumeration.FileExtension;
 import org.mskcc.cbio.oncokb.service.S3Service;
@@ -58,10 +57,7 @@ public class UsageAnalysisController {
 
   private JSONObject requestData(String file)
     throws UnsupportedEncodingException, IOException, ParseException {
-    Optional<ResponseInputStream<GetObjectResponse>> s3object = s3Service.getObject(
-      Constants.ONCOKB_S3_BUCKET,
-      file
-    );
+    Optional<ResponseInputStream<GetObjectResponse>> s3object = s3Service.getObject(file);
     if (s3object.isPresent()) {
       ResponseInputStream<GetObjectResponse> inputStream = s3object.get();
       JSONParser jsonParser = new JSONParser();
