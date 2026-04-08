@@ -28,7 +28,7 @@ class SamlServiceTest {
     void getSamlResponseShouldSetConfiguredUserAgentHeader() {
         RestTemplate restTemplate = new RestTemplate();
         MockRestServiceServer server = MockRestServiceServer.bindTo(restTemplate).build();
-        SamlService samlService = new SamlService(buildApplicationProperties("test-allowed-agent/1.0"), restTemplate);
+        SamlService samlService = buildSamlService("test-allowed-agent/1.0", restTemplate);
 
         server
             .expect(requestTo(IDP_URL))
@@ -47,7 +47,7 @@ class SamlServiceTest {
     void getSamlResponseShouldNotSetUserAgentHeaderWhenBlank() {
         RestTemplate restTemplate = new RestTemplate();
         MockRestServiceServer server = MockRestServiceServer.bindTo(restTemplate).build();
-        SamlService samlService = new SamlService(buildApplicationProperties("   "), restTemplate);
+        SamlService samlService = buildSamlService("   ", restTemplate);
 
         server
             .expect(requestTo(IDP_URL))
@@ -71,7 +71,7 @@ class SamlServiceTest {
     void getSamlResponseShouldThrowWhenSamlResponseInputIsMissing() {
         RestTemplate restTemplate = new RestTemplate();
         MockRestServiceServer server = MockRestServiceServer.bindTo(restTemplate).build();
-        SamlService samlService = new SamlService(buildApplicationProperties("test-allowed-agent/1.0"), restTemplate);
+        SamlService samlService = buildSamlService("test-allowed-agent/1.0", restTemplate);
 
         server.expect(requestTo(IDP_URL)).andRespond(withSuccess("<html><body>No assertion</body></html>", MediaType.TEXT_HTML));
 
@@ -93,5 +93,11 @@ class SamlServiceTest {
         applicationProperties.setSamlAws(samlAwsProperties);
 
         return applicationProperties;
+    }
+
+    private SamlService buildSamlService(String httpUserAgent, RestTemplate restTemplate) {
+        SamlService samlService = new SamlService(buildApplicationProperties(httpUserAgent));
+        ReflectionTestUtils.setField(samlService, "restTemplate", restTemplate);
+        return samlService;
     }
 }

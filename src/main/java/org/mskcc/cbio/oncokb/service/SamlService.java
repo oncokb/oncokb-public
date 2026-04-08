@@ -36,15 +36,11 @@ public class SamlService {
     private final Integer SESSION_DURATION_IN_SECONDS = 28800;  // 8 hours, the maximum allowable 
 
     private final ApplicationProperties applicationProperties;
-    private final RestTemplate restTemplate;
+    private RestTemplate restTemplate;
 
     public SamlService(ApplicationProperties applicationProperties) {
-        this(applicationProperties, new RestTemplate());
-    }
-
-    SamlService(ApplicationProperties applicationProperties, RestTemplate restTemplate) {
         this.applicationProperties = applicationProperties;
-        this.restTemplate = restTemplate;
+        this.restTemplate = new RestTemplate();
     }
 
     @PostConstruct
