@@ -285,6 +285,9 @@ export function SomaticGermlineAlterationTiles({
   const hasMutationEffect = !!rest.variantAnnotation.mutationEffect
     ?.knownEffect;
   const hasPenetrance = !!germlineAnnotation?.penetrance;
+  const isPathogenicVariantUmbrella = !!germlineAnnotation?.query.alteration?.startsWith(
+    'Pathogenic Variants'
+  );
 
   const [clinvar, setClinvar] = useState<ClinvarData | undefined | null>(
     undefined
@@ -321,6 +324,17 @@ export function SomaticGermlineAlterationTiles({
     rest.variantAnnotation.query.alteration,
     GENOME_NEXUS_ANNOTATION_BASE_URL,
   ]);
+
+  if (isPathogenicVariantUmbrella) {
+    tiles.push(
+      createHighestLevelOfEvidenceTileProps(
+        rest.variantAnnotation,
+        includeTitle,
+        isGermline
+      )
+    );
+    return <SomaticGermlineTiles tiles={tiles} />;
+  }
 
   if (isGermline) {
     if (hasPathogenicity) {

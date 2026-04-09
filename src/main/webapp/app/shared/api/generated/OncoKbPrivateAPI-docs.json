@@ -3994,6 +3994,9 @@
         "oncogenicity": {
           "type": "string"
         },
+        "pathogenicity": {
+          "type": "string"
+        },
         "queryType": {
           "type": "string",
           "enum": [

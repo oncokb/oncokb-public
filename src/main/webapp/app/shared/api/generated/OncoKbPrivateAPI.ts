@@ -635,6 +635,8 @@ export type TypeaheadSearchResp = {
 
         'oncogenicity': string
 
+        'pathogenicity': string
+
         'queryType': "GENE" | "VARIANT" | "DRUG" | "TEXT" | "GENOMIC" | "CANCER_TYPE"
 
         'tumorTypes': Array < TumorType >
