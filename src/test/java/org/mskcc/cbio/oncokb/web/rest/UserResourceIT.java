@@ -62,8 +62,6 @@ public class UserResourceIT {
 
     private static final String DEFAULT_LASTNAME = "doe";
     private static final String UPDATED_LASTNAME = "jhipsterLastName";
-    private static final String DEFAULT_JOBTITLE = "Researcher";
-    private static final String UPDATED_JOBTITLE = "Senior Researcher";
 
     private static final String DEFAULT_IMAGEURL = "http://placehold.it/50x50";
     private static final String UPDATED_IMAGEURL = "http://placehold.it/40x40";
@@ -137,7 +135,6 @@ public class UserResourceIT {
         managedUserVM.setPassword(DEFAULT_PASSWORD);
         managedUserVM.setFirstName(DEFAULT_FIRSTNAME);
         managedUserVM.setLastName(DEFAULT_LASTNAME);
-        managedUserVM.setJobTitle(DEFAULT_JOBTITLE);
         managedUserVM.setEmail(DEFAULT_EMAIL);
         managedUserVM.setActivated(true);
         managedUserVM.setImageUrl(DEFAULT_IMAGEURL);
@@ -179,7 +176,6 @@ public class UserResourceIT {
         managedUserVM.setPassword(DEFAULT_PASSWORD);
         managedUserVM.setFirstName(DEFAULT_FIRSTNAME);
         managedUserVM.setLastName(DEFAULT_LASTNAME);
-        managedUserVM.setJobTitle(DEFAULT_JOBTITLE);
         managedUserVM.setEmail(DEFAULT_EMAIL);
         managedUserVM.setActivated(true);
         managedUserVM.setImageUrl(DEFAULT_IMAGEURL);
@@ -208,7 +204,6 @@ public class UserResourceIT {
         managedUserVM.setPassword(DEFAULT_PASSWORD);
         managedUserVM.setFirstName(DEFAULT_FIRSTNAME);
         managedUserVM.setLastName(DEFAULT_LASTNAME);
-        managedUserVM.setJobTitle(DEFAULT_JOBTITLE);
         managedUserVM.setEmail("anothermail@localhost");
         managedUserVM.setActivated(true);
         managedUserVM.setImageUrl(DEFAULT_IMAGEURL);
@@ -237,7 +232,6 @@ public class UserResourceIT {
         managedUserVM.setPassword(DEFAULT_PASSWORD);
         managedUserVM.setFirstName(DEFAULT_FIRSTNAME);
         managedUserVM.setLastName(DEFAULT_LASTNAME);
-        managedUserVM.setJobTitle(DEFAULT_JOBTITLE);
         managedUserVM.setEmail(DEFAULT_EMAIL);// this email should already be used
         managedUserVM.setActivated(true);
         managedUserVM.setImageUrl(DEFAULT_IMAGEURL);
@@ -323,7 +317,7 @@ public class UserResourceIT {
         managedUserVM.setImageUrl(UPDATED_IMAGEURL);
         managedUserVM.setLangKey(UPDATED_LANGKEY);
         managedUserVM.setLicenseType(LicenseType.RESEARCH_IN_COMMERCIAL);
-        managedUserVM.setJobTitle(UPDATED_JOBTITLE);
+        managedUserVM.setJobTitle("test title");
         managedUserVM.setCompanyName("test company");
         managedUserVM.setCity("test city");
         managedUserVM.setCountry("test country");
@@ -376,7 +370,6 @@ public class UserResourceIT {
         managedUserVM.setPassword(UPDATED_PASSWORD);
         managedUserVM.setFirstName(UPDATED_FIRSTNAME);
         managedUserVM.setLastName(UPDATED_LASTNAME);
-        managedUserVM.setJobTitle(UPDATED_JOBTITLE);
         managedUserVM.setEmail(UPDATED_EMAIL);
         managedUserVM.setActivated(true);
         managedUserVM.setImageUrl(UPDATED_IMAGEURL);
@@ -414,7 +407,6 @@ public class UserResourceIT {
         managedUserVM.setPassword(UPDATED_PASSWORD);
         managedUserVM.setFirstName(UPDATED_FIRSTNAME);
         managedUserVM.setLastName(UPDATED_LASTNAME);
-        managedUserVM.setJobTitle(UPDATED_JOBTITLE);
         managedUserVM.setEmail(UPDATED_EMAIL);
         managedUserVM.setActivated(updatedUser.getActivated());
         managedUserVM.setImageUrl(UPDATED_IMAGEURL);
@@ -475,7 +467,6 @@ public class UserResourceIT {
         managedUserVM.setPassword(updatedUser.getPassword());
         managedUserVM.setFirstName(updatedUser.getFirstName());
         managedUserVM.setLastName(updatedUser.getLastName());
-        managedUserVM.setJobTitle(DEFAULT_JOBTITLE);
         managedUserVM.setEmail("jhipster@localhost");// this email should already be used by anotherUser
         managedUserVM.setActivated(updatedUser.getActivated());
         managedUserVM.setImageUrl(updatedUser.getImageUrl());
@@ -518,7 +509,6 @@ public class UserResourceIT {
         managedUserVM.setPassword(updatedUser.getPassword());
         managedUserVM.setFirstName(updatedUser.getFirstName());
         managedUserVM.setLastName(updatedUser.getLastName());
-        managedUserVM.setJobTitle(DEFAULT_JOBTITLE);
         managedUserVM.setEmail(updatedUser.getEmail());
         managedUserVM.setActivated(updatedUser.getActivated());
         managedUserVM.setImageUrl(updatedUser.getImageUrl());
