@@ -189,6 +189,8 @@ export default class UserPage extends React.Component<IUserPage> {
       });
       return this.userUsage.summary;
     },
+    onError: (error: Error) =>
+      notifyError(error, 'Failed to load user usage data.'),
     default: {
       day: {},
       month: {},
@@ -1196,13 +1198,21 @@ export default class UserPage extends React.Component<IUserPage> {
                             Data usage
                           </div>
 
-                          <UsageAnalysisTable
-                            data={this.usageDetail.result}
-                            loadedData={this.usageDetail.isComplete}
-                            defaultResourcesType={ToggleValue.PUBLIC_RESOURCES}
-                            defaultTimeType={ToggleValue.RESULTS_BY_DAY}
-                            defaultPageSize={5}
-                          />
+                          {this.usageDetail.isError ? (
+                            <Alert variant="danger">
+                              Failed to load user usage data.
+                            </Alert>
+                          ) : (
+                            <UsageAnalysisTable
+                              data={this.usageDetail.result}
+                              loadedData={this.usageDetail.isComplete}
+                              defaultResourcesType={
+                                ToggleValue.PUBLIC_RESOURCES
+                              }
+                              defaultTimeType={ToggleValue.RESULTS_BY_DAY}
+                              defaultPageSize={5}
+                            />
+                          )}
                         </Col>
                       </Row>
                       <Row>

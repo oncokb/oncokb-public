@@ -19,6 +19,7 @@ import org.springframework.mock.http.client.MockClientHttpRequest;
 import org.springframework.test.util.ReflectionTestUtils;
 import org.springframework.test.web.client.MockRestServiceServer;
 import org.springframework.web.client.RestTemplate;
+import org.springframework.web.server.ResponseStatusException;
 
 class SamlServiceTest {
 
@@ -75,11 +76,14 @@ class SamlServiceTest {
 
         server.expect(requestTo(IDP_URL)).andRespond(withSuccess("<html><body>No assertion</body></html>", MediaType.TEXT_HTML));
 
-        RuntimeException exception = assertThrows(RuntimeException.class, () ->
+        ResponseStatusException exception = assertThrows(ResponseStatusException.class, () ->
             ReflectionTestUtils.invokeMethod(samlService, "getSamlResponse")
         );
 
-        assertEquals("Could not find SAMLResponse value in SAML assertion response", exception.getMessage());
+        assertEquals(
+            "AWS authentication is temporarily unavailable because SAML authentication failed.",
+            exception.getReason()
+        );
         server.verify();
     }
 

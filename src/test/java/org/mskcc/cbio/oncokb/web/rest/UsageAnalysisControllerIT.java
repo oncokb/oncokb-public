@@ -4,6 +4,7 @@ import static org.mockito.ArgumentMatchers.any;
 import static org.mskcc.cbio.oncokb.config.Constants.*;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.content;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 import com.google.gson.Gson;
@@ -37,9 +38,12 @@ import org.mskcc.cbio.oncokb.service.dto.CompanyDTO;
 import org.mskcc.cbio.oncokb.service.dto.UserDTO;
 import org.mskcc.cbio.oncokb.service.mapper.UserMapper;
 import org.mskcc.cbio.oncokb.util.TimeUtil;
+import org.mskcc.cbio.oncokb.web.rest.errors.ExceptionTranslator;
 import org.springframework.http.MediaType;
+import org.springframework.mock.env.MockEnvironment;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.setup.MockMvcBuilders;
+import org.springframework.web.server.ResponseStatusException;
 import org.testcontainers.shaded.org.apache.commons.io.IOUtils;
 import software.amazon.awssdk.core.ResponseInputStream;
 import software.amazon.awssdk.http.AbortableInputStream;
@@ -152,7 +156,10 @@ public class UsageAnalysisControllerIT {
     MockitoAnnotations.initMocks(this);
     this.mockS3ObjectResponse(data);
     this.restMockMvc =
-      MockMvcBuilders.standaloneSetup(usageAnalysisController).build();
+      MockMvcBuilders
+        .standaloneSetup(usageAnalysisController)
+        .setControllerAdvice(new ExceptionTranslator(new MockEnvironment()))
+        .build();
   }
 
   @Test
@@ -225,6 +232,27 @@ public class UsageAnalysisControllerIT {
         content().contentTypeCompatibleWith(MediaType.APPLICATION_JSON)
       )
       .andExpect(content().json(expected, true));
+  }
+
+  @Test
+  public void shouldReturnServiceUnavailableWhenS3LookupFails() throws Exception {
+    Mockito
+      .when(s3Service.getObject(any()))
+      .thenThrow(
+        new ResponseStatusException(
+          org.springframework.http.HttpStatus.SERVICE_UNAVAILABLE,
+          "The S3 service is temporarily unavailable."
+        )
+      );
+
+    restMockMvc
+      .perform(get("/api/usage/summary/resources"))
+      .andExpect(status().isServiceUnavailable())
+      .andExpect(content().contentType(MediaType.APPLICATION_PROBLEM_JSON))
+      .andExpect(
+        jsonPath("$.title").value("The S3 service is temporarily unavailable.")
+      )
+      .andExpect(jsonPath("$.message").value("error.http.503"));
   }
 
   private static class MockS3Data {

@@ -59,11 +59,13 @@ public class UsageAnalysisController {
     throws UnsupportedEncodingException, IOException, ParseException {
     Optional<ResponseInputStream<GetObjectResponse>> s3object = s3Service.getObject(file);
     if (s3object.isPresent()) {
-      ResponseInputStream<GetObjectResponse> inputStream = s3object.get();
-      JSONParser jsonParser = new JSONParser();
-      return (JSONObject) jsonParser.parse(
-        new InputStreamReader(inputStream, "UTF-8")
-      );
+      try (
+        ResponseInputStream<GetObjectResponse> inputStream = s3object.get();
+        InputStreamReader reader = new InputStreamReader(inputStream, "UTF-8")
+      ) {
+        JSONParser jsonParser = new JSONParser();
+        return (JSONObject) jsonParser.parse(reader);
+      }
     }
     return null;
   }

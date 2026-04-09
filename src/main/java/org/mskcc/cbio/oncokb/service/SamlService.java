@@ -9,6 +9,7 @@ import org.jsoup.nodes.Element;
 import org.mskcc.cbio.oncokb.config.application.ApplicationProperties;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.HttpEntity;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.MediaType;
@@ -17,6 +18,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.util.LinkedMultiValueMap;
 import org.springframework.util.MultiValueMap;
 import org.springframework.web.client.RestTemplate;
+import org.springframework.web.server.ResponseStatusException;
 
 import software.amazon.awssdk.auth.credentials.AnonymousCredentialsProvider;
 import software.amazon.awssdk.regions.Region;
@@ -70,41 +72,62 @@ public class SamlService {
     }
 
     public StsAssumeRoleWithSamlCredentialsProvider getCredentialsProvider() {
+        if (this.credentialsProvider == null) {
+            log.error("SAML credentials provider is not configured");
+            throw new ResponseStatusException(
+                HttpStatus.SERVICE_UNAVAILABLE,
+                "AWS authentication is unavailable because SAML AWS credentials are not configured."
+            );
+        }
         return this.credentialsProvider;
     }
 
     private String getSamlResponse() throws RuntimeException {
-        HttpHeaders headers = new HttpHeaders();
-        headers.setContentType(MediaType.APPLICATION_FORM_URLENCODED);
+        try {
+            HttpHeaders headers = new HttpHeaders();
+            headers.setContentType(MediaType.APPLICATION_FORM_URLENCODED);
 
-        String httpUserAgent = applicationProperties.getSamlAws().getHttpUserAgent();
-        if (StringUtils.isNotBlank(httpUserAgent)) {
-            headers.set(HttpHeaders.USER_AGENT, httpUserAgent);
+            String httpUserAgent = applicationProperties.getSamlAws().getHttpUserAgent();
+            if (StringUtils.isNotBlank(httpUserAgent)) {
+                headers.set(HttpHeaders.USER_AGENT, httpUserAgent);
+            }
+
+            MultiValueMap<String, String> map = new LinkedMultiValueMap<String, String>();
+            map.add(MSK_USERNAME_FIELD, applicationProperties.getSamlAws().getServiceAccountUsername());
+            map.add(MSK_PASSWORD_FIELD, applicationProperties.getSamlAws().getServiceAccountPassword());
+
+            HttpEntity<MultiValueMap<String, String>> request = new HttpEntity<MultiValueMap<String, String>>(
+                map,
+                headers
+            );
+            ResponseEntity<String> response = restTemplate.postForEntity(
+                MSK_IDP_URL,
+                request,
+                String.class
+            );
+
+            Document document = Jsoup.parse(response.getBody());
+            Element samlResponseElement = document
+                .select("input[name=SAMLResponse]")
+                .first();
+
+            if (samlResponseElement == null) {
+                log.error("Could not find SAMLResponse value in SAML assertion response");
+                throw new ResponseStatusException(
+                    HttpStatus.SERVICE_UNAVAILABLE,
+                    "AWS authentication is temporarily unavailable because SAML authentication failed."
+                );
+            }
+
+            return samlResponseElement.attr("value");
+        } catch (ResponseStatusException ex) {
+            throw ex;
+        } catch (Exception ex) {
+            log.error("Failed to retrieve SAML assertion for AWS access", ex);
+            throw new ResponseStatusException(
+                HttpStatus.SERVICE_UNAVAILABLE,
+                "AWS authentication is temporarily unavailable because SAML authentication failed."
+            );
         }
-
-        MultiValueMap<String, String> map = new LinkedMultiValueMap<String, String>();
-        map.add(MSK_USERNAME_FIELD, applicationProperties.getSamlAws().getServiceAccountUsername());
-        map.add(MSK_PASSWORD_FIELD, applicationProperties.getSamlAws().getServiceAccountPassword());
-
-        HttpEntity<MultiValueMap<String, String>> request = new HttpEntity<MultiValueMap<String, String>>(
-            map,
-            headers
-        );
-        ResponseEntity<String> response = restTemplate.postForEntity(
-            MSK_IDP_URL,
-            request,
-            String.class
-        );
-
-        Document document = Jsoup.parse(response.getBody());
-        Element samlResponseElement = document
-            .select("input[name=SAMLResponse]")
-            .first();
-
-        if (samlResponseElement == null) {
-            throw new RuntimeException("Could not find SAMLResponse value in SAML assertion response");
-        }
-
-        return samlResponseElement.attr("value");
     }
 }

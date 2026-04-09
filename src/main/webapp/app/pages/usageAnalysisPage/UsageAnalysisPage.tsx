@@ -12,6 +12,7 @@ import client from 'app/shared/api/clientInstance';
 import { match } from 'react-router';
 import Tabs from 'react-bootstrap/Tabs';
 import Tab from 'react-bootstrap/Tab';
+import Alert from 'react-bootstrap/Alert';
 import { UserOverviewUsage, UsageSummary } from 'app/shared/api/generated/API';
 import autobind from 'autobind-decorator';
 import { USAGE_YEAR_DETAIL_TIME_KEY } from 'app/config/constants';
@@ -26,6 +27,7 @@ import {
 } from 'app/components/oncokbTable/HeaderConstants';
 import UsageAnalysisTable from 'app/pages/usageAnalysisPage/UsageAnalysisTable';
 import { ToggleValue } from './usage-analysis-utils';
+import { notifyError } from 'app/shared/utils/NotificationUtils';
 
 export enum UsageType {
   USER = 'USER',
@@ -133,6 +135,11 @@ export default class UsageAnalysisPage extends React.Component<{
     async invoke() {
       return await client.userOverviewUsageGetUsingGET({});
     },
+    onError: (error: Error) => {
+      if (this.usageType === UsageType.USER) {
+        notifyError(error, 'Failed to load user usage data.');
+      }
+    },
     default: [],
   });
 
@@ -140,6 +147,11 @@ export default class UsageAnalysisPage extends React.Component<{
     await: () => [],
     async invoke() {
       return await client.resourceUsageGetUsingGET({});
+    },
+    onError: (error: Error) => {
+      if (this.usageType === UsageType.RESOURCE) {
+        notifyError(error, 'Failed to load resource usage data.');
+      }
     },
     default: {
       day: {},
@@ -176,22 +188,32 @@ export default class UsageAnalysisPage extends React.Component<{
         >
           <Tab eventKey={UsageType.USER} title="Users">
             <div className="mt-2">
-              <UsageAnalysisTable
-                data={this.users.result}
-                loadedData={this.users.isComplete}
-                defaultResourcesType={ToggleValue.PUBLIC_RESOURCES}
-                defaultTimeType={ToggleValue.RESULTS_BY_DAY}
-              />
+              {this.users.isError ? (
+                <Alert variant="danger">Failed to load user usage data.</Alert>
+              ) : (
+                <UsageAnalysisTable
+                  data={this.users.result}
+                  loadedData={this.users.isComplete}
+                  defaultResourcesType={ToggleValue.PUBLIC_RESOURCES}
+                  defaultTimeType={ToggleValue.RESULTS_BY_DAY}
+                />
+              )}
             </div>
           </Tab>
           <Tab eventKey={UsageType.RESOURCE} title="Resources">
             <div className="mt-2">
-              <UsageAnalysisTable
-                data={this.usageDetail.result}
-                loadedData={this.users.isComplete}
-                defaultResourcesType={ToggleValue.PUBLIC_RESOURCES}
-                defaultTimeType={ToggleValue.RESULTS_BY_DAY}
-              />
+              {this.usageDetail.isError ? (
+                <Alert variant="danger">
+                  Failed to load resource usage data.
+                </Alert>
+              ) : (
+                <UsageAnalysisTable
+                  data={this.usageDetail.result}
+                  loadedData={this.usageDetail.isComplete}
+                  defaultResourcesType={ToggleValue.PUBLIC_RESOURCES}
+                  defaultTimeType={ToggleValue.RESULTS_BY_DAY}
+                />
+              )}
             </div>
           </Tab>
         </Tabs>

@@ -6,7 +6,7 @@ import React from 'react';
 import { Link, match } from 'react-router-dom';
 import client from 'app/shared/api/clientInstance';
 import { getSectionClassName } from '../account/AccountUtils';
-import { Col, Row } from 'react-bootstrap';
+import { Alert, Col, Row } from 'react-bootstrap';
 import UserUsageDetailsTable from './UserUsageDetailsTable';
 import { InfoRow } from '../AccountPage';
 import {
@@ -44,62 +44,60 @@ export default class UserUsageDetailsPage extends React.Component<{
         [USAGE_MONTH_DETAIL_TIME_KEY]: [],
         [USAGE_DAY_DETAIL_TIME_KEY]: [],
       };
-      try {
-        this.user = await client.userUsageGetUsingGET({ userId: this.userId });
-        if (this.user.summary !== null) {
-          const yearSummary = this.user.summary.year;
-          const yearDetailSummary: UsageRecord[] = [];
-          Object.keys(yearSummary).forEach(year => {
-            const yearUsage = yearSummary[year];
-            Object.keys(yearUsage).forEach(resourceEntry => {
-              yearDetailSummary.push({
-                userEmail: this.user.userEmail,
-                usage: yearUsage[resourceEntry],
-                time: year,
-                resource: resourceEntry,
-                maxUsageProportion: 0,
-              });
+      this.user = await client.userUsageGetUsingGET({ userId: this.userId });
+      if (this.user.summary !== null) {
+        const yearSummary = this.user.summary.year;
+        const yearDetailSummary: UsageRecord[] = [];
+        Object.keys(yearSummary).forEach(year => {
+          const yearUsage = yearSummary[year];
+          Object.keys(yearUsage).forEach(resourceEntry => {
+            yearDetailSummary.push({
+              userEmail: this.user.userEmail,
+              usage: yearUsage[resourceEntry],
+              time: year,
+              resource: resourceEntry,
+              maxUsageProportion: 0,
             });
           });
-          result[USAGE_YEAR_DETAIL_TIME_KEY] = yearDetailSummary;
+        });
+        result[USAGE_YEAR_DETAIL_TIME_KEY] = yearDetailSummary;
 
-          const monthSummary = this.user.summary.month;
-          const monthDetailSummary: UsageRecord[] = [];
-          Object.keys(monthSummary).forEach(month => {
-            const monthUsage = monthSummary[month];
-            Object.keys(monthUsage).forEach(resourceEntry => {
-              monthDetailSummary.push({
-                userEmail: this.user.userEmail,
-                usage: monthUsage[resourceEntry],
-                time: month,
-                resource: resourceEntry,
-                maxUsageProportion: 0,
-              });
+        const monthSummary = this.user.summary.month;
+        const monthDetailSummary: UsageRecord[] = [];
+        Object.keys(monthSummary).forEach(month => {
+          const monthUsage = monthSummary[month];
+          Object.keys(monthUsage).forEach(resourceEntry => {
+            monthDetailSummary.push({
+              userEmail: this.user.userEmail,
+              usage: monthUsage[resourceEntry],
+              time: month,
+              resource: resourceEntry,
+              maxUsageProportion: 0,
             });
           });
-          result[USAGE_MONTH_DETAIL_TIME_KEY] = monthDetailSummary;
+        });
+        result[USAGE_MONTH_DETAIL_TIME_KEY] = monthDetailSummary;
 
-          const daySummary = this.user.summary.day;
-          const dayDetailSummary: UsageRecord[] = [];
-          Object.keys(daySummary).forEach(day => {
-            const dayUsage = daySummary[day];
-            Object.keys(dayUsage).forEach(resourceEntry => {
-              dayDetailSummary.push({
-                userEmail: this.user.userEmail,
-                usage: dayUsage[resourceEntry],
-                time: day,
-                resource: resourceEntry,
-                maxUsageProportion: 0,
-              });
+        const daySummary = this.user.summary.day;
+        const dayDetailSummary: UsageRecord[] = [];
+        Object.keys(daySummary).forEach(day => {
+          const dayUsage = daySummary[day];
+          Object.keys(dayUsage).forEach(resourceEntry => {
+            dayDetailSummary.push({
+              userEmail: this.user.userEmail,
+              usage: dayUsage[resourceEntry],
+              time: day,
+              resource: resourceEntry,
+              maxUsageProportion: 0,
             });
           });
-          result[USAGE_DAY_DETAIL_TIME_KEY] = dayDetailSummary;
-        }
-      } catch (error) {
-        notifyError(error, 'Failed to load user data usage with error: ');
+        });
+        result[USAGE_DAY_DETAIL_TIME_KEY] = dayDetailSummary;
       }
       return Promise.resolve(result);
     },
+    onError: (error: Error) =>
+      notifyError(error, 'Failed to load user data usage.'),
     default: {
       [USAGE_YEAR_DETAIL_TIME_KEY]: [],
       [USAGE_MONTH_DETAIL_TIME_KEY]: [],
@@ -145,12 +143,16 @@ export default class UserUsageDetailsPage extends React.Component<{
           </Col>
         </Row>
 
-        <UserUsageDetailsTable
-          data={this.usageDetail.result}
-          loadedData={this.usageDetail.isComplete}
-          defaultResourcesType={ToggleValue.PUBLIC_RESOURCES}
-          defaultTimeType={ToggleValue.RESULTS_BY_MONTH}
-        />
+        {this.usageDetail.isError ? (
+          <Alert variant="danger">Failed to load user data usage.</Alert>
+        ) : (
+          <UserUsageDetailsTable
+            data={this.usageDetail.result}
+            loadedData={this.usageDetail.isComplete}
+            defaultResourcesType={ToggleValue.PUBLIC_RESOURCES}
+            defaultTimeType={ToggleValue.RESULTS_BY_MONTH}
+          />
+        )}
       </>
     );
   }
