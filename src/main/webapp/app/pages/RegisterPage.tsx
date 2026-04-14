@@ -235,8 +235,7 @@ export class RegisterPage extends React.Component<IRegisterProps> {
             </span>
           ) : (
             <span>
-              You will have a temporary grace period while your license request
-              is under review.
+              You will have access while your license request is under review.
             </span>
           )}{' '}
           {licenseType === LicenseType.ACADEMIC ? (
