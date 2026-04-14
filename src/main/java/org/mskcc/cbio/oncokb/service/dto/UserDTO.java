@@ -109,7 +109,13 @@ public class UserDTO implements Serializable {
         this.createdDate = user.getCreatedDate();
         this.lastModifiedBy = user.getLastModifiedBy();
         this.lastModifiedDate = user.getLastModifiedDate();
-        this.activationGracePeriodDaysRemaining = SecurityUtils.getActivationGracePeriodDaysRemaining(user, userDetails != null ? userDetails.getLicenseType() : LicenseType.COMMERCIAL);
+
+        LicenseType licenseType = LicenseType.COMMERCIAL; // Defaulting to most restrictive
+        if (userDetails != null && userDetails.getLicenseType() != null) {
+            licenseType = userDetails.getLicenseType();
+        }
+        this.activationGracePeriodDaysRemaining = SecurityUtils.getActivationGracePeriodDaysRemaining(user,licenseType);
+        
         this.authorities = user.getAuthorities().stream()
             .map(Authority::getName)
             .collect(Collectors.toSet());
