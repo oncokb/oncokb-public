@@ -8,14 +8,18 @@ import org.mskcc.cbio.oncokb.config.application.ApplicationProperties;
 import org.mskcc.cbio.oncokb.config.application.SamlAwsProperties;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
+import org.springframework.web.server.ResponseStatusException;
 import software.amazon.awssdk.core.ResponseInputStream;
 import software.amazon.awssdk.core.sync.ResponseTransformer;
 import software.amazon.awssdk.regions.Region;
 import software.amazon.awssdk.services.s3.S3Client;
 import software.amazon.awssdk.services.s3.model.GetObjectRequest;
 import software.amazon.awssdk.services.s3.model.GetObjectResponse;
+import software.amazon.awssdk.services.s3.model.NoSuchKeyException;
 import software.amazon.awssdk.services.s3.model.PutObjectRequest;
+import software.amazon.awssdk.services.s3.model.S3Exception;
 
 @Service
 public class S3Service {
@@ -31,12 +35,39 @@ public class S3Service {
     public S3Service(SamlService samlService, ApplicationProperties applicationProperties) {
         this.samlService = samlService;
         this.applicationProperties = applicationProperties;
+    }
+
+    private S3Client getS3Client() {
+        if (this.s3Client != null) {
+            return this.s3Client;
+        }
+
         SamlAwsProperties samlAwsProperties = applicationProperties.getSamlAws();
-        if (samlAwsProperties != null) {
-            String region = samlAwsProperties.getRegion();
-            s3Client = S3Client.builder().credentialsProvider(samlService.getCredentialsProvider()).region(Region.of(region)).build();
-        } else {
-            log.error("Saml AWS properties not configured");
+        if (samlAwsProperties == null) {
+            log.error("SAML AWS properties are not configured");
+            throw new ResponseStatusException(
+                HttpStatus.SERVICE_UNAVAILABLE,
+                "AWS S3 configuration is missing."
+            );
+        }
+
+        try {
+            this.s3Client =
+                S3Client
+                    .builder()
+                    .credentialsProvider(samlService.getCredentialsProvider())
+                    .region(Region.of(samlAwsProperties.getRegion()))
+                    .build();
+            return this.s3Client;
+        } catch (ResponseStatusException ex) {
+            log.error("Failed to create the S3 client", ex);
+            throw ex;
+        } catch (Exception ex) {
+            log.error("Failed to create the S3 client", ex);
+            throw new ResponseStatusException(
+                HttpStatus.SERVICE_UNAVAILABLE,
+                "The S3 service is temporarily unavailable."
+            );
         }
     }
 
@@ -51,7 +82,7 @@ public class S3Service {
             .bucket(applicationProperties.getS3Bucket())
             .key(objectPath)
             .build();
-        s3Client.putObject(putObjectRequest, Paths.get(file.getPath()));
+        getS3Client().putObject(putObjectRequest, Paths.get(file.getPath()));
     }
 
     /**
@@ -61,14 +92,30 @@ public class S3Service {
      */
     public Optional<ResponseInputStream<GetObjectResponse>> getObject(String objectPath){
         try {
-            ResponseInputStream<GetObjectResponse> s3object = s3Client.getObject(GetObjectRequest.builder()
+            ResponseInputStream<GetObjectResponse> s3object = getS3Client().getObject(GetObjectRequest.builder()
                 .bucket(applicationProperties.getS3Bucket())
                 .key(objectPath)
                 .build(), ResponseTransformer.toInputStream());
             return Optional.of(s3object);
-        } catch (Exception e) {
-            log.error(e.getMessage(), e);
+        } catch (NoSuchKeyException ex) {
             return Optional.empty();
+        } catch (S3Exception ex) {
+            if (ex.statusCode() == 404) {
+                return Optional.empty();
+            }
+            log.error("Failed to retrieve S3 object {} from bucket {}", objectPath, applicationProperties.getS3Bucket(), ex);
+            throw new ResponseStatusException(
+                HttpStatus.SERVICE_UNAVAILABLE,
+                "The S3 service is temporarily unavailable."
+            );
+        } catch (ResponseStatusException ex) {
+            throw ex;
+        } catch (Exception e) {
+            log.error("Failed to retrieve S3 object {} from bucket {}", objectPath, applicationProperties.getS3Bucket(), e);
+            throw new ResponseStatusException(
+                HttpStatus.SERVICE_UNAVAILABLE,
+                "The S3 service is temporarily unavailable."
+            );
         }
     }
 }

@@ -636,6 +636,8 @@ export default class CompanyPage extends React.Component<ICompanyPage> {
         companyId: this.company.id,
       });
     },
+    onError: (error: Error) =>
+      notifyError(error, 'Failed to load company usage data.'),
     default: [],
   });
 
@@ -1073,135 +1075,143 @@ export default class CompanyPage extends React.Component<ICompanyPage> {
                           Company Data Usage
                         </div>
                         <div className="mt-2">
-                          <OncoKBTable<
-                            UserOverviewUsage & {
-                              dayUsage: Record<string, UserStats>;
-                              monthUsage: Record<string, UserStats>;
-                              yearUsage: Record<string, UserStats>;
-                            }
-                          >
-                            data={this.users.result}
-                            columns={[
-                              {
-                                id: 'userEmail',
-                                Header: emailHeader,
-                                accessor: 'userEmail',
-                                minWidth: 200,
-                                onFilter: (data, keyword) =>
-                                  filterByKeyword(data.userEmail, keyword),
-                              },
-                              this.resourcesTypeToggleValue ===
-                              ToggleValue.ALL_RESOURCES
-                                ? {
-                                    id: 'totalUsage',
-                                    Header: usageHeader,
-                                    minWidth: 100,
-                                    Cell(props: {
-                                      original: UserOverviewUsage;
-                                    }) {
-                                      return (
-                                        <UsageText
-                                          usage={
-                                            props.original.yearUsage[
-                                              currentYearStr
-                                            ]?.totalUsage
-                                          }
-                                        />
-                                      );
-                                    },
-                                  }
-                                : {
-                                    id: 'totalUsage',
-                                    Header: usageHeader,
-                                    minWidth: 100,
-                                    Cell(props: {
-                                      original: UserOverviewUsage;
-                                    }) {
-                                      return (
-                                        <UsageText
-                                          usage={
-                                            props.original.yearUsage[
-                                              currentYearStr
-                                            ]?.totalPublicUsage
-                                          }
-                                        />
-                                      );
-                                    },
-                                  },
-                              this.resourcesTypeToggleValue ===
-                              ToggleValue.ALL_RESOURCES
-                                ? {
-                                    id: 'mostUsedEndpoint',
-                                    Header: endpointHeader,
-                                    minWidth: 200,
-                                    onFilter: (data, keyword) =>
-                                      filterByKeyword(
-                                        data.yearUsage[currentYearStr]
-                                          ?.mostUsedEndpoint,
-                                        keyword
-                                      ),
-                                    accessor: x =>
-                                      x.yearUsage[currentYearStr]
-                                        ?.mostUsedEndpoint,
-                                  }
-                                : {
-                                    id: 'mostUsedPublicEndpoint',
-                                    Header: publicEndpointHeader,
-                                    minWidth: 200,
-                                    accessor: x =>
-                                      x.yearUsage[currentYearStr]
-                                        ?.mostUsedPublicEndpoint,
-                                    onFilter: (data, keyword) =>
-                                      filterByKeyword(
-                                        data.yearUsage[currentYearStr]
-                                          ?.mostUsedPublicEndpoint,
-                                        keyword
-                                      ),
-                                  },
-                              {
-                                ...getUsageTableColumnDefinition(
-                                  UsageTableColumnKey.OPERATION
-                                ),
-                                sortable: false,
-                                className: 'd-flex justify-content-center',
-                                Cell(props: { original: UserOverviewUsage }) {
-                                  return (
-                                    <Link
-                                      to={`${PAGE_ROUTE.ADMIN_USER_USAGE_DETAILS_LINK}${props.original.userId}`}
-                                    >
-                                      <i className="fa fa-info-circle"></i>
-                                    </Link>
-                                  );
+                          {this.users.isError ? (
+                            <Alert variant="danger">
+                              Failed to load company usage data.
+                            </Alert>
+                          ) : (
+                            <OncoKBTable<
+                              UserOverviewUsage & {
+                                dayUsage: Record<string, UserStats>;
+                                monthUsage: Record<string, UserStats>;
+                                yearUsage: Record<string, UserStats>;
+                              }
+                            >
+                              data={this.users.result}
+                              columns={[
+                                {
+                                  id: 'userEmail',
+                                  Header: emailHeader,
+                                  accessor: 'userEmail',
+                                  minWidth: 200,
+                                  onFilter: (data, keyword) =>
+                                    filterByKeyword(data.userEmail, keyword),
                                 },
-                              },
-                            ]}
-                            loading={this.users.isPending}
-                            defaultSorted={[
-                              {
-                                id: 'totalUsage',
-                                desc: true,
-                              },
-                            ]}
-                            showPagination={true}
-                            minRows={1}
-                            defaultPageSize={5}
-                            filters={() => {
-                              return (
-                                <Row>
-                                  <UsageToggleGroup
-                                    defaultValue={this.resourcesTypeToggleValue}
-                                    toggleValues={[
-                                      ToggleValue.ALL_RESOURCES,
-                                      ToggleValue.PUBLIC_RESOURCES,
-                                    ]}
-                                    handleToggle={
-                                      this.handleResourcesTypeToggleChange
+                                this.resourcesTypeToggleValue ===
+                                ToggleValue.ALL_RESOURCES
+                                  ? {
+                                      id: 'totalUsage',
+                                      Header: usageHeader,
+                                      minWidth: 100,
+                                      Cell(props: {
+                                        original: UserOverviewUsage;
+                                      }) {
+                                        return (
+                                          <UsageText
+                                            usage={
+                                              props.original.yearUsage[
+                                                currentYearStr
+                                              ]?.totalUsage
+                                            }
+                                          />
+                                        );
+                                      },
                                     }
-                                  />
-                                </Row>
-                              );
-                            }}
-                          />
+                                  : {
+                                      id: 'totalUsage',
+                                      Header: usageHeader,
+                                      minWidth: 100,
+                                      Cell(props: {
+                                        original: UserOverviewUsage;
+                                      }) {
+                                        return (
+                                          <UsageText
+                                            usage={
+                                              props.original.yearUsage[
+                                                currentYearStr
+                                              ]?.totalPublicUsage
+                                            }
+                                          />
+                                        );
+                                      },
+                                    },
+                                this.resourcesTypeToggleValue ===
+                                ToggleValue.ALL_RESOURCES
+                                  ? {
+                                      id: 'mostUsedEndpoint',
+                                      Header: endpointHeader,
+                                      minWidth: 200,
+                                      onFilter: (data, keyword) =>
+                                        filterByKeyword(
+                                          data.yearUsage[currentYearStr]
+                                            ?.mostUsedEndpoint,
+                                          keyword
+                                        ),
+                                      accessor: x =>
+                                        x.yearUsage[currentYearStr]
+                                          ?.mostUsedEndpoint,
+                                    }
+                                  : {
+                                      id: 'mostUsedPublicEndpoint',
+                                      Header: publicEndpointHeader,
+                                      minWidth: 200,
+                                      accessor: x =>
+                                        x.yearUsage[currentYearStr]
+                                          ?.mostUsedPublicEndpoint,
+                                      onFilter: (data, keyword) =>
+                                        filterByKeyword(
+                                          data.yearUsage[currentYearStr]
+                                            ?.mostUsedPublicEndpoint,
+                                          keyword
+                                        ),
+                                    },
+                                {
+                                  ...getUsageTableColumnDefinition(
+                                    UsageTableColumnKey.OPERATION
+                                  ),
+                                  sortable: false,
+                                  className: 'd-flex justify-content-center',
+                                  Cell(props: { original: UserOverviewUsage }) {
+                                    return (
+                                      <Link
+                                        to={`${PAGE_ROUTE.ADMIN_USER_USAGE_DETAILS_LINK}${props.original.userId}`}
+                                      >
+                                        <i className="fa fa-info-circle"></i>
+                                      </Link>
+                                    );
+                                  },
+                                },
+                              ]}
+                              loading={this.users.isPending}
+                              defaultSorted={[
+                                {
+                                  id: 'totalUsage',
+                                  desc: true,
+                                },
+                              ]}
+                              showPagination={true}
+                              minRows={1}
+                              defaultPageSize={5}
+                              filters={() => {
+                                return (
+                                  <Row>
+                                    <UsageToggleGroup
+                                      defaultValue={
+                                        this.resourcesTypeToggleValue
+                                      }
+                                      toggleValues={[
+                                        ToggleValue.ALL_RESOURCES,
+                                        ToggleValue.PUBLIC_RESOURCES,
+                                      ]}
+                                      handleToggle={
+                                        this.handleResourcesTypeToggleChange
+                                      }
+                                    />
+                                  </Row>
+                                );
+                              }}
+                            />
+                          )}
                         </div>
                       </Col>
                     </Row>

@@ -288,6 +288,13 @@ function getMockResponse(url) {
         body: usageUsersOverview,
       };
       break;
+    case `${SERVER_URL}api/usage/summary/users?companyId=1`:
+      res = {
+        status: 200,
+        contentType: 'application/json',
+        body: usageUsersOverview,
+      };
+      break;
     case `${SERVER_URL}api/usage/summary/resources`:
       res = {
         status: 200,

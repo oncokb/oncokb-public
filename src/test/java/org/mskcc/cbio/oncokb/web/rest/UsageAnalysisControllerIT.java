@@ -37,9 +37,12 @@ import org.mskcc.cbio.oncokb.service.dto.CompanyDTO;
 import org.mskcc.cbio.oncokb.service.dto.UserDTO;
 import org.mskcc.cbio.oncokb.service.mapper.UserMapper;
 import org.mskcc.cbio.oncokb.util.TimeUtil;
+import org.mskcc.cbio.oncokb.web.rest.errors.ExceptionTranslator;
 import org.springframework.http.MediaType;
+import org.springframework.mock.env.MockEnvironment;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.setup.MockMvcBuilders;
+import org.springframework.web.server.ResponseStatusException;
 import org.testcontainers.shaded.org.apache.commons.io.IOUtils;
 import software.amazon.awssdk.core.ResponseInputStream;
 import software.amazon.awssdk.http.AbortableInputStream;
@@ -152,7 +155,10 @@ public class UsageAnalysisControllerIT {
     MockitoAnnotations.initMocks(this);
     this.mockS3ObjectResponse(data);
     this.restMockMvc =
-      MockMvcBuilders.standaloneSetup(usageAnalysisController).build();
+      MockMvcBuilders
+        .standaloneSetup(usageAnalysisController)
+        .setControllerAdvice(new ExceptionTranslator(new MockEnvironment()))
+        .build();
   }
 
   @Test

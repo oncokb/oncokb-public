@@ -4,10 +4,12 @@ import { observable } from 'mobx';
 import { inject, observer } from 'mobx-react';
 import { RouterStore } from 'mobx-react-router';
 import React from 'react';
+import Alert from 'react-bootstrap/Alert';
 import { match } from 'react-router-dom';
 import Client from 'app/shared/api/clientInstance';
 import ResourceUsageDetailsTable from './ResourceUsageDetailsTable';
 import { decodeResourceUsageDetailPageURL } from 'app/shared/utils/Utils';
+import { notifyError } from 'app/shared/utils/NotificationUtils';
 import {
   TimeGroupedUsageRecords,
   mapUsageSummaryToTimeGroupedUsageRecords,
@@ -36,6 +38,8 @@ export default class ResourceUsageDetailsPage extends React.Component<{
         mapUsageSummaryToTimeGroupedUsageRecords(this.resource, 'email')
       );
     },
+    onError: (error: Error) =>
+      notifyError(error, 'Failed to load resource usage details.'),
     default: {
       'Day Detail': [],
       'Year Detail': [],
@@ -52,11 +56,15 @@ export default class ResourceUsageDetailsPage extends React.Component<{
       <>
         <h5> {this.endpoint}</h5>
         <hr />
-        <ResourceUsageDetailsTable
-          data={this.resourceDetail.result}
-          loadedData={this.resourceDetail.isComplete}
-          defaultTimeType={ToggleValue.RESULTS_BY_MONTH}
-        />
+        {this.resourceDetail.isError ? (
+          <Alert variant="danger">Failed to load resource usage details.</Alert>
+        ) : (
+          <ResourceUsageDetailsTable
+            data={this.resourceDetail.result}
+            loadedData={this.resourceDetail.isComplete}
+            defaultTimeType={ToggleValue.RESULTS_BY_MONTH}
+          />
+        )}
       </>
     );
   }
