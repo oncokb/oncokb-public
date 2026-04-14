@@ -4,6 +4,7 @@ import org.mskcc.cbio.oncokb.RedisTestContainerExtension;
 import org.mskcc.cbio.oncokb.OncokbPublicApp;
 import org.mskcc.cbio.oncokb.domain.User;
 import org.mskcc.cbio.oncokb.domain.enumeration.AccountRequestStatus;
+import org.mskcc.cbio.oncokb.domain.enumeration.LicenseType;
 import org.mskcc.cbio.oncokb.repository.UserDetailsRepository;
 import org.mskcc.cbio.oncokb.repository.UserRepository;
 
@@ -186,6 +187,7 @@ public class DomainUserDetailsServiceIT {
         org.mskcc.cbio.oncokb.domain.UserDetails userEightDetails = new org.mskcc.cbio.oncokb.domain.UserDetails();
         userEightDetails.setUser(userEight);
         userEightDetails.setAccountRequestStatus(AccountRequestStatus.PENDING);
+        userEightDetails.setLicenseType(LicenseType.COMMERCIAL);
         userDetailsRepository.save(userEightDetails);
 
         User userNine = new User();
