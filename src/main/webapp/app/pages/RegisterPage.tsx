@@ -226,8 +226,9 @@ export class RegisterPage extends React.Component<IRegisterProps> {
           the email to complete registration.
         </p>
         <p>
-          After validating your email address, please allow 1-2 business days
-          for us to review your request.{' '}
+          After validating your email address, you will be able to access the
+          OncoKB website. In parallel, your request will be reviewed on an
+          individual basis, and you may be contacted with follow-up questions.{' '}
           {noGracePeriod ? (
             <span>
               You will not have a grace period since you are using a personal
