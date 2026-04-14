@@ -74,10 +74,7 @@ export default class ActivateAccount extends React.Component<{
               We are currently reviewing your registration and will notify you
               of your account approval status within two business days.{' '}
               {this.hasGracePeriod === true ? (
-                <span>
-                  You have temporary grace-period access while your request is
-                  under review.
-                </span>
+                <span>You have access while your request is under review.</span>
               ) : (
                 <span>
                   You do not have a grace period. Access will be enabled after
