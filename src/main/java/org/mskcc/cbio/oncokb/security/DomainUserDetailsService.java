@@ -57,14 +57,14 @@ public class DomainUserDetailsService implements UserDetailsService {
     }
 
     private org.springframework.security.core.userdetails.User createSpringSecurityUser(String lowercaseLogin, User user) {
-        AccountRequestStatus accountRequestStatus = userDetailsRepository.findOneByUser(user)
-            .map(org.mskcc.cbio.oncokb.domain.UserDetails::getAccountRequestStatus)
-            .orElse(AccountRequestStatus.UNKNOWN);
-
-        if (AccountRequestStatus.UNKNOWN.equals(accountRequestStatus)) {
+        Optional<org.mskcc.cbio.oncokb.domain.UserDetails> userDetailsOptional = userDetailsRepository.findOneByUser(user);
+        if (!userDetailsOptional.isPresent() || userDetailsOptional.get().getAccountRequestStatus().equals(AccountRequestStatus.UNKNOWN)) {
             log.warn("Account request status missing for user '{}'. Denying login.", user.getLogin());
             throw new UserNotApprovedException(lowercaseLogin);
         }
+        
+        org.mskcc.cbio.oncokb.domain.UserDetails userDetails = userDetailsOptional.get();
+        AccountRequestStatus accountRequestStatus = userDetails.getAccountRequestStatus();
 
         if (AccountRequestStatus.REJECTED.equals(accountRequestStatus)) {
             throw new ResponseStatusException(HttpStatus.FORBIDDEN, "User account request has been rejected.");
@@ -83,7 +83,7 @@ public class DomainUserDetailsService implements UserDetailsService {
                 throw new UserNotApprovedException(lowercaseLogin);
             }
 
-            if (!SecurityUtils.isWithinActivationGracePeriod(user)) {
+            if (!SecurityUtils.isWithinActivationGracePeriod(user, userDetails.getLicenseType())) {
                 throw new ExpiredGracePeriodException(lowercaseLogin);
             }
 

@@ -171,7 +171,10 @@ export default class AccountMenu extends React.Component<IAccountMenuProps> {
   render() {
     const graceDaysRemaining = getGracePeriodDaysRemaining(this.props.account);
     const showGraceIndicator =
-      this.props.isAuthenticated && hasGracePeriodAccess(this.props.account);
+      this.props.isAuthenticated &&
+      hasGracePeriodAccess(this.props.account) &&
+      this.props.account?.licenseType !== 'HOSPITAL' &&
+      this.props.account?.licenseType !== 'ACADEMIC';
     const dayLabel = graceDaysRemaining === 1 ? 'day' : 'days';
     const reviewLicenseText = `We are reviewing your license application. Meanwhile, you can view limited content for ${graceDaysRemaining} ${dayLabel}.`;
     return (

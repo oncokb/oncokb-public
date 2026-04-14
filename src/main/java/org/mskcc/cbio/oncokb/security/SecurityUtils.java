@@ -4,11 +4,11 @@ import java.time.Duration;
 import java.time.Instant;
 import java.time.LocalDate;
 import java.time.ZoneOffset;
-import java.time.temporal.ChronoUnit;
 import java.util.Optional;
 import java.util.UUID;
 import java.util.stream.Stream;
 import org.mskcc.cbio.oncokb.domain.User;
+import org.mskcc.cbio.oncokb.domain.enumeration.LicenseType;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.context.SecurityContext;
@@ -95,13 +95,21 @@ public final class SecurityUtils {
             .map(GrantedAuthority::getAuthority);
     }
 
-    public static boolean isWithinActivationGracePeriod(User user) {
+    public static boolean isWithinActivationGracePeriod(User user, LicenseType licenseType) {
+        if (licenseType.equals(LicenseType.ACADEMIC) || licenseType.equals(LicenseType.HOSPITAL)) {
+            return true;
+        }
+
         return getGracePeriodEnd(user)
             .map(end -> Instant.now().isBefore(end))
             .orElse(false);
     }
 
-    public static long getActivationGracePeriodDaysRemaining(User user) {
+    public static long getActivationGracePeriodDaysRemaining(User user, LicenseType licenseType) {
+        if (licenseType.equals(LicenseType.ACADEMIC) || licenseType.equals(LicenseType.HOSPITAL)) {
+            return 3650; // ten years, a pretty long time
+        }
+
         Optional<Instant> gracePeriodEnd = getGracePeriodEnd(user);
         if (!gracePeriodEnd.isPresent()) {
             return 0;

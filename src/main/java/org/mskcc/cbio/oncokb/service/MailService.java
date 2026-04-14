@@ -58,7 +58,7 @@ public class MailService {
     private static final String USER = "user";
 
     private static final String BASE_URL = "baseUrl";
-    private static final String ACTIVATION_GRACE_PERIOD_DAYS = "activationGracePeriodDays";
+    // private static final String ACTIVATION_GRACE_PERIOD_DAYS = "activationGracePeriodDays";
     private static final String HAS_GRACE_PERIOD = "hasGracePeriod";
 
     private static final String EXPIRE_IN_DAYS = "expiresInDays";
@@ -283,7 +283,7 @@ public class MailService {
         Context context = new Context(locale);
         context.setVariable(USER, user);
         context.setVariable(BASE_URL, jHipsterProperties.getMail().getBaseUrl());
-        context.setVariable(ACTIVATION_GRACE_PERIOD_DAYS, SecurityUtils.getActivationGracePeriodDays());
+        // context.setVariable(ACTIVATION_GRACE_PERIOD_DAYS, SecurityUtils.getActivationGracePeriodDays());
         context.setVariable(
             HAS_GRACE_PERIOD,
             !AccountRequestStatus.PENDING_NO_GRACE_PERIOD.equals(user.getAccountRequestStatus())

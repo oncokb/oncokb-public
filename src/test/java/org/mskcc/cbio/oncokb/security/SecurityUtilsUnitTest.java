@@ -2,6 +2,7 @@ package org.mskcc.cbio.oncokb.security;
 
 import org.junit.jupiter.api.Test;
 import org.mskcc.cbio.oncokb.domain.User;
+import org.mskcc.cbio.oncokb.domain.enumeration.LicenseType;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
@@ -136,9 +137,9 @@ public class SecurityUtilsUnitTest {
         User flooredUser = createUserWithCreatedDate(aprilFirst2026);
 
         long olderUserDaysRemaining =
-            SecurityUtils.getActivationGracePeriodDaysRemaining(olderUser);
+            SecurityUtils.getActivationGracePeriodDaysRemaining(olderUser, LicenseType.COMMERCIAL);
         long flooredUserDaysRemaining =
-            SecurityUtils.getActivationGracePeriodDaysRemaining(flooredUser);
+            SecurityUtils.getActivationGracePeriodDaysRemaining(flooredUser, LicenseType.COMMERCIAL);
 
         assertThat(olderUserDaysRemaining).isEqualTo(flooredUserDaysRemaining);
     }
