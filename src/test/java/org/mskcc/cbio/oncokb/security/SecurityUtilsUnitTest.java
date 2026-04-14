@@ -137,9 +137,9 @@ public class SecurityUtilsUnitTest {
         User flooredUser = createUserWithCreatedDate(aprilFirst2026);
 
         long olderUserDaysRemaining =
-            SecurityUtils.getActivationGracePeriodDaysRemaining(olderUser);
+            SecurityUtils.getActivationGracePeriodDaysRemaining(olderUser, LicenseType.COMMERCIAL);
         long flooredUserDaysRemaining =
-            SecurityUtils.getActivationGracePeriodDaysRemaining(flooredUser);
+            SecurityUtils.getActivationGracePeriodDaysRemaining(flooredUser, LicenseType.COMMERCIAL);
 
         assertThat(olderUserDaysRemaining).isEqualTo(flooredUserDaysRemaining);
     }
