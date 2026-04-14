@@ -514,9 +514,9 @@ export class NewAccountForm extends React.Component<INewAccountForm> {
                     <Alert variant={'warning'}>
                       <i className={'mr-2 fa fa-exclamation-triangle'}></i>
                       <span>
-                        You are using a personal email address. You will not get
-                        a grace period while your account request is under
-                        review.
+                        You are using a personal email address. You will not
+                        receive a grace period while your account request is
+                        under review.
                       </span>
                     </Alert>
                   ) : null}
