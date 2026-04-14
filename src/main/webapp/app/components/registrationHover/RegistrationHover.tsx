@@ -136,7 +136,7 @@ export default function RegistrationHover({
           </p>
           <ul>
             <li>Academic user? Registration is free!</li>
-            <li>Hospital or commercial use requires a paid license.</li>
+            <li>Commercial use requires a paid license.</li>
           </ul>
           <p>
             As always, please review our{' '}
