@@ -544,6 +544,21 @@ describe('Tests with login', () => {
     });
   });
 
+  it('User Quick View Modal', async () => {
+    await page.goto(`${CLIENT_URL}admin/user-details`);
+    await page.setViewport(VIEW_PORT_1080);
+    await page.waitFor(WAITING_TIME);
+    await page.click('button[title="Quick view"]');
+    await page.waitForSelector('.modal.show');
+    await page.waitFor(WAITING_TIME);
+    let image = await page.screenshot(
+      getScreenshotConfig('User Quick View Modal')
+    );
+    expect(image).toMatchImageSnapshot({
+      customSnapshotIdentifier: 'User Quick View Modal',
+    });
+  });
+
   it('User Details Page', async () => {
     await page.goto(`${CLIENT_URL}users/admin`);
     await page.setViewport(VIEW_PORT_1080);

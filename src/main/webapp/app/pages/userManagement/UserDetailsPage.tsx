@@ -29,6 +29,7 @@ import {
   getGracePeriodDaysRemaining,
   hasGracePeriodAccess,
 } from 'app/shared/utils/GracePeriodUtils';
+import { UserQuickViewModal } from './UserQuickViewModal';
 
 enum USER_BUTTON_TYPE {
   COMMERCIAL = 'Commercial Users',
@@ -45,6 +46,7 @@ export default class UserDetailsPage extends React.Component<{
   @observable users: UserDTO[] = [];
   @observable loadedUsers = false;
   @observable showUpdateStatusModal = false;
+  @observable showQuickViewModal = false;
   @observable currentSelected: {
     user: UserDTO | undefined;
     authority: USER_AUTHORITY | undefined;
@@ -118,6 +120,34 @@ export default class UserDetailsPage extends React.Component<{
   cancelUpdateActiveStatus() {
     this.showUpdateStatusModal = false;
     this.currentSelected.user = undefined;
+  }
+
+  @action
+  openQuickViewModal(user: UserDTO) {
+    this.showQuickViewModal = true;
+    this.currentSelected.user = user;
+  }
+
+  @action
+  closeQuickViewModal() {
+    this.showQuickViewModal = false;
+    this.currentSelected.user = undefined;
+  }
+
+  @action
+  updateQuickViewUserActiveStatus(authorities: string[]) {
+    if (this.currentSelected.user === undefined) {
+      notifyError(new Error('No user specified'));
+      return;
+    }
+
+    this.showQuickViewModal = false;
+    const userToUpdate: UserDTO = {
+      ...this.currentSelected.user,
+      activated: !this.currentSelected.user.activated,
+      authorities,
+    };
+    this.updateUser(userToUpdate, true);
   }
 
   @action
@@ -238,6 +268,26 @@ export default class UserDetailsPage extends React.Component<{
   }
 
   private columns: SearchColumn<UserDTO>[] = [
+    {
+      id: 'quickView',
+      Header: '',
+      minWidth: 40,
+      sortable: false,
+      filterable: false,
+      className: 'justify-content-center',
+      Cell: (props: { original: UserDTO }) => {
+        return (
+          <Button
+            variant="link"
+            className="p-0"
+            title="Quick view"
+            onClick={() => this.openQuickViewModal(props.original)}
+          >
+            <i className="fa fa-eye"></i>
+          </Button>
+        );
+      },
+    },
     {
       id: 'createdDate',
       Header: <span className={styles.tableHeader}>Created Date</span>,
@@ -490,6 +540,12 @@ export default class UserDetailsPage extends React.Component<{
           user={this.currentSelected.user}
           onCancel={() => this.cancelUpdateActiveStatus()}
           onConfirm={this.updateActiveStatus.bind(this)}
+        />
+        <UserQuickViewModal
+          show={this.showQuickViewModal}
+          user={this.currentSelected.user}
+          onClose={() => this.closeQuickViewModal()}
+          onUpdateActiveStatus={this.updateQuickViewUserActiveStatus.bind(this)}
         />
       </>
     );
