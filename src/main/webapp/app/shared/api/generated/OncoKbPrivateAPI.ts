@@ -2350,10 +2350,14 @@ export default class OncoKbPrivateAPI {
             });
         };
     utilsEvidencesByLevelsGetUsingGETURL(parameters: {
+        'germline' ? : boolean,
         $queryParameters ? : any
     }): string {
         let queryParameters: any = {};
         let path = '/utils/evidences/levels';
+        if (parameters['germline'] !== undefined) {
+            queryParameters['germline'] = parameters['germline'];
+        }
 
         if (parameters.$queryParameters) {
             Object.keys(parameters.$queryParameters).forEach(function(parameterName) {
@@ -2369,8 +2373,10 @@ export default class OncoKbPrivateAPI {
      * Get the list of evidences by levels.
      * @method
      * @name OncoKbPrivateAPI#utilsEvidencesByLevelsGetUsingGET
+     * @param {boolean} germline - false
      */
     utilsEvidencesByLevelsGetUsingGETWithHttpInfo(parameters: {
+        'germline' ? : boolean,
         $queryParameters ? : any,
             $domain ? : string
     }): Promise < request.Response > {
@@ -2385,6 +2391,10 @@ export default class OncoKbPrivateAPI {
         return new Promise(function(resolve, reject) {
             headers['Accept'] = 'application/json';
             headers['Content-Type'] = 'application/json';
+
+            if (parameters['germline'] !== undefined) {
+                queryParameters['germline'] = parameters['germline'];
+            }
 
             if (parameters.$queryParameters) {
                 Object.keys(parameters.$queryParameters).forEach(function(parameterName) {
@@ -2402,8 +2412,10 @@ export default class OncoKbPrivateAPI {
      * Get the list of evidences by levels.
      * @method
      * @name OncoKbPrivateAPI#utilsEvidencesByLevelsGetUsingGET
+     * @param {boolean} germline - false
      */
     utilsEvidencesByLevelsGetUsingGET(parameters: {
+        'germline' ? : boolean,
         $queryParameters ? : any,
             $domain ? : string
     }): Promise < {} > {

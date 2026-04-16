@@ -901,6 +901,15 @@
         "produces": [
           "application/json"
         ],
+        "parameters": [
+          {
+            "name": "germline",
+            "in": "query",
+            "description": "false",
+            "required": false,
+            "type": "boolean"
+          }
+        ],
         "responses": {
           "200": {
             "description": "OK",
