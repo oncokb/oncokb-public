@@ -824,6 +824,22 @@ export default class ActionableGenesPage extends React.Component<
         },
       },
       {
+        id: 'geneticType',
+        Header: <span>Type</span>,
+        accessor: 'germline',
+        minWidth: 65,
+        sortMethod(a: boolean, b: boolean) {
+          return a === b ? 0 : a ? 1 : -1;
+        },
+        Cell(props: { original: Treatment }) {
+          return (
+            <div className={'d-flex justify-content-center'}>
+              <GeneticTypeTag isGermline={props.original.germline} />
+            </div>
+          );
+        },
+      },
+      {
         ...getDefaultColumnDefinition(TABLE_COLUMN_KEY.HUGO_SYMBOL),
         minWidth: 110,
         style: { whiteSpace: 'normal' },
@@ -833,22 +849,16 @@ export default class ActionableGenesPage extends React.Component<
             hashQueries.tab = ANNOTATION_PAGE_TAB_KEYS.FDA;
           }
           return (
-            <div
-              className={'d-flex flex-wrap align-items-center'}
-              style={{ columnGap: '0.5rem' }}
-            >
-              <GenePageLink
-                hugoSymbol={props.original.hugoSymbol}
-                germline={props.original.germline}
-                hashQueries={hashQueries}
-                onClick={() => {
-                  if (this.fdaSectionIsOpen) {
-                    this.props.appStore.toFdaRecognizedContent = true;
-                  }
-                }}
-              />
-              {props.original.germline && <GeneticTypeTag isGermline={true} />}
-            </div>
+            <GenePageLink
+              hugoSymbol={props.original.hugoSymbol}
+              germline={props.original.germline}
+              hashQueries={hashQueries}
+              onClick={() => {
+                if (this.fdaSectionIsOpen) {
+                  this.props.appStore.toFdaRecognizedContent = true;
+                }
+              }}
+            />
           );
         },
       },
