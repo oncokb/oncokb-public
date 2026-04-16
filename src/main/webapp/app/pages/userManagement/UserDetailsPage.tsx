@@ -134,7 +134,7 @@ export default class UserDetailsPage extends React.Component<{
     this.currentSelected.user = undefined;
   }
 
-  @action
+  @action.bound
   updateQuickViewUserActiveStatus(authorities: string[]) {
     if (this.currentSelected.user === undefined) {
       notifyError(new Error('No user specified'));
@@ -150,7 +150,7 @@ export default class UserDetailsPage extends React.Component<{
     this.updateUser(userToUpdate, true);
   }
 
-  @action
+  @action.bound
   updateActiveStatus(sendEmail: boolean, authorities: string[]) {
     this.showUpdateStatusModal = false;
     if (this.currentSelected.user === undefined) {
@@ -539,13 +539,13 @@ export default class UserDetailsPage extends React.Component<{
           show={this.showUpdateStatusModal}
           user={this.currentSelected.user}
           onCancel={() => this.cancelUpdateActiveStatus()}
-          onConfirm={this.updateActiveStatus.bind(this)}
+          onConfirm={this.updateActiveStatus}
         />
         <UserQuickViewModal
           show={this.showQuickViewModal}
           user={this.currentSelected.user}
           onClose={() => this.closeQuickViewModal()}
-          onUpdateActiveStatus={this.updateQuickViewUserActiveStatus.bind(this)}
+          onUpdateActiveStatus={this.updateQuickViewUserActiveStatus}
         />
       </>
     );

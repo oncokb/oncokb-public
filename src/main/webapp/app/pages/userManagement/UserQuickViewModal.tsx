@@ -3,9 +3,9 @@ import { Alert, Button, Col, Modal, Row } from 'react-bootstrap';
 import { AUTHORITIES } from 'app/config/constants';
 import { InfoRow } from 'app/pages/AccountPage';
 import { UserDTO } from 'app/shared/api/generated/API';
-import ExternalLinkIcon from 'app/shared/icons/ExternalLinkIcon';
 import { formatEnumLabel } from 'app/shared/utils/Utils';
 import styles from './UserQuickViewModal.module.scss';
+import { Link } from 'react-router-dom';
 
 type UserQuickViewModalProps = {
   user: UserDTO | undefined;
@@ -30,10 +30,6 @@ function getActivationAuthorities(user: UserDTO | undefined) {
   }
 
   return authorities;
-}
-
-function getUserPageLink(login: string) {
-  return `${window.location.origin}/users/${login}`;
 }
 
 export const UserQuickViewModal: React.FunctionComponent<UserQuickViewModalProps> = props => {
@@ -64,12 +60,12 @@ export const UserQuickViewModal: React.FunctionComponent<UserQuickViewModalProps
           title={<h6>User Page</h6>}
           content={
             user ? (
-              <ExternalLinkIcon
-                link={getUserPageLink(user.login)}
-                style={{ justifyContent: 'flex-start' }}
+              <Link
+                to={`/users/${user.login}`}
+                className="d-flex align-items-center"
               >
                 View user page
-              </ExternalLinkIcon>
+              </Link>
             ) : (
               ''
             )
