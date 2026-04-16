@@ -5,9 +5,14 @@ import styles from './external-link-icon.module.scss';
 const ExternalLinkIcon: React.FunctionComponent<{
   link: string;
   className?: string;
+  style?: React.CSSProperties;
 }> = props => {
   return (
-    <Linkout link={props.link} className={styles.externalLinkContainer}>
+    <Linkout
+      link={props.link}
+      className={styles.externalLinkContainer}
+      style={props.style}
+    >
       <span className={styles.externalLinkContent}>{props.children}</span>
       <i className={`fa fa-external-link ${props.className} ${styles.icon}`} />
     </Linkout>
