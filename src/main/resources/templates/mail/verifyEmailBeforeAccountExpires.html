@@ -13,9 +13,14 @@
             Your OncoKB account will expire in <span th:text="${expiresInDays}"></span> days. Please click the URL below to verify you still own this email address and to renew your account:
         </p>
         <p>
-            <a th:with="verifyUrl=${baseUrl} + '/account/verify',
-              url=(@{${verifyUrl}(key=${user.activationKey},login=${user.login})})" th:href="${url}"
+            <a th:with="url=(@{|${baseUrl}/account/verify?key=${user.activationKey}|})" th:href="${url}"
             th:text="${url}">Verification link</a>
+        </p>
+        <p>
+            If the link above does not work, you can verify your email manually by visiting <a th:with="url=(@{|${baseUrl}/account/verify|})" th:href="${url}" th:text="${url}">verification page</a> and entering the activation key below:
+        </p>
+        <p style="text-align: center;">
+            <strong th:text="${user.activationKey}">activation-key</strong>
         </p>
         <p>
             <div th:text="#{email.closing}">Sincerely,</div>

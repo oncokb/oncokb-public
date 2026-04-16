@@ -1,6 +1,12 @@
 import * as request from "superagent";
 
 type CallbackHandler = (err: any, res ? : request.Response) => void;
+export type AccountActivationVM = {
+    'activated': boolean
+
+        'hasGracePeriod': boolean
+
+};
 export type Activation = {
     'activationDate': string
 
@@ -1676,17 +1682,12 @@ export default class API {
     };
     activateAccountUsingGETURL(parameters: {
         'key': string,
-        'login': string,
         $queryParameters ? : any
     }): string {
         let queryParameters: any = {};
         let path = '/api/activate';
         if (parameters['key'] !== undefined) {
             queryParameters['key'] = parameters['key'];
-        }
-
-        if (parameters['login'] !== undefined) {
-            queryParameters['login'] = parameters['login'];
         }
 
         if (parameters.$queryParameters) {
@@ -1704,11 +1705,9 @@ export default class API {
      * @method
      * @name API#activateAccountUsingGET
      * @param {string} key - key
-     * @param {string} login - login
      */
     activateAccountUsingGETWithHttpInfo(parameters: {
         'key': string,
-        'login': string,
         $queryParameters ? : any,
         $domain ? : string
     }): Promise < request.Response > {
@@ -1732,15 +1731,6 @@ export default class API {
                 return;
             }
 
-            if (parameters['login'] !== undefined) {
-                queryParameters['login'] = parameters['login'];
-            }
-
-            if (parameters['login'] === undefined) {
-                reject(new Error('Missing required  parameter: login'));
-                return;
-            }
-
             if (parameters.$queryParameters) {
                 Object.keys(parameters.$queryParameters).forEach(function(parameterName) {
                     var parameter = parameters.$queryParameters[parameterName];
@@ -1758,14 +1748,12 @@ export default class API {
      * @method
      * @name API#activateAccountUsingGET
      * @param {string} key - key
-     * @param {string} login - login
      */
     activateAccountUsingGET(parameters: {
         'key': string,
-        'login': string,
         $queryParameters ? : any,
         $domain ? : string
-    }): Promise < boolean > {
+    }): Promise < AccountActivationVM > {
         return this.activateAccountUsingGETWithHttpInfo(parameters).then(function(response: request.Response) {
             return response.body;
         });

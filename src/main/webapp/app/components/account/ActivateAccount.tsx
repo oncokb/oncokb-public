@@ -2,13 +2,13 @@ import React from 'react';
 import { RouterStore } from 'mobx-react-router';
 import * as QueryString from 'query-string';
 import client from 'app/shared/api/clientInstance';
-import { observable } from 'mobx';
+import { observable, action } from 'mobx';
 import LoadingIndicator from 'app/components/loadingIndicator/LoadingIndicator';
 import { remoteData } from 'cbioportal-frontend-commons';
 import { Link } from 'react-router-dom';
 import { ONCOKB_TM, PAGE_ROUTE } from 'app/config/constants';
 import { inject, observer } from 'mobx-react';
-import { Col, Row, Alert } from 'react-bootstrap';
+import { Alert, Form, Button } from 'react-bootstrap';
 import SmallPageContainer from '../SmallPageContainer';
 import MessageToContact from 'app/shared/texts/MessageToContact';
 import * as styles from '../../index.module.scss';
@@ -19,8 +19,7 @@ export default class ActivateAccount extends React.Component<{
   routing: RouterStore;
 }> {
   @observable activateKey: string;
-  @observable login: string;
-  @observable hasGracePeriod?: boolean;
+  @observable manualKey = '';
 
   constructor(props: Readonly<{ routing: RouterStore }>) {
     super(props);
@@ -29,31 +28,58 @@ export default class ActivateAccount extends React.Component<{
     if (queryStrings.key) {
       this.activateKey = queryStrings.key as string;
     }
-    if (queryStrings.login) {
-      this.login = queryStrings.login as string;
-    }
-    if (queryStrings.hasGracePeriod) {
-      const hasGracePeriod = (queryStrings.hasGracePeriod as string).toLowerCase();
-      if (hasGracePeriod === 'true') {
-        this.hasGracePeriod = true;
-      } else if (hasGracePeriod === 'false') {
-        this.hasGracePeriod = false;
-      }
-    }
   }
 
-  readonly activateAccount = remoteData<boolean>({
+  readonly activateAccount = remoteData({
     invoke: () => {
-      if (this.activateKey && this.login) {
+      if (this.activateKey) {
         return client.activateAccountUsingGET({
           key: this.activateKey,
-          login: this.login,
         });
       } else {
-        return Promise.reject('The key or login is empty');
+        return Promise.reject('The activation key is empty');
       }
     },
   });
+
+  @action.bound
+  submitManualKey() {
+    const trimmed = this.manualKey.trim();
+    if (trimmed) {
+      this.activateKey = trimmed;
+    }
+  }
+
+  getManualKeyForm = () => {
+    return (
+      <div>
+        <Alert variant={'info'} className={styles.biggerText}>
+          <p>
+            Please paste your activation key below to verify your email address.
+            You can find the key in the verification email you received.
+          </p>
+          <Form.Group className={'mb-3'}>
+            <Form.Label>Activation Key</Form.Label>
+            <Form.Control
+              type="text"
+              value={this.manualKey}
+              onChange={action((e: React.ChangeEvent<HTMLInputElement>) => {
+                this.manualKey = e.target.value;
+              })}
+              placeholder="Paste your activation key here"
+            />
+          </Form.Group>
+          <Button
+            variant="primary"
+            disabled={!this.manualKey.trim()}
+            onClick={this.submitManualKey}
+          >
+            Verify Email Address
+          </Button>
+        </Alert>
+      </div>
+    );
+  };
 
   getSuccessfulMessage = () => {
     return (
@@ -61,7 +87,7 @@ export default class ActivateAccount extends React.Component<{
         <Alert variant={'info'} className={styles.biggerText}>
           <p>
             Thank you for verifying your email address.{' '}
-            {this.activateAccount.result && (
+            {this.activateAccount.result?.activated && (
               <span>
                 You can now <Link to={PAGE_ROUTE.LOGIN}>login</Link> to your{' '}
                 {ONCOKB_TM} account.
@@ -69,20 +95,25 @@ export default class ActivateAccount extends React.Component<{
             )}
           </p>
 
-          {!this.activateAccount.result && (
+          {!this.activateAccount.result?.activated && (
             <p>
-              {this.hasGracePeriod === true ? (
-                <span>You have access while your request is under review.</span>
+              {this.activateAccount.result?.hasGracePeriod ? (
+                <>
+                  <span>
+                    You have access while your request is under review.
+                  </span>
+                  <span>
+                    {' '}
+                    You may now <Link to={PAGE_ROUTE.LOGIN}>log in</Link> to
+                    your {ONCOKB_TM} account.
+                  </span>
+                </>
               ) : (
                 <span>
                   You do not have a grace period. Access will be enabled after
                   approval.
                 </span>
-              )}{' '}
-              <span>
-                You may now <Link to={PAGE_ROUTE.LOGIN}>log in</Link> to your{' '}
-                {ONCOKB_TM} account.
-              </span>
+              )}
             </p>
           )}
           <MessageToContact
@@ -118,6 +149,10 @@ export default class ActivateAccount extends React.Component<{
   };
 
   render() {
+    if (!this.activateKey) {
+      return <SmallPageContainer>{this.getManualKeyForm()}</SmallPageContainer>;
+    }
+
     return (
       <SmallPageContainer>
         {this.activateAccount.isPending ? (

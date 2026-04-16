@@ -381,13 +381,12 @@ export default class CompanyPage extends React.Component<ICompanyPage> {
   @action.bound
   async verifyUserEmail(user: UserDTO) {
     try {
-      const activated = await client.activateAccountUsingGET({
+      const result = await client.activateAccountUsingGET({
         key: user.activationKey,
-        login: user.login,
       });
       const updatedUser = {
         ...user,
-        activated,
+        activated: result.activated,
         activationKey: '',
         emailVerified: true,
       };

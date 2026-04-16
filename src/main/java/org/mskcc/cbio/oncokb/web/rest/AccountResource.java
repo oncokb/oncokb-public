@@ -5,6 +5,7 @@ import org.mskcc.cbio.oncokb.domain.Company;
 import org.mskcc.cbio.oncokb.domain.CompanyCandidate;
 import org.mskcc.cbio.oncokb.domain.Token;
 import org.mskcc.cbio.oncokb.domain.User;
+import org.mskcc.cbio.oncokb.domain.enumeration.AccountRequestStatus;
 import org.mskcc.cbio.oncokb.domain.enumeration.LicenseStatus;
 import org.mskcc.cbio.oncokb.domain.enumeration.LicenseType;
 import org.mskcc.cbio.oncokb.repository.UserRepository;
@@ -145,46 +146,44 @@ public class AccountResource {
      * @throws RuntimeException {@code 500 (Internal Server Error)} if the user couldn't be activated.
      */
     @GetMapping("/activate")
-    public boolean activateAccount(@RequestParam(value = "key") String key, @RequestParam(value = "login") String login) {
-        Optional<User> userOptional = userService.getUserByLogin(login);
-        if (!userOptional.isPresent() || (userOptional.get().getActivationKey() != null && !userOptional.get().getActivationKey().equals(key))) {
-            throw new CustomMessageRuntimeException("Your user account could not be activated as no user was found associated with this activation key.");
-        } else {
-            if (userOptional.get().getActivationKey() == null) {
-                return userOptional.get().getActivated();
-            }
-
-            boolean newUserActivation = !userOptional.get().getActivated();
-            userOptional = userService.activateRegistration(key);
-
-            User user;
-            if (userOptional.isPresent()) {
-                user = userOptional.get();
-            } else {
-                throw new CustomMessageRuntimeException("User could not be found");
-            }
-
-            if (newUserActivation) {
-                UserDTO userDTO = userMapper.userToUserDTO(user);
-                return activateUser(userDTO, userService.findCompanyCandidate(userDTO));
-            } else {
-                // This user exists before, we are looking for to extend the expiration date of all tokens associated
-                List<Token> userTokens = tokenService.findByUser(user);
-                boolean userAccountCanNOTBeExtended = !userTokens.stream().filter(token -> token.isRenewable()).findAny().isPresent();
-                if (userAccountCanNOTBeExtended) {
-                    throw new CustomMessageRuntimeException("Your account token is expired and cannot be extended.");
-                } else {
-                    Instant defaultExpiration = Instant.now().plusSeconds(tokenProvider.EXPIRATION_TIME_IN_SECONDS);
-                    tokenService.findByUser(user).forEach(token -> {
-                        // if the extended date based on the current token expiration is before the date in 6month, we should use the bigger one
-                        Instant expirationBased = token.getExpiration().plusSeconds(tokenProvider.EXPIRATION_TIME_IN_SECONDS);
-                        token.setExpiration(expirationBased.isBefore(defaultExpiration) ? defaultExpiration : expirationBased);
-                        tokenService.save(token);
-                    });
-                }
-            }
-            return true;
+    public AccountActivationVM activateAccount(@RequestParam(value = "key") String key) {
+        Optional<User> userOptional = userService.getUserByActivationKey(key);
+        if (!userOptional.isPresent()) {
+            throw new CustomMessageRuntimeException("Your account could not be activated because the activation key is invalid or has already been used.");
         }
+
+        User existingUser = userOptional.get();
+        UserDetailsDTO existingUserDetails = userDetailsService.findOneByUser(existingUser)
+            .orElseThrow(() -> new CustomMessageRuntimeException("User details could not be found"));
+        boolean hasGracePeriod = AccountRequestStatus.PENDING.equals(existingUserDetails.getAccountRequestStatus())
+            && SecurityUtils.isWithinActivationGracePeriod(existingUser, existingUserDetails.getLicenseType());
+        boolean newUserActivation = !existingUser.getActivated();
+
+        userOptional = userService.activateRegistration(key);
+        User user = userOptional.orElseThrow(() -> new CustomMessageRuntimeException("User could not be found"));
+
+        boolean activated;
+        if (newUserActivation) {
+            UserDTO userDTO = userMapper.userToUserDTO(user);
+            activated = activateUser(userDTO, userService.findCompanyCandidate(userDTO));
+        } else {
+            // This user exists before, we are looking to extend the expiration date of all tokens associated
+            List<Token> userTokens = tokenService.findByUser(user);
+            boolean userAccountCanNOTBeExtended = !userTokens.stream().filter(token -> token.isRenewable()).findAny().isPresent();
+            if (userAccountCanNOTBeExtended) {
+                throw new CustomMessageRuntimeException("Your account token is expired and cannot be extended.");
+            }
+            Instant defaultExpiration = Instant.now().plusSeconds(tokenProvider.EXPIRATION_TIME_IN_SECONDS);
+            tokenService.findByUser(user).forEach(token -> {
+                // if the extended date based on the current token expiration is before the date in 6month, we should use the bigger one
+                Instant expirationBased = token.getExpiration().plusSeconds(tokenProvider.EXPIRATION_TIME_IN_SECONDS);
+                token.setExpiration(expirationBased.isBefore(defaultExpiration) ? defaultExpiration : expirationBased);
+                tokenService.save(token);
+            });
+            activated = true;
+        }
+
+        return new AccountActivationVM(activated, hasGracePeriod);
     }
 
     private boolean activateUser(
