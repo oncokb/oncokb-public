@@ -825,7 +825,7 @@ export default class ActionableGenesPage extends React.Component<
       },
       {
         id: 'geneticType',
-        Header: <span>Type</span>,
+        Header: <span>Setting</span>,
         accessor: 'germline',
         minWidth: 65,
         sortMethod(a: boolean, b: boolean) {
