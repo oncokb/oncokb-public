@@ -550,6 +550,7 @@ public class AccountResourceIT {
 
         UserDetails userDetails = new UserDetails();
         userDetails.setUser(user);
+        userDetails.setAccountRequestStatus(AccountRequestStatus.PENDING);
         userDetailsRepository.saveAndFlush(userDetails);
 
         restAccountMockMvc.perform(get("/api/activate?key={activationKey}&login={userLogin}", activationKey, userLogin))
@@ -588,6 +589,7 @@ public class AccountResourceIT {
 
         UserDetails userDetails = new UserDetails();
         userDetails.setUser(user);
+        userDetails.setAccountRequestStatus(AccountRequestStatus.PENDING);
         userDetailsRepository.saveAndFlush(userDetails);
 
         restAccountMockMvc.perform(get("/api/activate?key={activationKey}&login={userLogin}", activationKey, userLogin))
@@ -626,6 +628,7 @@ public class AccountResourceIT {
 
         UserDetails userDetails = new UserDetails();
         userDetails.setUser(user);
+        userDetails.setAccountRequestStatus(AccountRequestStatus.PENDING);
         userDetailsRepository.saveAndFlush(userDetails);
 
         restAccountMockMvc.perform(get("/api/activate?key={activationKey}&login={userLogin}", activationKey, userLogin))
