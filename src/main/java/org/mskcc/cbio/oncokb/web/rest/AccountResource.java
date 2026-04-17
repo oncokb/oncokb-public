@@ -156,6 +156,7 @@ public class AccountResource {
         UserDetailsDTO existingUserDetails = userDetailsService.findOneByUser(existingUser)
             .orElseThrow(() -> new CustomMessageRuntimeException("User details could not be found"));
         boolean hasGracePeriod = AccountRequestStatus.PENDING.equals(existingUserDetails.getAccountRequestStatus())
+            && existingUserDetails.getLicenseType() != null
             && SecurityUtils.isWithinActivationGracePeriod(existingUser, existingUserDetails.getLicenseType());
         boolean newUserActivation = !existingUser.getActivated();
 
