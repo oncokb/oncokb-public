@@ -304,8 +304,7 @@ public class MailServiceIT {
         assertThat(message.getAllRecipients()[0].toString()).isEqualTo(user.getEmail());
         assertThat(message.getFrom()[0].toString()).isEqualTo(jHipsterProperties.getMail().getFrom());
         assertThat(content).isNotEmpty();
-        assertThat(content).contains("hasGracePeriod=true");
-        // assertThat(content).contains("day grace period");
+        assertThat(content).contains("you will be able to access the OncoKB website");
         assertThat(message.getDataHandler().getContentType()).isEqualTo("text/html;charset=UTF-8");
     }
 
@@ -320,7 +319,6 @@ public class MailServiceIT {
         verify(javaMailSender).send(messageCaptor.capture());
         MimeMessage message = messageCaptor.getValue();
         String content = message.getContent().toString();
-        assertThat(content).contains("hasGracePeriod=false");
         assertThat(content).contains("Access will be enabled after approval is complete");
     }
 

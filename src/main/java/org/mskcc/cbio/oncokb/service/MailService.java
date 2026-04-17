@@ -134,6 +134,7 @@ public class MailService {
         }
         message.setSubject(subject);
         message.setText(content, isHtml);
+        mimeMessage.setHeader("Content-Transfer-Encoding", "base64");
 
         if (attachmentFilesNames != null) {
             attachmentFilesNames.forEach(filename -> {

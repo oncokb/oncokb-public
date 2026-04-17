@@ -226,17 +226,18 @@ export class RegisterPage extends React.Component<IRegisterProps> {
           the email to complete registration.
         </p>
         <p>
-          After validating your email address, you will be able to access the
-          OncoKB website. In parallel, your request will be reviewed on an
-          individual basis, and you may be contacted with follow-up questions.{' '}
           {noGracePeriod ? (
             <span>
-              You will not have a grace period since you are using a personal
-              email address.
+              While we review your request, you will not have a grace period to
+              browse the website since you are using a personal email address.
             </span>
           ) : (
             <span>
-              You will have access while your license request is under review.
+              After validating your email address, you will be able to access
+              the OncoKB website. In parallel, your request will be reviewed on
+              an individual basis, and you may be contacted with follow-up
+              questions. You will have access while your license request is
+              under review.
             </span>
           )}{' '}
           {licenseType === LicenseType.ACADEMIC ? (

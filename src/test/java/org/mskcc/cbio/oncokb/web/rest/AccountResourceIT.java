@@ -548,6 +548,11 @@ public class AccountResourceIT {
 
         userRepository.saveAndFlush(user);
 
+        UserDetails userDetails = new UserDetails();
+        userDetails.setUser(user);
+        userDetails.setAccountRequestStatus(AccountRequestStatus.PENDING);
+        userDetailsRepository.saveAndFlush(userDetails);
+
         restAccountMockMvc.perform(get("/api/activate?key={activationKey}&login={userLogin}", activationKey, userLogin))
             .andExpect(status().isOk());
 
@@ -582,6 +587,11 @@ public class AccountResourceIT {
         companyDTO.setCompanyDomains(Collections.singleton(companyDomain));
         companyRepository.saveAndFlush(companyMapper.toEntity(companyDTO));
 
+        UserDetails userDetails = new UserDetails();
+        userDetails.setUser(user);
+        userDetails.setAccountRequestStatus(AccountRequestStatus.PENDING);
+        userDetailsRepository.saveAndFlush(userDetails);
+
         restAccountMockMvc.perform(get("/api/activate?key={activationKey}&login={userLogin}", activationKey, userLogin))
             .andExpect(status().isOk());
 
@@ -615,6 +625,11 @@ public class AccountResourceIT {
         companyDTO.setCompanyType(CompanyType.PARENT);
         companyDTO.setCompanyDomains(Collections.singleton(companyDomain));
         companyRepository.saveAndFlush(companyMapper.toEntity(companyDTO));
+
+        UserDetails userDetails = new UserDetails();
+        userDetails.setUser(user);
+        userDetails.setAccountRequestStatus(AccountRequestStatus.PENDING);
+        userDetailsRepository.saveAndFlush(userDetails);
 
         restAccountMockMvc.perform(get("/api/activate?key={activationKey}&login={userLogin}", activationKey, userLogin))
             .andExpect(status().isOk());
