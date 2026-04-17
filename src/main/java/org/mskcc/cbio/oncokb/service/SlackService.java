@@ -8,6 +8,7 @@ import com.slack.api.methods.SlackApiException;
 import com.slack.api.methods.request.views.ViewsOpenRequest;
 import com.slack.api.methods.response.conversations.ConversationsHistoryResponse;
 import com.slack.api.methods.response.views.ViewsOpenResponse;
+import com.slack.api.model.ErrorResponseMetadata;
 import com.slack.api.model.Message;
 import com.slack.api.model.block.*;
 import com.slack.api.model.block.composition.*;
@@ -798,12 +799,17 @@ public class SlackService {
         try {
             ViewsOpenResponse response = slack.methods().viewsOpen(request);
             if (!response.isOk()) {
-                log.info("Send the modal to slack with error " + response.getError() + ". Response meta data message: " + response.getResponseMetadata().getMessages());
+                ErrorResponseMetadata metadata = response.getResponseMetadata();
+                if (metadata != null) {
+                    log.error("Send the modal to slack with error " + response.getError() + ". Response meta data message: " + metadata.getMessages());
+                } else {
+                    log.error("Send the modal to slack with error " + response.getError() + ".");
+                }
             } else {
                 log.info("Sent the modal to slack");
             }
         } catch (Exception e) {
-            log.warn("Failed to send modal to slack");
+            log.error("Failed to send modal to slack", e);
         }
     }
 
@@ -811,21 +817,30 @@ public class SlackService {
         Optional<DropdownEmailOption> mailOption = Arrays.stream(DropdownEmailOption.values()).filter(mo -> mo.getActionId() == actionId).findAny();
 
         final String DEFAULT_SUBJECT = "License for " + userDTO.getLicenseType().getName() + " of OncoKB";
-        final String COMPANY_LICENSE_SUBJECT = "OncoKB - " + userDTO.getCompanyName() + " license options";
-        final String GREETING = "Dear " + userDTO.getFirstName() + ' ' + userDTO.getLastName() + ",\n\n" +
-            "Thank you for your interest in the " + userDTO.getLicenseType().getName() + " license for OncoKB.\n\n";
+        final String GREETING = "Dear " + userDTO.getFirstName() + ' ' + userDTO.getLastName() + ",\n\n";
+        final String DEFAULT_INTRO = "Thank you for your interest in the " + userDTO.getLicenseType().getName() + " license for OncoKB.\n\n";
         final String CLOSING = "\nSincerely,\nThe OncoKB Team";
 
         List<LayoutBlock> layoutBlocks = new ArrayList<>();
         ViewTitle title = ViewTitle.builder().type(PlainTextObject.TYPE).build(); // Max 24 characters
         String callbackId = null;
         String subject = null;
-        StringBuilder bodySb = new StringBuilder().append(GREETING);
+        String intro = DEFAULT_INTRO;
         if (mailOption.isPresent()) {
             try {
                 title.setText(mailOption.get().getModalTitle().orElse(""));
                 callbackId = mailOption.get().getConfirmActionId().isPresent() ? mailOption.get().getConfirmActionId().get().getId() : "";
-                subject = mailOption.get().getModalSubject().get().equals(ModalEmailSubject.DEFAULT) ? DEFAULT_SUBJECT : COMPANY_LICENSE_SUBJECT;
+                subject = DEFAULT_SUBJECT;
+                if (MailType.CLARIFY_COMMERCIAL_USE.equals(mailOption.get().getMailType())) {
+                    intro = "Thank you for your interest in OncoKB.\n\n";
+                }
+            } catch (Exception e) {
+                log.warn("Unable to find email template file");
+            }
+        }
+        StringBuilder bodySb = new StringBuilder().append(GREETING).append(intro);
+        if (mailOption.isPresent()) {
+            try {
                 bodySb.append(getStringFromResourceTemplateMailTextFile(mailOption.get().getMailType().getStringTemplateName().orElse("")));
             } catch (Exception e) {
                 log.warn("Unable to find email template file");

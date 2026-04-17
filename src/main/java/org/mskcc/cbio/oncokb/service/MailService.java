@@ -255,8 +255,9 @@ public class MailService {
     public void sendEmailFromSlack(UserDTO user, String subject, String body, MailType mailType, String sendBy) {
         try {
             String defaultEmailSendFrom = applicationProperties.getEmailAddresses().getRegistrationAddress();
+            log.info("defaultEmailSendFrom in sendEmailFromSlack is '{}'", defaultEmailSendFrom);
             String ccAddress = null;
-            if (MailType.LICENSE_OPTIONS.equals(mailType)) {
+            if (MailType.CLARIFY_HOSPITAL_USE.equals(mailType) || MailType.CLARIFY_COMMERCIAL_USE.equals(mailType)) {
                 defaultEmailSendFrom = applicationProperties.getEmailAddresses().getLicenseAddress();
                 ccAddress = defaultEmailSendFrom;
             }
@@ -264,7 +265,7 @@ public class MailService {
             addUserMailsRecord(user, mailType, defaultEmailSendFrom, StringUtils.isNotEmpty(sendBy) ? sendBy : "Through slack, unknown sender");
             log.info("Sent email to User '{}'", user.getEmail());
         } catch (MailException | MessagingException e) {
-            log.warn("Email could not be sent to user '{}'", user.getEmail(), e);
+            log.error("Email could not be sent to user '{}'", user.getEmail(), e);
         }
     }
 

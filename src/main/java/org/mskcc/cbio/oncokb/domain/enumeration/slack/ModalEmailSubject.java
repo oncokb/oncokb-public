@@ -13,5 +13,4 @@ package org.mskcc.cbio.oncokb.domain.enumeration.slack;
  */
 public enum ModalEmailSubject {
     DEFAULT // "License for " + userDTO.getLicenseType().getName() + " of OncoKB"
-    , COMPANY // "OncoKB - " + userDTO.getCompanyName() + " license options"
 }

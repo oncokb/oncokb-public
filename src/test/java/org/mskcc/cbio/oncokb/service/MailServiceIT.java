@@ -409,7 +409,7 @@ public class MailServiceIT {
     }
 
     @Test
-    public void testSendEmailFromSlackLicenseOptions() throws MessagingException, IOException {
+    public void testSendEmailFromSlackHospitalUseClarification() throws MessagingException, IOException {
         // Mainly test the email send from
         String TEST_SUB = "testSubject";
         String TEST_USER_EMAIL = "john.doe@example.com";
@@ -419,7 +419,29 @@ public class MailServiceIT {
         user.setEmail(TEST_USER_EMAIL);
         user.setLangKey("en");
 
-        MailType mailType = MailType.LICENSE_OPTIONS;
+        MailType mailType = MailType.CLARIFY_HOSPITAL_USE;
+
+        mailService.sendEmailFromSlack(user, TEST_SUB, "testBody", mailType, "test");
+        verify(javaMailSender).send(messageCaptor.capture());
+        MimeMessage message = messageCaptor.getValue();
+        assertThat(message.getSubject()).isEqualTo(TEST_SUB);
+        assertThat(message.getAllRecipients()[0].toString()).isEqualTo(TEST_USER_EMAIL);
+        assertThat(message.getFrom()[0].toString()).isEqualTo(LICENSE_ADDR);
+        assertThat(message.getRecipients(Message.RecipientType.CC) != null && message.getRecipients(Message.RecipientType.CC).length == 1).isTrue();
+        assertThat(message.getRecipients(Message.RecipientType.CC)[0].toString()).isEqualTo(LICENSE_ADDR);
+    }
+
+    @Test
+    public void testSendEmailFromSlackCommercialUseClarification() throws MessagingException, IOException {
+        String TEST_SUB = "testSubject";
+        String TEST_USER_EMAIL = "john.doe@example.com";
+
+        UserDTO user = new UserDTO();
+        user.setLogin("john");
+        user.setEmail(TEST_USER_EMAIL);
+        user.setLangKey("en");
+
+        MailType mailType = MailType.CLARIFY_COMMERCIAL_USE;
 
         mailService.sendEmailFromSlack(user, TEST_SUB, "testBody", mailType, "test");
         verify(javaMailSender).send(messageCaptor.capture());

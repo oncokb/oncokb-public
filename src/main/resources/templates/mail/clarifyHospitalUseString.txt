@@ -1,0 +1,9 @@
+To move forward, could you share a little more information – in particular, we would like to understand the specific context of your OncoKB use-case, and how you envision implementing it into your workflow.
+
+Please provide additional details about the context of your OncoKB clinical use-case based on the following questions:
+- Would OncoKB be used for variant interpretation, clinical decision making, or both?
+- Would OncoKB information be incorporated into annotated NGS reports in any way?
+- Are you interested in having programmatic API access to OncoKB?
+- For what volume of patients per year do you anticipate using OncoKB?
+
+Thank you for your interest, and we look forward to hearing from you.
