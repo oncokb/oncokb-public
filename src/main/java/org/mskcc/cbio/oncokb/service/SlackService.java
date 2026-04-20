@@ -111,7 +111,7 @@ public class SlackService {
 
         log.debug("Sending notification to admin group that a user has registered a new account");
         if (StringUtils.isEmpty(this.applicationProperties.getSlack().getUserRegistrationWebhook())) {
-            log.debug("\tSkipped, the webhook is not configured");
+            log.warn("Failed to send user registration notification to slack - webhook is not configured");
         } else {
             List<LayoutBlock> layoutBlocks = this.buildBlocks(user, trialAccountActivated, null, company);
             this.sendBlocks(this.applicationProperties.getSlack().getUserRegistrationWebhook(), layoutBlocks);
@@ -122,7 +122,7 @@ public class SlackService {
     public void sendUserApiAccessRequestToChannel(UserDTO user) {
         log.debug("Sending notification to admin group that a user has requested API access");
         if (StringUtils.isEmpty(this.applicationProperties.getSlack().getUserRegistrationWebhook())) {
-            log.debug("\tSkipped, the webhook is not configured");
+            log.warn("Failed to send API access request notification to slack - webhook is not configured");
         } else {
             List<LayoutBlock> layoutBlocks = new ArrayList<>();
 
@@ -166,7 +166,7 @@ public class SlackService {
             // This is an automatic message when user from whitelist is registered.
             WebhookResponse response = slack.send(this.applicationProperties.getSlack().getUserRegistrationWebhook(), payload);
         } catch (IOException e) {
-            log.warn("Failed to send message to slack");
+            log.warn("Failed to send approved confirmation message to slack", e);
         }
     }
 
@@ -193,7 +193,7 @@ public class SlackService {
                 context
             );
         } catch (IOException e) {
-            log.warn("Failed to send message to slack");
+            log.warn("Failed to send trial agreement confirmation message to slack", e);
         }
     }
 
