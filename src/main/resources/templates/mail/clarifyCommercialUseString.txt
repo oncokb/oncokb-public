@@ -1,0 +1,8 @@
+To move forward, could you share a little more information – in particular, we would like to understand the specific context of your OncoKB use-case, and how you envision implementing it into your workflow.
+
+As far as licensing terms, MSK offers the following options:
+- For research at commercial companies, an annual flat fee based on company size
+- For annotation of clinical reports, a charge per report based on annual volume
+- For incorporation into a product, a shared royalty model
+
+Please feel free to provide any additional information you think could be helpful. Thank you for your interest, and we look forward to hearing from you.

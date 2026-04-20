@@ -622,7 +622,7 @@ public class SlackControllerIT {
 
     private void checkEmail(MimeMessage message, MailType mailType) throws IOException, MessagingException {
         assertThat(message.getAllRecipients()[0].toString()).isEqualTo(DEFAULT_USER_EMAIL);
-        if (mailType == MailType.LICENSE_OPTIONS) {
+        if (mailType == MailType.CLARIFY_HOSPITAL_USE || mailType == MailType.CLARIFY_COMMERCIAL_USE) {
             assertThat(message.getFrom()[0].toString()).isEqualTo(LICENSE_ADDR);
         } else if (mailType == MailType.ACTIVATE_FREE_TRIAL) {
             assertThat(message.getFrom()[0].toString()).isEqualTo(DEFAULT_ADDR);

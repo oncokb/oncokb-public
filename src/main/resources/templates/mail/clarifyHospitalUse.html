@@ -1,27 +1,25 @@
 <!DOCTYPE html>
 <html xmlns:th="http://www.thymeleaf.org">
 <head>
-  <title th:text="#{email.license.options.title(${user.companyName})}"></title>
+  <title th:text="#{email.license.clarify.title(${user.licenseType.name})}"></title>
   <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
   <link rel="shortcut icon" th:href="@{|${baseUrl}/favicon.ico|}" />
 </head>
 <body>
 <p th:text="'Dear ' + ${user.firstName} + ' ' + ${user.lastName} + ','"></p>
 
-<p th:text="'Thank you for your interest in the ' + ${license} + ' license for OncoKB.'"></p>
+<p>Thank you for your interest in the Hospital Use license for OncoKB.</p>
 
 <p>
   To move forward, could you share a little more information – in particular, we would like to understand the specific context of your OncoKB use-case, and how you envision implementing it into your workflow.
 </p>
-<p>
-  As far as licensing terms, MSK offers the following options
-  - a flat fee for research in commercial companies
-  - charge per report on a tiered fee schedule depending on the volume of reports generated, with a set minimum annual royalty
-  - hybrid of both
-</p>
-<p>
-  Toward that, does <span th:text="${user.companyName}"></span> have a budget in mind for an OncoKB License? If applicable, perhaps a conference call can be arranged as a next step.
-</p>
+<p>Please provide additional details about the context of your OncoKB clinical use-case based on the following questions:</p>
+<ul>
+  <li>Would OncoKB be used for variant interpretation, clinical decision making, or both?</li>
+  <li>Would OncoKB information be incorporated into annotated NGS reports in any way?</li>
+  <li>Are you interested in having programmatic API access to OncoKB?</li>
+  <li>For what volume of patients per year do you anticipate using OncoKB?</li>
+</ul>
 <p>
   Thank you for your interest, and we look forward to hearing from you.
 </p>
