@@ -192,34 +192,43 @@ public class AccountResource {
         @NotNull CompanyCandidate companyCandidate
     ) {
         boolean userIsActivated = false;
+        log.info("Activating user: {}", userDTO.getLogin());
 
         // When the possible company is on LIMITED tier, we proceed with the manual approval process
         if (!companyCandidate.getCanAssociate()) {
+            log.info("`{}' cannot be associated with a company. Proceeding with manual approval.", userDTO.getLogin());
             Company limitedCompany = null;
             if (companyCandidate.getCompanyCandidate().isPresent()) {
                 limitedCompany = companyCandidate.getCompanyCandidate().get();
             }
+            log.info("`{}' is associated with company `{}`.", userDTO.getLogin(), limitedCompany != null ? limitedCompany.getName() : "N/A");
             slackService.sendUserRegistrationToChannel(userDTO, userService.isUserOnTrial(userDTO), limitedCompany);
         } else {
             Company company = companyCandidate.getCompanyCandidate().get();
+            log.info("`{}' is associated with company `{}`.", userDTO.getLogin(), company.getName());
             if (company.getLicenseStatus().equals(LicenseStatus.REGULAR)) {
+                log.info("Company `{}` has a regular license. Activating user `{}` directly.", company.getName(), userDTO.getLogin());
                 Optional<Boolean> apiRequestedOptional = Optional.ofNullable(userDTO.getAdditionalInfo())
                     .map(AdditionalInfoDTO::getApiAccessRequest)
                     .map(ApiAccessRequest::isRequested);
                 if (apiRequestedOptional.isPresent() && apiRequestedOptional.get() && LicenseType.ACADEMIC.equals(company.getLicenseType())) {
                     // if user specifically asked for API access, we need to send the justification to user channel for approval
+                    log.info("User `{}` requested API access. Sending the request to slack for approval.", userDTO.getLogin());
                     slackService.sendUserRegistrationToChannel(userDTO, userService.isUserOnTrial(userDTO), company);
                 } else {
                     // Don't send the automated approval message to slack if the company is on trial
                     // We only want a message when the user accepts the trial license agreement.
+                    log.info("User `{}` did not request API access or company `{}` has a non-academic license. Activating user `{}` directly.", userDTO.getLogin(), company.getName(), userDTO.getLogin());
                     userService.updateUserWithCompanyLicense(userDTO, company, false, false);
                     userService.approveUser(userDTO, false);
                     slackService.sendApprovedConfirmation(userDTO, company);
+                    log.info("User `{}` has been activated.", userDTO.getLogin());
                     userIsActivated = true;
                 }
             }
         }
 
+        log.info("Finished activation process for user `{}`. Activated: {}", userDTO.getLogin(), userIsActivated);
         return userIsActivated;
     }
 
