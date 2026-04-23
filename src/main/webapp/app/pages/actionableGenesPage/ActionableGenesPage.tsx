@@ -661,7 +661,7 @@ export default class ActionableGenesPage extends React.Component<
 
   @autobind
   downloadAssociation() {
-    const header = ['Level', 'Gene', 'Alterations', 'Cancer Types'];
+    const header = ['Level', 'Setting', 'Gene', 'Alterations', 'Cancer Types'];
     if (this.drugRelatedLevelSelected) {
       header.push('Drugs (for therapeutic implications only)');
     }
@@ -669,6 +669,7 @@ export default class ActionableGenesPage extends React.Component<
     this.filteredTreatments
       .map(treatment => ({
         level: treatment.level,
+        setting: treatment.germline ? 'Germline' : 'Somatic',
         hugoSymbol: treatment.hugoSymbol,
         alterations: treatment.alterationsName,
         tumorType: treatment.cancerTypesName,
@@ -676,6 +677,9 @@ export default class ActionableGenesPage extends React.Component<
       }))
       .sort((treatmentA, treatmentB) => {
         let result = sortByLevel(treatmentA.level, treatmentB.level);
+        if (result === 0) {
+          result = treatmentA.setting.localeCompare(treatmentB.setting);
+        }
         if (result === 0) {
           result = treatmentA.hugoSymbol.localeCompare(treatmentB.hugoSymbol);
         }
@@ -693,6 +697,7 @@ export default class ActionableGenesPage extends React.Component<
       .forEach(item => {
         const row = [
           item.level,
+          item.setting,
           item.hugoSymbol,
           item.alterations,
           item.tumorType,
