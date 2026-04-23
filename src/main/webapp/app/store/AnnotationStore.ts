@@ -333,6 +333,9 @@ export class AnnotationStore {
   readonly genomicIndicators = remoteData<Evidence[]>({
     await: () => [this.gene],
     invoke: async () => {
+      if (!this.germline) {
+        return [];
+      }
       try {
         const evidences = await apiClient.evidencesLookupGetUsingGET({
           hugoSymbol: this.gene.result.hugoSymbol,
