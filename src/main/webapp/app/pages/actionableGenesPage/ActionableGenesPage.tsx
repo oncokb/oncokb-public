@@ -827,13 +827,12 @@ export default class ActionableGenesPage extends React.Component<
         id: 'geneticType',
         Header: <span>Setting</span>,
         accessor: 'germline',
-        minWidth: 65,
         sortMethod(a: boolean, b: boolean) {
           return a === b ? 0 : a ? 1 : -1;
         },
         Cell(props: { original: Treatment }) {
           return (
-            <div className={'d-flex justify-content-center'}>
+            <div className={'d-flex'}>
               <GeneticTypeTag isGermline={props.original.germline} />
             </div>
           );
