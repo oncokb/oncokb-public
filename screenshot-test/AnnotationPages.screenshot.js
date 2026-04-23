@@ -134,16 +134,6 @@ if (!fs.existsSync(LATEST_SNAPSHOTS_DIR)){
 }
 
 function getMockResponse(url){
-  if (
-    url.startsWith(`${SERVER_URL}api/v1/evidences/lookup?`) &&
-    url.includes('evidenceTypes=GENOMIC_INDICATOR')
-  ) {
-    return {
-      status: 200,
-      contentType: 'application/json',
-      body: '[]'
-    };
-  }
 
   let res = undefined
   switch (url) {
