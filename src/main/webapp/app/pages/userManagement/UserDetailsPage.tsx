@@ -502,7 +502,7 @@ export default class UserDetailsPage extends React.Component<{
                 <Col xs={4} className={styles.center}>
                   <Button
                     active={this.currentSelectedButton === button}
-                    className={styles.filterButton}
+                    variant="outline-primary"
                     onClick={() => this.toggleFilter(button)}
                   >
                     {button}
