@@ -38,8 +38,11 @@ const geneList = fs
 const allCuratedGenes = fs
   .readFileSync(`${DATA_DIR}utils-allCuratedGenes.json`)
   .toString();
-const evidenceLevels = fs
-  .readFileSync(`${DATA_DIR}private-utils-evidences-levels.json`)
+const evidenceLevelsSomatic = fs
+  .readFileSync(`${DATA_DIR}private-utils-evidences-levels-somatic.json`)
+  .toString();
+const evidenceLevelsGermline = fs
+  .readFileSync(`${DATA_DIR}private-utils-evidences-levels-germline.json`)
   .toString();
 const tumorTypes = fs
   .readFileSync(`${DATA_DIR}private-utils-tumorTypes.json`)
@@ -182,11 +185,18 @@ function getMockResponse(url) {
         body: allCuratedGenes,
       };
       break;
-    case `${SERVER_URL}api/private/utils/evidences/levels`:
+    case `${SERVER_URL}api/private/utils/evidences/levels?germline=false`:
       res = {
         status: 200,
         contentType: 'application/json',
-        body: evidenceLevels,
+        body: evidenceLevelsSomatic,
+      };
+      break;
+    case `${SERVER_URL}api/private/utils/evidences/levels?germline=true`:
+      res = {
+        status: 200,
+        contentType: 'application/json',
+        body: evidenceLevelsGermline,
       };
       break;
     case `${SERVER_URL}api/private/utils/tumorTypes`:
