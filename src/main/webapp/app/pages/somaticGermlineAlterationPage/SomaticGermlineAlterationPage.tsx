@@ -81,6 +81,8 @@ import VariantOverView from 'app/shared/sections/VariantOverview';
 import GeneAdditionalInfoSection from 'app/shared/sections/GeneAdditionalInfoSection';
 import InfoIcon from 'app/shared/icons/InfoIcon';
 import { UnknownGeneAlert } from 'app/shared/alert/UnknownGeneAlert';
+import { InvalidAnnotationAlert } from 'app/shared/alert/InvalidAnnotationAlert';
+import { InvalidAnnotation } from 'app/store/AnnotationResult';
 
 type MatchParams = {
   hugoSymbol: string;
@@ -202,6 +204,16 @@ export class SomaticGermlineAlterationPage extends React.Component<
   }
 
   @computed
+  get invalidAnnotation(): InvalidAnnotation | undefined {
+    return this.pageShouldBeRendered ? this.store.invalidAnnotation : undefined;
+  }
+
+  @computed
+  get annotation() {
+    return this.store.currentAnnotation;
+  }
+
+  @computed
   get documentTitle() {
     const content = [];
     content.push(
@@ -242,7 +254,7 @@ export class SomaticGermlineAlterationPage extends React.Component<
       );
       let alterationsName = '';
       let alterationsView: JSX.Element | undefined = undefined;
-      if (evidence.alterations.length > 0) {
+      if (alterations.length > 0) {
         alterationsName = alterations
           .map(alteration => alteration.name)
           .join(', ');
@@ -401,7 +413,7 @@ export class SomaticGermlineAlterationPage extends React.Component<
   get therapeuticImplications(): TherapeuticImplication[] {
     return this.getImplications(
       this.getEvidenceByEvidenceTypes(
-        this.store.annotationData.result.tumorTypes,
+        this.annotation.tumorTypes,
         TREATMENT_EVIDENCE_TYPES
       )
     );
@@ -410,7 +422,7 @@ export class SomaticGermlineAlterationPage extends React.Component<
   @computed
   get fdaImplication(): FdaImplication[] {
     const evidences = this.getEvidenceByEvidenceTypes(
-      this.store.annotationData.result.tumorTypes,
+      this.annotation.tumorTypes,
       TREATMENT_EVIDENCE_TYPES
     );
     const fdaImplications: FdaImplication[] = [];
@@ -552,20 +564,18 @@ export class SomaticGermlineAlterationPage extends React.Component<
   @computed
   get diagnosticImplications(): TherapeuticImplication[] {
     return this.getImplications(
-      this.getEvidenceByEvidenceTypes(
-        this.store.annotationData.result.tumorTypes,
-        [EVIDENCE_TYPES.DIAGNOSTIC_IMPLICATION]
-      )
+      this.getEvidenceByEvidenceTypes(this.annotation.tumorTypes, [
+        EVIDENCE_TYPES.DIAGNOSTIC_IMPLICATION,
+      ])
     );
   }
 
   @computed
   get prognosticImplications(): TherapeuticImplication[] {
     return this.getImplications(
-      this.getEvidenceByEvidenceTypes(
-        this.store.annotationData.result.tumorTypes,
-        [EVIDENCE_TYPES.PROGNOSTIC_IMPLICATION]
-      )
+      this.getEvidenceByEvidenceTypes(this.annotation.tumorTypes, [
+        EVIDENCE_TYPES.PROGNOSTIC_IMPLICATION,
+      ])
     );
   }
 
@@ -575,7 +585,7 @@ export class SomaticGermlineAlterationPage extends React.Component<
     if (!this.isCategoricalAlteration) {
       orderedSummaries.push(SummaryKey.ALTERATION_SUMMARY);
     }
-    return getSummaries(this.store.annotationData.result, orderedSummaries);
+    return getSummaries(this.annotation, orderedSummaries);
   }
 
   @computed get isCategoricalAlteration() {
@@ -605,16 +615,16 @@ export class SomaticGermlineAlterationPage extends React.Component<
   @computed
   get isPositionalAlteration() {
     return isPositionalAlteration(
-      this.store.annotationData.result.query.proteinStart,
-      this.store.annotationData.result.query.proteinEnd,
-      this.store.annotationData.result.query.consequence
+      this.annotation.query.proteinStart,
+      this.annotation.query.proteinEnd,
+      this.annotation.query.consequence
     );
   }
 
   get isUnknownOncogenicity() {
     return (
-      !this.store.annotationData.result.oncogenic ||
-      this.store.annotationData.result.oncogenic === ONCOGENICITY.UNKNOWN
+      !this.annotation.oncogenic ||
+      this.annotation.oncogenic === ONCOGENICITY.UNKNOWN
     );
   }
 
@@ -646,163 +656,168 @@ export class SomaticGermlineAlterationPage extends React.Component<
             </Row>
           </Container>
         ) : this.pageShouldBeRendered ? (
-          <StickyMiniNavBarContextProvider>
-            <Container>
-              <Row className="justify-content-center">
-                <Col md={11}>
-                  <SomaticGermlineBreadcrumbs
-                    hugoSymbol={this.store.hugoSymbol}
-                    alterationName={this.store.alterationName}
-                    cancerTypeName={this.store.cancerTypeName}
-                    alterationNameWithDiff={this.store.alterationNameWithDiff}
-                    germline={this.store.germline}
-                  />
-                  <GermlineSomaticHeader
-                    includeEmailLink
-                    annotation={{
-                      gene: this.store.hugoSymbol,
-                      alteration: this.store.alterationName,
-                      cancerType: this.store.cancerTypeName,
-                    }}
-                    appStore={this.props.appStore}
-                    alteration={this.store.alterationNameWithDiff}
-                    proteinAlteration={this.store.alteration?.proteinChange}
-                    isGermline={this.store.germline}
-                  />
-                  <GeneAdditionalInfoSection
-                    gene={this.store.gene.result}
-                    ensemblGenes={this.store.ensemblGenes.result}
-                    show={this.showAdditionalGeneInfo}
-                    onToggle={this.toggleAdditionalGeneInfo}
-                  />
-                </Col>
-                <Col md={11}>
-                  <Row className={classnames(styles.descriptionContainer)}>
-                    <Col>
-                      <VariantOverView
-                        alterationSummaries={this.alterationSummaries}
-                        hugoSymbol={this.store.hugoSymbol}
-                        alteration={
-                          this.store.annotationData.result.query.alteration
-                        }
-                        geneType={this.store.gene.result.geneType}
-                      />
-                    </Col>
-                  </Row>
-                  {this.store.annotationData.result.mutationEffect
-                    .description && (
+          this.invalidAnnotation ? (
+            <InvalidAnnotationAlert
+              invalidAnnotation={this.invalidAnnotation}
+            />
+          ) : (
+            <StickyMiniNavBarContextProvider>
+              <Container>
+                <Row className="justify-content-center">
+                  <Col md={11}>
+                    <SomaticGermlineBreadcrumbs
+                      hugoSymbol={this.store.hugoSymbol}
+                      alterationName={this.store.alterationName}
+                      cancerTypeName={this.store.cancerTypeName}
+                      alterationNameWithDiff={this.store.alterationNameWithDiff}
+                      germline={this.store.germline}
+                    />
+                    <GermlineSomaticHeader
+                      includeEmailLink
+                      annotation={{
+                        gene: this.store.hugoSymbol,
+                        alteration: this.store.alterationName,
+                        cancerType: this.store.cancerTypeName,
+                      }}
+                      appStore={this.props.appStore}
+                      alteration={this.store.alterationNameWithDiff}
+                      proteinAlteration={this.store.alteration?.proteinChange}
+                      isGermline={this.store.germline}
+                    />
+                    <GeneAdditionalInfoSection
+                      gene={this.store.gene.result}
+                      ensemblGenes={this.store.ensemblGenes.result}
+                      show={this.showAdditionalGeneInfo}
+                      onToggle={this.toggleAdditionalGeneInfo}
+                    />
+                  </Col>
+                  <Col md={11}>
                     <Row className={classnames(styles.descriptionContainer)}>
                       <Col>
-                        <ShowHideText
-                          show={this.showMutationEffect}
-                          title="mutation effect description"
-                          content={
-                            <MutationEffectDescription
-                              hugoSymbol={this.store.hugoSymbol}
-                              description={
-                                this.store.annotationData.result.mutationEffect
-                                  .description
-                              }
-                            />
-                          }
-                          onClick={() =>
-                            this.toggleMutationEffect(!this.showMutationEffect)
-                          }
+                        <VariantOverView
+                          alterationSummaries={this.alterationSummaries}
+                          hugoSymbol={this.store.hugoSymbol}
+                          alteration={this.annotation.query.alteration}
+                          geneType={this.store.gene.result.geneType}
                         />
                       </Col>
                     </Row>
-                  )}
-                </Col>
-              </Row>
-            </Container>
-            <Container>
-              <Row className="justify-content-center">
-                <Col md={11}>
-                  <SomaticGermlineAlterationTiles
-                    includeTitle
-                    variantAnnotation={this.store.annotationData.result}
-                    isGermline={this.store.germline}
-                    grch37Isoform={this.store.gene.result.grch37Isoform}
-                  />
-                </Col>
-              </Row>
-            </Container>
-            <StickyMiniNavBar
-              title={
-                <span className={'d-flex align-items-center'}>
-                  <span>
-                    {this.store.hugoSymbol} {this.store.alterationNameWithDiff}{' '}
-                  </span>
-                  <GeneticTypeTag
-                    className={'ml-2'}
-                    isGermline={this.store.germline}
-                  />
-                </span>
-              }
-            />
-            <Container>
-              <Row className="justify-content-center">
-                <Col md={11}>
-                  {this.store.germline &&
-                    (this.store.genomicIndicators.isPending ||
-                      this.store.genomicIndicators.result.length > 0) && (
-                      <>
-                        <MiniNavBarHeader id="genomic-indicators">
-                          Genomic Indicators
-                        </MiniNavBarHeader>
-                        <GenomicIndicatorTable
-                          data={
-                            this.store.genomicIndicatorsAssociatedWithVariant
-                          }
-                          isPending={
-                            this.store.annotationResult.isPending ||
-                            this.store.genomicIndicators.isPending
-                          }
-                        />
-                      </>
+                    {this.annotation.mutationEffect.description && (
+                      <Row className={classnames(styles.descriptionContainer)}>
+                        <Col>
+                          <ShowHideText
+                            show={this.showMutationEffect}
+                            title="mutation effect description"
+                            content={
+                              <MutationEffectDescription
+                                hugoSymbol={this.store.hugoSymbol}
+                                description={
+                                  this.annotation.mutationEffect.description
+                                }
+                              />
+                            }
+                            onClick={() =>
+                              this.toggleMutationEffect(
+                                !this.showMutationEffect
+                              )
+                            }
+                          />
+                        </Col>
+                      </Row>
                     )}
-                  <div className="d-flex align-items-center">
-                    <MiniNavBarHeader
-                      id="clinical-implications"
-                      comingSoon={this.store.germline}
-                    >
-                      <span
-                        className={
-                          this.store.germline ? 'text-secondary' : undefined
-                        }
-                      >
-                        Clinical Implications for this Biomarker
-                      </span>
-                    </MiniNavBarHeader>
-                  </div>
-                  {!this.store.germline && (
-                    <SomaticGermlineAlterationView
-                      appStore={this.props.appStore}
-                      hugoSymbol={this.store.hugoSymbol}
-                      alteration={this.store.alterationName}
-                      alterationQuery={this.store.alterationQuery}
-                      germline={this.store.germline}
-                      matchedAlteration={this.store.alteration}
-                      tumorType={this.store.cancerTypeName}
-                      onChangeTumorType={this.onChangeTumorType.bind(this)}
-                      annotation={this.store.annotationData.result}
-                      biologicalAlterations={
-                        this.store.biologicalAlterations.result
-                      }
-                      relevantAlterations={undefined}
-                      fdaImplication={this.fdaImplication}
-                      therapeuticImplications={this.therapeuticImplications}
-                      diagnosticImplications={this.diagnosticImplications}
-                      prognosticImplications={this.prognosticImplications}
-                      defaultSelectedTab={this.selectedTab}
-                      onChangeTab={this.onChangeTab}
-                      routing={this.props.routing}
+                  </Col>
+                </Row>
+              </Container>
+              <Container>
+                <Row className="justify-content-center">
+                  <Col md={11}>
+                    <SomaticGermlineAlterationTiles
+                      includeTitle
+                      variantAnnotation={this.annotation}
+                      isGermline={this.store.germline}
+                      grch37Isoform={this.store.gene.result.grch37Isoform}
                     />
-                  )}
-                </Col>
-              </Row>
-            </Container>
-          </StickyMiniNavBarContextProvider>
+                  </Col>
+                </Row>
+              </Container>
+              <StickyMiniNavBar
+                title={
+                  <span className={'d-flex align-items-center'}>
+                    <span>
+                      {this.store.hugoSymbol}{' '}
+                      {this.store.alterationNameWithDiff}{' '}
+                    </span>
+                    <GeneticTypeTag
+                      className={'ml-2'}
+                      isGermline={this.store.germline}
+                    />
+                  </span>
+                }
+              />
+              <Container>
+                <Row className="justify-content-center">
+                  <Col md={11}>
+                    {this.store.germline &&
+                      (this.store.genomicIndicators.isPending ||
+                        this.store.genomicIndicators.result.length > 0) && (
+                        <>
+                          <MiniNavBarHeader id="genomic-indicators">
+                            Genomic Indicators
+                          </MiniNavBarHeader>
+                          <GenomicIndicatorTable
+                            data={
+                              this.store.genomicIndicatorsAssociatedWithVariant
+                            }
+                            isPending={
+                              this.store.annotationResult.isPending ||
+                              this.store.genomicIndicators.isPending
+                            }
+                          />
+                        </>
+                      )}
+                    <div className="d-flex align-items-center">
+                      <MiniNavBarHeader
+                        id="clinical-implications"
+                        comingSoon={this.store.germline}
+                      >
+                        <span
+                          className={
+                            this.store.germline ? 'text-secondary' : undefined
+                          }
+                        >
+                          Clinical Implications for this Biomarker
+                        </span>
+                      </MiniNavBarHeader>
+                    </div>
+                    {!this.store.germline && (
+                      <SomaticGermlineAlterationView
+                        appStore={this.props.appStore}
+                        hugoSymbol={this.store.hugoSymbol}
+                        alteration={this.store.alterationName}
+                        alterationQuery={this.store.alterationQuery}
+                        germline={this.store.germline}
+                        matchedAlteration={this.store.alteration}
+                        tumorType={this.store.cancerTypeName}
+                        onChangeTumorType={this.onChangeTumorType.bind(this)}
+                        annotation={this.annotation}
+                        biologicalAlterations={
+                          this.store.biologicalAlterations.result
+                        }
+                        relevantAlterations={undefined}
+                        fdaImplication={this.fdaImplication}
+                        therapeuticImplications={this.therapeuticImplications}
+                        diagnosticImplications={this.diagnosticImplications}
+                        prognosticImplications={this.prognosticImplications}
+                        defaultSelectedTab={this.selectedTab}
+                        onChangeTab={this.onChangeTab}
+                        routing={this.props.routing}
+                      />
+                    )}
+                  </Col>
+                </Row>
+              </Container>
+            </StickyMiniNavBarContextProvider>
+          )
         ) : (
           <If condition={this.errorOccurred}>
             <Then>

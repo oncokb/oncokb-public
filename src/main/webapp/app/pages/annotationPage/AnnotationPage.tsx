@@ -65,6 +65,7 @@ import LoadingIndicator, {
 } from 'app/components/loadingIndicator/LoadingIndicator';
 import { Else, If, Then } from 'react-if';
 import { UnknownGeneAlert } from 'app/shared/alert/UnknownGeneAlert';
+import { InvalidAnnotationAlert } from 'app/shared/alert/InvalidAnnotationAlert';
 import { RouterStore } from 'mobx-react-router';
 import { Option } from 'app/shared/select/FormSelectWithLabelField';
 import MutationEffectDescription from 'app/pages/annotationPage/MutationEffectDescription';
@@ -79,6 +80,7 @@ import MiniNavBarHeader from 'app/shared/nav/MiniNavBarHeader';
 import { StickyMiniNavBarContextProvider } from 'app/shared/nav/StickyMiniNavBar';
 import SomaticGermlineCancerTypeSelect from 'app/shared/dropdown/SomaticGermlineCancerTypeSelect';
 import { COLOR_BLUE } from 'app/config/theme';
+import { InvalidAnnotation } from 'app/store/AnnotationResult';
 
 export enum AnnotationType {
   GENE,
@@ -286,7 +288,7 @@ export default class AnnotationPage extends React.Component<
   get therapeuticImplications(): TherapeuticImplication[] {
     return this.getImplications(
       this.getEvidenceByEvidenceTypes(
-        this.props.store.annotationData.result.tumorTypes,
+        this.annotation.tumorTypes,
         TREATMENT_EVIDENCE_TYPES
       )
     );
@@ -295,7 +297,7 @@ export default class AnnotationPage extends React.Component<
   @computed
   get fdaImplication(): FdaImplication[] {
     const evidences = this.getEvidenceByEvidenceTypes(
-      this.props.store.annotationData.result.tumorTypes,
+      this.annotation.tumorTypes,
       TREATMENT_EVIDENCE_TYPES
     );
     const fdaImplications: FdaImplication[] = [];
@@ -385,20 +387,18 @@ export default class AnnotationPage extends React.Component<
   @computed
   get diagnosticImplications(): TherapeuticImplication[] {
     return this.getImplications(
-      this.getEvidenceByEvidenceTypes(
-        this.props.store.annotationData.result.tumorTypes,
-        [EVIDENCE_TYPES.DIAGNOSTIC_IMPLICATION]
-      )
+      this.getEvidenceByEvidenceTypes(this.annotation.tumorTypes, [
+        EVIDENCE_TYPES.DIAGNOSTIC_IMPLICATION,
+      ])
     );
   }
 
   @computed
   get prognosticImplications(): TherapeuticImplication[] {
     return this.getImplications(
-      this.getEvidenceByEvidenceTypes(
-        this.props.store.annotationData.result.tumorTypes,
-        [EVIDENCE_TYPES.PROGNOSTIC_IMPLICATION]
-      )
+      this.getEvidenceByEvidenceTypes(this.annotation.tumorTypes, [
+        EVIDENCE_TYPES.PROGNOSTIC_IMPLICATION,
+      ])
     );
   }
 
@@ -408,10 +408,7 @@ export default class AnnotationPage extends React.Component<
     if (!this.isCategoricalAlteration) {
       orderedSummaries.push(SummaryKey.ALTERATION_SUMMARY);
     }
-    return getSummaries(
-      this.props.store.annotationData.result,
-      orderedSummaries
-    );
+    return getSummaries(this.annotation, orderedSummaries);
   }
 
   @computed get isCategoricalAlteration() {
@@ -435,9 +432,21 @@ export default class AnnotationPage extends React.Component<
   }
 
   @computed
+  get invalidAnnotation(): InvalidAnnotation | undefined {
+    return this.pageShouldBeRendered
+      ? this.props.store.invalidAnnotation
+      : undefined;
+  }
+
+  @computed
+  get annotation() {
+    return this.props.store.currentAnnotation;
+  }
+
+  @computed
   get annotationPageMetaDescription() {
     if (this.pageShouldBeRendered) {
-      return `${this.props.store.annotationData.result.geneSummary} ${this.props.store.annotationData.result.variantSummary} ${this.props.store.annotationData.result.tumorTypeSummary}`;
+      return `${this.annotation.geneSummary} ${this.annotation.variantSummary} ${this.annotation.tumorTypeSummary}`;
     } else {
       return '';
     }
@@ -607,9 +616,7 @@ export default class AnnotationPage extends React.Component<
                   <VariantOverView
                     alterationSummaries={this.alterationSummaries}
                     hugoSymbol={this.props.store.hugoSymbol}
-                    alteration={
-                      this.props.store.annotationData.result.query.alteration
-                    }
+                    alteration={this.annotation.query.alteration}
                     geneType={this.props.store.gene.result.geneType}
                   />
                 </Col>
@@ -629,7 +636,7 @@ export default class AnnotationPage extends React.Component<
                   url={'genomenexus.org'}
                   logo={gnLogo}
                 />
-                {this.props.store.annotationData.result.vue && (
+                {this.annotation.vue && (
                   <PowerBySource
                     name={'reVUE'}
                     url={'cancerrevue.org'}
@@ -639,8 +646,7 @@ export default class AnnotationPage extends React.Component<
               </Col>
             )}
           </Row>
-          {this.props.store.annotationData.result.mutationEffect
-            .description && (
+          {this.annotation.mutationEffect.description && (
             <Row>
               <Col>
                 <ShowHideText
@@ -649,10 +655,7 @@ export default class AnnotationPage extends React.Component<
                   content={
                     <MutationEffectDescription
                       hugoSymbol={this.props.store.hugoSymbol}
-                      description={
-                        this.props.store.annotationData.result.mutationEffect
-                          .description
-                      }
+                      description={this.annotation.mutationEffect.description}
                     />
                   }
                   onClick={() =>
@@ -666,7 +669,7 @@ export default class AnnotationPage extends React.Component<
             <Col>
               <SomaticGermlineAlterationTiles
                 includeTitle
-                variantAnnotation={this.props.store.annotationData.result}
+                variantAnnotation={this.annotation}
                 isGermline={this.props.store.germline}
                 grch37Isoform={this.props.store.gene.result.grch37Isoform}
               />
@@ -699,7 +702,7 @@ export default class AnnotationPage extends React.Component<
               matchedAlteration={this.props.store.alteration}
               tumorType={this.props.store.cancerTypeName}
               onChangeTumorType={this.props.onChangeTumorType}
-              annotation={this.props.store.annotationData.result}
+              annotation={this.annotation}
               biologicalAlterations={
                 this.props.store.biologicalAlterations.result
               }
@@ -719,7 +722,7 @@ export default class AnnotationPage extends React.Component<
               matchedAlteration={this.props.store.alteration}
               tumorType={this.props.store.cancerTypeName}
               onChangeTumorType={this.props.onChangeTumorType}
-              annotation={this.props.store.annotationData.result}
+              annotation={this.annotation}
               biologicalAlterations={
                 this.props.store.biologicalAlterations.result
               }
@@ -753,7 +756,11 @@ export default class AnnotationPage extends React.Component<
       <>
         {this.navBreadcrumbs}
         {this.pageShouldBeRendered ? (
-          this.props.store.annotationData.result.query.hugoSymbol ? (
+          this.invalidAnnotation ? (
+            <InvalidAnnotationAlert
+              invalidAnnotation={this.invalidAnnotation}
+            />
+          ) : this.annotation.query.hugoSymbol ? (
             this.getAnnotationComponents()
           ) : (
             <Alert variant="warning" className={'text-center'}>

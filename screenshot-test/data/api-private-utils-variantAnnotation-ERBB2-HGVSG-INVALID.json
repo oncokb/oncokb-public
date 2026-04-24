@@ -1,0 +1,94 @@
+{
+  "query": {
+    "id": null,
+    "referenceGenome": "GRCh37",
+    "hugoSymbol": "ERBB2",
+    "entrezGeneId": 2064,
+    "alteration": "L768S,",
+    "alterationType": "MUTATION",
+    "svType": null,
+    "tumorType": null,
+    "consequence": "missense_variant",
+    "proteinStart": 768,
+    "proteinEnd": 768,
+    "hgvs": "17:g.37880996A>T,",
+    "hgvsInfo": null,
+    "canonicalTranscript": null,
+    "germline": false
+  },
+  "geneExist": true,
+  "variantExist": false,
+  "alleleExist": false,
+  "oncogenic": "Unknown",
+  "mutationEffect": {
+    "knownEffect": "Unknown",
+    "description": "",
+    "citations": {
+      "pmids": [],
+      "abstracts": []
+    }
+  },
+  "germline": {
+    "genomicIndicators": [],
+    "penetrance": "",
+    "penetranceDescription": "",
+    "pathogenic": "",
+    "description": "",
+    "cancerRisk": "",
+    "clinVarId": ""
+  },
+  "highestSensitiveLevel": null,
+  "highestResistanceLevel": null,
+  "highestDiagnosticImplicationLevel": null,
+  "highestPrognosticImplicationLevel": null,
+  "highestFdaLevel": null,
+  "otherSignificantSensitiveLevels": [],
+  "otherSignificantResistanceLevels": [],
+  "hotspot": false,
+  "exon": null,
+  "geneSummary": "ERBB2 encodes the HER2 receptor tyrosine kinase.",
+  "variantSummary": "",
+  "tumorTypeSummary": "",
+  "prognosticSummary": "",
+  "diagnosticSummary": "",
+  "diagnosticImplications": [],
+  "prognosticImplications": [],
+  "tumorTypes": [],
+  "treatments": [],
+  "alteration": {
+    "alteration": "",
+    "name": "",
+    "proteinChange": "",
+    "proteinStart": 0,
+    "proteinEnd": 0,
+    "refResidues": "",
+    "variantResidues": "",
+    "referenceGenomes": [
+      "GRCh37"
+    ],
+    "consequence": {
+      "description": "",
+      "isGenerallyTruncating": false,
+      "term": ""
+    },
+    "gene": {
+      "entrezGeneId": 2064,
+      "hugoSymbol": "ERBB2",
+      "grch37Isoform": "ENST00000269571",
+      "grch37RefSeq": "NM_004448.3",
+      "grch38Isoform": "ENST00000269571",
+      "grch38RefSeq": "NM_004448.4",
+      "geneAliases": [
+        "HER2",
+        "NEU"
+      ],
+      "genesets": [],
+      "geneType": "ONCOGENE"
+    }
+  },
+  "background": "",
+  "dataVersion": "",
+  "lastUpdate": "",
+  "vue": false,
+  "vus": false
+}
