@@ -34,6 +34,7 @@ import {
   PortalAlteration,
   Tag,
   SomaticVariantAnnotation,
+  VariantAnnotation as ApiVariantAnnotation,
   TumorType,
 } from 'app/shared/api/generated/OncoKbPrivateAPI';
 import { BarChartDatum } from 'app/components/barChart/BarChart';
@@ -71,6 +72,11 @@ import {
   keyBy,
   uniq,
 } from 'app/shared/utils/LodashUtils';
+import type { AnnotationResult } from 'app/store/AnnotationResult';
+import {
+  isInvalidVariantAnnotation,
+  normalizeVariantAnnotation,
+} from 'app/store/AnnotationResult';
 
 export interface IAnnotationStore {
   type: AnnotationType;
@@ -84,7 +90,7 @@ export interface IAnnotationStore {
 }
 
 export type VariantAnnotation =
-  | SomaticVariantAnnotation
+  | ApiVariantAnnotation
   | GermlineVariantAnnotation;
 
 export type TherapeuticImplication = {
@@ -750,6 +756,45 @@ export class AnnotationStore {
       return this.somaticAnnotationData.result.oncogenic;
     }
     return undefined;
+  }
+
+  @computed
+  get annotationResultState(): AnnotationResult {
+    const annotation = normalizeVariantAnnotation(
+      this.selectedAnnotationData.result
+    );
+
+    if (!this.germline && isInvalidVariantAnnotation(annotation)) {
+      return {
+        kind: 'invalid',
+        annotation,
+        message:
+          'This alteration appears to be invalid and could not be annotated.',
+      };
+    }
+    return {
+      kind: 'valid',
+      annotation,
+    };
+  }
+
+  @computed
+  get currentAnnotation() {
+    return this.annotationResultState.annotation;
+  }
+
+  @computed
+  get validAnnotation() {
+    return this.annotationResultState.kind === 'valid'
+      ? this.annotationResultState.annotation
+      : undefined;
+  }
+
+  @computed
+  get invalidAnnotation() {
+    return this.annotationResultState.kind === 'invalid'
+      ? this.annotationResultState
+      : undefined;
   }
 
   @computed get cancerTypeFilter() {

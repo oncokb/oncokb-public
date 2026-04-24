@@ -91,6 +91,13 @@ const genomeNexusClinvarTp53 = fs.readFileSync(
   `${DATA_DIR}genome-nexus-clinvar-TP53-c.1000G-C.json`
 ).toString();
 
+// ERBB2 invalid annotation pages
+const erbb2GeneQuery = fs.readFileSync(`${DATA_DIR}api-v1-genes-ERBB2.json`).toString();
+const erbb2GeneNumbers = fs.readFileSync(`${DATA_DIR}private-utils-numbers-gene-ERBB2.json`).toString();
+const erbb2EnsemblGenes = fs.readFileSync(`${DATA_DIR}api-private-utils-ensembleGenes-ERBB2.json`).toString();
+const erbb2InvalidVariantAnnotation = fs.readFileSync(`${DATA_DIR}api-private-utils-variantAnnotation-ERBB2-L768S-INVALID.json`).toString();
+const erbb2InvalidHgvsgVariantAnnotation = fs.readFileSync(`${DATA_DIR}api-private-utils-variantAnnotation-ERBB2-HGVSG-INVALID.json`).toString();
+
 // # Fix the time to expiration date.
 function updateTokenExpirationDate(current){
   let today = new Date()
@@ -493,11 +500,77 @@ function getMockResponse(url){
         body: brafV600eHairyCellLeukemiaVariantAnnotation
       };
       break;
+    case `${SERVER_URL}api/private/utils/numbers/gene/ERBB2?germline=false`:
+      res = {
+        status: 200,
+        contentType: 'application/json',
+        body: erbb2GeneNumbers
+      };
+      break;
+    case `${SERVER_URL}api/v1/genes/lookup?query=ERBB2`:
+      res = {
+        status: 200,
+        contentType: 'application/json',
+        body: erbb2GeneQuery
+      };
+      break;
+    case `${SERVER_URL}api/private/search/variants/biological?hugoSymbol=ERBB2&germline=false`:
+      res = {
+        status: 200,
+        contentType: 'application/json',
+        body: '[]'
+      };
+      break;
+    case `${SERVER_URL}api/private/search/variants/clinical?hugoSymbol=ERBB2&germline=false`:
+      res = {
+        status: 200,
+        contentType: 'application/json',
+        body: '[]'
+      };
+      break;
+    case `${SERVER_URL}api/private/utils/ensembleGenes?entrezGeneId=2064`:
+      res = {
+        status: 200,
+        contentType: 'application/json',
+        body: erbb2EnsemblGenes
+      };
+      break;
+    case `${SERVER_URL}api/v1/variants/lookup?hugoSymbol=ERBB2&variant=L768S,`:
+    case `${SERVER_URL}api/v1/variants/lookup?hugoSymbol=ERBB2&variant=L768S%2C`:
+      res = {
+        status: 200,
+        contentType: 'application/json',
+        body: '[]'
+      };
+      break;
+    case `${SERVER_URL}api/private/utils/variantAnnotation?hugoSymbol=ERBB2&referenceGenome=GRCh37&alteration=L768S,&germline=false`:
+    case `${SERVER_URL}api/private/utils/variantAnnotation?hugoSymbol=ERBB2&referenceGenome=GRCh37&alteration=L768S%2C&germline=false`:
+      res = {
+        status: 200,
+        contentType: 'application/json',
+        body: erbb2InvalidVariantAnnotation
+      };
+      break;
+    case `${SERVER_URL}api/private/utils/variantAnnotation?hugoSymbol=ERBB2&referenceGenome=GRCh37&alteration=L768S,&tumorType=MEL&germline=false`:
+    case `${SERVER_URL}api/private/utils/variantAnnotation?hugoSymbol=ERBB2&referenceGenome=GRCh37&alteration=L768S%2C&tumorType=MEL&germline=false`:
+      res = {
+        status: 200,
+        contentType: 'application/json',
+        body: erbb2InvalidVariantAnnotation
+      };
+      break;
     case `${SERVER_URL}api/private/utils/variantAnnotation?referenceGenome=GRCh37&hgvsg=7%3Ag.140453136A%3ET`:
       res = {
         status: 200,
         contentType: 'application/json',
         body: brafV600eHgvsgVariantAnnotation
+      };
+      break;
+    case `${SERVER_URL}api/private/utils/variantAnnotation?referenceGenome=GRCh37&hgvsg=17%3Ag.37880996A%3ET%2C`:
+      res = {
+        status: 200,
+        contentType: 'application/json',
+        body: erbb2InvalidHgvsgVariantAnnotation
       };
       break;
 
@@ -624,6 +697,30 @@ describe('Tests with login', () => {
     await page.waitFor(WAITING_TIME);
     let image = await page.screenshot(getScreenshotConfig('HGVSg Page on VUE variant with Login'));
     expect(image).toMatchImageSnapshot({ customSnapshotIdentifier: 'HGVSg Page on VUE variant with Login' });
+  })
+
+  it('Alteration Page - Invalid Variant', async() => {
+    await page.goto(`${CLIENT_URL}gene/ERBB2/somatic/L768S,`);
+    await page.setViewport(VIEW_PORT_1080);
+    await page.waitFor(WAITING_TIME);
+    let image = await page.screenshot(getScreenshotConfig('Alteration Page invalid variant with Login'));
+    expect(image).toMatchImageSnapshot({ customSnapshotIdentifier: 'Alteration Page invalid variant with Login' });
+  })
+
+  it('Alteration Page with Cancer Type - Invalid Variant', async() => {
+    await page.goto(`${CLIENT_URL}gene/ERBB2/somatic/L768S,/MEL`);
+    await page.setViewport(VIEW_PORT_1080);
+    await page.waitFor(WAITING_TIME);
+    let image = await page.screenshot(getScreenshotConfig('Alteration Page with Cancer Type invalid variant with Login'));
+    expect(image).toMatchImageSnapshot({ customSnapshotIdentifier: 'Alteration Page with Cancer Type invalid variant with Login' });
+  })
+
+  it('HGVSg Page - Invalid Variant', async() => {
+    await page.goto(`${CLIENT_URL}hgvsg/17:g.37880996A>T,?refGenome=GRCh37`);
+    await page.setViewport(VIEW_PORT_1080);
+    await page.waitFor(WAITING_TIME);
+    let image = await page.screenshot(getScreenshotConfig('HGVSg Page invalid variant with Login'));
+    expect(image).toMatchImageSnapshot({ customSnapshotIdentifier: 'HGVSg Page invalid variant with Login' });
   })
 
   it('Tag Page', async() => {
