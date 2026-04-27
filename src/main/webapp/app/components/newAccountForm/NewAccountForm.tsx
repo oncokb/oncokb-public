@@ -23,6 +23,7 @@ import {
 import {
   ACADEMIC_TERMS,
   ACCOUNT_TITLES,
+  AUTHORITIES,
   LicenseStatus,
   LicenseType,
   ONCOKB_TM,
@@ -101,6 +102,7 @@ export class NewAccountForm extends React.Component<INewAccountForm> {
   @observable companyOptions: CompanySelectOptionType[] = [];
   @observable selectedCompanyOption: CompanySelectOptionType | undefined;
   @observable apiAccessRequested = false;
+  @observable adminApiAccessEnabled = true;
 
   private defaultFormValue = {
     accountType: ACCOUNT_TYPE_DEFAULT,
@@ -139,6 +141,11 @@ export class NewAccountForm extends React.Component<INewAccountForm> {
       city: values.city,
       country: values.country,
     };
+    if (this.props.byAdmin) {
+      newUser.authorities = this.adminApiAccessEnabled
+        ? [AUTHORITIES.USER, AUTHORITIES.API]
+        : [AUTHORITIES.USER];
+    }
     const additionalInfo = this.constructAdditionalInfo(values);
     if (Object.keys(additionalInfo).length > 0) {
       newUser.additionalInfo = additionalInfo;
@@ -854,6 +861,30 @@ export class NewAccountForm extends React.Component<INewAccountForm> {
                   </Col>
                 </Row>
               </>
+            ) : null}
+            {this.props.byAdmin ? (
+              <Row className={getSectionClassName()}>
+                <Col md="3">
+                  <h5>API Access</h5>
+                </Col>
+                <Col md="9">
+                  <AvCheckboxGroup
+                    name="adminApiAccess"
+                    key="adminApiAccess"
+                    errorMessage={'You have to accept the term'}
+                  >
+                    <AvCheckbox
+                      label={'Grant API Access'}
+                      value={this.adminApiAccessEnabled}
+                      checked={this.adminApiAccessEnabled}
+                      onChange={() =>
+                        (this.adminApiAccessEnabled = !this
+                          .adminApiAccessEnabled)
+                      }
+                    />
+                  </AvCheckboxGroup>
+                </Col>
+              </Row>
             ) : null}
             {this.props.byAdmin ? (
               <Row className={getSectionClassName()}>
