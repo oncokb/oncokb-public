@@ -60,9 +60,6 @@ b {
 }
 
 .header {
-  .navbar-brand {
-  }
-
   .navbar {
     background-color: $nav-bg-color;
     padding-bottom: 0;
@@ -71,6 +68,10 @@ b {
       & > .nav-item {
         color: white;
         border-bottom: $navbar-item-border-bottom solid $nav-bg-color;
+      }
+
+      &.mr-auto > .nav-item {
+        transition: border-bottom-color 0.15s ease;
 
         &.active {
           border-bottom-color: $oncokb-darker-blue;
@@ -78,11 +79,8 @@ b {
 
         &:hover {
           text-decoration: none;
+          border-bottom-color: $oncokb-darker-blue;
         }
-      }
-
-      & > .nav-item:first-line {
-        line-height: 2.5rem;
       }
 
       & .nav-link {
@@ -102,9 +100,89 @@ b {
   }
 }
 
-#account-menu {
-  line-height: 2.75rem;
-  border-bottom: 0.25rem $primary;
+#account-menu,
+#about-menu,
+#developer-menu {
+  &::after {
+    display: none;
+  }
+
+  .account-menu-chevron.open {
+    transform: rotate(180deg);
+  }
+}
+
+@include media-breakpoint-up(lg) {
+  #account-menu,
+  #about-menu,
+  #developer-menu {
+    line-height: 2.75rem;
+  }
+}
+
+.account-menu-chevron {
+  display: inline-block;
+  transform: rotate(0deg);
+  transition: transform 0.2s ease;
+}
+
+.header-dropdown-menu {
+  .dropdown-item {
+    &.active,
+    &:active {
+      background-color: transparent;
+      color: #212529;
+    }
+  }
+}
+
+.collapsed-nav-submenu {
+  width: 100%;
+  padding: 0 0.25rem 0.5rem;
+  animation: collapsedNavSubmenuIn 0.2s ease;
+
+  &.exiting {
+    animation: collapsedNavSubmenuOut 0.2s ease forwards;
+  }
+}
+
+.collapsed-nav-submenu-back {
+  align-items: center;
+  column-gap: 0.5rem;
+  display: inline-flex;
+  line-height: 1.5rem;
+  margin: 0.25rem 0 1rem;
+  padding: 0 0.25rem 0.25rem;
+
+  i,
+  span {
+    display: block;
+  }
+
+  i {
+    line-height: 1;
+    position: relative;
+    top: -1px;
+  }
+}
+
+.collapsed-nav-submenu-title {
+  border-bottom: 1px solid rgba(255, 255, 255, 0.25);
+  color: rgba(255, 255, 255, 0.75);
+  display: block;
+  font-size: 0.75rem;
+  letter-spacing: 0.08em;
+  margin-bottom: 0.5rem;
+  width: fit-content;
+  padding-bottom: 0.75rem;
+  text-transform: uppercase;
+}
+
+.collapsed-nav-submenu-link {
+  display: block;
+  line-height: 1.5rem;
+  margin: 1.5rem 0;
+  padding: 0 0.25rem 0.25rem;
 }
 
 .team,

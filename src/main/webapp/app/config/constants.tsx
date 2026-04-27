@@ -73,6 +73,8 @@ export const SOP_LINK = 'https://sop.oncokb.org';
 export const FAQ_LINK = 'https://faq.oncokb.org';
 export const FAQ_URL_PATTERNS_LINK = `${FAQ_LINK}/technical#what-are-the-url-patterns-of-oncokb-website`;
 export const API_DOCUMENT_LINK = 'https://api.oncokb.org/oncokb-website/api';
+export const PREMIUM_API_DOCUMENT_LINK =
+  'https://oncokb.gitbook.io/oncokb-premium-api/api';
 export const DEMO_WEBSITE_LINK = 'https://demo.oncokb.org';
 export const DEMO_API_DOCUMENT_LINK =
   'https://demo.oncokb.org/api/v1/swagger-ui.html';
@@ -579,8 +581,11 @@ export enum PAGE_TITLE {
   ADMIN_ADD_USER_BANNER_MESSAGE = 'Add New User Banner Messages',
   ADMIN_COMPANY_DETAILS = 'Companies',
   API_ACCESS = 'API Access',
+  API_DOCUMENTATION = 'API Documentation',
+  PREMIUM_API_DOCUMENTATION = 'Premium API Docs',
   CANCER_GENES = 'OncoKB™ Cancer Gene List',
   CDX = 'FDA Cleared or Approved Companion Diagnostic Devices',
+  DATA_DOWNLOAD = 'Data Download',
   FAQ = 'Frequently Asked Question',
   FDA_RECOGNITION = 'OncoKB™ is now an FDA-recognized Public Human Genetic Variant Database*',
   HOME = "OncoKB™ - MSK's Precision Oncology Knowledge Base",
@@ -625,7 +630,10 @@ export enum PAGE_ROUTE {
   LOGOUT = '/logout',
   LEGACY_DATA_ACCESS = '/dataAccess',
   LEGACY_API_ACCESS = '/apiAccess',
-  API_ACCESS = '/api-access',
+  LEGACY_API_ACCESS_HYPHEN = '/api-access',
+  API_DOCS = '/api-docs',
+  PREMIUM_API_DOCS = '/premium-api-docs',
+  DATA_DOWNLOAD = '/data-download',
   FAQ_ACCESS = '/faq',
   LEGACY_CANCER_GENES = '/cancerGenes',
   CANCER_GENES = '/cancer-genes',
