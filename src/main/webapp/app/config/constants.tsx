@@ -65,7 +65,7 @@ export const ONCOKB_LICENSE_EMAIL = 'licenses@oncokb.org';
 export const GRID_BREAKPOINTS = {
   SM: 576,
   MD: 768,
-  LG: 1075,
+  LG: 1050,
   XL: 1500,
 };
 export const MSK_LOGO_ICON_CUTOFF = 1260;
