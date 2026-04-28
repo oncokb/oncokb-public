@@ -37,9 +37,12 @@ import org.mskcc.cbio.oncokb.repository.UserDetailsRepository;
 import org.mskcc.cbio.oncokb.repository.UserRepository;
 import org.mskcc.cbio.oncokb.service.*;
 import org.mskcc.cbio.oncokb.service.dto.UserDTO;
+import org.mskcc.cbio.oncokb.service.dto.useradditionalinfo.AdditionalInfoDTO;
+import org.mskcc.cbio.oncokb.service.dto.useradditionalinfo.ApiAccessRequest;
 import org.mskcc.cbio.oncokb.service.dto.useradditionalinfo.TrialAccount;
 import org.mskcc.cbio.oncokb.service.impl.TokenServiceImpl;
 import org.mskcc.cbio.oncokb.service.mapper.UserMapper;
+import org.mskcc.cbio.oncokb.security.AuthoritiesConstants;
 import org.mskcc.cbio.oncokb.web.rest.slack.ActionId;
 import org.mskcc.cbio.oncokb.web.rest.slack.BlockId;
 import org.mskcc.cbio.oncokb.web.rest.slack.DropdownEmailOption;
@@ -250,6 +253,7 @@ public class SlackControllerIT {
         UserDetails mockUserDetails = userDetailsRepository.findOneByUser(mockUser).orElse(null);
         assertThat(mockUserDetails).isNotNull();
         assertThat(mockUserDetails.getAccountRequestStatus()).isEqualTo(AccountRequestStatus.APPROVED);
+        assertThat(mockUser.getAuthorities()).extracting("name").contains(AuthoritiesConstants.API);
 
         // Check user token
         List<Token> mockTokens = tokenService.findByUser(mockUser);
@@ -270,6 +274,45 @@ public class SlackControllerIT {
         String expandUrl = urlCaptor.getValue();
         Payload expandPayload = payloadCaptor.getValue();
         checkSlackBlock(expandUrl, expandPayload, ActionId.APPROVE_USER, false);
+    }
+
+    @Test
+    void testApproveHospitalUserWithoutApiRequestDoesNotGrantApiAccess() throws IOException, MessagingException {
+        User mockUser = userRepository.findOneWithAuthoritiesByLogin(DEFAULT_USER_EMAIL).orElseThrow();
+        UserDetails mockUserDetails = userDetailsRepository.findOneByUser(mockUser).orElseThrow();
+        mockUserDetails.setLicenseType(LicenseType.HOSPITAL);
+        userDetailsRepository.saveAndFlush(mockUserDetails);
+
+        BlockActionPayload actionJSON = getBlockActionPayload(ActionId.APPROVE_USER);
+        Gson snakeCase = GsonFactory.createSnakeCase();
+        slackController.approveUser(snakeCase.toJson(actionJSON));
+
+        User updatedUser = userRepository.findOneWithAuthoritiesByLogin(DEFAULT_USER_EMAIL).orElseThrow();
+        assertThat(updatedUser.getActivated()).isTrue();
+        assertThat(updatedUser.getAuthorities()).extracting("name").doesNotContain(AuthoritiesConstants.API);
+    }
+
+    @Test
+    void testApproveHospitalUserWithApiRequestGrantsApiAccess() throws IOException, MessagingException {
+        User mockUser = userRepository.findOneWithAuthoritiesByLogin(DEFAULT_USER_EMAIL).orElseThrow();
+        UserDetails mockUserDetails = userDetailsRepository.findOneByUser(mockUser).orElseThrow();
+        mockUserDetails.setLicenseType(LicenseType.HOSPITAL);
+
+        AdditionalInfoDTO additionalInfoDTO = new AdditionalInfoDTO();
+        ApiAccessRequest apiAccessRequest = new ApiAccessRequest();
+        apiAccessRequest.setRequested(true);
+        apiAccessRequest.setJustification("Hospital reporting");
+        additionalInfoDTO.setApiAccessRequest(apiAccessRequest);
+        mockUserDetails.setAdditionalInfo(new Gson().toJson(additionalInfoDTO));
+        userDetailsRepository.saveAndFlush(mockUserDetails);
+
+        BlockActionPayload actionJSON = getBlockActionPayload(ActionId.APPROVE_USER);
+        Gson snakeCase = GsonFactory.createSnakeCase();
+        slackController.approveUser(snakeCase.toJson(actionJSON));
+
+        User updatedUser = userRepository.findOneWithAuthoritiesByLogin(DEFAULT_USER_EMAIL).orElseThrow();
+        assertThat(updatedUser.getActivated()).isTrue();
+        assertThat(updatedUser.getAuthorities()).extracting("name").contains(AuthoritiesConstants.API);
     }
 
     @Test

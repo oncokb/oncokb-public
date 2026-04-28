@@ -167,6 +167,83 @@ public class UserResourceIT {
 
     @Test
     @Transactional
+    public void createHospitalUserWithoutAuthoritiesDoesNotDefaultApiRole() throws Exception {
+        ManagedUserVM managedUserVM = new ManagedUserVM();
+        managedUserVM.setLogin("hospital-user");
+        managedUserVM.setPassword(DEFAULT_PASSWORD);
+        managedUserVM.setFirstName(DEFAULT_FIRSTNAME);
+        managedUserVM.setLastName(DEFAULT_LASTNAME);
+        managedUserVM.setEmail("hospital-user@localhost");
+        managedUserVM.setActivated(true);
+        managedUserVM.setImageUrl(DEFAULT_IMAGEURL);
+        managedUserVM.setLangKey(DEFAULT_LANGKEY);
+        managedUserVM.setLicenseType(LicenseType.HOSPITAL);
+
+        restUserMockMvc.perform(post("/api/users")
+            .contentType(MediaType.APPLICATION_JSON)
+            .content(TestUtil.convertObjectToJsonBytes(managedUserVM)))
+            .andExpect(status().isCreated());
+
+        User createdUser = userRepository.findOneWithAuthoritiesByLogin("hospital-user").orElseThrow();
+        assertThat(createdUser.getAuthorities()).extracting("name")
+            .contains(AuthoritiesConstants.USER)
+            .doesNotContain(AuthoritiesConstants.API);
+    }
+
+    @Test
+    @Transactional
+    public void createCommercialUserWithoutAuthoritiesDoesNotDefaultApiRole() throws Exception {
+        ManagedUserVM managedUserVM = new ManagedUserVM();
+        managedUserVM.setLogin("commercial-user");
+        managedUserVM.setPassword(DEFAULT_PASSWORD);
+        managedUserVM.setFirstName(DEFAULT_FIRSTNAME);
+        managedUserVM.setLastName(DEFAULT_LASTNAME);
+        managedUserVM.setEmail("commercial-user@localhost");
+        managedUserVM.setActivated(true);
+        managedUserVM.setImageUrl(DEFAULT_IMAGEURL);
+        managedUserVM.setLangKey(DEFAULT_LANGKEY);
+        managedUserVM.setLicenseType(LicenseType.COMMERCIAL);
+
+        restUserMockMvc.perform(post("/api/users")
+            .contentType(MediaType.APPLICATION_JSON)
+            .content(TestUtil.convertObjectToJsonBytes(managedUserVM)))
+            .andExpect(status().isCreated());
+
+        User createdUser = userRepository.findOneWithAuthoritiesByLogin("commercial-user").orElseThrow();
+        assertThat(createdUser.getAuthorities()).extracting("name")
+            .contains(AuthoritiesConstants.USER)
+            .doesNotContain(AuthoritiesConstants.API);
+    }
+
+    @Test
+    @Transactional
+    public void createUserWithExplicitApiRolePersistsApiRole() throws Exception {
+        ManagedUserVM managedUserVM = new ManagedUserVM();
+        managedUserVM.setLogin("explicit-api-user");
+        managedUserVM.setPassword(DEFAULT_PASSWORD);
+        managedUserVM.setFirstName(DEFAULT_FIRSTNAME);
+        managedUserVM.setLastName(DEFAULT_LASTNAME);
+        managedUserVM.setEmail("explicit-api-user@localhost");
+        managedUserVM.setActivated(true);
+        managedUserVM.setImageUrl(DEFAULT_IMAGEURL);
+        managedUserVM.setLangKey(DEFAULT_LANGKEY);
+        managedUserVM.setLicenseType(LicenseType.HOSPITAL);
+        managedUserVM.setAuthorities(
+            new LinkedHashSet<>(Arrays.asList(AuthoritiesConstants.USER, AuthoritiesConstants.API))
+        );
+
+        restUserMockMvc.perform(post("/api/users")
+            .contentType(MediaType.APPLICATION_JSON)
+            .content(TestUtil.convertObjectToJsonBytes(managedUserVM)))
+            .andExpect(status().isCreated());
+
+        User createdUser = userRepository.findOneWithAuthoritiesByLogin("explicit-api-user").orElseThrow();
+        assertThat(createdUser.getAuthorities()).extracting("name")
+            .contains(AuthoritiesConstants.USER, AuthoritiesConstants.API);
+    }
+
+    @Test
+    @Transactional
     public void createUserWithExistingId() throws Exception {
         int databaseSizeBeforeCreate = userRepository.findAll().size();
 

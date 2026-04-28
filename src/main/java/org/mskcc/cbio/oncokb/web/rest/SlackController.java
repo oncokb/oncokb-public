@@ -65,7 +65,12 @@ public class SlackController {
             userDTO.getId()
         );
 
-        if (!userDTO.getLicenseType().equals(LicenseType.ACADEMIC) || apiAccessRequested) {
+        boolean shouldGrantApiAccess = LicenseType.COMMERCIAL.equals(userDTO.getLicenseType())
+            || LicenseType.RESEARCH_IN_COMMERCIAL.equals(userDTO.getLicenseType())
+            || (LicenseType.ACADEMIC.equals(userDTO.getLicenseType()) && apiAccessRequested)
+            || (LicenseType.HOSPITAL.equals(userDTO.getLicenseType()) && apiAccessRequested);
+
+        if (shouldGrantApiAccess) {
             log.info("Giving the user API access");
             Set<String> userDTOAuthorities = userDTO.getAuthorities();
             userDTOAuthorities.add(AuthoritiesConstants.API);

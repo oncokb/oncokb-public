@@ -45,13 +45,15 @@ random_suffix() {
 SUFFIX="$(random_suffix)"
 EMAIL="test-user-${SUFFIX}@example.org"
 LOGIN="$EMAIL"
+FIRST_NAME="Test${SUFFIX}"
+LAST_NAME="User${SUFFIX}"
 
 PAYLOAD="$(cat <<EOF
 {
   "login": "$LOGIN",
   "password": "$PASSWORD",
-  "firstName": "Test",
-  "lastName": "User",
+  "firstName": "$FIRST_NAME",
+  "lastName": "$LAST_NAME",
   "email": "$EMAIL",
   "licenseType": "$LICENSE_TYPE",
   "companyName": "Test Org",
