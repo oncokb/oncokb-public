@@ -622,6 +622,8 @@ export class SomaticGermlineAlterationPage extends React.Component<
     const showUnknownGene =
       this.store.gene.isComplete &&
       (this.store.gene.isError || this.store.gene.result === DEFAULT_GENE);
+    const alternativeVariant = this.store.annotationData.result
+      .alternativeOncoKbVariant;
     return (
       <div className="view-wrapper">
         <Helmet>
@@ -677,6 +679,35 @@ export class SomaticGermlineAlterationPage extends React.Component<
                   />
                 </Col>
                 <Col md={11}>
+                  {alternativeVariant && (
+                    <Row
+                      className={classnames(
+                        styles.descriptionContainer,
+                        DEFAULT_MARGIN_BOTTOM_LG
+                      )}
+                    >
+                      <Col>
+                        <div>
+                          {alternativeVariant.gene}{' '}
+                          {alternativeVariant.inputVariant} is based on a
+                          transcript not used by OncoKB. The equivalent mutation{' '}
+                          <AlterationPageLink
+                            hugoSymbol={alternativeVariant.gene}
+                            alteration={
+                              alternativeVariant.foundAlteration.alteration
+                            }
+                            cancerType={this.store.cancerTypeName}
+                            germline={this.store.germline}
+                          >
+                            {alternativeVariant.gene}{' '}
+                            {alternativeVariant.foundAlteration.alteration}
+                          </AlterationPageLink>{' '}
+                          is annotated on OncoKB transcript{' '}
+                          {alternativeVariant.transcriptId}.
+                        </div>
+                      </Col>
+                    </Row>
+                  )}
                   <Row className={classnames(styles.descriptionContainer)}>
                     <Col>
                       <VariantOverView

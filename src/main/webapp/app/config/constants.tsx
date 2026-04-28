@@ -562,6 +562,7 @@ export const DEFAULT_ANNOTATION: VariantAnnotation = {
   vue: false,
   vus: false,
   germline: DEFAULT_GERMLINE_VARIANT,
+  alternativeOncoKbVariant: null,
 };
 
 export enum PAGE_TITLE {

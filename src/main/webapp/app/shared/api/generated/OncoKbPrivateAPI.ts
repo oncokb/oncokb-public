@@ -121,6 +121,18 @@ export type Alteration = {
         'variantResidues': string
 
 };
+
+export type AlternativeOncoKbVariant = {
+
+    'foundAlteration': Alteration
+
+    'gene': string
+    
+    'inputVariant': string
+    
+    'transcriptId': string
+}
+
 export type DownloadAvailability = {
     'hasAllActionableVariants': boolean
 
@@ -223,6 +235,8 @@ export type VariantAnnotation = {
         'variantExist': boolean
 
         'variantSummary': string
+
+        'alternativeOncoKbVariant': AlternativeOncoKbVariant | null
 
         'vue': boolean
 
