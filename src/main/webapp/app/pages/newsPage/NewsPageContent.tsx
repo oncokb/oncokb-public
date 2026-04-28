@@ -8189,7 +8189,7 @@ export const NEWS_BY_DATE: { [date: string]: NewsData } = {
     news: [
       <span>
         All {ONCOKB_TM} alterations and their annotations can now be{' '}
-        <Link to={PAGE_ROUTE.API_ACCESS}>
+        <Link to={PAGE_ROUTE.API_DOCS}>
           {' '}
           batch downloaded or accessed programmatically via our API.
         </Link>

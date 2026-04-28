@@ -28,7 +28,10 @@ function Privacy({ childClassName }: { childClassName: string }) {
   );
 }
 
-class Footer extends React.Component<{ lastDataUpdate: string }> {
+class Footer extends React.Component<{
+  lastDataUpdate: string;
+  dataVersion: string;
+}> {
   public get top() {
     return (
       <>
@@ -116,7 +119,8 @@ class Footer extends React.Component<{ lastDataUpdate: string }> {
                       className={classnames(styles.footerAList, styles.news)}
                     >
                       <Link to={PAGE_ROUTE.NEWS}>
-                        Last data update: {this.props.lastDataUpdate}
+                        Last data update: {this.props.lastDataUpdate} (
+                        {this.props.dataVersion})
                       </Link>
                     </div>
                   </Col>

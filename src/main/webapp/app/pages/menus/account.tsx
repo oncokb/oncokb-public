@@ -1,14 +1,10 @@
 import React from 'react';
 import MenuItem from 'app/pages/menus/menu-item';
-import { inject, observer } from 'mobx-react';
+import { observer } from 'mobx-react';
 import { Dropdown, NavItem } from 'react-bootstrap';
 import NavLink from 'react-bootstrap/NavLink';
 import { PAGE_ROUTE, PAGE_TITLE } from 'app/config/constants';
 import { UserDTO } from 'app/shared/api/generated/API';
-import { RouterStore } from 'mobx-react-router';
-import AuthenticationStore from 'app/store/AuthenticationStore';
-import { IReactionDisposer, reaction } from 'mobx';
-import { getPublicWebsiteToken } from 'app/indexUtils';
 import {
   getGracePeriodDaysRemaining,
   hasGracePeriodAccess,
@@ -117,50 +113,34 @@ interface IAccountMenuProps {
   showAccountText?: boolean;
   account?: UserDTO;
   onMenuItemClick?: () => void;
-  routing?: RouterStore;
-  authenticationStore?: AuthenticationStore;
 }
 
-@inject('routing', 'authenticationStore')
 @observer
 export default class AccountMenu extends React.Component<IAccountMenuProps> {
-  private routeDisposer?: IReactionDisposer;
   state = {
     isOpen: false,
   };
 
-  constructor(props: Readonly<IAccountMenuProps>) {
-    super(props);
-
-    if (this.props.routing && this.props.authenticationStore) {
-      const routingStore = this.props.routing;
-      const authenticationStore = this.props.authenticationStore;
-      this.routeDisposer = reaction(
-        () => routingStore.location,
-        location => {
-          // Avoid refetching account during logout route transition
-          // It can race with logout and restore authenticated state
-          // which will force the user to click logout twice.
-          if (location.pathname === PAGE_ROUTE.LOGOUT) {
-            return;
-          }
-          const isLoggedInUser =
-            this.props.isAuthenticated &&
-            authenticationStore.idToken !== getPublicWebsiteToken();
-          if (isLoggedInUser) {
-            authenticationStore.getAccount();
-          }
-        }
-      );
-    }
-  }
+  private closeTimeout: number | undefined;
 
   componentWillUnmount() {
-    this.routeDisposer?.();
+    window.clearTimeout(this.closeTimeout);
   }
 
   handleToggle = (isOpen: boolean) => {
     this.setState({ isOpen });
+  };
+
+  handleMouseEnter = () => {
+    window.clearTimeout(this.closeTimeout);
+    this.setState({ isOpen: true });
+  };
+
+  handleMouseLeave = () => {
+    this.closeTimeout = window.setTimeout(
+      () => this.setState({ isOpen: false }),
+      200
+    );
   };
 
   handleItemClick = () => {
@@ -182,10 +162,17 @@ export default class AccountMenu extends React.Component<IAccountMenuProps> {
         as={NavItem}
         show={this.state.isOpen}
         onToggle={this.handleToggle}
+        onMouseEnter={this.handleMouseEnter}
+        onMouseLeave={this.handleMouseLeave}
       >
         <Dropdown.Toggle id={'account-menu'} as={NavLink}>
           <i className={'fa fa-user-o mr-1'} />
           {this.props.showAccountText ? PAGE_TITLE.ACCOUNT : undefined}
+          <i
+            className={`fa fa-angle-down fa-lg ml-1 account-menu-chevron${
+              this.state.isOpen ? ' open' : ''
+            }`}
+          />
           {showGraceIndicator && (
             <i
               className="fa fa-exclamation-circle text-warning ml-1"
