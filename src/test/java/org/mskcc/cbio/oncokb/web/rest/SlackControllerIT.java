@@ -278,8 +278,8 @@ public class SlackControllerIT {
 
     @Test
     void testApproveHospitalUserWithoutApiRequestDoesNotGrantApiAccess() throws IOException, MessagingException {
-        User mockUser = userRepository.findOneWithAuthoritiesByLogin(DEFAULT_USER_EMAIL).orElseThrow();
-        UserDetails mockUserDetails = userDetailsRepository.findOneByUser(mockUser).orElseThrow();
+        User mockUser = userRepository.findOneWithAuthoritiesByLogin(DEFAULT_USER_EMAIL).orElseThrow(NoSuchElementException::new);
+        UserDetails mockUserDetails = userDetailsRepository.findOneByUser(mockUser).orElseThrow(NoSuchElementException::new);
         mockUserDetails.setLicenseType(LicenseType.HOSPITAL);
         userDetailsRepository.saveAndFlush(mockUserDetails);
 
@@ -287,15 +287,15 @@ public class SlackControllerIT {
         Gson snakeCase = GsonFactory.createSnakeCase();
         slackController.approveUser(snakeCase.toJson(actionJSON));
 
-        User updatedUser = userRepository.findOneWithAuthoritiesByLogin(DEFAULT_USER_EMAIL).orElseThrow();
+        User updatedUser = userRepository.findOneWithAuthoritiesByLogin(DEFAULT_USER_EMAIL).orElseThrow(NoSuchElementException::new);
         assertThat(updatedUser.getActivated()).isTrue();
         assertThat(updatedUser.getAuthorities()).extracting("name").doesNotContain(AuthoritiesConstants.API);
     }
 
     @Test
     void testApproveHospitalUserWithApiRequestGrantsApiAccess() throws IOException, MessagingException {
-        User mockUser = userRepository.findOneWithAuthoritiesByLogin(DEFAULT_USER_EMAIL).orElseThrow();
-        UserDetails mockUserDetails = userDetailsRepository.findOneByUser(mockUser).orElseThrow();
+        User mockUser = userRepository.findOneWithAuthoritiesByLogin(DEFAULT_USER_EMAIL).orElseThrow(NoSuchElementException::new);
+        UserDetails mockUserDetails = userDetailsRepository.findOneByUser(mockUser).orElseThrow(NoSuchElementException::new);
         mockUserDetails.setLicenseType(LicenseType.HOSPITAL);
 
         AdditionalInfoDTO additionalInfoDTO = new AdditionalInfoDTO();
@@ -310,7 +310,7 @@ public class SlackControllerIT {
         Gson snakeCase = GsonFactory.createSnakeCase();
         slackController.approveUser(snakeCase.toJson(actionJSON));
 
-        User updatedUser = userRepository.findOneWithAuthoritiesByLogin(DEFAULT_USER_EMAIL).orElseThrow();
+        User updatedUser = userRepository.findOneWithAuthoritiesByLogin(DEFAULT_USER_EMAIL).orElseThrow(NoSuchElementException::new);
         assertThat(updatedUser.getActivated()).isTrue();
         assertThat(updatedUser.getAuthorities()).extracting("name").contains(AuthoritiesConstants.API);
     }

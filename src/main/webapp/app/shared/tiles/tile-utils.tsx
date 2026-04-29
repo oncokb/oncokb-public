@@ -17,6 +17,7 @@ import config, {
   ONCOKB_TM,
   GENOME_NEXUS_ANNOTATION_BASE_URL,
   CLINVAR_VARIANT_BASE_URL,
+  PATHOGENIC_VARIANTS,
 } from 'app/config/constants';
 import {
   isPositionalAlteration,
@@ -286,7 +287,7 @@ export function SomaticGermlineAlterationTiles({
     ?.knownEffect;
   const hasPenetrance = !!germlineAnnotation?.penetrance;
   const isPathogenicVariantUmbrella = !!germlineAnnotation?.query.alteration?.startsWith(
-    'Pathogenic Variants'
+    PATHOGENIC_VARIANTS
   );
 
   const [clinvar, setClinvar] = useState<ClinvarData | undefined | null>(

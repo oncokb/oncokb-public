@@ -21,6 +21,7 @@ import {
   ONCOGENICITY_CLASS_NAMES,
   ONCOKB,
   ONCOKB_TM,
+  PATHOGENIC_VARIANTS,
   PAGE_ROUTE,
   REFERENCE_GENOME,
   SHORTEN_TEXT_FROM_LIST_THRESHOLD,
@@ -920,6 +921,20 @@ export const getCategoricalAlterationDescription = (
         <SopPageLink>
           {ONCOKB_TM} Curation Standard Operating Protocol, Chapter 1,
           Sub-Protocol 2.5
+        </SopPageLink>
+        .
+      </span>
+    );
+  } else if (
+    alteration.toLowerCase().startsWith(PATHOGENIC_VARIANTS.toLowerCase())
+  ) {
+    content = (
+      <span>
+        "{PATHOGENIC_VARIANTS}" includes all variants within {geneLink}{' '}
+        annotated as pathogenic or likely pathogenic as defined by{' '}
+        <SopPageLink>
+          {ONCOKB_TM} Curation Standard Operating Protocol, Part II. Chapter 9:
+          Sub-protocol 2.2
         </SopPageLink>
         .
       </span>
