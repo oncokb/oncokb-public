@@ -7,6 +7,8 @@ import {
 } from 'app/shared/utils/UrlUtils';
 import { NewlyAddedGenesListItem } from 'app/pages/newsPage/NewlyAddedGenesListItem';
 import { TableOfContents } from 'app/pages/privacyNotice/TableOfContents';
+import { convertGeneInputToLinks } from 'app/pages/newsPage/Util';
+import GeneticTypeTag from 'app/components/tag/GeneticTypeTag';
 
 export default function NewsContent022025() {
   return (
@@ -37,9 +39,13 @@ export default function NewsContent022025() {
           </thead>
           <tbody>
             <tr>
-              <td>{getAlternativeGenePageLinks('FGFR1')}</td>
+              <td>{getAlternativeGenePageLinks('FGFR1', false)}</td>
               <td>
-                <AlterationPageLink hugoSymbol="FGFR1" alteration="Fusions">
+                <AlterationPageLink
+                  hugoSymbol="FGFR1"
+                  alteration="Fusions"
+                  germline={false}
+                >
                   Fusions
                 </AlterationPageLink>
               </td>
@@ -62,9 +68,13 @@ export default function NewsContent022025() {
               </td>
             </tr>
             <tr>
-              <td>{getAlternativeGenePageLinks('FGFR2')}</td>
+              <td>{getAlternativeGenePageLinks('FGFR2', false)}</td>
               <td>
-                <AlterationPageLink hugoSymbol="FGFR2" alteration="Fusions">
+                <AlterationPageLink
+                  hugoSymbol="FGFR2"
+                  alteration="Fusions"
+                  germline={false}
+                >
                   Fusions
                 </AlterationPageLink>
               </td>
@@ -87,11 +97,12 @@ export default function NewsContent022025() {
               </td>
             </tr>
             <tr>
-              <td>{getAlternativeGenePageLinks('FGFR2')}</td>
+              <td>{getAlternativeGenePageLinks('FGFR2', false)}</td>
               <td>
                 <AlterationPageLink
                   hugoSymbol="FGFR2"
                   alteration="Oncogenic Mutations"
+                  germline={false}
                 >
                   Oncogenic Mutations
                 </AlterationPageLink>
@@ -116,11 +127,12 @@ export default function NewsContent022025() {
               </td>
             </tr>
             <tr>
-              <td>{getAlternativeGenePageLinks('FGFR3')}</td>
+              <td>{getAlternativeGenePageLinks('FGFR3', false)}</td>
               <td>
                 <AlterationPageLink
                   hugoSymbol="FGFR3"
                   alteration="Oncogenic Mutations"
+                  germline={false}
                 >
                   Oncogenic Mutations
                 </AlterationPageLink>
@@ -170,9 +182,13 @@ export default function NewsContent022025() {
           <tbody>
             <tr>
               <td>1</td>
-              <td>{getAlternativeGenePageLinks('BRAF')}</td>
+              <td>{getAlternativeGenePageLinks('BRAF', false)}</td>
               <td>
-                <AlterationPageLink hugoSymbol="BRAF" alteration="V600E">
+                <AlterationPageLink
+                  hugoSymbol="BRAF"
+                  alteration="V600E"
+                  germline={false}
+                >
                   V600E
                 </AlterationPageLink>
               </td>

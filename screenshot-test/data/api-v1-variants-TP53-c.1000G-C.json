@@ -1,0 +1,51 @@
+[
+  {
+    "mutationEffectDescription": "The TP53 c.1000G>C variant changes a glycine to arginine at codon 334 (p.G334R). This variant has been identified in 1/113,268 European chromosomes by the Genome Aggregation Database (http://gnomad.broadinstitute.org) and has been reported in multiple individuals with Li Fraumeni syndrome-related cancers (PMID: 23580068, 25452441, 25503501, 25584008, 32675277, IARC TP53 database: https://p53.iarc.fr/). Recently, it has been reported to segregate with disease in multiple families, while individuals who carried this variant but were unaffected in late adulthood were also described, suggesting that this variant may have lower penetrance compared to typical TP53 variants associated with Li Fraumeni syndrome (PMID: 32675277). Functional studies suggested that this variant behaves similar to wild-type protein in certain in vitro assays, but may lead to a mild defect in transactivation of a subset of p53 target genes (PMID: 12826609, 25584008, 29955864, 30224644, 32675277).",
+    "pathogenic": "Likely Pathogenic",
+    "pathogenicPmids": [],
+    "pathogenicAbstracts": [],
+    "penetrance": "High",
+    "cancerRisk": null,
+    "variant": {
+      "gene": {
+        "entrezGeneId": 7157,
+        "hugoSymbol": "TP53",
+        "geneType": "TSG",
+        "grch37Isoform": "ENST00000269305",
+        "grch37RefSeq": "NM_000546.5",
+        "grch38Isoform": "ENST00000269305",
+        "grch38RefSeq": "NM_000546.5",
+        "geneAliases": ["LFS1", "p53"],
+        "genesets": []
+      },
+      "consequence": {
+        "term": "NA",
+        "isGenerallyTruncating": false,
+        "description": "NA"
+      },
+      "alteration": "c.1000G>C",
+      "proteinChange": "G334R",
+      "name": "c.1000G>C",
+      "refResidues": null,
+      "proteinStart": -1,
+      "proteinEnd": 100000,
+      "variantResidues": null,
+      "referenceGenomes": ["GRCh38", "GRCh37"]
+    },
+    "mutationEffect": "Unknown",
+    "mutationEffectPmids": [
+      "25452441",
+      "29955864",
+      "25503501",
+      "23580068",
+      "32675277",
+      "25584008",
+      "30224644",
+      "12826609"
+    ],
+    "mutationEffectAbstracts": [],
+    "oncogenic": null,
+    "oncogenicPmids": [],
+    "oncogenicAbstracts": []
+  }
+]

@@ -7,6 +7,8 @@ import {
 } from 'app/shared/utils/UrlUtils';
 import { NewlyAddedGenesListItem } from 'app/pages/newsPage/NewlyAddedGenesListItem';
 import { TableOfContents } from 'app/pages/privacyNotice/TableOfContents';
+import { convertGeneInputToLinks } from 'app/pages/newsPage/Util';
+import GeneticTypeTag from 'app/components/tag/GeneticTypeTag';
 
 export default function NewsContent082025() {
   return (
@@ -39,126 +41,246 @@ export default function NewsContent082025() {
           <tbody>
             <tr>
               <td>1</td>
-              <td>{getAlternativeGenePageLinks('ERBB2')}</td>
+              <td>{getAlternativeGenePageLinks('ERBB2', false)}</td>
               <td>
                 Tyrosine Kinase Domain Activating Mutations (
-                <AlterationPageLink hugoSymbol="ERBB2" alteration="V697L">
+                <AlterationPageLink
+                  hugoSymbol="ERBB2"
+                  alteration="V697L"
+                  germline={false}
+                >
                   V697L
                 </AlterationPageLink>
                 ,{' '}
-                <AlterationPageLink hugoSymbol="ERBB2" alteration="Q709L">
+                <AlterationPageLink
+                  hugoSymbol="ERBB2"
+                  alteration="Q709L"
+                  germline={false}
+                >
                   Q709L
                 </AlterationPageLink>
                 ,{' '}
-                <AlterationPageLink hugoSymbol="ERBB2" alteration="A710V">
+                <AlterationPageLink
+                  hugoSymbol="ERBB2"
+                  alteration="A710V"
+                  germline={false}
+                >
                   A710V
                 </AlterationPageLink>
                 ,{' '}
-                <AlterationPageLink hugoSymbol="ERBB2" alteration="E717D">
+                <AlterationPageLink
+                  hugoSymbol="ERBB2"
+                  alteration="E717D"
+                  germline={false}
+                >
                   E717D
                 </AlterationPageLink>
                 ,{' '}
-                <AlterationPageLink hugoSymbol="ERBB2" alteration="L726F">
+                <AlterationPageLink
+                  hugoSymbol="ERBB2"
+                  alteration="L726F"
+                  germline={false}
+                >
                   L726F
                 </AlterationPageLink>
                 ,{' '}
-                <AlterationPageLink hugoSymbol="ERBB2" alteration="L726I">
+                <AlterationPageLink
+                  hugoSymbol="ERBB2"
+                  alteration="L726I"
+                  germline={false}
+                >
                   L726I
                 </AlterationPageLink>
                 ,{' '}
-                <AlterationPageLink hugoSymbol="ERBB2" alteration="T733I">
+                <AlterationPageLink
+                  hugoSymbol="ERBB2"
+                  alteration="T733I"
+                  germline={false}
+                >
                   T733I
                 </AlterationPageLink>
                 ,{' '}
-                <AlterationPageLink hugoSymbol="ERBB2" alteration="L768S">
+                <AlterationPageLink
+                  hugoSymbol="ERBB2"
+                  alteration="L768S"
+                  germline={false}
+                >
                   L768S
                 </AlterationPageLink>
                 ,{' '}
-                <AlterationPageLink hugoSymbol="ERBB2" alteration="L755A">
+                <AlterationPageLink
+                  hugoSymbol="ERBB2"
+                  alteration="L755A"
+                  germline={false}
+                >
                   L755A
                 </AlterationPageLink>
                 ,{' '}
-                <AlterationPageLink hugoSymbol="ERBB2" alteration="L755P">
+                <AlterationPageLink
+                  hugoSymbol="ERBB2"
+                  alteration="L755P"
+                  germline={false}
+                >
                   L755P
                 </AlterationPageLink>
                 ,{' '}
-                <AlterationPageLink hugoSymbol="ERBB2" alteration="L755S">
+                <AlterationPageLink
+                  hugoSymbol="ERBB2"
+                  alteration="L755S"
+                  germline={false}
+                >
                   L755S
                 </AlterationPageLink>
                 ,{' '}
-                <AlterationPageLink hugoSymbol="ERBB2" alteration="L755W">
+                <AlterationPageLink
+                  hugoSymbol="ERBB2"
+                  alteration="L755W"
+                  germline={false}
+                >
                   L755W
                 </AlterationPageLink>
                 ,{' '}
-                <AlterationPageLink hugoSymbol="ERBB2" alteration="I767M">
+                <AlterationPageLink
+                  hugoSymbol="ERBB2"
+                  alteration="I767M"
+                  germline={false}
+                >
                   I767M
                 </AlterationPageLink>
                 ,{' '}
-                <AlterationPageLink hugoSymbol="ERBB2" alteration="D769H">
+                <AlterationPageLink
+                  hugoSymbol="ERBB2"
+                  alteration="D769H"
+                  germline={false}
+                >
                   D769H
                 </AlterationPageLink>
                 ,{' '}
-                <AlterationPageLink hugoSymbol="ERBB2" alteration="D769Y">
+                <AlterationPageLink
+                  hugoSymbol="ERBB2"
+                  alteration="D769Y"
+                  germline={false}
+                >
                   D769Y
                 </AlterationPageLink>
                 ,{' '}
-                <AlterationPageLink hugoSymbol="ERBB2" alteration="V773L">
+                <AlterationPageLink
+                  hugoSymbol="ERBB2"
+                  alteration="V773L"
+                  germline={false}
+                >
                   V773L
                 </AlterationPageLink>
                 ,{' '}
-                <AlterationPageLink hugoSymbol="ERBB2" alteration="G776S">
+                <AlterationPageLink
+                  hugoSymbol="ERBB2"
+                  alteration="G776S"
+                  germline={false}
+                >
                   G776S
                 </AlterationPageLink>
                 ,{' '}
-                <AlterationPageLink hugoSymbol="ERBB2" alteration="G776V">
+                <AlterationPageLink
+                  hugoSymbol="ERBB2"
+                  alteration="G776V"
+                  germline={false}
+                >
                   G776V
                 </AlterationPageLink>
                 ,{' '}
-                <AlterationPageLink hugoSymbol="ERBB2" alteration="V777L">
+                <AlterationPageLink
+                  hugoSymbol="ERBB2"
+                  alteration="V777L"
+                  germline={false}
+                >
                   V777L
                 </AlterationPageLink>
                 ,{' '}
-                <AlterationPageLink hugoSymbol="ERBB2" alteration="V777M">
+                <AlterationPageLink
+                  hugoSymbol="ERBB2"
+                  alteration="V777M"
+                  germline={false}
+                >
                   V777M
                 </AlterationPageLink>
                 ,{' '}
-                <AlterationPageLink hugoSymbol="ERBB2" alteration="V794M">
+                <AlterationPageLink
+                  hugoSymbol="ERBB2"
+                  alteration="V794M"
+                  germline={false}
+                >
                   V794M
                 </AlterationPageLink>
                 ,{' '}
-                <AlterationPageLink hugoSymbol="ERBB2" alteration="T798M">
+                <AlterationPageLink
+                  hugoSymbol="ERBB2"
+                  alteration="T798M"
+                  germline={false}
+                >
                   T798M
                 </AlterationPageLink>
                 ,{' '}
-                <AlterationPageLink hugoSymbol="ERBB2" alteration="D808N">
+                <AlterationPageLink
+                  hugoSymbol="ERBB2"
+                  alteration="D808N"
+                  germline={false}
+                >
                   D808N
                 </AlterationPageLink>
                 ,{' '}
-                <AlterationPageLink hugoSymbol="ERBB2" alteration="G815R">
+                <AlterationPageLink
+                  hugoSymbol="ERBB2"
+                  alteration="G815R"
+                  germline={false}
+                >
                   G815R
                 </AlterationPageLink>
                 ,{' '}
-                <AlterationPageLink hugoSymbol="ERBB2" alteration="D821N">
+                <AlterationPageLink
+                  hugoSymbol="ERBB2"
+                  alteration="D821N"
+                  germline={false}
+                >
                   D821N
                 </AlterationPageLink>
                 ,{' '}
-                <AlterationPageLink hugoSymbol="ERBB2" alteration="L841V">
+                <AlterationPageLink
+                  hugoSymbol="ERBB2"
+                  alteration="L841V"
+                  germline={false}
+                >
                   L841V
                 </AlterationPageLink>
                 ,{' '}
-                <AlterationPageLink hugoSymbol="ERBB2" alteration="V842I">
+                <AlterationPageLink
+                  hugoSymbol="ERBB2"
+                  alteration="V842I"
+                  germline={false}
+                >
                   V842I
                 </AlterationPageLink>
                 ,{' '}
-                <AlterationPageLink hugoSymbol="ERBB2" alteration="L866M">
+                <AlterationPageLink
+                  hugoSymbol="ERBB2"
+                  alteration="L866M"
+                  germline={false}
+                >
                   L866M
                 </AlterationPageLink>
                 ,{' '}
-                <AlterationPageLink hugoSymbol="ERBB2" alteration="L869R">
+                <AlterationPageLink
+                  hugoSymbol="ERBB2"
+                  alteration="L869R"
+                  germline={false}
+                >
                   L869R
                 </AlterationPageLink>
                 ,{' '}
-                <AlterationPageLink hugoSymbol="ERBB2" alteration="770_831ins">
+                <AlterationPageLink
+                  hugoSymbol="ERBB2"
+                  alteration="770_831ins"
+                  germline={false}
+                >
                   770_831ins
                 </AlterationPageLink>
                 )

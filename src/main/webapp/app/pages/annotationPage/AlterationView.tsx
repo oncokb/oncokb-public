@@ -15,9 +15,9 @@ import { action, computed } from 'mobx';
 import autobind from 'autobind-decorator';
 import {
   BiologicalVariant,
-  VariantAnnotation,
 } from 'app/shared/api/generated/OncoKbPrivateAPI';
-import {
+import type {
+  VariantAnnotation,
   FdaImplication,
   TherapeuticImplication,
 } from 'app/store/AnnotationStore';

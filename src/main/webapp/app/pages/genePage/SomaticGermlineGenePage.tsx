@@ -892,6 +892,7 @@ export default class SomaticGermlineGenePage extends React.Component<
                                             this.filteredTxAlterations
                                           ),
                                         ]}
+                                        hideFda={this.isGermline}
                                         onChangeTab={this.onChangeTab}
                                       />
                                     </>

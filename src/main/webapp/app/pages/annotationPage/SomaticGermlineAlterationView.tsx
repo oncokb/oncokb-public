@@ -12,11 +12,9 @@ import { Col, Row } from 'react-bootstrap';
 import classnames from 'classnames';
 import { action, computed } from 'mobx';
 import autobind from 'autobind-decorator';
-import {
-  BiologicalVariant,
+import { BiologicalVariant } from 'app/shared/api/generated/OncoKbPrivateAPI';
+import type {
   VariantAnnotation,
-} from 'app/shared/api/generated/OncoKbPrivateAPI';
-import {
   FdaImplication,
   TherapeuticImplication,
 } from 'app/store/AnnotationStore';
@@ -186,6 +184,7 @@ export default class SomaticGermlineAlterationView extends React.Component<
               dx={this.props.diagnosticImplications}
               px={this.props.prognosticImplications}
               fda={this.props.fdaImplication}
+              hideFda={this.props.germline}
               onChangeTab={this.props.onChangeTab}
             />
           </Col>
