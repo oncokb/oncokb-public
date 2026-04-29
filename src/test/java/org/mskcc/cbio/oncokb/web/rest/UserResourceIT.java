@@ -184,7 +184,9 @@ public class UserResourceIT {
             .content(TestUtil.convertObjectToJsonBytes(managedUserVM)))
             .andExpect(status().isCreated());
 
-        User createdUser = userRepository.findOneWithAuthoritiesByLogin("hospital-user").orElseThrow();
+        User createdUser = userRepository
+            .findOneWithAuthoritiesByLogin("hospital-user")
+            .orElseThrow(() -> new IllegalStateException("hospital-user was not created"));
         assertThat(createdUser.getAuthorities()).extracting("name")
             .contains(AuthoritiesConstants.USER)
             .doesNotContain(AuthoritiesConstants.API);
@@ -209,7 +211,9 @@ public class UserResourceIT {
             .content(TestUtil.convertObjectToJsonBytes(managedUserVM)))
             .andExpect(status().isCreated());
 
-        User createdUser = userRepository.findOneWithAuthoritiesByLogin("commercial-user").orElseThrow();
+        User createdUser = userRepository
+            .findOneWithAuthoritiesByLogin("commercial-user")
+            .orElseThrow(() -> new IllegalStateException("commercial-user was not created"));
         assertThat(createdUser.getAuthorities()).extracting("name")
             .contains(AuthoritiesConstants.USER)
             .doesNotContain(AuthoritiesConstants.API);
@@ -237,7 +241,9 @@ public class UserResourceIT {
             .content(TestUtil.convertObjectToJsonBytes(managedUserVM)))
             .andExpect(status().isCreated());
 
-        User createdUser = userRepository.findOneWithAuthoritiesByLogin("explicit-api-user").orElseThrow();
+        User createdUser = userRepository
+            .findOneWithAuthoritiesByLogin("explicit-api-user")
+            .orElseThrow(() -> new IllegalStateException("explicit-api-user was not created"));
         assertThat(createdUser.getAuthorities()).extracting("name")
             .contains(AuthoritiesConstants.USER, AuthoritiesConstants.API);
     }

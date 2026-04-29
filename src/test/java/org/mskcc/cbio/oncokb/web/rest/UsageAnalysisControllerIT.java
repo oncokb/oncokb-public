@@ -31,6 +31,8 @@ import org.mskcc.cbio.oncokb.config.Constants;
 import org.mskcc.cbio.oncokb.domain.User;
 import org.mskcc.cbio.oncokb.domain.enumeration.FileExtension;
 import org.mskcc.cbio.oncokb.domain.enumeration.LicenseType;
+import org.mskcc.cbio.oncokb.repository.UserDetailsRepository;
+import org.mskcc.cbio.oncokb.repository.projection.UserRegistrationSummaryProjection;
 import org.mskcc.cbio.oncokb.service.S3Service;
 import org.mskcc.cbio.oncokb.service.UserService;
 import org.mskcc.cbio.oncokb.service.dto.CompanyDTO;
@@ -62,6 +64,9 @@ public class UsageAnalysisControllerIT {
 
   @Mock
   private UserMapper userMapper;
+
+  @Mock
+  private UserDetailsRepository userDetailsRepository;
 
   private Clock clock = Clock.fixed(
     ZonedDateTime
@@ -231,6 +236,42 @@ public class UsageAnalysisControllerIT {
         content().contentTypeCompatibleWith(MediaType.APPLICATION_JSON)
       )
       .andExpect(content().json(expected, true));
+  }
+
+  @Test
+  public void shouldGetRegistrationSummary() throws Exception {
+    UserRegistrationSummaryProjection academic = Mockito.mock(
+      UserRegistrationSummaryProjection.class
+    );
+    Mockito.when(academic.getDate()).thenReturn(LocalDate.of(2026, 4, 28));
+    Mockito.when(academic.getTotal()).thenReturn(12L);
+    Mockito.when(academic.getLicenseType()).thenReturn("ACADEMIC");
+
+    UserRegistrationSummaryProjection commercial = Mockito.mock(
+      UserRegistrationSummaryProjection.class
+    );
+    Mockito.when(commercial.getDate()).thenReturn(LocalDate.of(2026, 4, 28));
+    Mockito.when(commercial.getTotal()).thenReturn(5L);
+    Mockito.when(commercial.getLicenseType()).thenReturn("COMMERCIAL");
+
+    Mockito
+      .when(userDetailsRepository.findDailyRegistrationSummaries())
+      .thenReturn(Arrays.asList(academic, commercial));
+
+    restMockMvc
+      .perform(get("/api/usage/summary/registrations"))
+      .andExpect(status().isOk())
+      .andExpect(
+        content().contentTypeCompatibleWith(MediaType.APPLICATION_JSON)
+      )
+      .andExpect(
+        content()
+          .json(
+            "[{\"date\":\"2026-04-28\",\"total\":12,\"licenseType\":\"ACADEMIC\"}," +
+            "{\"date\":\"2026-04-28\",\"total\":5,\"licenseType\":\"COMMERCIAL\"}]",
+            true
+          )
+      );
   }
 
   private static class MockS3Data {
