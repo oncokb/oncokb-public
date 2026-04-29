@@ -337,7 +337,7 @@ export function SomaticGermlineAlterationTiles({
     return <SomaticGermlineTiles tiles={tiles} />;
   }
 
-  if (isGermline) {
+  if (isGermline && germlineAnnotation) {
     if (hasPathogenicity) {
       tiles.push(
         createPathogenicityTileProps(germlineAnnotation, clinvar, includeTitle)
