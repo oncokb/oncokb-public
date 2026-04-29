@@ -3,11 +3,16 @@ import { ElementType } from 'app/components/SimpleTable';
 import { GenePageLink } from 'app/shared/utils/UrlUtils';
 import WithSeparator from 'react-with-separator';
 
-export const convertGeneInputToLinks = (geneInput: string): ElementType => {
+export const convertGeneInputToLinks = (
+  geneInput: string,
+  germline = false
+): ElementType => {
   const itemLinks = geneInput
     .trim()
     .split(',')
-    .map(gene => <GenePageLink key={gene} hugoSymbol={gene.trim()} />);
+    .map(gene => (
+      <GenePageLink key={gene} hugoSymbol={gene.trim()} germline={germline} />
+    ));
 
   return <WithSeparator separator=", ">{itemLinks}</WithSeparator>;
 };

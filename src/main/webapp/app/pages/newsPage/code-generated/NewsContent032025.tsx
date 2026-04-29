@@ -7,6 +7,8 @@ import {
 } from 'app/shared/utils/UrlUtils';
 import { NewlyAddedGenesListItem } from 'app/pages/newsPage/NewlyAddedGenesListItem';
 import { TableOfContents } from 'app/pages/privacyNotice/TableOfContents';
+import { convertGeneInputToLinks } from 'app/pages/newsPage/Util';
+import GeneticTypeTag from 'app/components/tag/GeneticTypeTag';
 
 export default function NewsContent032025() {
   return (
@@ -32,11 +34,12 @@ export default function NewsContent032025() {
           <tbody>
             <tr>
               <td>4</td>
-              <td>{getAlternativeGenePageLinks('ERBB2')}</td>
+              <td>{getAlternativeGenePageLinks('ERBB2', false)}</td>
               <td>
                 <AlterationPageLink
                   hugoSymbol="ERBB2"
                   alteration="Oncogenic Mutations"
+                  germline={false}
                 >
                   Oncogenic Mutations
                 </AlterationPageLink>
@@ -79,11 +82,12 @@ export default function NewsContent032025() {
           </thead>
           <tbody>
             <tr>
-              <td>{getAlternativeGenePageLinks('ERBB2')}</td>
+              <td>{getAlternativeGenePageLinks('ERBB2', false)}</td>
               <td>
                 <AlterationPageLink
                   hugoSymbol="ERBB2"
                   alteration="Oncogenic Mutations"
+                  germline={false}
                 >
                   Oncogenic Mutations
                 </AlterationPageLink>
@@ -132,11 +136,12 @@ export default function NewsContent032025() {
           <tbody>
             <tr>
               <td>1</td>
-              <td>{getAlternativeGenePageLinks('NF1')}</td>
+              <td>{getAlternativeGenePageLinks('NF1', false)}</td>
               <td>
                 <AlterationPageLink
                   hugoSymbol="NF1"
                   alteration="Oncogenic Mutations"
+                  germline={false}
                 >
                   Oncogenic Mutations
                 </AlterationPageLink>
