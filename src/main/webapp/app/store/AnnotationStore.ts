@@ -69,6 +69,11 @@ import {
   keyBy,
   uniq,
 } from 'app/shared/utils/LodashUtils';
+import {
+  AnnotationResult,
+  isInvalidVariantAnnotation,
+  normalizeVariantAnnotation,
+} from 'app/store/AnnotationResult';
 
 export interface IAnnotationStore {
   type: AnnotationType;
@@ -645,6 +650,43 @@ export class AnnotationStore {
         return this.defaultAnnotationResult;
         break;
     }
+  }
+
+  @computed
+  get annotationResultState(): AnnotationResult {
+    const annotation = normalizeVariantAnnotation(this.annotationData.result);
+
+    if (isInvalidVariantAnnotation(annotation)) {
+      return {
+        kind: 'invalid',
+        annotation,
+        message:
+          'This alteration appears to be invalid and could not be annotated.',
+      };
+    }
+    return {
+      kind: 'valid',
+      annotation,
+    };
+  }
+
+  @computed
+  get currentAnnotation() {
+    return this.annotationResultState.annotation;
+  }
+
+  @computed
+  get validAnnotation() {
+    return this.annotationResultState.kind === 'valid'
+      ? this.annotationResultState.annotation
+      : undefined;
+  }
+
+  @computed
+  get invalidAnnotation() {
+    return this.annotationResultState.kind === 'invalid'
+      ? this.annotationResultState
+      : undefined;
   }
 
   @computed get cancerTypeFilter() {

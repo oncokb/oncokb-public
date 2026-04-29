@@ -1,0 +1,22 @@
+{
+  "highestSensitiveLevel": null,
+  "highestResistanceLevel": null,
+  "highestDiagnosticImplicationLevel": null,
+  "highestPrognosticImplicationLevel": null,
+  "gene": {
+    "entrezGeneId": 2064,
+    "hugoSymbol": "ERBB2",
+    "grch37Isoform": "ENST00000269571",
+    "grch37RefSeq": "NM_004448.3",
+    "grch38Isoform": "ENST00000269571",
+    "grch38RefSeq": "NM_004448.4",
+    "geneAliases": [
+      "HER2",
+      "NEU"
+    ],
+    "genesets": [],
+    "geneType": "ONCOGENE"
+  },
+  "alteration": 0,
+  "tumorType": null
+}
