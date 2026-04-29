@@ -783,6 +783,7 @@ export const LOSS_OF_FUNCTION_MUTATIONS = 'Loss-of-function Mutations';
 export const SWITCH_OF_FUNCTION_MUTATIONS = 'Switch-of-function Mutations';
 
 export const CATEGORICAL_ALTERATIONS = [
+  PATHOGENIC_VARIANTS,
   ONCOGENIC_MUTATIONS,
   FUSIONS,
   TRUNCATING_MUTATIONS,
