@@ -517,6 +517,45 @@
         "deprecated": false
       }
     },
+    "/api/account/reset-password/info": {
+      "get": {
+        "tags": [
+          "account-resource"
+        ],
+        "summary": "getPasswordResetInfo",
+        "operationId": "getPasswordResetInfoUsingGET",
+        "produces": [
+          "*/*"
+        ],
+        "parameters": [
+          {
+            "name": "key",
+            "in": "query",
+            "description": "key",
+            "required": true,
+            "type": "string"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "schema": {
+              "type": "boolean"
+            }
+          },
+          "401": {
+            "description": "Unauthorized"
+          },
+          "403": {
+            "description": "Forbidden"
+          },
+          "404": {
+            "description": "Not Found"
+          }
+        },
+        "deprecated": false
+      }
+    },
     "/api/account/reset-password/init": {
       "post": {
         "tags": [
@@ -681,20 +720,13 @@
             "description": "key",
             "required": true,
             "type": "string"
-          },
-          {
-            "name": "login",
-            "in": "query",
-            "description": "login",
-            "required": true,
-            "type": "string"
           }
         ],
         "responses": {
           "200": {
             "description": "OK",
             "schema": {
-              "type": "boolean"
+              "$ref": "#/definitions/AccountActivationVM"
             }
           },
           "401": {
@@ -2100,7 +2132,8 @@
               "CLARIFY_USE_CASE",
               "CLARIFY_DUPLICATE_USER",
               "CLARIFY_REGISTRATION_INFO",
-              "LICENSE_OPTIONS",
+              "CLARIFY_HOSPITAL_USE",
+              "CLARIFY_COMMERCIAL_USE",
               "VERIFY_EMAIL_BEFORE_ACCOUNT_EXPIRES",
               "ACTIVATE_FREE_TRIAL",
               "TRIAL_ACCOUNT_IS_ABOUT_TO_EXPIRE",
@@ -2436,6 +2469,39 @@
             "description": "OK",
             "schema": {
               "$ref": "#/definitions/UsageSummary"
+            }
+          },
+          "401": {
+            "description": "Unauthorized"
+          },
+          "403": {
+            "description": "Forbidden"
+          },
+          "404": {
+            "description": "Not Found"
+          }
+        },
+        "deprecated": false
+      }
+    },
+    "/api/usage/summary/registrations": {
+      "get": {
+        "tags": [
+          "usage-analysis-controller"
+        ],
+        "summary": "registrationSummaryGet",
+        "operationId": "registrationSummaryGetUsingGET",
+        "produces": [
+          "*/*"
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "schema": {
+              "type": "array",
+              "items": {
+                "$ref": "#/definitions/UserRegistrationSummary"
+              }
             }
           },
           "401": {
@@ -3585,6 +3651,18 @@
     }
   },
   "definitions": {
+    "AccountActivationVM": {
+      "type": "object",
+      "properties": {
+        "activated": {
+          "type": "boolean"
+        },
+        "hasGracePeriod": {
+          "type": "boolean"
+        }
+      },
+      "title": "AccountActivationVM"
+    },
     "Activation": {
       "type": "object",
       "properties": {
@@ -3966,7 +4044,8 @@
             "CLARIFY_USE_CASE",
             "CLARIFY_DUPLICATE_USER",
             "CLARIFY_REGISTRATION_INFO",
-            "LICENSE_OPTIONS",
+            "CLARIFY_HOSPITAL_USE",
+            "CLARIFY_COMMERCIAL_USE",
             "VERIFY_EMAIL_BEFORE_ACCOUNT_EXPIRES",
             "ACTIVATE_FREE_TRIAL",
             "TRIAL_ACCOUNT_IS_ABOUT_TO_EXPIRE",
@@ -4589,7 +4668,8 @@
             "CLARIFY_USE_CASE",
             "CLARIFY_DUPLICATE_USER",
             "CLARIFY_REGISTRATION_INFO",
-            "LICENSE_OPTIONS",
+            "CLARIFY_HOSPITAL_USE",
+            "CLARIFY_COMMERCIAL_USE",
             "VERIFY_EMAIL_BEFORE_ACCOUNT_EXPIRES",
             "ACTIVATE_FREE_TRIAL",
             "TRIAL_ACCOUNT_IS_ABOUT_TO_EXPIRE",
@@ -4652,6 +4732,22 @@
         }
       },
       "title": "UserOverviewUsage"
+    },
+    "UserRegistrationSummary": {
+      "type": "object",
+      "properties": {
+        "licenseType": {
+          "type": "string"
+        },
+        "date": {
+          "type": "string"
+        },
+        "total": {
+          "type": "integer",
+          "format": "int64"
+        }
+      },
+      "title": "UserRegistrationSummary"
     },
     "UserStats": {
       "type": "object",

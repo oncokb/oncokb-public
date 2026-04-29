@@ -20,12 +20,15 @@ import org.json.simple.parser.JSONParser;
 import org.json.simple.parser.ParseException;
 import org.mskcc.cbio.oncokb.domain.User;
 import org.mskcc.cbio.oncokb.domain.enumeration.FileExtension;
+import org.mskcc.cbio.oncokb.repository.UserDetailsRepository;
+import org.mskcc.cbio.oncokb.repository.projection.UserRegistrationSummaryProjection;
 import org.mskcc.cbio.oncokb.service.S3Service;
 import org.mskcc.cbio.oncokb.service.UserService;
 import org.mskcc.cbio.oncokb.service.dto.UserDTO;
 import org.mskcc.cbio.oncokb.service.mapper.UserMapper;
 import org.mskcc.cbio.oncokb.util.TimeUtil;
 import org.mskcc.cbio.oncokb.web.rest.vm.usageAnalysis.UsageSummary;
+import org.mskcc.cbio.oncokb.web.rest.vm.usageAnalysis.UserRegistrationSummary;
 import org.mskcc.cbio.oncokb.web.rest.vm.usageAnalysis.UserOverviewUsage;
 import org.mskcc.cbio.oncokb.web.rest.vm.usageAnalysis.UserStats;
 import org.mskcc.cbio.oncokb.web.rest.vm.usageAnalysis.UserUsage;
@@ -43,6 +46,8 @@ import software.amazon.awssdk.services.s3.model.GetObjectResponse;
 @Controller
 @RequestMapping("/api")
 public class UsageAnalysisController {
+  public static final String NO_CREATION_DATE_LABEL = "No creation date";
+
   @Autowired
   private S3Service s3Service;
 
@@ -51,6 +56,9 @@ public class UsageAnalysisController {
 
   @Autowired
   private UserMapper userMapper;
+
+  @Autowired
+  private UserDetailsRepository userDetailsRepository;
 
   @Autowired
   private Clock clock;
@@ -393,6 +401,16 @@ public class UsageAnalysisController {
     return new ResponseEntity<>(summary, HttpStatus.OK);
   }
 
+  @GetMapping("/usage/summary/registrations")
+  public ResponseEntity<List<UserRegistrationSummary>> registrationSummaryGet() {
+    List<UserRegistrationSummary> summaries = userDetailsRepository
+      .findDailyRegistrationSummaries()
+      .stream()
+      .map(this::toUserRegistrationSummary)
+      .collect(Collectors.toList());
+    return new ResponseEntity<>(summaries, HttpStatus.OK);
+  }
+
   /**
    * API to get the usage of a specific resource
    * @param endpoint
@@ -469,5 +487,19 @@ public class UsageAnalysisController {
         resourceDetail.get(key).put(user, usage);
       }
     }
+  }
+
+  private UserRegistrationSummary toUserRegistrationSummary(
+    UserRegistrationSummaryProjection projection
+  ) {
+    UserRegistrationSummary summary = new UserRegistrationSummary();
+    summary.setDate(
+      projection.getDate() == null
+        ? NO_CREATION_DATE_LABEL
+        : projection.getDate().toString()
+    );
+    summary.setTotal(projection.getTotal());
+    summary.setLicenseType(projection.getLicenseType());
+    return summary;
   }
 }

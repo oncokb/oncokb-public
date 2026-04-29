@@ -13,7 +13,11 @@ import { match } from 'react-router';
 import Tabs from 'react-bootstrap/Tabs';
 import Tab from 'react-bootstrap/Tab';
 import Alert from 'react-bootstrap/Alert';
-import { UserOverviewUsage, UsageSummary } from 'app/shared/api/generated/API';
+import {
+  UserOverviewUsage,
+  UsageSummary,
+  UserRegistrationSummary,
+} from 'app/shared/api/generated/API';
 import autobind from 'autobind-decorator';
 import { USAGE_YEAR_DETAIL_TIME_KEY } from 'app/config/constants';
 import { remoteData } from 'cbioportal-frontend-commons';
@@ -28,13 +32,19 @@ import {
 import UsageAnalysisTable from 'app/pages/usageAnalysisPage/UsageAnalysisTable';
 import { ToggleValue } from './usage-analysis-utils';
 import { notifyError } from 'app/shared/utils/NotificationUtils';
+import RegistrationDetailsTable from './RegistrationDetailsTable';
 
 export enum UsageType {
+  REGISTRATION = 'REGISTRATION',
   USER = 'USER',
   RESOURCE = 'RESOURCE',
 }
 
-const ALLOWED_USAGETYPE: string[] = [UsageType.USER, UsageType.RESOURCE];
+const ALLOWED_USAGETYPE: string[] = [
+  UsageType.REGISTRATION,
+  UsageType.USER,
+  UsageType.RESOURCE,
+];
 
 export enum UsageTableColumnKey {
   RESOURCES = 'resource',
@@ -100,7 +110,7 @@ export default class UsageAnalysisPage extends React.Component<{
     ToggleValue.PUBLIC_RESOURCES;
   @observable dropdownList: string[] = [];
   @observable dropdownValue = USAGE_YEAR_DETAIL_TIME_KEY;
-  @observable usageType: UsageType = UsageType.USER;
+  @observable usageType: UsageType = UsageType.REGISTRATION;
 
   readonly reactions: IReactionDisposer[] = [];
 
@@ -160,6 +170,19 @@ export default class UsageAnalysisPage extends React.Component<{
     },
   });
 
+  readonly registrationSummary = remoteData<UserRegistrationSummary[]>({
+    await: () => [],
+    async invoke() {
+      return await client.registrationSummaryGetUsingGET({});
+    },
+    onError: (error: Error) => {
+      if (this.usageType === UsageType.REGISTRATION) {
+        notifyError(error, 'Failed to load registration data.');
+      }
+    },
+    default: [],
+  });
+
   @autobind
   @action
   handleUserTabResourcesTypeToggleChange(value: ToggleValue) {
@@ -186,6 +209,20 @@ export default class UsageAnalysisPage extends React.Component<{
           id="uncontrolled-tab-example"
           onSelect={k => this.toggleType(UsageType[k!])}
         >
+          <Tab eventKey={UsageType.REGISTRATION} title="Registrations">
+            <div className="mt-2">
+              {this.registrationSummary.isError ? (
+                <Alert variant="danger">
+                  Failed to load registration data.
+                </Alert>
+              ) : (
+                <RegistrationDetailsTable
+                  data={this.registrationSummary.result}
+                  loadedData={this.registrationSummary.isComplete}
+                />
+              )}
+            </div>
+          </Tab>
           <Tab eventKey={UsageType.USER} title="Users">
             <div className="mt-2">
               {this.users.isError ? (

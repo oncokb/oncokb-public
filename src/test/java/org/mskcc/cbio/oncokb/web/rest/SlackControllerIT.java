@@ -278,8 +278,12 @@ public class SlackControllerIT {
 
     @Test
     void testApproveHospitalUserWithoutApiRequestDoesNotGrantApiAccess() throws IOException, MessagingException {
-        User mockUser = userRepository.findOneWithAuthoritiesByLogin(DEFAULT_USER_EMAIL).orElseThrow();
-        UserDetails mockUserDetails = userDetailsRepository.findOneByUser(mockUser).orElseThrow();
+        User mockUser = userRepository
+            .findOneWithAuthoritiesByLogin(DEFAULT_USER_EMAIL)
+            .orElseThrow(() -> new IllegalStateException("Default user was not found"));
+        UserDetails mockUserDetails = userDetailsRepository
+            .findOneByUser(mockUser)
+            .orElseThrow(() -> new IllegalStateException("User details were not found"));
         mockUserDetails.setLicenseType(LicenseType.HOSPITAL);
         userDetailsRepository.saveAndFlush(mockUserDetails);
 
@@ -287,15 +291,21 @@ public class SlackControllerIT {
         Gson snakeCase = GsonFactory.createSnakeCase();
         slackController.approveUser(snakeCase.toJson(actionJSON));
 
-        User updatedUser = userRepository.findOneWithAuthoritiesByLogin(DEFAULT_USER_EMAIL).orElseThrow();
+        User updatedUser = userRepository
+            .findOneWithAuthoritiesByLogin(DEFAULT_USER_EMAIL)
+            .orElseThrow(() -> new IllegalStateException("Updated user was not found"));
         assertThat(updatedUser.getActivated()).isTrue();
         assertThat(updatedUser.getAuthorities()).extracting("name").doesNotContain(AuthoritiesConstants.API);
     }
 
     @Test
     void testApproveHospitalUserWithApiRequestGrantsApiAccess() throws IOException, MessagingException {
-        User mockUser = userRepository.findOneWithAuthoritiesByLogin(DEFAULT_USER_EMAIL).orElseThrow();
-        UserDetails mockUserDetails = userDetailsRepository.findOneByUser(mockUser).orElseThrow();
+        User mockUser = userRepository
+            .findOneWithAuthoritiesByLogin(DEFAULT_USER_EMAIL)
+            .orElseThrow(() -> new IllegalStateException("Default user was not found"));
+        UserDetails mockUserDetails = userDetailsRepository
+            .findOneByUser(mockUser)
+            .orElseThrow(() -> new IllegalStateException("User details were not found"));
         mockUserDetails.setLicenseType(LicenseType.HOSPITAL);
 
         AdditionalInfoDTO additionalInfoDTO = new AdditionalInfoDTO();
@@ -310,7 +320,9 @@ public class SlackControllerIT {
         Gson snakeCase = GsonFactory.createSnakeCase();
         slackController.approveUser(snakeCase.toJson(actionJSON));
 
-        User updatedUser = userRepository.findOneWithAuthoritiesByLogin(DEFAULT_USER_EMAIL).orElseThrow();
+        User updatedUser = userRepository
+            .findOneWithAuthoritiesByLogin(DEFAULT_USER_EMAIL)
+            .orElseThrow(() -> new IllegalStateException("Updated user was not found"));
         assertThat(updatedUser.getActivated()).isTrue();
         assertThat(updatedUser.getAuthorities()).extracting("name").contains(AuthoritiesConstants.API);
     }
