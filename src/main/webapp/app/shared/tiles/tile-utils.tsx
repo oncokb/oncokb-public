@@ -340,7 +340,7 @@ export function SomaticGermlineAlterationTiles({
   if (isGermline) {
     if (hasPathogenicity) {
       tiles.push(
-        createPathogenicityTileProps(germlineAnnotation!, clinvar, includeTitle)
+        createPathogenicityTileProps(germlineAnnotation, clinvar, includeTitle)
       );
     } else if (hasMutationEffect) {
       tiles.push(
@@ -352,7 +352,7 @@ export function SomaticGermlineAlterationTiles({
       );
     }
     if (hasPenetrance) {
-      tiles.push(createGeneticRiskTileProps(germlineAnnotation!, includeTitle));
+      tiles.push(createGeneticRiskTileProps(germlineAnnotation, includeTitle));
     }
     tiles.push(
       createHighestLevelOfEvidenceTileProps(

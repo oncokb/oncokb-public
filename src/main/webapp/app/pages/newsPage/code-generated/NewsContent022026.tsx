@@ -7,6 +7,8 @@ import {
 } from 'app/shared/utils/UrlUtils';
 import { NewlyAddedGenesListItem } from 'app/pages/newsPage/NewlyAddedGenesListItem';
 import { TableOfContents } from 'app/pages/privacyNotice/TableOfContents';
+import { convertGeneInputToLinks } from 'app/pages/newsPage/Util';
+import GeneticTypeTag from 'app/components/tag/GeneticTypeTag';
 
 export default function NewsContent022026() {
   return (
@@ -32,37 +34,37 @@ export default function NewsContent022026() {
                 </thead>
                 <tbody>
                   <tr>
-                    <td>{getAlternativeGenePageLinks('KLHL6')}</td>
+                    <td>{getAlternativeGenePageLinks('KLHL6', false)}</td>
                     <td>Oncogene, Tumor Suppressor</td>
                     <td>Tumor Suppressor</td>
                   </tr>
                   <tr>
-                    <td>{getAlternativeGenePageLinks('MEF2C')}</td>
+                    <td>{getAlternativeGenePageLinks('MEF2C', false)}</td>
                     <td>Oncogene, Tumor Suppressor</td>
                     <td>Oncogene</td>
                   </tr>
                   <tr>
-                    <td>{getAlternativeGenePageLinks('MITF')}</td>
+                    <td>{getAlternativeGenePageLinks('MITF', false)}</td>
                     <td>Oncogene, Tumor Suppressor</td>
                     <td>Oncogene</td>
                   </tr>
                   <tr>
-                    <td>{getAlternativeGenePageLinks('NSD1')}</td>
+                    <td>{getAlternativeGenePageLinks('NSD1', false)}</td>
                     <td>Oncogene, Tumor Suppressor</td>
                     <td>Tumor Suppressor</td>
                   </tr>
                   <tr>
-                    <td>{getAlternativeGenePageLinks('PRKCB')}</td>
+                    <td>{getAlternativeGenePageLinks('PRKCB', false)}</td>
                     <td>Oncogene, Tumor Suppressor</td>
                     <td>Oncogene</td>
                   </tr>
                   <tr>
-                    <td>{getAlternativeGenePageLinks('PTPN1')}</td>
+                    <td>{getAlternativeGenePageLinks('PTPN1', false)}</td>
                     <td>Oncogene, Tumor Suppressor</td>
                     <td>Tumor Suppressor</td>
                   </tr>
                   <tr>
-                    <td>{getAlternativeGenePageLinks('SERPINB3')}</td>
+                    <td>{getAlternativeGenePageLinks('SERPINB3', false)}</td>
                     <td>Oncogene, Tumor Suppressor</td>
                     <td>
                       Insufficient evidence to classify as an Oncogene or Tumor
@@ -70,7 +72,7 @@ export default function NewsContent022026() {
                     </td>
                   </tr>
                   <tr>
-                    <td>{getAlternativeGenePageLinks('SMARCE1')}</td>
+                    <td>{getAlternativeGenePageLinks('SMARCE1', false)}</td>
                     <td>Oncogene, Tumor Suppressor</td>
                     <td>
                       Insufficient evidence to classify as an Oncogene or Tumor
@@ -78,12 +80,12 @@ export default function NewsContent022026() {
                     </td>
                   </tr>
                   <tr>
-                    <td>{getAlternativeGenePageLinks('SOX9')}</td>
+                    <td>{getAlternativeGenePageLinks('SOX9', false)}</td>
                     <td>Oncogene, Tumor Suppressor</td>
                     <td>Tumor Suppressor</td>
                   </tr>
                   <tr>
-                    <td>{getAlternativeGenePageLinks('ZBTB20')}</td>
+                    <td>{getAlternativeGenePageLinks('ZBTB20', false)}</td>
                     <td>Oncogene, Tumor Suppressor</td>
                     <td>Oncogene</td>
                   </tr>
@@ -119,9 +121,13 @@ export default function NewsContent022026() {
           <tbody>
             <tr>
               <td>R2</td>
-              <td>{getAlternativeGenePageLinks('EGFR')}</td>
+              <td>{getAlternativeGenePageLinks('EGFR', false)}</td>
               <td>
-                <AlterationPageLink hugoSymbol="EGFR" alteration="S492R">
+                <AlterationPageLink
+                  hugoSymbol="EGFR"
+                  alteration="S492R"
+                  germline={false}
+                >
                   S492R
                 </AlterationPageLink>
               </td>

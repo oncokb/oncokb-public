@@ -7,6 +7,8 @@ import {
 } from 'app/shared/utils/UrlUtils';
 import { NewlyAddedGenesListItem } from 'app/pages/newsPage/NewlyAddedGenesListItem';
 import { TableOfContents } from 'app/pages/privacyNotice/TableOfContents';
+import { convertGeneInputToLinks } from 'app/pages/newsPage/Util';
+import GeneticTypeTag from 'app/components/tag/GeneticTypeTag';
 
 export default function NewsContent052025() {
   return (
@@ -32,11 +34,12 @@ export default function NewsContent052025() {
           </thead>
           <tbody>
             <tr>
-              <td>{getAlternativeGenePageLinks('KRAS')}</td>
+              <td>{getAlternativeGenePageLinks('KRAS', false)}</td>
               <td>
                 <AlterationPageLink
                   hugoSymbol="KRAS"
                   alteration="Oncogenic Mutations"
+                  germline={false}
                 >
                   Oncogenic Mutations
                 </AlterationPageLink>
