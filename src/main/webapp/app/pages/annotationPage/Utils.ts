@@ -3,7 +3,7 @@ import {
   TherapeuticImplication,
 } from 'app/store/AnnotationStore';
 import { LEVEL_PRIORITY, LEVELS, PAGE_ROUTE } from 'app/config/constants';
-import { VariantAnnotation } from 'app/shared/api/generated/OncoKbPrivateAPI';
+import type { VariantAnnotation } from 'app/store/AnnotationStore';
 
 const getFdaImplicationKey = (fdaImplication: FdaImplication) => {
   return `${fdaImplication.alteration.alteration}-${fdaImplication.cancerType}`;

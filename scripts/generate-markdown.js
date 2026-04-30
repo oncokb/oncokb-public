@@ -14,8 +14,9 @@ const oncokbBaseUrls = [
 ];
 
 const objectPropertyMark = '-------------------';
+const booleanPropertyMark = '__BOOL_PROP__';
 const objectPropertyMarkRegex = new RegExp(
-  `"${objectPropertyMark}(.*)${objectPropertyMark}"`,
+  `"${objectPropertyMark}(.*?)${objectPropertyMark}"`,
   'gm'
 );
 
@@ -86,9 +87,17 @@ function decodeHtmlEntities(text) {
  */
 function fixHtmlString(htmlString) {
   return htmlString
+    .replace(
+      new RegExp(`germline="${booleanPropertyMark}(true|false)"`, 'g'),
+      (_, isGermline) => `germline={${isGermline}}`
+    )
     .replace(objectPropertyMarkRegex, (_, group) => {
       return `{${decodeHtmlEntities(group)}}`;
     })
+    .replace(
+      /\{&lt;GeneticTypeTag isGermline=\{(true|false)\} \/&gt;\}/g,
+      (_, isGermline) => `{<GeneticTypeTag isGermline={${isGermline}} />}`
+    )
     .replace(/\u00A0/g, ' ');
 }
 
@@ -212,7 +221,9 @@ function addAutoTableLinks(md, state) {
   let columnIdx = 0;
   let geneIdx = -1;
   let mutationIdx = -1;
+  let settingIdx = -1;
   let currentGene = '';
+  let currentGeneSetting = 'somatic';
   for (const token of state.tokens) {
     if (token.type === 'th_open') {
       inTh = true;
@@ -227,14 +238,54 @@ function addAutoTableLinks(md, state) {
     } else if (token.type === 'tr_open') {
       columnIdx = 0;
       currentGene = '';
+      currentGeneSetting = 'somatic';
+    } else if (inTd && columnIdx === settingIdx && token.type === 'inline') {
+      const child = token.children[0];
+      currentGeneSetting =
+        child.content.trim().toLowerCase() === 'germline'
+          ? 'germline'
+          : 'somatic';
+      if (['germline', 'somatic'].includes(child.content.trim().toLowerCase())) {
+        const geneticTypeTag = `{<GeneticTypeTag isGermline={${
+          currentGeneSetting === 'germline'
+        }} />}`;
+        token.content = geneticTypeTag;
+        token.children = [createMarkdownTextToken(md, geneticTypeTag)];
+      }
     } else if (inTd && columnIdx === geneIdx && token.type === 'inline') {
       const child = token.children[0];
       currentGene = child.content;
-      child.content = `{getAlternativeGenePageLinks('${child.content}')}`;
+      if (child.content.includes(',')) {
+        child.content = `{convertGeneInputToLinks('${child.content}', ${
+          currentGeneSetting === 'germline'
+        })}`;
+      } else {
+        child.content = `{getAlternativeGenePageLinks('${child.content}', ${
+          currentGeneSetting === 'germline'
+        })}`;
+      }
     } else if (inTd && columnIdx === mutationIdx && token.type === 'inline') {
       const child = token.children[0];
       if (currentGene === '') {
         throw new Error(`No gene for this row and mutation "${child.content}"`);
+      } else if (currentGene.includes(',')) {
+        // Multi-gene rows should remain text in the mutation column.
+      } else if (child.content.startsWith('Pathogenic Variants (excluding')) {
+        const pathogenicVariantsStr = 'Pathogenic Variants';
+        const exclusionSection = child.content.replace(
+          `${pathogenicVariantsStr} `,
+          ''
+        );
+        const pathogenicVariantLinks = createMutationLinks(
+          md,
+          currentGene,
+          [pathogenicVariantsStr],
+          currentGeneSetting === 'germline'
+        );
+        token.children = [
+          ...pathogenicVariantLinks,
+          createMarkdownTextToken(md, ` ${exclusionSection}`),
+        ];
       } else if (child.content.startsWith('Oncogenic Mutations (excluding')) {
         // Oncogenic Mutations with excluding do not need links, but they
         // need to have a few line breaks between "Mutations" and "(excluding"
@@ -268,7 +319,8 @@ function addAutoTableLinks(md, state) {
         const allMutationLinks = createMutationLinks(
           md,
           currentGene,
-          mutationNames
+          mutationNames,
+          currentGeneSetting === 'germline'
         );
 
         token.children = [
@@ -291,7 +343,8 @@ function addAutoTableLinks(md, state) {
           const mutationLinks = createMutationLinks(
             md,
             currentGene,
-            mutationNames
+            mutationNames,
+            currentGeneSetting === 'germline'
           );
           tokens.push(createMarkdownTextToken(md, title + ': '));
           tokens.push(...mutationLinks);
@@ -304,19 +357,22 @@ function addAutoTableLinks(md, state) {
         const allMutationLinks = createMutationLinks(
           md,
           currentGene,
-          mutationNames
+          mutationNames,
+          currentGeneSetting === 'germline'
         );
         token.children = allMutationLinks;
       }
-    } else if (inTh && token.content === 'Gene') {
+    } else if (inTh && ['Gene', 'Gene(s)'].includes(token.content)) {
       geneIdx = columnIdx;
+    } else if (inTh && token.content === 'Setting') {
+      settingIdx = columnIdx;
     } else if (inTh && token.content === 'Mutation') {
       mutationIdx = columnIdx;
     }
   }
 }
 
-function createMutationLinks(md, currentGene, mutationNames) {
+function createMutationLinks(md, currentGene, mutationNames, germline = false) {
   const allMutationLinks = [];
   for (mutationName of mutationNames) {
     let mutationLinks = [
@@ -356,6 +412,10 @@ function createMutationLinks(md, currentGene, mutationNames) {
       );
       alterationPageLinkTags[0].attrSet('hugoSymbol', currentGene);
       alterationPageLinkTags[0].attrSet('alteration', mutationLink.linkText);
+      alterationPageLinkTags[0].attrSet(
+        'germline',
+        `${booleanPropertyMark}${germline}`
+      );
       if (i > 0) {
         const linkEndToken = alterationPageLinkTags.pop();
         const textToken = createMarkdownTextToken(md, mutationLink.alteration);
@@ -505,6 +565,8 @@ import { Link } from 'react-router-dom';
 import { AlterationPageLink, getAlternativeGenePageLinks, GenePageLink } from 'app/shared/utils/UrlUtils';
 import { NewlyAddedGenesListItem } from 'app/pages/newsPage/NewlyAddedGenesListItem';
 import { TableOfContents } from 'app/pages/privacyNotice/TableOfContents';
+import { convertGeneInputToLinks } from 'app/pages/newsPage/Util';
+import GeneticTypeTag from 'app/components/tag/GeneticTypeTag';
 
 export default function ${componentName}() {
   return (

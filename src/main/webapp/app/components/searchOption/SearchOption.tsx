@@ -11,7 +11,12 @@ import classnames from 'classnames';
 import AppStore from 'app/store/AppStore';
 import { FeedbackIcon } from 'app/components/feedback/FeedbackIcon';
 import { FeedbackType } from 'app/components/feedback/types';
-import { LEVEL_PRIORITY_BY_TYPE, ONCOKB_TM } from 'app/config/constants';
+import {
+  LEVEL_PRIORITY_BY_TYPE,
+  ONCOKB_TM,
+  ONCOGENICITY,
+  PATHOGENICITY,
+} from 'app/config/constants';
 import {
   Alteration,
   TypeaheadSearchResp,
@@ -52,6 +57,17 @@ type SearchOptionProps = {
   data: ExtendedTypeaheadSearchResp;
   appStore: AppStore;
 };
+
+function getSearchResultIconOncogenicity(data: ExtendedTypeaheadSearchResp) {
+  if (data.pathogenicity === PATHOGENICITY.PATHOGENIC) {
+    return ONCOGENICITY.ONCOGENIC;
+  }
+  if (data.pathogenicity === PATHOGENICITY.LIKELY_PATHOGENIC) {
+    return ONCOGENICITY.LIKELY_ONCOGENIC;
+  }
+  return data.oncogenicity;
+}
+
 const LevelString: React.FunctionComponent<{
   level: string;
 }> = props => {
@@ -128,7 +144,7 @@ const AlterationSearchOption: React.FunctionComponent<{
         {getGeneticTypeTag(props.data.geneticType)}
         <OncoKBAnnotationIcon
           className={'mb-1 ml-1'}
-          oncogenicity={props.data.oncogenicity}
+          oncogenicity={getSearchResultIconOncogenicity(props.data)}
           vus={props.data.vus}
           sensitiveLevel={props.data.highestSensitiveLevel}
           resistanceLevel={props.data.highestResistanceLevel}
@@ -169,7 +185,7 @@ const GenomicSearchOption: React.FunctionComponent<{
         {getGeneticTypeTag(props.data.geneticType)}
         <OncoKBAnnotationIcon
           className={'mb-1 ml-1'}
-          oncogenicity={props.data.oncogenicity}
+          oncogenicity={getSearchResultIconOncogenicity(props.data)}
           vus={props.data.vus}
           sensitiveLevel={props.data.highestSensitiveLevel}
           resistanceLevel={props.data.highestResistanceLevel}

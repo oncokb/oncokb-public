@@ -7,6 +7,8 @@ import {
 } from 'app/shared/utils/UrlUtils';
 import { NewlyAddedGenesListItem } from 'app/pages/newsPage/NewlyAddedGenesListItem';
 import { TableOfContents } from 'app/pages/privacyNotice/TableOfContents';
+import { convertGeneInputToLinks } from 'app/pages/newsPage/Util';
+import GeneticTypeTag from 'app/components/tag/GeneticTypeTag';
 
 export default function NewsContent102025() {
   return (
@@ -147,9 +149,13 @@ export default function NewsContent102025() {
           <tbody>
             <tr>
               <td>1</td>
-              <td>{getAlternativeGenePageLinks('H3-3A')}</td>
+              <td>{getAlternativeGenePageLinks('H3-3A', false)}</td>
               <td>
-                <AlterationPageLink hugoSymbol="H3-3A" alteration="K28M">
+                <AlterationPageLink
+                  hugoSymbol="H3-3A"
+                  alteration="K28M"
+                  germline={false}
+                >
                   K28M
                 </AlterationPageLink>
               </td>
@@ -165,9 +171,13 @@ export default function NewsContent102025() {
             </tr>
             <tr>
               <td>1</td>
-              <td>{getAlternativeGenePageLinks('H3C2')}</td>
+              <td>{getAlternativeGenePageLinks('H3C2', false)}</td>
               <td>
-                <AlterationPageLink hugoSymbol="H3C2" alteration="K28M">
+                <AlterationPageLink
+                  hugoSymbol="H3C2"
+                  alteration="K28M"
+                  germline={false}
+                >
                   K28M
                 </AlterationPageLink>
               </td>
@@ -183,9 +193,13 @@ export default function NewsContent102025() {
             </tr>
             <tr>
               <td>1</td>
-              <td>{getAlternativeGenePageLinks('H3C3')}</td>
+              <td>{getAlternativeGenePageLinks('H3C3', false)}</td>
               <td>
-                <AlterationPageLink hugoSymbol="H3C3" alteration="K28M">
+                <AlterationPageLink
+                  hugoSymbol="H3C3"
+                  alteration="K28M"
+                  germline={false}
+                >
                   K28M
                 </AlterationPageLink>
               </td>

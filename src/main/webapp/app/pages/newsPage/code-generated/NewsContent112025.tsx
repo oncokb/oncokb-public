@@ -7,6 +7,8 @@ import {
 } from 'app/shared/utils/UrlUtils';
 import { NewlyAddedGenesListItem } from 'app/pages/newsPage/NewlyAddedGenesListItem';
 import { TableOfContents } from 'app/pages/privacyNotice/TableOfContents';
+import { convertGeneInputToLinks } from 'app/pages/newsPage/Util';
+import GeneticTypeTag from 'app/components/tag/GeneticTypeTag';
 
 export default function NewsContent112025() {
   return (
@@ -62,9 +64,13 @@ export default function NewsContent112025() {
           </thead>
           <tbody>
             <tr>
-              <td>{getAlternativeGenePageLinks('ESR1')}</td>
+              <td>{getAlternativeGenePageLinks('ESR1', false)}</td>
               <td>
-                <AlterationPageLink hugoSymbol="ESR1" alteration="V422del">
+                <AlterationPageLink
+                  hugoSymbol="ESR1"
+                  alteration="V422del"
+                  germline={false}
+                >
                   V422del
                 </AlterationPageLink>
               </td>
@@ -88,9 +94,13 @@ export default function NewsContent112025() {
               </td>
             </tr>
             <tr>
-              <td>{getAlternativeGenePageLinks('ESR1')}</td>
+              <td>{getAlternativeGenePageLinks('ESR1', false)}</td>
               <td>
-                <AlterationPageLink hugoSymbol="ESR1" alteration="S463F">
+                <AlterationPageLink
+                  hugoSymbol="ESR1"
+                  alteration="S463F"
+                  germline={false}
+                >
                   S463F
                 </AlterationPageLink>
               </td>
@@ -114,12 +124,13 @@ export default function NewsContent112025() {
               </td>
             </tr>
             <tr>
-              <td>{getAlternativeGenePageLinks('NPM1')}</td>
+              <td>{getAlternativeGenePageLinks('NPM1', false)}</td>
               <td>
                 Susceptible NPM1 mutations per the FDA label:{' '}
                 <AlterationPageLink
                   hugoSymbol="NPM1"
                   alteration="Truncating mutations in Exon 5"
+                  germline={false}
                 >
                   Truncating mutations in Exon 5
                 </AlterationPageLink>
@@ -127,6 +138,7 @@ export default function NewsContent112025() {
                 <AlterationPageLink
                   hugoSymbol="NPM1"
                   alteration="Truncating mutations in Exon 9"
+                  germline={false}
                 >
                   Truncating mutations in Exon 9
                 </AlterationPageLink>
@@ -134,6 +146,7 @@ export default function NewsContent112025() {
                 <AlterationPageLink
                   hugoSymbol="NPM1"
                   alteration="Truncating mutations in Exon 11"
+                  germline={false}
                 >
                   Truncating mutations in Exon 11
                 </AlterationPageLink>
@@ -143,6 +156,7 @@ export default function NewsContent112025() {
                 <AlterationPageLink
                   hugoSymbol="NPM1"
                   alteration="K134delinsQLLSGL"
+                  germline={false}
                 >
                   K134delinsQLLSGL
                 </AlterationPageLink>
@@ -150,6 +164,7 @@ export default function NewsContent112025() {
                 <AlterationPageLink
                   hugoSymbol="NPM1"
                   alteration="L135insALELGN"
+                  germline={false}
                 >
                   L135insALELGN
                 </AlterationPageLink>
@@ -157,6 +172,7 @@ export default function NewsContent112025() {
                 <AlterationPageLink
                   hugoSymbol="NPM1"
                   alteration="L136_137insAEDVKLL"
+                  germline={false}
                 >
                   L136_137insAEDVKLL
                 </AlterationPageLink>
@@ -164,6 +180,7 @@ export default function NewsContent112025() {
                 <AlterationPageLink
                   hugoSymbol="NPM1"
                   alteration="K141_142insLSALSISGK"
+                  germline={false}
                 >
                   K141_142insLSALSISGK
                 </AlterationPageLink>
@@ -173,6 +190,7 @@ export default function NewsContent112025() {
                 <AlterationPageLink
                   hugoSymbol="NPM1"
                   alteration="NPM1-CCDC28A Fusion"
+                  germline={false}
                 >
                   NPM1-CCDC28A Fusion
                 </AlterationPageLink>
@@ -180,6 +198,7 @@ export default function NewsContent112025() {
                 <AlterationPageLink
                   hugoSymbol="NPM1"
                   alteration="NPM1-HAUS1 Fusion"
+                  germline={false}
                 >
                   NPM1-HAUS1 Fusion
                 </AlterationPageLink>
@@ -187,6 +206,7 @@ export default function NewsContent112025() {
                 <AlterationPageLink
                   hugoSymbol="NPM1"
                   alteration="NPM1-MLF1 Fusion"
+                  germline={false}
                 >
                   NPM1-MLF1 Fusion
                 </AlterationPageLink>
@@ -194,6 +214,7 @@ export default function NewsContent112025() {
                 <AlterationPageLink
                   hugoSymbol="NPM1"
                   alteration="NPM1-RPP30 Fusion"
+                  germline={false}
                 >
                   NPM1-RPP30 Fusion
                 </AlterationPageLink>
@@ -251,29 +272,53 @@ export default function NewsContent112025() {
           <tbody>
             <tr>
               <td>1</td>
-              <td>{getAlternativeGenePageLinks('ESR1')}</td>
+              <td>{getAlternativeGenePageLinks('ESR1', false)}</td>
               <td>
-                <AlterationPageLink hugoSymbol="ESR1" alteration="S463P">
+                <AlterationPageLink
+                  hugoSymbol="ESR1"
+                  alteration="S463P"
+                  germline={false}
+                >
                   S463P
                 </AlterationPageLink>
                 ,{' '}
-                <AlterationPageLink hugoSymbol="ESR1" alteration="L469V">
+                <AlterationPageLink
+                  hugoSymbol="ESR1"
+                  alteration="L469V"
+                  germline={false}
+                >
                   L469V
                 </AlterationPageLink>
                 ,{' '}
-                <AlterationPageLink hugoSymbol="ESR1" alteration="L536">
+                <AlterationPageLink
+                  hugoSymbol="ESR1"
+                  alteration="L536"
+                  germline={false}
+                >
                   L536
                 </AlterationPageLink>
                 ,{' '}
-                <AlterationPageLink hugoSymbol="ESR1" alteration="Y537">
+                <AlterationPageLink
+                  hugoSymbol="ESR1"
+                  alteration="Y537"
+                  germline={false}
+                >
                   Y537
                 </AlterationPageLink>
                 ,{' '}
-                <AlterationPageLink hugoSymbol="ESR1" alteration="D538">
+                <AlterationPageLink
+                  hugoSymbol="ESR1"
+                  alteration="D538"
+                  germline={false}
+                >
                   D538
                 </AlterationPageLink>
                 ,{' '}
-                <AlterationPageLink hugoSymbol="ESR1" alteration="E380">
+                <AlterationPageLink
+                  hugoSymbol="ESR1"
+                  alteration="E380"
+                  germline={false}
+                >
                   E380
                 </AlterationPageLink>
               </td>

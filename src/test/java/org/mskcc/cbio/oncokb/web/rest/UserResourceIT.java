@@ -184,7 +184,7 @@ public class UserResourceIT {
             .content(TestUtil.convertObjectToJsonBytes(managedUserVM)))
             .andExpect(status().isCreated());
 
-        User createdUser = userRepository.findOneWithAuthoritiesByLogin("hospital-user").orElseThrow();
+        User createdUser = userRepository.findOneWithAuthoritiesByLogin("hospital-user").orElseThrow(NoSuchElementException::new);
         assertThat(createdUser.getAuthorities()).extracting("name")
             .contains(AuthoritiesConstants.USER)
             .doesNotContain(AuthoritiesConstants.API);
@@ -209,7 +209,7 @@ public class UserResourceIT {
             .content(TestUtil.convertObjectToJsonBytes(managedUserVM)))
             .andExpect(status().isCreated());
 
-        User createdUser = userRepository.findOneWithAuthoritiesByLogin("commercial-user").orElseThrow();
+        User createdUser = userRepository.findOneWithAuthoritiesByLogin("commercial-user").orElseThrow(NoSuchElementException::new);
         assertThat(createdUser.getAuthorities()).extracting("name")
             .contains(AuthoritiesConstants.USER)
             .doesNotContain(AuthoritiesConstants.API);
@@ -237,7 +237,7 @@ public class UserResourceIT {
             .content(TestUtil.convertObjectToJsonBytes(managedUserVM)))
             .andExpect(status().isCreated());
 
-        User createdUser = userRepository.findOneWithAuthoritiesByLogin("explicit-api-user").orElseThrow();
+        User createdUser = userRepository.findOneWithAuthoritiesByLogin("explicit-api-user").orElseThrow(NoSuchElementException::new);
         assertThat(createdUser.getAuthorities()).extracting("name")
             .contains(AuthoritiesConstants.USER, AuthoritiesConstants.API);
     }

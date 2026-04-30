@@ -12,6 +12,7 @@ import { COLOR_BLUE } from 'app/config/theme';
 import { Gene } from 'app/shared/api/generated/OncoKbAPI';
 import {
   EnsemblGene,
+  SomaticVariantAnnotation,
   Tag,
   VariantAnnotation,
 } from 'app/shared/api/generated/OncoKbPrivateAPI';
@@ -172,7 +173,7 @@ const SomaticTagCancerTypePage = inject(
             cancerTypeCode,
           } = pageLoadState.data;
 
-          const highestLevelInfo: VariantAnnotation = {
+          const highestLevelInfo: SomaticVariantAnnotation = {
             ...DEFAULT_ANNOTATION,
             highestSensitiveLevel: tag.highestLevels.highestSensitiveLevel,
             highestDiagnosticImplicationLevel:

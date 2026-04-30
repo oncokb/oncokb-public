@@ -194,7 +194,10 @@ export const getAlternativeAllelesPageLinks = (
   }
 };
 
-export const getAlternativeGenePageLinks = (genes: string) => {
+export const getAlternativeGenePageLinks = (
+  genes: string,
+  germline = false
+) => {
   const splits = genes.split('/');
   const temp = splits[0];
   const baseHugoSymbol = temp.substring(0, temp.length - 1);
@@ -202,7 +205,7 @@ export const getAlternativeGenePageLinks = (genes: string) => {
     (ending, index) => {
       const hugoSymbol = `${baseHugoSymbol}${ending}`;
       return (
-        <GenePageLink hugoSymbol={hugoSymbol}>
+        <GenePageLink hugoSymbol={hugoSymbol} germline={germline}>
           {index === 0 ? hugoSymbol : ending}
         </GenePageLink>
       );

@@ -11,6 +11,7 @@ import {
 import { Gene } from 'app/shared/api/generated/OncoKbAPI';
 import {
   EnsemblGene,
+  SomaticVariantAnnotation,
   Tag,
   VariantAnnotation,
 } from 'app/shared/api/generated/OncoKbPrivateAPI';
@@ -184,7 +185,7 @@ const SomaticTagPage = inject(
       {pageLoadState.state === LoadState.Success ? (
         (() => {
           const { tag, gene, ensemblGenes, geneSummary } = pageLoadState.data;
-          const highestLevelInfo: VariantAnnotation = {
+          const highestLevelInfo: SomaticVariantAnnotation = {
             ...DEFAULT_ANNOTATION,
             highestSensitiveLevel: tag.highestLevels.highestSensitiveLevel,
             highestDiagnosticImplicationLevel:

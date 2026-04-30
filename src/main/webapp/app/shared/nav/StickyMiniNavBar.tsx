@@ -107,7 +107,7 @@ export default function StickyMiniNavBar({
       newSections.push({
         id: ele.id,
         label: ele.textContent,
-        comingSoon: ele.getAttribute('coming-soon') !== null ? true : false,
+        comingSoon: false,
       });
     });
     setSections(newSections);

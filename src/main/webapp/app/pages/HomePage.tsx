@@ -36,7 +36,6 @@ import { COLOR_DARK_BLUE } from 'app/config/theme';
 import WindowStore from 'app/store/WindowStore';
 import { uniq } from 'app/shared/utils/LodashUtils';
 import { Helmet } from 'react-helmet-async';
-import { getAlterationPageLink } from 'app/shared/utils/UrlUtils';
 
 interface IHomeProps {
   content: string;

@@ -7,6 +7,8 @@ import {
 } from 'app/shared/utils/UrlUtils';
 import { NewlyAddedGenesListItem } from 'app/pages/newsPage/NewlyAddedGenesListItem';
 import { TableOfContents } from 'app/pages/privacyNotice/TableOfContents';
+import { convertGeneInputToLinks } from 'app/pages/newsPage/Util';
+import GeneticTypeTag from 'app/components/tag/GeneticTypeTag';
 
 export default function NewsContent072025() {
   return (
@@ -43,7 +45,7 @@ export default function NewsContent072025() {
           <tbody>
             <tr>
               <td>1</td>
-              <td>{getAlternativeGenePageLinks('EGFR')}</td>
+              <td>{getAlternativeGenePageLinks('EGFR', false)}</td>
               <td>
                 Oncogenic Mutations
                 <br />
@@ -88,17 +90,29 @@ export default function NewsContent072025() {
           </thead>
           <tbody>
             <tr>
-              <td>{getAlternativeGenePageLinks('EGFR')}</td>
+              <td>{getAlternativeGenePageLinks('EGFR', false)}</td>
               <td>
-                <AlterationPageLink hugoSymbol="EGFR" alteration="G724S">
+                <AlterationPageLink
+                  hugoSymbol="EGFR"
+                  alteration="G724S"
+                  germline={false}
+                >
                   G724S
                 </AlterationPageLink>
                 ,{' '}
-                <AlterationPageLink hugoSymbol="EGFR" alteration="L718Q">
+                <AlterationPageLink
+                  hugoSymbol="EGFR"
+                  alteration="L718Q"
+                  germline={false}
+                >
                   L718Q
                 </AlterationPageLink>
                 /
-                <AlterationPageLink hugoSymbol="EGFR" alteration="L718V">
+                <AlterationPageLink
+                  hugoSymbol="EGFR"
+                  alteration="L718V"
+                  germline={false}
+                >
                   V
                 </AlterationPageLink>
               </td>
@@ -123,11 +137,12 @@ export default function NewsContent072025() {
               </td>
             </tr>
             <tr>
-              <td>{getAlternativeGenePageLinks('EGFR')}</td>
+              <td>{getAlternativeGenePageLinks('EGFR', false)}</td>
               <td>
                 <AlterationPageLink
                   hugoSymbol="EGFR"
                   alteration="Exon 19 in-frame insertions"
+                  germline={false}
                 >
                   Exon 19 in-frame insertions
                 </AlterationPageLink>
@@ -154,11 +169,12 @@ export default function NewsContent072025() {
               </td>
             </tr>
             <tr>
-              <td>{getAlternativeGenePageLinks('EGFR')}</td>
+              <td>{getAlternativeGenePageLinks('EGFR', false)}</td>
               <td>
                 <AlterationPageLink
                   hugoSymbol="EGFR"
                   alteration="Kinase Domain Duplication"
+                  germline={false}
                 >
                   Kinase Domain Duplication
                 </AlterationPageLink>
@@ -185,9 +201,13 @@ export default function NewsContent072025() {
               </td>
             </tr>
             <tr>
-              <td>{getAlternativeGenePageLinks('EGFR')}</td>
+              <td>{getAlternativeGenePageLinks('EGFR', false)}</td>
               <td>
-                <AlterationPageLink hugoSymbol="EGFR" alteration="L747P">
+                <AlterationPageLink
+                  hugoSymbol="EGFR"
+                  alteration="L747P"
+                  germline={false}
+                >
                   L747P
                 </AlterationPageLink>
               </td>
@@ -212,9 +232,13 @@ export default function NewsContent072025() {
               </td>
             </tr>
             <tr>
-              <td>{getAlternativeGenePageLinks('EGFR')}</td>
+              <td>{getAlternativeGenePageLinks('EGFR', false)}</td>
               <td>
-                <AlterationPageLink hugoSymbol="EGFR" alteration="D761Y">
+                <AlterationPageLink
+                  hugoSymbol="EGFR"
+                  alteration="D761Y"
+                  germline={false}
+                >
                   D761Y
                 </AlterationPageLink>
               </td>
@@ -264,11 +288,12 @@ export default function NewsContent072025() {
           <tbody>
             <tr>
               <td>1</td>
-              <td>{getAlternativeGenePageLinks('EGFR')}</td>
+              <td>{getAlternativeGenePageLinks('EGFR', false)}</td>
               <td>
                 <AlterationPageLink
                   hugoSymbol="EGFR"
                   alteration="Exon 20 in-frame insertions"
+                  germline={false}
                 >
                   Exon 20 in-frame insertions
                 </AlterationPageLink>
@@ -296,16 +321,21 @@ export default function NewsContent072025() {
             </tr>
             <tr>
               <td>1</td>
-              <td>{getAlternativeGenePageLinks('EGFR')}</td>
+              <td>{getAlternativeGenePageLinks('EGFR', false)}</td>
               <td>
                 <AlterationPageLink
                   hugoSymbol="EGFR"
                   alteration="Exon 19 in-frame deletions"
+                  germline={false}
                 >
                   Exon 19 in-frame deletions
                 </AlterationPageLink>
                 ,{' '}
-                <AlterationPageLink hugoSymbol="EGFR" alteration="L858R">
+                <AlterationPageLink
+                  hugoSymbol="EGFR"
+                  alteration="L858R"
+                  germline={false}
+                >
                   L858R
                 </AlterationPageLink>
               </td>
@@ -328,17 +358,29 @@ export default function NewsContent072025() {
             </tr>
             <tr>
               <td>1</td>
-              <td>{getAlternativeGenePageLinks('EGFR')}</td>
+              <td>{getAlternativeGenePageLinks('EGFR', false)}</td>
               <td>
-                <AlterationPageLink hugoSymbol="EGFR" alteration="G719">
+                <AlterationPageLink
+                  hugoSymbol="EGFR"
+                  alteration="G719"
+                  germline={false}
+                >
                   G719
                 </AlterationPageLink>
                 ,{' '}
-                <AlterationPageLink hugoSymbol="EGFR" alteration="L861Q">
+                <AlterationPageLink
+                  hugoSymbol="EGFR"
+                  alteration="L861Q"
+                  germline={false}
+                >
                   L861Q
                 </AlterationPageLink>
                 ,{' '}
-                <AlterationPageLink hugoSymbol="EGFR" alteration="S768I">
+                <AlterationPageLink
+                  hugoSymbol="EGFR"
+                  alteration="S768I"
+                  germline={false}
+                >
                   S768I
                 </AlterationPageLink>
               </td>
@@ -357,9 +399,13 @@ export default function NewsContent072025() {
             </tr>
             <tr>
               <td>1</td>
-              <td>{getAlternativeGenePageLinks('EGFR')}</td>
+              <td>{getAlternativeGenePageLinks('EGFR', false)}</td>
               <td>
-                <AlterationPageLink hugoSymbol="EGFR" alteration="T790M">
+                <AlterationPageLink
+                  hugoSymbol="EGFR"
+                  alteration="T790M"
+                  germline={false}
+                >
                   T790M
                 </AlterationPageLink>
               </td>
