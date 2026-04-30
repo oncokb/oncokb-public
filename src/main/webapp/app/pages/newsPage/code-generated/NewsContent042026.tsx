@@ -82,10 +82,7 @@ export default function NewsContent042026() {
               <td>Prostate Cancer</td>
               <td>Olaparib, Talazoparib + Enzalutamide</td>
               <td>
-                <a href="https://www.fda.gov/drugs/resources-information-approved-drugs/fda-approves-olaparib-hrr-gene-mutated-metastatic-castration-resistant-prostate-cancer">
-                  FDA approval of Olaparib
-                </a>
-                ; PMID:{' '}
+                FDA approval of Olaparib; PMID:{' '}
                 <a href="https://pubmed.ncbi.nlm.nih.gov/32343890/">32343890</a>
                 <br />
                 <br />
@@ -106,10 +103,7 @@ export default function NewsContent042026() {
               <td>Prostate Cancer</td>
               <td>Olaparib</td>
               <td>
-                <a href="https://www.fda.gov/drugs/resources-information-approved-drugs/fda-approves-olaparib-hrr-gene-mutated-metastatic-castration-resistant-prostate-cancer">
-                  FDA approval of Olaparib
-                </a>
-                ; PMID:{' '}
+                FDA approval of Olaparib; PMID:{' '}
                 <a href="https://pubmed.ncbi.nlm.nih.gov/32343890/">32343890</a>
               </td>
             </tr>
@@ -153,35 +147,23 @@ export default function NewsContent042026() {
                 Niraparib + Bevacizumab (Level 2)
               </td>
               <td>
-                <a href="https://www.fda.gov/drugs/resources-information-approved-drugs/fda-approves-rucaparib-maintenance-treatment-recurrent-ovarian-fallopian-tube-or-primary-peritoneal">
-                  FDA approval of Rucaparib
-                </a>
-                ; PMID:{' '}
+                FDA approval of Rucaparib; PMID:{' '}
                 <a href="https://pubmed.ncbi.nlm.nih.gov/40580808/">40580808</a>
                 ,{' '}
                 <a href="https://pubmed.ncbi.nlm.nih.gov/35658487/">35658487</a>
                 <br />
                 <br />
-                <a href="https://www.fda.gov/drugs/resources-information-approved-drugs/fda-approves-olaparib-plus-bevacizumab-maintenance-treatment-ovarian-fallopian-tube-or-primary">
-                  FDA approval of Olaparib + Bevacizumab
-                </a>
-                ; PMID:{' '}
+                FDA approval of Olaparib + Bevacizumab; PMID:{' '}
                 <a href="https://pubmed.ncbi.nlm.nih.gov/37211045/">37211045</a>
                 <br />
                 <br />
-                <a href="https://www.fda.gov/drugs/resources-information-approved-drugs/fda-approves-niraparib-first-line-maintenance-advanced-ovarian-cancer">
-                  FDA approval of Niraparib
-                </a>
-                ; PMID:{' '}
+                FDA approval of Niraparib; PMID:{' '}
                 <a href="https://pubmed.ncbi.nlm.nih.gov/39284381/">39284381</a>
                 ,{' '}
                 <a href="https://pubmed.ncbi.nlm.nih.gov/27717299/">27717299</a>
                 <br />
                 <br />
-                <a href="https://www.fda.gov/drugs/resources-information-approved-drugs/fda-approves-olaparib-tablets-maintenance-treatment-ovarian-cancer">
-                  FDA approval of Olaparib
-                </a>
-                ; PMID:{' '}
+                FDA approval of Olaparib; PMID:{' '}
                 <a href="https://pubmed.ncbi.nlm.nih.gov/33743851/">33743851</a>
                 ,{' '}
                 <a href="https://pubmed.ncbi.nlm.nih.gov/30345884/">30345884</a>
@@ -218,17 +200,11 @@ export default function NewsContent042026() {
                 <a href="https://pubmed.ncbi.nlm.nih.gov/38049622/">38049622</a>
                 <br />
                 <br />
-                <a href="https://www.fda.gov/drugs/resources-information-approved-drugs/fda-approves-olaparib-hrr-gene-mutated-metastatic-castration-resistant-prostate-cancer">
-                  FDA approval of Olaparib
-                </a>
-                ; PMID:{' '}
+                FDA approval of Olaparib; PMID:{' '}
                 <a href="https://pubmed.ncbi.nlm.nih.gov/32343890/">32343890</a>
                 <br />
                 <br />
-                <a href="https://www.fda.gov/drugs/resources-information-approved-drugs/fda-grants-regular-approval-rucaparib-metastatic-castration-resistant-prostate-cancer">
-                  FDA approval of Rucaparib
-                </a>
-                ; PMID:{' '}
+                FDA approval of Rucaparib; PMID:{' '}
                 <a href="https://pubmed.ncbi.nlm.nih.gov/36795891/">36795891</a>
                 <br />
                 <br />
@@ -341,10 +317,7 @@ export default function NewsContent042026() {
               <td>Encapsulated Glioma</td>
               <td>Everolimus</td>
               <td>
-                <a href="https://www.fda.gov/drugs/resources-information-approved-drugs/fda-approves-everolimus-tuberous-sclerosis-complex-associated-partial-onset-seizures">
-                  FDA approval of Everolimus
-                </a>
-                ; PMID:{' '}
+                FDA approval of Everolimus; PMID:{' '}
                 <a href="https://pubmed.ncbi.nlm.nih.gov/23158522/">23158522</a>
               </td>
             </tr>
@@ -361,10 +334,7 @@ export default function NewsContent042026() {
                 Sirolimus (Level 2)
               </td>
               <td>
-                <a href="https://www.fda.gov/drugs/resources-information-approved-drugs/fda-approves-everolimus-tuberous-sclerosis-complex-associated-partial-onset-seizures">
-                  FDA approval of Everolimus
-                </a>
-                ; PMID:{' '}
+                FDA approval of Everolimus; PMID:{' '}
                 <a href="https://pubmed.ncbi.nlm.nih.gov/23312829/">23312829</a>
                 <br />
                 <br />
