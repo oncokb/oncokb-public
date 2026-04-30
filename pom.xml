@@ -5,7 +5,7 @@
 
     <groupId>org.mskcc.cbio.oncokb</groupId>
     <artifactId>public-website</artifactId>
-    <version>6.7.0</version>
+    <version>6.8.0</version>
     <packaging>jar</packaging>
     <name>OncoKB Public Website</name>
 
