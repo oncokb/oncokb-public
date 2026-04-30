@@ -86,7 +86,9 @@ export default function NewsContent042026() {
                   FDA approval of Olaparib
                 </a>
                 ; PMID:{' '}
-                <a href="https://pubmed.ncbi.nlm.nih.gov/32343890/">32343890</a>{' '}
+                <a href="https://pubmed.ncbi.nlm.nih.gov/32343890/">32343890</a>
+                <br />
+                <br />
                 <a href="https://www.fda.gov/drugs/drug-approvals-and-databases/fda-approves-talazoparib-enzalutamide-hrr-gene-mutated-metastatic-castration-resistant-prostate">
                   FDA approval of Talazoparib + Enzalutamide
                 </a>
@@ -127,7 +129,9 @@ export default function NewsContent042026() {
               </td>
               <td>
                 FDA approval of Olaparib; PMID:{' '}
-                <a href="https://pubmed.ncbi.nlm.nih.gov/31157963/">31157963</a>{' '}
+                <a href="https://pubmed.ncbi.nlm.nih.gov/31157963/">31157963</a>
+                <br />
+                <br />
                 Inclusion of Rucaprib in Pancreatic Adenocarcinoma NCCN
                 Guidelines; PMID:{' '}
                 <a href="https://pubmed.ncbi.nlm.nih.gov/33970687/">33970687</a>
@@ -155,26 +159,34 @@ export default function NewsContent042026() {
                 ; PMID:{' '}
                 <a href="https://pubmed.ncbi.nlm.nih.gov/40580808/">40580808</a>
                 ,{' '}
-                <a href="https://pubmed.ncbi.nlm.nih.gov/35658487/">35658487</a>{' '}
+                <a href="https://pubmed.ncbi.nlm.nih.gov/35658487/">35658487</a>
+                <br />
+                <br />
                 <a href="https://www.fda.gov/drugs/resources-information-approved-drugs/fda-approves-olaparib-plus-bevacizumab-maintenance-treatment-ovarian-fallopian-tube-or-primary">
                   FDA approval of Olaparib + Bevacizumab
                 </a>
                 ; PMID:{' '}
-                <a href="https://pubmed.ncbi.nlm.nih.gov/37211045/">37211045</a>{' '}
+                <a href="https://pubmed.ncbi.nlm.nih.gov/37211045/">37211045</a>
+                <br />
+                <br />
                 <a href="https://www.fda.gov/drugs/resources-information-approved-drugs/fda-approves-niraparib-first-line-maintenance-advanced-ovarian-cancer">
                   FDA approval of Niraparib
                 </a>
                 ; PMID:{' '}
                 <a href="https://pubmed.ncbi.nlm.nih.gov/39284381/">39284381</a>
                 ,{' '}
-                <a href="https://pubmed.ncbi.nlm.nih.gov/27717299/">27717299</a>{' '}
+                <a href="https://pubmed.ncbi.nlm.nih.gov/27717299/">27717299</a>
+                <br />
+                <br />
                 <a href="https://www.fda.gov/drugs/resources-information-approved-drugs/fda-approves-olaparib-tablets-maintenance-treatment-ovarian-cancer">
                   FDA approval of Olaparib
                 </a>
                 ; PMID:{' '}
                 <a href="https://pubmed.ncbi.nlm.nih.gov/33743851/">33743851</a>
                 ,{' '}
-                <a href="https://pubmed.ncbi.nlm.nih.gov/30345884/">30345884</a>{' '}
+                <a href="https://pubmed.ncbi.nlm.nih.gov/30345884/">30345884</a>
+                <br />
+                <br />
                 Inclusion of Niraparib + Bevacizumab in Ovarian Cancer/Fallopian
                 Tube Cancer/Primary Peritoneal Cancer NCCN Guidelines; PMID:{' '}
                 <a href="https://pubmed.ncbi.nlm.nih.gov/40602355/">40602355</a>
@@ -196,22 +208,30 @@ export default function NewsContent042026() {
                   FDA approval of Olaparib + Abiraterone + Prednisone
                 </a>
                 ; PMID:{' '}
-                <a href="https://pubmed.ncbi.nlm.nih.gov/37714168/">37714168</a>{' '}
+                <a href="https://pubmed.ncbi.nlm.nih.gov/37714168/">37714168</a>
+                <br />
+                <br />
                 <a href="https://www.fda.gov/drugs/drug-approvals-and-databases/fda-approves-talazoparib-enzalutamide-hrr-gene-mutated-metastatic-castration-resistant-prostate">
                   FDA approval of Talazoparib + Enzalutamide
                 </a>
                 ; PMID:{' '}
-                <a href="https://pubmed.ncbi.nlm.nih.gov/38049622/">38049622</a>{' '}
+                <a href="https://pubmed.ncbi.nlm.nih.gov/38049622/">38049622</a>
+                <br />
+                <br />
                 <a href="https://www.fda.gov/drugs/resources-information-approved-drugs/fda-approves-olaparib-hrr-gene-mutated-metastatic-castration-resistant-prostate-cancer">
                   FDA approval of Olaparib
                 </a>
                 ; PMID:{' '}
-                <a href="https://pubmed.ncbi.nlm.nih.gov/32343890/">32343890</a>{' '}
+                <a href="https://pubmed.ncbi.nlm.nih.gov/32343890/">32343890</a>
+                <br />
+                <br />
                 <a href="https://www.fda.gov/drugs/resources-information-approved-drugs/fda-grants-regular-approval-rucaparib-metastatic-castration-resistant-prostate-cancer">
                   FDA approval of Rucaparib
                 </a>
                 ; PMID:{' '}
-                <a href="https://pubmed.ncbi.nlm.nih.gov/36795891/">36795891</a>{' '}
+                <a href="https://pubmed.ncbi.nlm.nih.gov/36795891/">36795891</a>
+                <br />
+                <br />
                 <a href="https://www.fda.gov/drugs/resources-information-approved-drugs/fda-approves-niraparib-and-abiraterone-acetate-plus-prednisone-brca-mutated-metastatic-castration">
                   FDA approval of Niraparib + Abiraterone Acetate + Prednisone
                 </a>
@@ -258,7 +278,9 @@ export default function NewsContent042026() {
                 ; PMID:{' '}
                 <a href="https://pubmed.ncbi.nlm.nih.gov/32187457/">32187457</a>
                 ,{' '}
-                <a href="https://pubmed.ncbi.nlm.nih.gov/40473450/">40473450</a>{' '}
+                <a href="https://pubmed.ncbi.nlm.nih.gov/40473450/">40473450</a>
+                <br />
+                <br />
                 <a href="https://www.fda.gov/drugs/resources-information-approved-drugs/fda-approves-mirdametinib-adult-and-pediatric-patients-neurofibromatosis-type-1-who-have-symptomatic">
                   FDA approval of Mirdametinib
                 </a>
@@ -343,7 +365,9 @@ export default function NewsContent042026() {
                   FDA approval of Everolimus
                 </a>
                 ; PMID:{' '}
-                <a href="https://pubmed.ncbi.nlm.nih.gov/23312829/">23312829</a>{' '}
+                <a href="https://pubmed.ncbi.nlm.nih.gov/23312829/">23312829</a>
+                <br />
+                <br />
                 Inclusion of Sirolimus in Kidney Cancer NCCN Guidelines; PMID:{' '}
                 <a href="https://pubmed.ncbi.nlm.nih.gov/18184959/">18184959</a>
               </td>
