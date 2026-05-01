@@ -43,13 +43,12 @@ import client from 'app/shared/api/clientInstance';
 import { notifyError } from 'app/shared/utils/NotificationUtils';
 import {
   EMAIL_VAL,
-  LONG_TEXT_VAL,
   SHORT_TEXT_VAL,
   TEXT_VAL,
   OPTIONAL_TEXT_VAL,
   textValidation,
 } from 'app/shared/utils/FormValidationUtils';
-import { NOT_USED_IN_AI_MODELS } from 'app/config/constants/terms';
+import ApiAccessSection, { supportsApiAccessRequest } from './ApiAccessSection';
 import UseCaseExamples from './UseCaseExamples';
 import ImportantNotes from './ImportantNotes';
 import styles from './NewAccountForm.module.scss';
@@ -74,7 +73,7 @@ export enum AccountType {
   TRIAL = 'trial',
 }
 
-enum FormKey {
+export enum FormKey {
   ANTICIPATED_REPORTS = 'anticipatedReports',
   COMPANY_DESCRIPTION = 'companyDescription',
   USE_CASE = 'useCase',
@@ -187,7 +186,7 @@ export class NewAccountForm extends React.Component<INewAccountForm> {
           values[FormKey.BUS_CONTACT_PHONE];
       }
     }
-    if (!this.isCommercialLicense) {
+    if (supportsApiAccessRequest(this.selectedLicense)) {
       additionalInfo.apiAccessRequest = {
         requested: this.apiAccessRequested,
         justification: values[FormKey.API_ACCESS_JUSTIFICATION],
@@ -763,79 +762,15 @@ export class NewAccountForm extends React.Component<INewAccountForm> {
                 </Col>
               </Row>
             )}
-            {!this.isCommercialLicense && (
-              <Row className={getSectionClassName()}>
-                <Col md="3">
-                  <h5>API Access</h5>
-                </Col>
-                <Col md="9">
-                  <p>
-                    Would you like programmatic access to the {ONCOKB_TM}{' '}
-                    database via our API? API access allows a user to
-                    simultaneously annotate multiple tumor mutations with{' '}
-                    {ONCOKB_TM} data and provides a text file output.{' '}
-                    {ONCOKB_TM} API access may also enable the user to leverage{' '}
-                    {ONCOKB_TM} alongside other platform APIs.
-                  </p>
-                  <p>
-                    Should you request API access, you must provide a detailed
-                    description on how you plan to use {ONCOKB_TM} APIs.
-                    Additional time for user screening will be required to grant
-                    access.
-                  </p>
-                  <p>
-                    The following use cases do <b>not</b> require API access:
-                  </p>
-                  <ul style={{ listStyleType: 'circle' }}>
-                    <li>Browse {ONCOKB_TM} content on our website</li>
-                    <li>
-                      Download data from our website (Actionable Genes,
-                      Precision Oncology Therapies, Cancer Genes etc.)
-                    </li>
-                    <li>
-                      View therapeutic implication descriptions (treatment
-                      descriptions)
-                    </li>
-                  </ul>
-                  <AvCheckboxGroup
-                    name={FormKey.REQUEST_API_ACCESS}
-                    key={FormKey.REQUEST_API_ACCESS}
-                    errorMessage={'You have to accept the term'}
-                  >
-                    <AvCheckbox
-                      label={'Request API Access'}
-                      value={this.apiAccessRequested}
-                      onChange={() =>
-                        (this.apiAccessRequested = !this.apiAccessRequested)
-                      }
-                    />
-                  </AvCheckboxGroup>
-                  {this.apiAccessRequested && (
-                    <div className="mt-2">
-                      <b style={{ fontSize: '0.8rem', lineHeight: '1' }}>
-                        {NOT_USED_IN_AI_MODELS}
-                      </b>
-                      <AvField
-                        name={FormKey.API_ACCESS_JUSTIFICATION}
-                        placeholder={
-                          'Provide a justification for your API access request'
-                        }
-                        rows={6}
-                        type={'textarea'}
-                        required={this.apiAccessRequested}
-                        validate={{
-                          ...LONG_TEXT_VAL,
-                          required: {
-                            value: true,
-                            errorMessage: 'Your justification is required.',
-                          },
-                        }}
-                      />
-                    </div>
-                  )}
-                </Col>
-              </Row>
-            )}
+            <ApiAccessSection
+              apiAccessRequested={this.apiAccessRequested}
+              apiAccessJustificationFieldName={FormKey.API_ACCESS_JUSTIFICATION}
+              licenseType={this.selectedLicense}
+              requestApiAccessFieldName={FormKey.REQUEST_API_ACCESS}
+              onToggleApiAccess={() =>
+                (this.apiAccessRequested = !this.apiAccessRequested)
+              }
+            />
             {this.selectedLicense === LicenseType.ACADEMIC &&
             !this.props.byAdmin ? (
               <>
