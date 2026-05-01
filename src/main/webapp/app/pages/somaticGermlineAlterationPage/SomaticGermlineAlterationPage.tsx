@@ -792,30 +792,28 @@ export class SomaticGermlineAlterationPage extends React.Component<
                         </span>
                       </MiniNavBarHeader>
                     </div>
-                    {!this.store.germline && (
-                      <SomaticGermlineAlterationView
-                        appStore={this.props.appStore}
-                        hugoSymbol={this.store.hugoSymbol}
-                        alteration={this.store.alterationName}
-                        alterationQuery={this.store.alterationQuery}
-                        germline={this.store.germline}
-                        matchedAlteration={this.store.alteration}
-                        tumorType={this.store.cancerTypeName}
-                        onChangeTumorType={this.onChangeTumorType.bind(this)}
-                        annotation={this.annotation}
-                        biologicalAlterations={
-                          this.store.biologicalAlterations.result
-                        }
-                        relevantAlterations={undefined}
-                        fdaImplication={this.fdaImplication}
-                        therapeuticImplications={this.therapeuticImplications}
-                        diagnosticImplications={this.diagnosticImplications}
-                        prognosticImplications={this.prognosticImplications}
-                        defaultSelectedTab={this.selectedTab}
-                        onChangeTab={this.onChangeTab}
-                        routing={this.props.routing}
-                      />
-                    )}
+                    <SomaticGermlineAlterationView
+                      appStore={this.props.appStore}
+                      hugoSymbol={this.store.hugoSymbol}
+                      alteration={this.store.alterationName}
+                      alterationQuery={this.store.alterationQuery}
+                      germline={this.store.germline}
+                      matchedAlteration={this.store.alteration}
+                      tumorType={this.store.cancerTypeName}
+                      onChangeTumorType={this.onChangeTumorType.bind(this)}
+                      annotation={this.annotation}
+                      biologicalAlterations={
+                        this.store.biologicalAlterations.result
+                      }
+                      relevantAlterations={undefined}
+                      fdaImplication={this.fdaImplication}
+                      therapeuticImplications={this.therapeuticImplications}
+                      diagnosticImplications={this.diagnosticImplications}
+                      prognosticImplications={this.prognosticImplications}
+                      defaultSelectedTab={this.selectedTab}
+                      onChangeTab={this.onChangeTab}
+                      routing={this.props.routing}
+                    />
                   </Col>
                 </Row>
               </Container>
