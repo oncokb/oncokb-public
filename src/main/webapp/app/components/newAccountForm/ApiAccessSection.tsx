@@ -7,6 +7,7 @@ import {
 import { Col, Row } from 'react-bootstrap';
 import { LicenseType, ONCOKB_TM } from 'app/config/constants';
 import { NOT_USED_IN_AI_MODELS } from 'app/config/constants/terms';
+import { Linkout } from 'app/shared/links/Linkout';
 import { getSectionClassName } from 'app/pages/account/AccountUtils';
 import { LONG_TEXT_VAL } from 'app/shared/utils/FormValidationUtils';
 
@@ -48,9 +49,12 @@ export default function ApiAccessSection({
               Would you like programmatic access to the {ONCOKB_TM} database via
               our API? API access allows a user to simultaneously annotate
               multiple tumor mutations with {ONCOKB_TM} data and can provide
-              text file output through oncokb-annotator. {ONCOKB_TM} API access
-              may also enable the user to leverage {ONCOKB_TM} alongside other
-              platform APIs.
+              text file output through{' '}
+              <Linkout link="https://github.com/oncokb/oncokb-annotator">
+                oncokb-annotator
+              </Linkout>
+              . {ONCOKB_TM} API access may also enable the user to leverage{' '}
+              {ONCOKB_TM} alongside other platform APIs.
             </p>
             <p>
               Should you request API access, you must provide a detailed
