@@ -47,9 +47,10 @@ export default function ApiAccessSection({
             <p>
               Would you like programmatic access to the {ONCOKB_TM} database via
               our API? API access allows a user to simultaneously annotate
-              multiple tumor mutations with {ONCOKB_TM} data and provides a text
-              file output. {ONCOKB_TM} API access may also enable the user to
-              leverage {ONCOKB_TM} alongside other platform APIs.
+              multiple tumor mutations with {ONCOKB_TM} data and can provide
+              text file output through oncokb-annotator. {ONCOKB_TM} API access
+              may also enable the user to leverage {ONCOKB_TM} alongside other
+              platform APIs.
             </p>
             <p>
               Should you request API access, you must provide a detailed
