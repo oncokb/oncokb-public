@@ -51,6 +51,14 @@ export default function NewsContent042026() {
           Updated <Link to="/faq">FAQ</Link> page to answer common questions
           regarding our germline annotations and curation process
         </li>
+        <li>
+          We recognize that our new registration requirement has raised
+          questions, particularly in clinical settings. We are actively refining
+          and clarifying our terms of use to ensure they are transparent and
+          easy to understand, including what is freely available and what
+          requires a license. In the meantime, research and clinical users will
+          continue to have free access to the OncoKB website upon registration.
+        </li>
       </ul>
       <p>
         <strong>Updated Therapeutic Implications</strong>
