@@ -5,6 +5,7 @@
   - This release includes fifty Level 1 and seven Level 2 germline therapeutic associations across sixteen tumor types (see table below)
 - Updated [Actionable Genes](https://www.oncokb.org/actionable-genes#sections=Tx) page to support germline therapeutic implications
 - Updated [FAQ](https://www.oncokb.org/faq) page to answer common questions regarding our germline annotations and curation process
+- We recognize that our new registration requirement has raised questions, particularly in clinical settings. We are actively refining and clarifying our terms of use to ensure they are transparent and easy to understand, including what is freely available and what requires a license. In the meantime, research and clinical users will continue to have free access to the OncoKB website upon registration.
 
 **Updated Therapeutic Implications**
 
