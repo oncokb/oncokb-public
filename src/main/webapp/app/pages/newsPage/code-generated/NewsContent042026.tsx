@@ -17,8 +17,9 @@ export default function NewsContent042026() {
         <li>
           We are now supporting germline variant annotation through the API!
           Please see our updated API documentation{' '}
-          <a href="https://api.oncokb.org/oncokb-website/api">here</a>.
-          Important points:
+          <a href="https://api.oncokb.org/oncokb-website/api">here</a> and our
+          updated SOP <a href="https://sop.oncokb.org">here</a>. Important
+          points:
           <ul>
             <li>
               Only HGVSg and HGVSc formats are currently supported for the
