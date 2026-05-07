@@ -1,4 +1,4 @@
-- We are now supporting germline variant annotation through the API\! Please see our updated API documentation [here](https://api.oncokb.org/oncokb-website/api). Important points:
+- We are now supporting germline variant annotation through the API\! Please see our updated API documentation [here](https://api.oncokb.org/oncokb-website/api) and our updated SOP [here](https://sop.oncokb.org). Important points:
   - Only HGVSg and HGVSc formats are currently supported for the germline API
   - New germline annotation endpoints are now available at “/api/v1/annotate/germline/…”. The existing “/api/v1/annotate/…” endpoints continue to serve somatic annotations.
 - We now have standard of care (Level 1 and 2\) therapeutic implications for germline variants\!
