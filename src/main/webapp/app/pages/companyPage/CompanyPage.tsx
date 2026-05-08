@@ -423,6 +423,13 @@ export default class CompanyPage extends React.Component<ICompanyPage> {
     this.selectedUsersOptions = this.dropDownUsers.filter(user =>
       this.company.companyDomains.includes(user.label.split('@').pop() || '')
     );
+    if (this.selectedUsersOptions.length === 0) {
+      notifyError(
+        new Error(
+          'No related users found. Please double check the company domains.'
+        )
+      );
+    }
   }
 
   @action.bound
