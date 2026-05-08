@@ -19,9 +19,9 @@ import {
   filterRegistrationDataByDateRange,
   formatRegistrationSummaryAsTsv,
   getRegistrationTimeHeader,
-  UserRegistrationSummary,
 } from './registration-utils';
 import { ToggleValue } from './usage-analysis-utils';
+import { UserRegistrationSummary } from 'app/shared/api/generated/API';
 
 type RegistrationDetailsTableProps = {
   data: UserRegistrationSummary[];
@@ -90,13 +90,7 @@ export default class RegistrationDetailsTable extends React.Component<
 
   @computed
   get exportedData(): AggregatedUserRegistrationSummary[] {
-    const sorted = [...this.aggregatedData];
-
-    if (this.sorted.length === 0) {
-      return sorted;
-    }
-
-    return sorted.sort((first, second) => {
+    return [...this.aggregatedData].sort((first, second) => {
       for (const sortingRule of this.sorted) {
         const direction = sortingRule.desc ? -1 : 1;
         const id = sortingRule.id as keyof AggregatedUserRegistrationSummary;

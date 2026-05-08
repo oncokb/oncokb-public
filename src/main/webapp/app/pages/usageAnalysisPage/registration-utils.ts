@@ -2,12 +2,7 @@ import { LicenseType } from 'app/config/constants';
 import { TABLE_DAY_FORMAT, TABLE_YEAR_FORMAT } from 'app/config/constants';
 import moment from 'moment';
 import { ToggleValue } from './usage-analysis-utils';
-
-export type UserRegistrationSummary = {
-  date: string;
-  total: number;
-  licenseType: string;
-};
+import { UserRegistrationSummary } from 'app/shared/api/generated/API';
 
 export type AggregatedUserRegistrationSummary = {
   periodStart: string;
@@ -104,7 +99,7 @@ export function filterRegistrationDataByDateRange(
   fromDate?: string,
   toDate?: string
 ) {
-  if (!filterToggled || !fromDate || !toDate) {
+  if (!filterToggled) {
     return data;
   }
 
@@ -117,14 +112,19 @@ export function filterRegistrationDataByDateRange(
     tableFormat = TABLE_DAY_FORMAT;
   }
 
-  const fromTime = moment(fromDate).format(tableFormat);
-  const toTime = moment(toDate).format(tableFormat);
+  const fromTime =
+    fromDate !== undefined ? moment(fromDate).format(tableFormat) : undefined;
+  const toTime =
+    toDate !== undefined ? moment(toDate).format(tableFormat) : undefined;
 
   return data.filter(record => {
     if (record.periodStart === NO_CREATION_DATE_LABEL) {
       return false;
     }
-    return record.periodStart >= fromTime && record.periodStart <= toTime;
+    return (
+      (fromTime === undefined || record.periodStart >= fromTime) &&
+      (toTime === undefined || record.periodStart <= toTime)
+    );
   });
 }
 
