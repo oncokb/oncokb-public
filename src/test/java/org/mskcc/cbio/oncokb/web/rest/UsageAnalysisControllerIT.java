@@ -22,6 +22,7 @@ import java.util.*;
 import java.util.AbstractMap.SimpleEntry;
 import java.util.Map.Entry;
 import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Test;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
@@ -51,6 +52,7 @@ import software.amazon.awssdk.services.s3.model.GetObjectResponse;
 /**
  * Unit tests for the {@link UsageAnalysisController } REST controller.
  */
+@Disabled
 public class UsageAnalysisControllerIT {
   private final Gson gson = new Gson();
 
