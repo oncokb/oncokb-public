@@ -230,33 +230,33 @@ public class UsageAnalysisController {
     @PathVariable @NotNull Long userId
   )
     throws IOException, ParseException {
-    if (userId != null) {
-      Map<String, UsageSummary> userSummaries = getUserSummaries();
+    // if (userId != null) {
+    //   Map<String, UsageSummary> userSummaries = getUserSummaries();
 
-      Optional<User> user = userService.getUserById(userId);
-      String email = user.map(User::getEmail).orElse(null);
+    //   Optional<User> user = userService.getUserById(userId);
+    //   String email = user.map(User::getEmail).orElse(null);
 
-      UsageSummary usageSummary = userSummaries.getOrDefault(
-        email,
-        new UsageSummary()
-      );
+    //   UsageSummary usageSummary = userSummaries.getOrDefault(
+    //     email,
+    //     new UsageSummary()
+    //   );
 
-      UserUsage userUsage = new UserUsage();
-      userUsage.setUserFirstName(user.get().getFirstName());
-      userUsage.setUserLastName(user.get().getLastName());
-      userUsage.setUserEmail(email);
-      userUsage.setLicenseType(
-        Objects.nonNull(userMapper.userToUserDTO(user.get()).getLicenseType())
-          ? userMapper.userToUserDTO(user.get()).getLicenseType().getName()
-          : null
-      );
-      userUsage.setJobTitle(userMapper.userToUserDTO(user.get()).getJobTitle());
-      userUsage.setCompany(
-        userMapper.userToUserDTO(user.get()).getCompanyName()
-      );
-      userUsage.setSummary(usageSummary);
-      return new ResponseEntity<>(userUsage, HttpStatus.OK);
-    }
+    //   UserUsage userUsage = new UserUsage();
+    //   userUsage.setUserFirstName(user.get().getFirstName());
+    //   userUsage.setUserLastName(user.get().getLastName());
+    //   userUsage.setUserEmail(email);
+    //   userUsage.setLicenseType(
+    //     Objects.nonNull(userMapper.userToUserDTO(user.get()).getLicenseType())
+    //       ? userMapper.userToUserDTO(user.get()).getLicenseType().getName()
+    //       : null
+    //   );
+    //   userUsage.setJobTitle(userMapper.userToUserDTO(user.get()).getJobTitle());
+    //   userUsage.setCompany(
+    //     userMapper.userToUserDTO(user.get()).getCompanyName()
+    //   );
+    //   userUsage.setSummary(usageSummary);
+    //   return new ResponseEntity<>(userUsage, HttpStatus.OK);
+    // }
 
     return new ResponseEntity<>(new UserUsage(), HttpStatus.OK);
   }
@@ -273,55 +273,55 @@ public class UsageAnalysisController {
     @RequestParam(required = false) Long companyId
   )
     throws IOException, ParseException {
-    Map<String, UsageSummary> usageSummaries = getUserSummaries();
-    List<UserOverviewUsage> result = new ArrayList<>();
-    Set<String> emailSet = usageSummaries.keySet();
-    if (companyId != null) {
-      emailSet =
-        emailSet
-          .stream()
-          .filter(
-            item -> {
-              Optional<User> user = userService.getUserWithAuthoritiesByEmailIgnoreCase(
-                item
-              );
-              if (user.isPresent()) {
-                UserDTO userDTO = userMapper.userToUserDTO(user.get());
-                if (userDTO.getCompany() != null) {
-                  return Objects.equals(
-                    userDTO.getCompany().getId(),
-                    companyId
-                  );
-                }
-              }
-              return false;
-            }
-          )
-          .collect(Collectors.toSet());
-    }
-    for (String email : emailSet) {
-      UsageSummary usageSummary = usageSummaries.get(email);
-      UserOverviewUsage userOverviewUsage = new UserOverviewUsage();
-      userOverviewUsage.setUserEmail(email);
-      Optional<User> user = userService.getUserWithAuthoritiesByEmailIgnoreCase(
-        email
-      );
-      userOverviewUsage.setUserId(
-        user.map(value -> value.getId().toString()).orElse(null)
-      );
+    // Map<String, UsageSummary> usageSummaries = getUserSummaries();
+    // List<UserOverviewUsage> result = new ArrayList<>();
+    // Set<String> emailSet = usageSummaries.keySet();
+    // if (companyId != null) {
+    //   emailSet =
+    //     emailSet
+    //       .stream()
+    //       .filter(
+    //         item -> {
+    //           Optional<User> user = userService.getUserWithAuthoritiesByEmailIgnoreCase(
+    //             item
+    //           );
+    //           if (user.isPresent()) {
+    //             UserDTO userDTO = userMapper.userToUserDTO(user.get());
+    //             if (userDTO.getCompany() != null) {
+    //               return Objects.equals(
+    //                 userDTO.getCompany().getId(),
+    //                 companyId
+    //               );
+    //             }
+    //           }
+    //           return false;
+    //         }
+    //       )
+    //       .collect(Collectors.toSet());
+    // }
+    // for (String email : emailSet) {
+    //   UsageSummary usageSummary = usageSummaries.get(email);
+    //   UserOverviewUsage userOverviewUsage = new UserOverviewUsage();
+    //   userOverviewUsage.setUserEmail(email);
+    //   Optional<User> user = userService.getUserWithAuthoritiesByEmailIgnoreCase(
+    //     email
+    //   );
+    //   userOverviewUsage.setUserId(
+    //     user.map(value -> value.getId().toString()).orElse(null)
+    //   );
 
-      Map<String, UserStats> dayUsage = getStats(usageSummary.getDay());
-      Map<String, UserStats> monthUsage = getStats(usageSummary.getMonth());
-      Map<String, UserStats> yearUsage = getStats(usageSummary.getYear());
+    //   Map<String, UserStats> dayUsage = getStats(usageSummary.getDay());
+    //   Map<String, UserStats> monthUsage = getStats(usageSummary.getMonth());
+    //   Map<String, UserStats> yearUsage = getStats(usageSummary.getYear());
 
-      userOverviewUsage.setDayUsage(dayUsage);
-      userOverviewUsage.setMonthUsage(monthUsage);
-      userOverviewUsage.setYearUsage(yearUsage);
+    //   userOverviewUsage.setDayUsage(dayUsage);
+    //   userOverviewUsage.setMonthUsage(monthUsage);
+    //   userOverviewUsage.setYearUsage(yearUsage);
 
-      result.add(userOverviewUsage);
-    }
+    //   result.add(userOverviewUsage);
+    // }
 
-    return new ResponseEntity<>(result, HttpStatus.OK);
+    return new ResponseEntity<>(new ArrayList<>(), HttpStatus.OK);
   }
 
   private Map<String, UserStats> getStats(
@@ -389,8 +389,9 @@ public class UsageAnalysisController {
   @GetMapping("/usage/summary/resources")
   public ResponseEntity<UsageSummary> resourceUsageGet()
     throws IOException, ParseException {
-    UsageSummary summary = getResourceSummaries();
-    return new ResponseEntity<>(summary, HttpStatus.OK);
+    // UsageSummary summary = getResourceSummaries();
+    // return new ResponseEntity<>(summary, HttpStatus.OK);
+    return new ResponseEntity<>(new UsageSummary(), HttpStatus.OK);
   }
 
   /**
@@ -406,50 +407,51 @@ public class UsageAnalysisController {
     @RequestParam String endpoint
   )
     throws UnsupportedEncodingException, IOException, ParseException {
-    Map<String, UsageSummary> userSummaries = getUserSummaries();
+    // Map<String, UsageSummary> userSummaries = getUserSummaries();
 
-    UsageSummary resourceDetail = new UsageSummary();
-    Map<String, Map<String, Long>> yearResourceDetail = new HashMap<>();
-    Map<String, Map<String, Long>> monthResourceDetail = new HashMap<>();
-    Map<String, Map<String, Long>> dayResourceDetail = new HashMap<>();
-    resourceDetail.setYear(yearResourceDetail);
-    resourceDetail.setMonth(monthResourceDetail);
-    resourceDetail.setDay(dayResourceDetail);
+    // UsageSummary resourceDetail = new UsageSummary();
+    // Map<String, Map<String, Long>> yearResourceDetail = new HashMap<>();
+    // Map<String, Map<String, Long>> monthResourceDetail = new HashMap<>();
+    // Map<String, Map<String, Long>> dayResourceDetail = new HashMap<>();
+    // resourceDetail.setYear(yearResourceDetail);
+    // resourceDetail.setMonth(monthResourceDetail);
+    // resourceDetail.setDay(dayResourceDetail);
 
-    for (Map.Entry<String, UsageSummary> userEntry : userSummaries.entrySet()) {
-      String user = userEntry.getKey();
-      UsageSummary userUsageSummary = userEntry.getValue();
-      boolean containsEndpoint = false;
-      for (Map<String, Long> endpointUsage : userUsageSummary
-        .getYear()
-        .values()) {
-        if (endpointUsage.containsKey(endpoint)) {
-          containsEndpoint = true;
-          break;
-        }
-      }
-      if (containsEndpoint) {
-        addUserUsage(
-          user,
-          endpoint,
-          yearResourceDetail,
-          userUsageSummary.getYear()
-        );
-        addUserUsage(
-          user,
-          endpoint,
-          monthResourceDetail,
-          userUsageSummary.getMonth()
-        );
-        addUserUsage(
-          user,
-          endpoint,
-          dayResourceDetail,
-          userUsageSummary.getDay()
-        );
-      }
-    }
-    return new ResponseEntity<>(resourceDetail, HttpStatus.OK);
+    // for (Map.Entry<String, UsageSummary> userEntry : userSummaries.entrySet()) {
+    //   String user = userEntry.getKey();
+    //   UsageSummary userUsageSummary = userEntry.getValue();
+    //   boolean containsEndpoint = false;
+    //   for (Map<String, Long> endpointUsage : userUsageSummary
+    //     .getYear()
+    //     .values()) {
+    //     if (endpointUsage.containsKey(endpoint)) {
+    //       containsEndpoint = true;
+    //       break;
+    //     }
+    //   }
+    //   if (containsEndpoint) {
+    //     addUserUsage(
+    //       user,
+    //       endpoint,
+    //       yearResourceDetail,
+    //       userUsageSummary.getYear()
+    //     );
+    //     addUserUsage(
+    //       user,
+    //       endpoint,
+    //       monthResourceDetail,
+    //       userUsageSummary.getMonth()
+    //     );
+    //     addUserUsage(
+    //       user,
+    //       endpoint,
+    //       dayResourceDetail,
+    //       userUsageSummary.getDay()
+    //     );
+    //   }
+    // }
+    // return new ResponseEntity<>(resourceDetail, HttpStatus.OK);
+    return new ResponseEntity<>(new UsageSummary(), HttpStatus.OK);
   }
 
   private void addUserUsage(
