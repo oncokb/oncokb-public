@@ -89,8 +89,8 @@ export const EMAIL_VAL = {
     errorMessage: 'Your email is required to be at least 5 characters.',
   },
   maxLength: {
-    value: 50,
-    errorMessage: 'Your email cannot be longer than 50 characters.',
+    value: 254,
+    errorMessage: 'Your email cannot be longer than 254 characters.',
   },
 };
 

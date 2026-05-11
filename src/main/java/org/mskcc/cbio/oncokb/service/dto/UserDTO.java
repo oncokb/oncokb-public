@@ -26,7 +26,7 @@ public class UserDTO implements Serializable {
 
     @NotBlank
     @Pattern(regexp = Constants.LOGIN_REGEX)
-    @Size(min = 1, max = 50)
+    @Size(min = 1, max = 254)
     private String login;
 
     @NotBlank
