@@ -57,6 +57,16 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 @SpringBootTest(classes = OncokbPublicApp.class)
 public class AccountResourceIT {
     static final String TEST_USER_LOGIN = "test";
+    private static final String LONG_EMAIL_LOCAL_PART = RandomStringUtils.randomAlphabetic(64).toLowerCase(Locale.ENGLISH);
+    private static final String LONG_EMAIL_DOMAIN = String.join(
+        ".",
+        RandomStringUtils.randomAlphabetic(30).toLowerCase(Locale.ENGLISH),
+        RandomStringUtils.randomAlphabetic(30).toLowerCase(Locale.ENGLISH),
+        RandomStringUtils.randomAlphabetic(30).toLowerCase(Locale.ENGLISH),
+        RandomStringUtils.randomAlphabetic(30).toLowerCase(Locale.ENGLISH),
+        "org"
+    );
+    private static final String LONG_EMAIL = LONG_EMAIL_LOCAL_PART + "@" + LONG_EMAIL_DOMAIN;
 
     @Autowired
     private UserRepository userRepository;
@@ -202,6 +212,33 @@ public class AccountResourceIT {
         UserDetails userDetails = userDetailsRepository.findOneByUser(user).orElse(null);
         assertThat(userDetails).isNotNull();
         assertThat(userDetails.getAccountRequestStatus()).isEqualTo(AccountRequestStatus.PENDING);
+    }
+
+    @Test
+    @Transactional
+    public void testRegisterValidWithLongEmailLogin() throws Exception {
+        ManagedUserVM validUser = new ManagedUserVM();
+        validUser.setLogin(LONG_EMAIL);
+        validUser.setPassword("password");
+        validUser.setFirstName("Alice");
+        validUser.setLastName("Long");
+        validUser.setEmail(LONG_EMAIL);
+        validUser.setImageUrl("http://placehold.it/50x50");
+        validUser.setLangKey(Constants.DEFAULT_LANGUAGE);
+        validUser.setAuthorities(Collections.singleton(AuthoritiesConstants.USER));
+        assertThat(userRepository.findOneWithAuthoritiesByLogin(LONG_EMAIL).isPresent()).isFalse();
+
+        restAccountMockMvc.perform(
+                post("/api/register")
+                    .contentType(MediaType.APPLICATION_JSON)
+                    .content(TestUtil.convertObjectToJsonBytes(validUser))
+                    .header("g-recaptcha-response", Constants.TESTING_TOKEN))
+            .andExpect(status().isCreated());
+
+        User user = userRepository.findOneWithAuthoritiesByLogin(LONG_EMAIL).orElse(null);
+        assertThat(user).isNotNull();
+        assertThat(user.getLogin()).isEqualTo(LONG_EMAIL);
+        assertThat(user.getEmail()).isEqualTo(LONG_EMAIL);
     }
 
     @Test

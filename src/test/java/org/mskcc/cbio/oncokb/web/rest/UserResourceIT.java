@@ -48,6 +48,16 @@ public class UserResourceIT {
 
     private static final String DEFAULT_LOGIN = "johndoe";
     private static final String UPDATED_LOGIN = "jhipster";
+    private static final String LONG_EMAIL_LOCAL_PART = RandomStringUtils.randomAlphabetic(64).toLowerCase(Locale.ENGLISH);
+    private static final String LONG_EMAIL_DOMAIN = String.join(
+        ".",
+        RandomStringUtils.randomAlphabetic(30).toLowerCase(Locale.ENGLISH),
+        RandomStringUtils.randomAlphabetic(30).toLowerCase(Locale.ENGLISH),
+        RandomStringUtils.randomAlphabetic(30).toLowerCase(Locale.ENGLISH),
+        RandomStringUtils.randomAlphabetic(30).toLowerCase(Locale.ENGLISH),
+        "org"
+    );
+    private static final String LONG_EMAIL = LONG_EMAIL_LOCAL_PART + "@" + LONG_EMAIL_DOMAIN;
 
     private static final Long DEFAULT_ID = 1L;
 
@@ -163,6 +173,31 @@ public class UserResourceIT {
         Optional<UserDetails> userDetailsOptional = userDetailsRepository.findOneByUser(userOptional.get());
         assertThat(userDetailsOptional).isPresent();
         assertThat(userDetailsOptional.get().getAccountRequestStatus()).isEqualTo(AccountRequestStatus.APPROVED);
+    }
+
+    @Test
+    @Transactional
+    public void createUserWithLongEmailLogin() throws Exception {
+        ManagedUserVM managedUserVM = new ManagedUserVM();
+        managedUserVM.setLogin(LONG_EMAIL);
+        managedUserVM.setPassword(DEFAULT_PASSWORD);
+        managedUserVM.setFirstName(DEFAULT_FIRSTNAME);
+        managedUserVM.setLastName(DEFAULT_LASTNAME);
+        managedUserVM.setEmail(LONG_EMAIL);
+        managedUserVM.setActivated(true);
+        managedUserVM.setImageUrl(DEFAULT_IMAGEURL);
+        managedUserVM.setLangKey(DEFAULT_LANGKEY);
+        managedUserVM.setAuthorities(Collections.singleton(AuthoritiesConstants.USER));
+
+        restUserMockMvc.perform(post("/api/users")
+            .contentType(MediaType.APPLICATION_JSON)
+            .content(TestUtil.convertObjectToJsonBytes(managedUserVM)))
+            .andExpect(status().isCreated());
+
+        User createdUser = userRepository.findOneWithAuthoritiesByLogin(LONG_EMAIL)
+            .orElseThrow(NoSuchElementException::new);
+        assertThat(createdUser.getLogin()).isEqualTo(LONG_EMAIL);
+        assertThat(createdUser.getEmail()).isEqualTo(LONG_EMAIL);
     }
 
     @Test
