@@ -135,9 +135,10 @@ export default function RegistrationHover({
             accessing our evidence-based precision oncology content.
           </p>
           <ul>
-            <li>Academic user? Registration is free!</li>
+            <li>Academic or clinical user? Registration is free!</li>
             <li>
-              Commercial use or clinical reporting requires a paid license.
+              Commercial use or API-based clinical reporting requires a paid
+              license.
             </li>
           </ul>
           <p>
