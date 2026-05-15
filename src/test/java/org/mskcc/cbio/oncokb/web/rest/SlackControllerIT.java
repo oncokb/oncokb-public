@@ -124,9 +124,6 @@ public class SlackControllerIT {
     private Slack slack;
 
     @Spy
-    private SentryService sentryService;
-
-    @Spy
     private MethodsClient methodsClient;
 
     @Captor
@@ -191,7 +188,7 @@ public class SlackControllerIT {
             jHipsterProperties, javaMailSender, messageSource, templateEngine,
             userMailsService, tokenService, userRepository, userDetailsRepository, applicationProperties
         );
-        slackService = new SlackService(applicationProperties, mailService, userService, userMailsService, userMapper, slack, sentryService);
+        slackService = new SlackService(applicationProperties, mailService, userService, userMailsService, userMapper, slack);
         slackController = new SlackController(userService, userRepository, mailService, slackService, userMapper);
 
         /******************************

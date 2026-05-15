@@ -7,7 +7,6 @@ type ServerConfig = {
   appProfile: AppProfile;
   token: string;
   googleAnalyticsProjectId: string;
-  sentryProjectId: string;
   readonly: boolean;
   enableAuth: boolean;
   paywallEnabled: boolean;

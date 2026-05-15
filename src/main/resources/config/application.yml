@@ -167,18 +167,6 @@ jhipster:
     contact-email:
     license: unlicensed
     license-url:
-
-# ===================================================================
-# Sentry specific properties
-# How to configure Sentry Spring Boot: https://docs.sentry.io/clients/java/config/
-# Full reference is available at: https://github.com/getsentry/sentry-java/blob/main/sentry-spring-boot-starter/src/main/java/io/sentry/spring/boot/SentryProperties.java
-# ===================================================================
-sentry:
-  dsn:
-  stacktrace:
-    app:
-      packages: org.mskcc.cbio.oncokb
-# ===================================================================
 # Application specific properties
 # Add your own application properties here, see the ApplicationProperties class
 # to have type-safe configuration, like in the JHipsterProperties above
