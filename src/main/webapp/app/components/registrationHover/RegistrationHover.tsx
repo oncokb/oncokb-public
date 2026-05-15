@@ -131,8 +131,6 @@ export default function RegistrationHover({
       body: (
         <div className={classNames(styles.contentBody)}>
           <p>
-            Help us better understand your needs.
-            <br />
             Create an account or log in to continue accessing OncoKB content.
           </p>
           <ul>
