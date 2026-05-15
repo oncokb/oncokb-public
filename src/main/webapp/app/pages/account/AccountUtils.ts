@@ -38,7 +38,7 @@ export function getAccountInfoTitle(
         title = 'Company Name';
         break;
       case LicenseType.HOSPITAL:
-        title = 'Hospital Name';
+        title = 'Clinical Institution';
         break;
       default:
         title = 'Company Name';
