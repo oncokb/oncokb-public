@@ -2,7 +2,7 @@ import React, { useEffect, useState } from 'react';
 import styles from './styles.module.scss';
 import classNames from 'classnames';
 import { Link, useLocation } from 'react-router-dom';
-import { PAGE_ROUTE } from 'app/config/constants';
+import { ONCOKB_TM, PAGE_ROUTE } from 'app/config/constants';
 import AuthenticationStore from 'app/store/AuthenticationStore';
 import { AppConfig } from 'app/appConfig';
 
@@ -133,7 +133,8 @@ export default function RegistrationHover({
           <p>
             Help us better understand your needs.
             <br />
-            Create an account or log in to continue accessing OncoKB content.
+            Create an account or log in to continue accessing {ONCOKB_TM}{' '}
+            content.
           </p>
           <ul>
             <li>
