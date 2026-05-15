@@ -5,9 +5,11 @@ import { Link } from 'react-router-dom';
 const LicenseExplanation: React.FunctionComponent = () => {
   return (
     <span>
-      A license is required to use {ONCOKB_TM} in a commercial setting or for
-      clinical purposes. {ONCOKB_TM} is freely accessible for research use in an
-      academic setting.
+      {ONCOKB_TM} is freely accessible for academic research use and for manual
+      clinical reference through the {ONCOKB_TM} website. A paid license is
+      required for commercial use or for programmatic/API-based use of{' '}
+      {ONCOKB_TM} content, including integration into clinical reporting
+      workflows.
     </span>
   );
 };

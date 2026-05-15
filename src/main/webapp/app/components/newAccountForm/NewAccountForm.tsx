@@ -24,6 +24,7 @@ import {
   ACADEMIC_TERMS,
   ACCOUNT_TITLES,
   AUTHORITIES,
+  CLINICAL_TERMS,
   LicenseStatus,
   LicenseType,
   ONCOKB_TM,
@@ -240,22 +241,18 @@ export class NewAccountForm extends React.Component<INewAccountForm> {
       return (
         <>
           <p>
-            To incorporate {ONCOKB_TM} content into patient sequencing reports,
-            your hospital will need a license.
+            After registration, hospitals and clinicians may use the OncoKB
+            website for free as a clinical reference tool. A paid license is
+            required for API access or automated use of {ONCOKB_TM} content in
+            clinical reporting systems, pipelines, or workflows.
           </p>
           <p>
             <b>
               Please complete the form below to create your {ONCOKB_TM} account.
             </b>{' '}
-            {this.props.visibleSections?.includes(FormSection.COMPANY) ? (
-              <span>
-                If your hospital already has a license, we will grant you API
-                access shortly. Otherwise, we will contact you with license
-                terms.
-              </span>
-            ) : null}{' '}
-            You can also reach out to <LicenseInquireLink /> for more
-            information.
+            If you are requesting API access for clinical or commercial use, we
+            will contact you shortly with licensing information. You can also
+            reach out to <LicenseInquireLink /> for more information.
           </p>
         </>
       );
@@ -293,13 +290,20 @@ export class NewAccountForm extends React.Component<INewAccountForm> {
   @computed
   get companyDescriptionPlaceholder() {
     const commonDescription =
-      'Provide a brief description of the ' +
+      'Please provide a brief description of the ' +
       getAccountInfoTitle(
         ACCOUNT_TITLES.COMPANY,
         this.selectedLicense
-      ).toLowerCase();
+      ).toLowerCase() +
+      ', including';
 
-    if (this.isCommercialLicense) {
+    if (this.selectedLicense === LicenseType.HOSPITAL) {
+      return (
+        commonDescription +
+        ':\n' +
+        ` - Whether your institution is for-profit, non-profit, government, community, academic, etc.`
+      );
+    } else if (this.isCommercialLicense) {
       return (
         commonDescription +
         ':\n' +
@@ -315,9 +319,15 @@ export class NewAccountForm extends React.Component<INewAccountForm> {
 
   @computed
   get useCasePlaceholder() {
-    const commonDescription = `Provide a description of how you plan to use ${ONCOKB_TM}`;
-
-    if (this.isCommercialLicense) {
+    const commonDescription = `Please provide a description of how you plan to use ${ONCOKB_TM}`;
+    if (this.selectedLicense === LicenseType.HOSPITAL) {
+      return (
+        commonDescription +
+        '\n' +
+        `  - Where in your clinical workflow will ${ONCOKB_TM} be used?\n` +
+        `  - Will you use ${ONCOKB_TM} in clinical reports?`
+      );
+    } else if (this.isCommercialLicense) {
       return (
         commonDescription +
         '\n' +
@@ -712,7 +722,7 @@ export class NewAccountForm extends React.Component<INewAccountForm> {
                         {/* index.scss appends "*" only when a label is immediately
                           followed by an element with the `required` attribute. */}
                         <label htmlFor={FormKey.USE_CASE}>
-                          {`Describe how you plan to use ${ONCOKB_TM} *`}
+                          {`Please describe how you plan to use ${ONCOKB_TM} *`}
                         </label>
                         {[
                           LicenseType.RESEARCH_IN_COMMERCIAL,
@@ -784,6 +794,32 @@ export class NewAccountForm extends React.Component<INewAccountForm> {
                       our API, please agree to the following terms:
                     </p>
                     {ACADEMIC_TERMS.map(term => (
+                      <AvCheckboxGroup
+                        name={term.key}
+                        required
+                        key={term.key}
+                        errorMessage={'You have to accept the term'}
+                      >
+                        <AvCheckbox label={term.description} value={term.key} />
+                      </AvCheckboxGroup>
+                    ))}
+                  </Col>
+                </Row>
+              </>
+            ) : null}
+            {this.selectedLicense === LicenseType.HOSPITAL &&
+            !this.props.byAdmin ? (
+              <>
+                <Row className={getSectionClassName()}>
+                  <Col md="3">
+                    <h5>Terms</h5>
+                  </Col>
+                  <Col md="9">
+                    <p>
+                      In order to be granted access to downloadable content and
+                      our API, please agree to the following terms:
+                    </p>
+                    {CLINICAL_TERMS.map(term => (
                       <AvCheckboxGroup
                         name={term.key}
                         required

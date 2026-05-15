@@ -131,11 +131,14 @@ export default function RegistrationHover({
       body: (
         <div className={classNames(styles.contentBody)}>
           <p>
-            Help us grow by creating an account or logging in to continue
-            accessing our evidence-based precision oncology content.
+            Help us better understand your needs.
+            <br />
+            Create an account or log in to continue accessing OncoKB content.
           </p>
           <ul>
-            <li>Academic or clinical user? Registration is free!</li>
+            <li>
+              Academic or clinical user? Web access is free after registration!
+            </li>
             <li>
               Commercial use or API-based clinical reporting requires a paid
               license.
