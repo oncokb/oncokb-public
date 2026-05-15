@@ -127,7 +127,7 @@ export default function RegistrationHover({
     return <></>;
   } else {
     const content = {
-      title: 'Thanks for using OncoKB!',
+      title: 'Help us better understand your needs.',
       body: (
         <div className={classNames(styles.contentBody)}>
           <p>

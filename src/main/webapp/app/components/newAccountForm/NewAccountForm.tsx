@@ -241,7 +241,7 @@ export class NewAccountForm extends React.Component<INewAccountForm> {
       return (
         <>
           <p>
-            After registration, hospitals and clinicians may use the OncoKB
+            After registration, hospitals and clinicians may use the {ONCOKB_TM}{' '}
             website for free as a clinical reference tool. A paid license is
             required for API access or automated use of {ONCOKB_TM} content in
             clinical reporting systems, pipelines, or workflows.
@@ -633,16 +633,6 @@ export class NewAccountForm extends React.Component<INewAccountForm> {
                   ) : null}
                   {this.selectedCompanyOption ? null : (
                     <div className={styles.companySection}>
-                      {this.selectedLicense !== LicenseType.ACADEMIC && (
-                        <p>
-                          Please feel free to skip this section if your{' '}
-                          {getAccountInfoTitle(
-                            ACCOUNT_TITLES.COMPANY,
-                            this.selectedLicense
-                          ).toLowerCase()}{' '}
-                          already has a license with us.
-                        </p>
-                      )}
                       <AvField
                         name="company"
                         label={getAccountInfoTitle(
@@ -722,7 +712,7 @@ export class NewAccountForm extends React.Component<INewAccountForm> {
                         {/* index.scss appends "*" only when a label is immediately
                           followed by an element with the `required` attribute. */}
                         <label htmlFor={FormKey.USE_CASE}>
-                          {`Please describe how you plan to use ${ONCOKB_TM} *`}
+                          {`Please describe how you plan to use ${ONCOKB_TM}`}
                         </label>
                         {[
                           LicenseType.RESEARCH_IN_COMMERCIAL,
@@ -815,10 +805,7 @@ export class NewAccountForm extends React.Component<INewAccountForm> {
                     <h5>Terms</h5>
                   </Col>
                   <Col md="9">
-                    <p>
-                      In order to be granted access to downloadable content and
-                      our API, please agree to the following terms:
-                    </p>
+                    <p>Please agree to the following terms:</p>
                     {CLINICAL_TERMS.map(term => (
                       <AvCheckboxGroup
                         name={term.key}
