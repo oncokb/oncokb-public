@@ -145,7 +145,8 @@ export default function RegistrationHover({
           </ul>
           <p>
             As always, please review our{' '}
-            <Link to={PAGE_ROUTE.TERMS}>terms of use</Link> before using OncoKB.
+            <Link to={PAGE_ROUTE.TERMS}>terms of use</Link> before using{' '}
+            {ONCOKB_TM}.
           </p>
         </div>
       ),
