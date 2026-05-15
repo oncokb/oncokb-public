@@ -904,7 +904,7 @@ export enum API_CALL_STATUS {
   FAILURE,
 }
 
-export enum TERM_DEFINITION {
+export enum ACADEMIC_TERM_DEFINITION {
   IS_ACADEMIC_GROUP = 'IS_ACADEMIC_GROUP',
   ONLY_ACADEMIC_USAGE = 'ONLY_ACADEMIC_USAGE',
   NO_COMPANY_USAGE = 'NO_COMPANY_USAGE',
@@ -936,24 +936,61 @@ export const FdaRecognitionDisclaimer: React.FunctionComponent<{
 
 export const ACADEMIC_TERMS = [
   {
-    key: TERM_DEFINITION.IS_ACADEMIC_GROUP,
+    key: ACADEMIC_TERM_DEFINITION.IS_ACADEMIC_GROUP,
     description:
       'I confirm that I am a student or employee at the academic institution specified above.',
   },
   {
-    key: TERM_DEFINITION.ONLY_ACADEMIC_USAGE,
+    key: ACADEMIC_TERM_DEFINITION.ONLY_ACADEMIC_USAGE,
     description: `I agree that my use of ${ONCOKB_TM} is solely for research or educational purposes.`,
   },
   {
-    key: TERM_DEFINITION.NOT_USED_IN_AI_MODELS,
+    key: ACADEMIC_TERM_DEFINITION.NOT_USED_IN_AI_MODELS,
     description: `I confirm that I will NOT use ${ONCOKB_TM} data for the purpose of creating and training AI models.`,
   },
   {
-    key: TERM_DEFINITION.NO_COMPANY_USAGE,
+    key: ACADEMIC_TERM_DEFINITION.NO_COMPANY_USAGE,
     description: `I confirm that I will NOT use ${ONCOKB_TM} data for use in medical reports or in an electronic health care system.`,
   },
   {
-    key: TERM_DEFINITION.OK_WITH_TERMS_OF_USE,
+    key: ACADEMIC_TERM_DEFINITION.OK_WITH_TERMS_OF_USE,
+    description: (
+      <span>
+        I have read and agree with the {ONCOKB_TM}{' '}
+        <Link to={PAGE_ROUTE.TERMS}>Terms of Use</Link>.
+      </span>
+    ),
+  },
+];
+
+export enum CLINICAL_TERM_DEFINITION {
+  NOT_USED_IN_AI_MODELS = 'NOT_USED_IN_AI_MODELS',
+  MAY_NOT_REDISTRIBUTE = 'MAY_NOT_REDISTRIBUTE',
+  LIMITED_CLINICAL_ACCESS = 'LIMITED_CLINICAL_ACCESS',
+  API_ACCESS_ACKNOWLEDGEMENT = 'API_ACCESS_ACKNOWLEDGEMENT',
+  NO_COMMERCIAL_USAGE = 'NO_COMMERCIAL_USAGE',
+  OK_WITH_TERMS_OF_USE = 'OK_WITH_TERMS_OF_USE',
+}
+
+export const CLINICAL_TERMS = [
+  {
+    key: CLINICAL_TERM_DEFINITION.NOT_USED_IN_AI_MODELS,
+    description: `I confirm that I will not use ${ONCOKB_TM} data to train or develop AI models.`,
+  },
+  {
+    key: CLINICAL_TERM_DEFINITION.MAY_NOT_REDISTRIBUTE,
+    description: `I understand that I may not redistribute or share the content with any others, in part or in whole, for any purpose.`,
+  },
+  {
+    key: CLINICAL_TERM_DEFINITION.LIMITED_CLINICAL_ACCESS,
+    description: `I understand that free clinical access is limited to manual use through the ${ONCOKB_TM} website.`,
+  },
+  {
+    key: CLINICAL_TERM_DEFINITION.API_ACCESS_ACKNOWLEDGEMENT,
+    description: `I understand that API access, automated integrations, and incorporation of OncoKB content into clinical reporting systems or workflows require a paid license.`,
+  },
+  {
+    key: CLINICAL_TERM_DEFINITION.OK_WITH_TERMS_OF_USE,
     description: (
       <span>
         I have read and agree with the {ONCOKB_TM}{' '}
