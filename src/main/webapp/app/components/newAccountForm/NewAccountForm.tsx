@@ -779,7 +779,10 @@ export class NewAccountForm extends React.Component<INewAccountForm> {
                     <h5>Terms</h5>
                   </Col>
                   <Col md="9">
-                    <p>Please agree to the following terms:</p>
+                    <p>
+                      In order to be granted access to downloadable content and
+                      our API, please agree to the following terms:
+                    </p>
                     {ACADEMIC_TERMS.map(term => (
                       <AvCheckboxGroup
                         name={term.key}
@@ -802,10 +805,7 @@ export class NewAccountForm extends React.Component<INewAccountForm> {
                     <h5>Terms</h5>
                   </Col>
                   <Col md="9">
-                    <p>
-                      In order to be granted access to downloadable content and
-                      our API, please agree to the following terms:
-                    </p>
+                    <p>Please agree to the following terms:</p>
                     {CLINICAL_TERMS.map(term => (
                       <AvCheckboxGroup
                         name={term.key}
