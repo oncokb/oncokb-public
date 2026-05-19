@@ -39,7 +39,7 @@ import WindowStore from 'app/store/WindowStore';
 import classnames from 'classnames';
 import { inject } from 'mobx-react';
 import { RouterStore } from 'mobx-react-router';
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useMemo, useState } from 'react';
 import { Alert, Col, Container, Row } from 'react-bootstrap';
 import { Helmet } from 'react-helmet-async';
 import { Else, If, Then } from 'react-if';
@@ -146,6 +146,30 @@ const SomaticTagCancerTypePage = inject(
 
     fetchInfo();
   }, [tumorType]);
+
+  const [txSummary, dxSummary, pxSummary] = useMemo(() => {
+    let tumorTypeSummary = '';
+    let diagnosticSummary = '';
+    let prognosticSummary = '';
+
+    if (pageLoadState.state === LoadState.Success) {
+      for (const evi of pageLoadState.data.tag.evidences) {
+        switch (evi.evidenceType) {
+          case 'TUMOR_TYPE_SUMMARY':
+            tumorTypeSummary = evi.description;
+            break;
+          case 'DIAGNOSTIC_SUMMARY':
+            diagnosticSummary = evi.description;
+            break;
+          case 'PROGNOSTIC_SUMMARY':
+            prognosticSummary = evi.description;
+            break;
+          default:
+        }
+      }
+    }
+    return [tumorTypeSummary, diagnosticSummary, prognosticSummary];
+  }, [pageLoadState.state]);
 
   return (
     <div className="view-wrapper">
@@ -313,7 +337,12 @@ const SomaticTagCancerTypePage = inject(
                       matchedAlteration={undefined}
                       tumorType={tumorType}
                       onChangeTumorType={() => {}}
-                      annotation={DEFAULT_ANNOTATION}
+                      annotation={{
+                        ...DEFAULT_ANNOTATION,
+                        tumorTypeSummary: txSummary,
+                        diagnosticSummary: dxSummary,
+                        prognosticSummary: pxSummary,
+                      }}
                       biologicalAlterations={[]}
                       relevantAlterations={undefined}
                       fdaImplication={getFdaImplicationsFromTags(
