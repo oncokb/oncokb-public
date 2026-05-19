@@ -1009,7 +1009,7 @@ const getImplicationsFromTag = (
       continue;
     }
 
-    let alterationsName: string | IAlteration;
+    let alterationsName: string;
     let alterationsView: JSX.Element;
     if (evidence.alterations.length > 0) {
       alterationsName = evidence.alterations
@@ -1181,7 +1181,7 @@ const getFdaImplicationsFromTag = (tag: Tag, hugoSymbol: string) => {
       continue;
     }
 
-    let alterationsName: string | IAlteration;
+    let alterationsName: string;
     let alterationsView: JSX.Element;
     if (evidence.alterations.length > 0) {
       alterationsName = evidence.alterations
