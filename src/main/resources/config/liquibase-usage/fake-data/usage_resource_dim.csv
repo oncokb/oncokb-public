@@ -1,0 +1,4 @@
+id;resource_path;is_public
+1;/api/v1/genes;true
+2;/api/v1/variants;true
+3;/api/private/annotate;false

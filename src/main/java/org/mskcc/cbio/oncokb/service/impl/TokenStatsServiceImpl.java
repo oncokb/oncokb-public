@@ -7,6 +7,11 @@ import org.mskcc.cbio.oncokb.querydomain.UserTokenUsageWithInfo;
 import org.mskcc.cbio.oncokb.service.TokenStatsService;
 import org.mskcc.cbio.oncokb.domain.TokenStats;
 import org.mskcc.cbio.oncokb.repository.TokenStatsRepository;
+import org.mskcc.cbio.oncokb.repository.TokenStatsUsageRepository;
+import org.mskcc.cbio.oncokb.web.rest.vm.usageAnalysis.UsageAnalysisInterval;
+import org.mskcc.cbio.oncokb.web.rest.vm.usageAnalysis.ResourceUsageAnalysisRow;
+import org.mskcc.cbio.oncokb.web.rest.vm.usageAnalysis.UsageAnalysisRow;
+import org.mskcc.cbio.oncokb.web.rest.vm.usageAnalysis.UsageResourceName;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -29,11 +34,17 @@ public class TokenStatsServiceImpl implements TokenStatsService {
     private final Logger log = LoggerFactory.getLogger(TokenStatsServiceImpl.class);
 
     private final TokenStatsRepository tokenStatsRepository;
+    private final TokenStatsUsageRepository tokenStatsUsageRepository;
 
     private final JHipsterProperties jHipsterProperties;
 
-    public TokenStatsServiceImpl(TokenStatsRepository tokenStatsRepository, JHipsterProperties jHipsterProperties) {
+    public TokenStatsServiceImpl(
+        TokenStatsRepository tokenStatsRepository,
+        TokenStatsUsageRepository tokenStatsUsageRepository,
+        JHipsterProperties jHipsterProperties
+    ) {
         this.tokenStatsRepository = tokenStatsRepository;
+        this.tokenStatsUsageRepository = tokenStatsUsageRepository;
         this.jHipsterProperties = jHipsterProperties;
     }
 
@@ -78,6 +89,84 @@ public class TokenStatsServiceImpl implements TokenStatsService {
 
     public List<UserTokenUsageWithInfo> getTokenUsageAnalysis(Instant after) {
         return tokenStatsRepository.countTokenUsageByTokenTimeResource(after);
+    }
+
+    @Override
+    @Transactional(readOnly = true)
+    public Page<UsageAnalysisRow> getPagedUserUsageSummary(
+        UsageAnalysisInterval interval,
+        boolean publicOnly,
+        Long companyId,
+        Long userId,
+        String searchQuery,
+        String resourceContainsQuery,
+        String fromDate,
+        String toDate,
+        Pageable pageable
+    ) {
+        return tokenStatsUsageRepository.findPagedUserUsageSummary(
+            interval,
+            publicOnly,
+            companyId,
+            userId,
+            searchQuery,
+            resourceContainsQuery,
+            fromDate,
+            toDate,
+            pageable
+        );
+    }
+
+    @Override
+    @Transactional(readOnly = true)
+    public Page<ResourceUsageAnalysisRow> getPagedResourceUsageSummary(
+        UsageAnalysisInterval interval,
+        boolean publicOnly,
+        Long userId,
+        String searchQuery,
+        String resourceContainsQuery,
+        String fromDate,
+        String toDate,
+        Pageable pageable
+    ) {
+        return tokenStatsUsageRepository.findPagedResourceUsageSummary(
+            interval,
+            publicOnly,
+            userId,
+            searchQuery,
+            resourceContainsQuery,
+            fromDate,
+            toDate,
+            pageable
+        );
+    }
+
+    @Override
+    @Transactional(readOnly = true)
+    public Page<ResourceUsageAnalysisRow> getPagedGlobalResourceUsageSummary(
+        UsageAnalysisInterval interval,
+        boolean publicOnly,
+        String searchQuery,
+        Long resourceId,
+        String fromDate,
+        String toDate,
+        Pageable pageable
+    ) {
+        return tokenStatsUsageRepository.findPagedGlobalResourceUsageSummary(
+            interval,
+            publicOnly,
+            searchQuery,
+            resourceId,
+            fromDate,
+            toDate,
+            pageable
+        );
+    }
+
+    @Override
+    @Transactional(readOnly = true)
+    public Optional<UsageResourceName> getUsageResourceName(Long resourceId) {
+        return tokenStatsUsageRepository.findResourceNameById(resourceId);
     }
 
 }

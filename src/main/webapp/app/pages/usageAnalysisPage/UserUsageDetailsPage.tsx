@@ -1,25 +1,20 @@
-import { UserUsage } from 'app/shared/api/generated/API';
-import { observable } from 'mobx';
+import client from 'app/shared/api/clientInstance';
+import { getSectionClassName } from '../account/AccountUtils';
+import { InfoRow } from '../AccountPage';
+import { notifyError } from 'app/shared/utils/NotificationUtils';
+import { PromiseStatus } from 'app/shared/utils/PromiseUtils';
+import { ResourceUsageAnalysisRow } from 'app/shared/api/generated/API';
+import { observable, action } from 'mobx';
 import { inject, observer } from 'mobx-react';
 import { RouterStore } from 'mobx-react-router';
 import React from 'react';
-import { Link, match } from 'react-router-dom';
-import client from 'app/shared/api/clientInstance';
-import { getSectionClassName } from '../account/AccountUtils';
 import { Alert, Col, Row } from 'react-bootstrap';
-import UserUsageDetailsTable from './UserUsageDetailsTable';
-import { InfoRow } from '../AccountPage';
+import { Link, match } from 'react-router-dom';
+import UsageAnalysisTable from './UsageAnalysisTable';
 import {
-  USAGE_MONTH_DETAIL_TIME_KEY,
-  USAGE_YEAR_DETAIL_TIME_KEY,
-  USAGE_DAY_DETAIL_TIME_KEY,
-} from 'app/config/constants';
-import { remoteData } from 'cbioportal-frontend-commons';
-import { notifyError } from 'app/shared/utils/NotificationUtils';
-import {
-  UsageRecord,
-  TimeGroupedUsageRecords,
-  ToggleValue,
+  UserUsage,
+  ResourceToggleValue,
+  TimeToggleValue,
 } from './usage-analysis-utils';
 
 @inject('routing')
@@ -28,82 +23,51 @@ export default class UserUsageDetailsPage extends React.Component<{
   routing: RouterStore;
   match: match;
 }> {
-  @observable user: UserUsage;
+  @observable user: UserUsage | undefined;
+  @observable loadStatus = PromiseStatus.pending;
 
-  userId = this.props.match.params['id'];
+  userId = Number(this.props.match.params['id']);
 
   constructor(props: Readonly<{ routing: RouterStore; match: match }>) {
     super(props);
+    this.loadUser();
   }
 
-  readonly usageDetail = remoteData<TimeGroupedUsageRecords>({
-    await: () => [],
-    invoke: async () => {
-      const result: TimeGroupedUsageRecords = {
-        [USAGE_YEAR_DETAIL_TIME_KEY]: [],
-        [USAGE_MONTH_DETAIL_TIME_KEY]: [],
-        [USAGE_DAY_DETAIL_TIME_KEY]: [],
+  @action.bound
+  async loadUser() {
+    if (!Number.isFinite(this.userId)) {
+      this.loadStatus = PromiseStatus.error;
+      return;
+    }
+
+    try {
+      const rows = await client.userUsageGetUsingGET({
+        userId: this.userId,
+        interval: 'YEAR',
+        publicOnly: false,
+        page: 0,
+        size: 1,
+      });
+      const firstRow: ResourceUsageAnalysisRow | undefined = rows[0];
+      this.user = {
+        userFirstName: firstRow?.userFirstName || '',
+        userLastName: firstRow?.userLastName || '',
+        userEmail: firstRow?.userEmail || '',
+        company: firstRow?.company || '',
+        jobTitle: firstRow?.jobTitle || '',
+        licenseType: firstRow?.licenseType || '',
+        summary: {
+          day: {},
+          month: {},
+          year: {},
+        },
       };
-      this.user = await client.userUsageGetUsingGET({ userId: this.userId });
-      if (this.user.summary !== null) {
-        const yearSummary = this.user.summary.year;
-        const yearDetailSummary: UsageRecord[] = [];
-        Object.keys(yearSummary).forEach(year => {
-          const yearUsage = yearSummary[year];
-          Object.keys(yearUsage).forEach(resourceEntry => {
-            yearDetailSummary.push({
-              userEmail: this.user.userEmail,
-              usage: yearUsage[resourceEntry],
-              time: year,
-              resource: resourceEntry,
-              maxUsageProportion: 0,
-            });
-          });
-        });
-        result[USAGE_YEAR_DETAIL_TIME_KEY] = yearDetailSummary;
-
-        const monthSummary = this.user.summary.month;
-        const monthDetailSummary: UsageRecord[] = [];
-        Object.keys(monthSummary).forEach(month => {
-          const monthUsage = monthSummary[month];
-          Object.keys(monthUsage).forEach(resourceEntry => {
-            monthDetailSummary.push({
-              userEmail: this.user.userEmail,
-              usage: monthUsage[resourceEntry],
-              time: month,
-              resource: resourceEntry,
-              maxUsageProportion: 0,
-            });
-          });
-        });
-        result[USAGE_MONTH_DETAIL_TIME_KEY] = monthDetailSummary;
-
-        const daySummary = this.user.summary.day;
-        const dayDetailSummary: UsageRecord[] = [];
-        Object.keys(daySummary).forEach(day => {
-          const dayUsage = daySummary[day];
-          Object.keys(dayUsage).forEach(resourceEntry => {
-            dayDetailSummary.push({
-              userEmail: this.user.userEmail,
-              usage: dayUsage[resourceEntry],
-              time: day,
-              resource: resourceEntry,
-              maxUsageProportion: 0,
-            });
-          });
-        });
-        result[USAGE_DAY_DETAIL_TIME_KEY] = dayDetailSummary;
-      }
-      return Promise.resolve(result);
-    },
-    onError: (error: Error) =>
-      notifyError(error, 'Failed to load user data usage.'),
-    default: {
-      [USAGE_YEAR_DETAIL_TIME_KEY]: [],
-      [USAGE_MONTH_DETAIL_TIME_KEY]: [],
-      [USAGE_DAY_DETAIL_TIME_KEY]: [],
-    },
-  });
+      this.loadStatus = PromiseStatus.complete;
+    } catch (error) {
+      notifyError(error as Error, 'Failed to load user data usage.');
+      this.loadStatus = PromiseStatus.error;
+    }
+  }
 
   render() {
     return (
@@ -114,45 +78,35 @@ export default class UserUsageDetailsPage extends React.Component<{
             <hr />
             {this.user ? (
               <>
-                <InfoRow
-                  title="First Name"
-                  content={this.user.userFirstName}
-                ></InfoRow>
-                <InfoRow
-                  title="Last Name"
-                  content={this.user.userLastName}
-                ></InfoRow>
+                <InfoRow title="First Name" content={this.user.userFirstName} />
+                <InfoRow title="Last Name" content={this.user.userLastName} />
                 <InfoRow title="Email">
                   <Link to={`/users/${this.user.userEmail}`}>
                     {this.user.userEmail}
                   </Link>
                 </InfoRow>
-                <InfoRow title="Company" content={this.user.company}></InfoRow>
-                <InfoRow
-                  title="Job Title"
-                  content={this.user.jobTitle}
-                ></InfoRow>
-                <InfoRow
-                  title="License Type"
-                  content={this.user.licenseType}
-                ></InfoRow>
+                <InfoRow title="Company" content={this.user.company} />
+                <InfoRow title="Job Title" content={this.user.jobTitle} />
+                <InfoRow title="License Type" content={this.user.licenseType} />
               </>
+            ) : this.loadStatus === PromiseStatus.error ? (
+              <Alert variant="danger">Failed to load user data usage.</Alert>
             ) : (
-              <span>Not available</span>
+              <span>Loading...</span>
             )}
           </Col>
         </Row>
 
-        {this.usageDetail.isError ? (
-          <Alert variant="danger">Failed to load user data usage.</Alert>
-        ) : (
-          <UserUsageDetailsTable
-            data={this.usageDetail.result}
-            loadedData={this.usageDetail.isComplete}
-            defaultResourcesType={ToggleValue.PUBLIC_RESOURCES}
-            defaultTimeType={ToggleValue.RESULTS_BY_MONTH}
-          />
-        )}
+        {this.loadStatus === PromiseStatus.complete &&
+          Number.isFinite(this.userId) && (
+            <UsageAnalysisTable
+              mode="resourceSummary"
+              userId={this.userId}
+              defaultResourcesType={ResourceToggleValue.PUBLIC_RESOURCES}
+              defaultTimeType={TimeToggleValue.RESULTS_BY_MONTH}
+              defaultPageSize={10}
+            />
+          )}
       </>
     );
   }

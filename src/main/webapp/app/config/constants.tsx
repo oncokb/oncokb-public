@@ -728,7 +728,7 @@ export enum PAGE_ROUTE {
   ADMIN_USAGE_ANALYSIS = '/admin/usage-analysis',
   ADMIN_USER_USAGE_DETAILS = '/admin/usage-analysis/users/:id',
   ADMIN_USER_USAGE_DETAILS_LINK = '/admin/usage-analysis/users/',
-  ADMIN_RESOURCE_DETAILS = '/admin/usage-analysis/resources/:endpoint',
+  ADMIN_RESOURCE_DETAILS = '/admin/usage-analysis/resources/:resourceId',
   ADMIN_RESOURCE_DETAILS_LINK = '/admin/usage-analysis/resources/',
   ADMIN_ADD_COMPANY = '/admin/create-company',
   ADMIN_ADD_USER_BANNER_MESSAGE = '/admin/create-user-banner-messages',

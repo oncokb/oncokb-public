@@ -1,0 +1,583 @@
+<?xml version="1.0" encoding="utf-8"?>
+<databaseChangeLog
+    xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-3.9.xsd">
+
+    <changeSet id="20260514130000-0-create-usage-schema" author="codex">
+        <sql dbms="mysql,mariadb">CREATE SCHEMA IF NOT EXISTS ${usageSchemaName}</sql>
+    </changeSet>
+
+    <changeSet id="20260514130000-1-create-usage-ingest-run" author="codex">
+        <createTable schemaName="${usageSchemaName}" tableName="usage_ingest_run">
+            <column name="id" type="bigint" autoIncrement="true">
+                <constraints primaryKey="true" nullable="false"/>
+            </column>
+            <column name="s3_key" type="varchar(512)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="bucket_date" type="date">
+                <constraints nullable="false"/>
+            </column>
+            <column name="status" type="varchar(32)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="source_row_count" type="bigint"/>
+            <column name="imported_at" type="datetime"/>
+            <column name="error_message" type="clob"/>
+            <column name="created_at" type="datetime" defaultValueComputed="CURRENT_TIMESTAMP">
+                <constraints nullable="false"/>
+            </column>
+            <column name="updated_at" type="datetime" defaultValueComputed="CURRENT_TIMESTAMP">
+                <constraints nullable="false"/>
+            </column>
+        </createTable>
+        <addUniqueConstraint schemaName="${usageSchemaName}" tableName="usage_ingest_run" columnNames="s3_key" constraintName="uk_usage_ingest_run_s3_key"/>
+        <addUniqueConstraint schemaName="${usageSchemaName}" tableName="usage_ingest_run" columnNames="bucket_date" constraintName="uk_usage_ingest_run_bucket_date"/>
+    </changeSet>
+
+    <changeSet id="20260514130000-2-create-usage-resource-dim" author="codex">
+        <createTable schemaName="${usageSchemaName}" tableName="usage_resource_dim">
+            <column name="id" type="bigint" autoIncrement="true">
+                <constraints primaryKey="true" nullable="false"/>
+            </column>
+            <column name="resource_path" type="varchar(512)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="is_public" type="boolean">
+                <constraints nullable="false"/>
+            </column>
+            <column name="created_at" type="datetime" defaultValueComputed="CURRENT_TIMESTAMP">
+                <constraints nullable="false"/>
+            </column>
+        </createTable>
+        <addUniqueConstraint schemaName="${usageSchemaName}" tableName="usage_resource_dim" columnNames="resource_path" constraintName="uk_usage_resource_dim_path"/>
+        <createIndex schemaName="${usageSchemaName}" tableName="usage_resource_dim" indexName="idx_usage_resource_dim_public">
+            <column name="is_public"/>
+            <column name="resource_path"/>
+        </createIndex>
+    </changeSet>
+
+    <changeSet id="20260514130000-3-create-usage-user-day-resource" author="codex">
+        <createTable schemaName="${usageSchemaName}" tableName="usage_user_day_resource">
+            <column name="usage_date" type="date">
+                <constraints nullable="false"/>
+            </column>
+            <column name="user_id" type="bigint"/>
+            <column name="user_email" type="varchar(254)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="company_id" type="bigint"/>
+            <column name="resource_id" type="bigint">
+                <constraints nullable="false"/>
+            </column>
+            <column name="usage_count" type="bigint">
+                <constraints nullable="false"/>
+            </column>
+            <column name="created_at" type="datetime" defaultValueComputed="CURRENT_TIMESTAMP">
+                <constraints nullable="false"/>
+            </column>
+            <column name="updated_at" type="datetime" defaultValueComputed="CURRENT_TIMESTAMP">
+                <constraints nullable="false"/>
+            </column>
+        </createTable>
+        <addPrimaryKey schemaName="${usageSchemaName}" tableName="usage_user_day_resource" columnNames="usage_date,user_email,resource_id" constraintName="pk_uudr"/>
+        <createIndex schemaName="${usageSchemaName}" tableName="usage_user_day_resource" indexName="idx_uudr_user_page">
+            <column name="usage_date"/>
+            <column name="user_id"/>
+            <column name="usage_count"/>
+            <column name="resource_id"/>
+        </createIndex>
+        <createIndex schemaName="${usageSchemaName}" tableName="usage_user_day_resource" indexName="idx_uudr_res_page">
+            <column name="usage_date"/>
+            <column name="resource_id"/>
+            <column name="user_id"/>
+        </createIndex>
+    </changeSet>
+
+    <changeSet id="20260514130000-4-create-usage-user-month-resource" author="codex">
+        <createTable schemaName="${usageSchemaName}" tableName="usage_user_month_resource">
+            <column name="usage_month" type="date">
+                <constraints nullable="false"/>
+            </column>
+            <column name="user_id" type="bigint"/>
+            <column name="user_email" type="varchar(254)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="company_id" type="bigint"/>
+            <column name="resource_id" type="bigint">
+                <constraints nullable="false"/>
+            </column>
+            <column name="usage_count" type="bigint">
+                <constraints nullable="false"/>
+            </column>
+            <column name="created_at" type="datetime" defaultValueComputed="CURRENT_TIMESTAMP">
+                <constraints nullable="false"/>
+            </column>
+            <column name="updated_at" type="datetime" defaultValueComputed="CURRENT_TIMESTAMP">
+                <constraints nullable="false"/>
+            </column>
+        </createTable>
+        <addPrimaryKey schemaName="${usageSchemaName}" tableName="usage_user_month_resource" columnNames="usage_month,user_email,resource_id" constraintName="pk_uumr"/>
+        <createIndex schemaName="${usageSchemaName}" tableName="usage_user_month_resource" indexName="idx_uumr_user_page">
+            <column name="usage_month"/>
+            <column name="user_id"/>
+            <column name="usage_count"/>
+            <column name="resource_id"/>
+        </createIndex>
+        <createIndex schemaName="${usageSchemaName}" tableName="usage_user_month_resource" indexName="idx_uumr_res_page">
+            <column name="usage_month"/>
+            <column name="resource_id"/>
+            <column name="user_id"/>
+        </createIndex>
+    </changeSet>
+
+    <changeSet id="20260514130000-5-create-usage-user-year-resource" author="codex">
+        <createTable schemaName="${usageSchemaName}" tableName="usage_user_year_resource">
+            <column name="usage_year" type="date">
+                <constraints nullable="false"/>
+            </column>
+            <column name="user_id" type="bigint"/>
+            <column name="user_email" type="varchar(254)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="company_id" type="bigint"/>
+            <column name="resource_id" type="bigint">
+                <constraints nullable="false"/>
+            </column>
+            <column name="usage_count" type="bigint">
+                <constraints nullable="false"/>
+            </column>
+            <column name="created_at" type="datetime" defaultValueComputed="CURRENT_TIMESTAMP">
+                <constraints nullable="false"/>
+            </column>
+            <column name="updated_at" type="datetime" defaultValueComputed="CURRENT_TIMESTAMP">
+                <constraints nullable="false"/>
+            </column>
+        </createTable>
+        <addPrimaryKey schemaName="${usageSchemaName}" tableName="usage_user_year_resource" columnNames="usage_year,user_email,resource_id" constraintName="pk_uuyr"/>
+        <createIndex schemaName="${usageSchemaName}" tableName="usage_user_year_resource" indexName="idx_uuyr_user_page">
+            <column name="usage_year"/>
+            <column name="user_id"/>
+            <column name="usage_count"/>
+            <column name="resource_id"/>
+        </createIndex>
+        <createIndex schemaName="${usageSchemaName}" tableName="usage_user_year_resource" indexName="idx_uuyr_res_page">
+            <column name="usage_year"/>
+            <column name="resource_id"/>
+            <column name="user_id"/>
+        </createIndex>
+    </changeSet>
+
+    <changeSet id="20260514130000-6-create-usage-user-day-summary" author="codex">
+        <createTable schemaName="${usageSchemaName}" tableName="usage_user_day_summary">
+            <column name="usage_date" type="date">
+                <constraints nullable="false"/>
+            </column>
+            <column name="user_id" type="bigint"/>
+            <column name="user_email" type="varchar(254)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="company_id" type="bigint"/>
+            <column name="total_usage" type="bigint">
+                <constraints nullable="false"/>
+            </column>
+            <column name="total_public_usage" type="bigint">
+                <constraints nullable="false"/>
+            </column>
+            <column name="top_resource_id" type="bigint"/>
+            <column name="top_resource_usage" type="bigint"/>
+            <column name="top_public_resource_id" type="bigint"/>
+            <column name="top_public_resource_usage" type="bigint"/>
+            <column name="created_at" type="datetime" defaultValueComputed="CURRENT_TIMESTAMP">
+                <constraints nullable="false"/>
+            </column>
+            <column name="updated_at" type="datetime" defaultValueComputed="CURRENT_TIMESTAMP">
+                <constraints nullable="false"/>
+            </column>
+        </createTable>
+        <addPrimaryKey schemaName="${usageSchemaName}" tableName="usage_user_day_summary" columnNames="usage_date,user_email" constraintName="pk_uuds"/>
+        <createIndex schemaName="${usageSchemaName}" tableName="usage_user_day_summary" indexName="idx_uuds_page_all">
+            <column name="usage_date"/>
+            <column name="company_id"/>
+            <column name="total_usage"/>
+            <column name="user_email"/>
+        </createIndex>
+        <createIndex schemaName="${usageSchemaName}" tableName="usage_user_day_summary" indexName="idx_uuds_page_pub">
+            <column name="usage_date"/>
+            <column name="company_id"/>
+            <column name="total_public_usage"/>
+            <column name="user_email"/>
+        </createIndex>
+        <createIndex schemaName="${usageSchemaName}" tableName="usage_user_day_summary" indexName="idx_uuds_user">
+            <column name="user_id"/>
+            <column name="usage_date"/>
+        </createIndex>
+    </changeSet>
+
+    <changeSet id="20260514130000-7-create-usage-user-month-summary" author="codex">
+        <createTable schemaName="${usageSchemaName}" tableName="usage_user_month_summary">
+            <column name="usage_month" type="date">
+                <constraints nullable="false"/>
+            </column>
+            <column name="user_id" type="bigint"/>
+            <column name="user_email" type="varchar(254)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="company_id" type="bigint"/>
+            <column name="total_usage" type="bigint">
+                <constraints nullable="false"/>
+            </column>
+            <column name="total_public_usage" type="bigint">
+                <constraints nullable="false"/>
+            </column>
+            <column name="top_resource_id" type="bigint"/>
+            <column name="top_resource_usage" type="bigint"/>
+            <column name="top_public_resource_id" type="bigint"/>
+            <column name="top_public_resource_usage" type="bigint"/>
+            <column name="created_at" type="datetime" defaultValueComputed="CURRENT_TIMESTAMP">
+                <constraints nullable="false"/>
+            </column>
+            <column name="updated_at" type="datetime" defaultValueComputed="CURRENT_TIMESTAMP">
+                <constraints nullable="false"/>
+            </column>
+        </createTable>
+        <addPrimaryKey schemaName="${usageSchemaName}" tableName="usage_user_month_summary" columnNames="usage_month,user_email" constraintName="pk_uums"/>
+        <createIndex schemaName="${usageSchemaName}" tableName="usage_user_month_summary" indexName="idx_uums_page_all">
+            <column name="usage_month"/>
+            <column name="company_id"/>
+            <column name="total_usage"/>
+            <column name="user_email"/>
+        </createIndex>
+        <createIndex schemaName="${usageSchemaName}" tableName="usage_user_month_summary" indexName="idx_uums_page_pub">
+            <column name="usage_month"/>
+            <column name="company_id"/>
+            <column name="total_public_usage"/>
+            <column name="user_email"/>
+        </createIndex>
+        <createIndex schemaName="${usageSchemaName}" tableName="usage_user_month_summary" indexName="idx_uums_user">
+            <column name="user_id"/>
+            <column name="usage_month"/>
+        </createIndex>
+    </changeSet>
+
+    <changeSet id="20260514130000-8-create-usage-user-year-summary" author="codex">
+        <createTable schemaName="${usageSchemaName}" tableName="usage_user_year_summary">
+            <column name="usage_year" type="date">
+                <constraints nullable="false"/>
+            </column>
+            <column name="user_id" type="bigint"/>
+            <column name="user_email" type="varchar(254)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="company_id" type="bigint"/>
+            <column name="total_usage" type="bigint">
+                <constraints nullable="false"/>
+            </column>
+            <column name="total_public_usage" type="bigint">
+                <constraints nullable="false"/>
+            </column>
+            <column name="top_resource_id" type="bigint"/>
+            <column name="top_resource_usage" type="bigint"/>
+            <column name="top_public_resource_id" type="bigint"/>
+            <column name="top_public_resource_usage" type="bigint"/>
+            <column name="created_at" type="datetime" defaultValueComputed="CURRENT_TIMESTAMP">
+                <constraints nullable="false"/>
+            </column>
+            <column name="updated_at" type="datetime" defaultValueComputed="CURRENT_TIMESTAMP">
+                <constraints nullable="false"/>
+            </column>
+        </createTable>
+        <addPrimaryKey schemaName="${usageSchemaName}" tableName="usage_user_year_summary" columnNames="usage_year,user_email" constraintName="pk_uuys"/>
+        <createIndex schemaName="${usageSchemaName}" tableName="usage_user_year_summary" indexName="idx_uuys_page_all">
+            <column name="usage_year"/>
+            <column name="company_id"/>
+            <column name="total_usage"/>
+            <column name="user_email"/>
+        </createIndex>
+        <createIndex schemaName="${usageSchemaName}" tableName="usage_user_year_summary" indexName="idx_uuys_page_pub">
+            <column name="usage_year"/>
+            <column name="company_id"/>
+            <column name="total_public_usage"/>
+            <column name="user_email"/>
+        </createIndex>
+        <createIndex schemaName="${usageSchemaName}" tableName="usage_user_year_summary" indexName="idx_uuys_user">
+            <column name="user_id"/>
+            <column name="usage_year"/>
+        </createIndex>
+    </changeSet>
+
+    <changeSet id="20260514130000-9-create-usage-resource-day-summary" author="codex">
+        <createTable schemaName="${usageSchemaName}" tableName="usage_resource_day_summary">
+            <column name="usage_date" type="date">
+                <constraints nullable="false"/>
+            </column>
+            <column name="resource_id" type="bigint">
+                <constraints nullable="false"/>
+            </column>
+            <column name="usage_count" type="bigint">
+                <constraints nullable="false"/>
+            </column>
+            <column name="created_at" type="datetime" defaultValueComputed="CURRENT_TIMESTAMP">
+                <constraints nullable="false"/>
+            </column>
+            <column name="updated_at" type="datetime" defaultValueComputed="CURRENT_TIMESTAMP">
+                <constraints nullable="false"/>
+            </column>
+        </createTable>
+        <addPrimaryKey schemaName="${usageSchemaName}" tableName="usage_resource_day_summary" columnNames="usage_date,resource_id" constraintName="pk_urds"/>
+        <createIndex schemaName="${usageSchemaName}" tableName="usage_resource_day_summary" indexName="idx_urds_page">
+            <column name="usage_date"/>
+            <column name="usage_count"/>
+            <column name="resource_id"/>
+        </createIndex>
+    </changeSet>
+
+    <changeSet id="20260514130000-10-create-usage-resource-month-summary" author="codex">
+        <createTable schemaName="${usageSchemaName}" tableName="usage_resource_month_summary">
+            <column name="usage_month" type="date">
+                <constraints nullable="false"/>
+            </column>
+            <column name="resource_id" type="bigint">
+                <constraints nullable="false"/>
+            </column>
+            <column name="usage_count" type="bigint">
+                <constraints nullable="false"/>
+            </column>
+            <column name="created_at" type="datetime" defaultValueComputed="CURRENT_TIMESTAMP">
+                <constraints nullable="false"/>
+            </column>
+            <column name="updated_at" type="datetime" defaultValueComputed="CURRENT_TIMESTAMP">
+                <constraints nullable="false"/>
+            </column>
+        </createTable>
+        <addPrimaryKey schemaName="${usageSchemaName}" tableName="usage_resource_month_summary" columnNames="usage_month,resource_id" constraintName="pk_urms"/>
+        <createIndex schemaName="${usageSchemaName}" tableName="usage_resource_month_summary" indexName="idx_urms_page">
+            <column name="usage_month"/>
+            <column name="usage_count"/>
+            <column name="resource_id"/>
+        </createIndex>
+    </changeSet>
+
+    <changeSet id="20260514130000-11-create-usage-resource-year-summary" author="codex">
+        <createTable schemaName="${usageSchemaName}" tableName="usage_resource_year_summary">
+            <column name="usage_year" type="date">
+                <constraints nullable="false"/>
+            </column>
+            <column name="resource_id" type="bigint">
+                <constraints nullable="false"/>
+            </column>
+            <column name="usage_count" type="bigint">
+                <constraints nullable="false"/>
+            </column>
+            <column name="created_at" type="datetime" defaultValueComputed="CURRENT_TIMESTAMP">
+                <constraints nullable="false"/>
+            </column>
+            <column name="updated_at" type="datetime" defaultValueComputed="CURRENT_TIMESTAMP">
+                <constraints nullable="false"/>
+            </column>
+        </createTable>
+        <addPrimaryKey schemaName="${usageSchemaName}" tableName="usage_resource_year_summary" columnNames="usage_year,resource_id" constraintName="pk_urys"/>
+        <createIndex schemaName="${usageSchemaName}" tableName="usage_resource_year_summary" indexName="idx_urys_page">
+            <column name="usage_year"/>
+            <column name="usage_count"/>
+            <column name="resource_id"/>
+        </createIndex>
+    </changeSet>
+
+    <changeSet id="20260514130000-12-add-usage-foreign-keys" author="codex">
+        <addForeignKeyConstraint baseTableSchemaName="${usageSchemaName}" baseTableName="usage_user_day_resource" baseColumnNames="resource_id"
+                                 referencedTableSchemaName="${usageSchemaName}" referencedTableName="usage_resource_dim" referencedColumnNames="id"
+                                 constraintName="fk_uudr_resource"/>
+        <addForeignKeyConstraint baseTableSchemaName="${usageSchemaName}" baseTableName="usage_user_month_resource" baseColumnNames="resource_id"
+                                 referencedTableSchemaName="${usageSchemaName}" referencedTableName="usage_resource_dim" referencedColumnNames="id"
+                                 constraintName="fk_uumr_resource"/>
+        <addForeignKeyConstraint baseTableSchemaName="${usageSchemaName}" baseTableName="usage_user_year_resource" baseColumnNames="resource_id"
+                                 referencedTableSchemaName="${usageSchemaName}" referencedTableName="usage_resource_dim" referencedColumnNames="id"
+                                 constraintName="fk_uuyr_resource"/>
+        <addForeignKeyConstraint baseTableSchemaName="${usageSchemaName}" baseTableName="usage_user_day_summary" baseColumnNames="top_resource_id"
+                                 referencedTableSchemaName="${usageSchemaName}" referencedTableName="usage_resource_dim" referencedColumnNames="id"
+                                 constraintName="fk_uuds_top_resource"/>
+        <addForeignKeyConstraint baseTableSchemaName="${usageSchemaName}" baseTableName="usage_user_day_summary" baseColumnNames="top_public_resource_id"
+                                 referencedTableSchemaName="${usageSchemaName}" referencedTableName="usage_resource_dim" referencedColumnNames="id"
+                                 constraintName="fk_uuds_top_pub_res"/>
+        <addForeignKeyConstraint baseTableSchemaName="${usageSchemaName}" baseTableName="usage_user_month_summary" baseColumnNames="top_resource_id"
+                                 referencedTableSchemaName="${usageSchemaName}" referencedTableName="usage_resource_dim" referencedColumnNames="id"
+                                 constraintName="fk_uums_top_resource"/>
+        <addForeignKeyConstraint baseTableSchemaName="${usageSchemaName}" baseTableName="usage_user_month_summary" baseColumnNames="top_public_resource_id"
+                                 referencedTableSchemaName="${usageSchemaName}" referencedTableName="usage_resource_dim" referencedColumnNames="id"
+                                 constraintName="fk_uums_top_pub_res"/>
+        <addForeignKeyConstraint baseTableSchemaName="${usageSchemaName}" baseTableName="usage_user_year_summary" baseColumnNames="top_resource_id"
+                                 referencedTableSchemaName="${usageSchemaName}" referencedTableName="usage_resource_dim" referencedColumnNames="id"
+                                 constraintName="fk_uuys_top_resource"/>
+        <addForeignKeyConstraint baseTableSchemaName="${usageSchemaName}" baseTableName="usage_user_year_summary" baseColumnNames="top_public_resource_id"
+                                 referencedTableSchemaName="${usageSchemaName}" referencedTableName="usage_resource_dim" referencedColumnNames="id"
+                                 constraintName="fk_uuys_top_pub_res"/>
+        <addForeignKeyConstraint baseTableSchemaName="${usageSchemaName}" baseTableName="usage_resource_day_summary" baseColumnNames="resource_id"
+                                 referencedTableSchemaName="${usageSchemaName}" referencedTableName="usage_resource_dim" referencedColumnNames="id"
+                                 constraintName="fk_urds_resource"/>
+        <addForeignKeyConstraint baseTableSchemaName="${usageSchemaName}" baseTableName="usage_resource_month_summary" baseColumnNames="resource_id"
+                                 referencedTableSchemaName="${usageSchemaName}" referencedTableName="usage_resource_dim" referencedColumnNames="id"
+                                 constraintName="fk_urms_resource"/>
+        <addForeignKeyConstraint baseTableSchemaName="${usageSchemaName}" baseTableName="usage_resource_year_summary" baseColumnNames="resource_id"
+                                 referencedTableSchemaName="${usageSchemaName}" referencedTableName="usage_resource_dim" referencedColumnNames="id"
+                                 constraintName="fk_urys_resource"/>
+    </changeSet>
+
+    <!--
+        Load sample usage metrics data.
+        - This data is opt-in through the Liquibase 'faker' context.
+        - CSV files live in 'src/main/resources/config/liquibase-usage/fake-data'.
+        - The dataset is intentionally small but internally consistent across
+          resource dimension, user/resource drilldown, and summary tables.
+    -->
+    <changeSet id="20260514130000-13-usage-resource-dim-data" author="codex" context="faker">
+        <loadData
+                  file="config/liquibase-usage/fake-data/usage_resource_dim.csv"
+                  schemaName="${usageSchemaName}"
+                  separator=";"
+                  tableName="usage_resource_dim">
+            <column name="id" type="numeric"/>
+            <column name="resource_path" type="string"/>
+            <column name="is_public" type="boolean"/>
+        </loadData>
+    </changeSet>
+
+    <changeSet id="20260514130000-14-usage-user-day-resource-data" author="codex" context="faker">
+        <loadData
+                  file="config/liquibase-usage/fake-data/usage_user_day_resource.csv"
+                  schemaName="${usageSchemaName}"
+                  separator=";"
+                  tableName="usage_user_day_resource">
+            <column name="usage_date" type="date"/>
+            <column name="user_id" type="numeric"/>
+            <column name="user_email" type="string"/>
+            <column name="company_id" type="numeric"/>
+            <column name="resource_id" type="numeric"/>
+            <column name="usage_count" type="numeric"/>
+        </loadData>
+    </changeSet>
+
+    <changeSet id="20260514130000-15-usage-user-month-resource-data" author="codex" context="faker">
+        <loadData
+                  file="config/liquibase-usage/fake-data/usage_user_month_resource.csv"
+                  schemaName="${usageSchemaName}"
+                  separator=";"
+                  tableName="usage_user_month_resource">
+            <column name="usage_month" type="date"/>
+            <column name="user_id" type="numeric"/>
+            <column name="user_email" type="string"/>
+            <column name="company_id" type="numeric"/>
+            <column name="resource_id" type="numeric"/>
+            <column name="usage_count" type="numeric"/>
+        </loadData>
+    </changeSet>
+
+    <changeSet id="20260514130000-16-usage-user-year-resource-data" author="codex" context="faker">
+        <loadData
+                  file="config/liquibase-usage/fake-data/usage_user_year_resource.csv"
+                  schemaName="${usageSchemaName}"
+                  separator=";"
+                  tableName="usage_user_year_resource">
+            <column name="usage_year" type="date"/>
+            <column name="user_id" type="numeric"/>
+            <column name="user_email" type="string"/>
+            <column name="company_id" type="numeric"/>
+            <column name="resource_id" type="numeric"/>
+            <column name="usage_count" type="numeric"/>
+        </loadData>
+    </changeSet>
+
+    <changeSet id="20260514130000-17-usage-user-day-summary-data" author="codex" context="faker">
+        <loadData
+                  file="config/liquibase-usage/fake-data/usage_user_day_summary.csv"
+                  schemaName="${usageSchemaName}"
+                  separator=";"
+                  tableName="usage_user_day_summary">
+            <column name="usage_date" type="date"/>
+            <column name="user_id" type="numeric"/>
+            <column name="user_email" type="string"/>
+            <column name="company_id" type="numeric"/>
+            <column name="total_usage" type="numeric"/>
+            <column name="total_public_usage" type="numeric"/>
+            <column name="top_resource_id" type="numeric"/>
+            <column name="top_resource_usage" type="numeric"/>
+            <column name="top_public_resource_id" type="numeric"/>
+            <column name="top_public_resource_usage" type="numeric"/>
+        </loadData>
+    </changeSet>
+
+    <changeSet id="20260514130000-18-usage-user-month-summary-data" author="codex" context="faker">
+        <loadData
+                  file="config/liquibase-usage/fake-data/usage_user_month_summary.csv"
+                  schemaName="${usageSchemaName}"
+                  separator=";"
+                  tableName="usage_user_month_summary">
+            <column name="usage_month" type="date"/>
+            <column name="user_id" type="numeric"/>
+            <column name="user_email" type="string"/>
+            <column name="company_id" type="numeric"/>
+            <column name="total_usage" type="numeric"/>
+            <column name="total_public_usage" type="numeric"/>
+            <column name="top_resource_id" type="numeric"/>
+            <column name="top_resource_usage" type="numeric"/>
+            <column name="top_public_resource_id" type="numeric"/>
+            <column name="top_public_resource_usage" type="numeric"/>
+        </loadData>
+    </changeSet>
+
+    <changeSet id="20260514130000-19-usage-user-year-summary-data" author="codex" context="faker">
+        <loadData
+                  file="config/liquibase-usage/fake-data/usage_user_year_summary.csv"
+                  schemaName="${usageSchemaName}"
+                  separator=";"
+                  tableName="usage_user_year_summary">
+            <column name="usage_year" type="date"/>
+            <column name="user_id" type="numeric"/>
+            <column name="user_email" type="string"/>
+            <column name="company_id" type="numeric"/>
+            <column name="total_usage" type="numeric"/>
+            <column name="total_public_usage" type="numeric"/>
+            <column name="top_resource_id" type="numeric"/>
+            <column name="top_resource_usage" type="numeric"/>
+            <column name="top_public_resource_id" type="numeric"/>
+            <column name="top_public_resource_usage" type="numeric"/>
+        </loadData>
+    </changeSet>
+
+    <changeSet id="20260514130000-20-usage-resource-day-summary-data" author="codex" context="faker">
+        <loadData
+                  file="config/liquibase-usage/fake-data/usage_resource_day_summary.csv"
+                  schemaName="${usageSchemaName}"
+                  separator=";"
+                  tableName="usage_resource_day_summary">
+            <column name="usage_date" type="date"/>
+            <column name="resource_id" type="numeric"/>
+            <column name="usage_count" type="numeric"/>
+        </loadData>
+    </changeSet>
+
+    <changeSet id="20260514130000-21-usage-resource-month-summary-data" author="codex" context="faker">
+        <loadData
+                  file="config/liquibase-usage/fake-data/usage_resource_month_summary.csv"
+                  schemaName="${usageSchemaName}"
+                  separator=";"
+                  tableName="usage_resource_month_summary">
+            <column name="usage_month" type="date"/>
+            <column name="resource_id" type="numeric"/>
+            <column name="usage_count" type="numeric"/>
+        </loadData>
+    </changeSet>
+
+    <changeSet id="20260514130000-22-usage-resource-year-summary-data" author="codex" context="faker">
+        <loadData
+                  file="config/liquibase-usage/fake-data/usage_resource_year_summary.csv"
+                  schemaName="${usageSchemaName}"
+                  separator=";"
+                  tableName="usage_resource_year_summary">
+            <column name="usage_year" type="date"/>
+            <column name="resource_id" type="numeric"/>
+            <column name="usage_count" type="numeric"/>
+        </loadData>
+    </changeSet>
+</databaseChangeLog>

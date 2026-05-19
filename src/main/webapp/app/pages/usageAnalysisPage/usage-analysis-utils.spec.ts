@@ -3,8 +3,8 @@ import {
   isPrivateResource,
   mapUserOrResourceUsageToUsageRecords,
   mapUsageSummaryToTimeGroupedUsageRecords,
-  ToggleValue,
   UsageSummaryWithUsageTypes,
+  TimeToggleValue,
 } from './usage-analysis-utils';
 
 const userOverviewUsageWithUsageTypes: UserOverviewUsageWithUsageTypes[] = [
@@ -104,7 +104,7 @@ describe('usage-analysis-utils', () => {
     [
       [
         userOverviewUsageWithUsageTypes,
-        ToggleValue.RESULTS_BY_YEAR,
+        TimeToggleValue.RESULTS_BY_YEAR,
         true,
         '2019-01-01',
         '2019-12-31',
@@ -115,7 +115,7 @@ describe('usage-analysis-utils', () => {
     [
       [
         userOverviewUsageWithUsageTypes,
-        ToggleValue.RESULTS_BY_YEAR,
+        TimeToggleValue.RESULTS_BY_YEAR,
         false,
         '2019-01-01',
         '2019-12-31',
@@ -135,7 +135,7 @@ describe('usage-analysis-utils', () => {
     [
       [
         userOverviewUsageWithUsageTypes,
-        ToggleValue.RESULTS_BY_YEAR,
+        TimeToggleValue.RESULTS_BY_YEAR,
         true,
         '2020-01-01',
         '2020-12-31',
@@ -155,7 +155,7 @@ describe('usage-analysis-utils', () => {
     [
       [
         userOverviewUsageWithUsageTypes,
-        ToggleValue.RESULTS_BY_YEAR,
+        TimeToggleValue.RESULTS_BY_YEAR,
         true,
         '2020-01-01',
         '2020-12-31',
@@ -175,7 +175,7 @@ describe('usage-analysis-utils', () => {
     [
       [
         userOverviewUsageWithUsageTypes,
-        ToggleValue.RESULTS_BY_MONTH,
+        TimeToggleValue.RESULTS_BY_MONTH,
         true,
         '2020-01-01',
         '2020-12-31',
@@ -195,7 +195,7 @@ describe('usage-analysis-utils', () => {
     [
       [
         userOverviewUsageWithUsageTypes,
-        ToggleValue.RESULTS_BY_MONTH,
+        TimeToggleValue.RESULTS_BY_MONTH,
         true,
         '2020-01-01',
         '2020-12-31',
@@ -215,7 +215,7 @@ describe('usage-analysis-utils', () => {
     [
       [
         userOverviewUsageWithUsageTypes,
-        ToggleValue.RESULTS_BY_DAY,
+        TimeToggleValue.RESULTS_BY_DAY,
         true,
         '2020-01-01',
         '2020-12-31',
@@ -235,7 +235,7 @@ describe('usage-analysis-utils', () => {
     [
       [
         userOverviewUsageWithUsageTypes,
-        ToggleValue.RESULTS_BY_DAY,
+        TimeToggleValue.RESULTS_BY_DAY,
         true,
         '2020-01-01',
         '2020-12-31',

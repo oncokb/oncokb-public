@@ -3,6 +3,8 @@ package org.mskcc.cbio.oncokb.config;
 import io.github.jhipster.config.JHipsterConstants;
 import io.github.jhipster.config.liquibase.SpringLiquibaseUtil;
 import liquibase.integration.spring.SpringLiquibase;
+import org.mskcc.cbio.oncokb.config.application.ApplicationProperties;
+import org.mskcc.cbio.oncokb.config.application.UsageLiquibaseProperties;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.ObjectProvider;
@@ -24,9 +26,11 @@ public class LiquibaseConfiguration {
     private final Logger log = LoggerFactory.getLogger(LiquibaseConfiguration.class);
 
     private final Environment env;
+    private final ApplicationProperties applicationProperties;
 
-    public LiquibaseConfiguration(Environment env) {
+    public LiquibaseConfiguration(Environment env, ApplicationProperties applicationProperties) {
         this.env = env;
+        this.applicationProperties = applicationProperties;
     }
 
     @Bean
@@ -54,6 +58,44 @@ public class LiquibaseConfiguration {
         } else {
             liquibase.setShouldRun(liquibaseProperties.isEnabled());
             log.debug("Configuring Liquibase");
+        }
+        return liquibase;
+    }
+
+    @Bean
+    public SpringLiquibase usageLiquibase(@Qualifier("taskExecutor") Executor executor,
+            @LiquibaseDataSource ObjectProvider<DataSource> liquibaseDataSource,
+            ObjectProvider<DataSource> dataSource, DataSourceProperties dataSourceProperties) {
+
+        UsageLiquibaseProperties usageLiquibaseProperties = applicationProperties.getUsageLiquibase();
+        LiquibaseProperties liquibaseProperties = new LiquibaseProperties();
+        liquibaseProperties.setChangeLog(usageLiquibaseProperties.getChangeLog());
+        liquibaseProperties.setDefaultSchema(usageLiquibaseProperties.getSchema());
+        liquibaseProperties.setLiquibaseSchema(usageLiquibaseProperties.getSchema());
+        liquibaseProperties.setDatabaseChangeLogTable(usageLiquibaseProperties.getDatabaseChangeLogTable());
+        liquibaseProperties.setDatabaseChangeLogLockTable(usageLiquibaseProperties.getDatabaseChangeLogLockTable());
+        liquibaseProperties.setEnabled(usageLiquibaseProperties.isEnabled());
+
+        SpringLiquibase liquibase = SpringLiquibaseUtil.createAsyncSpringLiquibase(
+            this.env,
+            executor,
+            liquibaseDataSource.getIfAvailable(),
+            liquibaseProperties,
+            dataSource.getIfUnique(),
+            dataSourceProperties
+        );
+        liquibase.setChangeLog(liquibaseProperties.getChangeLog());
+        liquibase.setContexts(liquibaseProperties.getContexts());
+        liquibase.setDefaultSchema(liquibaseProperties.getDefaultSchema());
+        liquibase.setLiquibaseSchema(liquibaseProperties.getLiquibaseSchema());
+        liquibase.setDatabaseChangeLogTable(liquibaseProperties.getDatabaseChangeLogTable());
+        liquibase.setDatabaseChangeLogLockTable(liquibaseProperties.getDatabaseChangeLogLockTable());
+        liquibase.setChangeLogParameters(java.util.Collections.singletonMap("usageSchemaName", usageLiquibaseProperties.getSchema()));
+        if (env.acceptsProfiles(Profiles.of(JHipsterConstants.SPRING_PROFILE_NO_LIQUIBASE))) {
+            liquibase.setShouldRun(false);
+        } else {
+            liquibase.setShouldRun(liquibaseProperties.isEnabled());
+            log.debug("Configuring usage Liquibase");
         }
         return liquibase;
     }
