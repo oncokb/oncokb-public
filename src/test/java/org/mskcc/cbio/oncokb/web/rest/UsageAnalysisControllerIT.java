@@ -1,264 +1,386 @@
 package org.mskcc.cbio.oncokb.web.rest;
 
-import static org.mockito.ArgumentMatchers.any;
-import static org.mskcc.cbio.oncokb.config.Constants.*;
+import static org.hamcrest.Matchers.hasSize;
+import static org.mockito.Mockito.mock;
+import static org.mockito.Mockito.verify;
+import static org.mockito.Mockito.when;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.content;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.header;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
-import com.google.gson.Gson;
-import com.google.gson.JsonArray;
-import com.google.gson.JsonElement;
-import com.google.gson.JsonObject;
-import com.google.gson.JsonPrimitive;
-import java.io.InputStream;
-import java.time.Clock;
 import java.time.LocalDate;
-import java.time.YearMonth;
-import java.time.ZoneId;
-import java.time.ZonedDateTime;
-import java.time.format.DateTimeFormatter;
-import java.util.*;
-import java.util.AbstractMap.SimpleEntry;
-import java.util.Map.Entry;
-import org.junit.jupiter.api.BeforeEach;
-import org.junit.jupiter.api.Disabled;
-import org.junit.jupiter.api.Test;
-import org.mockito.InjectMocks;
+import java.util.Arrays;
+import java.util.Collections;
+import java.util.List;
+import org.junit.Before;
+import org.junit.Test;
+import org.mockito.ArgumentCaptor;
 import org.mockito.Mock;
-import org.mockito.Mockito;
 import org.mockito.MockitoAnnotations;
-import org.mskcc.cbio.oncokb.config.Constants;
-import org.mskcc.cbio.oncokb.domain.User;
-import org.mskcc.cbio.oncokb.domain.enumeration.FileExtension;
-import org.mskcc.cbio.oncokb.domain.enumeration.LicenseType;
 import org.mskcc.cbio.oncokb.repository.UserDetailsRepository;
 import org.mskcc.cbio.oncokb.repository.projection.UserRegistrationSummaryProjection;
-import org.mskcc.cbio.oncokb.service.S3Service;
-import org.mskcc.cbio.oncokb.service.UserService;
-import org.mskcc.cbio.oncokb.service.dto.CompanyDTO;
-import org.mskcc.cbio.oncokb.service.dto.UserDTO;
-import org.mskcc.cbio.oncokb.service.mapper.UserMapper;
-import org.mskcc.cbio.oncokb.util.TimeUtil;
+import org.mskcc.cbio.oncokb.service.TokenStatsService;
 import org.mskcc.cbio.oncokb.web.rest.errors.ExceptionTranslator;
+import org.mskcc.cbio.oncokb.web.rest.vm.usageAnalysis.ResourceUsageAnalysisRow;
+import org.mskcc.cbio.oncokb.web.rest.vm.usageAnalysis.UsageAnalysisInterval;
+import org.mskcc.cbio.oncokb.web.rest.vm.usageAnalysis.UsageAnalysisRow;
+import org.mskcc.cbio.oncokb.web.rest.vm.usageAnalysis.UsageResourceName;
+import org.springframework.data.domain.PageImpl;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
 import org.springframework.http.MediaType;
 import org.springframework.mock.env.MockEnvironment;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.setup.MockMvcBuilders;
-import org.springframework.web.server.ResponseStatusException;
-import org.testcontainers.shaded.org.apache.commons.io.IOUtils;
-import software.amazon.awssdk.core.ResponseInputStream;
-import software.amazon.awssdk.http.AbortableInputStream;
-import software.amazon.awssdk.services.s3.model.GetObjectResponse;
+import org.springframework.data.web.PageableHandlerMethodArgumentResolver;
+import java.util.Optional;
 
 /**
- * Unit tests for the {@link UsageAnalysisController } REST controller.
+ * Unit tests for the {@link UsageAnalysisController} REST controller.
  */
-@Disabled
 public class UsageAnalysisControllerIT {
-  private final Gson gson = new Gson();
-
   @Mock
-  private S3Service s3Service;
-
-  @Mock
-  private UserService userService;
-
-  @Mock
-  private UserMapper userMapper;
+  private TokenStatsService tokenStatsService;
 
   @Mock
   private UserDetailsRepository userDetailsRepository;
 
-  private Clock clock = Clock.fixed(
-    ZonedDateTime
-      .of(2020, 12, 31, 0, 0, 0, 0, ZoneId.of(Constants.NY_ZONE_ID))
-      .toInstant(),
-    ZoneId.of(Constants.NY_ZONE_ID)
-  );
-
-  // we need a separate mock object because we want to use a real clock instance
-  // in usageAnalysisController which normally should be done
-  // with @Spy, but @Spy doesn't work because clock has static methods.
-  @Mock
-  private Clock mockClock;
-
-  @InjectMocks
-  private UsageAnalysisController usageAnalysisController;
-
   private MockMvc restMockMvc;
 
-  private final MockS3Data data = new MockS3Data(1, this.clock);
-
-  public UsageAnalysisControllerIT() throws Exception {}
-
-  private void mockS3ObjectResponse(MockS3Data data) throws Exception {
-    Mockito
-      .when(mockClock.withZone(any()))
-      .thenAnswer(
-        i -> {
-          ZoneId zone = (ZoneId) i.getArguments()[0];
-          return this.clock.withZone(zone);
-        }
-      );
-
-    Mockito
-      .when(userMapper.userToUserDTO(any()))
-      .thenAnswer(
-        i -> {
-          User user = (User) i.getArguments()[0];
-          Optional<UserDTO> userDto = data.userDtos
-            .stream()
-            .filter(x -> Objects.equals(x.getId(), user.getId()))
-            .findFirst();
-          return userDto.orElseThrow(Exception::new);
-        }
-      );
-
-    Mockito
-      .when(userService.getUserWithAuthoritiesByEmailIgnoreCase(any()))
-      .thenAnswer(
-        i -> {
-          String email = (String) i.getArguments()[0];
-          return data.users
-            .stream()
-            .filter(x -> x.getEmail().equalsIgnoreCase(email))
-            .findFirst();
-        }
-      );
-
-    Mockito
-      .when(userService.getUserById(any()))
-      .thenAnswer(
-        i -> {
-          long id = (long) i.getArguments()[0];
-          return data.users.stream().filter(x -> x.getId() == id).findFirst();
-        }
-      );
-
-    Mockito
-      .when(s3Service.getObject(any()))
-      .thenAnswer(
-        i -> {
-          String filePath = (String) i.getArguments()[0];
-          JsonElement element = data.files.get(filePath);
-          String fileContents = gson.toJson(element);
-          InputStream objectStream = IOUtils.toInputStream(
-            fileContents,
-            "UTF-8"
-          );
-          ResponseInputStream<GetObjectResponse> stream = new ResponseInputStream<>(
-            GetObjectResponse.builder().build(),
-            AbortableInputStream.create(objectStream)
-          );
-          return Optional.of(stream);
-        }
-      );
-  }
-
-  @BeforeEach
-  public void setup() throws Exception {
-    usageAnalysisController = new UsageAnalysisController();
+  @Before
+  public void setup() {
     MockitoAnnotations.initMocks(this);
-    this.mockS3ObjectResponse(data);
+    UsageAnalysisController usageAnalysisController =
+      new UsageAnalysisController(
+        tokenStatsService,
+        userDetailsRepository
+      );
     this.restMockMvc =
       MockMvcBuilders
         .standaloneSetup(usageAnalysisController)
+        .setCustomArgumentResolvers(new PageableHandlerMethodArgumentResolver())
         .setControllerAdvice(new ExceptionTranslator(new MockEnvironment()))
         .build();
   }
 
   @Test
+  public void shouldGetUsageSummaryUsersWithDefaultSorting() throws Exception {
+    UsageAnalysisRow row = new UsageAnalysisRow();
+    row.setUserId("42");
+    row.setUserEmail("user@example.org");
+    row.setResource("/api/v1/genes");
+    row.setUsage(123L);
+    row.setTime("2026-05-19");
+    row.setMaxUsageProportion(87.5f);
+
+    when(
+      tokenStatsService.getPagedUserUsageSummary(
+        org.mockito.ArgumentMatchers.eq(UsageAnalysisInterval.DAY),
+        org.mockito.ArgumentMatchers.eq(true),
+        org.mockito.ArgumentMatchers.eq(99L),
+        org.mockito.ArgumentMatchers.isNull(),
+        org.mockito.ArgumentMatchers.isNull(),
+        org.mockito.ArgumentMatchers.isNull(),
+        org.mockito.ArgumentMatchers.isNull(),
+        org.mockito.ArgumentMatchers.isNull(),
+        org.mockito.ArgumentMatchers.any(Pageable.class)
+      )
+    )
+      .thenReturn(ListBackedPages.userUsagePage(row));
+
+    restMockMvc
+      .perform(get("/api/usage/summary/users").param("companyId", "99"))
+      .andExpect(status().isOk())
+      .andExpect(
+        content().contentTypeCompatibleWith(MediaType.APPLICATION_JSON)
+      )
+      .andExpect(header().string("X-Total-Count", "1"))
+      .andExpect(jsonPath("$", hasSize(1)))
+      .andExpect(jsonPath("$[0].userId").value("42"))
+      .andExpect(jsonPath("$[0].userEmail").value("user@example.org"))
+      .andExpect(jsonPath("$[0].resource").value("/api/v1/genes"))
+      .andExpect(jsonPath("$[0].usage").value(123))
+      .andExpect(jsonPath("$[0].time").value("2026-05-19"))
+      .andExpect(jsonPath("$[0].maxUsageProportion").value(87.5));
+
+    ArgumentCaptor<Pageable> pageableCaptor = ArgumentCaptor.forClass(
+      Pageable.class
+    );
+    verify(tokenStatsService)
+      .getPagedUserUsageSummary(
+        UsageAnalysisInterval.DAY,
+        true,
+        99L,
+        null,
+        null,
+        null,
+        null,
+        null,
+        pageableCaptor.capture()
+      );
+
+    Pageable pageable = pageableCaptor.getValue();
+    org.assertj.core.api.Assertions
+      .assertThat(pageable.getPageNumber())
+      .isEqualTo(0);
+    org.assertj.core.api.Assertions
+      .assertThat(pageable.getPageSize())
+      .isEqualTo(20);
+    org.assertj.core.api.Assertions
+      .assertThat(pageable.getSort().toList())
+      .containsExactly(
+        new Sort.Order(Sort.Direction.DESC, "time"),
+        new Sort.Order(Sort.Direction.DESC, "usage"),
+        new Sort.Order(Sort.Direction.ASC, "userEmail")
+      );
+  }
+
+  @Test
   public void shouldGetUsageSummaryResources() throws Exception {
-    String url = "/api/usage/summary/resources";
-    String expected = gson.toJson(data.files.get(url));
-    restMockMvc
-      .perform(get(url))
-      .andExpect(status().isOk())
-      .andExpect(
-        content().contentTypeCompatibleWith(MediaType.APPLICATION_JSON)
+    ResourceUsageAnalysisRow row = new ResourceUsageAnalysisRow();
+    row.setResourceId(8L);
+    row.setResource("/api/v1/variants");
+    row.setUsage(55L);
+    row.setTime("2026-05");
+
+    when(
+      tokenStatsService.getPagedGlobalResourceUsageSummary(
+        org.mockito.ArgumentMatchers.eq(UsageAnalysisInterval.MONTH),
+        org.mockito.ArgumentMatchers.eq(false),
+        org.mockito.ArgumentMatchers.eq("variants"),
+        org.mockito.ArgumentMatchers.isNull(),
+        org.mockito.ArgumentMatchers.isNull(),
+        org.mockito.ArgumentMatchers.isNull(),
+        org.mockito.ArgumentMatchers.any(Pageable.class)
       )
-      .andExpect(content().json(expected, true));
+    )
+      .thenReturn(
+        new PageImpl<>(
+          Collections.singletonList(row),
+          PageRequest.of(
+            0,
+            5,
+            Sort.by(
+              Sort.Order.asc("resource"),
+              Sort.Order.desc("usage")
+            )
+          ),
+          1
+        )
+      );
+
+    restMockMvc
+      .perform(
+        get("/api/usage/summary/resources")
+          .param("interval", "MONTH")
+          .param("publicOnly", "false")
+          .param("search", "variants")
+          .param("size", "5")
+          .param("sort", "resource,asc")
+          .param("sort", "usage,desc")
+      )
+      .andExpect(status().isOk())
+      .andExpect(header().string("X-Total-Count", "1"))
+      .andExpect(jsonPath("$", hasSize(1)))
+      .andExpect(jsonPath("$[0].resourceId").value(8))
+      .andExpect(jsonPath("$[0].resource").value("/api/v1/variants"))
+      .andExpect(jsonPath("$[0].usage").value(55))
+      .andExpect(jsonPath("$[0].time").value("2026-05"));
+
+    ArgumentCaptor<Pageable> pageableCaptor = ArgumentCaptor.forClass(
+      Pageable.class
+    );
+    verify(tokenStatsService)
+      .getPagedGlobalResourceUsageSummary(
+        UsageAnalysisInterval.MONTH,
+        false,
+        "variants",
+        null,
+        null,
+        null,
+        pageableCaptor.capture()
+      );
+
+    org.assertj.core.api.Assertions
+      .assertThat(pageableCaptor.getValue().getSort().toList())
+      .containsExactly(
+        new Sort.Order(Sort.Direction.ASC, "resource"),
+        new Sort.Order(Sort.Direction.DESC, "usage")
+      );
   }
 
   @Test
-  public void shouldGetUsageResources() throws Exception {
-    String url =
-      "/api/usage/resources?endpoint=" + data.sampleOncokbEndpoints[0];
-    String expected = gson.toJson(data.files.get(url));
-    restMockMvc
-      .perform(get(url))
-      .andExpect(status().isOk())
-      .andExpect(
-        content().contentTypeCompatibleWith(MediaType.APPLICATION_JSON)
+  public void shouldGetUsageSummaryResourcesByResourceId() throws Exception {
+    ResourceUsageAnalysisRow row = new ResourceUsageAnalysisRow();
+    row.setResourceId(77L);
+    row.setResource("/api/v1/annotate/mutations/byProteinChange");
+    row.setUsage(21L);
+    row.setTime("2026-05");
+
+    when(
+      tokenStatsService.getPagedGlobalResourceUsageSummary(
+        org.mockito.ArgumentMatchers.eq(UsageAnalysisInterval.MONTH),
+        org.mockito.ArgumentMatchers.eq(true),
+        org.mockito.ArgumentMatchers.isNull(),
+        org.mockito.ArgumentMatchers.eq(77L),
+        org.mockito.ArgumentMatchers.isNull(),
+        org.mockito.ArgumentMatchers.isNull(),
+        org.mockito.ArgumentMatchers.any(Pageable.class)
       )
-      // strict checking enforces the same order on arrays
-      // we need to use strict checks to make sure we are not missing
-      // any data in our asserts
-      // if you have issues with arrays make sure you have the correct order
-      .andExpect(content().json(expected, true));
+    )
+      .thenReturn(ListBackedPages.resourceUsagePage(row));
+
+    restMockMvc
+      .perform(
+        get("/api/usage/summary/resources")
+          .param("interval", "MONTH")
+          .param("resourceId", "77")
+      )
+      .andExpect(status().isOk())
+      .andExpect(header().string("X-Total-Count", "1"))
+      .andExpect(jsonPath("$[0].resourceId").value(77))
+      .andExpect(
+        jsonPath("$[0].resource").value(
+          "/api/v1/annotate/mutations/byProteinChange"
+        )
+      );
+
+    verify(tokenStatsService)
+      .getPagedGlobalResourceUsageSummary(
+        UsageAnalysisInterval.MONTH,
+        true,
+        null,
+        77L,
+        null,
+        null,
+        PageRequest.of(
+          0,
+          20,
+          Sort.by(
+            Sort.Order.desc("time"),
+            Sort.Order.desc("usage"),
+            Sort.Order.asc("resource")
+          )
+        )
+      );
   }
 
   @Test
-  public void shouldGetUsageSummaryUsers() throws Exception {
-    String url = "/api/usage/summary/users";
-    String expected = gson.toJson(data.files.get(url));
+  public void shouldGetUsageResourceName() throws Exception {
+    UsageResourceName resourceName = new UsageResourceName();
+    resourceName.setResourceId(77L);
+    resourceName.setResource("/api/v1/annotate/mutations/byProteinChange");
+
+    when(tokenStatsService.getUsageResourceName(77L))
+      .thenReturn(Optional.of(resourceName));
+
     restMockMvc
-      .perform(get(url))
+      .perform(get("/api/usage/resources/77"))
       .andExpect(status().isOk())
       .andExpect(
         content().contentTypeCompatibleWith(MediaType.APPLICATION_JSON)
       )
-      .andExpect(content().json(expected, true));
+      .andExpect(jsonPath("$.resourceId").value(77))
+      .andExpect(
+        jsonPath("$.resource").value(
+          "/api/v1/annotate/mutations/byProteinChange"
+        )
+      );
   }
 
   @Test
-  public void shouldGetUsageSummaryUsersByCompanyId() throws Exception {
-    String url =
-      "/api/usage/summary/users?companyId=" +
-      data.userDtos.get(0).getCompany().getId();
-    String expected = gson.toJson(data.files.get(url));
+  public void shouldReturnNotFoundForUnknownUsageResourceName() throws Exception {
+    when(tokenStatsService.getUsageResourceName(77L))
+      .thenReturn(Optional.empty());
+
     restMockMvc
-      .perform(get(url))
-      .andExpect(status().isOk())
-      .andExpect(
-        content().contentTypeCompatibleWith(MediaType.APPLICATION_JSON)
-      )
-      .andExpect(content().json(expected, true));
+      .perform(get("/api/usage/resources/77"))
+      .andExpect(status().isNotFound());
   }
 
   @Test
-  public void shouldGetUsageUsersById() throws Exception {
-    String url = "/api/usage/users/" + data.users.get(0).getId();
-    String expected = gson.toJson(data.files.get(url));
-    restMockMvc
-      .perform(get(url))
-      .andExpect(status().isOk())
-      .andExpect(
-        content().contentTypeCompatibleWith(MediaType.APPLICATION_JSON)
+  public void shouldGetUserUsageDetails() throws Exception {
+    ResourceUsageAnalysisRow row = new ResourceUsageAnalysisRow();
+    row.setResource("/api/private/annotate");
+    row.setUsage(12L);
+    row.setTime("2026");
+
+    when(
+      tokenStatsService.getPagedResourceUsageSummary(
+        org.mockito.ArgumentMatchers.eq(UsageAnalysisInterval.YEAR),
+        org.mockito.ArgumentMatchers.eq(true),
+        org.mockito.ArgumentMatchers.eq(7L),
+        org.mockito.ArgumentMatchers.eq("annotate"),
+        org.mockito.ArgumentMatchers.isNull(),
+        org.mockito.ArgumentMatchers.isNull(),
+        org.mockito.ArgumentMatchers.isNull(),
+        org.mockito.ArgumentMatchers.any(Pageable.class)
       )
-      .andExpect(content().json(expected, true));
+    )
+      .thenReturn(
+        new PageImpl<>(
+          Collections.singletonList(row),
+          PageRequest.of(1, 10, Sort.by(Sort.Order.desc("time"))),
+          3
+        )
+      );
+
+    restMockMvc
+      .perform(
+        get("/api/usage/users/7")
+          .param("interval", "YEAR")
+          .param("search", "annotate")
+          .param("page", "1")
+          .param("size", "10")
+      )
+      .andExpect(status().isOk())
+      .andExpect(header().string("X-Total-Count", "3"))
+      .andExpect(jsonPath("$[0].resource").value("/api/private/annotate"))
+      .andExpect(jsonPath("$[0].usage").value(12))
+      .andExpect(jsonPath("$[0].time").value("2026"));
+
+    verify(tokenStatsService)
+      .getPagedResourceUsageSummary(
+        UsageAnalysisInterval.YEAR,
+        true,
+        7L,
+        "annotate",
+        null,
+        null,
+        null,
+        PageRequest.of(
+          1,
+          10,
+          Sort.by(
+            Sort.Order.desc("time"),
+            Sort.Order.desc("usage"),
+            Sort.Order.asc("resource")
+          )
+        )
+      );
   }
 
   @Test
   public void shouldGetRegistrationSummary() throws Exception {
-    UserRegistrationSummaryProjection academic = Mockito.mock(
+    UserRegistrationSummaryProjection noDateProjection = mock(
       UserRegistrationSummaryProjection.class
     );
-    Mockito.when(academic.getDate()).thenReturn(LocalDate.of(2026, 4, 28));
-    Mockito.when(academic.getTotal()).thenReturn(12L);
-    Mockito.when(academic.getLicenseType()).thenReturn("ACADEMIC");
+    when(noDateProjection.getDate()).thenReturn(null);
+    when(noDateProjection.getTotal()).thenReturn(2L);
+    when(noDateProjection.getLicenseType()).thenReturn("ACADEMIC");
 
-    UserRegistrationSummaryProjection commercial = Mockito.mock(
+    UserRegistrationSummaryProjection datedProjection = mock(
       UserRegistrationSummaryProjection.class
     );
-    Mockito.when(commercial.getDate()).thenReturn(LocalDate.of(2026, 4, 28));
-    Mockito.when(commercial.getTotal()).thenReturn(5L);
-    Mockito.when(commercial.getLicenseType()).thenReturn("COMMERCIAL");
+    when(datedProjection.getDate()).thenReturn(LocalDate.of(2026, 5, 19));
+    when(datedProjection.getTotal()).thenReturn(4L);
+    when(datedProjection.getLicenseType()).thenReturn("COMMERCIAL");
 
-    Mockito
-      .when(userDetailsRepository.findDailyRegistrationSummaries())
-      .thenReturn(Arrays.asList(academic, commercial));
+    when(userDetailsRepository.findDailyRegistrationSummaries())
+      .thenReturn(Arrays.asList(noDateProjection, datedProjection));
 
     restMockMvc
       .perform(get("/api/usage/summary/registrations"))
@@ -266,816 +388,34 @@ public class UsageAnalysisControllerIT {
       .andExpect(
         content().contentTypeCompatibleWith(MediaType.APPLICATION_JSON)
       )
-      .andExpect(
-        content()
-          .json(
-            "[{\"date\":\"2026-04-28\",\"total\":12,\"licenseType\":\"ACADEMIC\"}," +
-            "{\"date\":\"2026-04-28\",\"total\":5,\"licenseType\":\"COMMERCIAL\"}]",
-            true
-          )
-      );
+      .andExpect(jsonPath("$", hasSize(2)))
+      .andExpect(jsonPath("$[0].date").value("No creation date"))
+      .andExpect(jsonPath("$[0].total").value(2))
+      .andExpect(jsonPath("$[0].licenseType").value("ACADEMIC"))
+      .andExpect(jsonPath("$[1].date").value("2026-05-19"))
+      .andExpect(jsonPath("$[1].total").value(4))
+      .andExpect(jsonPath("$[1].licenseType").value("COMMERCIAL"));
   }
 
-  private static class MockS3Data {
+  private static final class ListBackedPages {
+    private ListBackedPages() {}
 
-    private static class KeyValuePair<Key, Value> {
-      public final Key key;
-      public final Value value;
-
-      public KeyValuePair(Key key, Value value) {
-        this.key = key;
-        this.value = value;
-      }
+    private static PageImpl<UsageAnalysisRow> userUsagePage(UsageAnalysisRow row) {
+      return new PageImpl<>(
+        Collections.singletonList(row),
+        PageRequest.of(0, 20, Sort.by(Sort.Order.desc("time"))),
+        1
+      );
     }
 
-    private final String[] sampleOncokbEndpoints = {
-      "/api/v1/annotate/mutations/byProteinChange",
-      "/api/private/utils/numbers/main/",
-      "/api/v1/annotate/structuralVariants",
-      "/api/private/utils/numbers/levels/",
-      "/api/v1/annotate/copyNumberAlterations",
-      "/api/private/search/typeahead",
-    };
-    private final String[] fakeCompanies = { "FakeCo", "DemoLLC" };
-    private final Random random;
-
-    private final JsonObject files = new JsonObject();
-
-    private final List<User> users = new ArrayList<>();
-    private final List<UserDTO> userDtos = new ArrayList<>();
-
-    private final Clock clock;
-
-    public MockS3Data(int seed, Clock clock) throws Exception {
-      this(seed, clock, new String[] { "doej", "smithj" });
-    }
-
-    public MockS3Data(int seed, Clock clock, String[] userNames)
-      throws Exception {
-      this.clock = clock;
-      random = new Random(seed);
-      addUsers(userNames);
-    }
-
-    private String getNextOncokbEndpoint() {
-      return sampleOncokbEndpoints[Math.abs(
-          random.nextInt() % sampleOncokbEndpoints.length
-        )];
-    }
-
-    /**
-     * Get value from files JSON object based on the JSON path created by the
-     * {@code keys}. If an object is missing in the JSON path then it's created.
-     * @param firstKey firstKey in JSON path
-     * @param restOfTheKeys The keys in JSON path
-     * @return The resulting {@code KeyValuePair}
-     */
-    private KeyValuePair<String, JsonObject> safeFetchJsonObjectFromFilesObject(
-      String firstKey,
-      String... restOfTheKeys
+    private static PageImpl<ResourceUsageAnalysisRow> resourceUsagePage(
+      ResourceUsageAnalysisRow row
     ) {
-      JsonObject obj = files;
-      if (!obj.has(firstKey)) {
-        obj.add(firstKey, new JsonObject());
-      }
-      obj = (JsonObject) obj.get(firstKey);
-
-      return getLastKeyValuePair(firstKey, obj, restOfTheKeys);
-    }
-
-    /**
-     * Get value from files JSON object based on the JSON path created by the
-     * {@code firstKey}/[{@code index}]/{@code keys}.
-     * If an object is missing in the JSON path then it's created.
-     * @param firstKey First key in the files object.
-     * @param index Array index of the array the {@code firstKey} parameter points to.
-     * @param restOfTheKeys The remaining JSON path keys.
-     * @return The resulting {@code KeyValuePair}
-     */
-    private KeyValuePair<String, JsonObject> safeFetchJsonObjectFromFilesObject(
-      String firstKey,
-      int index,
-      String... restOfTheKeys
-    ) {
-      JsonObject obj = files;
-      if (!obj.has(firstKey)) {
-        obj.add(firstKey, new JsonArray());
-      }
-      JsonArray arr = (JsonArray) obj.get(firstKey);
-      while (index >= arr.size()) {
-        arr.add(new JsonObject());
-      }
-      obj = (JsonObject) arr.get(index);
-
-      return getLastKeyValuePair(firstKey, obj, restOfTheKeys);
-    }
-
-    private KeyValuePair<String, JsonObject> getLastKeyValuePair(
-      String firstKey,
-      JsonObject obj,
-      String... restOfTheKeys
-    ) {
-      for (int i = 0; i < restOfTheKeys.length - 1; i++) {
-        String key = restOfTheKeys[i];
-        if (!obj.has(key)) {
-          obj.add(key, new JsonObject());
-        }
-        obj = (JsonObject) obj.get(key);
-      }
-      String lastKey = restOfTheKeys.length == 0
-        ? firstKey
-        : restOfTheKeys[restOfTheKeys.length - 1];
-      return new KeyValuePair<>(lastKey, obj);
-    }
-
-    /**
-     * Adds the passed value to the value found in the files JSON object based on the JSON path created by the
-     * keys. If an object is missing in the JSON path then it's created.
-     * @param value Adds the specified value at the given JSON path.
-     * @param firstKey First key in the files object.
-     * @param restOfTheKeys The keys in JSON path.
-     */
-    private void safeAddNestedValueInFilesObject(
-      int value,
-      String firstKey,
-      String... restOfTheKeys
-    ) {
-      KeyValuePair<String, JsonObject> pair = safeFetchJsonObjectFromFilesObject(
-        firstKey,
-        restOfTheKeys
+      return new PageImpl<>(
+        Collections.singletonList(row),
+        PageRequest.of(0, 20, Sort.by(Sort.Order.desc("time"))),
+        1
       );
-      String lastKey = pair.key;
-      JsonObject obj = pair.value;
-      if (!obj.has(lastKey)) {
-        obj.addProperty(lastKey, 0);
-      }
-      JsonPrimitive primitive = (JsonPrimitive) obj.get(lastKey);
-      int number = primitive.getAsInt();
-      obj.addProperty(lastKey, number + value);
-    }
-
-    /**
-     * Adds the passed value to the value found in the files JSON object based on the JSON path created by the
-     * keys. If an object is missing in the JSON path then it's created.
-     * @param value Adds the specified value at the given JSON path.
-     * @param firstKey First key in the files object.
-     * @param index Array index of the array the {@code firstKey} parameter points to.
-     * @param restOfTheKeys The remaining JSON path keys.
-     */
-    private void safeAddNestedValueInFilesObject(
-      int value,
-      String firstKey,
-      int index,
-      String... restOfTheKeys
-    ) {
-      KeyValuePair<String, JsonObject> pair = safeFetchJsonObjectFromFilesObject(
-        firstKey,
-        index,
-        restOfTheKeys
-      );
-
-      if (!pair.value.has(pair.key)) {
-        pair.value.addProperty(pair.key, 0);
-      }
-      String lastKey = pair.key;
-      JsonObject obj = pair.value;
-      JsonPrimitive primitive = (JsonPrimitive) obj.get(lastKey);
-      int number = primitive.getAsInt();
-      obj.addProperty(lastKey, number + value);
-    }
-
-    /**
-     * Set the passed value to the value found in the files JSON object based on the JSON path created by the
-     * keys. If an object is missing in the JSON path then it's created.
-     * @param value Sets the specified value at the given JSON path.
-     * @param firstKey First key in the files object.
-     * @param restOfTheKeys The keys in JSON path.
-     */
-    private void safeSetNestedValueInFilesObject(
-      String value,
-      String firstKey,
-      String... restOfTheKeys
-    ) {
-      KeyValuePair<String, JsonObject> pair = safeFetchJsonObjectFromFilesObject(
-        firstKey,
-        restOfTheKeys
-      );
-      String lastKey = pair.key;
-      JsonObject obj = pair.value;
-      obj.addProperty(lastKey, value);
-    }
-
-    /**
-     * Set the passed value to the value found in the files JSON object based on the JSON path created by the
-     * keys. If an object is missing in the JSON path then it's created.
-     * @param value The value that is going to be added to value located in the JSON path.
-     * @param firstKey First key in the files object.
-     * @param index Array index of the array the {@code firstKey} parameter points to.
-     * @param restOfTheKeys The remaining JSON path keys.
-     */
-    private void safeSetNestedValueInFilesObject(
-      String value,
-      String firstKey,
-      int index,
-      String... restOfTheKeys
-    ) {
-      KeyValuePair<String, JsonObject> pair = safeFetchJsonObjectFromFilesObject(
-        firstKey,
-        index,
-        restOfTheKeys
-      );
-      String lastKey = pair.key;
-      JsonObject obj = pair.value;
-      obj.addProperty(lastKey, value);
-    }
-
-    /**
-     * Set the passed value to the value found in the files JSON object based on the JSON path created by the
-     * keys. If an object is missing in the JSON path then it's created.
-     * @param value The value that is going to be added to value located in the JSON path.
-     * @param firstKey First key in the files object.
-     * @param index Array index of the array the {@code firstKey} parameter points to.
-     * @param keys The remaining JSON path keys.
-     */
-    private void safeSetNestedValueInFilesObject(
-      float value,
-      String firstKey,
-      int index,
-      String... keys
-    ) {
-      KeyValuePair<String, JsonObject> pair = safeFetchJsonObjectFromFilesObject(
-        firstKey,
-        index,
-        keys
-      );
-      String lastKey = pair.key;
-      JsonObject obj = pair.value;
-      obj.addProperty(lastKey, value);
-    }
-
-    private void addUsers(String[] userNames) throws Exception {
-      LocalDate today = TimeUtil.getCurrentNYTime(this.clock).toLocalDate();
-      int currentYear = today.getYear();
-      int userId = -1;
-      for (String userName : userNames) {
-        userId++;
-        // force ordering to consistent since we are doing strict checks on
-        // asserts for json
-        userName = userId + userName;
-
-        int companyIndex = userId % fakeCompanies.length;
-        String companyName = fakeCompanies[companyIndex];
-
-        User user = createMockUser(userId, userName, companyName);
-        users.add(user);
-
-        CompanyDTO companyDTO = createMockCompany(companyIndex, companyName);
-
-        UserDTO userDto = createMockUserDto(user, companyDTO);
-        userDtos.add(userDto);
-
-        String usageUserEndpoint = "/api/usage/users/" + user.getId();
-        String[] userUsageSummaryEndpoints = {
-          "/api/usage/summary/users",
-          "/api/usage/summary/users?companyId=" + companyDTO.getId(),
-        };
-
-        for (int yearIndex = 0; yearIndex < 6; yearIndex++) {
-          boolean yearShouldBeRecorded = false;
-          Map<String, Integer> yearUserResourceUsage = createUserResourceUsageMap();
-          int yearTotalUsage = 0;
-          int yearTotalPublicUsage = 0;
-          int year = currentYear - yearIndex;
-
-          DateTimeFormatter dayFormatter = DateTimeFormatter.ofPattern(
-            "yyyy-MM-dd"
-          );
-          DateTimeFormatter monthFormatter = DateTimeFormatter.ofPattern(
-            "yyyy-MM"
-          );
-
-          String yearKey = String.valueOf(year);
-
-          for (int month = 1; month <= 12; month++) {
-            boolean monthShouldBeRecorded = false;
-            Map<String, Integer> monthUserResourceUsage = createUserResourceUsageMap();
-            int monthTotalUsage = 0;
-            int monthTotalPublicUsage = 0;
-            YearMonth yearMonth = YearMonth.of(year, month);
-            String monthKey = yearMonth.format(monthFormatter);
-            LocalDate start = yearMonth.atDay(1).atStartOfDay().toLocalDate();
-            LocalDate end = yearMonth
-              .atEndOfMonth()
-              .atStartOfDay()
-              .toLocalDate();
-
-            for (
-              LocalDate date = start;
-              !date.isAfter(end) && !date.isAfter(today);
-              date = date.plusDays(1)
-            ) {
-              boolean dayShouldBeRecorded = false;
-              Map<String, Integer> dayUserResourceUsage = createUserResourceUsageMap();
-              int dayTotalUsage = 0;
-              int dayTotalPublicUsage = 0;
-              int j = 0;
-              String dayKey = date.format(dayFormatter);
-              while (random.nextInt() % 5 == 0 && j < 5) {
-                j++;
-                String oncokbEndpoint = getNextOncokbEndpoint();
-                int value = random.nextInt(100) + 1;
-
-                updateResourceYearFile(
-                  value,
-                  oncokbEndpoint,
-                  yearKey,
-                  monthKey
-                );
-
-                updateResourceMonthFile(
-                  value,
-                  oncokbEndpoint,
-                  monthKey,
-                  dayKey
-                );
-
-                updateUserYearFile(
-                  value,
-                  user,
-                  oncokbEndpoint,
-                  yearKey,
-                  monthKey
-                );
-
-                updateUserMonthFile(
-                  value,
-                  user,
-                  oncokbEndpoint,
-                  monthKey,
-                  dayKey
-                );
-
-                boolean isAfterOrEqualToPast3FullYears = date.isAfter(
-                  today.minusYears(3).withDayOfYear(1).minusDays(1)
-                );
-                boolean isBeforeOrEqualToToday = date.isBefore(
-                  today.plusMonths(1).withDayOfMonth(1)
-                );
-
-                if (isAfterOrEqualToPast3FullYears && isBeforeOrEqualToToday) {
-                  updateResourceSummaryExpectedResponse(
-                    value,
-                    oncokbEndpoint,
-                    yearKey,
-                    monthKey,
-                    dayKey
-                  );
-                  safeAddNestedValueInFilesObject(
-                    value,
-                    usageUserEndpoint,
-                    "summary",
-                    "year",
-                    yearKey,
-                    oncokbEndpoint
-                  );
-                  safeAddNestedValueInFilesObject(
-                    value,
-                    usageUserEndpoint,
-                    "summary",
-                    "month",
-                    monthKey,
-                    oncokbEndpoint
-                  );
-                  safeAddNestedValueInFilesObject(
-                    value,
-                    usageUserEndpoint,
-                    "summary",
-                    "day",
-                    dayKey,
-                    oncokbEndpoint
-                  );
-                  updateSpecificEndpointUserUsageExpectedResponse(
-                    value,
-                    user,
-                    oncokbEndpoint,
-                    yearKey,
-                    monthKey,
-                    dayKey
-                  );
-
-                  // track for user endpoint usage endpoint
-                  dayUserResourceUsage.put(
-                    oncokbEndpoint,
-                    dayUserResourceUsage.get(oncokbEndpoint) + value
-                  );
-                  monthUserResourceUsage.put(
-                    oncokbEndpoint,
-                    monthUserResourceUsage.get(oncokbEndpoint) + value
-                  );
-                  yearUserResourceUsage.put(
-                    oncokbEndpoint,
-                    yearUserResourceUsage.get(oncokbEndpoint) + value
-                  );
-                  if (!oncokbEndpoint.startsWith("/api/private/")) {
-                    dayTotalPublicUsage += value;
-                    monthTotalPublicUsage += value;
-                    yearTotalPublicUsage += value;
-                  }
-                  dayTotalUsage += value;
-                  monthTotalUsage += value;
-                  yearTotalUsage += value;
-                  dayShouldBeRecorded = true;
-                  monthShouldBeRecorded = true;
-                  yearShouldBeRecorded = true;
-                }
-              }
-              if (dayShouldBeRecorded) {
-                updateUserSummaryUsageExpectedResponse(
-                  "dayUsage",
-                  dayKey,
-                  user,
-                  dayTotalUsage,
-                  dayTotalPublicUsage,
-                  userUsageSummaryEndpoints,
-                  dayUserResourceUsage
-                );
-              }
-            }
-            if (monthShouldBeRecorded) {
-              updateUserSummaryUsageExpectedResponse(
-                "monthUsage",
-                monthKey,
-                user,
-                monthTotalUsage,
-                monthTotalPublicUsage,
-                userUsageSummaryEndpoints,
-                monthUserResourceUsage
-              );
-            }
-          }
-          if (yearShouldBeRecorded) {
-            updateUserSummaryUsageExpectedResponse(
-              "yearUsage",
-              yearKey,
-              user,
-              yearTotalUsage,
-              yearTotalPublicUsage,
-              userUsageSummaryEndpoints,
-              yearUserResourceUsage
-            );
-          }
-        }
-
-        updateUserUsageExpectedResponse(user, userDto, usageUserEndpoint);
-      }
-    }
-
-    private HashMap<String, Integer> createUserResourceUsageMap() {
-      HashMap<String, Integer> userResourceUsage = new HashMap<>();
-      for (String oncokbEndpoint : sampleOncokbEndpoints) {
-        userResourceUsage.put(oncokbEndpoint, 0);
-      }
-      return userResourceUsage;
-    }
-
-    private void updateSpecificEndpointUserUsageExpectedResponse(
-      int value,
-      User user,
-      String oncokbEndpoint,
-      String yearKey,
-      String monthKey,
-      String dayKey
-    ) {
-      String usageResourcesEndpoint =
-        "/api/usage/resources?endpoint=" + oncokbEndpoint;
-      safeAddNestedValueInFilesObject(
-        value,
-        usageResourcesEndpoint,
-        "year",
-        yearKey,
-        user.getEmail()
-      );
-      safeAddNestedValueInFilesObject(
-        value,
-        usageResourcesEndpoint,
-        "month",
-        monthKey,
-        user.getEmail()
-      );
-      safeAddNestedValueInFilesObject(
-        value,
-        usageResourcesEndpoint,
-        "day",
-        dayKey,
-        user.getEmail()
-      );
-    }
-
-    private void updateUserSummaryUsageExpectedResponse(
-      String timePeriodKey,
-      String timePeriodValue,
-      User user,
-      int totalUsage,
-      int totalPublicUsage,
-      String[] userUsageSummaryEndpoints,
-      Map<String, Integer> userResourceUsage
-    )
-      throws Exception {
-      Entry<String, Integer> maxResourceEntry = userResourceUsage
-        .entrySet()
-        .stream()
-        .filter(x -> x.getValue() > 0)
-        .max(Map.Entry.comparingByValue())
-        .orElse(new SimpleEntry<String, Integer>("", 0));
-
-      Entry<String, Integer> maxPublicResourceEntry = userResourceUsage
-        .entrySet()
-        .stream()
-        .filter(
-          x -> !x.getKey().startsWith("/api/private/") && x.getValue() > 0
-        )
-        .max(Map.Entry.comparingByValue())
-        .orElse(new SimpleEntry<String, Integer>("", 0));
-      int userId = user.getId().intValue();
-      for (String usageSummaryUrl : userUsageSummaryEndpoints) {
-        safeSetNestedValueInFilesObject(
-          String.valueOf(user.getId()),
-          usageSummaryUrl,
-          userId,
-          "userId"
-        );
-        safeSetNestedValueInFilesObject(
-          user.getEmail(),
-          usageSummaryUrl,
-          userId,
-          "userEmail"
-        );
-        safeSetNestedValueInFilesObject(
-          totalUsage,
-          usageSummaryUrl,
-          userId,
-          timePeriodKey,
-          timePeriodValue,
-          "totalUsage"
-        );
-        safeSetNestedValueInFilesObject(
-          totalPublicUsage,
-          usageSummaryUrl,
-          userId,
-          timePeriodKey,
-          timePeriodValue,
-          "totalPublicUsage"
-        );
-        safeSetNestedValueInFilesObject(
-          maxResourceEntry.getKey(),
-          usageSummaryUrl,
-          userId,
-          timePeriodKey,
-          timePeriodValue,
-          "mostUsedEndpoint"
-        );
-        safeSetNestedValueInFilesObject(
-          maxPublicResourceEntry.getKey(),
-          usageSummaryUrl,
-          userId,
-          timePeriodKey,
-          timePeriodValue,
-          "mostUsedPublicEndpoint"
-        );
-        safeSetNestedValueInFilesObject(
-          (int) (1000 * ((float) maxResourceEntry.getValue() / totalUsage)) /
-          10f,
-          usageSummaryUrl,
-          userId,
-          timePeriodKey,
-          timePeriodValue,
-          "maxUsageProportion"
-        );
-        safeSetNestedValueInFilesObject(
-          (int) (
-            1000 *
-            ((float) maxPublicResourceEntry.getValue() / totalPublicUsage)
-          ) /
-          10f,
-          usageSummaryUrl,
-          userId,
-          timePeriodKey,
-          timePeriodValue,
-          "publicMaxUsageProportion"
-        );
-      }
-    }
-
-    private void updateUserUsageExpectedResponse(
-      User user,
-      UserDTO userDto,
-      String usageUserEndpoint
-    ) {
-      safeSetNestedValueInFilesObject(
-        user.getFirstName(),
-        usageUserEndpoint,
-        "userFirstName"
-      );
-      safeSetNestedValueInFilesObject(
-        user.getLastName(),
-        usageUserEndpoint,
-        "userLastName"
-      );
-      safeSetNestedValueInFilesObject(
-        user.getEmail(),
-        usageUserEndpoint,
-        "userEmail"
-      );
-      safeSetNestedValueInFilesObject(
-        userDto.getLicenseType().getName(),
-        usageUserEndpoint,
-        "licenseType"
-      );
-      safeSetNestedValueInFilesObject(
-        userDto.getJobTitle(),
-        usageUserEndpoint,
-        "jobTitle"
-      );
-      safeSetNestedValueInFilesObject(
-        userDto.getCompanyName(),
-        usageUserEndpoint,
-        "company"
-      );
-    }
-
-    private void updateResourceSummaryExpectedResponse(
-      int value,
-      String oncokbEndpoint,
-      String yearKey,
-      String monthKey,
-      String dayKey
-    ) {
-      String usageSummaryResources = "/api/usage/summary/resources";
-      safeAddNestedValueInFilesObject(
-        value,
-        usageSummaryResources,
-        "year",
-        yearKey,
-        oncokbEndpoint
-      );
-      safeAddNestedValueInFilesObject(
-        value,
-        usageSummaryResources,
-        "month",
-        monthKey,
-        oncokbEndpoint
-      );
-      safeAddNestedValueInFilesObject(
-        value,
-        usageSummaryResources,
-        "day",
-        dayKey,
-        oncokbEndpoint
-      );
-    }
-
-    private void updateResourceYearFile(
-      int value,
-      String oncokbEndpoint,
-      String yearKey,
-      String monthKey
-    ) {
-      String resourceYearPath =
-        YEAR_RESOURCES_USAGE_SUMMARY_FILE_PREFIX +
-        yearKey +
-        FileExtension.JSON_FILE.getExtension();
-
-      safeAddNestedValueInFilesObject(
-        value,
-        resourceYearPath,
-        "year",
-        oncokbEndpoint
-      );
-      safeAddNestedValueInFilesObject(
-        value,
-        resourceYearPath,
-        "month",
-        monthKey,
-        oncokbEndpoint
-      );
-    }
-
-    private void updateUserYearFile(
-      int value,
-      User user,
-      String oncokbEndpoint,
-      String yearKey,
-      String monthKey
-    ) {
-      String userYearPath =
-        YEAR_USERS_USAGE_SUMMARY_FILE_PREFIX +
-        yearKey +
-        FileExtension.JSON_FILE.getExtension();
-
-      safeAddNestedValueInFilesObject(
-        value,
-        userYearPath,
-        user.getEmail(),
-        "year",
-        oncokbEndpoint
-      );
-      safeAddNestedValueInFilesObject(
-        value,
-        userYearPath,
-        user.getEmail(),
-        "month",
-        monthKey,
-        oncokbEndpoint
-      );
-    }
-
-    private void updateResourceMonthFile(
-      int value,
-      String oncokbEndpoint,
-      String monthKey,
-      String dayKey
-    ) {
-      String resourceMonthPath =
-        MONTH_RESOURCES_USAGE_SUMMARY_FILE_PREFIX +
-        monthKey +
-        FileExtension.JSON_FILE.getExtension();
-      safeAddNestedValueInFilesObject(
-        value,
-        resourceMonthPath,
-        "month",
-        monthKey,
-        oncokbEndpoint
-      );
-      safeAddNestedValueInFilesObject(
-        value,
-        resourceMonthPath,
-        "day",
-        dayKey,
-        oncokbEndpoint
-      );
-    }
-
-    private void updateUserMonthFile(
-      int value,
-      User user,
-      String oncokbEndpoint,
-      String monthKey,
-      String dayKey
-    ) {
-      String userMonthPath =
-        MONTH_USERS_USAGE_SUMMARY_FILE_PREFIX +
-        monthKey +
-        FileExtension.JSON_FILE.getExtension();
-
-      safeAddNestedValueInFilesObject(
-        value,
-        userMonthPath,
-        user.getEmail(),
-        "month",
-        oncokbEndpoint
-      );
-      safeAddNestedValueInFilesObject(
-        value,
-        userMonthPath,
-        user.getEmail(),
-        "day",
-        dayKey,
-        oncokbEndpoint
-      );
-    }
-
-    private UserDTO createMockUserDto(User user, CompanyDTO companyDTO) {
-      UserDTO userDto = new UserDTO();
-      userDto.setId(user.getId());
-      userDto.setFirstName(user.getFirstName());
-      userDto.setLastName(user.getLastName());
-      userDto.setEmail(user.getEmail());
-      userDto.setJobTitle(user.getLastName() + " Job Title");
-      userDto.setCompany(companyDTO);
-      userDto.setCompanyName(companyDTO.getName());
-      userDto.setLicenseType(LicenseType.ACADEMIC);
-      return userDto;
-    }
-
-    private CompanyDTO createMockCompany(int companyId, String companyName) {
-      CompanyDTO companyDTO = new CompanyDTO();
-      companyDTO.setName(companyName);
-      companyDTO.setId((long) companyId);
-      companyDTO.setLicenseType(LicenseType.ACADEMIC);
-      return companyDTO;
-    }
-
-    private User createMockUser(
-      int userId,
-      String userName,
-      String companyName
-    ) {
-      User user = new User();
-      user.setId((long) userId);
-      user.setEmail(userName + "@" + companyName + ".com");
-      user.setFirstName(String.valueOf(userName.charAt(userName.length() - 1)));
-      user.setLastName(userName.substring(0, userName.length() - 1));
-      return user;
     }
   }
 }

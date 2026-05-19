@@ -190,3 +190,7 @@ application:
   keycloak:
     enabled: false
     allowed-email-domain: mskcc.org
+  usage-liquibase:
+    enabled: true
+    change-log: classpath:config/liquibase-usage/master.xml
+    schema: oncokb_metrics

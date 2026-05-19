@@ -1,0 +1,3 @@
+usage_month;user_id;user_email;company_id;total_usage;total_public_usage;top_resource_id;top_resource_usage;top_public_resource_id;top_public_resource_usage
+2026-05-01;4;user@localhost;1;58;40;1;40;1;40
+2026-05-01;3;admin@localhost;null;32;22;2;22;2;22

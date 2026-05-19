@@ -4,6 +4,10 @@ import org.mskcc.cbio.oncokb.domain.Token;
 import org.mskcc.cbio.oncokb.domain.TokenStats;
 import org.mskcc.cbio.oncokb.querydomain.UserTokenUsage;
 import org.mskcc.cbio.oncokb.querydomain.UserTokenUsageWithInfo;
+import org.mskcc.cbio.oncokb.web.rest.vm.usageAnalysis.UsageAnalysisInterval;
+import org.mskcc.cbio.oncokb.web.rest.vm.usageAnalysis.ResourceUsageAnalysisRow;
+import org.mskcc.cbio.oncokb.web.rest.vm.usageAnalysis.UsageAnalysisRow;
+import org.mskcc.cbio.oncokb.web.rest.vm.usageAnalysis.UsageResourceName;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 
@@ -60,4 +64,39 @@ public interface TokenStatsService {
     List<UserTokenUsage> getUserTokenUsage(Instant before);
 
     List<UserTokenUsageWithInfo> getTokenUsageAnalysis(Instant after);
+
+    Page<UsageAnalysisRow> getPagedUserUsageSummary(
+        UsageAnalysisInterval interval,
+        boolean publicOnly,
+        Long companyId,
+        Long userId,
+        String searchQuery,
+        String resourceContainsQuery,
+        String fromDate,
+        String toDate,
+        Pageable pageable
+    );
+
+    Page<ResourceUsageAnalysisRow> getPagedResourceUsageSummary(
+        UsageAnalysisInterval interval,
+        boolean publicOnly,
+        Long userId,
+        String searchQuery,
+        String resourceContainsQuery,
+        String fromDate,
+        String toDate,
+        Pageable pageable
+    );
+
+    Page<ResourceUsageAnalysisRow> getPagedGlobalResourceUsageSummary(
+        UsageAnalysisInterval interval,
+        boolean publicOnly,
+        String searchQuery,
+        Long resourceId,
+        String fromDate,
+        String toDate,
+        Pageable pageable
+    );
+
+    Optional<UsageResourceName> getUsageResourceName(Long resourceId);
 }

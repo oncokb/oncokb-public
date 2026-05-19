@@ -1,5 +1,7 @@
-import React from 'react';
-import { ToggleValue } from 'app/pages/usageAnalysisPage/usage-analysis-utils';
+import {
+  ResourceToggleValue,
+  TimeToggleValue,
+} from 'app/pages/usageAnalysisPage/usage-analysis-utils';
 
 export const emailHeader = 'Email';
 export const usageHeader = 'Usage';
@@ -10,17 +12,19 @@ export const publicEndpointHeader =
 export const timeHeader = 'Time';
 export const operationHeader = 'Details';
 
-export const filterDependentTimeHeader = (timeTypeToggleValue: ToggleValue) => {
-  return timeTypeToggleValue === ToggleValue.RESULTS_BY_YEAR
+export const filterDependentTimeHeader = (
+  timeTypeToggleValue: TimeToggleValue
+) => {
+  return timeTypeToggleValue === TimeToggleValue.RESULTS_BY_YEAR
     ? 'Duration'
     : 'Time';
 };
 export const filterDependentResourceHeader = (
-  resourcesTypeToggleValue: ToggleValue
+  resourcesTypeToggleValue: ResourceToggleValue
 ) => {
   return (
     'Resource' +
-    (resourcesTypeToggleValue === ToggleValue.PUBLIC_RESOURCES
+    (resourcesTypeToggleValue === ResourceToggleValue.PUBLIC_RESOURCES
       ? ' (only public)'
       : '')
   );

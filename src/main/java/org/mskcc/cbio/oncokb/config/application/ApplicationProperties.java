@@ -44,6 +44,7 @@ public class ApplicationProperties {
     private RateLimitProperties rateLimit = new RateLimitProperties();
     private TokenStatsProperties tokenStats = new TokenStatsProperties();
     private KeycloakProperties keycloak = new KeycloakProperties();
+    private UsageLiquibaseProperties usageLiquibase = new UsageLiquibaseProperties();
 
     public String getName() {
         return name;
@@ -242,5 +243,13 @@ public class ApplicationProperties {
 
     public void setKeycloak(KeycloakProperties keycloak) {
         this.keycloak = keycloak;
+    }
+
+    public UsageLiquibaseProperties getUsageLiquibase() {
+        return usageLiquibase;
+    }
+
+    public void setUsageLiquibase(UsageLiquibaseProperties usageLiquibase) {
+        this.usageLiquibase = usageLiquibase;
     }
 }

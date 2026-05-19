@@ -1,228 +1,313 @@
-import OncoKBTable, {
-  SearchColumn,
-} from 'app/components/oncokbTable/OncoKBTable';
-import { filterByKeyword } from 'app/shared/utils/Utils';
-import autobind from 'autobind-decorator';
-import { action, computed, observable } from 'mobx';
-import { observer } from 'mobx-react';
-import React from 'react';
-import { Row } from 'react-bootstrap';
-import {
-  getUsageTableColumnDefinition,
-  UsageTableColumnKey,
-} from 'app/pages/usageAnalysisPage/UsageAnalysisPage';
-import { UsageToggleGroup } from './UsageToggleGroup';
+import OncoKBTable from 'app/components/oncokbTable/OncoKBTable';
 import { UsageAnalysisCalendarButton } from 'app/components/calendarButton/UsageAnalysisCalendarButton';
 import {
   emailHeader,
   endpointHeader,
   filterDependentTimeHeader,
-} from 'app/components/oncokbTable/HeaderConstants';
-import UsageText from 'app/shared/texts/UsageText';
+  usageHeader,
+} from 'app/components/oncokbTable/header-constants';
 import { PAGE_ROUTE } from 'app/config/constants';
+import client from 'app/shared/api/clientInstance';
+import UsageText from 'app/shared/texts/UsageText';
+import autobind from 'autobind-decorator';
+import {
+  action,
+  computed,
+  observable,
+  reaction,
+  IReactionDisposer,
+} from 'mobx';
+import { observer } from 'mobx-react';
+import React from 'react';
+import { Row } from 'react-bootstrap';
 import { Link } from 'react-router-dom';
 import { SortingRule } from 'react-table';
+import { UsageToggleGroup } from './UsageToggleGroup';
 import {
-  UsageSummaryWithUsageTypes,
-  UserOverviewUsageWithUsageTypes,
-  mapUserOrResourceUsageToUsageRecords,
+  buildUsageSort,
+  formatDateForUsageInterval,
+  getTotalCountFromHeaders,
+  getTotalPages,
+  toggleValueToInterval,
+  UsageMode,
   UsageRecord,
-  ToggleValue,
+  ResourceToggleValue,
+  TimeToggleValue,
 } from './usage-analysis-utils';
+import {
+  getUsageTableColumnDefinition,
+  UsageTableColumnKey,
+} from './usage-table-columns';
 
-type IUserUsageDetailsTable = {
-  loadedData: boolean;
-  defaultResourcesType: ToggleValue;
-  defaultTimeType: ToggleValue;
+type UsageAnalysisTableProps = {
+  mode: UsageMode;
+  companyId?: number;
+  userId?: number;
+  resourceId?: number;
+  resourcePath?: string;
+  defaultResourcesType?: ResourceToggleValue;
+  defaultTimeType: TimeToggleValue;
   defaultPageSize?: number;
-  data: UsageSummaryWithUsageTypes | UserOverviewUsageWithUsageTypes[];
+  resourceToggleValues?: ResourceToggleValue[];
+  timeToggleValues?: TimeToggleValue[];
+  showEndpointColumn?: boolean;
+  showTimeColumn?: boolean;
+  showOperationColumn?: boolean;
+};
+
+const DEFAULT_SORTED: Record<UsageMode, SortingRule[]> = {
+  userSummary: [
+    { id: UsageTableColumnKey.TIME, desc: true },
+    { id: UsageTableColumnKey.USAGE, desc: true },
+  ],
+  resourceSummary: [
+    { id: UsageTableColumnKey.TIME, desc: true },
+    { id: UsageTableColumnKey.USAGE, desc: true },
+  ],
 };
 
 @observer
 export default class UsageAnalysisTable extends React.Component<
-  IUserUsageDetailsTable,
-  {}
+  UsageAnalysisTableProps
 > {
-  @observable resourcesTypeToggleValue: ToggleValue = this.props
-    .defaultResourcesType;
-  @observable timeTypeToggleValue: ToggleValue = this.props.defaultTimeType;
+  @observable resourcesTypeToggleValue: ResourceToggleValue =
+    this.props.defaultResourcesType || ResourceToggleValue.PUBLIC_RESOURCES;
+  @observable timeTypeToggleValue: TimeToggleValue = this.props.defaultTimeType;
   @observable fromDate: string | undefined;
   @observable toDate: string | undefined;
-  @observable filterToggled: boolean;
-  @observable dropdownMenuOpen: boolean;
+  @observable filterToggled = false;
+  @observable dropdownMenuOpen = false;
+  @observable searchKeyword = '';
+  @observable.shallow data: UsageRecord[] = [];
+  @observable loading = false;
+  @observable isError = false;
+  @observable page = 0;
+  @observable pageSize = this.props.defaultPageSize || 20;
+  @observable pages = 1;
+  @observable.shallow sorted: SortingRule[] = DEFAULT_SORTED[this.props.mode];
 
-  @autobind
-  @action
-  handleResourcesTypeToggleChange(value: ToggleValue) {
-    this.resourcesTypeToggleValue = value;
+  readonly reactions: IReactionDisposer[] = [];
+
+  componentDidMount() {
+    this.reactions.push(
+      reaction(
+        () => ({
+          mode: this.props.mode,
+          companyId: this.props.companyId,
+          userId: this.props.userId,
+          resourceId: this.props.resourceId,
+          resourcePath: this.props.resourcePath,
+          publicOnly:
+            this.resourcesTypeToggleValue !== ResourceToggleValue.ALL_RESOURCES,
+          interval: toggleValueToInterval(this.timeTypeToggleValue),
+          fromDate: this.filterToggled
+            ? formatDateForUsageInterval(
+                this.fromDate,
+                toggleValueToInterval(this.timeTypeToggleValue)
+              )
+            : undefined,
+          toDate: this.filterToggled
+            ? formatDateForUsageInterval(
+                this.toDate,
+                toggleValueToInterval(this.timeTypeToggleValue)
+              )
+            : undefined,
+          searchKeyword: this.searchKeyword,
+          page: this.page,
+          pageSize: this.pageSize,
+          sorted: this.sorted.map(
+            sortRule => `${sortRule.id}:${sortRule.desc}`
+          ),
+        }),
+        () => {
+          this.fetchData();
+        },
+        { fireImmediately: true }
+      )
+    );
+  }
+
+  componentWillUnmount() {
+    this.reactions.forEach(disposer => disposer());
   }
 
   @autobind
   @action
-  handleTimeTypeToggleChange(value: ToggleValue) {
+  handleResourcesTypeToggleChange(value: ResourceToggleValue) {
+    this.resourcesTypeToggleValue = value;
+    this.page = 0;
+  }
+
+  @autobind
+  @action
+  handleTimeTypeToggleChange(value: TimeToggleValue) {
     this.timeTypeToggleValue = value;
+    this.page = 0;
   }
 
   @autobind
   @action
   handleFilterToggledChange(value: boolean) {
     this.filterToggled = value;
+    this.page = 0;
   }
 
-  @computed get calculateDateGroupedData(): UsageRecord[] {
-    return mapUserOrResourceUsageToUsageRecords(
-      this.props.data,
-      this.timeTypeToggleValue,
-      this.filterToggled,
-      this.fromDate,
-      this.toDate,
-      this.resourcesTypeToggleValue === ToggleValue.ALL_RESOURCES
+  @autobind
+  @action
+  handleSearchChange(keyword: string) {
+    this.searchKeyword = keyword;
+    this.page = 0;
+  }
+
+  @autobind
+  @action
+  handleFetchData(tableState: {
+    page: number;
+    pageSize: number;
+    sorted: SortingRule[];
+  }) {
+    this.page = tableState.page;
+    this.pageSize = tableState.pageSize;
+  }
+
+  @autobind
+  @action
+  handleSortedChange(newSorted: SortingRule[]) {
+    this.sorted =
+      newSorted.length > 0 ? newSorted : DEFAULT_SORTED[this.props.mode];
+    this.page = 0;
+  }
+
+  @computed
+  get showEndpointColumn() {
+    return this.props.showEndpointColumn !== false;
+  }
+
+  @computed
+  get showOperationColumn() {
+    return (
+      this.props.mode === 'userSummary' &&
+      this.props.showOperationColumn !== false
     );
   }
 
-  @computed get dateGroupedColumns() {
-    const columns = [];
-    const isResources = Array.isArray(this.props.data);
+  @computed
+  get showTimeColumn() {
+    return this.props.showTimeColumn !== false;
+  }
 
-    if (isResources) {
+  @computed
+  get columns() {
+    const columns: any[] = [];
+
+    if (this.props.mode === 'userSummary') {
       columns.push({
         id: 'userEmail',
         Header: emailHeader,
-        onFilter: (row: UsageRecord, keyword: string) =>
-          filterByKeyword(row.userEmail, keyword),
+        accessor: 'userEmail',
         Cell(props: { original: UsageRecord }) {
-          return props.original.userId ? (
+          return props.original.userEmail ? (
             <Link
               to={`${PAGE_ROUTE.ADMIN_USER_USAGE_DETAILS_LINK}${props.original.userId}`}
             >
               {props.original.userEmail}
             </Link>
           ) : (
-            <div>{props.original.userEmail}</div>
+            <div>N/A</div>
           );
         },
       });
     }
+
     columns.push({
-      ...getUsageTableColumnDefinition(UsageTableColumnKey.USAGE),
+      id: UsageTableColumnKey.USAGE,
+      Header: usageHeader,
+      accessor: 'usage',
+      minWidth: 100,
       Cell(props: { original: UsageRecord }) {
         return <UsageText usage={props.original.usage} />;
       },
     });
-    columns.push({
-      id: 'endpoint',
-      Header: endpointHeader,
-      minWidth: 200,
-      onFilter: (row: UsageRecord, keyword: string) =>
-        filterByKeyword(row.resource, keyword),
-      Cell(props: { original: UsageRecord }) {
-        return props.original.resource ? (
-          <div>
-            <Link
-              to={`${
-                PAGE_ROUTE.ADMIN_RESOURCE_DETAILS_LINK
-              }${props.original.resource.replace(/\//g, '!')}`}
-            >
-              {props.original.resource}
-            </Link>{' '}
-            {isResources && <>({props.original.maxUsageProportion}%)</>}
-          </div>
-        ) : (
-          <div>N/A</div>
-        );
-      },
-    });
-    columns.push({
-      ...getUsageTableColumnDefinition(UsageTableColumnKey.TIME),
-      Header: filterDependentTimeHeader(this.timeTypeToggleValue),
-      onFilter: (row: UsageRecord, keyword: string) =>
-        filterByKeyword(row.time, keyword),
-    });
-    if (isResources) {
+
+    if (this.showEndpointColumn) {
+      columns.push({
+        id: 'endpoint',
+        Header: endpointHeader,
+        accessor: 'resource',
+        minWidth: 200,
+        Cell: (props: { original: UsageRecord }) => {
+          return props.original.resource ? (
+            <div>
+              {props.original.resourceId !== undefined ? (
+                <Link
+                  to={`${PAGE_ROUTE.ADMIN_RESOURCE_DETAILS_LINK}${props.original.resourceId}`}
+                >
+                  {props.original.resource}
+                </Link>
+              ) : (
+                <span>{props.original.resource}</span>
+              )}{' '}
+              {this.props.mode === 'userSummary' && (
+                <>{`(${props.original.maxUsageProportion}%)`}</>
+              )}
+            </div>
+          ) : (
+            <div>N/A</div>
+          );
+        },
+      });
+    }
+
+    if (this.showTimeColumn) {
+      columns.push({
+        ...getUsageTableColumnDefinition(UsageTableColumnKey.TIME),
+        Header: filterDependentTimeHeader(this.timeTypeToggleValue),
+      });
+    }
+
+    if (this.showOperationColumn) {
       columns.push({
         ...getUsageTableColumnDefinition(UsageTableColumnKey.OPERATION),
         sortable: false,
         className: 'd-flex justify-content-center',
         Cell(props: { original: UsageRecord }) {
-          return props.original.userId ? (
+          return (
             <Link
               to={`${PAGE_ROUTE.ADMIN_USER_USAGE_DETAILS_LINK}${props.original.userId}`}
             >
               <i className="fa fa-info-circle" />
             </Link>
-          ) : (
-            <i className="fa fa-info-circle" />
           );
         },
       });
     }
+
     return columns;
   }
 
-  @computed get resetDefaultSort(): SortingRule[] {
-    const sortingRules: SortingRule[] = [];
-    if (this.filterToggled) {
-      sortingRules.push({
-        id: UsageTableColumnKey.TIME,
-        desc: false,
-      });
-    } else {
-      sortingRules.push({
-        id: UsageTableColumnKey.TIME,
-        desc: true,
-      });
-    }
-
-    if (this.timeTypeToggleValue === ToggleValue.RESULTS_BY_YEAR) {
-      sortingRules.push({
-        id: 'totalUsage',
-        desc: true,
-      });
-    } else if (this.timeTypeToggleValue === ToggleValue.RESULTS_BY_MONTH) {
-      sortingRules.push(
-        {
-          id: UsageTableColumnKey.USAGE,
-          desc: true,
-        },
-        {
-          id: 'monthResetPlaceholder',
-          desc: true,
-        }
-      );
-    } else if (this.timeTypeToggleValue === ToggleValue.RESULTS_BY_DAY) {
-      sortingRules.push(
-        {
-          id: UsageTableColumnKey.USAGE,
-          desc: true,
-        },
-        {
-          id: 'dayResetPlaceholder',
-          desc: true,
-        }
-      );
-    }
-
-    return sortingRules;
-  }
-
   readonly filters = () => {
+    const resourceToggleValues = this.props.resourceToggleValues || [
+      ResourceToggleValue.ALL_RESOURCES,
+      ResourceToggleValue.PUBLIC_RESOURCES,
+    ];
+    const timeToggleValues = this.props.timeToggleValues || [
+      TimeToggleValue.RESULTS_BY_YEAR,
+      TimeToggleValue.RESULTS_BY_MONTH,
+      TimeToggleValue.RESULTS_BY_DAY,
+    ];
+
     return (
       <Row>
-        <UsageToggleGroup
-          defaultValue={this.resourcesTypeToggleValue}
-          toggleValues={[
-            ToggleValue.ALL_RESOURCES,
-            ToggleValue.PUBLIC_RESOURCES,
-          ]}
-          handleToggle={this.handleResourcesTypeToggleChange}
-        />
+        {resourceToggleValues.length > 0 && (
+          <UsageToggleGroup
+            defaultValue={this.resourcesTypeToggleValue}
+            toggleValues={resourceToggleValues}
+            handleToggle={this.handleResourcesTypeToggleChange}
+          />
+        )}
         <UsageToggleGroup
           defaultValue={this.timeTypeToggleValue}
-          toggleValues={[
-            ToggleValue.RESULTS_BY_YEAR,
-            ToggleValue.RESULTS_BY_MONTH,
-            ToggleValue.RESULTS_BY_DAY,
-          ]}
+          toggleValues={timeToggleValues}
           handleToggle={this.handleTimeTypeToggleChange}
         />
         <UsageAnalysisCalendarButton
@@ -244,23 +329,135 @@ export default class UsageAnalysisTable extends React.Component<
     );
   };
 
-  getTable() {
-    return (
-      <OncoKBTable<UsageRecord>
-        key={this.timeTypeToggleValue}
-        data={this.calculateDateGroupedData}
-        columns={this.dateGroupedColumns}
-        loading={!this.props.loadedData}
-        defaultSorted={this.resetDefaultSort}
-        showPagination={true}
-        minRows={1}
-        defaultPageSize={this.props.defaultPageSize}
-        filters={this.filters}
-      />
-    );
+  async fetchData() {
+    if (
+      this.props.mode === 'resourceSummary' &&
+      this.props.userId === undefined
+    ) {
+      if (this.props.userId !== undefined) {
+        return;
+      }
+    }
+
+    this.loading = true;
+    this.isError = false;
+
+    const interval = toggleValueToInterval(this.timeTypeToggleValue);
+    const sort = buildUsageSort(this.sorted, this.props.mode);
+    const fromDate = this.filterToggled
+      ? formatDateForUsageInterval(this.fromDate, interval)
+      : undefined;
+    const toDate = this.filterToggled
+      ? formatDateForUsageInterval(this.toDate, interval)
+      : undefined;
+
+    try {
+      let response;
+      if (this.props.mode === 'userSummary') {
+        response = await client.userUsageSummaryGetUsingGETWithHttpInfo({
+          companyId: this.props.companyId,
+          fromDate,
+          interval,
+          publicOnly:
+            this.resourcesTypeToggleValue !== ResourceToggleValue.ALL_RESOURCES,
+          page: this.page,
+          resource: this.props.resourcePath,
+          size: this.pageSize,
+          sort,
+          search: this.searchKeyword || undefined,
+          toDate,
+        });
+        this.data = response.body.map((row: any) => ({
+          userId: row.userId,
+          userEmail: row.userEmail,
+          resourceId: row.resourceId,
+          usage: row.usage,
+          time: row.time,
+          resource: row.resource,
+          maxUsageProportion: row.maxUsageProportion,
+        }));
+      } else if (this.props.userId !== undefined) {
+        response = await client.userUsageGetUsingGETWithHttpInfo({
+          fromDate,
+          userId: this.props.userId,
+          interval,
+          publicOnly:
+            this.resourcesTypeToggleValue !== ResourceToggleValue.ALL_RESOURCES,
+          page: this.page,
+          resource: this.props.resourcePath,
+          size: this.pageSize,
+          sort,
+          search: this.searchKeyword || undefined,
+          toDate,
+        });
+        this.data = response.body.map((row: any) => ({
+          userId: row.userId?.toString(),
+          userEmail: row.userEmail || '',
+          resourceId: row.resourceId,
+          usage: row.usage,
+          time: row.time,
+          resource: row.resource,
+          maxUsageProportion: 0,
+        }));
+      } else {
+        response = await client.resourceUsageGetUsingGETWithHttpInfo({
+          fromDate,
+          interval,
+          publicOnly:
+            this.resourcesTypeToggleValue !== ResourceToggleValue.ALL_RESOURCES,
+          page: this.page,
+          $queryParameters:
+            this.props.resourceId !== undefined
+              ? { resourceId: this.props.resourceId }
+              : undefined,
+          size: this.pageSize,
+          sort,
+          search: this.searchKeyword || undefined,
+          toDate,
+        });
+        this.data = response.body.map((row: any) => ({
+          resourceId: row.resourceId,
+          userEmail: '',
+          usage: row.usage,
+          time: row.time,
+          resource: row.resource,
+          maxUsageProportion: 0,
+        }));
+      }
+
+      this.pages = getTotalPages(
+        getTotalCountFromHeaders(response.header),
+        this.pageSize
+      );
+    } catch (error) {
+      this.data = [];
+      this.pages = 1;
+      this.isError = true;
+    } finally {
+      this.loading = false;
+    }
   }
 
   render() {
-    return this.getTable();
+    return (
+      <OncoKBTable<UsageRecord>
+        data={this.data}
+        columns={this.columns}
+        loading={this.loading}
+        showPagination={true}
+        minRows={1}
+        page={this.page}
+        pageSize={this.pageSize}
+        pages={this.pages}
+        manual
+        sorted={this.sorted}
+        onSortedChange={this.handleSortedChange}
+        onFetchData={this.handleFetchData}
+        filters={this.filters}
+        serverSideSearch
+        searchKeyword={this.searchKeyword}
+        onSearchChange={this.handleSearchChange}
+      />
+    );
   }
 }
