@@ -1009,6 +1009,54 @@ const getImplicationsFromTag = (
       continue;
     }
 
+    let alterationsName: string | IAlteration;
+    let alterationsView: JSX.Element;
+    if (evidence.alterations.length > 0) {
+      alterationsName = evidence.alterations
+        .map(alt => alt.alteration)
+        .join(', ');
+      alterationsView = (
+        <WithSeparator separator={', '}>
+          {evidence.alterations.map(alteration =>
+            alteration.consequence ? (
+              <AlterationPageLink
+                key={alteration.name}
+                hugoSymbol={hugoSymbol}
+                alteration={{
+                  alteration: alteration.alteration,
+                  name: alteration.name,
+                }}
+                alterationRefGenomes={
+                  alteration.referenceGenomes as REFERENCE_GENOME[]
+                }
+                germline={false}
+              />
+            ) : (
+              <span>{alteration.name}</span>
+            )
+          )}
+        </WithSeparator>
+      );
+    } else {
+      alterationsName = tag.name;
+      alterationsView = (
+        <AlterationPageLink
+          key={tag.name}
+          hugoSymbol={hugoSymbol}
+          alteration={tag.name}
+          alterationRefGenomes={[
+            REFERENCE_GENOME.GRCh37,
+            REFERENCE_GENOME.GRCh38,
+          ]}
+          germline={false}
+          isTag
+        >
+          <span>{tag.name}</span>
+          <InfoIcon className="ml-2" overlay={<span>{tag.description}</span>} />
+        </AlterationPageLink>
+      );
+    }
+
     const level = levelOfEvidence2Level(evidence.levelOfEvidence);
     const fdaLevel = levelOfEvidence2Level(evidence.fdaLevel);
     const cancerTypes = evidence.cancerTypes.map(cancerType =>
@@ -1028,26 +1076,8 @@ const getImplicationsFromTag = (
           level,
           fdaLevel,
           drugDescription: evidence.description,
-          alterations: tag.name,
-          alterationsView: (
-            <AlterationPageLink
-              key={tag.name}
-              hugoSymbol={hugoSymbol}
-              alteration={tag.name}
-              alterationRefGenomes={[
-                REFERENCE_GENOME.GRCh37,
-                REFERENCE_GENOME.GRCh38,
-              ]}
-              germline={false}
-              isTag
-            >
-              <span>{tag.name}</span>
-              <InfoIcon
-                className="ml-2"
-                overlay={<span>{tag.description}</span>}
-              />
-            </AlterationPageLink>
-          ),
+          alterations: alterationsName,
+          alterationsView,
           drugs: getTreatmentNameByPriority(treatment),
           cancerTypes: cancerTypesName,
           cancerTypesArray: cancerTypes,
@@ -1086,26 +1116,8 @@ const getImplicationsFromTag = (
         level,
         fdaLevel,
         drugDescription: evidence.description,
-        alterations: tag.name,
-        alterationsView: (
-          <AlterationPageLink
-            key={tag.name}
-            hugoSymbol={hugoSymbol}
-            alteration={tag.name}
-            alterationRefGenomes={[
-              REFERENCE_GENOME.GRCh37,
-              REFERENCE_GENOME.GRCh38,
-            ]}
-            germline={false}
-            isTag
-          >
-            <span>{tag.name}</span>
-            <InfoIcon
-              className="ml-2"
-              overlay={<span>{tag.description}</span>}
-            />
-          </AlterationPageLink>
-        ),
+        alterations: alterationsName,
+        alterationsView,
         drugs: '',
         cancerTypes: cancerTypesName,
         cancerTypesArray: cancerTypes,
@@ -1169,6 +1181,59 @@ const getFdaImplicationsFromTag = (tag: Tag, hugoSymbol: string) => {
       continue;
     }
 
+    let alterationsName: string | IAlteration;
+    let alterationsView: JSX.Element;
+    if (evidence.alterations.length > 0) {
+      alterationsName = evidence.alterations
+        .map(alt => alt.alteration)
+        .join(', ');
+      alterationsView = (
+        <WithSeparator separator={', '}>
+          {evidence.alterations.map(alteration =>
+            alteration.consequence ? (
+              <AlterationPageLink
+                key={alteration.name}
+                hugoSymbol={hugoSymbol}
+                alteration={{
+                  alteration: alteration.alteration,
+                  name: alteration.name,
+                }}
+                alterationRefGenomes={
+                  alteration.referenceGenomes as REFERENCE_GENOME[]
+                }
+                hashQueries={{
+                  tab: ANNOTATION_PAGE_TAB_KEYS.FDA,
+                }}
+                germline={false}
+              />
+            ) : (
+              <span>{alteration.name}</span>
+            )
+          )}
+        </WithSeparator>
+      );
+    } else {
+      alterationsName = tag.name;
+      alterationsView = (
+        <AlterationPageLink
+          key={tag.name}
+          hugoSymbol={hugoSymbol}
+          alteration={tag.name}
+          alterationRefGenomes={[
+            REFERENCE_GENOME.GRCh37,
+            REFERENCE_GENOME.GRCh38,
+          ]}
+          germline={false}
+          hashQueries={{
+            tab: ANNOTATION_PAGE_TAB_KEYS.FDA,
+          }}
+          isTag
+        >
+          <span>{tag.name}</span>
+          <InfoIcon className="ml-2" overlay={<span>{tag.description}</span>} />
+        </AlterationPageLink>
+      );
+    }
     const fdaLevel = levelOfEvidence2Level(evidence.fdaLevel);
     const cancerTypes = evidence.cancerTypes.map(cancerType =>
       getCancerTypeNameFromOncoTreeType(cancerType)
@@ -1210,14 +1275,14 @@ const getFdaImplicationsFromTag = (tag: Tag, hugoSymbol: string) => {
     fdaImplications.push({
       level: fdaLevel,
       alteration: {
-        alteration: tag.name,
+        alteration: alterationsName,
         consequence: {
           description: '',
           isGenerallyTruncating: false,
           term: '',
         },
         gene: evidence.gene,
-        name: tag.name,
+        name: alterationsName,
         proteinChange: '',
         proteinEnd: 0,
         proteinStart: 0,
@@ -1225,25 +1290,7 @@ const getFdaImplicationsFromTag = (tag: Tag, hugoSymbol: string) => {
         referenceGenomes: [],
         variantResidues: '',
       },
-      alterationView: (
-        <AlterationPageLink
-          key={tag.name}
-          hugoSymbol={hugoSymbol}
-          alteration={tag.name}
-          alterationRefGenomes={[
-            REFERENCE_GENOME.GRCh37,
-            REFERENCE_GENOME.GRCh38,
-          ]}
-          hashQueries={{
-            tab: ANNOTATION_PAGE_TAB_KEYS.FDA,
-          }}
-          germline={false}
-          isTag
-        >
-          <span>{tag.name}</span>
-          <InfoIcon className="ml-2" overlay={<span>{tag.description}</span>} />
-        </AlterationPageLink>
-      ),
+      alterationView: alterationsView,
       cancerType: cancerTypesName,
       cancerTypeView,
     });
