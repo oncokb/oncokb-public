@@ -2,7 +2,6 @@ import 'core-js/stable';
 import 'regenerator-runtime/runtime';
 import 'typeface-open-sans';
 import * as superagent from 'superagent';
-import * as Sentry from '@sentry/react';
 
 import * as React from 'react';
 import * as ReactDOM from 'react-dom';
@@ -115,24 +114,13 @@ superagent.Request.prototype.end = function (callback) {
     const currentCount = Number(localStorage.getItem(STORAGE_KEY));
 
     // If we've already reloaded more than the threshold for this hour,
-    // log to Sentry (if configured) or show a generic error to prevent
-    // infinite reload.
+    // log locally and show a generic error to prevent infinite reload.
     if (currentCount > WEBSITE_RELOAD_TIMES_THRESHOLD) {
-      let message =
+      console.error(
+        `The user cannot reload the page with the newest public website token. The website has retried ${WEBSITE_RELOAD_TIMES_THRESHOLD} time(s). The token currently used is ${getPublicWebsiteToken()}`
+      );
+      const message =
         'An unexpected error occurred while refreshing your session. Please reload the page and contact support if the issue persists.';
-
-      if (
-        AppConfig.serverConfig?.sentryProjectId &&
-        // check if sentry is initialized
-        Sentry.getCurrentHub().getClient()
-      ) {
-        const eventId = Sentry.captureException(
-          new Error(
-            `The user cannot reload the page with the newest public website token. The website has retried ${WEBSITE_RELOAD_TIMES_THRESHOLD} time(s). The token currently used is ${getPublicWebsiteToken()}`
-          )
-        );
-        message = `${message} Code: ${eventId}`;
-      }
 
       notifyError(new Error(message));
 
