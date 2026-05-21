@@ -206,11 +206,6 @@ export class SomaticGermlineCancerTypePage extends React.Component<
   @computed
   get documentTitle() {
     const content = [];
-    content.push(
-      `${upperFirst(
-        this.store.germline ? GENETIC_TYPE.GERMLINE : GENETIC_TYPE.SOMATIC
-      )}`
-    );
     if (this.store.hugoSymbol) {
       content.push(this.store.hugoSymbol);
     }

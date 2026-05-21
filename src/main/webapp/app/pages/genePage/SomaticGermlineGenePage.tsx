@@ -584,11 +584,7 @@ export default class SomaticGermlineGenePage extends React.Component<
     return (
       <div className="view-wrapper">
         <Helmet>
-          <title>
-            {getPageTitle(
-              `${upperFirst(this.selectedGeneticType)} ${this.store.hugoSymbol}`
-            )}
-          </title>
+          <title>{getPageTitle(`${this.store.hugoSymbol}`)}</title>
           <meta name="description" content={this.store.geneSummary.result} />
           <link
             id="canonical"
