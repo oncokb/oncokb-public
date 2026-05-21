@@ -1,4 +1,3 @@
-import { GENETIC_TYPE } from 'app/components/geneticTypeTabs/GeneticTypeTabs';
 import LoadingIndicator, {
   LoaderSize,
 } from 'app/components/loadingIndicator/LoadingIndicator';
@@ -25,7 +24,6 @@ import { AlterationPageHashQueries } from 'app/shared/route/types';
 import GeneAdditionalInfoSection from 'app/shared/sections/GeneAdditionalInfoSection';
 import { SomaticGermlineTile } from 'app/shared/tiles/SomaticGermlineTiles';
 import { createHighestLevelOfEvidenceTileProps } from 'app/shared/tiles/tile-utils';
-import { upperFirst } from 'app/shared/utils/LodashUtils';
 import {
   getFdaImplicationsFromTags,
   getImplicationsFromTags,
@@ -80,9 +78,7 @@ const SomaticTagPage = inject(
   'routing'
 )((props: SomaticGermlineTagPageProps) => {
   const { hugoSymbol, tag: tagName } = props.match.params;
-  const documentTitle = `${upperFirst(
-    GENETIC_TYPE.SOMATIC
-  )} ${hugoSymbol} ${tagName}`;
+  const documentTitle = `${hugoSymbol} ${tagName}`;
 
   const [pageLoadState, setPageLoadState] = useState<PageLoadState>({
     state: LoadState.Loading,
