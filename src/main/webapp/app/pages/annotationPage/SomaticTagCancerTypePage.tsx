@@ -1,4 +1,3 @@
-import { GENETIC_TYPE } from 'app/components/geneticTypeTabs/GeneticTypeTabs';
 import LoadingIndicator, {
   LoaderSize,
 } from 'app/components/loadingIndicator/LoadingIndicator';
@@ -26,7 +25,6 @@ import StickyMiniNavBar, {
 } from 'app/shared/nav/StickyMiniNavBar';
 import GeneAdditionalInfoSection from 'app/shared/sections/GeneAdditionalInfoSection';
 import VariantOverView from 'app/shared/sections/VariantOverview';
-import { upperFirst } from 'app/shared/utils/LodashUtils';
 import { getAlterationPageLink } from 'app/shared/utils/UrlUtils';
 import {
   getFdaImplicationsFromTags,
@@ -89,9 +87,7 @@ const SomaticTagCancerTypePage = inject(
   'authenticationStore'
 )((props: SomaticTagCancerTypePageProps) => {
   const { hugoSymbol, tag: tagName, tumorType } = props.match.params;
-  const documentTitle = `${upperFirst(
-    GENETIC_TYPE.SOMATIC
-  )} ${hugoSymbol} ${tagName}`;
+  const documentTitle = `${hugoSymbol} ${tagName}`;
 
   const [showAdditionalGeneInfo, setShowAdditionalGeneInfo] = useState(false);
   const [pageLoadState, setPageLoadState] = useState<PageLoadState>({
