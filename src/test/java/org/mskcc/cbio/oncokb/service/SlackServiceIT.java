@@ -11,6 +11,7 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.mockito.ArgumentCaptor;
 import org.mockito.Captor;
+import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
 import org.mockito.Spy;
 import org.mskcc.cbio.oncokb.OncokbPublicApp;
@@ -56,20 +57,16 @@ class SlackServiceIT {
     private MailService mailService;
 
     @Autowired
-    private UserService userService;
-
-    @Autowired
-    private UserMailsService userMailsService;
-
-    @Autowired
     private UserMapper userMapper;
 
     @Spy
     private Slack slack;
 
-    private UserService spiedUserService;
+    @Mock
+    private UserService userService;
 
-    private UserMailsService spiedUserMailsService;
+    @Mock
+    private UserMailsService userMailsService;
 
     @Captor
     private ArgumentCaptor<String> urlCaptor;
@@ -89,9 +86,9 @@ class SlackServiceIT {
         applicationProperties.setSlack(new SlackProperties());
         applicationProperties.getSlack().setUserRegistrationWebhook(USER_REGISTRATION_WEBHOOK);
 
-        spiedUserService = spy(userService);
-        spiedUserMailsService = spy(userMailsService);
-        slackService = new SlackService(applicationProperties, mailService, spiedUserService, spiedUserMailsService, userMapper, slack);
+        doReturn(new ArrayList<UserDTO>()).when(userService).getPotentialDuplicateAccountsByUser(any(UserDTO.class));
+        doReturn(new ArrayList<>()).when(userMailsService).findUserMailsByUserAndMailTypeIn(any(User.class), anyList());
+        slackService = new SlackService(applicationProperties, mailService, userService, userMailsService, userMapper, slack);
     }
 
     private void setMockResponse(Integer code) throws IOException {
@@ -270,8 +267,9 @@ class SlackServiceIT {
             duplicateUsers.add(duplicateUser);
         }
 
-        doReturn(duplicateUsers).when(spiedUserService).getPotentialDuplicateAccountsByUser(any(UserDTO.class));
-        doReturn(new ArrayList<>()).when(spiedUserMailsService).findUserMailsByUserAndMailTypeIn(any(User.class), anyList());
+        User mappedUser = userMapper.userDTOToUser(user);
+        doReturn(duplicateUsers).when(userService).getPotentialDuplicateAccountsByUser(user);
+        doReturn(new ArrayList<>()).when(userMailsService).findUserMailsByUserAndMailTypeIn(eq(mappedUser), anyList());
 
         List<LayoutBlock> blocks = slackService.buildBlocks(user, false, null, null);
 
