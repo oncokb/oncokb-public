@@ -1,4 +1,5 @@
 import React from 'react';
+import { Link } from 'react-router-dom';
 import {
   AvCheckbox,
   AvCheckboxGroup,
@@ -28,6 +29,8 @@ import {
   LicenseStatus,
   LicenseType,
   ONCOKB_TM,
+  PAGE_ROUTE,
+  SHOW_KEYCLOAK_TEMP_PAGE_QUERY_PARAM,
   THRESHOLD_TRIAL_TOKEN_VALID_DEFAULT,
 } from 'app/config/constants';
 import { Alert, Button, Col, Row } from 'react-bootstrap';
@@ -63,6 +66,7 @@ export type INewAccountForm = {
   isLargeScreen: boolean;
   byAdmin: boolean;
   defaultLicense?: LicenseType;
+  initialEmail?: string;
   visibleSections?: FormSection[];
   gracePeriodBlacklistedDomains?: string[];
   onSelectLicense?: (newLicenseType: LicenseType | undefined) => void;
@@ -116,6 +120,7 @@ export class NewAccountForm extends React.Component<INewAccountForm> {
 
   constructor(props: INewAccountForm) {
     super(props);
+    this.email = props.initialEmail || '';
     if (props.defaultLicense) {
       this.selectedLicense = props.defaultLicense;
     }
@@ -411,6 +416,16 @@ export class NewAccountForm extends React.Component<INewAccountForm> {
     return this.props.gracePeriodBlacklistedDomains?.includes(domain) ?? false;
   }
 
+  @computed
+  get isMskEmail() {
+    return this.email.trim().toLowerCase().endsWith('@mskcc.org');
+  }
+
+  @computed
+  get keycloakTempPageLink() {
+    return `${PAGE_ROUTE.LOGIN}?${SHOW_KEYCLOAK_TEMP_PAGE_QUERY_PARAM}=true`;
+  }
+
   render() {
     return (
       <AvForm
@@ -470,6 +485,32 @@ export class NewAccountForm extends React.Component<INewAccountForm> {
                 </Col>
                 <Col md="9">
                   <AvField
+                    name="email"
+                    label={getAccountInfoTitle(
+                      ACCOUNT_TITLES.EMAIL,
+                      this.selectedLicense
+                    )}
+                    type="email"
+                    value={this.email}
+                    onChange={(event: any) => {
+                      this.email = event.target.value;
+                    }}
+                    validate={EMAIL_VAL}
+                  />
+                  {this.isMskEmail ? (
+                    <Alert variant={'warning'}>
+                      <i className={'mr-2 fa fa-exclamation-triangle'}></i>
+                      <span>
+                        MSK users do not need to fill out this form and can get
+                        an account by{' '}
+                        <Link to={this.keycloakTempPageLink}>
+                          signing in with MSK SSO
+                        </Link>
+                        .
+                      </span>
+                    </Alert>
+                  ) : null}
+                  <AvField
                     name="firstName"
                     autoComplete="given-name"
                     label={getAccountInfoTitle(
@@ -512,19 +553,6 @@ export class NewAccountForm extends React.Component<INewAccountForm> {
                       },
                       ...TEXT_VAL,
                     }}
-                  />
-                  <AvField
-                    name="email"
-                    label={getAccountInfoTitle(
-                      ACCOUNT_TITLES.EMAIL,
-                      this.selectedLicense
-                    )}
-                    type="email"
-                    value={this.email}
-                    onChange={(event: any) => {
-                      this.email = event.target.value;
-                    }}
-                    validate={EMAIL_VAL}
                   />
                   {this.showNoGracePeriodWarning ? (
                     <Alert variant={'warning'}>

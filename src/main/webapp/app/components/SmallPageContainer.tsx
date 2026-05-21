@@ -7,7 +7,7 @@ const SmallPageContainer: React.FunctionComponent<{
 }> = props => {
   return (
     <Row className={`justify-content-center ${props.className}`}>
-      <Col lg={props.size ? (props.size === 'sm' ? '6' : '8') : '6'}>
+      <Col lg={props.size ? (props.size === 'sm' ? '6' : '8') : '4'}>
         {props.children}
       </Col>
     </Row>

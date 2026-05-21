@@ -639,7 +639,7 @@ export enum PAGE_TITLE {
   FDA_NGS = 'FDA fact sheet',
 
   LOGOUT = 'Log out',
-  LOGIN = 'Log in',
+  LOGIN = 'Login/Sign up',
   NEWS = 'Latest News',
   ONCOLOGY_TX = 'FDA-Approved Oncology Therapies',
   PRIVACY = 'OncoKB™ Digital Tracker Governance Privacy Policy',
@@ -742,6 +742,8 @@ export enum PAGE_ROUTE {
   ACCOUNT_ACTIVE_TRIAL_FINISH = '/account/active-trial/finish',
   GENOMIC_REPORT = '/genomic-report',
 }
+
+export const SHOW_KEYCLOAK_TEMP_PAGE_QUERY_PARAM = 'showKeycloakTempPage';
 
 export enum API_ROUTE {
   AUTHENTICATE = '/api/authenticate',
