@@ -5,6 +5,7 @@ import {
   IReactionDisposer,
   reaction,
 } from 'mobx';
+import * as request from 'superagent';
 import { Storage } from 'react-jhipster';
 import autobind from 'autobind-decorator';
 import client from 'app/shared/api/clientInstance';
@@ -18,6 +19,7 @@ import {
 import { notifyError } from 'app/shared/utils/NotificationUtils';
 import { OncoKBError } from 'app/shared/alert/ErrorAlertUtils';
 import { daysDiff } from 'app/shared/utils/Utils';
+import { getClientInstanceURL } from 'app/shared/utils/DevUtils';
 
 export const ACTION_TYPES = {
   LOGIN: 'authentication/LOGIN',
@@ -195,6 +197,13 @@ class AuthenticationStore {
   }
 
   @computed
+  get isMskUser() {
+    return (
+      this.account?.email?.trim().toLowerCase().endsWith('@mskcc.org') ?? false
+    );
+  }
+
+  @computed
   get accountStatus() {
     const tokenValid = this.tokens.filter(
       token => new Date(token.expiration).getDate() <= Date.now()
@@ -233,6 +242,16 @@ class AuthenticationStore {
         },
       })
       .then(this.loginSuccessCallback, this.loginErrorCallback);
+  }
+
+  @autobind
+  @action
+  public authenticateKeycloakLogin() {
+    this.loading = true;
+    request
+      .post(getClientInstanceURL('oauth2/oncokb-token'))
+      .then(response => this.loginSuccessCallback(response.body))
+      .catch(this.loginErrorCallback);
   }
 
   @action.bound

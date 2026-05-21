@@ -143,10 +143,14 @@ class Header extends React.Component<IHeaderProps> {
           title: PAGE_TITLE.ACCOUNT_SETTINGS,
           link: PAGE_ROUTE.ACCOUNT_SETTINGS,
         },
-        {
-          title: PAGE_TITLE.ACCOUNT_PASSWORD,
-          link: PAGE_ROUTE.ACCOUNT_PASSWORD,
-        },
+        ...(!this.props.authStore.isMskUser
+          ? [
+              {
+                title: PAGE_TITLE.ACCOUNT_PASSWORD,
+                link: PAGE_ROUTE.ACCOUNT_PASSWORD,
+              },
+            ]
+          : []),
         ...(this.props.isAdmin ? COLLAPSED_NAV_ADMIN_ACCOUNT_ITEMS : []),
         { title: PAGE_TITLE.LOGOUT, link: PAGE_ROUTE.LOGOUT },
       ];
@@ -411,7 +415,7 @@ class Header extends React.Component<IHeaderProps> {
                           isAuthenticated={this.props.isUserAuthenticated}
                           isAdmin={this.props.isAdmin}
                           showAccountText={this.props.windowStore.isXLscreen}
-                          account={this.props.authStore.account}
+                          authStore={this.props.authStore}
                           onMenuItemClick={() => {
                             this.isNavExpanded = false;
                           }}

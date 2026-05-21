@@ -25,6 +25,8 @@ import { getErrorMessage } from 'app/shared/alert/ErrorAlertUtils';
 import client from 'app/shared/api/clientInstance';
 import { LoginVM } from 'app/shared/api/generated/API';
 import {
+  KEYCLOAK_ERROR_QUERY_PARAM,
+  KEYCLOAK_LOGIN_SUCCESS_QUERY_PARAM,
   PAGE_ROUTE,
   SHOW_KEYCLOAK_TEMP_PAGE_QUERY_PARAM,
 } from 'app/config/constants';
@@ -44,6 +46,7 @@ export default class LoginPage extends React.Component<ILoginProps> {
   @observable email = '';
   @observable password = '';
   @observable showKeycloakTempPage = false;
+  @observable keycloakErrorMessage: string | undefined;
 
   @observable resendingVerification = false;
   @observable resendVerificationMessage: string;
@@ -119,6 +122,32 @@ export default class LoginPage extends React.Component<ILoginProps> {
     );
   }
 
+  componentDidMount() {
+    const queryStrings = QueryString.parse(this.props.routing.location.search);
+    const keycloakLoginSuccess =
+      queryStrings[KEYCLOAK_LOGIN_SUCCESS_QUERY_PARAM] === 'true';
+    const keycloakError = this.getQueryStringValue(
+      queryStrings[KEYCLOAK_ERROR_QUERY_PARAM]
+    );
+
+    if (keycloakLoginSuccess || keycloakError) {
+      this.props.routing.history.replace({ pathname: PAGE_ROUTE.LOGIN });
+    }
+
+    if (keycloakLoginSuccess) {
+      this.props.authenticationStore.authenticateKeycloakLogin();
+    } else if (keycloakError) {
+      this.keycloakErrorMessage = keycloakError;
+    }
+  }
+
+  getQueryStringValue(value: string | string[] | null | undefined) {
+    if (Array.isArray(value)) {
+      return value[0];
+    }
+    return value;
+  }
+
   @computed
   get trialActivationLink() {
     if (this.props.authenticationStore.loginError) {
@@ -155,7 +184,7 @@ export default class LoginPage extends React.Component<ILoginProps> {
     const normalizedEmail = (email || this.email).trim().toLowerCase();
     this.email = normalizedEmail;
     if (normalizedEmail.endsWith('@mskcc.org')) {
-      this.showKeycloakTempPage = true;
+      window.location.href = '/oauth2/authorization/oidc';
       return;
     }
     this.savedCredential = {
@@ -232,6 +261,10 @@ export default class LoginPage extends React.Component<ILoginProps> {
   }
 
   renderLoginError(errorMessage: string) {
+    if (this.keycloakErrorMessage) {
+      return <Alert variant={'danger'}>{this.keycloakErrorMessage}</Alert>;
+    }
+
     if (!this.props.authenticationStore.loginError) {
       return null;
     }
@@ -287,7 +320,7 @@ export default class LoginPage extends React.Component<ILoginProps> {
         placeholder="Your password"
         value={this.password}
         onChange={this.handlePasswordChange}
-        disabled={!this.hasValidEmail}
+        autoComplete="current-password"
         required
         errorMessage="Password cannot be empty"
       />
@@ -406,6 +439,7 @@ export default class LoginPage extends React.Component<ILoginProps> {
                 value={this.email}
                 onChange={this.handleEmailChange}
                 required
+                autoComplete="username"
                 autoFocus
               />
               {this.renderMskLogin()}
