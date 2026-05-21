@@ -39,7 +39,7 @@ export class PasswordResetInit extends React.Component<{}> {
   render() {
     return (
       <SmallPageContainer>
-        <h1>Reset your password</h1>
+        <h2>Reset your password</h2>
         <Alert variant={'warning'}>
           <span>Enter the email address you used to register</span>
         </Alert>
@@ -77,7 +77,12 @@ export class PasswordResetInit extends React.Component<{}> {
               },
             }}
           />
-          <Button color="primary" type="submit">
+          <Button
+            block
+            variant="outline-primary"
+            className="font-medium"
+            type="submit"
+          >
             Reset password
           </Button>
         </AvForm>

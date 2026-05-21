@@ -74,7 +74,8 @@ strong {
         border-bottom: $navbar-item-border-bottom solid $nav-bg-color;
       }
 
-      &.mr-auto > .nav-item {
+      &.mr-auto > .nav-item,
+      & > .login-nav-item {
         transition: border-bottom-color 0.15s ease;
 
         &.active {

@@ -9,6 +9,7 @@ import {
   getGracePeriodDaysRemaining,
   hasGracePeriodAccess,
 } from 'app/shared/utils/GracePeriodUtils';
+import { getLoginRouteForRegister } from 'app/shared/utils/UrlUtils';
 
 const AccountMenuItemsAuthenticated: React.FunctionComponent<{
   isAdmin: boolean;
@@ -99,7 +100,7 @@ const AccountMenuItems: React.FunctionComponent<{
     </MenuItem>
     <MenuItem
       icon="sign-in"
-      to={PAGE_ROUTE.REGISTER}
+      to={getLoginRouteForRegister()}
       onClick={props.onItemClick}
     >
       {PAGE_TITLE.REGISTER}
