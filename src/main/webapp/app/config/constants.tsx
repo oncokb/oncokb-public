@@ -25,6 +25,8 @@ export const SERVER_API_URL = process.env.SERVER_API_URL;
 
 export const LOCAL_DEV_OPT = 'localdev';
 export const DISABLE_BANNER_OPT = 'disablebanner';
+export const KEYCLOAK_LOGIN_SUCCESS_QUERY_PARAM = 'login_success';
+export const KEYCLOAK_ERROR_QUERY_PARAM = 'keycloak_error';
 
 export const DEV_URL = 'http://localhost:9095';
 
