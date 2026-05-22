@@ -23,8 +23,6 @@ import com.slack.api.util.json.GsonFactory;
 import com.slack.api.webhook.Payload;
 import com.slack.api.webhook.WebhookResponse;
 
-import io.sentry.SentryLevel;
-
 import org.apache.commons.lang3.StringUtils;
 import org.mskcc.cbio.oncokb.config.application.ApplicationProperties;
 import org.mskcc.cbio.oncokb.domain.Company;
@@ -84,22 +82,19 @@ public class SlackService {
     private final UserMailsService userMailsService;
     private final UserMapper userMapper;
     private final Slack slack;
-    private final SentryService sentryService;
 
     public SlackService(ApplicationProperties applicationProperties,
             MailService mailService,
             @Lazy UserService userService,
             UserMailsService userMailsService,
             UserMapper userMapper,
-            Slack slack,
-            SentryService sentryService) {
+            Slack slack) {
         this.applicationProperties = applicationProperties;
         this.mailService = mailService;
         this.userService = userService;
         this.userMailsService = userMailsService;
         this.userMapper = userMapper;
         this.slack = slack;
-        this.sentryService = sentryService;
     }
 
     @Async
@@ -321,10 +316,14 @@ public class SlackService {
             WebhookResponse response = slack.send(url, payload);
             log.info("Slack webhook responded with statusCode={}, body={}", response.getCode(), response.getBody());
             if (!Integer.valueOf(200).equals(response.getCode())) {
-                log.error("Getting a response code other than 200, {}", response);
                 String payloadStr = GsonFactory.createSnakeCase().toJson(payload);
-                String sentryMessage = String.format("Non-200 response from slack %s. Sent to \"%s\"\n\n%s", response.getCode(), url, payloadStr);
-                this.sentryService.throwMessage(SentryLevel.ERROR, sentryMessage, null);
+                // Use the Block Kit Builder to verify the formatting of the message: https://app.slack.com/block-kit-builder
+                log.error(
+                    "Non-200 response from slack statusCode={} webhook={}. Payload={}",
+                    response.getCode(),
+                    url,
+                    payloadStr
+                );
             }
         } catch (Exception e) {
             log.error("Failed to send message to slack webhook={}", url, e);
@@ -682,6 +681,7 @@ public class SlackService {
                     sb.append(", *REJECTED*");
                 }
             }
+            truncateStringIfSlackLimitExceeded(sb);
             layoutBlocks.add(buildMarkdownBlock(sb.toString(), DUPLICATE_USER_INFO));
         }
         return layoutBlocks;

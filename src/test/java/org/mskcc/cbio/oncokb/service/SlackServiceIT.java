@@ -7,17 +7,17 @@ import com.slack.api.model.block.composition.TextObject;
 import com.slack.api.webhook.Payload;
 import com.slack.api.webhook.WebhookResponse;
 
-import io.sentry.SentryLevel;
-
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.mockito.ArgumentCaptor;
 import org.mockito.Captor;
+import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
 import org.mockito.Spy;
 import org.mskcc.cbio.oncokb.OncokbPublicApp;
 import org.mskcc.cbio.oncokb.config.application.ApplicationProperties;
 import org.mskcc.cbio.oncokb.config.application.SlackProperties;
+import org.mskcc.cbio.oncokb.domain.User;
 import org.mskcc.cbio.oncokb.domain.Company;
 import org.mskcc.cbio.oncokb.domain.enumeration.LicenseStatus;
 import org.mskcc.cbio.oncokb.domain.enumeration.LicenseType;
@@ -27,16 +27,21 @@ import org.mskcc.cbio.oncokb.service.dto.useradditionalinfo.ApiAccessRequest;
 import org.mskcc.cbio.oncokb.service.dto.useradditionalinfo.TrialAccount;
 import org.mskcc.cbio.oncokb.service.dto.useradditionalinfo.UserCompany;
 import org.mskcc.cbio.oncokb.service.mapper.UserMapper;
+import org.mskcc.cbio.oncokb.web.rest.slack.BlockId;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 
 import java.io.IOException;
 import java.util.HashMap;
 import java.util.HashSet;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Optional;
 import java.util.Set;
 
 import static org.assertj.core.api.Assertions.*;
 import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.ArgumentMatchers.anyList;
 import static org.mockito.Mockito.*;
 
 @SpringBootTest(classes = OncokbPublicApp.class)
@@ -52,19 +57,16 @@ class SlackServiceIT {
     private MailService mailService;
 
     @Autowired
-    private UserService userService;
-
-    @Autowired
-    private UserMailsService userMailsService;
-
-    @Autowired
     private UserMapper userMapper;
 
     @Spy
     private Slack slack;
 
-    @Spy
-    private SentryService sentryService;
+    @Mock
+    private UserService userService;
+
+    @Mock
+    private UserMailsService userMailsService;
 
     @Captor
     private ArgumentCaptor<String> urlCaptor;
@@ -84,7 +86,9 @@ class SlackServiceIT {
         applicationProperties.setSlack(new SlackProperties());
         applicationProperties.getSlack().setUserRegistrationWebhook(USER_REGISTRATION_WEBHOOK);
 
-        slackService = new SlackService(applicationProperties, mailService, userService, userMailsService, userMapper, slack, sentryService);
+        doReturn(new ArrayList<UserDTO>()).when(userService).getPotentialDuplicateAccountsByUser(any(UserDTO.class));
+        doReturn(new ArrayList<>()).when(userMailsService).findUserMailsByUserAndMailTypeIn(any(User.class), anyList());
+        slackService = new SlackService(applicationProperties, mailService, userService, userMailsService, userMapper, slack);
     }
 
     private void setMockResponse(Integer code) throws IOException {
@@ -236,6 +240,48 @@ class SlackServiceIT {
 
         slackService.sendUserRegistrationToChannel(user, false, company);
         verify(slack).send(urlCaptor.capture(), payloadCaptor.capture());
-        verify(sentryService).throwMessage(eq(SentryLevel.ERROR), anyString(), isNull());
+    }
+
+    @Test
+    void testDuplicateUserInfoSizeLimit() {
+        UserDTO user = new UserDTO();
+        user.setId(0L);
+        user.setLogin("john.doe@example.com");
+        user.setEmail("john.doe@example.com");
+        user.setFirstName("john");
+        user.setLastName("doe");
+        user.setCompanyName("company name");
+        user.setCity("city");
+        user.setCountry("country");
+        user.setLicenseType(LicenseType.COMMERCIAL);
+
+        List<UserDTO> duplicateUsers = new ArrayList<>();
+        for (int i = 0; i < 40; i++) {
+            UserDTO duplicateUser = new UserDTO();
+            duplicateUser.setFirstName("VeryLongFirstName" + i);
+            duplicateUser.setLastName("VeryLongLastName" + i);
+            duplicateUser.setEmail("very.long.duplicate.user." + i + "@example.com");
+            duplicateUser.setCompanyName("Extremely verbose company name for duplicate account " + i);
+            duplicateUser.setCity("Very long city name " + i);
+            duplicateUser.setCountry("Very long country name " + i);
+            duplicateUsers.add(duplicateUser);
+        }
+
+        User mappedUser = userMapper.userDTOToUser(user);
+        doReturn(duplicateUsers).when(userService).getPotentialDuplicateAccountsByUser(user);
+        doReturn(new ArrayList<>()).when(userMailsService).findUserMailsByUserAndMailTypeIn(eq(mappedUser), anyList());
+
+        List<LayoutBlock> blocks = slackService.buildBlocks(user, false, null, null);
+
+        Optional<SectionBlock> duplicateUserInfoBlock = blocks.stream()
+            .filter(SectionBlock.class::isInstance)
+            .map(SectionBlock.class::cast)
+            .filter(block -> BlockId.DUPLICATE_USER_INFO.getId().equals(block.getBlockId()))
+            .findFirst();
+
+        assertThat(duplicateUserInfoBlock).isPresent();
+        assertThat(duplicateUserInfoBlock.get().getText().getText())
+            .endsWith("… [exceeded slack character limit]");
+        assertThat(duplicateUserInfoBlock.get().getText().getText().length()).isLessThanOrEqualTo(2000);
     }
 }

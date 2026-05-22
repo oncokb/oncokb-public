@@ -1,5 +1,4 @@
 import { AppConfig } from 'app/appConfig';
-import * as Sentry from '@sentry/react';
 
 /* eslint no-console: 0 */
 
@@ -40,13 +39,7 @@ export default class ReCAPTCHA {
           token = res;
         })
         .catch((error: Error) => {
-          if (
-            AppConfig.serverConfig?.sentryProjectId &&
-            // check if sentry is initialized
-            Sentry.getCurrentHub().getClient()
-          ) {
-            Sentry.captureException(error);
-          }
+          console.error('Failed to get reCAPTCHA token', error);
         });
     }
     return token;
