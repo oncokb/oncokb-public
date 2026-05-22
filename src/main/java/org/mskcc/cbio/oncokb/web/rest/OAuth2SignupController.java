@@ -50,8 +50,6 @@ import java.util.UUID;
 @RestController
 @RequestMapping("/oauth2")
 public class OAuth2SignupController {
-    private static final String MSK_DEFAULT_CITY = "New York";
-    private static final String MSK_DEFAULT_COUNTRY = "USA";
     private static final String MSK_COMPANY_NAME = "MSKCC";
     private static final String COMPANY_NOT_FOUND_ERROR =
         "There was an error completing your signup. Please reach out to the OncoKB team.";
@@ -123,8 +121,8 @@ public class OAuth2SignupController {
         userDTO.setLicenseType(LicenseType.ACADEMIC);
         userDTO.setJobTitle(signup.getJobTitle().trim());
         userDTO.setCompanyName(MSK_COMPANY_NAME);
-        userDTO.setCity(MSK_DEFAULT_CITY);
-        userDTO.setCountry(MSK_DEFAULT_COUNTRY);
+        userDTO.setCity(signup.getCity().trim());
+        userDTO.setCountry(signup.getCountry().trim());
         userDTO.setActivated(true);
         userDTO.setAccountRequestStatus(AccountRequestStatus.APPROVED);
 
