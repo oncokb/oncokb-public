@@ -30,6 +30,9 @@ type FinishMskSignupProps = {
 export default class FinishMskSignupPage extends React.Component<
   FinishMskSignupProps
 > {
+  private static readonly DEFAULT_CITY = 'New York';
+  private static readonly DEFAULT_COUNTRY = 'USA';
+
   @observable email = '';
   @observable firstName = '';
   @observable lastName = '';
@@ -69,6 +72,8 @@ export default class FinishMskSignupPage extends React.Component<
         firstName: values.firstName,
         lastName: values.lastName,
         jobTitle: values.jobTitle,
+        city: values.city,
+        country: values.country,
         apiAccessRequested: this.apiAccessRequested,
         apiAccessJustification: values[FormKey.API_ACCESS_JUSTIFICATION],
       })
@@ -147,6 +152,30 @@ export default class FinishMskSignupPage extends React.Component<
                       errorMessage: 'Your job title/position is required.',
                     },
                     ...TEXT_VAL,
+                  }}
+                />
+                <AvField
+                  name="city"
+                  label="City"
+                  defaultValue={FinishMskSignupPage.DEFAULT_CITY}
+                  validate={{
+                    required: {
+                      value: true,
+                      errorMessage: 'Your city is required.',
+                    },
+                    ...SHORT_TEXT_VAL,
+                  }}
+                />
+                <AvField
+                  name="country"
+                  label="Country"
+                  defaultValue={FinishMskSignupPage.DEFAULT_COUNTRY}
+                  validate={{
+                    required: {
+                      value: true,
+                      errorMessage: 'Your country is required.',
+                    },
+                    ...SHORT_TEXT_VAL,
                   }}
                 />
               </Col>
