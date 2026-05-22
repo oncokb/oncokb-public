@@ -29,6 +29,7 @@ public class CustomOAuthSuccessHandler implements AuthenticationSuccessHandler {
 
     public static final String KEYCLOAK_LOGIN_SUCCESS_QUERY_PARAM = "login_success";
     public static final String KEYCLOAK_ERROR_QUERY_PARAM = "keycloak_error";
+    public static final String KEYCLOAK_FINISH_SIGNUP_QUERY_PARAM = "keycloak_finish_signup";
 
     private final ApplicationProperties applicationProperties;
     private final DomainUserDetailsService domainUserDetailsService;
@@ -67,7 +68,8 @@ public class CustomOAuthSuccessHandler implements AuthenticationSuccessHandler {
             }
 
             if (!userService.getUserWithAuthoritiesByEmailIgnoreCase(email).isPresent()) {
-                throw new IllegalStateException("No OncoKB account is associated with this email address.");
+                response.sendRedirect(buildLoginRedirect(KEYCLOAK_FINISH_SIGNUP_QUERY_PARAM, Boolean.TRUE.toString()));
+                return;
             }
 
             UserDetails userDetails = domainUserDetailsService.loadUserByUsername(email);

@@ -11,13 +11,17 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.server.ResponseStatusException;
-
 import java.util.UUID;
 
+/**
+ * The purpose of this controller is to return the user's API token
+ * once the user has been authenticated by Keycloak. Our frontend currently, stores the API token in local storage
+ * and uses it for all API calls. Once we fully move to Keycloak and remove the old Bearer token authentication,
+ * we can remove this controller.
+ */
 @RestController
 @RequestMapping("/oauth2")
 public class OAuthTokenController {
-
     private final UserAuthenticationTokenService userAuthenticationTokenService;
 
     public OAuthTokenController(UserAuthenticationTokenService userAuthenticationTokenService) {
@@ -32,6 +36,10 @@ public class OAuthTokenController {
 
         UUID uuid = userAuthenticationTokenService.authorizeCurrentUser();
 
+        return buildTokenResponse(uuid);
+    }
+
+    private ResponseEntity<UUID> buildTokenResponse(UUID uuid) {
         HttpHeaders httpHeaders = new HttpHeaders();
         httpHeaders.add(UUIDFilter.AUTHORIZATION_HEADER, "Bearer " + uuid);
         return new ResponseEntity<>(uuid, httpHeaders, HttpStatus.OK);

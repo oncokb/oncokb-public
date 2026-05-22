@@ -1,5 +1,5 @@
 import React from 'react';
-import { Link, Redirect } from 'react-router-dom';
+import { Redirect } from 'react-router-dom';
 import * as QueryString from 'query-string';
 import AuthenticationStore from 'app/store/AuthenticationStore';
 import { RouterStore } from 'mobx-react-router';
@@ -26,6 +26,7 @@ import client from 'app/shared/api/clientInstance';
 import { LoginVM } from 'app/shared/api/generated/API';
 import {
   KEYCLOAK_ERROR_QUERY_PARAM,
+  KEYCLOAK_FINISH_SIGNUP_QUERY_PARAM,
   KEYCLOAK_LOGIN_SUCCESS_QUERY_PARAM,
   PAGE_ROUTE,
   SHOW_KEYCLOAK_TEMP_PAGE_QUERY_PARAM,
@@ -129,13 +130,17 @@ export default class LoginPage extends React.Component<ILoginProps> {
     const keycloakError = this.getQueryStringValue(
       queryStrings[KEYCLOAK_ERROR_QUERY_PARAM]
     );
+    const keycloakFinishSignup =
+      queryStrings[KEYCLOAK_FINISH_SIGNUP_QUERY_PARAM] === 'true';
 
-    if (keycloakLoginSuccess || keycloakError) {
+    if (keycloakLoginSuccess || keycloakError || keycloakFinishSignup) {
       this.props.routing.history.replace({ pathname: PAGE_ROUTE.LOGIN });
     }
 
     if (keycloakLoginSuccess) {
       this.props.authenticationStore.authenticateKeycloakLogin();
+    } else if (keycloakFinishSignup) {
+      this.props.routing.history.push(PAGE_ROUTE.FINISH_SIGNUP);
     } else if (keycloakError) {
       this.keycloakErrorMessage = keycloakError;
     }
@@ -172,7 +177,7 @@ export default class LoginPage extends React.Component<ILoginProps> {
     return null;
   }
 
-  @action
+  @action.bound
   handleLogin = (
     event: any,
     errors: any,
@@ -195,7 +200,7 @@ export default class LoginPage extends React.Component<ILoginProps> {
     this.props.authenticationStore.login(normalizedEmail, password);
   };
 
-  @action
+  @action.bound
   handleCreateAccount = () => {
     if (!this.hasValidEmail) {
       return;
@@ -206,12 +211,18 @@ export default class LoginPage extends React.Component<ILoginProps> {
     });
   };
 
-  @action
+  @action.bound
+  handleForgotPassword = (event: React.MouseEvent<HTMLElement>) => {
+    event.stopPropagation();
+    this.props.routing.history.push(PAGE_ROUTE.ACCOUNT_PASSWORD_RESET_REQUEST);
+  };
+
+  @action.bound
   handleEmailChange = (event: any) => {
     this.email = event.target.value;
   };
 
-  @action
+  @action.bound
   handlePasswordChange = (event: any) => {
     this.password = event.target.value;
   };
@@ -301,7 +312,7 @@ export default class LoginPage extends React.Component<ILoginProps> {
         <p className="small text-center">
           New MSK user?{' '}
           <span className="font-weight-bold">
-            Your account will be created automatically
+            We’ll guide you through a quick account setup after MSK sign-in
           </span>
         </p>
       </>
@@ -365,9 +376,13 @@ export default class LoginPage extends React.Component<ILoginProps> {
           </span>
         </OverlayTrigger>
         <div className="mt-2">
-          <Link to={PAGE_ROUTE.ACCOUNT_PASSWORD_RESET_REQUEST}>
+          <a
+            href={PAGE_ROUTE.ACCOUNT_PASSWORD_RESET_REQUEST}
+            className="btn btn-link p-0 align-baseline"
+            onMouseDown={this.handleForgotPassword}
+          >
             Did you forget your password?
-          </Link>
+          </a>
         </div>
         <div className="d-flex align-items-center my-3">
           <hr className="flex-grow-1" />

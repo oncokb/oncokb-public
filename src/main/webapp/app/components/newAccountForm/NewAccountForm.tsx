@@ -422,7 +422,7 @@ export class NewAccountForm extends React.Component<INewAccountForm> {
   }
 
   @computed
-  get keycloakTempPageLink() {
+  get mskSsoLoginLink() {
     return `${PAGE_ROUTE.LOGIN}?${SHOW_KEYCLOAK_TEMP_PAGE_QUERY_PARAM}=true`;
   }
 
@@ -501,12 +501,21 @@ export class NewAccountForm extends React.Component<INewAccountForm> {
                     <Alert variant={'warning'}>
                       <i className={'mr-2 fa fa-exclamation-triangle'}></i>
                       <span>
-                        MSK users do not need to fill out this form and can get
-                        an account by{' '}
-                        <Link to={this.keycloakTempPageLink}>
-                          signing in with MSK SSO
-                        </Link>
-                        .
+                        MSK users should not use this registration form. Please{' '}
+                        <Link to={this.mskSsoLoginLink}>
+                          sign in with MSK SSO
+                        </Link>{' '}
+                        to complete a quick account setup.
+                      </span>
+                    </Alert>
+                  ) : null}
+                  {this.showNoGracePeriodWarning ? (
+                    <Alert variant={'warning'}>
+                      <i className={'mr-2 fa fa-exclamation-triangle'}></i>
+                      <span>
+                        You are using a personal email address. You will not
+                        receive a grace period while your account request is
+                        under review.
                       </span>
                     </Alert>
                   ) : null}
@@ -554,16 +563,6 @@ export class NewAccountForm extends React.Component<INewAccountForm> {
                       ...TEXT_VAL,
                     }}
                   />
-                  {this.showNoGracePeriodWarning ? (
-                    <Alert variant={'warning'}>
-                      <i className={'mr-2 fa fa-exclamation-triangle'}></i>
-                      <span>
-                        You are using a personal email address. You will not
-                        receive a grace period while your account request is
-                        under review.
-                      </span>
-                    </Alert>
-                  ) : null}
                   {this.showEmailMismatchConfirmation ? (
                     <Alert variant={'warning'}>
                       <i className={'mr-2 fa fa-exclamation-triangle'}></i>
