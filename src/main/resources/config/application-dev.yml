@@ -181,3 +181,6 @@ application:
       max-pool-size: 4
       queue-capacity: 500
       thread-name-prefix: token-stats-
+  keycloak:
+    enabled: false
+    allowed-email-domain: mskcc.org

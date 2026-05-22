@@ -45,6 +45,7 @@ import PageContainer from 'app/components/PageContainer';
 import GenomicReport from 'app/pages/patientReport/GenomicReport';
 import SomaticTagPage from 'app/pages/somaticGermlineAlterationPage/SomaticTagPage';
 import SomaticTagCancerTypePage from 'app/pages/annotationPage/SomaticTagCancerTypePage';
+import FinishMskSignupPage from 'app/pages/FinishMskSignupPage';
 
 const REGISTRATION_HOVER_GENE_PAGE_LIMIT = 5;
 const getOldLevelsRedirectRoute = (hash: string) => {
@@ -174,6 +175,14 @@ const AppRoutes = (props: {
           exact
           path={PAGE_ROUTE.LOGOUT}
           component={Logout}
+          windowStore={props.windowStore}
+          pageContainer={PageContainer}
+          authenticationStore={props.authenticationStore}
+        />
+        <ErrorBoundaryRoute
+          exact
+          path={PAGE_ROUTE.FINISH_SIGNUP}
+          component={FinishMskSignupPage}
           windowStore={props.windowStore}
           pageContainer={PageContainer}
           authenticationStore={props.authenticationStore}
