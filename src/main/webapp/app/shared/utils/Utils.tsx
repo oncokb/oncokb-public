@@ -998,6 +998,76 @@ export const getFdaSubmissionNumber = (
     : primaryNumber;
 };
 
+const getAlterationInfoForTag = (
+  tag: Tag,
+  evidence: Evidence,
+  hugoSymbol: string,
+  isFda: boolean
+): [string, JSX.Element] => {
+  let alterationsName: string;
+  let alterationsView: JSX.Element;
+  if (evidence.alterations.length > 0) {
+    alterationsName = evidence.alterations
+      .map(alt => alt.alteration)
+      .join(', ');
+    alterationsView = (
+      <WithSeparator separator={', '}>
+        {evidence.alterations.map(alteration =>
+          alteration.consequence ? (
+            <AlterationPageLink
+              key={alteration.name}
+              hugoSymbol={hugoSymbol}
+              alteration={{
+                alteration: alteration.alteration,
+                name: alteration.name,
+              }}
+              alterationRefGenomes={
+                alteration.referenceGenomes as REFERENCE_GENOME[]
+              }
+              hashQueries={
+                isFda
+                  ? {
+                      tab: ANNOTATION_PAGE_TAB_KEYS.FDA,
+                    }
+                  : undefined
+              }
+              germline={false}
+            />
+          ) : (
+            <span>{alteration.name}</span>
+          )
+        )}
+      </WithSeparator>
+    );
+  } else {
+    alterationsName = tag.name;
+    alterationsView = (
+      <AlterationPageLink
+        key={tag.name}
+        hugoSymbol={hugoSymbol}
+        alteration={tag.name}
+        alterationRefGenomes={[
+          REFERENCE_GENOME.GRCh37,
+          REFERENCE_GENOME.GRCh38,
+        ]}
+        germline={false}
+        hashQueries={
+          isFda
+            ? {
+                tab: ANNOTATION_PAGE_TAB_KEYS.FDA,
+              }
+            : undefined
+        }
+        isTag
+      >
+        <span>{tag.name}</span>
+        <InfoIcon className="ml-2" overlay={<span>{tag.description}</span>} />
+      </AlterationPageLink>
+    );
+  }
+  return [alterationsName, alterationsView];
+};
+
 const getImplicationsFromTag = (
   tag: Tag,
   evidenceTypes: EVIDENCE_TYPES[],
@@ -1009,54 +1079,12 @@ const getImplicationsFromTag = (
       continue;
     }
 
-    let alterationsName: string;
-    let alterationsView: JSX.Element;
-    if (evidence.alterations.length > 0) {
-      alterationsName = evidence.alterations
-        .map(alt => alt.alteration)
-        .join(', ');
-      alterationsView = (
-        <WithSeparator separator={', '}>
-          {evidence.alterations.map(alteration =>
-            alteration.consequence ? (
-              <AlterationPageLink
-                key={alteration.name}
-                hugoSymbol={hugoSymbol}
-                alteration={{
-                  alteration: alteration.alteration,
-                  name: alteration.name,
-                }}
-                alterationRefGenomes={
-                  alteration.referenceGenomes as REFERENCE_GENOME[]
-                }
-                germline={false}
-              />
-            ) : (
-              <span>{alteration.name}</span>
-            )
-          )}
-        </WithSeparator>
-      );
-    } else {
-      alterationsName = tag.name;
-      alterationsView = (
-        <AlterationPageLink
-          key={tag.name}
-          hugoSymbol={hugoSymbol}
-          alteration={tag.name}
-          alterationRefGenomes={[
-            REFERENCE_GENOME.GRCh37,
-            REFERENCE_GENOME.GRCh38,
-          ]}
-          germline={false}
-          isTag
-        >
-          <span>{tag.name}</span>
-          <InfoIcon className="ml-2" overlay={<span>{tag.description}</span>} />
-        </AlterationPageLink>
-      );
-    }
-
+    const [alterationsName, alterationsView] = getAlterationInfoForTag(
+      tag,
+      evidence,
+      hugoSymbol,
+      false
+    );
     const level = levelOfEvidence2Level(evidence.levelOfEvidence);
     const fdaLevel = levelOfEvidence2Level(evidence.fdaLevel);
     const cancerTypes = evidence.cancerTypes.map(cancerType =>
@@ -1181,59 +1209,12 @@ const getFdaImplicationsFromTag = (tag: Tag, hugoSymbol: string) => {
       continue;
     }
 
-    let alterationsName: string;
-    let alterationsView: JSX.Element;
-    if (evidence.alterations.length > 0) {
-      alterationsName = evidence.alterations
-        .map(alt => alt.alteration)
-        .join(', ');
-      alterationsView = (
-        <WithSeparator separator={', '}>
-          {evidence.alterations.map(alteration =>
-            alteration.consequence ? (
-              <AlterationPageLink
-                key={alteration.name}
-                hugoSymbol={hugoSymbol}
-                alteration={{
-                  alteration: alteration.alteration,
-                  name: alteration.name,
-                }}
-                alterationRefGenomes={
-                  alteration.referenceGenomes as REFERENCE_GENOME[]
-                }
-                hashQueries={{
-                  tab: ANNOTATION_PAGE_TAB_KEYS.FDA,
-                }}
-                germline={false}
-              />
-            ) : (
-              <span>{alteration.name}</span>
-            )
-          )}
-        </WithSeparator>
-      );
-    } else {
-      alterationsName = tag.name;
-      alterationsView = (
-        <AlterationPageLink
-          key={tag.name}
-          hugoSymbol={hugoSymbol}
-          alteration={tag.name}
-          alterationRefGenomes={[
-            REFERENCE_GENOME.GRCh37,
-            REFERENCE_GENOME.GRCh38,
-          ]}
-          germline={false}
-          hashQueries={{
-            tab: ANNOTATION_PAGE_TAB_KEYS.FDA,
-          }}
-          isTag
-        >
-          <span>{tag.name}</span>
-          <InfoIcon className="ml-2" overlay={<span>{tag.description}</span>} />
-        </AlterationPageLink>
-      );
-    }
+    const [alterationsName, alterationsView] = getAlterationInfoForTag(
+      tag,
+      evidence,
+      hugoSymbol,
+      true
+    );
     const fdaLevel = levelOfEvidence2Level(evidence.fdaLevel);
     const cancerTypes = evidence.cancerTypes.map(cancerType =>
       getCancerTypeNameFromOncoTreeType(cancerType)
