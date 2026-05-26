@@ -4,10 +4,16 @@
   xmlns:th="http://www.thymeleaf.org"
 >
   <url>
-    <loc th:text="${baseUrl} + '/gene/' + ${hugoSymbol}"></loc>
+    <loc th:text="${baseUrl} + '/gene/' + ${hugoSymbol} + '/somatic'"></loc>
+  </url>
+  <url>
+    <loc th:text="${baseUrl} + '/gene/' + ${hugoSymbol} + '/germline'"></loc>
   </url>
   <url th:each="alteration : ${alterations}">
-    <loc th:text="${baseUrl} + '/gene/' + ${hugoSymbol} + '/'+ ${alteration.name}"></loc>
+    <loc th:text="${baseUrl} + '/gene/' + ${hugoSymbol} + '/somatic/'+ ${alteration.name}"></loc>
+  </url>
+  <url th:each="alteration : ${alterations}">
+    <loc th:text="${baseUrl} + '/gene/' + ${hugoSymbol} + '/germline/'+ ${alteration.name}"></loc>
   </url>
 </urlset>
 
