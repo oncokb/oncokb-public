@@ -24,6 +24,8 @@ export const LOCAL_DEV_OPT = 'localdev';
 export const DISABLE_BANNER_OPT = 'disablebanner';
 export const KEYCLOAK_LOGIN_SUCCESS_QUERY_PARAM = 'login_success';
 export const KEYCLOAK_ERROR_QUERY_PARAM = 'keycloak_error';
+export const KEYCLOAK_IDP_HINT_QUERY_PARAM = 'kc_idp_hint';
+export const MSK_PING_IDP_ALIAS = 'msk-ping';
 
 export const DEV_URL = 'http://localhost:9095';
 

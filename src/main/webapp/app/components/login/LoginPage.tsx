@@ -26,7 +26,9 @@ import client from 'app/shared/api/clientInstance';
 import { LoginVM } from 'app/shared/api/generated/API';
 import {
   KEYCLOAK_ERROR_QUERY_PARAM,
+  KEYCLOAK_IDP_HINT_QUERY_PARAM,
   KEYCLOAK_LOGIN_SUCCESS_QUERY_PARAM,
+  MSK_PING_IDP_ALIAS,
   PAGE_ROUTE,
   SHOW_KEYCLOAK_TEMP_PAGE_QUERY_PARAM,
 } from 'app/config/constants';
@@ -114,6 +116,11 @@ export default class LoginPage extends React.Component<ILoginProps> {
   }
 
   @computed
+  get mskSsoAuthorizationUrl() {
+    return `/oauth2/authorization/oidc?${KEYCLOAK_IDP_HINT_QUERY_PARAM}=${MSK_PING_IDP_ALIAS}`;
+  }
+
+  @computed
   get shouldShowKeycloakTempPage() {
     const queryStrings = QueryString.parse(this.props.routing.location.search);
     return (
@@ -184,7 +191,7 @@ export default class LoginPage extends React.Component<ILoginProps> {
     const normalizedEmail = (email || this.email).trim().toLowerCase();
     this.email = normalizedEmail;
     if (normalizedEmail.endsWith('@mskcc.org')) {
-      window.location.href = '/oauth2/authorization/oidc';
+      window.location.href = this.mskSsoAuthorizationUrl;
       return;
     }
     this.savedCredential = {
