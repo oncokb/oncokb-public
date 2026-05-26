@@ -2,12 +2,14 @@ package org.mskcc.cbio.oncokb.config;
 
 import org.mskcc.cbio.oncokb.config.application.ApplicationProperties;
 import org.mskcc.cbio.oncokb.security.CustomOAuthSuccessHandler;
+import org.mskcc.cbio.oncokb.security.KeycloakIdpHintAuthorizationRequestResolver;
 import org.mskcc.cbio.oncokb.security.SecurityUtils;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.Import;
 import org.springframework.core.annotation.Order;
 import org.springframework.security.oauth2.client.registration.ClientRegistration;
 import org.springframework.security.oauth2.client.registration.ClientRegistrationRepository;
+import org.springframework.security.oauth2.client.web.OAuth2AuthorizationRequestResolver;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
 import org.springframework.security.config.http.SessionCreationPolicy;
@@ -22,6 +24,7 @@ public class SecurityConfigurationOAuth extends WebSecurityConfigurerAdapter {
     private final ApplicationProperties applicationProperties;
     private final CustomOAuthSuccessHandler customOAuthSuccessHandler;
     private final ClientRegistration oidcClientRegistration;
+    private final OAuth2AuthorizationRequestResolver authorizationRequestResolver;
 
     public SecurityConfigurationOAuth(
         SecurityProblemSupport problemSupport,
@@ -33,6 +36,7 @@ public class SecurityConfigurationOAuth extends WebSecurityConfigurerAdapter {
         this.applicationProperties = applicationProperties;
         this.customOAuthSuccessHandler = customOAuthSuccessHandler;
         this.oidcClientRegistration = clientRegistrationRepository.findByRegistrationId("oidc");
+        this.authorizationRequestResolver = new KeycloakIdpHintAuthorizationRequestResolver(clientRegistrationRepository);
     }
 
     @Override
@@ -70,9 +74,11 @@ public class SecurityConfigurationOAuth extends WebSecurityConfigurerAdapter {
         if (isKeycloakEnabled()) {
             http
                 .oauth2Login(login -> login
+                    .authorizationEndpoint(authorization -> authorization
+                        .authorizationRequestResolver(authorizationRequestResolver))
                     .successHandler(customOAuthSuccessHandler)
                     .failureUrl("/login?keycloak_error=Unable%20to%20authenticate%20with%20Keycloak"));
-    }
+        }
     }
 
     private boolean isKeycloakEnabled() {

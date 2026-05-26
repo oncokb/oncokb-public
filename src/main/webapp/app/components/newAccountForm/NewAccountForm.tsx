@@ -30,7 +30,8 @@ import {
   LicenseType,
   ONCOKB_TM,
   PAGE_ROUTE,
-  SHOW_KEYCLOAK_TEMP_PAGE_QUERY_PARAM,
+  KEYCLOAK_IDP_HINT_QUERY_PARAM,
+  MSK_PING_IDP_ALIAS,
   THRESHOLD_TRIAL_TOKEN_VALID_DEFAULT,
 } from 'app/config/constants';
 import { Alert, Button, Col, Row } from 'react-bootstrap';
@@ -423,7 +424,7 @@ export class NewAccountForm extends React.Component<INewAccountForm> {
 
   @computed
   get mskSsoLoginLink() {
-    return `${PAGE_ROUTE.LOGIN}?${SHOW_KEYCLOAK_TEMP_PAGE_QUERY_PARAM}=true`;
+    return `/oauth2/authorization/oidc?${KEYCLOAK_IDP_HINT_QUERY_PARAM}=${MSK_PING_IDP_ALIAS}`;
   }
 
   render() {
