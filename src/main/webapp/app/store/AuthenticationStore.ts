@@ -45,7 +45,6 @@ class AuthenticationStore {
   @observable errorMessage = ''; // Errors returned from server side
   @observable redirectMessage = '';
   @observable idToken = '';
-  @observable logoutUrl = '';
   @observable account: UserDTO | undefined;
   @observable tokens: Token[] = [];
 

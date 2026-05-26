@@ -26,7 +26,6 @@ import client from 'app/shared/api/clientInstance';
 import { LoginVM } from 'app/shared/api/generated/API';
 import {
   KEYCLOAK_ERROR_QUERY_PARAM,
-  KEYCLOAK_FINISH_SIGNUP_QUERY_PARAM,
   KEYCLOAK_LOGIN_SUCCESS_QUERY_PARAM,
   PAGE_ROUTE,
   SHOW_KEYCLOAK_TEMP_PAGE_QUERY_PARAM,
@@ -130,17 +129,13 @@ export default class LoginPage extends React.Component<ILoginProps> {
     const keycloakError = this.getQueryStringValue(
       queryStrings[KEYCLOAK_ERROR_QUERY_PARAM]
     );
-    const keycloakFinishSignup =
-      queryStrings[KEYCLOAK_FINISH_SIGNUP_QUERY_PARAM] === 'true';
 
-    if (keycloakLoginSuccess || keycloakError || keycloakFinishSignup) {
+    if (keycloakLoginSuccess || keycloakError) {
       this.props.routing.history.replace({ pathname: PAGE_ROUTE.LOGIN });
     }
 
     if (keycloakLoginSuccess) {
       this.props.authenticationStore.authenticateKeycloakLogin();
-    } else if (keycloakFinishSignup) {
-      this.props.routing.history.push(PAGE_ROUTE.FINISH_SIGNUP);
     } else if (keycloakError) {
       this.keycloakErrorMessage = keycloakError;
     }
@@ -312,7 +307,7 @@ export default class LoginPage extends React.Component<ILoginProps> {
         <p className="small text-center">
           New MSK user?{' '}
           <span className="font-weight-bold">
-            We’ll guide you through a quick account setup after MSK sign-in
+            Your OncoKB account will be created automatically after MSK sign-in
           </span>
         </p>
       </>

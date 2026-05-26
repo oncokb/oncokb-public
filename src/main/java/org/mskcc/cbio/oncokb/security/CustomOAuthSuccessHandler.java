@@ -2,6 +2,7 @@ package org.mskcc.cbio.oncokb.security;
 
 import org.apache.commons.lang3.StringUtils;
 import org.mskcc.cbio.oncokb.config.application.ApplicationProperties;
+import org.mskcc.cbio.oncokb.domain.User;
 import org.mskcc.cbio.oncokb.service.UserService;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
@@ -27,22 +28,25 @@ import java.util.stream.Collectors;
 @Component
 public class CustomOAuthSuccessHandler implements AuthenticationSuccessHandler {
 
+    private static final String SUPPORT_EMAIL = "support@oncokb.org";
     public static final String KEYCLOAK_LOGIN_SUCCESS_QUERY_PARAM = "login_success";
     public static final String KEYCLOAK_ERROR_QUERY_PARAM = "keycloak_error";
-    public static final String KEYCLOAK_FINISH_SIGNUP_QUERY_PARAM = "keycloak_finish_signup";
 
     private final ApplicationProperties applicationProperties;
     private final DomainUserDetailsService domainUserDetailsService;
     private final UserService userService;
+    private final OAuthAutoRegistrationService oauthAutoRegistrationService;
 
     public CustomOAuthSuccessHandler(
         ApplicationProperties applicationProperties,
         DomainUserDetailsService domainUserDetailsService,
-        UserService userService
+        UserService userService,
+        OAuthAutoRegistrationService oauthAutoRegistrationService
     ) {
         this.applicationProperties = applicationProperties;
         this.domainUserDetailsService = domainUserDetailsService;
         this.userService = userService;
+        this.oauthAutoRegistrationService = oauthAutoRegistrationService;
     }
 
     @Override
@@ -60,22 +64,27 @@ public class CustomOAuthSuccessHandler implements AuthenticationSuccessHandler {
 
             String email = normalizeEmail(oidcUser.getEmail());
             if (StringUtils.isBlank(email)) {
-                throw new IllegalStateException("Keycloak account does not include an email address.");
+                throw new IllegalStateException(buildMissingAttributeMessage("email"));
             }
 
             if (!isAllowedEmail(email)) {
                 throw new IllegalStateException("Only users from allowed Keycloak email domains can authenticate.");
             }
 
-            if (!userService.getUserWithAuthoritiesByEmailIgnoreCase(email).isPresent()) {
-                response.sendRedirect(buildLoginRedirect(KEYCLOAK_FINISH_SIGNUP_QUERY_PARAM, Boolean.TRUE.toString()));
-                return;
+            Optional<User> existingUser = userService.getUserWithAuthoritiesByEmailIgnoreCase(email);
+            if (!existingUser.isPresent()) {
+                String firstName = getRequiredClaim(oidcUser, "given_name", "first name");
+                String lastName = getRequiredClaim(oidcUser, "family_name", "last name");
+                User createdUser = oauthAutoRegistrationService.registerMskUser(
+                    email,
+                    firstName,
+                    lastName,
+                    getOptionalJobTitle(oidcUser)
+                );
+                setLocalAuthentication(createdUser.getEmail(), oidcUser);
+            } else {
+                setLocalAuthentication(existingUser.get().getEmail(), oidcUser);
             }
-
-            UserDetails userDetails = domainUserDetailsService.loadUserByUsername(email);
-            UsernamePasswordAuthenticationToken localAuthentication =
-                new UsernamePasswordAuthenticationToken(userDetails, oidcUser.getIdToken().getTokenValue(), userDetails.getAuthorities());
-            SecurityContextHolder.getContext().setAuthentication(localAuthentication);
 
             response.sendRedirect(buildLoginRedirect(KEYCLOAK_LOGIN_SUCCESS_QUERY_PARAM, Boolean.TRUE.toString()));
         } catch (Exception exception) {
@@ -97,6 +106,34 @@ public class CustomOAuthSuccessHandler implements AuthenticationSuccessHandler {
             return null;
         }
         return email.trim().toLowerCase(Locale.ENGLISH);
+    }
+
+    private String getRequiredClaim(OidcUser oidcUser, String claim, String displayName) {
+        return getOptionalClaim(oidcUser, claim)
+            .orElseThrow(() -> new IllegalStateException(buildMissingAttributeMessage(displayName)));
+    }
+
+    private Optional<String> getOptionalJobTitle(OidcUser oidcUser) {
+        return getOptionalClaim(oidcUser, "job_title")
+            .map(Optional::of)
+            .orElseGet(() -> getOptionalClaim(oidcUser, "position"));
+    }
+
+    private Optional<String> getOptionalClaim(OidcUser oidcUser, String claim) {
+        return Optional.ofNullable(oidcUser.getClaimAsString(claim))
+            .map(String::trim)
+            .filter(StringUtils::isNotBlank);
+    }
+
+    private String buildMissingAttributeMessage(String attribute) {
+        return "Keycloak account is missing required attribute: " + attribute + ". Please contact " + SUPPORT_EMAIL + ".";
+    }
+
+    private void setLocalAuthentication(String email, OidcUser oidcUser) {
+        UserDetails userDetails = domainUserDetailsService.loadUserByUsername(email);
+        UsernamePasswordAuthenticationToken localAuthentication =
+            new UsernamePasswordAuthenticationToken(userDetails, oidcUser.getIdToken().getTokenValue(), userDetails.getAuthorities());
+        SecurityContextHolder.getContext().setAuthentication(localAuthentication);
     }
 
     private boolean isAllowedEmail(String email) {
