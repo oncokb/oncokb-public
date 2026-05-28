@@ -31,6 +31,7 @@ import {
 } from 'app/config/constants';
 import { COLOR_BLUE } from 'app/config/theme';
 import * as styles from 'app/index.module.scss';
+import { getUniqueFdaImplications } from 'app/pages/annotationPage/Utils';
 import {
   Article,
   Citations,
@@ -1304,7 +1305,7 @@ export const getFdaImplicationsFromTags = (
       ...getFdaImplicationsFromTag(tag, hugoSymbol, isOnlyTagEvidence)
     );
   }
-  return implications;
+  return getUniqueFdaImplications(implications);
 };
 
 export const getTagVariantOverview = (tag: Tag) => {
