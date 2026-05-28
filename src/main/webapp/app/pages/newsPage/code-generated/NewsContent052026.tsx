@@ -593,14 +593,10 @@ export default function NewsContent052026() {
               <td>{<GeneticTypeTag isGermline={false} />}</td>
               <td>{getAlternativeGenePageLinks('ESR1', false)}</td>
               <td>
-                <AlterationPageLink
-                  hugoSymbol="ESR1"
-                  alteration="Oncogenic missense mutations in the ligand binding domain (LBD)"
-                  germline={false}
-                >
+                <Link to="/ESR1/somatic/tag/Oncogenic%20missense%20mutations%20in%20the%20ligand%20binding%20domain%20(LBD)">
                   Oncogenic missense mutations in the ligand binding domain
                   (LBD)
-                </AlterationPageLink>
+                </Link>
               </td>
               <td>Breast Cancer</td>
               <td>Elascetrant (Level 1), Fulvestrant (Level 3A)</td>
