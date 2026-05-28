@@ -11,6 +11,8 @@ import { convertGeneInputToLinks } from 'app/pages/newsPage/Util';
 import GeneticTypeTag from 'app/components/tag/GeneticTypeTag';
 
 export default function NewsContent052026() {
+  const tableSpacingStyle = { marginBottom: '1.5rem' };
+
   return (
     <>
       <ul>
@@ -28,10 +30,12 @@ export default function NewsContent052026() {
       <p>
         <strong>Updated Therapeutic Implications</strong>
       </p>
-      <ul>
-        <li>New alteration(s) with a tumor type-specific level of evidence</li>
+      <ul style={{ marginBottom: 0 }}>
+        <li style={{ marginBottom: 0 }}>
+          New alteration(s) with a tumor type-specific level of evidence
+        </li>
       </ul>
-      <div className="table-responsive">
+      <div className="table-responsive" style={tableSpacingStyle}>
         <table className="table">
           <thead>
             <tr>
@@ -321,12 +325,12 @@ export default function NewsContent052026() {
           </tbody>
         </table>
       </div>
-      <ul>
-        <li>
+      <ul style={{ marginBottom: 0 }}>
+        <li style={{ marginBottom: 0 }}>
           Promotion of tumor type-specific level of evidence for an alteration
         </li>
       </ul>
-      <div className="table-responsive">
+      <div className="table-responsive" style={tableSpacingStyle}>
         <table className="table">
           <thead>
             <tr>
@@ -461,14 +465,14 @@ export default function NewsContent052026() {
           </tbody>
         </table>
       </div>
-      <ul>
-        <li>
+      <ul style={{ marginBottom: 0 }}>
+        <li style={{ marginBottom: 0 }}>
           Addition of drug(s) associated with a tumor type-specific leveled
           alteration(s) currently in OncoKB™ (without changing the alteration's
           highest level of evidence)
         </li>
       </ul>
-      <div className="table-responsive">
+      <div className="table-responsive" style={tableSpacingStyle}>
         <table className="table">
           <thead>
             <tr>
