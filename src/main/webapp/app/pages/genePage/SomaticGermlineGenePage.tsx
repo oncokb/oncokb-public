@@ -165,7 +165,8 @@ export default class SomaticGermlineGenePage extends React.Component<
     return getImplicationsFromTags(
       this.store.tags.result,
       TREATMENT_EVIDENCE_TYPES,
-      this.store.hugoSymbol
+      this.store.hugoSymbol,
+      true
     );
   }
 
@@ -358,7 +359,8 @@ export default class SomaticGermlineGenePage extends React.Component<
     return getImplicationsFromTags(
       this.store.tags.result,
       [EVIDENCE_TYPES.DIAGNOSTIC_IMPLICATION],
-      this.store.hugoSymbol
+      this.store.hugoSymbol,
+      true
     );
   }
 
@@ -378,7 +380,8 @@ export default class SomaticGermlineGenePage extends React.Component<
     return getImplicationsFromTags(
       this.store.tags.result,
       [EVIDENCE_TYPES.PROGNOSTIC_IMPLICATION],
-      this.store.hugoSymbol
+      this.store.hugoSymbol,
+      true
     );
   }
 
@@ -386,7 +389,8 @@ export default class SomaticGermlineGenePage extends React.Component<
   get tagFdaImplications() {
     return getFdaImplicationsFromTags(
       this.store.tags.result,
-      this.store.hugoSymbol
+      this.store.hugoSymbol,
+      true
     );
   }
 
