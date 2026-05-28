@@ -275,22 +275,26 @@ const SomaticTagPage = inject(
                       relevantAlterations={undefined}
                       fdaImplication={getFdaImplicationsFromTags(
                         [tag],
-                        hugoSymbol
+                        hugoSymbol,
+                        false
                       )}
                       therapeuticImplications={getImplicationsFromTags(
                         [tag],
                         TREATMENT_EVIDENCE_TYPES,
-                        gene.hugoSymbol
+                        gene.hugoSymbol,
+                        false
                       )}
                       diagnosticImplications={getImplicationsFromTags(
                         [tag],
                         [EVIDENCE_TYPES.DIAGNOSTIC_IMPLICATION],
-                        gene.hugoSymbol
+                        gene.hugoSymbol,
+                        false
                       )}
                       prognosticImplications={getImplicationsFromTags(
                         [tag],
                         [EVIDENCE_TYPES.PROGNOSTIC_IMPLICATION],
-                        gene.hugoSymbol
+                        gene.hugoSymbol,
+                        false
                       )}
                       defaultSelectedTab={selectedTab}
                       onChangeTab={onChangeTab}

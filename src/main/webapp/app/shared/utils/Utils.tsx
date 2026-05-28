@@ -1002,11 +1002,12 @@ const getAlterationInfoForTag = (
   tag: Tag,
   evidence: Evidence,
   hugoSymbol: string,
-  isFda: boolean
+  isFda: boolean,
+  isOnlyTagEvidence: boolean
 ): [string, JSX.Element] => {
   let alterationsName: string;
   let alterationsView: JSX.Element;
-  if (evidence.alterations.length > 0) {
+  if (!isOnlyTagEvidence && evidence.alterations.length > 0) {
     alterationsName = evidence.alterations
       .map(alt => alt.alteration)
       .join(', ');
@@ -1071,7 +1072,8 @@ const getAlterationInfoForTag = (
 const getImplicationsFromTag = (
   tag: Tag,
   evidenceTypes: EVIDENCE_TYPES[],
-  hugoSymbol: string
+  hugoSymbol: string,
+  isOnlyTagEvidence: boolean
 ) => {
   const implications: TherapeuticImplication[] = [];
   for (const evidence of tag.evidences) {
@@ -1083,7 +1085,8 @@ const getImplicationsFromTag = (
       tag,
       evidence,
       hugoSymbol,
-      false
+      false,
+      isOnlyTagEvidence
     );
     const level = levelOfEvidence2Level(evidence.levelOfEvidence);
     const fdaLevel = levelOfEvidence2Level(evidence.fdaLevel);
@@ -1187,18 +1190,28 @@ const getImplicationsFromTag = (
 export const getImplicationsFromTags = (
   tags: Tag[],
   evidenceTypes: EVIDENCE_TYPES[],
-  hugoSymbol: string
+  hugoSymbol: string,
+  isOnlyTagEvidence: boolean
 ) => {
   const implications: TherapeuticImplication[] = [];
   for (const tag of tags) {
     implications.push(
-      ...getImplicationsFromTag(tag, evidenceTypes, hugoSymbol)
+      ...getImplicationsFromTag(
+        tag,
+        evidenceTypes,
+        hugoSymbol,
+        isOnlyTagEvidence
+      )
     );
   }
   return implications;
 };
 
-const getFdaImplicationsFromTag = (tag: Tag, hugoSymbol: string) => {
+const getFdaImplicationsFromTag = (
+  tag: Tag,
+  hugoSymbol: string,
+  isOnlyTagEvidence: boolean
+) => {
   const fdaImplications: FdaImplication[] = [];
   for (const evidence of tag.evidences) {
     if (
@@ -1213,7 +1226,8 @@ const getFdaImplicationsFromTag = (tag: Tag, hugoSymbol: string) => {
       tag,
       evidence,
       hugoSymbol,
-      true
+      true,
+      isOnlyTagEvidence
     );
     const fdaLevel = levelOfEvidence2Level(evidence.fdaLevel);
     const cancerTypes = evidence.cancerTypes.map(cancerType =>
@@ -1279,10 +1293,16 @@ const getFdaImplicationsFromTag = (tag: Tag, hugoSymbol: string) => {
   return fdaImplications;
 };
 
-export const getFdaImplicationsFromTags = (tags: Tag[], hugoSymbol: string) => {
+export const getFdaImplicationsFromTags = (
+  tags: Tag[],
+  hugoSymbol: string,
+  isOnlyTagEvidence: boolean
+) => {
   const implications: FdaImplication[] = [];
   for (const tag of tags) {
-    implications.push(...getFdaImplicationsFromTag(tag, hugoSymbol));
+    implications.push(
+      ...getFdaImplicationsFromTag(tag, hugoSymbol, isOnlyTagEvidence)
+    );
   }
   return implications;
 };
