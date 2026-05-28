@@ -94,10 +94,6 @@ function fixHtmlString(htmlString) {
     .replace(objectPropertyMarkRegex, (_, group) => {
       return `{${decodeHtmlEntities(group)}}`;
     })
-    .replace(
-      /\{&lt;GeneticTypeTag isGermline=\{(true|false)\} \/&gt;\}/g,
-      (_, isGermline) => `{<GeneticTypeTag isGermline={${isGermline}} />}`
-    )
     .replace(/\u00A0/g, ' ');
 }
 
@@ -126,10 +122,7 @@ function newlyAddedGenes(md, state) {
   let toRemoveEnd = -1;
   const genes = [];
   for (const token of state.tokens) {
-    if (
-      token.type === 'inline' &&
-      isNewlyAddedGenesTrigger(token.content)
-    ) {
+    if (token.type === 'inline' && isNewlyAddedGenesTrigger(token.content)) {
       foundNewlyAddedGenes = true;
       toRemoveStart = index;
     } else if (foundNewlyAddedGenes && token.type === 'bullet_list_close') {
@@ -245,12 +238,13 @@ function addAutoTableLinks(md, state) {
         child.content.trim().toLowerCase() === 'germline'
           ? 'germline'
           : 'somatic';
-      if (['germline', 'somatic'].includes(child.content.trim().toLowerCase())) {
-        const geneticTypeTag = `{<GeneticTypeTag isGermline={${
-          currentGeneSetting === 'germline'
-        }} />}`;
-        token.content = geneticTypeTag;
-        token.children = [createMarkdownTextToken(md, geneticTypeTag)];
+      if (
+        ['germline', 'somatic'].includes(child.content.trim().toLowerCase())
+      ) {
+        const geneticTypeText =
+          currentGeneSetting === 'germline' ? 'Germline' : 'Somatic';
+        token.content = geneticTypeText;
+        token.children = [createMarkdownTextToken(md, geneticTypeText)];
       }
     } else if (inTd && columnIdx === geneIdx && token.type === 'inline') {
       const child = token.children[0];
@@ -566,7 +560,6 @@ import { AlterationPageLink, getAlternativeGenePageLinks, GenePageLink } from 'a
 import { NewlyAddedGenesListItem } from 'app/pages/newsPage/NewlyAddedGenesListItem';
 import { TableOfContents } from 'app/pages/privacyNotice/TableOfContents';
 import { convertGeneInputToLinks } from 'app/pages/newsPage/Util';
-import GeneticTypeTag from 'app/components/tag/GeneticTypeTag';
 
 export default function ${componentName}() {
   return (

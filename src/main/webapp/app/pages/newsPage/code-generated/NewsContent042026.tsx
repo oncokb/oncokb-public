@@ -8,7 +8,6 @@ import {
 import { NewlyAddedGenesListItem } from 'app/pages/newsPage/NewlyAddedGenesListItem';
 import { TableOfContents } from 'app/pages/privacyNotice/TableOfContents';
 import { convertGeneInputToLinks } from 'app/pages/newsPage/Util';
-import GeneticTypeTag from 'app/components/tag/GeneticTypeTag';
 
 export default function NewsContent042026() {
   return (
@@ -83,7 +82,7 @@ export default function NewsContent042026() {
           <tbody>
             <tr>
               <td>1</td>
-              <td>{<GeneticTypeTag isGermline={true} />}</td>
+              <td>Germline</td>
               <td>
                 {convertGeneInputToLinks('ATM, CHEK2, PALB2, RAD51C', true)}
               </td>
@@ -104,7 +103,7 @@ export default function NewsContent042026() {
             </tr>
             <tr>
               <td>1</td>
-              <td>{<GeneticTypeTag isGermline={true} />}</td>
+              <td>Germline</td>
               <td>
                 {convertGeneInputToLinks('BARD1, BRIP1, RAD51B, RAD51D', true)}
               </td>
@@ -118,7 +117,7 @@ export default function NewsContent042026() {
             </tr>
             <tr>
               <td>1</td>
-              <td>{<GeneticTypeTag isGermline={true} />}</td>
+              <td>Germline</td>
               <td>{convertGeneInputToLinks('BRCA1, BRCA2', true)}</td>
               <td>Pathogenic Variants</td>
               <td>
@@ -142,7 +141,7 @@ export default function NewsContent042026() {
             </tr>
             <tr>
               <td>1</td>
-              <td>{<GeneticTypeTag isGermline={true} />}</td>
+              <td>Germline</td>
               <td>{convertGeneInputToLinks('BRCA1, BRCA2', true)}</td>
               <td>Pathogenic Variants</td>
               <td>
@@ -185,7 +184,7 @@ export default function NewsContent042026() {
             </tr>
             <tr>
               <td>1</td>
-              <td>{<GeneticTypeTag isGermline={true} />}</td>
+              <td>Germline</td>
               <td>{convertGeneInputToLinks('BRCA1, BRCA2', true)}</td>
               <td>Pathogenic Variants</td>
               <td>Prostate Cancer</td>
@@ -228,7 +227,7 @@ export default function NewsContent042026() {
             </tr>
             <tr>
               <td>1</td>
-              <td>{<GeneticTypeTag isGermline={true} />}</td>
+              <td>Germline</td>
               <td>{convertGeneInputToLinks('FANCA, MLH1, NBN', true)}</td>
               <td>Pathogenic Variants</td>
               <td>Prostate Cancer</td>
@@ -243,7 +242,7 @@ export default function NewsContent042026() {
             </tr>
             <tr>
               <td>1</td>
-              <td>{<GeneticTypeTag isGermline={true} />}</td>
+              <td>Germline</td>
               <td>{getAlternativeGenePageLinks('NF1', true)}</td>
               <td>
                 <AlterationPageLink
@@ -275,7 +274,7 @@ export default function NewsContent042026() {
             </tr>
             <tr>
               <td>1</td>
-              <td>{<GeneticTypeTag isGermline={true} />}</td>
+              <td>Germline</td>
               <td>{getAlternativeGenePageLinks('PTCH1', true)}</td>
               <td>
                 <AlterationPageLink
@@ -297,7 +296,7 @@ export default function NewsContent042026() {
             </tr>
             <tr>
               <td>1</td>
-              <td>{<GeneticTypeTag isGermline={true} />}</td>
+              <td>Germline</td>
               <td>{getAlternativeGenePageLinks('RET', true)}</td>
               <td>
                 <AlterationPageLink
@@ -320,7 +319,7 @@ export default function NewsContent042026() {
             </tr>
             <tr>
               <td>1</td>
-              <td>{<GeneticTypeTag isGermline={true} />}</td>
+              <td>Germline</td>
               <td>{convertGeneInputToLinks('TSC1, TSC2', true)}</td>
               <td>Pathogenic Variants</td>
               <td>Encapsulated Glioma</td>
@@ -332,7 +331,7 @@ export default function NewsContent042026() {
             </tr>
             <tr>
               <td>1</td>
-              <td>{<GeneticTypeTag isGermline={true} />}</td>
+              <td>Germline</td>
               <td>{convertGeneInputToLinks('TSC1, TSC2', true)}</td>
               <td>Pathogenic Variants</td>
               <td>Renal Angiomyolipoma</td>
@@ -353,7 +352,7 @@ export default function NewsContent042026() {
             </tr>
             <tr>
               <td>1</td>
-              <td>{<GeneticTypeTag isGermline={true} />}</td>
+              <td>Germline</td>
               <td>{getAlternativeGenePageLinks('VHL', true)}</td>
               <td>
                 <AlterationPageLink
@@ -382,7 +381,7 @@ export default function NewsContent042026() {
             </tr>
             <tr>
               <td>2</td>
-              <td>{<GeneticTypeTag isGermline={true} />}</td>
+              <td>Germline</td>
               <td>{getAlternativeGenePageLinks('PALB2', true)}</td>
               <td>
                 <AlterationPageLink

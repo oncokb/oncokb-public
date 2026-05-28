@@ -8,7 +8,6 @@ import {
 import { NewlyAddedGenesListItem } from 'app/pages/newsPage/NewlyAddedGenesListItem';
 import { TableOfContents } from 'app/pages/privacyNotice/TableOfContents';
 import { convertGeneInputToLinks } from 'app/pages/newsPage/Util';
-import GeneticTypeTag from 'app/components/tag/GeneticTypeTag';
 
 export default function NewsContent052026() {
   const tableSpacingStyle = { marginBottom: '1.5rem' };
@@ -51,7 +50,7 @@ export default function NewsContent052026() {
           <tbody>
             <tr>
               <td>1</td>
-              <td>{<GeneticTypeTag isGermline={false} />}</td>
+              <td>Somatic</td>
               <td>{getAlternativeGenePageLinks('ESR1', false)}</td>
               <td>
                 <AlterationPageLink
@@ -74,7 +73,7 @@ export default function NewsContent052026() {
             </tr>
             <tr>
               <td>3A</td>
-              <td>{<GeneticTypeTag isGermline={false} />}</td>
+              <td>Somatic</td>
               <td>{getAlternativeGenePageLinks('BTK', false)}</td>
               <td>
                 <AlterationPageLink
@@ -118,7 +117,7 @@ export default function NewsContent052026() {
             </tr>
             <tr>
               <td>4</td>
-              <td>{<GeneticTypeTag isGermline={false} />}</td>
+              <td>Somatic</td>
               <td>{getAlternativeGenePageLinks('CDK4', false)}</td>
               <td>
                 <AlterationPageLink
@@ -138,7 +137,7 @@ export default function NewsContent052026() {
             </tr>
             <tr>
               <td>R2</td>
-              <td>{<GeneticTypeTag isGermline={false} />}</td>
+              <td>Somatic</td>
               <td>{getAlternativeGenePageLinks('ALK', false)}</td>
               <td>
                 <AlterationPageLink
@@ -188,7 +187,7 @@ export default function NewsContent052026() {
             </tr>
             <tr>
               <td>R2</td>
-              <td>{<GeneticTypeTag isGermline={false} />}</td>
+              <td>Somatic</td>
               <td>{getAlternativeGenePageLinks('ALK', false)}</td>
               <td>
                 <AlterationPageLink
@@ -210,7 +209,7 @@ export default function NewsContent052026() {
             </tr>
             <tr>
               <td>R2</td>
-              <td>{<GeneticTypeTag isGermline={false} />}</td>
+              <td>Somatic</td>
               <td>{getAlternativeGenePageLinks('ALK', false)}</td>
               <td>
                 <AlterationPageLink
@@ -240,7 +239,7 @@ export default function NewsContent052026() {
             </tr>
             <tr>
               <td>R2</td>
-              <td>{<GeneticTypeTag isGermline={false} />}</td>
+              <td>Somatic</td>
               <td>{getAlternativeGenePageLinks('EGFR', false)}</td>
               <td>
                 <AlterationPageLink
@@ -262,7 +261,7 @@ export default function NewsContent052026() {
             </tr>
             <tr>
               <td>R2</td>
-              <td>{<GeneticTypeTag isGermline={false} />}</td>
+              <td>Somatic</td>
               <td>{getAlternativeGenePageLinks('MET', false)}</td>
               <td>
                 <AlterationPageLink
@@ -284,7 +283,7 @@ export default function NewsContent052026() {
             </tr>
             <tr>
               <td>R2</td>
-              <td>{<GeneticTypeTag isGermline={false} />}</td>
+              <td>Somatic</td>
               <td>{getAlternativeGenePageLinks('RET', false)}</td>
               <td>
                 <AlterationPageLink
@@ -346,7 +345,7 @@ export default function NewsContent052026() {
           </thead>
           <tbody>
             <tr>
-              <td>{<GeneticTypeTag isGermline={false} />}</td>
+              <td>Somatic</td>
               <td>{getAlternativeGenePageLinks('NRG1', false)}</td>
               <td>
                 <AlterationPageLink
@@ -372,7 +371,7 @@ export default function NewsContent052026() {
               </td>
             </tr>
             <tr>
-              <td>{<GeneticTypeTag isGermline={false} />}</td>
+              <td>Somatic</td>
               <td>{getAlternativeGenePageLinks('ESR1', false)}</td>
               <td>
                 <AlterationPageLink
@@ -401,7 +400,7 @@ export default function NewsContent052026() {
               </td>
             </tr>
             <tr>
-              <td>{<GeneticTypeTag isGermline={false} />}</td>
+              <td>Somatic</td>
               <td>{getAlternativeGenePageLinks('BTK', false)}</td>
               <td>
                 <AlterationPageLink
@@ -489,7 +488,7 @@ export default function NewsContent052026() {
           <tbody>
             <tr>
               <td>1</td>
-              <td>{<GeneticTypeTag isGermline={false} />}</td>
+              <td>Somatic</td>
               <td>{getAlternativeGenePageLinks('ESR1', false)}</td>
               <td>
                 <AlterationPageLink
@@ -516,7 +515,7 @@ export default function NewsContent052026() {
             </tr>
             <tr>
               <td>1</td>
-              <td>{<GeneticTypeTag isGermline={false} />}</td>
+              <td>Somatic</td>
               <td>{getAlternativeGenePageLinks('ESR1', false)}</td>
               <td>
                 <AlterationPageLink
@@ -590,13 +589,17 @@ export default function NewsContent052026() {
             </tr>
             <tr>
               <td>1</td>
-              <td>{<GeneticTypeTag isGermline={false} />}</td>
+              <td>Somatic</td>
               <td>{getAlternativeGenePageLinks('ESR1', false)}</td>
               <td>
-                <Link to="gene/ESR1/somatic/tag/Oncogenic%20missense%20mutations%20in%20the%20ligand%20binding%20domain%20(LBD)">
+                <AlterationPageLink
+                  hugoSymbol="ESR1"
+                  alteration="Oncogenic missense mutations in the ligand binding domain (LBD)"
+                  germline={false}
+                >
                   Oncogenic missense mutations in the ligand binding domain
                   (LBD)
-                </Link>
+                </AlterationPageLink>
               </td>
               <td>Breast Cancer</td>
               <td>Elascetrant (Level 1), Fulvestrant (Level 3A)</td>
@@ -611,7 +614,7 @@ export default function NewsContent052026() {
             </tr>
             <tr>
               <td>R1</td>
-              <td>{<GeneticTypeTag isGermline={false} />}</td>
+              <td>Somatic</td>
               <td>{getAlternativeGenePageLinks('BTK', false)}</td>
               <td>
                 <AlterationPageLink
