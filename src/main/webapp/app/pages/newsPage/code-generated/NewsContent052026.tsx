@@ -10,8 +10,6 @@ import { TableOfContents } from 'app/pages/privacyNotice/TableOfContents';
 import { convertGeneInputToLinks } from 'app/pages/newsPage/Util';
 
 export default function NewsContent052026() {
-  const tableSpacingStyle = { marginBottom: '1.5rem' };
-
   return (
     <>
       <ul>
@@ -39,7 +37,7 @@ export default function NewsContent052026() {
           New alteration(s) with a tumor type-specific level of evidence
         </li>
       </ul>
-      <div className="table-responsive" style={tableSpacingStyle}>
+      <div className="table-responsive" style={{ marginBottom: '1.5rem' }}>
         <table className="table">
           <thead>
             <tr>
@@ -48,7 +46,7 @@ export default function NewsContent052026() {
               <th>Gene(s)</th>
               <th>Mutation</th>
               <th>Cancer Type(s)</th>
-              <th>Drug(s) Added to OncoKB™</th>
+              <th>Drug(s) added to OncoKB™</th>
               <th>Evidence</th>
             </tr>
           </thead>
@@ -88,29 +86,29 @@ export default function NewsContent052026() {
                 >
                   C481S
                 </AlterationPageLink>
-                /
+                ,{' '}
                 <AlterationPageLink
                   hugoSymbol="BTK"
                   alteration="C481F"
                   germline={false}
                 >
-                  F
+                  C481F
                 </AlterationPageLink>
-                /
+                ,{' '}
                 <AlterationPageLink
                   hugoSymbol="BTK"
                   alteration="C481R"
                   germline={false}
                 >
-                  R
+                  C481R
                 </AlterationPageLink>
-                /
+                ,{' '}
                 <AlterationPageLink
                   hugoSymbol="BTK"
                   alteration="C481Y"
                   germline={false}
                 >
-                  Y
+                  C481Y
                 </AlterationPageLink>
               </td>
               <td>Chronic Lymphocytic Leukemia/Small Lymphocytic Lymphoma</td>
@@ -298,21 +296,21 @@ export default function NewsContent052026() {
                 >
                   G810C
                 </AlterationPageLink>
-                /
+                ,{' '}
                 <AlterationPageLink
                   hugoSymbol="RET"
                   alteration="G810S"
                   germline={false}
                 >
-                  S
+                  G810S
                 </AlterationPageLink>
-                /
+                ,{' '}
                 <AlterationPageLink
                   hugoSymbol="RET"
                   alteration="G810R"
                   germline={false}
                 >
-                  R
+                  G810R
                 </AlterationPageLink>
               </td>
               <td>Non-Small Cell Lung Cancer</td>
@@ -334,7 +332,7 @@ export default function NewsContent052026() {
           Promotion of tumor type-specific level of evidence for an alteration
         </li>
       </ul>
-      <div className="table-responsive" style={tableSpacingStyle}>
+      <div className="table-responsive" style={{ marginBottom: '1.5rem' }}>
         <table className="table">
           <thead>
             <tr>
@@ -415,21 +413,21 @@ export default function NewsContent052026() {
                 >
                   C481F
                 </AlterationPageLink>
-                /
+                ,{' '}
                 <AlterationPageLink
                   hugoSymbol="BTK"
                   alteration="C481R"
                   germline={false}
                 >
-                  R
+                  C481R
                 </AlterationPageLink>
-                /
+                ,{' '}
                 <AlterationPageLink
                   hugoSymbol="BTK"
                   alteration="C481Y"
                   germline={false}
                 >
-                  Y
+                  C481Y
                 </AlterationPageLink>
               </td>
               <td>Chronic Lymphocytic Leukemia/Small Lymphocytic Lymphoma</td>
@@ -476,7 +474,7 @@ export default function NewsContent052026() {
           highest level of evidence)
         </li>
       </ul>
-      <div className="table-responsive" style={tableSpacingStyle}>
+      <div className="table-responsive" style={{ marginBottom: '1.5rem' }}>
         <table className="table">
           <thead>
             <tr>
@@ -486,7 +484,7 @@ export default function NewsContent052026() {
               <th>Mutation</th>
               <th>Cancer Type</th>
               <th>Level-Associated Drug(s) in OncoKB™</th>
-              <th>Drug(s) Added to OncoKBTM</th>
+              <th>Drug(s) added to OncoKB™</th>
               <th>Evidence</th>
             </tr>
           </thead>

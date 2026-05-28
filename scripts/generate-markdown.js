@@ -19,6 +19,7 @@ const objectPropertyMarkRegex = new RegExp(
   `"${objectPropertyMark}(.*?)${objectPropertyMark}"`,
   'gm'
 );
+const tagMarkerRegex = /^\[\[tag\]\]\s*/i;
 
 /**
  * Escapes special characters in a string to be used in a regular expression.
@@ -91,10 +92,22 @@ function fixHtmlString(htmlString) {
       new RegExp(`germline="${booleanPropertyMark}(true|false)"`, 'g'),
       (_, isGermline) => `germline={${isGermline}}`
     )
+    .replace(
+      new RegExp(`isTag="${booleanPropertyMark}(true|false)"`, 'g'),
+      (_, isTag) => `isTag={${isTag}}`
+    )
+    .replace(/style="margin-bottom: 0"/g, 'style={{ marginBottom: 0 }}')
     .replace(objectPropertyMarkRegex, (_, group) => {
       return `{${decodeHtmlEntities(group)}}`;
     })
     .replace(/\u00A0/g, ' ');
+}
+
+function parseTaggedMutation(mutationName) {
+  return {
+    isTag: tagMarkerRegex.test(mutationName),
+    mutationName: mutationName.replace(tagMarkerRegex, '').trim(),
+  };
 }
 
 /**
@@ -366,21 +379,66 @@ function addAutoTableLinks(md, state) {
   }
 }
 
+function addTableHeaderListStyles(state) {
+  for (let i = 0; i < state.tokens.length; i++) {
+    const token = state.tokens[i];
+    if (token.type !== 'bullet_list_open') {
+      continue;
+    }
+
+    let listEndIdx = -1;
+    let depth = 0;
+    for (let j = i; j < state.tokens.length; j++) {
+      if (state.tokens[j].type === 'bullet_list_open') {
+        depth++;
+      } else if (state.tokens[j].type === 'bullet_list_close') {
+        depth--;
+        if (depth === 0) {
+          listEndIdx = j;
+          break;
+        }
+      }
+    }
+
+    if (listEndIdx < 0) {
+      continue;
+    }
+
+    const nextToken = state.tokens[listEndIdx + 1];
+    if (!nextToken || nextToken.type !== 'table_open') {
+      continue;
+    }
+
+    token.attrSet('style', 'margin-bottom: 0');
+    for (let j = i + 1; j < listEndIdx; j++) {
+      if (state.tokens[j].type === 'list_item_open') {
+        state.tokens[j].attrSet('style', 'margin-bottom: 0');
+      }
+    }
+  }
+
+  return true;
+}
+
 function createMutationLinks(md, currentGene, mutationNames, germline = false) {
   const allMutationLinks = [];
   for (mutationName of mutationNames) {
+    const { isTag, mutationName: parsedMutationName } = parseTaggedMutation(
+      mutationName
+    );
     let mutationLinks = [
       {
-        alteration: mutationName,
-        linkText: mutationName,
+        alteration: parsedMutationName,
+        linkText: parsedMutationName,
+        isTag,
       },
     ];
     // Check for for cases like L718Q/V
     if (
-      ALTERNATIVE_ALLELES_REGEX.test(mutationName) &&
-      !mutationName.endsWith('Fusion')
+      ALTERNATIVE_ALLELES_REGEX.test(parsedMutationName) &&
+      !parsedMutationName.endsWith('Fusion')
     ) {
-      const matches = ALTERNATIVE_ALLELES_REGEX.exec(mutationName);
+      const matches = ALTERNATIVE_ALLELES_REGEX.exec(parsedMutationName);
       if (matches) {
         const positionalVar = matches[1];
         const alternativeAlleles = matches[2];
@@ -388,6 +446,7 @@ function createMutationLinks(md, currentGene, mutationNames, germline = false) {
           return {
             alteration: index === 0 ? `${positionalVar}${allele}` : allele,
             linkText: `${positionalVar}${allele}`,
+            isTag,
           };
         });
       }
@@ -410,6 +469,12 @@ function createMutationLinks(md, currentGene, mutationNames, germline = false) {
         'germline',
         `${booleanPropertyMark}${germline}`
       );
+      if (mutationLink.isTag === true) {
+        alterationPageLinkTags[0].attrSet(
+          'isTag',
+          `${booleanPropertyMark}true`
+        );
+      }
       if (i > 0) {
         const linkEndToken = alterationPageLinkTags.pop();
         const textToken = createMarkdownTextToken(md, mutationLink.alteration);
@@ -479,7 +544,7 @@ const md = new MarkdownIt({
   // https://markdown-it.github.io/markdown-it
   // https://github.com/markdown-it/markdown-it/blob/master/docs/examples/renderer_rules.md
   md.renderer.rules.table_open = function () {
-    return '<div className="table-responsive">\n<table className="table">';
+    return '<div className="table-responsive" style={{ marginBottom: "1.5rem" }}>\n<table className="table">';
   };
 
   md.renderer.rules.table_close = function () {
@@ -491,10 +556,15 @@ const md = new MarkdownIt({
   });
 
   md.core.ruler.push('fix-links', state => fixLinks(state));
+  md.core.ruler.push('add-table-header-list-styles', state =>
+    addTableHeaderListStyles(state)
+  );
   md.core.ruler.push('fix-styles', state => {
     for (const token of state.tokens) {
       if (token.attrs != null && token.attrs.length > 0) {
-        token.attrs = token.attrs.filter(([name]) => name !== 'style');
+        token.attrs = token.attrs.filter(([name, value]) => {
+          return name !== 'style' || value === 'margin-bottom: 0';
+        });
       }
       if (token.type === 'table_open') {
         token.attrSet('className', 'table');

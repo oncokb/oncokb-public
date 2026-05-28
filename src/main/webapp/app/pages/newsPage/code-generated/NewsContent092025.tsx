@@ -8,25 +8,24 @@ import {
 import { NewlyAddedGenesListItem } from 'app/pages/newsPage/NewlyAddedGenesListItem';
 import { TableOfContents } from 'app/pages/privacyNotice/TableOfContents';
 import { convertGeneInputToLinks } from 'app/pages/newsPage/Util';
-import GeneticTypeTag from 'app/components/tag/GeneticTypeTag';
 
 export default function NewsContent092025() {
   return (
     <>
-      <ul>
-        <li>
+      <ul style={{ marginBottom: 0 }}>
+        <li style={{ marginBottom: 0 }}>
           We have updated the Level 1 annotation of ERBB2 Tyrosine Kinase Domain
           activating mutations in NSCLC (in association with zongertinib) to
           exclude the following mutations, which fall outside the TKD (ERBB2
           V697L, Q709L, A710V and E717D)
         </li>
-        <li>
+        <li style={{ marginBottom: 0 }}>
           Updated Therapeutic Implications - Addition of drug(s) associated with
           a tumor type-specific leveled alteration(s) currently in OncoKB™
           (without changing the alteration's highest level of evidence)
         </li>
       </ul>
-      <div className="table-responsive">
+      <div className="table-responsive" style={{ marginBottom: '1.5rem' }}>
         <table className="table">
           <thead>
             <tr>

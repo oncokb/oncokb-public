@@ -8,7 +8,6 @@ import {
 import { NewlyAddedGenesListItem } from 'app/pages/newsPage/NewlyAddedGenesListItem';
 import { TableOfContents } from 'app/pages/privacyNotice/TableOfContents';
 import { convertGeneInputToLinks } from 'app/pages/newsPage/Util';
-import GeneticTypeTag from 'app/components/tag/GeneticTypeTag';
 
 export default function NewsContent062025() {
   return (
@@ -23,14 +22,14 @@ export default function NewsContent062025() {
       <p>
         <strong>Updated Therapeutic Implications</strong>
       </p>
-      <ul>
-        <li>
+      <ul style={{ marginBottom: 0 }}>
+        <li style={{ marginBottom: 0 }}>
           Addition of drug(s) associated with a tumor type-specific leveled
           alteration(s) currently in OncoKB™ (without changing the alteration's
           highest level of evidence)
         </li>
       </ul>
-      <div className="table-responsive">
+      <div className="table-responsive" style={{ marginBottom: '1.5rem' }}>
         <table className="table">
           <thead>
             <tr>

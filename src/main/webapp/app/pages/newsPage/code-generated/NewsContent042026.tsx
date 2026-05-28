@@ -63,10 +63,12 @@ export default function NewsContent042026() {
       <p>
         <strong>Updated Therapeutic Implications</strong>
       </p>
-      <ul>
-        <li>New alteration(s) with a tumor type-specific level of evidence</li>
+      <ul style={{ marginBottom: 0 }}>
+        <li style={{ marginBottom: 0 }}>
+          New alteration(s) with a tumor type-specific level of evidence
+        </li>
       </ul>
-      <div className="table-responsive">
+      <div className="table-responsive" style={{ marginBottom: '1.5rem' }}>
         <table className="table">
           <thead>
             <tr>
