@@ -36,6 +36,6 @@
 
 - Addition of 4 new genes:
   - ART1
-  - CARS
   - CCT2
+  - LAG3
   - PTH

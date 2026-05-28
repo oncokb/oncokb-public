@@ -36,6 +36,10 @@ b {
   @include font-gotham('medium');
 }
 
+strong {
+  @include font-gotham('bold');
+}
+
 .Main {
   min-height: 100%;
   position: relative;

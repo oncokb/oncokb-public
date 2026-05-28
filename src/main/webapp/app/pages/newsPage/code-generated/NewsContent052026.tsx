@@ -593,7 +593,7 @@ export default function NewsContent052026() {
               <td>{<GeneticTypeTag isGermline={false} />}</td>
               <td>{getAlternativeGenePageLinks('ESR1', false)}</td>
               <td>
-                <Link to="/ESR1/somatic/tag/Oncogenic%20missense%20mutations%20in%20the%20ligand%20binding%20domain%20(LBD)">
+                <Link to="gene/ESR1/somatic/tag/Oncogenic%20missense%20mutations%20in%20the%20ligand%20binding%20domain%20(LBD)">
                   Oncogenic missense mutations in the ligand binding domain
                   (LBD)
                 </Link>
@@ -642,7 +642,7 @@ export default function NewsContent052026() {
       <ul>
         <li>
           <NewlyAddedGenesListItem
-            genes={['ART1', 'CARS', 'CCT2', 'PTH']}
+            genes={['ART1', 'CCT2', 'LAG3', 'PTH']}
           ></NewlyAddedGenesListItem>
         </li>
       </ul>
