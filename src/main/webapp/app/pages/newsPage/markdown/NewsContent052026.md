@@ -1,5 +1,6 @@
 - Release of [OncoKB™ SOP v6.2](https://sop.oncokb.org/)
 - Update to our [FDA Cleared or Approved Companion Diagnostic Devices](https://www.oncokb.org/companion-diagnostic-devices) (CDx) page
+- Update to our [FDA-Approved Oncology Therapies](https://www.oncokb.org/oncology-therapies) page
 
 **Updated Therapeutic Implications**
 
