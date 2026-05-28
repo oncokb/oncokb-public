@@ -25,6 +25,11 @@ export default function NewsContent052026() {
           </Link>{' '}
           (CDx) page
         </li>
+        <li>
+          Update to our{' '}
+          <Link to="/oncology-therapies">FDA-Approved Oncology Therapies</Link>{' '}
+          page
+        </li>
       </ul>
       <p>
         <strong>Updated Therapeutic Implications</strong>
@@ -596,6 +601,7 @@ export default function NewsContent052026() {
                   hugoSymbol="ESR1"
                   alteration="Oncogenic missense mutations in the ligand binding domain (LBD)"
                   germline={false}
+                  isTag={true}
                 >
                   Oncogenic missense mutations in the ligand binding domain
                   (LBD)
