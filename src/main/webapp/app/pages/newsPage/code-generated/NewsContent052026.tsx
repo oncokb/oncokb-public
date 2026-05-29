@@ -34,7 +34,7 @@ export default function NewsContent052026() {
       </p>
       <ul style={{ marginBottom: 0 }}>
         <li style={{ marginBottom: 0 }}>
-          New alteration(s) with a tumor type-specific level of evidence
+          New alteration(s) with a cancer type-specific level of evidence
         </li>
       </ul>
       <div className="table-responsive" style={{ marginBottom: '1.5rem' }}>
@@ -329,7 +329,7 @@ export default function NewsContent052026() {
       </div>
       <ul style={{ marginBottom: 0 }}>
         <li style={{ marginBottom: 0 }}>
-          Promotion of tumor type-specific level of evidence for an alteration
+          Promotion of cancer type-specific level of evidence for an alteration
         </li>
       </ul>
       <div className="table-responsive" style={{ marginBottom: '1.5rem' }}>
@@ -469,9 +469,9 @@ export default function NewsContent052026() {
       </div>
       <ul style={{ marginBottom: 0 }}>
         <li style={{ marginBottom: 0 }}>
-          Addition of drug(s) associated with a tumor type-specific leveled
-          alteration(s) currently in OncoKB™ (without changing the alteration's
-          highest level of evidence)
+          Addition of drug(s) associated with an existing cancer type-specific
+          alteration with an assigned OncoKB™ level of evidence, without
+          changing the alteration's highest level of evidence
         </li>
       </ul>
       <div className="table-responsive" style={{ marginBottom: '1.5rem' }}>
@@ -483,7 +483,7 @@ export default function NewsContent052026() {
               <th>Gene</th>
               <th>Mutation</th>
               <th>Cancer Type</th>
-              <th>Level-Associated Drug(s) in OncoKB™</th>
+              <th>Level-associated Drug(s) in OncoKB™</th>
               <th>Drug(s) added to OncoKB™</th>
               <th>Evidence</th>
             </tr>
@@ -631,7 +631,7 @@ export default function NewsContent052026() {
               </td>
               <td>Chronic Lymphocytic Leukemia/Small Lymphocytic Lymphoma</td>
               <td>Ibrutinib</td>
-              <td>Acalabrutinib, Zanubrutinib (Level R1)</td>
+              <td>Acalabrutinib (Level R1), Zanubrutinib (Level R1)</td>
               <td>
                 PMID:{' '}
                 <a href="https://pubmed.ncbi.nlm.nih.gov/38754046/">38754046</a>
