@@ -1,7 +1,10 @@
 package org.mskcc.cbio.oncokb.security;
 
 import org.apache.commons.lang3.StringUtils;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.security.oauth2.client.registration.ClientRegistration;
+import org.springframework.web.util.UriComponentsBuilder;
 
 import java.time.Duration;
 import java.time.Instant;
@@ -23,6 +26,7 @@ import org.springframework.security.core.userdetails.UserDetails;
  * Utility class for Spring Security.
  */
 public final class SecurityUtils {
+    private static final Logger log = LoggerFactory.getLogger(SecurityUtils.class);
 
     private static final Duration ACTIVATION_GRACE_PERIOD = Duration.ofDays(30);
     private static final String KEYCLOAK_AUTHORIZATION_PATH = "/protocol/openid-connect/auth";
@@ -160,12 +164,22 @@ public final class SecurityUtils {
             Object credentials = authToken.getCredentials();
             if (credentials instanceof String) {
                 String idToken = (String) credentials;
-                endSessionEndpoint += "?id_token_hint=" + idToken;
+                return UriComponentsBuilder.fromUriString(endSessionEndpoint)
+                    .queryParam("id_token_hint", idToken)
+                    .queryParam("post_logout_redirect_uri", postLogoutRedirectUri)
+                    .build()
+                    .encode()
+                    .toUriString();
             }
+            log.warn("Skipping Keycloak logout because authentication credentials are not an ID token string.");
+        } else {
+            log.warn(
+                "Skipping Keycloak logout because authentication is not UsernamePasswordAuthenticationToken: {}",
+                authentication == null ? "null" : authentication.getClass().getName()
+            );
         }
 
-        return endSessionEndpoint + (endSessionEndpoint.contains("?") ? "&" : "?") +
-            "post_logout_redirect_uri=" + postLogoutRedirectUri;
+        return StringUtils.defaultIfBlank(postLogoutRedirectUri, "/");
     }
 
     private static Optional<Instant> getGracePeriodEnd(User user) {
