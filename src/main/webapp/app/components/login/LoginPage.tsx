@@ -6,6 +6,9 @@ import { RouterStore } from 'mobx-react-router';
 import { inject, observer } from 'mobx-react';
 import { action, computed, observable } from 'mobx';
 import SmallPageContainer from 'app/components/SmallPageContainer';
+import LoadingIndicator, {
+  LoaderSize,
+} from 'app/components/loadingIndicator/LoadingIndicator';
 import { AvField, AvForm } from 'availity-reactstrap-validation';
 import {
   Alert,
@@ -47,7 +50,7 @@ export default class LoginPage extends React.Component<ILoginProps> {
   @observable savedCredential: LoginVM;
   @observable email = '';
   @observable password = '';
-  @observable showKeycloakTempPage = false;
+  @observable showOAuthLoginLoadingState = false;
   @observable keycloakErrorMessage: string | undefined;
 
   @observable resendingVerification = false;
@@ -121,10 +124,11 @@ export default class LoginPage extends React.Component<ILoginProps> {
   }
 
   @computed
-  get shouldShowKeycloakTempPage() {
+  get shouldShowOAuthLoginLoadingState() {
     const queryStrings = QueryString.parse(this.props.routing.location.search);
     return (
-      this.showKeycloakTempPage ||
+      this.showOAuthLoginLoadingState ||
+      queryStrings[KEYCLOAK_LOGIN_SUCCESS_QUERY_PARAM] === 'true' ||
       queryStrings[SHOW_KEYCLOAK_TEMP_PAGE_QUERY_PARAM] === 'true'
     );
   }
@@ -142,6 +146,7 @@ export default class LoginPage extends React.Component<ILoginProps> {
     }
 
     if (keycloakLoginSuccess) {
+      this.showOAuthLoginLoadingState = true;
       this.props.authenticationStore.authenticateKeycloakLogin();
     } else if (keycloakError) {
       this.keycloakErrorMessage = keycloakError;
@@ -246,6 +251,24 @@ export default class LoginPage extends React.Component<ILoginProps> {
           email and follow the instructions to regain access.
         </p>
       </div>
+    );
+  }
+
+  renderOAuthLoginLoadingState() {
+    return (
+      <SmallPageContainer>
+        <div className="text-center py-4">
+          <LoadingIndicator
+            isLoading
+            size={LoaderSize.LARGE}
+            className="mb-4"
+          />
+          <h2 className="mb-3">Signing you in</h2>
+          <p className="text-muted mb-0">
+            We&apos;re finishing your MSK SSO login and loading your account.
+          </p>
+        </div>
+      </SmallPageContainer>
     );
   }
 
@@ -432,12 +455,8 @@ export default class LoginPage extends React.Component<ILoginProps> {
     const errorMessage = getErrorMessage(
       this.props.authenticationStore.loginError ?? new Error()
     );
-    if (this.shouldShowKeycloakTempPage) {
-      return (
-        <SmallPageContainer>
-          Imagine this is the keycloak/ping login page
-        </SmallPageContainer>
-      );
+    if (this.shouldShowOAuthLoginLoadingState) {
+      return this.renderOAuthLoginLoadingState();
     }
     return (
       <SmallPageContainer>
