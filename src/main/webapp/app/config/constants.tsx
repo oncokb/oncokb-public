@@ -9,6 +9,7 @@ import {
 import React from 'react';
 import { Link } from 'react-router-dom';
 import { Feedback, FeedbackType } from 'app/components/feedback/types';
+import { MailTypeInfo } from 'app/shared/api/generated/API';
 
 /* eslint no-shadow: 0 */
 
@@ -1195,7 +1196,21 @@ export type InheritanceMechanism =
   | typeof MECHANISM_OF_INHERITANCE_X_LINKED_RECESSIVE
   | 'Carrier';
 
-export const USER_MAIL_TAGS: Record<string, string> = {
+export type MailCategory =
+  | 'ACTIVATION'
+  | 'CREATION'
+  | 'APPROVAL'
+  | 'API_APPROVAL'
+  | 'REJECTION'
+  | 'CLARIFICATION'
+  | 'LICENSE_OPTIONS'
+  | 'TRIAL'
+  | 'TERMINATION';
+
+export const USER_MAIL_TAGS: Partial<Record<
+  MailTypeInfo['mailType'],
+  MailCategory
+>> = {
   ACTIVATION: 'ACTIVATION',
   CREATION: 'CREATION',
   APPROVAL: 'APPROVAL',

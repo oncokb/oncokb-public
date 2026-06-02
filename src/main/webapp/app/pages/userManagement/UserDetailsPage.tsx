@@ -20,6 +20,7 @@ import {
 import {
   AUTHORITIES,
   LicenseType,
+  MailCategory,
   USER_AUTHORITY,
   USER_MAIL_TAGS,
 } from 'app/config/constants';
@@ -275,7 +276,7 @@ export default class UserDetailsPage extends React.Component<{
     const userMails = user.userMails || [];
     const tags = userMails
       .map(userMail => USER_MAIL_TAGS[userMail.mailType])
-      .filter((tag): tag is string => Boolean(tag));
+      .filter(tag => tag !== undefined);
 
     return Array.from(new Set(tags));
   }
@@ -501,7 +502,7 @@ export default class UserDetailsPage extends React.Component<{
 
         return (
           <div className="d-flex flex-wrap">
-            {tags.map((tag: string) => (
+            {tags.map((tag: any) => (
               <span key={tag} className="badge badge-info mr-1 mb-1">
                 {tag}
               </span>

@@ -2134,6 +2134,7 @@
               "CLARIFY_REGISTRATION_INFO",
               "CLARIFY_HOSPITAL_USE",
               "CLARIFY_COMMERCIAL_USE",
+              "LICENSE_OPTIONS",
               "VERIFY_EMAIL_BEFORE_ACCOUNT_EXPIRES",
               "ACTIVATE_FREE_TRIAL",
               "TRIAL_ACCOUNT_IS_ABOUT_TO_EXPIRE",
@@ -4013,7 +4014,7 @@
         "username": {
           "type": "string",
           "minLength": 1,
-          "maxLength": 50
+          "maxLength": 254
         }
       },
       "title": "LoginVM"
@@ -4046,6 +4047,7 @@
             "CLARIFY_REGISTRATION_INFO",
             "CLARIFY_HOSPITAL_USE",
             "CLARIFY_COMMERCIAL_USE",
+            "LICENSE_OPTIONS",
             "VERIFY_EMAIL_BEFORE_ACCOUNT_EXPIRES",
             "ACTIVATE_FREE_TRIAL",
             "TRIAL_ACCOUNT_IS_ABOUT_TO_EXPIRE",
@@ -4173,7 +4175,7 @@
         "login": {
           "type": "string",
           "minLength": 1,
-          "maxLength": 50,
+          "maxLength": 254,
           "pattern": "^[_.\\-\\+@A-Za-z0-9]*$"
         },
         "notifyUserOnTrialCreation": {
@@ -4197,6 +4199,12 @@
         "tokenValidDays": {
           "type": "integer",
           "format": "int32"
+        },
+        "userMails": {
+          "type": "array",
+          "items": {
+            "$ref": "#/definitions/UserMailsDTO"
+          }
         }
       },
       "title": "ManagedUserVM"
@@ -4379,7 +4387,7 @@
         "login": {
           "type": "string",
           "minLength": 1,
-          "maxLength": 50,
+          "maxLength": 254,
           "pattern": "^[_.\\-\\+@A-Za-z0-9]*$"
         },
         "resetDate": {
@@ -4568,7 +4576,7 @@
         "login": {
           "type": "string",
           "minLength": 1,
-          "maxLength": 50,
+          "maxLength": 254,
           "pattern": "^[_.\\-\\+@A-Za-z0-9]*$"
         },
         "resetDate": {
@@ -4577,6 +4585,12 @@
         },
         "resetKey": {
           "type": "string"
+        },
+        "userMails": {
+          "type": "array",
+          "items": {
+            "$ref": "#/definitions/UserMailsDTO"
+          }
         }
       },
       "title": "UserDTO"
@@ -4670,6 +4684,7 @@
             "CLARIFY_REGISTRATION_INFO",
             "CLARIFY_HOSPITAL_USE",
             "CLARIFY_COMMERCIAL_USE",
+            "LICENSE_OPTIONS",
             "VERIFY_EMAIL_BEFORE_ACCOUNT_EXPIRES",
             "ACTIVATE_FREE_TRIAL",
             "TRIAL_ACCOUNT_IS_ABOUT_TO_EXPIRE",
@@ -4736,10 +4751,10 @@
     "UserRegistrationSummary": {
       "type": "object",
       "properties": {
-        "licenseType": {
+        "date": {
           "type": "string"
         },
-        "date": {
+        "licenseType": {
           "type": "string"
         },
         "total": {

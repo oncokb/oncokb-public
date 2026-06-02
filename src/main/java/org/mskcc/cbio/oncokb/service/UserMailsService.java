@@ -15,7 +15,6 @@ import org.springframework.transaction.annotation.Transactional;
 import java.time.Instant;
 import java.util.LinkedList;
 import java.util.List;
-import java.util.Map;
 import java.util.Optional;
 import java.util.stream.Collectors;
 
@@ -98,12 +97,10 @@ public class UserMailsService {
             .collect(Collectors.toCollection(LinkedList::new));
     }
 
-    @Transactional(readOnly = true)
-    public Map<Long, List<UserMailsDTO>> findUserMailsGroupedByUserId(List<User> users) {
-        log.debug("Request to get all UserMails for a list of users, grouped by user id");
-        return userMailsRepository.findAllByUserIn(users).stream()
+    public List<UserMailsDTO> toDtos(List<org.mskcc.cbio.oncokb.domain.UserMails> userMailsList) {
+        return userMailsList.stream()
             .map(userMailsMapper::toDto)
-            .collect(Collectors.groupingBy(UserMailsDTO::getUserId));
+            .collect(Collectors.toList());
     }
 
     /**
