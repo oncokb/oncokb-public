@@ -572,7 +572,7 @@ public class UserService {
     @Transactional(readOnly = true)
     public List<UserDTO> findAllUsersWithUserDetailsByUsersIn(List<User> users) {
         List<Object[]> usersWithDetails = userRepository.findAllUsersWithUserDetailsByUsersIn(users);
-        return usersWithDetails
+        List<UserDTO> userDTOs = usersWithDetails
             .stream()
             .map(u -> {
                 User user = (User) u[0];
@@ -580,6 +580,15 @@ public class UserService {
                 return userMapper.userToUserDTO(user, userDetails);
             })
             .collect(Collectors.toList());
+
+        // Batch-load all mails and populate each UserDTO
+        Map<Long, List<org.mskcc.cbio.oncokb.service.dto.UserMailsDTO>> mailsByUserId =
+            userMailsService.findUserMailsGroupedByUserId(users);
+        userDTOs.forEach(dto -> dto.setUserMails(
+            mailsByUserId.getOrDefault(dto.getId(), Collections.emptyList())
+        ));
+
+        return userDTOs;
     }
 
     @Transactional(readOnly = true)
