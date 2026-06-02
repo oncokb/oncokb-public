@@ -94,7 +94,7 @@ public enum MailType {
         .description("Clarify - Commercial use")
         .titleKey("email.license.clarify.title")
         .stringTemplateName("clarifyCommercialUseString.txt"))
-    , LICENSE_OPTIONS(new MailTypeBuilder()
+    , LICENSE_OPTIONS(new MailTypeBuilder() // This mail is no more used but we still need to keep the record of past mails that have been sent with this mail type
         .templateName("licenseOptions")
         .description("License Options - Legacy mail type")
         .titleKey("email.license.title"))
