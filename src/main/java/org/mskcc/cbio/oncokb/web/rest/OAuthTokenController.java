@@ -34,7 +34,7 @@ public class OAuthTokenController {
             throw new ResponseStatusException(HttpStatus.UNAUTHORIZED, "Keycloak login is required.");
         }
 
-        UUID uuid = userAuthenticationTokenService.authorizeCurrentUser();
+        UUID uuid = userAuthenticationTokenService.authorizeCurrentUserViaOAuth();
 
         return buildTokenResponse(uuid);
     }
