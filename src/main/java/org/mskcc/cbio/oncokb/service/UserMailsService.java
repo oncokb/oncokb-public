@@ -97,12 +97,6 @@ public class UserMailsService {
             .collect(Collectors.toCollection(LinkedList::new));
     }
 
-    public List<UserMailsDTO> toDtos(List<org.mskcc.cbio.oncokb.domain.UserMails> userMailsList) {
-        return userMailsList.stream()
-            .map(userMailsMapper::toDto)
-            .collect(Collectors.toList());
-    }
-
     /**
      * Get one userMails by id.
      *
