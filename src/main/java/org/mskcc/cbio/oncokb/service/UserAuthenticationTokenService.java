@@ -26,7 +26,6 @@ import java.util.stream.Collectors;
 @Service
 @Transactional
 public class UserAuthenticationTokenService {
-
     private final TokenProvider tokenProvider;
     private final TokenService tokenService;
     private final UserDetailsService userDetailsService;
@@ -70,6 +69,26 @@ public class UserAuthenticationTokenService {
         validateTrialLicenseAgreement(userDetails);
 
         return uuid;
+    }
+
+    public UUID authorizeCurrentUserViaOAuth() {
+        List<Token> tokenList = tokenService.findByUserIsCurrentUser();
+        if (tokenList.isEmpty()) {
+            return tokenProvider.createTokenForCurrentUserLogin(Optional.empty(), Optional.empty()).getToken();
+        }
+
+        List<Token> validTokens = tokenList.stream()
+            .filter(token -> token.getExpiration().isAfter(Instant.now()))
+            .collect(Collectors.toList());
+        if (!validTokens.isEmpty()) {
+            return validTokens.iterator().next().getToken();
+        }
+
+        // In the future, if we allow OAuth for other users, then
+        // we need to think about whether we want to allow refreshing expired tokens automatically
+        // and the behavior of the trial and grace periods.
+
+        return refreshExpiredTokens(tokenList);
     }
 
     private boolean canRefreshExpiredTokenForCurrentGracePeriodUser(Optional<UserDetailsDTO> userDetails) {
