@@ -375,6 +375,8 @@ export type UserDTO = {
 
         'resetKey': string
 
+        'userMails'?: Array < UserMailsDTO >
+
 };
 export type UserDetailsDTO = {
     'accountRequestStatus': "UNKNOWN" | "PENDING" | "PENDING_NO_GRACE_PERIOD" | "APPROVED" | "REJECTED"

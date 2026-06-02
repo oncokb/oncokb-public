@@ -29,4 +29,6 @@ public interface UserMailsRepository extends JpaRepository<UserMails, Long> {
     List<UserMails> findUserMailByUserAndMailTypeIn(User user, List<MailType> mailTypes);
 
     void deleteAllByUser(User user);
+
+    List<UserMails> findAllByUserIn(List<User> users);
 }
