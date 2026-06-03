@@ -13,6 +13,7 @@ import org.springframework.security.oauth2.client.web.OAuth2AuthorizationRequest
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
 import org.springframework.security.config.http.SessionCreationPolicy;
+import org.springframework.security.web.util.matcher.AntPathRequestMatcher;
 import org.springframework.security.web.csrf.CookieCsrfTokenRepository;
 import org.zalando.problem.spring.web.advice.security.SecurityProblemSupport;
 
@@ -61,7 +62,11 @@ public class SecurityConfigurationOAuth extends WebSecurityConfigurerAdapter {
 
         http
             .logout(logout -> logout
-                .logoutUrl("/oauth2/logout")
+                // by default, Spring Security uses POST for logout, but we want to support GET for easier integration with Keycloak's logout flow
+                // CSRF protected logout is less of a security risk since the logout endpoint does not perform any state-changing operations and does not require authentication (it will simply invalidate the session if it exists)
+                // Note for future: If we need to support persisted sessions in the future, we need to consider having a shared persisted session storage using Redis. If a pod is restarted,
+                // the session will not be lost if we have session stored elsewhere.
+                .logoutRequestMatcher(new AntPathRequestMatcher("/oauth2/logout", "GET"))
                 .invalidateHttpSession(true)
                 .clearAuthentication(true)
                 .deleteCookies("JSESSIONID")
