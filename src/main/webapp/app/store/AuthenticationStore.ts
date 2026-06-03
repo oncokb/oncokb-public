@@ -20,6 +20,7 @@ import { notifyError } from 'app/shared/utils/NotificationUtils';
 import { OncoKBError } from 'app/shared/alert/ErrorAlertUtils';
 import { daysDiff } from 'app/shared/utils/Utils';
 import { getClientInstanceURL } from 'app/shared/utils/DevUtils';
+import { getXsrfToken, XSRF_TOKEN_HEADER } from 'app/shared/utils/CsrfUtils';
 
 export const ACTION_TYPES = {
   LOGIN: 'authentication/LOGIN',
@@ -249,6 +250,7 @@ class AuthenticationStore {
     this.loading = true;
     request
       .post(getClientInstanceURL('oauth2/oncokb-token'))
+      .set(XSRF_TOKEN_HEADER, getXsrfToken() || '')
       .then(response => this.loginSuccessCallback(response.body))
       .catch(this.loginErrorCallback);
   }

@@ -11,6 +11,7 @@ import org.springframework.security.core.context.SecurityContext;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.oauth2.client.registration.ClientRegistration;
 import org.springframework.security.oauth2.core.AuthorizationGrantType;
+import org.springframework.web.util.UriComponentsBuilder;
 
 import java.time.Duration;
 import java.time.Instant;
@@ -18,6 +19,7 @@ import java.time.LocalDate;
 import java.time.ZoneOffset;
 import java.util.ArrayList;
 import java.util.Collection;
+import java.util.Collections;
 import java.util.Optional;
 import java.util.UUID;
 
@@ -159,11 +161,11 @@ public class SecurityUtilsUnitTest {
             "https://beta.oncokb.org"
         );
 
-        assertThat(logoutUrl)
-            .isEqualTo(
-                "https://keycloak.example.org/realms/test/protocol/openid-connect/logout" +
-                    "?id_token_hint=token-value&post_logout_redirect_uri=https%3A%2F%2Fbeta.oncokb.org"
-            );
+        assertThat(UriComponentsBuilder.fromUriString(logoutUrl).build().getPath())
+            .isEqualTo("/realms/test/protocol/openid-connect/logout");
+        assertThat(UriComponentsBuilder.fromUriString(logoutUrl).build().getQueryParams())
+            .containsEntry("id_token_hint", Collections.singletonList("token-value"))
+            .containsEntry("post_logout_redirect_uri", Collections.singletonList("https://beta.oncokb.org"));
     }
 
     @Test

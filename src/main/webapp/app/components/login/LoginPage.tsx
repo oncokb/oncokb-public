@@ -39,6 +39,10 @@ import { TrialActivationPageLink } from 'app/shared/utils/UrlUtils';
 import { AppConfig } from 'app/appConfig';
 import ReCAPTCHA from 'app/shared/recaptcha/recaptcha';
 import { setRecaptchaToken } from 'app/indexUtils';
+import { COLOR_BLUE } from 'app/config/theme';
+
+const MSK_SSO_AUTHORIZATION_URL = `/oauth2/authorization/oidc?${KEYCLOAK_IDP_HINT_QUERY_PARAM}=${MSK_PING_IDP_ALIAS}`;
+
 export interface ILoginProps {
   authenticationStore: AuthenticationStore;
   routing: RouterStore;
@@ -93,7 +97,6 @@ export default class LoginPage extends React.Component<ILoginProps> {
     }
   }
 
-  @computed
   get normalizedEmail() {
     return this.email.trim().toLowerCase();
   }
@@ -103,24 +106,16 @@ export default class LoginPage extends React.Component<ILoginProps> {
     return /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(this.normalizedEmail);
   }
 
-  @computed
   get hasEnteredPassword() {
     return this.password.trim().length > 0;
   }
 
-  @computed
   get canSignIn() {
     return this.hasValidEmail && this.hasEnteredPassword;
   }
 
-  @computed
   get isMskEmail() {
     return this.normalizedEmail.endsWith('@mskcc.org');
-  }
-
-  @computed
-  get mskSsoAuthorizationUrl() {
-    return `/oauth2/authorization/oidc?${KEYCLOAK_IDP_HINT_QUERY_PARAM}=${MSK_PING_IDP_ALIAS}`;
   }
 
   @computed
@@ -196,7 +191,7 @@ export default class LoginPage extends React.Component<ILoginProps> {
     const normalizedEmail = (email || this.email).trim().toLowerCase();
     this.email = normalizedEmail;
     if (normalizedEmail.endsWith('@mskcc.org')) {
-      window.location.href = this.mskSsoAuthorizationUrl;
+      window.location.href = MSK_SSO_AUTHORIZATION_URL;
       return;
     }
     this.savedCredential = {
@@ -261,6 +256,7 @@ export default class LoginPage extends React.Component<ILoginProps> {
           <LoadingIndicator
             isLoading
             size={LoaderSize.LARGE}
+            color={COLOR_BLUE}
             className="mb-4"
           />
           <h2 className="mb-3">Signing you in</h2>
