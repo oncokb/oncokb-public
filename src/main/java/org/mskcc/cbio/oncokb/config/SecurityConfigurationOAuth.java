@@ -13,6 +13,7 @@ import org.springframework.security.oauth2.client.web.OAuth2AuthorizationRequest
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
 import org.springframework.security.config.http.SessionCreationPolicy;
+import org.springframework.security.web.csrf.CookieCsrfTokenRepository;
 import org.zalando.problem.spring.web.advice.security.SecurityProblemSupport;
 
 @Configuration
@@ -44,8 +45,11 @@ public class SecurityConfigurationOAuth extends WebSecurityConfigurerAdapter {
         http
             .requestMatchers(matchers -> matchers
                 .mvcMatchers("/oauth2/**", "/login/oauth2/**"))
+            // OAuth login uses a temporary session before the frontend exchanges it for a legacy API token.
+            // Keep CSRF enabled so cross-site pages cannot trigger that session-authenticated token exchange.
             .csrf(csrf -> csrf
-                .disable())
+                .csrfTokenRepository(CookieCsrfTokenRepository.withHttpOnlyFalse())
+                .ignoringAntMatchers("/oauth2/logout"))
             .exceptionHandling(handling -> handling
                 .authenticationEntryPoint(problemSupport)
                 .accessDeniedHandler(problemSupport))
