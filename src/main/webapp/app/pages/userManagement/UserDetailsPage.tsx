@@ -502,7 +502,7 @@ export default class UserDetailsPage extends React.Component<{
 
         return (
           <div className="d-flex flex-wrap">
-            {tags.map((tag: any) => (
+            {tags.map(tag => (
               <span key={tag} className="badge badge-info mr-1 mb-1">
                 {tag}
               </span>
