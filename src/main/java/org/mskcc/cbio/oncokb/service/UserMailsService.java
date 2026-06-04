@@ -1,5 +1,6 @@
 package org.mskcc.cbio.oncokb.service;
 
+import org.mskcc.cbio.oncokb.config.cache.CacheNameResolver;
 import org.mskcc.cbio.oncokb.domain.User;
 import org.mskcc.cbio.oncokb.domain.UserMails;
 import org.mskcc.cbio.oncokb.domain.enumeration.MailType;
@@ -9,14 +10,18 @@ import org.mskcc.cbio.oncokb.service.mapper.UserMailsMapper;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import org.springframework.cache.CacheManager;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.Objects;
 import java.time.Instant;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
+
+import static org.mskcc.cbio.oncokb.config.cache.UserCacheResolver.ALL_USERS_CACHE;
 
 /**
  * Service Implementation for managing {@link UserMails}.
@@ -31,9 +36,20 @@ public class UserMailsService {
 
     private final UserMailsMapper userMailsMapper;
 
-    public UserMailsService(UserMailsRepository userMailsRepository, UserMailsMapper userMailsMapper) {
+    private final CacheManager cacheManager;
+
+    private final CacheNameResolver cacheNameResolver;
+
+    public UserMailsService(
+        UserMailsRepository userMailsRepository,
+        UserMailsMapper userMailsMapper,
+        CacheManager cacheManager,
+        CacheNameResolver cacheNameResolver
+    ) {
         this.userMailsRepository = userMailsRepository;
         this.userMailsMapper = userMailsMapper;
+        this.cacheManager = cacheManager;
+        this.cacheNameResolver = cacheNameResolver;
     }
 
     /**
@@ -46,6 +62,7 @@ public class UserMailsService {
         log.debug("Request to save UserMails : {}", userMailsDTO);
         UserMails userMails = userMailsMapper.toEntity(userMailsDTO);
         userMails = userMailsRepository.save(userMails);
+        clearManagedUsersCache();
         return userMailsMapper.toDto(userMails);
     }
 
@@ -118,6 +135,7 @@ public class UserMailsService {
     public void delete(Long id) {
         log.debug("Request to delete UserMails : {}", id);
         userMailsRepository.deleteById(id);
+        clearManagedUsersCache();
     }
 
     /**
@@ -128,5 +146,12 @@ public class UserMailsService {
     public void deleteAllByUser(User user) {
         log.debug("Request to delete all UserMails related to user: {}", user);
         userMailsRepository.deleteAllByUser(user);
+        clearManagedUsersCache();
+    }
+
+    private void clearManagedUsersCache() {
+        Objects.requireNonNull(
+            cacheManager.getCache(this.cacheNameResolver.getCacheName(ALL_USERS_CACHE))
+        ).evict("getAllManagedUsers");
     }
 }
