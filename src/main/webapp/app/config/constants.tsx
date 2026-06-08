@@ -2,8 +2,9 @@ import { Gene, OncoKBInfo } from 'app/shared/api/generated/OncoKbAPI';
 import {
   Alteration,
   GeneNumber,
+  GermlineVariantAnnotation,
   MainNumber,
-  VariantAnnotation,
+  SomaticVariantAnnotation,
 } from 'app/shared/api/generated/OncoKbPrivateAPI';
 import React from 'react';
 import { Link } from 'react-router-dom';
@@ -73,6 +74,8 @@ export const SOP_LINK = 'https://sop.oncokb.org';
 export const FAQ_LINK = 'https://faq.oncokb.org';
 export const FAQ_URL_PATTERNS_LINK = `${FAQ_LINK}/technical#what-are-the-url-patterns-of-oncokb-website`;
 export const API_DOCUMENT_LINK = 'https://api.oncokb.org/oncokb-website/api';
+export const PREMIUM_API_DOCUMENT_LINK =
+  'https://oncokb.gitbook.io/oncokb-premium-api/api';
 export const DEMO_WEBSITE_LINK = 'https://demo.oncokb.org';
 export const DEMO_API_DOCUMENT_LINK =
   'https://demo.oncokb.org/api/v1/swagger-ui.html';
@@ -425,6 +428,18 @@ export const DEFAULT_ONCOKB_INFO: OncoKBInfo = {
   },
   publicInstance: false,
   oncoTreeVersion: '',
+  genomeNexus: {
+    grch37: {
+      genomeNexusVepVersion: '',
+      genomeNexusVersion: '',
+      vepVersion: '',
+    },
+    grch38: {
+      genomeNexusVepVersion: '',
+      genomeNexusVersion: '',
+      vepVersion: '',
+    },
+  },
 };
 
 export const DEFAULT_MAIN_NUMBERS: MainNumber = {
@@ -456,7 +471,6 @@ export const DEFAULT_GENE_NUMBER: GeneNumber = {
   highestPrognosticImplicationLevel: '',
   highestFdaLevel: '',
   penetrance: '',
-  inheritanceMechanism: '',
   tumorType: 0,
 };
 
@@ -468,7 +482,7 @@ export const DEFAULT_MUTATION_EFFECT = {
 
   description: '',
 
-  knownEffect: '',
+  knownEffect: 'Unknown',
 };
 
 export const DEFAULT_GERMLINE_VARIANT = {
@@ -489,6 +503,7 @@ export const DEFAULT_QUERY = {
   consequence: '',
   entrezGeneId: -1,
   hgvs: '',
+  hgvsInfo: '',
   hugoSymbol: '',
   id: '',
   proteinEnd: -1,
@@ -499,6 +514,7 @@ export const DEFAULT_QUERY = {
   type: '',
   germline: false,
   alleleState: '',
+  canonicalTranscript: '',
 };
 
 const DEFAULT_ALTERATION: Alteration = {
@@ -528,7 +544,7 @@ const DEFAULT_ALTERATION: Alteration = {
   variantResidues: '',
 };
 
-export const DEFAULT_ANNOTATION: VariantAnnotation = {
+export const DEFAULT_ANNOTATION: SomaticVariantAnnotation = {
   alleleExist: false,
   alteration: DEFAULT_ALTERATION,
   background: '',
@@ -546,6 +562,7 @@ export const DEFAULT_ANNOTATION: VariantAnnotation = {
   lastUpdate: '',
   mutationEffect: DEFAULT_MUTATION_EFFECT,
   oncogenic: '',
+  exon: '',
   otherSignificantResistanceLevels: [],
   otherSignificantSensitiveLevels: [],
   prognosticImplications: [],
@@ -565,6 +582,38 @@ export const DEFAULT_ANNOTATION: VariantAnnotation = {
   alternativeOncoKbVariant: null,
 };
 
+export const DEFAULT_GERMLINE_ANNOTATION: GermlineVariantAnnotation = {
+  alleleExist: false,
+  clinVarId: '',
+  dataVersion: '',
+  diagnosticImplications: [],
+  diagnosticSummary: '',
+  exon: '',
+  geneExist: false,
+  geneSummary: '',
+  genomicIndicators: [],
+  highestDiagnosticImplicationLevel: 'NO',
+  highestFdaLevel: 'NO',
+  highestPrognosticImplicationLevel: 'NO',
+  highestResistanceLevel: 'NO',
+  highestSensitiveLevel: 'NO',
+  lastUpdate: '',
+  mutationEffect: DEFAULT_MUTATION_EFFECT,
+  otherSignificantResistanceLevels: [],
+  otherSignificantSensitiveLevels: [],
+  pathogenic: '',
+  penetrance: '',
+  prognosticImplications: [],
+  prognosticSummary: '',
+  query: DEFAULT_QUERY,
+  treatments: [],
+  tumorTypeSummary: '',
+  tumorTypes: [],
+  variantExist: false,
+  variantSummary: '',
+  vus: false,
+};
+
 export enum PAGE_TITLE {
   ABOUT = 'About OncoKB™',
   ACCOUNT = 'Account',
@@ -580,8 +629,11 @@ export enum PAGE_TITLE {
   ADMIN_ADD_USER_BANNER_MESSAGE = 'Add New User Banner Messages',
   ADMIN_COMPANY_DETAILS = 'Companies',
   API_ACCESS = 'API Access',
+  API_DOCUMENTATION = 'API Documentation',
+  PREMIUM_API_DOCUMENTATION = 'Premium API Docs',
   CANCER_GENES = 'OncoKB™ Cancer Gene List',
   CDX = 'FDA Cleared or Approved Companion Diagnostic Devices',
+  DATA_DOWNLOAD = 'Data Download',
   FAQ = 'Frequently Asked Question',
   FDA_RECOGNITION = 'OncoKB™ is now an FDA-recognized Public Human Genetic Variant Database*',
   HOME = "OncoKB™ - MSK's Precision Oncology Knowledge Base",
@@ -626,7 +678,10 @@ export enum PAGE_ROUTE {
   LOGOUT = '/logout',
   LEGACY_DATA_ACCESS = '/dataAccess',
   LEGACY_API_ACCESS = '/apiAccess',
-  API_ACCESS = '/api-access',
+  LEGACY_API_ACCESS_HYPHEN = '/api-access',
+  API_DOCS = '/api-docs',
+  PREMIUM_API_DOCS = '/premium-api-docs',
+  DATA_DOWNLOAD = '/data-download',
   FAQ_ACCESS = '/faq',
   LEGACY_CANCER_GENES = '/cancerGenes',
   CANCER_GENES = '/cancer-genes',
@@ -719,6 +774,7 @@ export enum TABLE_COLUMN_KEY {
 }
 
 export const ONCOGENIC_MUTATIONS = 'Oncogenic Mutations';
+export const PATHOGENIC_VARIANTS = 'Pathogenic Variants';
 export const AMPLIFICATION = 'Amplification';
 export const DELETION = 'Deletion';
 export const FUSIONS = 'Fusions';
@@ -729,6 +785,7 @@ export const LOSS_OF_FUNCTION_MUTATIONS = 'Loss-of-function Mutations';
 export const SWITCH_OF_FUNCTION_MUTATIONS = 'Switch-of-function Mutations';
 
 export const CATEGORICAL_ALTERATIONS = [
+  PATHOGENIC_VARIANTS,
   ONCOGENIC_MUTATIONS,
   FUSIONS,
   TRUNCATING_MUTATIONS,
@@ -849,7 +906,7 @@ export enum API_CALL_STATUS {
   FAILURE,
 }
 
-export enum TERM_DEFINITION {
+export enum ACADEMIC_TERM_DEFINITION {
   IS_ACADEMIC_GROUP = 'IS_ACADEMIC_GROUP',
   ONLY_ACADEMIC_USAGE = 'ONLY_ACADEMIC_USAGE',
   NO_COMPANY_USAGE = 'NO_COMPANY_USAGE',
@@ -881,24 +938,61 @@ export const FdaRecognitionDisclaimer: React.FunctionComponent<{
 
 export const ACADEMIC_TERMS = [
   {
-    key: TERM_DEFINITION.IS_ACADEMIC_GROUP,
+    key: ACADEMIC_TERM_DEFINITION.IS_ACADEMIC_GROUP,
     description:
       'I confirm that I am a student or employee at the academic institution specified above.',
   },
   {
-    key: TERM_DEFINITION.ONLY_ACADEMIC_USAGE,
+    key: ACADEMIC_TERM_DEFINITION.ONLY_ACADEMIC_USAGE,
     description: `I agree that my use of ${ONCOKB_TM} is solely for research or educational purposes.`,
   },
   {
-    key: TERM_DEFINITION.NOT_USED_IN_AI_MODELS,
+    key: ACADEMIC_TERM_DEFINITION.NOT_USED_IN_AI_MODELS,
     description: `I confirm that I will NOT use ${ONCOKB_TM} data for the purpose of creating and training AI models.`,
   },
   {
-    key: TERM_DEFINITION.NO_COMPANY_USAGE,
+    key: ACADEMIC_TERM_DEFINITION.NO_COMPANY_USAGE,
     description: `I confirm that I will NOT use ${ONCOKB_TM} data for use in medical reports or in an electronic health care system.`,
   },
   {
-    key: TERM_DEFINITION.OK_WITH_TERMS_OF_USE,
+    key: ACADEMIC_TERM_DEFINITION.OK_WITH_TERMS_OF_USE,
+    description: (
+      <span>
+        I have read and agree with the {ONCOKB_TM}{' '}
+        <Link to={PAGE_ROUTE.TERMS}>Terms of Use</Link>.
+      </span>
+    ),
+  },
+];
+
+export enum CLINICAL_TERM_DEFINITION {
+  NOT_USED_IN_AI_MODELS = 'NOT_USED_IN_AI_MODELS',
+  MAY_NOT_REDISTRIBUTE = 'MAY_NOT_REDISTRIBUTE',
+  LIMITED_CLINICAL_ACCESS = 'LIMITED_CLINICAL_ACCESS',
+  API_ACCESS_ACKNOWLEDGEMENT = 'API_ACCESS_ACKNOWLEDGEMENT',
+  NO_COMMERCIAL_USAGE = 'NO_COMMERCIAL_USAGE',
+  OK_WITH_TERMS_OF_USE = 'OK_WITH_TERMS_OF_USE',
+}
+
+export const CLINICAL_TERMS = [
+  {
+    key: CLINICAL_TERM_DEFINITION.NOT_USED_IN_AI_MODELS,
+    description: `I confirm that I will not use ${ONCOKB_TM} data to train or develop AI models.`,
+  },
+  {
+    key: CLINICAL_TERM_DEFINITION.MAY_NOT_REDISTRIBUTE,
+    description: `I understand that I may not redistribute or share the content with any others, in part or in whole, for any purpose.`,
+  },
+  {
+    key: CLINICAL_TERM_DEFINITION.LIMITED_CLINICAL_ACCESS,
+    description: `I understand that free clinical access is limited to manual use through the ${ONCOKB_TM} website.`,
+  },
+  {
+    key: CLINICAL_TERM_DEFINITION.API_ACCESS_ACKNOWLEDGEMENT,
+    description: `I understand that API access, automated integrations, and incorporation of OncoKB content into clinical reporting systems or workflows require a paid license.`,
+  },
+  {
+    key: CLINICAL_TERM_DEFINITION.OK_WITH_TERMS_OF_USE,
     description: (
       <span>
         I have read and agree with the {ONCOKB_TM}{' '}
@@ -914,6 +1008,8 @@ export type DataRelease = {
 };
 
 export const DATA_RELEASES: DataRelease[] = [
+  { date: '05292026', version: 'v7.2' },
+  { date: '04302026', version: 'v7.1' },
   { date: '03302026', version: 'v7.0' },
   { date: '02272026', version: 'v6.2' },
   { date: '01292026', version: 'v6.1' },

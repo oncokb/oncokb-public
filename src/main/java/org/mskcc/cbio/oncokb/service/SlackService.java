@@ -23,8 +23,6 @@ import com.slack.api.util.json.GsonFactory;
 import com.slack.api.webhook.Payload;
 import com.slack.api.webhook.WebhookResponse;
 
-import io.sentry.SentryLevel;
-
 import org.apache.commons.lang3.StringUtils;
 import org.mskcc.cbio.oncokb.config.application.ApplicationProperties;
 import org.mskcc.cbio.oncokb.domain.Company;
@@ -84,36 +82,65 @@ public class SlackService {
     private final UserMailsService userMailsService;
     private final UserMapper userMapper;
     private final Slack slack;
-    private final SentryService sentryService;
 
     public SlackService(ApplicationProperties applicationProperties,
             MailService mailService,
             @Lazy UserService userService,
             UserMailsService userMailsService,
             UserMapper userMapper,
-            Slack slack,
-            SentryService sentryService) {
+            Slack slack) {
         this.applicationProperties = applicationProperties;
         this.mailService = mailService;
         this.userService = userService;
         this.userMailsService = userMailsService;
         this.userMapper = userMapper;
         this.slack = slack;
-        this.sentryService = sentryService;
     }
 
     @Async
     public void sendUserRegistrationToChannel(UserDTO user, boolean trialAccountActivated, Company company) {
+        log.info(
+            "Preparing user registration Slack notification for userId={}, email={}, trialAccountActivated={}, matchedCompany={}",
+            user.getId(),
+            user.getEmail(),
+            trialAccountActivated,
+            company == null ? "none" : company.getName()
+        );
         boolean withNote = withNote(DropdownEmailOption.CLARIFY_ACADEMIC_NON_INSTITUTE_EMAIL, user, null);
         if (withNote) {
+            log.info(
+                "Academic clarification note detected for userId={}, email={}; sending clarification email before Slack notification",
+                user.getId(),
+                user.getEmail()
+            );
             mailService.sendAcademicClarificationEmail(user);
+            log.info(
+                "Academic clarification email sent for userId={}, email={}",
+                user.getId(),
+                user.getEmail()
+            );
         }
 
-        log.debug("Sending notification to admin group that a user has registered a new account");
+        log.info("Sending notification to admin group that a user has registered a new account");
         if (StringUtils.isEmpty(this.applicationProperties.getSlack().getUserRegistrationWebhook())) {
-            log.warn("Failed to send user registration notification to slack - webhook is not configured");
+            log.error(
+                "Failed to send user registration notification to slack for userId={}, email={} - webhook is not configured",
+                user.getId(),
+                user.getEmail()
+            );
         } else {
+            log.info(
+                "Building Slack registration blocks for userId={}, email={}",
+                user.getId(),
+                user.getEmail()
+            );
             List<LayoutBlock> layoutBlocks = this.buildBlocks(user, trialAccountActivated, null, company);
+            log.info(
+                "Built {} Slack registration blocks for userId={}, email={}; sending to configured webhook",
+                layoutBlocks.size(),
+                user.getId(),
+                user.getEmail()
+            );
             this.sendBlocks(this.applicationProperties.getSlack().getUserRegistrationWebhook(), layoutBlocks);
         }
     }
@@ -281,16 +308,25 @@ public class SlackService {
             .build();
 
         try {
+            log.info(
+                "Sending Slack payload to webhook={}, blockCount={}",
+                url,
+                layoutBlocks == null ? 0 : layoutBlocks.size()
+            );
             WebhookResponse response = slack.send(url, payload);
-            log.info("Send the latest user blocks to slack with response code " + response.getCode());
+            log.info("Slack webhook responded with statusCode={}, body={}", response.getCode(), response.getBody());
             if (!Integer.valueOf(200).equals(response.getCode())) {
-                log.error("Getting a response code other than 200, {}", response);
                 String payloadStr = GsonFactory.createSnakeCase().toJson(payload);
-                String sentryMessage = String.format("Non-200 response from slack %s. Sent to \"%s\"\n\n%s", response.getCode(), url, payloadStr);
-                this.sentryService.throwMessage(SentryLevel.ERROR, sentryMessage, null);
+                // Use the Block Kit Builder to verify the formatting of the message: https://app.slack.com/block-kit-builder
+                log.error(
+                    "Non-200 response from slack statusCode={} webhook={}. Payload={}",
+                    response.getCode(),
+                    url,
+                    payloadStr
+                );
             }
         } catch (Exception e) {
-            log.error("Failed to send message to slack {}", e.toString());
+            log.error("Failed to send message to slack webhook={}", url, e);
         }
     }
 
@@ -645,6 +681,7 @@ public class SlackService {
                     sb.append(", *REJECTED*");
                 }
             }
+            truncateStringIfSlackLimitExceeded(sb);
             layoutBlocks.add(buildMarkdownBlock(sb.toString(), DUPLICATE_USER_INFO));
         }
         return layoutBlocks;

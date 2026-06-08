@@ -1,7 +1,7 @@
 import React from 'react';
 import { observer } from 'mobx-react';
 import { RouteComponentProps } from 'react-router';
-import { Row, Col, Button, Alert, Tab, Tabs, Form } from 'react-bootstrap';
+import { Row, Col, Button, Alert, Tab, Tabs } from 'react-bootstrap';
 import { getSectionClassName } from './account/AccountUtils';
 import { action, observable } from 'mobx';
 import { CompanyDTO, ManagedUserVM } from 'app/shared/api/generated/API';
@@ -20,6 +20,7 @@ import { Link } from 'react-router-dom';
 import { getErrorMessage } from 'app/shared/alert/ErrorAlertUtils';
 import { COLOR_LIGHT_GREY } from 'app/config/theme';
 import { partition } from 'app/shared/utils/LodashUtils';
+import { AUTHORITIES } from 'app/config/constants';
 
 interface MatchParams {
   id: string;
@@ -127,6 +128,7 @@ export class CreateCompanyUsersPage extends React.Component<
           this.company.result?.licenseStatus !== LicenseStatus.TRIAL,
         company: this.company.result,
         companyName: this.company.result?.name,
+        authorities: [AUTHORITIES.USER, AUTHORITIES.API],
         notifyUserOnTrialCreation:
           this.company.result?.licenseStatus === LicenseStatus.TRIAL,
       } as ManagedUserVM;

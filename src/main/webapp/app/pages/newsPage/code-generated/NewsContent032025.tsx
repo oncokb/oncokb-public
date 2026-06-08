@@ -7,17 +7,18 @@ import {
 } from 'app/shared/utils/UrlUtils';
 import { NewlyAddedGenesListItem } from 'app/pages/newsPage/NewlyAddedGenesListItem';
 import { TableOfContents } from 'app/pages/privacyNotice/TableOfContents';
+import { convertGeneInputToLinks } from 'app/pages/newsPage/Util';
 
 export default function NewsContent032025() {
   return (
     <>
-      <ul>
-        <li>
+      <ul style={{ marginBottom: 0 }}>
+        <li style={{ marginBottom: 0 }}>
           Updated Therapeutic Implications - New alteration(s) with a tumor
           type-specific level of evidence
         </li>
       </ul>
-      <div className="table-responsive">
+      <div className="table-responsive" style={{ marginBottom: '1.5rem' }}>
         <table className="table">
           <thead>
             <tr>
@@ -32,11 +33,12 @@ export default function NewsContent032025() {
           <tbody>
             <tr>
               <td>4</td>
-              <td>{getAlternativeGenePageLinks('ERBB2')}</td>
+              <td>{getAlternativeGenePageLinks('ERBB2', false)}</td>
               <td>
                 <AlterationPageLink
                   hugoSymbol="ERBB2"
                   alteration="Oncogenic Mutations"
+                  germline={false}
                 >
                   Oncogenic Mutations
                 </AlterationPageLink>
@@ -58,13 +60,13 @@ export default function NewsContent032025() {
         </table>
       </div>
       <h4></h4>
-      <ul>
-        <li>
+      <ul style={{ marginBottom: 0 }}>
+        <li style={{ marginBottom: 0 }}>
           Updated Therapeutic Implications - Promotion of tumor type-specific
           level of evidence for an alteration
         </li>
       </ul>
-      <div className="table-responsive">
+      <div className="table-responsive" style={{ marginBottom: '1.5rem' }}>
         <table className="table">
           <thead>
             <tr>
@@ -79,11 +81,12 @@ export default function NewsContent032025() {
           </thead>
           <tbody>
             <tr>
-              <td>{getAlternativeGenePageLinks('ERBB2')}</td>
+              <td>{getAlternativeGenePageLinks('ERBB2', false)}</td>
               <td>
                 <AlterationPageLink
                   hugoSymbol="ERBB2"
                   alteration="Oncogenic Mutations"
+                  germline={false}
                 >
                   Oncogenic Mutations
                 </AlterationPageLink>
@@ -109,14 +112,14 @@ export default function NewsContent032025() {
           </tbody>
         </table>
       </div>
-      <ul>
-        <li>
+      <ul style={{ marginBottom: 0 }}>
+        <li style={{ marginBottom: 0 }}>
           Updated Therapeutic Implications - Addition of drug(s) associated with
           a tumor type-specific leveled alteration(s) currently in OncoKB™
           (without changing the alteration's highest level of evidence)
         </li>
       </ul>
-      <div className="table-responsive">
+      <div className="table-responsive" style={{ marginBottom: '1.5rem' }}>
         <table className="table">
           <thead>
             <tr>
@@ -132,11 +135,12 @@ export default function NewsContent032025() {
           <tbody>
             <tr>
               <td>1</td>
-              <td>{getAlternativeGenePageLinks('NF1')}</td>
+              <td>{getAlternativeGenePageLinks('NF1', false)}</td>
               <td>
                 <AlterationPageLink
                   hugoSymbol="NF1"
                   alteration="Oncogenic Mutations"
+                  germline={false}
                 >
                   Oncogenic Mutations
                 </AlterationPageLink>

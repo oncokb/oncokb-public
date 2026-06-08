@@ -65,6 +65,7 @@ export interface IEvidenceTableTabProps {
   appStore?: AppStore; // it will be injected directly
   windowStore?: WindowStore; // it will be injected directly
   authenticationStore?: AuthenticationStore; // it will be injected directly
+  hideFda?: boolean;
 }
 
 @inject('windowStore', 'appStore', 'authenticationStore')
@@ -149,7 +150,7 @@ export default class AlterationTableTabs extends React.Component<
       this.props.tx.length > 0,
       this.props.dx.length > 0,
       this.props.px.length > 0,
-      this.props.fda.length > 0,
+      !this.props.hideFda && this.props.fda.length > 0,
       this.defaultSelectedTab
     );
   }
@@ -211,7 +212,7 @@ export default class AlterationTableTabs extends React.Component<
         title: `${ANNOTATION_PAGE_TAB_NAMES[ANNOTATION_PAGE_TAB_KEYS.PX]}`,
       });
     }
-    if (this.props.fda.length > 0) {
+    if (!this.props.hideFda && this.props.fda.length > 0) {
       tabs.push({
         key: ANNOTATION_PAGE_TAB_KEYS.FDA,
         title: `${ANNOTATION_PAGE_TAB_NAMES[ANNOTATION_PAGE_TAB_KEYS.FDA]}`,
@@ -557,7 +558,9 @@ export default class AlterationTableTabs extends React.Component<
     return (
       <Tabs
         selectedTabKey={
-          this.selectedTab ? this.selectedTab : this.tabDefaultActiveKey
+          this.tabs.some(tab => tab.key === this.selectedTab)
+            ? this.selectedTab
+            : this.tabDefaultActiveKey
         }
         onChange={this.onChangeTab}
         items={this.tabs}

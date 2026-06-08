@@ -1,0 +1,70 @@
+[
+    {
+        "id": 40863,
+        "uuid": null,
+        "evidenceType": "GENOMIC_INDICATOR",
+        "cancerTypes": [],
+        "excludedCancerTypes": [],
+        "relevantCancerTypes": [],
+        "gene": {
+            "entrezGeneId": 7157,
+            "hugoSymbol": "TP53",
+            "geneType": "TSG",
+            "grch37Isoform": "ENST00000269305",
+            "grch37RefSeq": "NM_000546.5",
+            "grch38Isoform": "ENST00000269305",
+            "grch38RefSeq": "NM_000546.5",
+            "geneAliases": [
+                "LFS1",
+                "p53"
+            ],
+            "genesets": []
+        },
+        "alterations": [
+            {
+                "gene": {
+                    "entrezGeneId": 7157,
+                    "hugoSymbol": "TP53",
+                    "geneType": "TSG",
+                    "grch37Isoform": "ENST00000269305",
+                    "grch37RefSeq": "NM_000546.5",
+                    "grch38Isoform": "ENST00000269305",
+                    "grch38RefSeq": "NM_000546.5",
+                    "geneAliases": [
+                        "LFS1",
+                        "p53"
+                    ],
+                    "genesets": []
+                },
+                "consequence": {
+                    "term": "NA",
+                    "isGenerallyTruncating": false,
+                    "description": "NA"
+                },
+                "alteration": "Pathogenic Variants",
+                "proteinChange": null,
+                "name": "Pathogenic Variants",
+                "refResidues": null,
+                "proteinStart": -1,
+                "proteinEnd": 100000,
+                "variantResidues": null,
+                "referenceGenomes": [
+                    "GRCh38",
+                    "GRCh37"
+                ]
+            }
+        ],
+        "name": "Li-Fraumeni syndrome",
+        "description": "A single variant in TP53 causes Li-Fraumeni syndrome, a condition that is associated with various cancer risks in both childhood and adulthood.",
+        "additionalInfo": null,
+        "treatments": [],
+        "knownEffect": "Autosomal Dominant",
+        "lastEdit": 1718150640000,
+        "lastReview": null,
+        "levelOfEvidence": null,
+        "fdaLevel": null,
+        "solidPropagationLevel": null,
+        "liquidPropagationLevel": null,
+        "articles": []
+    }
+]

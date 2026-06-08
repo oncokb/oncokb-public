@@ -1,4 +1,3 @@
-import { GENETIC_TYPE } from 'app/components/geneticTypeTabs/GeneticTypeTabs';
 import LoadingIndicator, {
   LoaderSize,
 } from 'app/components/loadingIndicator/LoadingIndicator';
@@ -12,6 +11,7 @@ import { COLOR_BLUE } from 'app/config/theme';
 import { Gene } from 'app/shared/api/generated/OncoKbAPI';
 import {
   EnsemblGene,
+  SomaticVariantAnnotation,
   Tag,
   VariantAnnotation,
 } from 'app/shared/api/generated/OncoKbPrivateAPI';
@@ -25,7 +25,6 @@ import StickyMiniNavBar, {
 } from 'app/shared/nav/StickyMiniNavBar';
 import GeneAdditionalInfoSection from 'app/shared/sections/GeneAdditionalInfoSection';
 import VariantOverView from 'app/shared/sections/VariantOverview';
-import { upperFirst } from 'app/shared/utils/LodashUtils';
 import { getAlterationPageLink } from 'app/shared/utils/UrlUtils';
 import {
   getFdaImplicationsFromTags,
@@ -38,7 +37,7 @@ import WindowStore from 'app/store/WindowStore';
 import classnames from 'classnames';
 import { inject } from 'mobx-react';
 import { RouterStore } from 'mobx-react-router';
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useMemo, useState } from 'react';
 import { Alert, Col, Container, Row } from 'react-bootstrap';
 import { Helmet } from 'react-helmet-async';
 import { Else, If, Then } from 'react-if';
@@ -88,9 +87,7 @@ const SomaticTagCancerTypePage = inject(
   'authenticationStore'
 )((props: SomaticTagCancerTypePageProps) => {
   const { hugoSymbol, tag: tagName, tumorType } = props.match.params;
-  const documentTitle = `${upperFirst(
-    GENETIC_TYPE.SOMATIC
-  )} ${hugoSymbol} ${tagName}`;
+  const documentTitle = `${hugoSymbol} ${tagName}`;
 
   const [showAdditionalGeneInfo, setShowAdditionalGeneInfo] = useState(false);
   const [pageLoadState, setPageLoadState] = useState<PageLoadState>({
@@ -146,6 +143,30 @@ const SomaticTagCancerTypePage = inject(
     fetchInfo();
   }, [tumorType]);
 
+  const [txSummary, dxSummary, pxSummary] = useMemo(() => {
+    let tumorTypeSummary = '';
+    let diagnosticSummary = '';
+    let prognosticSummary = '';
+
+    if (pageLoadState.state === LoadState.Success) {
+      for (const evi of pageLoadState.data.tag.evidences) {
+        switch (evi.evidenceType) {
+          case 'TUMOR_TYPE_SUMMARY':
+            tumorTypeSummary = evi.description;
+            break;
+          case 'DIAGNOSTIC_SUMMARY':
+            diagnosticSummary = evi.description;
+            break;
+          case 'PROGNOSTIC_SUMMARY':
+            prognosticSummary = evi.description;
+            break;
+          default:
+        }
+      }
+    }
+    return [tumorTypeSummary, diagnosticSummary, prognosticSummary];
+  }, [pageLoadState.state]);
+
   return (
     <div className="view-wrapper">
       <Helmet>
@@ -172,7 +193,7 @@ const SomaticTagCancerTypePage = inject(
             cancerTypeCode,
           } = pageLoadState.data;
 
-          const highestLevelInfo: VariantAnnotation = {
+          const highestLevelInfo: SomaticVariantAnnotation = {
             ...DEFAULT_ANNOTATION,
             highestSensitiveLevel: tag.highestLevels.highestSensitiveLevel,
             highestDiagnosticImplicationLevel:
@@ -312,27 +333,36 @@ const SomaticTagCancerTypePage = inject(
                       matchedAlteration={undefined}
                       tumorType={tumorType}
                       onChangeTumorType={() => {}}
-                      annotation={DEFAULT_ANNOTATION}
+                      annotation={{
+                        ...DEFAULT_ANNOTATION,
+                        tumorTypeSummary: txSummary,
+                        diagnosticSummary: dxSummary,
+                        prognosticSummary: pxSummary,
+                      }}
                       biologicalAlterations={[]}
                       relevantAlterations={undefined}
                       fdaImplication={getFdaImplicationsFromTags(
                         [tag],
-                        hugoSymbol
+                        hugoSymbol,
+                        false
                       )}
                       therapeuticImplications={getImplicationsFromTags(
                         [tag],
                         TREATMENT_EVIDENCE_TYPES,
-                        gene.hugoSymbol
+                        gene.hugoSymbol,
+                        false
                       )}
                       diagnosticImplications={getImplicationsFromTags(
                         [tag],
                         [EVIDENCE_TYPES.DIAGNOSTIC_IMPLICATION],
-                        gene.hugoSymbol
+                        gene.hugoSymbol,
+                        false
                       )}
                       prognosticImplications={getImplicationsFromTags(
                         [tag],
                         [EVIDENCE_TYPES.PROGNOSTIC_IMPLICATION],
-                        gene.hugoSymbol
+                        gene.hugoSymbol,
+                        false
                       )}
                     />
                   </Col>

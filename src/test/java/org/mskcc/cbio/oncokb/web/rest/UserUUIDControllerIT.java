@@ -39,6 +39,17 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 @AutoConfigureMockMvc
 @SpringBootTest(classes = OncokbPublicApp.class)
 public class UserUUIDControllerIT {
+    private static final String LONG_EMAIL_LOCAL_PART = org.apache.commons.lang3.RandomStringUtils.randomAlphabetic(64)
+        .toLowerCase(java.util.Locale.ENGLISH);
+    private static final String LONG_EMAIL_DOMAIN = String.join(
+        ".",
+        org.apache.commons.lang3.RandomStringUtils.randomAlphabetic(30).toLowerCase(java.util.Locale.ENGLISH),
+        org.apache.commons.lang3.RandomStringUtils.randomAlphabetic(30).toLowerCase(java.util.Locale.ENGLISH),
+        org.apache.commons.lang3.RandomStringUtils.randomAlphabetic(30).toLowerCase(java.util.Locale.ENGLISH),
+        org.apache.commons.lang3.RandomStringUtils.randomAlphabetic(30).toLowerCase(java.util.Locale.ENGLISH),
+        "org"
+    );
+    private static final String LONG_EMAIL = LONG_EMAIL_LOCAL_PART + "@" + LONG_EMAIL_DOMAIN;
 
     @Autowired
     private MockMvc restMockMvc;
@@ -153,5 +164,40 @@ public class UserUUIDControllerIT {
 
         assertThat(refreshedToken.getExpiration()).isAfter(Instant.now());
         assertThat(result.getResponse().getContentAsString()).isEqualTo("\"" + refreshedToken.getToken() + "\"");
+    }
+
+    @Test
+    @Transactional
+    public void testLongEmailLoginCanAuthenticate() throws Exception {
+        String rawPassword = "password";
+
+        User user = new User();
+        user.setLogin(LONG_EMAIL);
+        user.setEmail(LONG_EMAIL);
+        user.setFirstName("Long");
+        user.setLastName("Login");
+        user.setLangKey("en");
+        user.setActivated(true);
+        user.setPassword(passwordEncoder.encode(rawPassword));
+        Authority userAuthority = authorityRepository.findById(AuthoritiesConstants.USER)
+            .orElseThrow(() -> new IllegalStateException("Missing ROLE_USER authority"));
+        user.setAuthorities(Collections.singleton(userAuthority));
+        user = userRepository.save(user);
+
+        UserDetails userDetails = new UserDetails();
+        userDetails.setUser(user);
+        userDetails.setAccountRequestStatus(AccountRequestStatus.APPROVED);
+        userDetailsRepository.save(userDetails);
+
+        LoginVM loginVM = new LoginVM();
+        loginVM.setUsername(LONG_EMAIL);
+        loginVM.setPassword(rawPassword);
+        loginVM.setRememberMe(false);
+
+        restMockMvc.perform(post("/api/authenticate")
+                .contentType(MediaType.APPLICATION_JSON)
+                .content(TestUtil.convertObjectToJsonBytes(loginVM)))
+            .andExpect(status().isOk())
+            .andExpect(header().string("Authorization", containsString("Bearer ")));
     }
 }

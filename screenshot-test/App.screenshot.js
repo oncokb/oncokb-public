@@ -38,8 +38,11 @@ const geneList = fs
 const allCuratedGenes = fs
   .readFileSync(`${DATA_DIR}utils-allCuratedGenes.json`)
   .toString();
-const evidenceLevels = fs
-  .readFileSync(`${DATA_DIR}private-utils-evidences-levels.json`)
+const evidenceLevelsSomatic = fs
+  .readFileSync(`${DATA_DIR}private-utils-evidences-levels-somatic.json`)
+  .toString();
+const evidenceLevelsGermline = fs
+  .readFileSync(`${DATA_DIR}private-utils-evidences-levels-germline.json`)
   .toString();
 const tumorTypes = fs
   .readFileSync(`${DATA_DIR}private-utils-tumorTypes.json`)
@@ -63,6 +66,9 @@ const usageUsersOverview = fs
   .toString();
 const usageResourcesOverview = fs
   .readFileSync(`${DATA_DIR}api-usage-summary-resources.json`)
+  .toString();
+const usageRegistrationsOverview = fs
+  .readFileSync(`${DATA_DIR}api-usage-summary-registrations.json`)
   .toString();
 const usageUserDetail = fs
   .readFileSync(`${DATA_DIR}api-usage-users-2021.json`)
@@ -182,11 +188,18 @@ function getMockResponse(url) {
         body: allCuratedGenes,
       };
       break;
-    case `${SERVER_URL}api/private/utils/evidences/levels`:
+    case `${SERVER_URL}api/private/utils/evidences/levels?germline=false`:
       res = {
         status: 200,
         contentType: 'application/json',
-        body: evidenceLevels,
+        body: evidenceLevelsSomatic,
+      };
+      break;
+    case `${SERVER_URL}api/private/utils/evidences/levels?germline=true`:
+      res = {
+        status: 200,
+        contentType: 'application/json',
+        body: evidenceLevelsGermline,
       };
       break;
     case `${SERVER_URL}api/private/utils/tumorTypes`:
@@ -293,6 +306,13 @@ function getMockResponse(url) {
         status: 200,
         contentType: 'application/json',
         body: usageUsersOverview,
+      };
+      break;
+    case `${SERVER_URL}api/usage/summary/registrations`:
+      res = {
+        status: 200,
+        contentType: 'application/json',
+        body: usageRegistrationsOverview,
       };
       break;
     case `${SERVER_URL}api/usage/summary/resources`:
@@ -605,8 +625,20 @@ describe('Tests with login', () => {
     });
   });
 
+  it('Usage Analysis Page#Registrations', async () => {
+    await page.goto(`${CLIENT_URL}admin/usage-analysis#type=REGISTRATION`);
+    await page.setViewport(VIEW_PORT_1080);
+    await page.waitFor(WAITING_TIME);
+    let image = await page.screenshot(
+      getScreenshotConfig('Usage Analysis Page#Registrations')
+    );
+    expect(image).toMatchImageSnapshot({
+      customSnapshotIdentifier: 'Usage Analysis Page#Registrations',
+    });
+  });
+
   it('Usage Analysis Page#User Overview', async () => {
-    await page.goto(`${CLIENT_URL}admin/usage-analysis`);
+    await page.goto(`${CLIENT_URL}admin/usage-analysis#type=USER`);
     await page.setViewport(VIEW_PORT_1080);
     await page.waitFor(WAITING_TIME);
     let image = await page.screenshot(

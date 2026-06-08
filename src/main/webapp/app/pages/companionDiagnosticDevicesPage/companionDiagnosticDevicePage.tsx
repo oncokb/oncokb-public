@@ -550,19 +550,17 @@ const CompanionDiagnosticDevicePage: React.FunctionComponent<{}> = () => {
           <h2 className={'mb-3'}>
             FDA Cleared or Approved Companion Diagnostic Devices
           </h2>
-          <div className={'mb-2'}>Content current as of 11/24/2025</div>
+          <div className={'mb-2'}>Content current as of 05/28/2026</div>
           <div className={'mb-2'}>
-            Companion diagnostic devices (CDx) that are US- Food and Drug
-            Administration (FDA) approved or cleared to guide treatment
-            decisions in cancer for the safe and efficient use of oncology drugs
-            (per the FDA’s{' '}
+            Companion diagnostic devices (CDx) approved or cleared by the FDA
+            are required to detect the {ONCOKB_TM} Level 1 biomarkers specified
+            in the drug labels of precision oncology therapies. The devices
+            listed here are a subset of those in the FDA&apos;s{' '}
             <Linkout link="https://www.fda.gov/medical-devices/in-vitro-diagnostics/list-cleared-or-approved-companion-diagnostic-devices-in-vitro-and-imaging-tools">
               List of Cleared or Approved Companion Diagnostic Devices (In Vitro
               and Imaging Tools)
             </Linkout>
-            ). Only the companion diagnostics that are included in the FDA-drug
-            labels of {ONCOKB_TM} level 1 precision oncology drugs and determine
-            the list of {ONCOKB_TM} level 1 biomarkers are listed below.
+            .
           </div>
         </Col>
       </Row>

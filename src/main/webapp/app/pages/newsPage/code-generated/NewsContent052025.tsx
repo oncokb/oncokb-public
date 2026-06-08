@@ -7,17 +7,18 @@ import {
 } from 'app/shared/utils/UrlUtils';
 import { NewlyAddedGenesListItem } from 'app/pages/newsPage/NewlyAddedGenesListItem';
 import { TableOfContents } from 'app/pages/privacyNotice/TableOfContents';
+import { convertGeneInputToLinks } from 'app/pages/newsPage/Util';
 
 export default function NewsContent052025() {
   return (
     <>
-      <ul>
-        <li>
+      <ul style={{ marginBottom: 0 }}>
+        <li style={{ marginBottom: 0 }}>
           Updated Therapeutic Implications - Promotion of tumor type-specific
           level of evidence for an alteration
         </li>
       </ul>
-      <div className="table-responsive">
+      <div className="table-responsive" style={{ marginBottom: '1.5rem' }}>
         <table className="table">
           <thead>
             <tr>
@@ -32,11 +33,12 @@ export default function NewsContent052025() {
           </thead>
           <tbody>
             <tr>
-              <td>{getAlternativeGenePageLinks('KRAS')}</td>
+              <td>{getAlternativeGenePageLinks('KRAS', false)}</td>
               <td>
                 <AlterationPageLink
                   hugoSymbol="KRAS"
                   alteration="Oncogenic Mutations"
+                  germline={false}
                 >
                   Oncogenic Mutations
                 </AlterationPageLink>

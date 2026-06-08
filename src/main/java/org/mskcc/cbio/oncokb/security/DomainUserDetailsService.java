@@ -20,8 +20,6 @@ import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.server.ResponseStatusException;
 import org.springframework.http.HttpStatus;
 
-import io.sentry.RequestDetails;
-
 /**
  * Authenticate a user from the database.
  */

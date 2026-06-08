@@ -17,7 +17,9 @@ const FAQPageContent: React.FunctionComponent<{
       <Iframe
         url="https://faq.oncokb.org"
         className={
-          props.userMessageBannerEnabled ? 'faq-iframe-high-top' : 'faq-iframe'
+          props.userMessageBannerEnabled
+            ? 'gitbook-iframe-high-top'
+            : 'gitbook-iframe'
         }
       />
     </>

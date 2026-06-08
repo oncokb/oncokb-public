@@ -14,10 +14,12 @@ const oncokbBaseUrls = [
 ];
 
 const objectPropertyMark = '-------------------';
+const booleanPropertyMark = '__BOOL_PROP__';
 const objectPropertyMarkRegex = new RegExp(
-  `"${objectPropertyMark}(.*)${objectPropertyMark}"`,
+  `"${objectPropertyMark}(.*?)${objectPropertyMark}"`,
   'gm'
 );
+const tagMarkerRegex = /^\[\[tag\]\]\s*/i;
 
 /**
  * Escapes special characters in a string to be used in a regular expression.
@@ -86,10 +88,26 @@ function decodeHtmlEntities(text) {
  */
 function fixHtmlString(htmlString) {
   return htmlString
+    .replace(
+      new RegExp(`germline="${booleanPropertyMark}(true|false)"`, 'g'),
+      (_, isGermline) => `germline={${isGermline}}`
+    )
+    .replace(
+      new RegExp(`isTag="${booleanPropertyMark}(true|false)"`, 'g'),
+      (_, isTag) => `isTag={${isTag}}`
+    )
+    .replace(/style="margin-bottom: 0"/g, 'style={{ marginBottom: 0 }}')
     .replace(objectPropertyMarkRegex, (_, group) => {
       return `{${decodeHtmlEntities(group)}}`;
     })
     .replace(/\u00A0/g, ' ');
+}
+
+function parseTaggedMutation(mutationName) {
+  return {
+    isTag: tagMarkerRegex.test(mutationName),
+    mutationName: mutationName.replace(tagMarkerRegex, '').trim(),
+  };
 }
 
 /**
@@ -117,10 +135,7 @@ function newlyAddedGenes(md, state) {
   let toRemoveEnd = -1;
   const genes = [];
   for (const token of state.tokens) {
-    if (
-      token.type === 'inline' &&
-      isNewlyAddedGenesTrigger(token.content)
-    ) {
+    if (token.type === 'inline' && isNewlyAddedGenesTrigger(token.content)) {
       foundNewlyAddedGenes = true;
       toRemoveStart = index;
     } else if (foundNewlyAddedGenes && token.type === 'bullet_list_close') {
@@ -212,7 +227,9 @@ function addAutoTableLinks(md, state) {
   let columnIdx = 0;
   let geneIdx = -1;
   let mutationIdx = -1;
+  let settingIdx = -1;
   let currentGene = '';
+  let currentGeneSetting = 'somatic';
   for (const token of state.tokens) {
     if (token.type === 'th_open') {
       inTh = true;
@@ -227,14 +244,55 @@ function addAutoTableLinks(md, state) {
     } else if (token.type === 'tr_open') {
       columnIdx = 0;
       currentGene = '';
+      currentGeneSetting = 'somatic';
+    } else if (inTd && columnIdx === settingIdx && token.type === 'inline') {
+      const child = token.children[0];
+      currentGeneSetting =
+        child.content.trim().toLowerCase() === 'germline'
+          ? 'germline'
+          : 'somatic';
+      if (
+        ['germline', 'somatic'].includes(child.content.trim().toLowerCase())
+      ) {
+        const geneticTypeText =
+          currentGeneSetting === 'germline' ? 'Germline' : 'Somatic';
+        token.content = geneticTypeText;
+        token.children = [createMarkdownTextToken(md, geneticTypeText)];
+      }
     } else if (inTd && columnIdx === geneIdx && token.type === 'inline') {
       const child = token.children[0];
       currentGene = child.content;
-      child.content = `{getAlternativeGenePageLinks('${child.content}')}`;
+      if (child.content.includes(',')) {
+        child.content = `{convertGeneInputToLinks('${child.content}', ${
+          currentGeneSetting === 'germline'
+        })}`;
+      } else {
+        child.content = `{getAlternativeGenePageLinks('${child.content}', ${
+          currentGeneSetting === 'germline'
+        })}`;
+      }
     } else if (inTd && columnIdx === mutationIdx && token.type === 'inline') {
       const child = token.children[0];
       if (currentGene === '') {
         throw new Error(`No gene for this row and mutation "${child.content}"`);
+      } else if (currentGene.includes(',')) {
+        // Multi-gene rows should remain text in the mutation column.
+      } else if (child.content.startsWith('Pathogenic Variants (excluding')) {
+        const pathogenicVariantsStr = 'Pathogenic Variants';
+        const exclusionSection = child.content.replace(
+          `${pathogenicVariantsStr} `,
+          ''
+        );
+        const pathogenicVariantLinks = createMutationLinks(
+          md,
+          currentGene,
+          [pathogenicVariantsStr],
+          currentGeneSetting === 'germline'
+        );
+        token.children = [
+          ...pathogenicVariantLinks,
+          createMarkdownTextToken(md, ` ${exclusionSection}`),
+        ];
       } else if (child.content.startsWith('Oncogenic Mutations (excluding')) {
         // Oncogenic Mutations with excluding do not need links, but they
         // need to have a few line breaks between "Mutations" and "(excluding"
@@ -268,7 +326,8 @@ function addAutoTableLinks(md, state) {
         const allMutationLinks = createMutationLinks(
           md,
           currentGene,
-          mutationNames
+          mutationNames,
+          currentGeneSetting === 'germline'
         );
 
         token.children = [
@@ -291,7 +350,8 @@ function addAutoTableLinks(md, state) {
           const mutationLinks = createMutationLinks(
             md,
             currentGene,
-            mutationNames
+            mutationNames,
+            currentGeneSetting === 'germline'
           );
           tokens.push(createMarkdownTextToken(md, title + ': '));
           tokens.push(...mutationLinks);
@@ -304,33 +364,81 @@ function addAutoTableLinks(md, state) {
         const allMutationLinks = createMutationLinks(
           md,
           currentGene,
-          mutationNames
+          mutationNames,
+          currentGeneSetting === 'germline'
         );
         token.children = allMutationLinks;
       }
-    } else if (inTh && token.content === 'Gene') {
+    } else if (inTh && ['Gene', 'Gene(s)'].includes(token.content)) {
       geneIdx = columnIdx;
+    } else if (inTh && token.content === 'Setting') {
+      settingIdx = columnIdx;
     } else if (inTh && token.content === 'Mutation') {
       mutationIdx = columnIdx;
     }
   }
 }
 
-function createMutationLinks(md, currentGene, mutationNames) {
+function addTableHeaderListStyles(state) {
+  for (let i = 0; i < state.tokens.length; i++) {
+    const token = state.tokens[i];
+    if (token.type !== 'bullet_list_open') {
+      continue;
+    }
+
+    let listEndIdx = -1;
+    let depth = 0;
+    for (let j = i; j < state.tokens.length; j++) {
+      if (state.tokens[j].type === 'bullet_list_open') {
+        depth++;
+      } else if (state.tokens[j].type === 'bullet_list_close') {
+        depth--;
+        if (depth === 0) {
+          listEndIdx = j;
+          break;
+        }
+      }
+    }
+
+    if (listEndIdx < 0) {
+      continue;
+    }
+
+    const nextToken = state.tokens[listEndIdx + 1];
+    if (!nextToken || nextToken.type !== 'table_open') {
+      continue;
+    }
+
+    token.attrSet('style', 'margin-bottom: 0');
+    for (let j = i + 1; j < listEndIdx; j++) {
+      if (state.tokens[j].type === 'list_item_open') {
+        state.tokens[j].attrSet('style', 'margin-bottom: 0');
+      }
+    }
+  }
+
+  return true;
+}
+
+function createMutationLinks(md, currentGene, mutationNames, germline = false) {
   const allMutationLinks = [];
   for (mutationName of mutationNames) {
+    const { isTag, mutationName: parsedMutationName } = parseTaggedMutation(
+      mutationName
+    );
     let mutationLinks = [
       {
-        alteration: mutationName,
-        linkText: mutationName,
+        alteration: parsedMutationName,
+        linkText: parsedMutationName,
+        isTag,
       },
     ];
     // Check for for cases like L718Q/V
     if (
-      ALTERNATIVE_ALLELES_REGEX.test(mutationName) &&
-      !mutationName.endsWith('Fusion')
+      ALTERNATIVE_ALLELES_REGEX.test(parsedMutationName) &&
+      !parsedMutationName.endsWith('Fusion')
     ) {
-      const matches = ALTERNATIVE_ALLELES_REGEX.exec(mutationName);
+      const matches = ALTERNATIVE_ALLELES_REGEX.exec(parsedMutationName);
       if (matches) {
         const positionalVar = matches[1];
         const alternativeAlleles = matches[2];
@@ -338,6 +446,7 @@ function createMutationLinks(md, currentGene, mutationNames) {
           return {
             alteration: index === 0 ? `${positionalVar}${allele}` : allele,
             linkText: `${positionalVar}${allele}`,
+            isTag,
           };
         });
       }
@@ -356,6 +465,16 @@ function createMutationLinks(md, currentGene, mutationNames) {
       );
       alterationPageLinkTags[0].attrSet('hugoSymbol', currentGene);
       alterationPageLinkTags[0].attrSet('alteration', mutationLink.linkText);
+      alterationPageLinkTags[0].attrSet(
+        'germline',
+        `${booleanPropertyMark}${germline}`
+      );
+      if (mutationLink.isTag === true) {
+        alterationPageLinkTags[0].attrSet(
+          'isTag',
+          `${booleanPropertyMark}true`
+        );
+      }
       if (i > 0) {
         const linkEndToken = alterationPageLinkTags.pop();
         const textToken = createMarkdownTextToken(md, mutationLink.alteration);
@@ -425,7 +544,7 @@ const md = new MarkdownIt({
   // https://markdown-it.github.io/markdown-it
   // https://github.com/markdown-it/markdown-it/blob/master/docs/examples/renderer_rules.md
   md.renderer.rules.table_open = function () {
-    return '<div className="table-responsive">\n<table className="table">';
+    return '<div className="table-responsive" style={{ marginBottom: "1.5rem" }}>\n<table className="table">';
   };
 
   md.renderer.rules.table_close = function () {
@@ -437,10 +556,15 @@ const md = new MarkdownIt({
   });
 
   md.core.ruler.push('fix-links', state => fixLinks(state));
+  md.core.ruler.push('add-table-header-list-styles', state =>
+    addTableHeaderListStyles(state)
+  );
   md.core.ruler.push('fix-styles', state => {
     for (const token of state.tokens) {
       if (token.attrs != null && token.attrs.length > 0) {
-        token.attrs = token.attrs.filter(([name]) => name !== 'style');
+        token.attrs = token.attrs.filter(([name, value]) => {
+          return name !== 'style' || value === 'margin-bottom: 0';
+        });
       }
       if (token.type === 'table_open') {
         token.attrSet('className', 'table');
@@ -505,6 +629,7 @@ import { Link } from 'react-router-dom';
 import { AlterationPageLink, getAlternativeGenePageLinks, GenePageLink } from 'app/shared/utils/UrlUtils';
 import { NewlyAddedGenesListItem } from 'app/pages/newsPage/NewlyAddedGenesListItem';
 import { TableOfContents } from 'app/pages/privacyNotice/TableOfContents';
+import { convertGeneInputToLinks } from 'app/pages/newsPage/Util';
 
 export default function ${componentName}() {
   return (

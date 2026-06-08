@@ -129,9 +129,6 @@ public class UserResource {
             if (managedUserVM.getAuthorities() == null || managedUserVM.getAuthorities().isEmpty()) {
                 Set<String> authorities = new LinkedHashSet<>();
                 authorities.add(AuthoritiesConstants.USER);
-                if (!managedUserVM.getLicenseType().equals(LicenseType.ACADEMIC)) {
-                    authorities.add(AuthoritiesConstants.API);
-                }
                 managedUserVM.setAuthorities(Collections.unmodifiableSet(authorities));
             }
             User newUser = userService.createUser(managedUserVM, false, Optional.ofNullable(managedUserVM.getTokenValidDays()), Optional.ofNullable(managedUserVM.getTokenIsRenewable()));

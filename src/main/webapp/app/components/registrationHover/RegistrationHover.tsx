@@ -2,7 +2,7 @@ import React, { useEffect, useState } from 'react';
 import styles from './styles.module.scss';
 import classNames from 'classnames';
 import { Link, useLocation } from 'react-router-dom';
-import { PAGE_ROUTE } from 'app/config/constants';
+import { ONCOKB_TM, PAGE_ROUTE } from 'app/config/constants';
 import AuthenticationStore from 'app/store/AuthenticationStore';
 import { AppConfig } from 'app/appConfig';
 
@@ -127,22 +127,26 @@ export default function RegistrationHover({
     return <></>;
   } else {
     const content = {
-      title: 'Thanks for using OncoKB!',
+      title: 'Help us better understand your needs.',
       body: (
         <div className={classNames(styles.contentBody)}>
           <p>
-            Help us grow by creating an account or logging in to continue
-            accessing our evidence-based precision oncology content.
+            Create an account or log in to continue accessing {ONCOKB_TM}{' '}
+            content.
           </p>
           <ul>
-            <li>Academic user? Registration is free!</li>
             <li>
-              Commercial use or clinical reporting requires a paid license.
+              Academic or clinical user? Web access is free after registration!
+            </li>
+            <li>
+              Commercial use or API-based clinical reporting requires a paid
+              license.
             </li>
           </ul>
           <p>
             As always, please review our{' '}
-            <Link to={PAGE_ROUTE.TERMS}>terms of use</Link> before using OncoKB.
+            <Link to={PAGE_ROUTE.TERMS}>terms of use</Link> before using{' '}
+            {ONCOKB_TM}.
           </p>
         </div>
       ),

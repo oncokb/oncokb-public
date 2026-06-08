@@ -27,7 +27,10 @@ import ActivateTrialFinish from 'app/components/account/ActivateTrialFinish';
 import CompanyPage from 'app/pages/companyPage/CompanyPage';
 import { CreateCompanyUsersPage } from 'app/pages/CreateCompanyUsersPage';
 import { AboutPageNavTab } from 'app/pages/aboutGroup/AboutPageNavTab';
-import { ApiAccessPageNavTab } from 'app/pages/apiAccessGroup/ApiAccessPageNavTab';
+import { ApiDocumentationPage } from 'app/pages/apiAccessGroup/ApiDocumentationPage';
+import { PremiumApiDocumentationPage } from 'app/pages/apiAccessGroup/PremiumApiDocumentationPage';
+import DataDownloadPage from 'app/pages/apiAccessGroup/DataDownloadPage';
+import { LicensePageNavTab } from 'app/pages/apiAccessGroup/LicensePageNavTab';
 import FAQPage from 'app/pages/FAQPage';
 import ReadOnlyMode from 'app/shared/readonly/ReadOnlyMode';
 import * as QueryString from 'query-string';
@@ -44,7 +47,6 @@ import SomaticTagPage from 'app/pages/somaticGermlineAlterationPage/SomaticTagPa
 import SomaticTagCancerTypePage from 'app/pages/annotationPage/SomaticTagCancerTypePage';
 
 const REGISTRATION_HOVER_GENE_PAGE_LIMIT = 5;
-
 const getOldLevelsRedirectRoute = (hash: string) => {
   const queryStrings = QueryString.parse(hash) as {
     version: Version;
@@ -107,12 +109,17 @@ const AppRoutes = (props: {
       <Redirect
         exact
         from={PAGE_ROUTE.LEGACY_API_ACCESS}
-        to={PAGE_ROUTE.API_ACCESS}
+        to={PAGE_ROUTE.API_DOCS}
+      />
+      <Redirect
+        exact
+        from={PAGE_ROUTE.LEGACY_API_ACCESS_HYPHEN}
+        to={PAGE_ROUTE.API_DOCS}
       />
       <Redirect
         exact
         from={PAGE_ROUTE.LEGACY_DATA_ACCESS}
-        to={PAGE_ROUTE.API_ACCESS}
+        to={PAGE_ROUTE.DATA_DOWNLOAD}
       />
       <Redirect
         exact
@@ -176,17 +183,37 @@ const AppRoutes = (props: {
           isUserAuthenticated={props.authenticationStore.isUserAuthenticated}
           appStore={props.appStore}
           path={PAGE_ROUTE.REGISTER}
-          component={ApiAccessPageNavTab}
+          component={LicensePageNavTab}
           windowStore={props.windowStore}
           pageContainer={PageContainer}
           authenticationStore={props.authenticationStore}
         />
         <ErrorBoundaryRoute
           exact
-          path={PAGE_ROUTE.API_ACCESS}
-          component={ApiAccessPageNavTab}
+          path={PAGE_ROUTE.API_DOCS}
+          component={ApiDocumentationPage}
           windowStore={props.windowStore}
           authenticationStore={props.authenticationStore}
+          pageContainer={PageContainer}
+        />
+        <PrivateRoute
+          exact
+          path={PAGE_ROUTE.PREMIUM_API_DOCS}
+          component={PremiumApiDocumentationPage}
+          windowStore={props.windowStore}
+          authenticationStore={props.authenticationStore}
+          routing={props.routing}
+          hasAnyAuthorities={[USER_AUTHORITY.ROLE_PREMIUM_USER]}
+          pageContainer={PageContainer}
+        />
+        <PrivateRoute
+          exact
+          path={PAGE_ROUTE.DATA_DOWNLOAD}
+          component={DataDownloadPage}
+          windowStore={props.windowStore}
+          authenticationStore={props.authenticationStore}
+          routing={props.routing}
+          hasAnyAuthorities={[USER_AUTHORITY.ROLE_DATA_DOWNLOAD]}
           pageContainer={PageContainer}
         />
         <ErrorBoundaryRoute
@@ -404,7 +431,7 @@ const AppRoutes = (props: {
         <OncokbRoute
           exact
           path={PAGE_ROUTE.TERMS}
-          component={ApiAccessPageNavTab}
+          component={LicensePageNavTab}
           windowStore={props.windowStore}
           authenticationStore={props.authenticationStore}
           pageContainer={PageContainer}

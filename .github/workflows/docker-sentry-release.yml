@@ -3,7 +3,7 @@ on:
   workflow_dispatch:
     inputs:
       tag-name:
-        description: "Tag name to use for the image (required if manually running)"
+        description: 'Tag name to use for the image (required if manually running)'
         required: true
         type: string
   release:
@@ -42,24 +42,3 @@ jobs:
           -Djib.to.image="${REPOSITORY}:${TAG_NAME}" \
           -Djib.to.auth.username=$DOCKER_USERNAME \
           -Djib.to.auth.password=$DOCKER_PASSWORD
-      - name: Create a Sentry.io release in oncokb-public-website
-        uses: getsentry/action-release@v1.7.0
-        env:
-          SENTRY_AUTH_TOKEN: ${{ secrets.SENTRY_AUTH_TOKEN }}
-          SENTRY_ORG: memorial-sloan-kettering
-          SENTRY_PROJECT: oncokb-public-website
-        with:
-          version: ${{ env.VERSION }}
-          environment: production
-          version_prefix: oncokb-public-
-          sourceMapOptions: '{"include": ["target/classes/static/app"]}'
-      - name: Create a Sentry.io release in oncokb-public-website-backend
-        uses: getsentry/action-release@v1.7.0
-        env:
-          SENTRY_AUTH_TOKEN: ${{ secrets.SENTRY_AUTH_TOKEN }}
-          SENTRY_ORG: memorial-sloan-kettering
-          SENTRY_PROJECT: oncokb-public-website-backend
-        with:
-          version: ${{ env.VERSION }}
-          environment: production
-          version_prefix: oncokb-public-backend-

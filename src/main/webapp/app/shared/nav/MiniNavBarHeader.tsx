@@ -1,7 +1,6 @@
 import React, { useContext, useEffect } from 'react';
 import { StickyMiniNavBarContext } from './StickyMiniNavBar';
 import classnames from 'classnames';
-import ComingSoonTag from 'app/components/tag/ComingSoonTag';
 
 type IMiniNavBarHeader = {
   id: string;
@@ -45,7 +44,6 @@ export default function MiniNavBarHeader({
       >
         {children}
       </span>
-      {comingSoon && <ComingSoonTag className="ml-2" size="lg" />}
     </h3>
   );
 }

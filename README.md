@@ -351,7 +351,7 @@ yarn run buildPrivacyNotice
 4. Create News React Components
 
    ```sh
-   yarn run buildNewsSections
+   yarn run buildNewsPages
    ```
 
 5. Add the release date to `DATA_RELEASES` in the `constants.tsx` file.

@@ -52,6 +52,9 @@ const tp53BiologicalVariants = fs.readFileSync(`${DATA_DIR}api-private-search-va
 const tp53ClinicalVariants = fs.readFileSync(`${DATA_DIR}api-private-search-variants-cli-TP53.json`).toString();
 const tp53DeletionVariantAnnotation = fs.readFileSync(`${DATA_DIR}api-private-utils-variantAnnotation-TP53-DELETION.json`).toString();
 const tp53DeletionQuery = fs.readFileSync(`${DATA_DIR}api-v1-variants-TP53-DELETION.json`).toString();
+const tp53GermlineVariantAnnotation = fs.readFileSync(`${DATA_DIR}api-private-utils-variantAnnotation-germline-TP53-c.1000G-C.json`).toString();
+const tp53GermlineVariantQuery = fs.readFileSync(`${DATA_DIR}api-v1-variants-TP53-c.1000G-C.json`).toString();
+const tp53GenomicIndicators = fs.readFileSync(`${DATA_DIR}api-v1-evidences-TP53-genomic-indicator.json`).toString();
 
 // BRAF V600E shared API response data
 const brafGeneQuery = fs.readFileSync(`${DATA_DIR}api-v1-genes-BRAF.json`).toString();
@@ -84,209 +87,9 @@ const brafV600eHairyCellLeukemiaVariantAnnotation = fs.readFileSync(`${DATA_DIR}
 // Mainly test the therapeutic/fda data for solid disease
 const brafV600eMelanomaVariantAnnotation = fs.readFileSync(`${DATA_DIR}api-private-utils-variantAnnotation-BRAF-V600E-MEL.json`).toString();
 
-// FGFR3 Y375C page - API response data
-// Mainly test the alternativeOncoKbVariant message and linkout
-const fgfr3GeneQuery = JSON.stringify([
-  {
-    entrezGeneId: 2261,
-    hugoSymbol: 'FGFR3',
-    grch37Isoform: 'ENST00000340107',
-    grch37RefSeq: 'NM_000142.4',
-    grch38Isoform: 'ENST00000644923',
-    grch38RefSeq: 'NM_000142.4',
-    geneAliases: [],
-    genesets: [],
-    geneType: 'ONCOGENE',
-  },
-]);
-const fgfr3GeneNumbers = JSON.stringify({
-  highestSensitiveLevel: null,
-  highestResistanceLevel: null,
-  highestDiagnosticImplicationLevel: null,
-  highestPrognosticImplicationLevel: null,
-  gene: {
-    entrezGeneId: 2261,
-    hugoSymbol: 'FGFR3',
-    grch37Isoform: 'ENST00000340107',
-    grch37RefSeq: 'NM_000142.4',
-    grch38Isoform: 'ENST00000644923',
-    grch38RefSeq: 'NM_000142.4',
-    geneAliases: [],
-    genesets: [],
-    geneType: 'ONCOGENE',
-  },
-  alteration: 1,
-  tumorType: null,
-});
-const fgfr3EnsemblGenes = JSON.stringify([
-  {
-    ensemblGeneId: 'ENSG00000068078',
-    canonical: true,
-    chromosome: '4',
-    referenceGenome: 'GRCh37',
-    strand: 1,
-    start: 1807895,
-    end: 1825441,
-  },
-  {
-    ensemblGeneId: 'ENSG00000068078',
-    canonical: true,
-    chromosome: '4',
-    referenceGenome: 'GRCh38',
-    strand: 1,
-    start: 1760139,
-    end: 1777645,
-  },
-]);
-const fgfr3Y375cQuery = JSON.stringify([
-  {
-    gene: {
-      entrezGeneId: 2261,
-      hugoSymbol: 'FGFR3',
-      grch37Isoform: 'ENST00000340107',
-      grch37RefSeq: 'NM_000142.4',
-      grch38Isoform: 'ENST00000644923',
-      grch38RefSeq: 'NM_000142.4',
-      geneAliases: [],
-      genesets: [],
-      geneType: 'ONCOGENE',
-    },
-    consequence: {
-      term: 'missense_variant',
-      isGenerallyTruncating: false,
-      description:
-        'A sequence variant, that changes one or more bases, resulting in a different amino acid sequence but where the length is preserved',
-    },
-    alteration: 'Y375C',
-    name: 'Y375C',
-    refResidues: 'Y',
-    proteinStart: 375,
-    proteinEnd: 375,
-    variantResidues: 'C',
-    referenceGenomes: ['GRCh37', 'GRCh38'],
-  },
-]);
-const fgfr3Y375cRelevantAlterations = JSON.stringify([
-  {
-    gene: {
-      entrezGeneId: 2261,
-      hugoSymbol: 'FGFR3',
-      grch37Isoform: 'ENST00000340107',
-      grch37RefSeq: 'NM_000142.4',
-      grch38Isoform: 'ENST00000644923',
-      grch38RefSeq: 'NM_000142.4',
-      geneAliases: [],
-      genesets: [],
-      geneType: 'ONCOGENE',
-    },
-    consequence: {
-      term: 'missense_variant',
-      isGenerallyTruncating: false,
-      description:
-        'A sequence variant, that changes one or more bases, resulting in a different amino acid sequence but where the length is preserved',
-    },
-    alteration: 'Y375C',
-    name: 'Y375C',
-    refResidues: 'Y',
-    proteinStart: 375,
-    proteinEnd: 375,
-    variantResidues: 'C',
-    referenceGenomes: ['GRCh37', 'GRCh38'],
-  },
-]);
-const fgfr3Y375cVariantAnnotation = JSON.stringify({
-  query: {
-    id: null,
-    referenceGenome: 'GRCh37',
-    hugoSymbol: 'FGFR3',
-    entrezGeneId: 2261,
-    alteration: 'Y375C',
-    alterationType: 'MUTATION',
-    svType: null,
-    tumorType: null,
-    consequence: 'missense_variant',
-    proteinStart: 375,
-    proteinEnd: 375,
-    hgvs: null,
-    hgvsInfo: null,
-    canonicalTranscript: null,
-    germline: false,
-  },
-  geneExist: true,
-  variantExist: true,
-  alleleExist: true,
-  oncogenic: 'Unknown',
-  mutationEffect: {
-    knownEffect: 'Unknown',
-    description: '',
-    citations: {
-      pmids: [],
-      abstracts: [],
-    },
-  },
-  germline: {
-    genomicIndicators: [],
-    penetrance: '',
-    penetranceDescription: '',
-    pathogenic: '',
-    description: '',
-    cancerRisk: '',
-    clinVarId: '',
-  },
-  highestSensitiveLevel: null,
-  highestResistanceLevel: null,
-  highestDiagnosticImplicationLevel: null,
-  highestPrognosticImplicationLevel: null,
-  highestFdaLevel: null,
-  otherSignificantSensitiveLevels: [],
-  otherSignificantResistanceLevels: [],
-  hotspot: false,
-  exon: null,
-  geneSummary: '',
-  variantSummary: '',
-  tumorTypeSummary: '',
-  prognosticSummary: '',
-  diagnosticSummary: '',
-  diagnosticImplications: [],
-  prognosticImplications: [],
-  treatments: [],
-  tumorTypes: [],
-  dataVersion: 'v0',
-  lastUpdate: '',
-  vus: false,
-  vue: false,
-  alternativeOncoKbVariant: {
-    gene: 'FGFR3',
-    inputVariant: 'Y375C',
-    transcriptId: 'ENST00000644923',
-    foundAlteration: {
-      gene: {
-        entrezGeneId: 2261,
-        hugoSymbol: 'FGFR3',
-        grch37Isoform: 'ENST00000340107',
-        grch37RefSeq: 'NM_000142.4',
-        grch38Isoform: 'ENST00000644923',
-        grch38RefSeq: 'NM_000142.4',
-        geneAliases: [],
-        genesets: [],
-        geneType: 'ONCOGENE',
-      },
-      consequence: {
-        term: 'missense_variant',
-        isGenerallyTruncating: false,
-        description:
-          'A sequence variant, that changes one or more bases, resulting in a different amino acid sequence but where the length is preserved',
-      },
-      alteration: 'Y373C',
-      name: 'Y373C',
-      refResidues: 'Y',
-      proteinStart: 373,
-      proteinEnd: 373,
-      variantResidues: 'C',
-      referenceGenomes: ['GRCh37', 'GRCh38'],
-    },
-  },
-});
+const genomeNexusClinvarTp53 = fs.readFileSync(
+  `${DATA_DIR}genome-nexus-clinvar-TP53-c.1000G-C.json`
+).toString();
 
 // # Fix the time to expiration date.
 function updateTokenExpirationDate(current){
@@ -331,16 +134,6 @@ if (!fs.existsSync(LATEST_SNAPSHOTS_DIR)){
 }
 
 function getMockResponse(url){
-  if (
-    url.startsWith(`${SERVER_URL}api/v1/evidences/lookup?`) &&
-    url.includes('evidenceTypes=GENOMIC_INDICATOR')
-  ) {
-    return {
-      status: 200,
-      contentType: 'application/json',
-      body: '[]'
-    };
-  }
 
   let res = undefined
   switch (url) {
@@ -384,6 +177,13 @@ function getMockResponse(url){
         status: 200,
         contentType: 'application/json',
         body: numbersMain
+      };
+      break;
+    case `https://www.genomenexus.org/annotation/ENST00000269305:c.1000G%3EC?fields=clinvar`:
+      res = {
+        status: 200,
+        contentType: 'application/json',
+        body: genomeNexusClinvarTp53
       };
       break;
     case `${SERVER_URL}api/private/utils/numbers/levels/`:
@@ -458,6 +258,13 @@ function getMockResponse(url){
         body: ros1EvidenceBackground
       };
       break;
+    case `${SERVER_URL}api/v1/evidences/lookup?hugoSymbol=TP53&evidenceTypes=GENOMIC_INDICATOR&germline=true`:
+      res = {
+        status: 200,
+        contentType: 'application/json',
+        body: tp53GenomicIndicators
+      };
+      break;
     case `https://www.genomenexus.org//ensembl/transcript`:
       res = {
         status: 200,
@@ -502,6 +309,13 @@ function getMockResponse(url){
         body: tp53GeneNumbers
       };
       break;
+    case `${SERVER_URL}api/private/utils/numbers/gene/TP53?germline=true`:
+      res = {
+        status: 200,
+        contentType: 'application/json',
+        body: tp53GeneNumbers
+      };
+      break;
     case `${SERVER_URL}api/v1/genes/lookup?query=TP53`:
       res = {
         status: 200,
@@ -516,7 +330,21 @@ function getMockResponse(url){
         body: tp53BiologicalVariants
       };
       break;
+    case `${SERVER_URL}api/private/search/variants/biological?hugoSymbol=TP53&germline=true`:
+      res = {
+        status: 200,
+        contentType: 'application/json',
+        body: tp53BiologicalVariants
+      };
+      break;
     case `${SERVER_URL}api/private/search/variants/clinical?hugoSymbol=TP53&germline=false`:
+      res = {
+        status: 200,
+        contentType: 'application/json',
+        body: tp53ClinicalVariants
+      };
+      break;
+    case `${SERVER_URL}api/private/search/variants/clinical?hugoSymbol=TP53&germline=true`:
       res = {
         status: 200,
         contentType: 'application/json',
@@ -537,11 +365,32 @@ function getMockResponse(url){
         body: tp53DeletionVariantAnnotation
       };
       break;
+    case `${SERVER_URL}api/private/utils/variantAnnotation/germline?hugoSymbol=TP53&referenceGenome=GRCh37&alteration=c.1000G%3EC`:
+      res = {
+        status: 200,
+        contentType: 'application/json',
+        body: tp53GermlineVariantAnnotation
+      };
+      break;
+    case `${SERVER_URL}api/private/utils/variantAnnotation?hugoSymbol=TP53&referenceGenome=GRCh37&alteration=Deletion`:
+      res = {
+        status: 200,
+        contentType: 'application/json',
+        body: tp53DeletionVariantAnnotation
+      };
+      break;
     case `${SERVER_URL}api/v1/variants/lookup?hugoSymbol=TP53&variant=Deletion`:
       res = {
         status: 200,
         contentType: 'application/json',
         body: tp53DeletionQuery
+      };
+      break;
+    case `${SERVER_URL}api/v1/variants/lookup?hugoSymbol=TP53&variant=c.1000G%3EC`:
+      res = {
+        status: 200,
+        contentType: 'application/json',
+        body: tp53GermlineVariantQuery
       };
       break;
     case `${SERVER_URL}api/private/utils/relevantAlterations?referenceGenome=GRCh37&entrezGeneId=7157&alteration=Deletion`:
@@ -623,63 +472,21 @@ function getMockResponse(url){
         body: brafV600eMelanomaVariantAnnotation
       };
       break;
-    case `${SERVER_URL}api/private/utils/numbers/gene/FGFR3?germline=false`:
+    case `${SERVER_URL}api/private/utils/variantAnnotation?hugoSymbol=BRAF&referenceGenome=GRCh37&alteration=V600E&tumorType=MEL`:
       res = {
         status: 200,
         contentType: 'application/json',
-        body: fgfr3GeneNumbers,
-      };
-      break;
-    case `${SERVER_URL}api/v1/genes/lookup?query=FGFR3`:
-      res = {
-        status: 200,
-        contentType: 'application/json',
-        body: fgfr3GeneQuery,
-      };
-      break;
-    case `${SERVER_URL}api/private/search/variants/biological?hugoSymbol=FGFR3&germline=false`:
-      res = {
-        status: 200,
-        contentType: 'application/json',
-        body: '[]',
-      };
-      break;
-    case `${SERVER_URL}api/private/search/variants/clinical?hugoSymbol=FGFR3&germline=false`:
-      res = {
-        status: 200,
-        contentType: 'application/json',
-        body: '[]',
-      };
-      break;
-    case `${SERVER_URL}api/private/utils/ensembleGenes?entrezGeneId=2261`:
-      res = {
-        status: 200,
-        contentType: 'application/json',
-        body: fgfr3EnsemblGenes,
-      };
-      break;
-    case `${SERVER_URL}api/v1/variants/lookup?hugoSymbol=FGFR3&variant=Y375C`:
-      res = {
-        status: 200,
-        contentType: 'application/json',
-        body: fgfr3Y375cQuery,
-      };
-      break;
-    case `${SERVER_URL}api/private/utils/relevantAlterations?referenceGenome=GRCh37&entrezGeneId=2261&alteration=Y375C`:
-      res = {
-        status: 200,
-        contentType: 'application/json',
-        body: fgfr3Y375cRelevantAlterations,
-      };
-      break;
-    case `${SERVER_URL}api/private/utils/variantAnnotation?hugoSymbol=FGFR3&referenceGenome=GRCh37&alteration=Y375C&germline=false`:
-      res = {
-        status: 200,
-        contentType: 'application/json',
-        body: fgfr3Y375cVariantAnnotation,
+        body: brafV600eMelanomaVariantAnnotation
       };
       break;
     case `${SERVER_URL}api/private/utils/variantAnnotation?hugoSymbol=BRAF&referenceGenome=GRCh37&alteration=V600E&tumorType=HCL&germline=false`:
+      res = {
+        status: 200,
+        contentType: 'application/json',
+        body: brafV600eHairyCellLeukemiaVariantAnnotation
+      };
+      break;
+    case `${SERVER_URL}api/private/utils/variantAnnotation?hugoSymbol=BRAF&referenceGenome=GRCh37&alteration=V600E&tumorType=HCL`:
       res = {
         status: 200,
         contentType: 'application/json',
@@ -776,6 +583,14 @@ describe('Tests with login', () => {
     await page.waitFor(WAITING_TIME);
     let image = await page.screenshot(getScreenshotConfig('Alteration Page with Login'));
     expect(image).toMatchImageSnapshot({ customSnapshotIdentifier: 'Alteration Page with Login' });
+  })
+
+  it('Alteration Page - Germline', async() => {
+    await page.goto(`${CLIENT_URL}gene/TP53/germline/c.1000G>C`);
+    await page.setViewport(VIEW_PORT_1080);
+    await page.waitFor(WAITING_TIME);
+    let image = await page.screenshot(getScreenshotConfig('Alteration Page - Germline TP53 with Login'));
+    expect(image).toMatchImageSnapshot({ customSnapshotIdentifier: 'Alteration Page - Germline TP53 with Login' });
   })
 
   it('Alteration Page with Cancer Type - Solid', async() => {

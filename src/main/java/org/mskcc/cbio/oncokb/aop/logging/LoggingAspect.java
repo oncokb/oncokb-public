@@ -2,7 +2,6 @@ package org.mskcc.cbio.oncokb.aop.logging;
 
 import io.github.jhipster.config.JHipsterConstants;
 
-import io.sentry.Sentry;
 import org.aspectj.lang.JoinPoint;
 import org.aspectj.lang.ProceedingJoinPoint;
 import org.aspectj.lang.annotation.AfterThrowing;
@@ -85,7 +84,6 @@ public class LoggingAspect {
                     e.getCause() != null ? e.getCause() : "NULL"
                 );
         }
-        Sentry.captureException(e);
     }
 
     /**

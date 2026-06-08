@@ -38,7 +38,11 @@ class Main extends React.Component<IMainPage> {
     };
   }
 
-  private FOOTER_ROUTE_EXCLUSION = [PAGE_ROUTE.FAQ_ACCESS];
+  private FOOTER_ROUTE_EXCLUSION = [
+    PAGE_ROUTE.API_DOCS,
+    PAGE_ROUTE.PREMIUM_API_DOCS,
+    PAGE_ROUTE.FAQ_ACCESS,
+  ];
 
   @computed
   get showFooter() {
@@ -131,6 +135,7 @@ class Main extends React.Component<IMainPage> {
         {this.showFooter && (
           <Footer
             lastDataUpdate={this.props.appStore.appInfo.result.dataVersion.date}
+            dataVersion={this.props.appStore.appInfo.result.dataVersion.version}
           />
         )}
       </div>

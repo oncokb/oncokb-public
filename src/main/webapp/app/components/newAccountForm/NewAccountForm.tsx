@@ -23,6 +23,8 @@ import {
 import {
   ACADEMIC_TERMS,
   ACCOUNT_TITLES,
+  AUTHORITIES,
+  CLINICAL_TERMS,
   LicenseStatus,
   LicenseType,
   ONCOKB_TM,
@@ -42,13 +44,12 @@ import client from 'app/shared/api/clientInstance';
 import { notifyError } from 'app/shared/utils/NotificationUtils';
 import {
   EMAIL_VAL,
-  LONG_TEXT_VAL,
   SHORT_TEXT_VAL,
   TEXT_VAL,
   OPTIONAL_TEXT_VAL,
   textValidation,
 } from 'app/shared/utils/FormValidationUtils';
-import { NOT_USED_IN_AI_MODELS } from 'app/config/constants/terms';
+import ApiAccessSection, { supportsApiAccessRequest } from './ApiAccessSection';
 import UseCaseExamples from './UseCaseExamples';
 import ImportantNotes from './ImportantNotes';
 import styles from './NewAccountForm.module.scss';
@@ -73,7 +74,7 @@ export enum AccountType {
   TRIAL = 'trial',
 }
 
-enum FormKey {
+export enum FormKey {
   ANTICIPATED_REPORTS = 'anticipatedReports',
   COMPANY_DESCRIPTION = 'companyDescription',
   USE_CASE = 'useCase',
@@ -101,6 +102,7 @@ export class NewAccountForm extends React.Component<INewAccountForm> {
   @observable companyOptions: CompanySelectOptionType[] = [];
   @observable selectedCompanyOption: CompanySelectOptionType | undefined;
   @observable apiAccessRequested = false;
+  @observable adminApiAccessEnabled = true;
 
   private defaultFormValue = {
     accountType: ACCOUNT_TYPE_DEFAULT,
@@ -139,6 +141,11 @@ export class NewAccountForm extends React.Component<INewAccountForm> {
       city: values.city,
       country: values.country,
     };
+    if (this.props.byAdmin) {
+      newUser.authorities = this.adminApiAccessEnabled
+        ? [AUTHORITIES.USER, AUTHORITIES.API]
+        : [AUTHORITIES.USER];
+    }
     const additionalInfo = this.constructAdditionalInfo(values);
     if (Object.keys(additionalInfo).length > 0) {
       newUser.additionalInfo = additionalInfo;
@@ -180,7 +187,7 @@ export class NewAccountForm extends React.Component<INewAccountForm> {
           values[FormKey.BUS_CONTACT_PHONE];
       }
     }
-    if (!this.isCommercialLicense) {
+    if (supportsApiAccessRequest(this.selectedLicense)) {
       additionalInfo.apiAccessRequest = {
         requested: this.apiAccessRequested,
         justification: values[FormKey.API_ACCESS_JUSTIFICATION],
@@ -234,22 +241,18 @@ export class NewAccountForm extends React.Component<INewAccountForm> {
       return (
         <>
           <p>
-            To incorporate {ONCOKB_TM} content into patient sequencing reports,
-            your hospital will need a license.
+            After registration, hospitals and clinicians may use the {ONCOKB_TM}{' '}
+            website for free as a clinical reference tool. A paid license is
+            required for API access or automated use of {ONCOKB_TM} content in
+            clinical reporting systems, pipelines, or workflows.
           </p>
           <p>
             <b>
               Please complete the form below to create your {ONCOKB_TM} account.
             </b>{' '}
-            {this.props.visibleSections?.includes(FormSection.COMPANY) ? (
-              <span>
-                If your hospital already has a license, we will grant you API
-                access shortly. Otherwise, we will contact you with license
-                terms.
-              </span>
-            ) : null}{' '}
-            You can also reach out to <LicenseInquireLink /> for more
-            information.
+            If you are requesting API access for clinical or commercial use, we
+            will contact you shortly with licensing information. You can also
+            reach out to <LicenseInquireLink /> for more information.
           </p>
         </>
       );
@@ -287,13 +290,20 @@ export class NewAccountForm extends React.Component<INewAccountForm> {
   @computed
   get companyDescriptionPlaceholder() {
     const commonDescription =
-      'Provide a brief description of the ' +
+      'Please provide a brief description of the ' +
       getAccountInfoTitle(
         ACCOUNT_TITLES.COMPANY,
         this.selectedLicense
-      ).toLowerCase();
+      ).toLowerCase() +
+      ', including';
 
-    if (this.isCommercialLicense) {
+    if (this.selectedLicense === LicenseType.HOSPITAL) {
+      return (
+        commonDescription +
+        ':\n' +
+        ` - Whether your institution is for-profit, non-profit, government, community, academic, etc.`
+      );
+    } else if (this.isCommercialLicense) {
       return (
         commonDescription +
         ':\n' +
@@ -309,9 +319,15 @@ export class NewAccountForm extends React.Component<INewAccountForm> {
 
   @computed
   get useCasePlaceholder() {
-    const commonDescription = `Provide a description of how you plan to use ${ONCOKB_TM}`;
-
-    if (this.isCommercialLicense) {
+    const commonDescription = `Please provide a description of how you plan to use ${ONCOKB_TM}`;
+    if (this.selectedLicense === LicenseType.HOSPITAL) {
+      return (
+        commonDescription +
+        '\n' +
+        `  - Where in your clinical workflow will ${ONCOKB_TM} be used?\n` +
+        `  - Will you use ${ONCOKB_TM} in clinical reports?`
+      );
+    } else if (this.isCommercialLicense) {
       return (
         commonDescription +
         '\n' +
@@ -617,16 +633,6 @@ export class NewAccountForm extends React.Component<INewAccountForm> {
                   ) : null}
                   {this.selectedCompanyOption ? null : (
                     <div className={styles.companySection}>
-                      {this.selectedLicense !== LicenseType.ACADEMIC && (
-                        <p>
-                          Please feel free to skip this section if your{' '}
-                          {getAccountInfoTitle(
-                            ACCOUNT_TITLES.COMPANY,
-                            this.selectedLicense
-                          ).toLowerCase()}{' '}
-                          already has a license with us.
-                        </p>
-                      )}
                       <AvField
                         name="company"
                         label={getAccountInfoTitle(
@@ -706,7 +712,7 @@ export class NewAccountForm extends React.Component<INewAccountForm> {
                         {/* index.scss appends "*" only when a label is immediately
                           followed by an element with the `required` attribute. */}
                         <label htmlFor={FormKey.USE_CASE}>
-                          {`Describe how you plan to use ${ONCOKB_TM} *`}
+                          {`Please describe how you plan to use ${ONCOKB_TM}`}
                         </label>
                         {[
                           LicenseType.RESEARCH_IN_COMMERCIAL,
@@ -756,79 +762,15 @@ export class NewAccountForm extends React.Component<INewAccountForm> {
                 </Col>
               </Row>
             )}
-            {!this.isCommercialLicense && (
-              <Row className={getSectionClassName()}>
-                <Col md="3">
-                  <h5>API Access</h5>
-                </Col>
-                <Col md="9">
-                  <p>
-                    Would you like programmatic access to the {ONCOKB_TM}{' '}
-                    database via our API? API access allows a user to
-                    simultaneously annotate multiple tumor mutations with{' '}
-                    {ONCOKB_TM} data and provides a text file output.{' '}
-                    {ONCOKB_TM} API access may also enable the user to leverage{' '}
-                    {ONCOKB_TM} alongside other platform APIs.
-                  </p>
-                  <p>
-                    Should you request API access, you must provide a detailed
-                    description on how you plan to use {ONCOKB_TM} APIs.
-                    Additional time for user screening will be required to grant
-                    access.
-                  </p>
-                  <p>
-                    The following use cases do <b>not</b> require API access:
-                  </p>
-                  <ul style={{ listStyleType: 'circle' }}>
-                    <li>Browse {ONCOKB_TM} content on our website</li>
-                    <li>
-                      Download data from our website (Actionable Genes,
-                      Precision Oncology Therapies, Cancer Genes etc.)
-                    </li>
-                    <li>
-                      View therapeutic implication descriptions (treatment
-                      descriptions)
-                    </li>
-                  </ul>
-                  <AvCheckboxGroup
-                    name={FormKey.REQUEST_API_ACCESS}
-                    key={FormKey.REQUEST_API_ACCESS}
-                    errorMessage={'You have to accept the term'}
-                  >
-                    <AvCheckbox
-                      label={'Request API Access'}
-                      value={this.apiAccessRequested}
-                      onChange={() =>
-                        (this.apiAccessRequested = !this.apiAccessRequested)
-                      }
-                    />
-                  </AvCheckboxGroup>
-                  {this.apiAccessRequested && (
-                    <div className="mt-2">
-                      <b style={{ fontSize: '0.8rem', lineHeight: '1' }}>
-                        {NOT_USED_IN_AI_MODELS}
-                      </b>
-                      <AvField
-                        name={FormKey.API_ACCESS_JUSTIFICATION}
-                        placeholder={
-                          'Provide a justification for your API access request'
-                        }
-                        rows={6}
-                        type={'textarea'}
-                        required={this.apiAccessRequested}
-                        validate={{
-                          ...LONG_TEXT_VAL,
-                          required: {
-                            value: true,
-                            errorMessage: 'Your justification is required.',
-                          },
-                        }}
-                      />
-                    </div>
-                  )}
-                </Col>
-              </Row>
-            )}
+            <ApiAccessSection
+              apiAccessRequested={this.apiAccessRequested}
+              apiAccessJustificationFieldName={FormKey.API_ACCESS_JUSTIFICATION}
+              licenseType={this.selectedLicense}
+              requestApiAccessFieldName={FormKey.REQUEST_API_ACCESS}
+              onToggleApiAccess={() =>
+                (this.apiAccessRequested = !this.apiAccessRequested)
+              }
+            />
             {this.selectedLicense === LicenseType.ACADEMIC &&
             !this.props.byAdmin ? (
               <>
@@ -854,6 +796,53 @@ export class NewAccountForm extends React.Component<INewAccountForm> {
                   </Col>
                 </Row>
               </>
+            ) : null}
+            {this.selectedLicense === LicenseType.HOSPITAL &&
+            !this.props.byAdmin ? (
+              <>
+                <Row className={getSectionClassName()}>
+                  <Col md="3">
+                    <h5>Terms</h5>
+                  </Col>
+                  <Col md="9">
+                    <p>Please agree to the following terms:</p>
+                    {CLINICAL_TERMS.map(term => (
+                      <AvCheckboxGroup
+                        name={term.key}
+                        required
+                        key={term.key}
+                        errorMessage={'You have to accept the term'}
+                      >
+                        <AvCheckbox label={term.description} value={term.key} />
+                      </AvCheckboxGroup>
+                    ))}
+                  </Col>
+                </Row>
+              </>
+            ) : null}
+            {this.props.byAdmin ? (
+              <Row className={getSectionClassName()}>
+                <Col md="3">
+                  <h5>API Access</h5>
+                </Col>
+                <Col md="9">
+                  <AvCheckboxGroup
+                    name="adminApiAccess"
+                    key="adminApiAccess"
+                    errorMessage={'You have to accept the term'}
+                  >
+                    <AvCheckbox
+                      label={'Grant API Access'}
+                      value={this.adminApiAccessEnabled}
+                      checked={this.adminApiAccessEnabled}
+                      onChange={() =>
+                        (this.adminApiAccessEnabled = !this
+                          .adminApiAccessEnabled)
+                      }
+                    />
+                  </AvCheckboxGroup>
+                </Col>
+              </Row>
             ) : null}
             {this.props.byAdmin ? (
               <Row className={getSectionClassName()}>

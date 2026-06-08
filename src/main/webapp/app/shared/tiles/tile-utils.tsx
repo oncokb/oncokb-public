@@ -1,10 +1,11 @@
 import HighestLevelEvidence from 'app/pages/somaticGermlineAlterationPage/HighestLevelEvidence';
 import {
-  VariantAnnotation,
+  GermlineVariantAnnotation,
   MutationEffectResp,
-  GermlineVariant,
   GeneNumber,
+  SomaticVariantAnnotation,
 } from '../api/generated/OncoKbPrivateAPI';
+import type { VariantAnnotation } from 'app/store/AnnotationStore';
 import React, { useEffect, useState } from 'react';
 import classnames from 'classnames';
 import SomaticGermlineTiles, {
@@ -16,6 +17,7 @@ import config, {
   ONCOKB_TM,
   GENOME_NEXUS_ANNOTATION_BASE_URL,
   CLINVAR_VARIANT_BASE_URL,
+  PATHOGENIC_VARIANTS,
 } from 'app/config/constants';
 import {
   isPositionalAlteration,
@@ -98,7 +100,8 @@ function MutationEffectIcon({
 }
 export function createHighestLevelOfEvidenceTileProps(
   variantAnnotation: VariantAnnotation | GeneNumber,
-  includeTitle: boolean
+  includeTitle: boolean,
+  hideFda = false
 ): AlterationTileProps {
   const {
     highestDiagnosticImplicationLevel,
@@ -151,7 +154,7 @@ export function createHighestLevelOfEvidenceTileProps(
         },
         {
           title: 'FDA',
-          show: !!highestFdaLevel,
+          show: !hideFda && !!highestFdaLevel,
           value: <HighestLevelEvidence type="Fda" level={highestFdaLevel} />,
         },
       ],
@@ -170,7 +173,11 @@ function createMutationEffectTileProps(
     query.proteinEnd,
     query.consequence
   );
-  const { mutationEffect, oncogenic, vus } = variantAnnotation;
+  const mutationEffect = variantAnnotation.mutationEffect;
+  const oncogenic = isGermline
+    ? undefined
+    : (variantAnnotation as SomaticVariantAnnotation).oncogenic;
+  const vus = variantAnnotation.vus;
 
   const isUnknownOncogenicity =
     !oncogenic || oncogenic === ONCOGENICITY.UNKNOWN;
@@ -203,7 +210,7 @@ function createMutationEffectTileProps(
 }
 
 function createPathogenicityTileProps(
-  variantAnnotation: GermlineVariant,
+  variantAnnotation: GermlineVariantAnnotation,
   clinvarData: ClinvarData | undefined | null,
   includeTitle: boolean
 ): AlterationTileProps {
@@ -241,7 +248,7 @@ function createPathogenicityTileProps(
 }
 
 function createGeneticRiskTileProps(
-  variantAnnotation: GermlineVariant,
+  variantAnnotation: GermlineVariantAnnotation,
   includeTitle: boolean
 ): AlterationTileProps {
   return {
@@ -272,10 +279,16 @@ export function SomaticGermlineAlterationTiles({
 }: SomaticGermlineAlterationTilesProps) {
   const tiles: AlterationTileProps[] = [];
   const isGermline = rest.isGermline;
-  const hasPathogenicity = !!rest.variantAnnotation.germline?.pathogenic;
+  const germlineAnnotation = isGermline
+    ? (rest.variantAnnotation as GermlineVariantAnnotation)
+    : undefined;
+  const hasPathogenicity = !!germlineAnnotation?.pathogenic;
   const hasMutationEffect = !!rest.variantAnnotation.mutationEffect
     ?.knownEffect;
-  const hasPenetrance = !!rest.variantAnnotation.germline?.penetrance;
+  const hasPenetrance = !!germlineAnnotation?.penetrance;
+  const isPathogenicVariantUmbrella = !!germlineAnnotation?.query.alteration?.startsWith(
+    PATHOGENIC_VARIANTS
+  );
 
   const [clinvar, setClinvar] = useState<ClinvarData | undefined | null>(
     undefined
@@ -313,14 +326,21 @@ export function SomaticGermlineAlterationTiles({
     GENOME_NEXUS_ANNOTATION_BASE_URL,
   ]);
 
-  if (isGermline) {
+  if (isPathogenicVariantUmbrella) {
+    tiles.push(
+      createHighestLevelOfEvidenceTileProps(
+        rest.variantAnnotation,
+        includeTitle,
+        isGermline
+      )
+    );
+    return <SomaticGermlineTiles tiles={tiles} />;
+  }
+
+  if (isGermline && germlineAnnotation) {
     if (hasPathogenicity) {
       tiles.push(
-        createPathogenicityTileProps(
-          rest.variantAnnotation.germline,
-          clinvar,
-          includeTitle
-        )
+        createPathogenicityTileProps(germlineAnnotation, clinvar, includeTitle)
       );
     } else if (hasMutationEffect) {
       tiles.push(
@@ -332,13 +352,15 @@ export function SomaticGermlineAlterationTiles({
       );
     }
     if (hasPenetrance) {
-      tiles.push(
-        createGeneticRiskTileProps(
-          rest.variantAnnotation.germline,
-          includeTitle
-        )
-      );
+      tiles.push(createGeneticRiskTileProps(germlineAnnotation, includeTitle));
     }
+    tiles.push(
+      createHighestLevelOfEvidenceTileProps(
+        rest.variantAnnotation,
+        includeTitle,
+        isGermline
+      )
+    );
   } else {
     tiles.push(
       createMutationEffectTileProps(
@@ -407,7 +429,9 @@ export function SomaticGermlineGeneInfoTiles({
     });
   }
 
-  tiles.push(createHighestLevelOfEvidenceTileProps(geneNumber, true));
+  tiles.push(
+    createHighestLevelOfEvidenceTileProps(geneNumber, true, isGermline)
+  );
 
   const annotatedTitle = `Annotated ${isGermline ? 'Variants' : 'Alterations'}`;
   let annotatedItems: { title: string; value: string }[] = [];

@@ -21,6 +21,7 @@ import {
   ONCOGENICITY_CLASS_NAMES,
   ONCOKB,
   ONCOKB_TM,
+  PATHOGENIC_VARIANTS,
   PAGE_ROUTE,
   REFERENCE_GENOME,
   SHORTEN_TEXT_FROM_LIST_THRESHOLD,
@@ -30,6 +31,7 @@ import {
 } from 'app/config/constants';
 import { COLOR_BLUE } from 'app/config/theme';
 import * as styles from 'app/index.module.scss';
+import { getUniqueFdaImplications } from 'app/pages/annotationPage/Utils';
 import {
   Article,
   Citations,
@@ -924,6 +926,20 @@ export const getCategoricalAlterationDescription = (
         .
       </span>
     );
+  } else if (
+    alteration.toLowerCase().startsWith(PATHOGENIC_VARIANTS.toLowerCase())
+  ) {
+    content = (
+      <span>
+        "{PATHOGENIC_VARIANTS}" includes all variants within {geneLink}{' '}
+        annotated as pathogenic or likely pathogenic as defined by{' '}
+        <SopPageLink>
+          {ONCOKB_TM} Curation Standard Operating Protocol, Part II. Chapter 9:
+          Sub-protocol 2.2
+        </SopPageLink>
+        .
+      </span>
+    );
   }
 
   return content;
@@ -983,10 +999,82 @@ export const getFdaSubmissionNumber = (
     : primaryNumber;
 };
 
+const getAlterationInfoForTag = (
+  tag: Tag,
+  evidence: Evidence,
+  hugoSymbol: string,
+  isFda: boolean,
+  isOnlyTagEvidence: boolean
+): [string, JSX.Element] => {
+  let alterationsName: string;
+  let alterationsView: JSX.Element;
+  if (!isOnlyTagEvidence && evidence.alterations.length > 0) {
+    alterationsName = evidence.alterations
+      .map(alt => alt.alteration)
+      .join(', ');
+    alterationsView = (
+      <WithSeparator separator={', '}>
+        {evidence.alterations.map(alteration =>
+          alteration.consequence ? (
+            <AlterationPageLink
+              key={alteration.name}
+              hugoSymbol={hugoSymbol}
+              alteration={{
+                alteration: alteration.alteration,
+                name: alteration.name,
+              }}
+              alterationRefGenomes={
+                alteration.referenceGenomes as REFERENCE_GENOME[]
+              }
+              hashQueries={
+                isFda
+                  ? {
+                      tab: ANNOTATION_PAGE_TAB_KEYS.FDA,
+                    }
+                  : undefined
+              }
+              germline={false}
+            />
+          ) : (
+            <span>{alteration.name}</span>
+          )
+        )}
+      </WithSeparator>
+    );
+  } else {
+    alterationsName = tag.name;
+    alterationsView = (
+      <AlterationPageLink
+        key={tag.name}
+        hugoSymbol={hugoSymbol}
+        alteration={tag.name}
+        alterationRefGenomes={[
+          REFERENCE_GENOME.GRCh37,
+          REFERENCE_GENOME.GRCh38,
+        ]}
+        germline={false}
+        hashQueries={
+          isFda
+            ? {
+                tab: ANNOTATION_PAGE_TAB_KEYS.FDA,
+              }
+            : undefined
+        }
+        isTag
+      >
+        <span>{tag.name}</span>
+        <InfoIcon className="ml-2" overlay={<span>{tag.description}</span>} />
+      </AlterationPageLink>
+    );
+  }
+  return [alterationsName, alterationsView];
+};
+
 const getImplicationsFromTag = (
   tag: Tag,
   evidenceTypes: EVIDENCE_TYPES[],
-  hugoSymbol: string
+  hugoSymbol: string,
+  isOnlyTagEvidence: boolean
 ) => {
   const implications: TherapeuticImplication[] = [];
   for (const evidence of tag.evidences) {
@@ -994,6 +1082,13 @@ const getImplicationsFromTag = (
       continue;
     }
 
+    const [alterationsName, alterationsView] = getAlterationInfoForTag(
+      tag,
+      evidence,
+      hugoSymbol,
+      false,
+      isOnlyTagEvidence
+    );
     const level = levelOfEvidence2Level(evidence.levelOfEvidence);
     const fdaLevel = levelOfEvidence2Level(evidence.fdaLevel);
     const cancerTypes = evidence.cancerTypes.map(cancerType =>
@@ -1013,26 +1108,8 @@ const getImplicationsFromTag = (
           level,
           fdaLevel,
           drugDescription: evidence.description,
-          alterations: tag.name,
-          alterationsView: (
-            <AlterationPageLink
-              key={tag.name}
-              hugoSymbol={hugoSymbol}
-              alteration={tag.name}
-              alterationRefGenomes={[
-                REFERENCE_GENOME.GRCh37,
-                REFERENCE_GENOME.GRCh38,
-              ]}
-              germline={false}
-              isTag
-            >
-              <span>{tag.name}</span>
-              <InfoIcon
-                className="ml-2"
-                overlay={<span>{tag.description}</span>}
-              />
-            </AlterationPageLink>
-          ),
+          alterations: alterationsName,
+          alterationsView,
           drugs: getTreatmentNameByPriority(treatment),
           cancerTypes: cancerTypesName,
           cancerTypesArray: cancerTypes,
@@ -1071,26 +1148,8 @@ const getImplicationsFromTag = (
         level,
         fdaLevel,
         drugDescription: evidence.description,
-        alterations: tag.name,
-        alterationsView: (
-          <AlterationPageLink
-            key={tag.name}
-            hugoSymbol={hugoSymbol}
-            alteration={tag.name}
-            alterationRefGenomes={[
-              REFERENCE_GENOME.GRCh37,
-              REFERENCE_GENOME.GRCh38,
-            ]}
-            germline={false}
-            isTag
-          >
-            <span>{tag.name}</span>
-            <InfoIcon
-              className="ml-2"
-              overlay={<span>{tag.description}</span>}
-            />
-          </AlterationPageLink>
-        ),
+        alterations: alterationsName,
+        alterationsView,
         drugs: '',
         cancerTypes: cancerTypesName,
         cancerTypesArray: cancerTypes,
@@ -1132,18 +1191,28 @@ const getImplicationsFromTag = (
 export const getImplicationsFromTags = (
   tags: Tag[],
   evidenceTypes: EVIDENCE_TYPES[],
-  hugoSymbol: string
+  hugoSymbol: string,
+  isOnlyTagEvidence: boolean
 ) => {
   const implications: TherapeuticImplication[] = [];
   for (const tag of tags) {
     implications.push(
-      ...getImplicationsFromTag(tag, evidenceTypes, hugoSymbol)
+      ...getImplicationsFromTag(
+        tag,
+        evidenceTypes,
+        hugoSymbol,
+        isOnlyTagEvidence
+      )
     );
   }
   return implications;
 };
 
-const getFdaImplicationsFromTag = (tag: Tag, hugoSymbol: string) => {
+const getFdaImplicationsFromTag = (
+  tag: Tag,
+  hugoSymbol: string,
+  isOnlyTagEvidence: boolean
+) => {
   const fdaImplications: FdaImplication[] = [];
   for (const evidence of tag.evidences) {
     if (
@@ -1154,6 +1223,13 @@ const getFdaImplicationsFromTag = (tag: Tag, hugoSymbol: string) => {
       continue;
     }
 
+    const [alterationsName, alterationsView] = getAlterationInfoForTag(
+      tag,
+      evidence,
+      hugoSymbol,
+      true,
+      isOnlyTagEvidence
+    );
     const fdaLevel = levelOfEvidence2Level(evidence.fdaLevel);
     const cancerTypes = evidence.cancerTypes.map(cancerType =>
       getCancerTypeNameFromOncoTreeType(cancerType)
@@ -1195,14 +1271,14 @@ const getFdaImplicationsFromTag = (tag: Tag, hugoSymbol: string) => {
     fdaImplications.push({
       level: fdaLevel,
       alteration: {
-        alteration: tag.name,
+        alteration: alterationsName,
         consequence: {
           description: '',
           isGenerallyTruncating: false,
           term: '',
         },
         gene: evidence.gene,
-        name: tag.name,
+        name: alterationsName,
         proteinChange: '',
         proteinEnd: 0,
         proteinStart: 0,
@@ -1210,25 +1286,7 @@ const getFdaImplicationsFromTag = (tag: Tag, hugoSymbol: string) => {
         referenceGenomes: [],
         variantResidues: '',
       },
-      alterationView: (
-        <AlterationPageLink
-          key={tag.name}
-          hugoSymbol={hugoSymbol}
-          alteration={tag.name}
-          alterationRefGenomes={[
-            REFERENCE_GENOME.GRCh37,
-            REFERENCE_GENOME.GRCh38,
-          ]}
-          hashQueries={{
-            tab: ANNOTATION_PAGE_TAB_KEYS.FDA,
-          }}
-          germline={false}
-          isTag
-        >
-          <span>{tag.name}</span>
-          <InfoIcon className="ml-2" overlay={<span>{tag.description}</span>} />
-        </AlterationPageLink>
-      ),
+      alterationView: alterationsView,
       cancerType: cancerTypesName,
       cancerTypeView,
     });
@@ -1236,12 +1294,18 @@ const getFdaImplicationsFromTag = (tag: Tag, hugoSymbol: string) => {
   return fdaImplications;
 };
 
-export const getFdaImplicationsFromTags = (tags: Tag[], hugoSymbol: string) => {
+export const getFdaImplicationsFromTags = (
+  tags: Tag[],
+  hugoSymbol: string,
+  isOnlyTagEvidence: boolean
+) => {
   const implications: FdaImplication[] = [];
   for (const tag of tags) {
-    implications.push(...getFdaImplicationsFromTag(tag, hugoSymbol));
+    implications.push(
+      ...getFdaImplicationsFromTag(tag, hugoSymbol, isOnlyTagEvidence)
+    );
   }
-  return implications;
+  return getUniqueFdaImplications(implications);
 };
 
 export const getTagVariantOverview = (tag: Tag) => {

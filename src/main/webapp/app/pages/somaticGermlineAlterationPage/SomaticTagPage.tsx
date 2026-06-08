@@ -1,4 +1,3 @@
-import { GENETIC_TYPE } from 'app/components/geneticTypeTabs/GeneticTypeTabs';
 import LoadingIndicator, {
   LoaderSize,
 } from 'app/components/loadingIndicator/LoadingIndicator';
@@ -11,6 +10,7 @@ import {
 import { Gene } from 'app/shared/api/generated/OncoKbAPI';
 import {
   EnsemblGene,
+  SomaticVariantAnnotation,
   Tag,
   VariantAnnotation,
 } from 'app/shared/api/generated/OncoKbPrivateAPI';
@@ -24,7 +24,6 @@ import { AlterationPageHashQueries } from 'app/shared/route/types';
 import GeneAdditionalInfoSection from 'app/shared/sections/GeneAdditionalInfoSection';
 import { SomaticGermlineTile } from 'app/shared/tiles/SomaticGermlineTiles';
 import { createHighestLevelOfEvidenceTileProps } from 'app/shared/tiles/tile-utils';
-import { upperFirst } from 'app/shared/utils/LodashUtils';
 import {
   getFdaImplicationsFromTags,
   getImplicationsFromTags,
@@ -79,9 +78,7 @@ const SomaticTagPage = inject(
   'routing'
 )((props: SomaticGermlineTagPageProps) => {
   const { hugoSymbol, tag: tagName } = props.match.params;
-  const documentTitle = `${upperFirst(
-    GENETIC_TYPE.SOMATIC
-  )} ${hugoSymbol} ${tagName}`;
+  const documentTitle = `${hugoSymbol} ${tagName}`;
 
   const [pageLoadState, setPageLoadState] = useState<PageLoadState>({
     state: LoadState.Loading,
@@ -184,7 +181,7 @@ const SomaticTagPage = inject(
       {pageLoadState.state === LoadState.Success ? (
         (() => {
           const { tag, gene, ensemblGenes, geneSummary } = pageLoadState.data;
-          const highestLevelInfo: VariantAnnotation = {
+          const highestLevelInfo: SomaticVariantAnnotation = {
             ...DEFAULT_ANNOTATION,
             highestSensitiveLevel: tag.highestLevels.highestSensitiveLevel,
             highestDiagnosticImplicationLevel:
@@ -278,22 +275,26 @@ const SomaticTagPage = inject(
                       relevantAlterations={undefined}
                       fdaImplication={getFdaImplicationsFromTags(
                         [tag],
-                        hugoSymbol
+                        hugoSymbol,
+                        false
                       )}
                       therapeuticImplications={getImplicationsFromTags(
                         [tag],
                         TREATMENT_EVIDENCE_TYPES,
-                        gene.hugoSymbol
+                        gene.hugoSymbol,
+                        false
                       )}
                       diagnosticImplications={getImplicationsFromTags(
                         [tag],
                         [EVIDENCE_TYPES.DIAGNOSTIC_IMPLICATION],
-                        gene.hugoSymbol
+                        gene.hugoSymbol,
+                        false
                       )}
                       prognosticImplications={getImplicationsFromTags(
                         [tag],
                         [EVIDENCE_TYPES.PROGNOSTIC_IMPLICATION],
-                        gene.hugoSymbol
+                        gene.hugoSymbol,
+                        false
                       )}
                       defaultSelectedTab={selectedTab}
                       onChangeTab={onChangeTab}

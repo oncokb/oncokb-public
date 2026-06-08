@@ -72,7 +72,8 @@ export class PasswordResetInit extends React.Component<{}> {
               },
               maxLength: {
                 value: 254,
-                errorMessage: 'Your email cannot be longer than 50 characters.',
+                errorMessage:
+                  'Your email cannot be longer than 254 characters.',
               },
             }}
           />

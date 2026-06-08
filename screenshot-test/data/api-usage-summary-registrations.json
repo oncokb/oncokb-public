@@ -1,0 +1,27 @@
+[
+  {
+    "date": "2026-04-28",
+    "total": 12,
+    "licenseType": "ACADEMIC"
+  },
+  {
+    "date": "2026-04-28",
+    "total": 5,
+    "licenseType": "COMMERCIAL"
+  },
+  {
+    "date": "2026-04-21",
+    "total": 9,
+    "licenseType": "HOSPITAL"
+  },
+  {
+    "date": "2026-04-20",
+    "total": 3,
+    "licenseType": "RESEARCH_IN_COMMERCIAL"
+  },
+  {
+    "date": "No creation date",
+    "total": 1,
+    "licenseType": "ACADEMIC"
+  }
+]

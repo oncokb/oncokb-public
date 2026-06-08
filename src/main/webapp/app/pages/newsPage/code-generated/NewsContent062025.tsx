@@ -7,6 +7,7 @@ import {
 } from 'app/shared/utils/UrlUtils';
 import { NewlyAddedGenesListItem } from 'app/pages/newsPage/NewlyAddedGenesListItem';
 import { TableOfContents } from 'app/pages/privacyNotice/TableOfContents';
+import { convertGeneInputToLinks } from 'app/pages/newsPage/Util';
 
 export default function NewsContent062025() {
   return (
@@ -21,14 +22,14 @@ export default function NewsContent062025() {
       <p>
         <strong>Updated Therapeutic Implications</strong>
       </p>
-      <ul>
-        <li>
+      <ul style={{ marginBottom: 0 }}>
+        <li style={{ marginBottom: 0 }}>
           Addition of drug(s) associated with a tumor type-specific leveled
           alteration(s) currently in OncoKB™ (without changing the alteration's
           highest level of evidence)
         </li>
       </ul>
-      <div className="table-responsive">
+      <div className="table-responsive" style={{ marginBottom: '1.5rem' }}>
         <table className="table">
           <thead>
             <tr>
@@ -44,9 +45,13 @@ export default function NewsContent062025() {
           <tbody>
             <tr>
               <td>1</td>
-              <td>{getAlternativeGenePageLinks('ROS1')}</td>
+              <td>{getAlternativeGenePageLinks('ROS1', false)}</td>
               <td>
-                <AlterationPageLink hugoSymbol="ROS1" alteration="Fusions">
+                <AlterationPageLink
+                  hugoSymbol="ROS1"
+                  alteration="Fusions"
+                  germline={false}
+                >
                   Fusions
                 </AlterationPageLink>
               </td>
@@ -65,11 +70,12 @@ export default function NewsContent062025() {
             </tr>
             <tr>
               <td>1</td>
-              <td>{getAlternativeGenePageLinks('ERBB2')}</td>
+              <td>{getAlternativeGenePageLinks('ERBB2', false)}</td>
               <td>
                 <AlterationPageLink
                   hugoSymbol="ERBB2"
                   alteration="Oncogenic Mutations"
+                  germline={false}
                 >
                   Oncogenic Mutations
                 </AlterationPageLink>

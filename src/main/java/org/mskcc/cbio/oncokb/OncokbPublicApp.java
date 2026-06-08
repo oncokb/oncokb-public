@@ -1,16 +1,11 @@
 package org.mskcc.cbio.oncokb;
 
-import io.sentry.Sentry;
 import org.mskcc.cbio.oncokb.config.application.ApplicationProperties;
 
 import io.github.jhipster.config.DefaultProfileUtil;
 import io.github.jhipster.config.JHipsterConstants;
 
 import org.apache.commons.lang3.StringUtils;
-import org.mskcc.cbio.oncokb.service.EmailAlreadyUsedException;
-import org.mskcc.cbio.oncokb.service.InvalidPasswordException;
-import org.mskcc.cbio.oncokb.service.UsernameAlreadyUsedException;
-import org.mskcc.cbio.oncokb.web.rest.errors.*;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.boot.SpringApplication;
@@ -18,16 +13,7 @@ import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.boot.autoconfigure.liquibase.LiquibaseProperties;
 import org.springframework.boot.context.properties.EnableConfigurationProperties;
 import org.springframework.core.env.Environment;
-import org.springframework.security.authentication.BadCredentialsException;
-import org.springframework.security.authentication.InternalAuthenticationServiceException;
-import org.springframework.web.HttpRequestMethodNotSupportedException;
-import org.springframework.web.client.HttpClientErrorException;
-import org.springframework.web.client.HttpServerErrorException;
-import org.springframework.web.client.ResourceAccessException;
-import org.springframework.web.server.ResponseStatusException;
-
 import javax.annotation.PostConstruct;
-import java.io.IOException;
 import java.net.InetAddress;
 import java.net.UnknownHostException;
 import java.util.Arrays;
@@ -75,40 +61,6 @@ public class OncokbPublicApp {
         DefaultProfileUtil.addDefaultProfile(app);
         Environment env = app.run(args).getEnvironment();
         logApplicationStartup(env);
-        initSentry(env);
-    }
-
-    private static void initSentry(Environment env) {
-        Collection<String> activeProfiles = Arrays.asList(env.getActiveProfiles());
-        if (activeProfiles.contains(JHipsterConstants.SPRING_PROFILE_PRODUCTION)) {
-            Sentry.init(options -> {
-                options.setEnableExternalConfiguration(true);
-                options.setEnableUncaughtExceptionHandler(true);
-
-                // Completed disable the traces sampling
-                options.setTracesSampler(null);
-                options.setTracesSampleRate(null);
-
-                // Ignore the following exceptions
-                options.addIgnoredExceptionForType(BadCredentialsException.class);
-                options.addIgnoredExceptionForType(IOException.class);
-                options.addIgnoredExceptionForType(HttpClientErrorException.class);
-                options.addIgnoredExceptionForType(HttpServerErrorException.class);
-                options.addIgnoredExceptionForType(ResponseStatusException.class);
-                options.addIgnoredExceptionForType(EmailAlreadyUsedException.class);
-                options.addIgnoredExceptionForType(InvalidPasswordException.class);
-                options.addIgnoredExceptionForType(UsernameAlreadyUsedException.class);
-                options.addIgnoredExceptionForType(HttpRequestMethodNotSupportedException.class);
-                options.addIgnoredExceptionForType(TokenExpiredException.class);
-                options.addIgnoredExceptionForType(LicenseAgreementNotAcceptedException.class);
-                options.addIgnoredExceptionForType(DatabaseReadOnlyException.class);
-                options.addIgnoredExceptionForType(InternalAuthenticationServiceException.class);
-                options.addIgnoredExceptionForType(CustomMessageRuntimeException.class);
-                options.addIgnoredExceptionForType(BadRequestAlertException.class);
-                options.addIgnoredExceptionForType(ResourceAccessException.class);
-                options.addIgnoredExceptionForType(TokenExpiredException.class);
-            });
-        }
     }
 
     private static void logApplicationStartup(Environment env) {

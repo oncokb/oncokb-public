@@ -16,8 +16,8 @@ $view-wrapper-default-p-y: 2rem !default;
   .footer {
     height: $footer-height;
   }
-  .faq-iframe,
-  .faq-iframe-high-top {
+  .gitbook-iframe,
+  .gitbook-iframe-high-top {
     position: fixed;
     background: white;
     border: none;
@@ -26,11 +26,11 @@ $view-wrapper-default-p-y: 2rem !default;
     left: 0;
     width: 100%;
   }
-  .faq-iframe {
+  .gitbook-iframe {
     top: 80px;
     height: calc(100% - 80px);
   }
-  .faq-iframe-high-top {
+  .gitbook-iframe-high-top {
     top: 120px;
     height: calc(100% - 120px);
   }

@@ -72,10 +72,12 @@ import {
 } from 'app/shared/utils/LodashUtils';
 import { Helmet } from 'react-helmet-async';
 import InfoIcon from 'app/shared/icons/InfoIcon';
+import GeneticTypeTag from 'app/components/tag/GeneticTypeTag';
 
 type Treatment = {
   level: string;
   fdaLevel: string;
+  germline: boolean;
   hugoSymbol: string;
   alterations: Alteration[];
   alterationsName: string;
@@ -104,6 +106,7 @@ export default class ActionableGenesPage extends React.Component<
   @observable relevantCancerTypeSearchKeyword = '';
   @observable drugSearchKeyword = '';
   @observable geneSearchKeyword = '';
+  @observable geneticTypeFilter = '';
   @observable refGenome = DEFAULT_REFERENCE_GENOME;
   @observable levelSelected: {
     [level in LEVELS]: boolean;
@@ -132,11 +135,22 @@ export default class ActionableGenesPage extends React.Component<
   readonly evidencesByLevel = remoteData<EvidencesByLevel>({
     await: () => [],
     async invoke() {
-      return await privateClient.utilsEvidencesByLevelsGetUsingGET({});
+      return await privateClient.utilsEvidencesByLevelsGetUsingGET({
+        germline: false,
+      });
     },
     default: {},
   });
 
+  readonly germlineEvidencesByLevel = remoteData<EvidencesByLevel>({
+    await: () => [],
+    async invoke() {
+      return await privateClient.utilsEvidencesByLevelsGetUsingGET({
+        germline: true,
+      });
+    },
+    default: {},
+  });
   readonly reactions: IReactionDisposer[] = [];
 
   constructor(props: Readonly<ActionableGenesPageProps>) {
@@ -211,6 +225,8 @@ export default class ActionableGenesPage extends React.Component<
             this.collapseStatus[LEVEL_TYPES.PX] = false;
             this.props.appStore.inFdaRecognizedContent = true;
             this.clearSelectedLevels('ONCOKB');
+            this.drugSearchKeyword = '';
+            this.geneticTypeFilter = '';
           } else {
             if (
               !(
@@ -260,7 +276,7 @@ export default class ActionableGenesPage extends React.Component<
     this.reactions.forEach(componentReaction => componentReaction());
   }
 
-  getTreatments(evidences: Evidence[]) {
+  getTreatments(evidences: Evidence[], germline: boolean) {
     const treatments: (Treatment & { isTag?: boolean })[] = [];
     evidences.forEach((item: Evidence) => {
       const matchedAlterations = item.alterations.filter(alteration =>
@@ -307,6 +323,7 @@ export default class ActionableGenesPage extends React.Component<
             treatments.push({
               level,
               fdaLevel,
+              germline,
               hugoSymbol: item.gene.hugoSymbol || 'NA',
               alterations: sortedAlts,
               alterationsName: sortedAltsName,
@@ -326,6 +343,7 @@ export default class ActionableGenesPage extends React.Component<
           treatments.push({
             level,
             fdaLevel,
+            germline,
             hugoSymbol: item.gene.hugoSymbol || 'NA',
             alterations: sortedAlts,
             alterationsName: sortedAltsName,
@@ -340,6 +358,15 @@ export default class ActionableGenesPage extends React.Component<
           });
         }
       }
+    });
+    return treatments;
+  }
+
+  getMergedTreatments(evidencesByLevel: EvidencesByLevel, germline: boolean) {
+    let treatments: (Treatment & { isTag?: boolean })[] = [];
+    Object.keys(evidencesByLevel).forEach(levelOfEvidence => {
+      const content = evidencesByLevel[levelOfEvidence];
+      treatments = treatments.concat(this.getTreatments(content, germline));
     });
     return treatments;
   }
@@ -393,22 +420,23 @@ export default class ActionableGenesPage extends React.Component<
 
   @computed
   get allOncokbTreatments() {
-    let treatments: (Treatment & { isTag?: boolean })[] = [];
-    Object.keys(this.evidencesByLevel.result).forEach(levelOfEvidence => {
-      const content = this.evidencesByLevel.result[levelOfEvidence];
-      treatments = treatments.concat(this.getTreatments(content));
-    });
+    const treatments = this.getMergedTreatments(
+      this.evidencesByLevel.result,
+      false
+    ).concat(
+      this.getMergedTreatments(this.germlineEvidencesByLevel.result, true)
+    );
     return uniqBy(
       treatments,
       treatment =>
-        `${treatment.level}-${treatment.hugoSymbol}-${treatment.alterationsName}-${treatment.cancerTypesName}-${treatment.drugs}`
+        `${treatment.level}-${treatment.germline}-${treatment.hugoSymbol}-${treatment.alterationsName}-${treatment.cancerTypesName}-${treatment.drugs}`
     );
   }
 
   @computed
   get allFdaTreatments() {
     const treatments: (Treatment & { isTag?: boolean })[] = [];
-    this.allOncokbTreatments
+    this.getMergedTreatments(this.evidencesByLevel.result, false)
       .filter(treatment => treatment.fdaLevel)
       .map(treatment => {
         treatments.push({
@@ -419,7 +447,7 @@ export default class ActionableGenesPage extends React.Component<
     return uniqBy(
       treatments,
       treatment =>
-        `${treatment.level}-${treatment.hugoSymbol}-${treatment.alterationsName}-${treatment.cancerTypesName}`
+        `${treatment.level}-${treatment.germline}-${treatment.hugoSymbol}-${treatment.alterationsName}-${treatment.cancerTypesName}`
     );
   }
 
@@ -454,6 +482,12 @@ export default class ActionableGenesPage extends React.Component<
       ) {
         match = false;
       }
+      if (this.geneticTypeFilter === 'germline' && !treatment.germline) {
+        match = false;
+      }
+      if (this.geneticTypeFilter === 'somatic' && treatment.germline) {
+        match = false;
+      }
       if (
         this.selectedLevels.length > 0 &&
         !this.selectedLevels.includes(treatment.level)
@@ -472,6 +506,7 @@ export default class ActionableGenesPage extends React.Component<
   @computed
   get secondLayerFilterEnabled() {
     return (
+      !!this.geneticTypeFilter ||
       !!this.geneSearchKeyword ||
       !!this.relevantCancerTypeSearchKeyword ||
       !!this.drugSearchKeyword
@@ -580,6 +615,18 @@ export default class ActionableGenesPage extends React.Component<
       : null;
   }
 
+  @computed
+  get geneticTypeSelectValue() {
+    return this.geneticTypeFilter
+      ? {
+          label:
+            this.geneticTypeFilter.charAt(0).toUpperCase() +
+            this.geneticTypeFilter.slice(1),
+          value: this.geneticTypeFilter,
+        }
+      : null;
+  }
+
   @autobind
   @action
   updateLevelSelection(levelOfEvidence: LEVELS) {
@@ -609,11 +656,12 @@ export default class ActionableGenesPage extends React.Component<
     this.relevantCancerTypeSearchKeyword = '';
     this.drugSearchKeyword = '';
     this.geneSearchKeyword = '';
+    this.geneticTypeFilter = '';
   }
 
   @autobind
   downloadAssociation() {
-    const header = ['Level', 'Gene', 'Alterations', 'Cancer Types'];
+    const header = ['Level', 'Setting', 'Gene', 'Alterations', 'Cancer Types'];
     if (this.drugRelatedLevelSelected) {
       header.push('Drugs (for therapeutic implications only)');
     }
@@ -621,6 +669,7 @@ export default class ActionableGenesPage extends React.Component<
     this.filteredTreatments
       .map(treatment => ({
         level: treatment.level,
+        setting: treatment.germline ? 'Germline' : 'Somatic',
         hugoSymbol: treatment.hugoSymbol,
         alterations: treatment.alterationsName,
         tumorType: treatment.cancerTypesName,
@@ -628,6 +677,9 @@ export default class ActionableGenesPage extends React.Component<
       }))
       .sort((treatmentA, treatmentB) => {
         let result = sortByLevel(treatmentA.level, treatmentB.level);
+        if (result === 0) {
+          result = treatmentA.setting.localeCompare(treatmentB.setting);
+        }
         if (result === 0) {
           result = treatmentA.hugoSymbol.localeCompare(treatmentB.hugoSymbol);
         }
@@ -645,6 +697,7 @@ export default class ActionableGenesPage extends React.Component<
       .forEach(item => {
         const row = [
           item.level,
+          item.setting,
           item.hugoSymbol,
           item.alterations,
           item.tumorType,
@@ -660,7 +713,8 @@ export default class ActionableGenesPage extends React.Component<
   getAlterationCell(
     hugoSymbol: string,
     alterations: Alteration[],
-    isTag?: boolean
+    isTag?: boolean,
+    germline = false
   ) {
     const alterationPageHashQueries: AlterationPageHashQueries = {};
     if (this.fdaSectionIsOpen) {
@@ -677,6 +731,7 @@ export default class ActionableGenesPage extends React.Component<
               alterationRefGenomes={
                 alteration.referenceGenomes as REFERENCE_GENOME[]
               }
+              germline={germline}
               hashQueries={alterationPageHashQueries}
               onClick={() => {
                 if (this.fdaSectionIsOpen) {
@@ -706,6 +761,7 @@ export default class ActionableGenesPage extends React.Component<
               alterationRefGenomes={
                 alteration.referenceGenomes as REFERENCE_GENOME[]
               }
+              germline={germline}
               hashQueries={alterationPageHashQueries}
               onClick={() => {
                 if (this.fdaSectionIsOpen) {
@@ -719,7 +775,7 @@ export default class ActionableGenesPage extends React.Component<
         return <span>{alteration.name}</span>;
       }
     );
-    const shortenTextKey = `${hugoSymbol}-${alterations
+    const shortenTextKey = `${hugoSymbol}-${germline}-${alterations
       .map(a => a.alteration)
       .join('-')}`;
     return (
@@ -773,7 +829,23 @@ export default class ActionableGenesPage extends React.Component<
         },
       },
       {
+        id: 'geneticType',
+        Header: <span>Setting</span>,
+        accessor: 'germline',
+        sortMethod(a: boolean, b: boolean) {
+          return a === b ? 0 : a ? 1 : -1;
+        },
+        Cell(props: { original: Treatment }) {
+          return (
+            <div className={'d-flex'}>
+              <GeneticTypeTag isGermline={props.original.germline} />
+            </div>
+          );
+        },
+      },
+      {
         ...getDefaultColumnDefinition(TABLE_COLUMN_KEY.HUGO_SYMBOL),
+        minWidth: 110,
         style: { whiteSpace: 'normal' },
         Cell: (props: { original: Treatment }) => {
           const hashQueries: GenePageHashQueries = {};
@@ -783,6 +855,7 @@ export default class ActionableGenesPage extends React.Component<
           return (
             <GenePageLink
               hugoSymbol={props.original.hugoSymbol}
+              germline={props.original.germline}
               hashQueries={hashQueries}
               onClick={() => {
                 if (this.fdaSectionIsOpen) {
@@ -813,7 +886,8 @@ export default class ActionableGenesPage extends React.Component<
               {this.getAlterationCell(
                 props.original.hugoSymbol,
                 props.original.alterations,
-                props.original.isTag
+                props.original.isTag,
+                props.original.germline
               )}
             </div>
           );
@@ -841,10 +915,14 @@ export default class ActionableGenesPage extends React.Component<
 
   @computed
   get oncokbTableProps() {
+    const loading = this.fdaSectionIsOpen
+      ? this.evidencesByLevel.isPending
+      : this.evidencesByLevel.isPending ||
+        this.germlineEvidencesByLevel.isPending;
     const tableProps = {
       disableSearch: true,
       data: this.filteredTreatments,
-      loading: this.evidencesByLevel.isPending,
+      loading,
       columns: this.columns,
       defaultPageSize: 10,
       defaultSorted: [
@@ -959,9 +1037,33 @@ export default class ActionableGenesPage extends React.Component<
           style={{ paddingLeft: '0.5rem', paddingRight: '0.5rem' }}
           className={'mb-2'}
         >
+          {!this.fdaSectionIsOpen && (
+            <Col
+              className={classnames(...COMPONENT_PADDING)}
+              lg={this.drugRelatedLevelSelected ? 3 : 4}
+              xs={12}
+            >
+              <Select
+                value={this.geneticTypeSelectValue}
+                placeholder={'Germline / Somatic'}
+                options={[
+                  { value: 'germline', label: 'Germline' },
+                  { value: 'somatic', label: 'Somatic' },
+                ]}
+                isClearable={true}
+                onChange={(selectedOption: any) =>
+                  (this.geneticTypeFilter = selectedOption
+                    ? selectedOption.value
+                    : '')
+                }
+              />
+            </Col>
+          )}
           <Col
             className={classnames(...COMPONENT_PADDING)}
-            lg={this.drugRelatedLevelSelected ? 4 : 6}
+            lg={
+              this.fdaSectionIsOpen ? 6 : this.drugRelatedLevelSelected ? 3 : 4
+            }
             xs={12}
           >
             <Select
@@ -986,7 +1088,9 @@ export default class ActionableGenesPage extends React.Component<
           </Col>
           <Col
             className={classnames(...COMPONENT_PADDING)}
-            lg={this.drugRelatedLevelSelected ? 4 : 6}
+            lg={
+              this.fdaSectionIsOpen ? 6 : this.drugRelatedLevelSelected ? 3 : 4
+            }
             xs={12}
           >
             <CancerTypeSelect
@@ -999,7 +1103,7 @@ export default class ActionableGenesPage extends React.Component<
             />
           </Col>
           {this.drugRelatedLevelSelected && (
-            <Col className={classnames(...COMPONENT_PADDING)} lg={4} xs={12}>
+            <Col className={classnames(...COMPONENT_PADDING)} lg={3} xs={12}>
               <Select
                 value={this.drugSelectValue}
                 placeholder={`${this.filteredDrugs.length} ${pluralize(

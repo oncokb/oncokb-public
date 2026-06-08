@@ -5,7 +5,7 @@
 
     <groupId>org.mskcc.cbio.oncokb</groupId>
     <artifactId>public-website</artifactId>
-    <version>6.6.2</version>
+    <version>6.19.0</version>
     <packaging>jar</packaging>
     <name>OncoKB Public Website</name>
 
@@ -91,7 +91,6 @@
         <junit.utReportFolder>${project.testresult.directory}/test</junit.utReportFolder>
         <junit.itReportFolder>${project.testresult.directory}/integrationTest</junit.itReportFolder>
         <slack.version>1.25.1</slack.version>
-        <sentry.version>6.4.1</sentry.version>
         <!-- jhipster-needle-maven-property -->
     </properties>
 
@@ -357,12 +356,6 @@
             <groupId>org.apache.httpcomponents</groupId>
             <artifactId>httpclient</artifactId>
             <version>4.5.13</version>
-        </dependency>
-        <!-- Sentry -->
-        <dependency>
-            <groupId>io.sentry</groupId>
-            <artifactId>sentry-spring-boot-starter</artifactId>
-            <version>${sentry.version}</version>
         </dependency>
         <dependency>
             <groupId>com.slack.api</groupId>
