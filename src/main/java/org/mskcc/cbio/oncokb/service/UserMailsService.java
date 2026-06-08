@@ -22,6 +22,8 @@ import java.util.Optional;
 import java.util.stream.Collectors;
 
 import static org.mskcc.cbio.oncokb.config.cache.UserCacheResolver.ALL_USERS_CACHE;
+import static org.mskcc.cbio.oncokb.config.cache.UserCacheResolver.USERS_BY_EMAIL_CACHE;
+import static org.mskcc.cbio.oncokb.config.cache.UserCacheResolver.USERS_BY_LOGIN_CACHE;
 
 /**
  * Service Implementation for managing {@link UserMails}.
@@ -62,7 +64,7 @@ public class UserMailsService {
         log.debug("Request to save UserMails : {}", userMailsDTO);
         UserMails userMails = userMailsMapper.toEntity(userMailsDTO);
         userMails = userMailsRepository.save(userMails);
-        clearManagedUsersCache();
+        clearUserCaches(userMails.getUser());
         return userMailsMapper.toDto(userMails);
     }
 
@@ -134,8 +136,11 @@ public class UserMailsService {
      */
     public void delete(Long id) {
         log.debug("Request to delete UserMails : {}", id);
+        Optional<UserMails> userMails = userMailsRepository.findById(id);
         userMailsRepository.deleteById(id);
-        clearManagedUsersCache();
+        if (userMails.isPresent()) {
+            clearUserCaches(userMails.get().getUser());
+        }
     }
 
     /**
@@ -146,12 +151,14 @@ public class UserMailsService {
     public void deleteAllByUser(User user) {
         log.debug("Request to delete all UserMails related to user: {}", user);
         userMailsRepository.deleteAllByUser(user);
-        clearManagedUsersCache();
+        clearUserCaches(user);
     }
 
-    private void clearManagedUsersCache() {
-        Objects.requireNonNull(
-            cacheManager.getCache(this.cacheNameResolver.getCacheName(ALL_USERS_CACHE))
-        ).evict("getAllManagedUsers");
+    private void clearUserCaches(User user) {
+        Objects.requireNonNull(cacheManager.getCache(this.cacheNameResolver.getCacheName(USERS_BY_LOGIN_CACHE))).evict(user.getLogin());
+        if (user.getEmail() != null) {
+            Objects.requireNonNull(cacheManager.getCache(this.cacheNameResolver.getCacheName(USERS_BY_EMAIL_CACHE))).evict(user.getEmail());
+        }
+        Objects.requireNonNull(cacheManager.getCache(this.cacheNameResolver.getCacheName(ALL_USERS_CACHE))).evict("getAllManagedUsers");
     }
 }
