@@ -28,6 +28,13 @@ import {
   getImplicationsFromTags,
   getTagVariantOverview,
 } from 'app/shared/utils/Utils';
+import {
+  getHighestDiagnosticImplicationLevel,
+  getHighestFdaLevel,
+  getHighestPrognosticImplicationLevel,
+  getHighestResistanceLevel,
+  getHighestSensitiveLevel,
+} from 'app/shared/utils/LevelUtils';
 import AppStore from 'app/store/AppStore';
 import { inject } from 'mobx-react';
 import { RouterStore } from 'mobx-react-router';
@@ -182,13 +189,21 @@ const SomaticTagPage = inject(
           const { tag, gene, ensemblGenes, geneSummary } = pageLoadState.data;
           const highestLevelInfo: SomaticVariantAnnotation = {
             ...DEFAULT_ANNOTATION,
-            highestSensitiveLevel: tag.highestLevels.highestSensitiveLevel,
-            highestDiagnosticImplicationLevel:
-              tag.highestLevels.highestDiagnosticLevel,
-            highestPrognosticImplicationLevel:
-              tag.highestLevels.highestPrognosticLevel,
-            highestResistanceLevel: tag.highestLevels.highestResistanceLevel,
-            highestFdaLevel: tag.highestLevels.highestFDALevel,
+            highestSensitiveLevel: getHighestSensitiveLevel(
+              tag.highestLevels.highestSensitiveLevel
+            ),
+            highestDiagnosticImplicationLevel: getHighestDiagnosticImplicationLevel(
+              tag.highestLevels.highestDiagnosticLevel
+            ),
+            highestPrognosticImplicationLevel: getHighestPrognosticImplicationLevel(
+              tag.highestLevels.highestPrognosticLevel
+            ),
+            highestResistanceLevel: getHighestResistanceLevel(
+              tag.highestLevels.highestResistanceLevel
+            ),
+            highestFdaLevel: getHighestFdaLevel(
+              tag.highestLevels.highestFDALevel
+            ),
           };
 
           return (

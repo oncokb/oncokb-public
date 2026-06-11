@@ -2796,48 +2796,112 @@
       "properties": {
         "highestDiagnosticLevel": {
           "type": "string",
-          "description": "(Nullable) The highest diagnostic level from this tag's diagnostic evidences.",
-          "enum": [
-            "LEVEL_Dx1",
-            "LEVEL_Dx2",
-            "LEVEL_Dx3"
-          ]
-        },
-        "highestFDALevel": {
-          "type": "string",
-          "description": "(Nullable) The highest FDA level from this tag's therapeutic evidences.",
-          "enum": [
-            "LEVEL_Fda1",
-            "LEVEL_Fda2",
-            "LEVEL_Fda3"
-          ]
-        },
-        "highestPrognosticLevel": {
-          "type": "string",
-          "description": "(Nullable) The highest prognostic level from this tag's prognostic evidences.",
-          "enum": [
-            "LEVEL_Px1",
-            "LEVEL_Px2",
-            "LEVEL_Px3"
-          ]
-        },
-        "highestResistanceLevel": {
-          "type": "string",
-          "description": "(Nullable) The highest resistance level from this tag's therapeutic evidences.",
-          "enum": [
-            "LEVEL_R1",
-            "LEVEL_R2"
-          ]
-        },
-        "highestSensitiveLevel": {
-          "type": "string",
-          "description": "(Nullable) The highest sensitivity level from this tag's therapeutic evidences.",
           "enum": [
             "LEVEL_1",
             "LEVEL_2",
             "LEVEL_3A",
             "LEVEL_3B",
-            "LEVEL_4"
+            "LEVEL_4",
+            "LEVEL_R1",
+            "LEVEL_R2",
+            "LEVEL_Px1",
+            "LEVEL_Px2",
+            "LEVEL_Px3",
+            "LEVEL_Dx1",
+            "LEVEL_Dx2",
+            "LEVEL_Dx3",
+            "LEVEL_Fda1",
+            "LEVEL_Fda2",
+            "LEVEL_Fda3",
+            "NO"
+          ]
+        },
+        "highestFDALevel": {
+          "type": "string",
+          "enum": [
+            "LEVEL_1",
+            "LEVEL_2",
+            "LEVEL_3A",
+            "LEVEL_3B",
+            "LEVEL_4",
+            "LEVEL_R1",
+            "LEVEL_R2",
+            "LEVEL_Px1",
+            "LEVEL_Px2",
+            "LEVEL_Px3",
+            "LEVEL_Dx1",
+            "LEVEL_Dx2",
+            "LEVEL_Dx3",
+            "LEVEL_Fda1",
+            "LEVEL_Fda2",
+            "LEVEL_Fda3",
+            "NO"
+          ]
+        },
+        "highestPrognosticLevel": {
+          "type": "string",
+          "enum": [
+            "LEVEL_1",
+            "LEVEL_2",
+            "LEVEL_3A",
+            "LEVEL_3B",
+            "LEVEL_4",
+            "LEVEL_R1",
+            "LEVEL_R2",
+            "LEVEL_Px1",
+            "LEVEL_Px2",
+            "LEVEL_Px3",
+            "LEVEL_Dx1",
+            "LEVEL_Dx2",
+            "LEVEL_Dx3",
+            "LEVEL_Fda1",
+            "LEVEL_Fda2",
+            "LEVEL_Fda3",
+            "NO"
+          ]
+        },
+        "highestResistanceLevel": {
+          "type": "string",
+          "enum": [
+            "LEVEL_1",
+            "LEVEL_2",
+            "LEVEL_3A",
+            "LEVEL_3B",
+            "LEVEL_4",
+            "LEVEL_R1",
+            "LEVEL_R2",
+            "LEVEL_Px1",
+            "LEVEL_Px2",
+            "LEVEL_Px3",
+            "LEVEL_Dx1",
+            "LEVEL_Dx2",
+            "LEVEL_Dx3",
+            "LEVEL_Fda1",
+            "LEVEL_Fda2",
+            "LEVEL_Fda3",
+            "NO"
+          ]
+        },
+        "highestSensitiveLevel": {
+          "type": "string",
+          "enum": [
+            "LEVEL_1",
+            "LEVEL_2",
+            "LEVEL_3A",
+            "LEVEL_3B",
+            "LEVEL_4",
+            "LEVEL_R1",
+            "LEVEL_R2",
+            "LEVEL_Px1",
+            "LEVEL_Px2",
+            "LEVEL_Px3",
+            "LEVEL_Dx1",
+            "LEVEL_Dx2",
+            "LEVEL_Dx3",
+            "LEVEL_Fda1",
+            "LEVEL_Fda2",
+            "LEVEL_Fda3",
+            "NO"
           ]
         }
       }

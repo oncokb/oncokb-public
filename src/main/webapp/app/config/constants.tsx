@@ -4,6 +4,8 @@ import {
   GeneNumber,
   GermlineVariantAnnotation,
   MainNumber,
+  MutationEffectResp,
+  Query,
   SomaticVariantAnnotation,
 } from 'app/shared/api/generated/OncoKbPrivateAPI';
 import React from 'react';
@@ -474,7 +476,7 @@ export const DEFAULT_GENE_NUMBER: GeneNumber = {
   tumorType: 0,
 };
 
-export const DEFAULT_MUTATION_EFFECT = {
+export const DEFAULT_MUTATION_EFFECT: MutationEffectResp = {
   citations: {
     abstracts: [],
     pmids: [],
@@ -497,9 +499,9 @@ export const DEFAULT_GERMLINE_VARIANT = {
   penetranceDescription: '',
 };
 
-export const DEFAULT_QUERY = {
+export const DEFAULT_QUERY: Query = {
   alteration: '',
-  alterationType: '',
+  alterationType: 'MUTATION',
   consequence: '',
   entrezGeneId: -1,
   hgvs: '',
@@ -508,12 +510,9 @@ export const DEFAULT_QUERY = {
   id: '',
   proteinEnd: -1,
   proteinStart: -1,
-  referenceGenome: 'GRCH37' as any,
-  svType: 'UNKNOWN' as 'UNKNOWN',
+  referenceGenome: 'GRCh37',
+  svType: 'UNKNOWN',
   tumorType: '',
-  type: '',
-  germline: false,
-  alleleState: '',
   canonicalTranscript: '',
 };
 
@@ -553,15 +552,15 @@ export const DEFAULT_ANNOTATION: SomaticVariantAnnotation = {
   diagnosticSummary: '',
   geneExist: false,
   geneSummary: '',
-  highestDiagnosticImplicationLevel: 'NO',
-  highestPrognosticImplicationLevel: 'NO',
-  highestResistanceLevel: 'NO',
-  highestSensitiveLevel: 'NO',
-  highestFdaLevel: 'NO',
+  highestDiagnosticImplicationLevel: 'NO' as any,
+  highestPrognosticImplicationLevel: 'NO' as any,
+  highestResistanceLevel: 'NO' as any,
+  highestSensitiveLevel: 'NO' as any,
+  highestFdaLevel: 'NO' as any,
   hotspot: false,
   lastUpdate: '',
   mutationEffect: DEFAULT_MUTATION_EFFECT,
-  oncogenic: '',
+  oncogenic: '' as any,
   exon: '',
   otherSignificantResistanceLevels: [],
   otherSignificantSensitiveLevels: [],
@@ -581,23 +580,18 @@ export const DEFAULT_ANNOTATION: SomaticVariantAnnotation = {
 };
 
 export const DEFAULT_GERMLINE_ANNOTATION: GermlineVariantAnnotation = {
-  alleleExist: false,
-  clinVarId: '',
   dataVersion: '',
   diagnosticImplications: [],
   diagnosticSummary: '',
-  exon: '',
   geneExist: false,
   geneSummary: '',
   genomicIndicators: [],
-  highestDiagnosticImplicationLevel: 'NO',
-  highestPrognosticImplicationLevel: 'NO',
-  highestResistanceLevel: 'NO',
-  highestSensitiveLevel: 'NO',
+  highestDiagnosticImplicationLevel: 'NO' as any,
+  highestPrognosticImplicationLevel: 'NO' as any,
+  highestResistanceLevel: 'NO' as any,
+  highestSensitiveLevel: 'NO' as any,
   lastUpdate: '',
   mutationEffect: DEFAULT_MUTATION_EFFECT,
-  otherSignificantResistanceLevels: [],
-  otherSignificantSensitiveLevels: [],
   pathogenic: '',
   penetrance: '',
   prognosticImplications: [],
