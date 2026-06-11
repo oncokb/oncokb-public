@@ -591,7 +591,6 @@ export const DEFAULT_GERMLINE_ANNOTATION: GermlineVariantAnnotation = {
   geneSummary: '',
   genomicIndicators: [],
   highestDiagnosticImplicationLevel: 'NO',
-  highestFdaLevel: 'NO',
   highestPrognosticImplicationLevel: 'NO',
   highestResistanceLevel: 'NO',
   highestSensitiveLevel: 'NO',

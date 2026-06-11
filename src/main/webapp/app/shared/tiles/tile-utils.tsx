@@ -98,6 +98,7 @@ function MutationEffectIcon({
     </span>
   );
 }
+
 export function createHighestLevelOfEvidenceTileProps(
   variantAnnotation: VariantAnnotation | GeneNumber,
   includeTitle: boolean,
@@ -105,11 +106,14 @@ export function createHighestLevelOfEvidenceTileProps(
 ): AlterationTileProps {
   const {
     highestDiagnosticImplicationLevel,
-    highestFdaLevel,
     highestPrognosticImplicationLevel,
     highestResistanceLevel,
     highestSensitiveLevel,
   } = variantAnnotation;
+  const highestFdaLevel =
+    'highestFdaLevel' in variantAnnotation
+      ? variantAnnotation.highestFdaLevel
+      : undefined;
   return {
     title: includeTitle ? 'Highest Level of Evidence' : undefined,
     items: [

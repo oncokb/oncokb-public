@@ -12,7 +12,6 @@ import {
   EnsemblGene,
   SomaticVariantAnnotation,
   Tag,
-  VariantAnnotation,
 } from 'app/shared/api/generated/OncoKbPrivateAPI';
 import client from 'app/shared/api/oncokbClientInstance';
 import privateClient from 'app/shared/api/oncokbPrivateClientInstance';

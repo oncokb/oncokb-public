@@ -2,7 +2,10 @@ import React from 'react';
 import { observer } from 'mobx-react';
 import Select, { Props as SelectProps } from 'react-select';
 import { computed } from 'mobx';
-import { TumorType } from 'app/shared/api/generated/OncoKbPrivateAPI';
+import {
+  TumorType,
+  TumorTypeEntity,
+} from 'app/shared/api/generated/OncoKbPrivateAPI';
 import privateClient from 'app/shared/api/oncokbPrivateClientInstance';
 import { remoteData } from 'cbioportal-frontend-commons';
 import { uniq } from 'app/shared/utils/LodashUtils';
@@ -16,7 +19,7 @@ interface ICancerTypeSelect extends SelectProps {
 export default class CancerTypeSelect extends React.Component<
   ICancerTypeSelect
 > {
-  readonly allCancerTypes = remoteData<TumorType[]>({
+  readonly allCancerTypes = remoteData<TumorTypeEntity[]>({
     await: () => [],
     async invoke() {
       const result = await privateClient.utilsTumorTypesGetUsingGET({});

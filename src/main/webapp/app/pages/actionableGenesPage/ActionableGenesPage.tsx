@@ -16,6 +16,7 @@ import {
   Evidence,
   TumorType,
   Treatment as EvidenceTreatment,
+  TumorTypeEntity,
 } from 'app/shared/api/generated/OncoKbPrivateAPI';
 import Select from 'react-select';
 import {
@@ -81,9 +82,9 @@ type Treatment = {
   hugoSymbol: string;
   alterations: Alteration[];
   alterationsName: string;
-  cancerTypes: TumorType[];
-  excludedCancerTypes: TumorType[];
-  relevantCancerTypes: TumorType[];
+  cancerTypes: TumorTypeEntity[];
+  excludedCancerTypes: TumorTypeEntity[];
+  relevantCancerTypes: TumorTypeEntity[];
   cancerTypesName: string;
   treatment: EvidenceTreatment | undefined;
   uniqueDrugs: string[];
