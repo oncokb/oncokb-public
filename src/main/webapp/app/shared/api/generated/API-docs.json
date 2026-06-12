@@ -2133,6 +2133,7 @@
               "CLARIFY_DUPLICATE_USER",
               "CLARIFY_REGISTRATION_INFO",
               "CLARIFY_HOSPITAL_USE",
+              "HOSPITAL_APPROVAL_HIGH_VOLUME",
               "CLARIFY_COMMERCIAL_USE",
               "VERIFY_EMAIL_BEFORE_ACCOUNT_EXPIRES",
               "ACTIVATE_FREE_TRIAL",
@@ -4013,7 +4014,7 @@
         "username": {
           "type": "string",
           "minLength": 1,
-          "maxLength": 50
+          "maxLength": 254
         }
       },
       "title": "LoginVM"
@@ -4045,6 +4046,7 @@
             "CLARIFY_DUPLICATE_USER",
             "CLARIFY_REGISTRATION_INFO",
             "CLARIFY_HOSPITAL_USE",
+            "HOSPITAL_APPROVAL_HIGH_VOLUME",
             "CLARIFY_COMMERCIAL_USE",
             "VERIFY_EMAIL_BEFORE_ACCOUNT_EXPIRES",
             "ACTIVATE_FREE_TRIAL",
@@ -4173,7 +4175,7 @@
         "login": {
           "type": "string",
           "minLength": 1,
-          "maxLength": 50,
+          "maxLength": 254,
           "pattern": "^[_.\\-\\+@A-Za-z0-9]*$"
         },
         "notifyUserOnTrialCreation": {
@@ -4379,7 +4381,7 @@
         "login": {
           "type": "string",
           "minLength": 1,
-          "maxLength": 50,
+          "maxLength": 254,
           "pattern": "^[_.\\-\\+@A-Za-z0-9]*$"
         },
         "resetDate": {
@@ -4568,7 +4570,7 @@
         "login": {
           "type": "string",
           "minLength": 1,
-          "maxLength": 50,
+          "maxLength": 254,
           "pattern": "^[_.\\-\\+@A-Za-z0-9]*$"
         },
         "resetDate": {
@@ -4669,6 +4671,7 @@
             "CLARIFY_DUPLICATE_USER",
             "CLARIFY_REGISTRATION_INFO",
             "CLARIFY_HOSPITAL_USE",
+            "HOSPITAL_APPROVAL_HIGH_VOLUME",
             "CLARIFY_COMMERCIAL_USE",
             "VERIFY_EMAIL_BEFORE_ACCOUNT_EXPIRES",
             "ACTIVATE_FREE_TRIAL",
@@ -4736,10 +4739,10 @@
     "UserRegistrationSummary": {
       "type": "object",
       "properties": {
-        "licenseType": {
+        "date": {
           "type": "string"
         },
-        "date": {
+        "licenseType": {
           "type": "string"
         },
         "total": {
