@@ -181,3 +181,7 @@ application:
       max-pool-size: 4
       queue-capacity: 500
       thread-name-prefix: token-stats-
+  usage-liquibase:
+    enabled: true
+    change-log: classpath:config/liquibase-usage/master.xml
+    schema: oncokb_metrics

@@ -2445,30 +2445,31 @@
         "deprecated": false
       }
     },
-    "/api/usage/resources": {
+    "/api/usage/resources/{resourceId}": {
       "get": {
         "tags": [
           "usage-analysis-controller"
         ],
-        "summary": "resourceDetailGet",
-        "operationId": "resourceDetailGetUsingGET",
+        "summary": "usageResourceGet",
+        "operationId": "usageResourceGetUsingGET",
         "produces": [
           "*/*"
         ],
         "parameters": [
           {
-            "name": "endpoint",
-            "in": "query",
-            "description": "endpoint",
+            "name": "resourceId",
+            "in": "path",
+            "description": "resourceId",
             "required": true,
-            "type": "string"
+            "type": "integer",
+            "format": "int64"
           }
         ],
         "responses": {
           "200": {
             "description": "OK",
             "schema": {
-              "$ref": "#/definitions/UsageSummary"
+              "$ref": "#/definitions/UsageResourceName"
             }
           },
           "401": {
@@ -2527,11 +2528,138 @@
         "produces": [
           "*/*"
         ],
+        "parameters": [
+          {
+            "name": "fromDate",
+            "in": "query",
+            "description": "fromDate",
+            "required": false,
+            "type": "string"
+          },
+          {
+            "name": "interval",
+            "in": "query",
+            "description": "interval",
+            "required": false,
+            "type": "string",
+            "default": "DAY",
+            "enum": [
+              "DAY",
+              "MONTH",
+              "YEAR"
+            ]
+          },
+          {
+            "name": "offset",
+            "in": "query",
+            "required": false,
+            "type": "integer",
+            "format": "int64"
+          },
+          {
+            "name": "page",
+            "in": "query",
+            "description": "Page number of the requested page",
+            "required": false,
+            "type": "integer",
+            "format": "int32"
+          },
+          {
+            "name": "pageNumber",
+            "in": "query",
+            "required": false,
+            "type": "integer",
+            "format": "int32"
+          },
+          {
+            "name": "pageSize",
+            "in": "query",
+            "required": false,
+            "type": "integer",
+            "format": "int32"
+          },
+          {
+            "name": "paged",
+            "in": "query",
+            "required": false,
+            "type": "boolean"
+          },
+          {
+            "name": "publicOnly",
+            "in": "query",
+            "description": "publicOnly",
+            "required": false,
+            "type": "boolean",
+            "default": true
+          },
+          {
+            "name": "resourceId",
+            "in": "query",
+            "description": "resourceId",
+            "required": false,
+            "type": "integer",
+            "format": "int64"
+          },
+          {
+            "name": "search",
+            "in": "query",
+            "description": "search",
+            "required": false,
+            "type": "string"
+          },
+          {
+            "name": "size",
+            "in": "query",
+            "description": "Size of a page",
+            "required": false,
+            "type": "integer",
+            "format": "int32"
+          },
+          {
+            "name": "sort",
+            "in": "query",
+            "description": "Sorting criteria in the format: property(,asc|desc). Default sort order is ascending. Multiple sort criteria are supported.",
+            "required": false,
+            "type": "array",
+            "items": {
+              "type": "string"
+            },
+            "collectionFormat": "multi"
+          },
+          {
+            "name": "sort.sorted",
+            "in": "query",
+            "required": false,
+            "type": "boolean"
+          },
+          {
+            "name": "sort.unsorted",
+            "in": "query",
+            "required": false,
+            "type": "boolean"
+          },
+          {
+            "name": "toDate",
+            "in": "query",
+            "description": "toDate",
+            "required": false,
+            "type": "string"
+          },
+          {
+            "name": "unpaged",
+            "in": "query",
+            "required": false,
+            "type": "boolean"
+          }
+        ],
         "responses": {
           "200": {
             "description": "OK",
             "schema": {
-              "$ref": "#/definitions/UsageSummary"
+              "type": "array",
+              "items": {
+                "$ref": "#/definitions/ResourceUsageAnalysisRow"
+              }
             }
           },
           "401": {
@@ -2552,8 +2680,8 @@
         "tags": [
           "usage-analysis-controller"
         ],
-        "summary": "userOverviewUsageGet",
-        "operationId": "userOverviewUsageGetUsingGET",
+        "summary": "userUsageSummaryGet",
+        "operationId": "userUsageSummaryGetUsingGET",
         "produces": [
           "*/*"
         ],
@@ -2565,6 +2693,127 @@
             "required": false,
             "type": "integer",
             "format": "int64"
+          },
+          {
+            "name": "fromDate",
+            "in": "query",
+            "description": "fromDate",
+            "required": false,
+            "type": "string"
+          },
+          {
+            "name": "interval",
+            "in": "query",
+            "description": "interval",
+            "required": false,
+            "type": "string",
+            "default": "DAY",
+            "enum": [
+              "DAY",
+              "MONTH",
+              "YEAR"
+            ]
+          },
+          {
+            "name": "offset",
+            "in": "query",
+            "required": false,
+            "type": "integer",
+            "format": "int64"
+          },
+          {
+            "name": "page",
+            "in": "query",
+            "description": "Page number of the requested page",
+            "required": false,
+            "type": "integer",
+            "format": "int32"
+          },
+          {
+            "name": "pageNumber",
+            "in": "query",
+            "required": false,
+            "type": "integer",
+            "format": "int32"
+          },
+          {
+            "name": "pageSize",
+            "in": "query",
+            "required": false,
+            "type": "integer",
+            "format": "int32"
+          },
+          {
+            "name": "paged",
+            "in": "query",
+            "required": false,
+            "type": "boolean"
+          },
+          {
+            "name": "publicOnly",
+            "in": "query",
+            "description": "publicOnly",
+            "required": false,
+            "type": "boolean",
+            "default": true
+          },
+          {
+            "name": "resource",
+            "in": "query",
+            "description": "resource",
+            "required": false,
+            "type": "string"
+          },
+          {
+            "name": "search",
+            "in": "query",
+            "description": "search",
+            "required": false,
+            "type": "string"
+          },
+          {
+            "name": "size",
+            "in": "query",
+            "description": "Size of a page",
+            "required": false,
+            "type": "integer",
+            "format": "int32"
+          },
+          {
+            "name": "sort",
+            "in": "query",
+            "description": "Sorting criteria in the format: property(,asc|desc). Default sort order is ascending. Multiple sort criteria are supported.",
+            "required": false,
+            "type": "array",
+            "items": {
+              "type": "string"
+            },
+            "collectionFormat": "multi"
+          },
+          {
+            "name": "sort.sorted",
+            "in": "query",
+            "required": false,
+            "type": "boolean"
+          },
+          {
+            "name": "sort.unsorted",
+            "in": "query",
+            "required": false,
+            "type": "boolean"
+          },
+          {
+            "name": "toDate",
+            "in": "query",
+            "description": "toDate",
+            "required": false,
+            "type": "string"
+          },
+          {
+            "name": "unpaged",
+            "in": "query",
+            "required": false,
+            "type": "boolean"
           }
         ],
         "responses": {
@@ -2573,7 +2822,7 @@
             "schema": {
               "type": "array",
               "items": {
-                "$ref": "#/definitions/UserOverviewUsage"
+                "$ref": "#/definitions/UsageAnalysisRow"
               }
             }
           },
@@ -2602,6 +2851,127 @@
         ],
         "parameters": [
           {
+            "name": "fromDate",
+            "in": "query",
+            "description": "fromDate",
+            "required": false,
+            "type": "string"
+          },
+          {
+            "name": "interval",
+            "in": "query",
+            "description": "interval",
+            "required": false,
+            "type": "string",
+            "default": "DAY",
+            "enum": [
+              "DAY",
+              "MONTH",
+              "YEAR"
+            ]
+          },
+          {
+            "name": "offset",
+            "in": "query",
+            "required": false,
+            "type": "integer",
+            "format": "int64"
+          },
+          {
+            "name": "page",
+            "in": "query",
+            "description": "Page number of the requested page",
+            "required": false,
+            "type": "integer",
+            "format": "int32"
+          },
+          {
+            "name": "pageNumber",
+            "in": "query",
+            "required": false,
+            "type": "integer",
+            "format": "int32"
+          },
+          {
+            "name": "pageSize",
+            "in": "query",
+            "required": false,
+            "type": "integer",
+            "format": "int32"
+          },
+          {
+            "name": "paged",
+            "in": "query",
+            "required": false,
+            "type": "boolean"
+          },
+          {
+            "name": "publicOnly",
+            "in": "query",
+            "description": "publicOnly",
+            "required": false,
+            "type": "boolean",
+            "default": true
+          },
+          {
+            "name": "resource",
+            "in": "query",
+            "description": "resource",
+            "required": false,
+            "type": "string"
+          },
+          {
+            "name": "search",
+            "in": "query",
+            "description": "search",
+            "required": false,
+            "type": "string"
+          },
+          {
+            "name": "size",
+            "in": "query",
+            "description": "Size of a page",
+            "required": false,
+            "type": "integer",
+            "format": "int32"
+          },
+          {
+            "name": "sort",
+            "in": "query",
+            "description": "Sorting criteria in the format: property(,asc|desc). Default sort order is ascending. Multiple sort criteria are supported.",
+            "required": false,
+            "type": "array",
+            "items": {
+              "type": "string"
+            },
+            "collectionFormat": "multi"
+          },
+          {
+            "name": "sort.sorted",
+            "in": "query",
+            "required": false,
+            "type": "boolean"
+          },
+          {
+            "name": "sort.unsorted",
+            "in": "query",
+            "required": false,
+            "type": "boolean"
+          },
+          {
+            "name": "toDate",
+            "in": "query",
+            "description": "toDate",
+            "required": false,
+            "type": "string"
+          },
+          {
+            "name": "unpaged",
+            "in": "query",
+            "required": false,
+            "type": "boolean"
+          },
+          {
             "name": "userId",
             "in": "path",
             "description": "userId",
@@ -2614,7 +2984,10 @@
           "200": {
             "description": "OK",
             "schema": {
-              "$ref": "#/definitions/UserUsage"
+              "type": "array",
+              "items": {
+                "$ref": "#/definitions/ResourceUsageAnalysisRow"
+              }
             }
           },
           "401": {
@@ -4013,7 +4386,7 @@
         "username": {
           "type": "string",
           "minLength": 1,
-          "maxLength": 50
+          "maxLength": 254
         }
       },
       "title": "LoginVM"
@@ -4173,7 +4546,7 @@
         "login": {
           "type": "string",
           "minLength": 1,
-          "maxLength": 50,
+          "maxLength": 254,
           "pattern": "^[_.\\-\\+@A-Za-z0-9]*$"
         },
         "notifyUserOnTrialCreation": {
@@ -4201,14 +4574,6 @@
       },
       "title": "ManagedUserVM"
     },
-    "MapOfstringAndlong": {
-      "type": "object",
-      "title": "MapOfstringAndlong",
-      "additionalProperties": {
-        "type": "integer",
-        "format": "int64"
-      }
-    },
     "PasswordChangeDTO": {
       "type": "object",
       "properties": {
@@ -4220,6 +4585,48 @@
         }
       },
       "title": "PasswordChangeDTO"
+    },
+    "ResourceUsageAnalysisRow": {
+      "type": "object",
+      "properties": {
+        "company": {
+          "type": "string"
+        },
+        "jobTitle": {
+          "type": "string"
+        },
+        "licenseType": {
+          "type": "string"
+        },
+        "resource": {
+          "type": "string"
+        },
+        "resourceId": {
+          "type": "integer",
+          "format": "int64"
+        },
+        "time": {
+          "type": "string"
+        },
+        "usage": {
+          "type": "integer",
+          "format": "int64"
+        },
+        "userEmail": {
+          "type": "string"
+        },
+        "userFirstName": {
+          "type": "string"
+        },
+        "userId": {
+          "type": "integer",
+          "format": "int64"
+        },
+        "userLastName": {
+          "type": "string"
+        }
+      },
+      "title": "ResourceUsageAnalysisRow"
     },
     "TerminationEmailDTO": {
       "type": "object",
@@ -4301,41 +4708,48 @@
       },
       "title": "TrialAccount"
     },
-    "UsageSummary": {
+    "UsageAnalysisRow": {
       "type": "object",
       "properties": {
-        "day": {
-          "type": "object",
-          "additionalProperties": {
-            "type": "object",
-            "additionalProperties": {
-              "type": "integer",
-              "format": "int64"
-            }
-          }
+        "maxUsageProportion": {
+          "type": "number",
+          "format": "float"
         },
-        "month": {
-          "type": "object",
-          "additionalProperties": {
-            "type": "object",
-            "additionalProperties": {
-              "type": "integer",
-              "format": "int64"
-            }
-          }
+        "resource": {
+          "type": "string"
         },
-        "year": {
-          "type": "object",
-          "additionalProperties": {
-            "type": "object",
-            "additionalProperties": {
-              "type": "integer",
-              "format": "int64"
-            }
-          }
+        "resourceId": {
+          "type": "integer",
+          "format": "int64"
+        },
+        "time": {
+          "type": "string"
+        },
+        "usage": {
+          "type": "integer",
+          "format": "int64"
+        },
+        "userEmail": {
+          "type": "string"
+        },
+        "userId": {
+          "type": "string"
         }
       },
-      "title": "UsageSummary"
+      "title": "UsageAnalysisRow"
+    },
+    "UsageResourceName": {
+      "type": "object",
+      "properties": {
+        "resource": {
+          "type": "string"
+        },
+        "resourceId": {
+          "type": "integer",
+          "format": "int64"
+        }
+      },
+      "title": "UsageResourceName"
     },
     "User": {
       "type": "object",
@@ -4379,7 +4793,7 @@
         "login": {
           "type": "string",
           "minLength": 1,
-          "maxLength": 50,
+          "maxLength": 254,
           "pattern": "^[_.\\-\\+@A-Za-z0-9]*$"
         },
         "resetDate": {
@@ -4568,7 +4982,7 @@
         "login": {
           "type": "string",
           "minLength": 1,
-          "maxLength": 50,
+          "maxLength": 254,
           "pattern": "^[_.\\-\\+@A-Za-z0-9]*$"
         },
         "resetDate": {
@@ -4703,43 +5117,13 @@
       },
       "title": "UserMailsDTO"
     },
-    "UserOverviewUsage": {
-      "type": "object",
-      "properties": {
-        "dayUsage": {
-          "type": "object",
-          "additionalProperties": {
-            "$ref": "#/definitions/UserStats"
-          }
-        },
-        "monthUsage": {
-          "type": "object",
-          "additionalProperties": {
-            "$ref": "#/definitions/UserStats"
-          }
-        },
-        "userEmail": {
-          "type": "string"
-        },
-        "userId": {
-          "type": "string"
-        },
-        "yearUsage": {
-          "type": "object",
-          "additionalProperties": {
-            "$ref": "#/definitions/UserStats"
-          }
-        }
-      },
-      "title": "UserOverviewUsage"
-    },
     "UserRegistrationSummary": {
       "type": "object",
       "properties": {
-        "licenseType": {
+        "date": {
           "type": "string"
         },
-        "date": {
+        "licenseType": {
           "type": "string"
         },
         "total": {
@@ -4748,61 +5132,6 @@
         }
       },
       "title": "UserRegistrationSummary"
-    },
-    "UserStats": {
-      "type": "object",
-      "properties": {
-        "maxUsageProportion": {
-          "type": "number",
-          "format": "float"
-        },
-        "mostUsedEndpoint": {
-          "type": "string"
-        },
-        "mostUsedPublicEndpoint": {
-          "type": "string"
-        },
-        "publicMaxUsageProportion": {
-          "type": "number",
-          "format": "float"
-        },
-        "totalPublicUsage": {
-          "type": "integer",
-          "format": "int64"
-        },
-        "totalUsage": {
-          "type": "integer",
-          "format": "int64"
-        }
-      },
-      "title": "UserStats"
-    },
-    "UserUsage": {
-      "type": "object",
-      "properties": {
-        "company": {
-          "type": "string"
-        },
-        "jobTitle": {
-          "type": "string"
-        },
-        "licenseType": {
-          "type": "string"
-        },
-        "summary": {
-          "$ref": "#/definitions/UsageSummary"
-        },
-        "userEmail": {
-          "type": "string"
-        },
-        "userFirstName": {
-          "type": "string"
-        },
-        "userLastName": {
-          "type": "string"
-        }
-      },
-      "title": "UserUsage"
     },
     "VerifyCompanyNameVM": {
       "type": "object",

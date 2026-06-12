@@ -41,6 +41,7 @@ public class ApplicationProperties {
     private RecaptchaProperties recaptcha;
     private RateLimitProperties rateLimit = new RateLimitProperties();
     private TokenStatsProperties tokenStats = new TokenStatsProperties();
+    private UsageLiquibaseProperties usageLiquibase = new UsageLiquibaseProperties();
 
     public String getName() {
         return name;
@@ -223,5 +224,13 @@ public class ApplicationProperties {
 
     public void setTokenStats(TokenStatsProperties tokenStats) {
         this.tokenStats = tokenStats;
+    }
+
+    public UsageLiquibaseProperties getUsageLiquibase() {
+        return usageLiquibase;
+    }
+
+    public void setUsageLiquibase(UsageLiquibaseProperties usageLiquibase) {
+        this.usageLiquibase = usageLiquibase;
     }
 }

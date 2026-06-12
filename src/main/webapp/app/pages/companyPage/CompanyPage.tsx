@@ -19,11 +19,9 @@ import {
   CompanyVM,
   Token,
   UserDTO,
-  UserOverviewUsage,
   CompanyAdditionalInfoDTO,
   TerminationEmailDTO,
   CompanyTermination,
-  UserStats,
 } from 'app/shared/api/generated/API';
 import client from 'app/shared/api/clientInstance';
 import { action, computed, observable } from 'mobx';
@@ -42,7 +40,7 @@ import { COMPANY_FORM_OPTIONS } from 'app/components/newCompanyForm/NewCompanyFo
 import { FormListField } from 'app/shared/list/FormListField';
 import { UserTable } from 'app/shared/table/UserTable';
 import Select from 'react-select';
-import { DefaultTooltip, remoteData } from 'cbioportal-frontend-commons';
+import { DefaultTooltip } from 'cbioportal-frontend-commons';
 import { AdditionalInfoSelect } from 'app/shared/dropdown/AdditionalInfoSelect';
 import {
   debouncedCompanyNameValidator,
@@ -60,18 +58,8 @@ import {
 } from 'app/shared/utils/Utils';
 import { UsageToggleGroup } from 'app/pages/usageAnalysisPage/UsageToggleGroup';
 import OncoKBTable from 'app/components/oncokbTable/OncoKBTable';
-import {
-  getUsageTableColumnDefinition,
-  UsageTableColumnKey,
-} from 'app/pages/usageAnalysisPage/UsageAnalysisPage';
+import UsageAnalysisTable from 'app/pages/usageAnalysisPage/UsageAnalysisTable';
 import autobind from 'autobind-decorator';
-import {
-  emailHeader,
-  endpointHeader,
-  publicEndpointHeader,
-  usageHeader,
-} from 'app/components/oncokbTable/HeaderConstants';
-import UsageText from 'app/shared/texts/UsageText';
 import { DateSelector } from 'app/components/dateSelector/DateSelector';
 import { DownloadButton } from 'app/components/downloadButton/DownloadButton';
 import { RouterStore } from 'mobx-react-router';
@@ -81,7 +69,10 @@ import CompanyAdditionalInfo, {
   createDefaultAdditionalInfo,
 } from './CompanyAdditionalInfo';
 import FormInputField from 'app/shared/input/FormInputField';
-import { ToggleValue } from '../usageAnalysisPage/usage-analysis-utils';
+import {
+  ResourceToggleValue,
+  TimeToggleValue,
+} from '../usageAnalysisPage/usage-analysis-utils';
 import ButtonWithTooltip from 'app/shared/button/ButtonWithTooltip';
 
 interface MatchParams {
@@ -161,8 +152,8 @@ export default class CompanyPage extends React.Component<ICompanyPage> {
   sendTerminationNoticePayload: TerminationEmailDTO = defaultPayload;
   @observable editAllModeEnabled = false;
 
-  @observable resourcesTypeToggleValue: ToggleValue =
-    ToggleValue.PUBLIC_RESOURCES;
+  @observable resourcesTypeToggleValue: ResourceToggleValue =
+    ResourceToggleValue.PUBLIC_RESOURCES;
 
   @observable serviceAccountTokens: Token[] = [];
   @observable tokenToDelete: Token | undefined;
@@ -635,21 +626,9 @@ export default class CompanyPage extends React.Component<ICompanyPage> {
     );
   }
 
-  readonly users = remoteData<UserOverviewUsage[]>({
-    await: () => [],
-    invoke: async () => {
-      return await client.userOverviewUsageGetUsingGET({
-        companyId: this.company.id,
-      });
-    },
-    onError: (error: Error) =>
-      notifyError(error, 'Failed to load company usage data.'),
-    default: [],
-  });
-
   @autobind
   @action
-  handleResourcesTypeToggleChange(value: ToggleValue) {
+  handleResourcesTypeToggleChange(value: ResourceToggleValue) {
     this.resourcesTypeToggleValue = value;
   }
 
@@ -696,7 +675,6 @@ export default class CompanyPage extends React.Component<ICompanyPage> {
   }
 
   render() {
-    const currentYearStr = new Date().getFullYear().toString();
     return (
       <If condition={this.getCompanyStatus === PromiseStatus.pending}>
         <Then>
@@ -1081,143 +1059,17 @@ export default class CompanyPage extends React.Component<ICompanyPage> {
                           Company Data Usage
                         </div>
                         <div className="mt-2">
-                          {this.users.isError ? (
-                            <Alert variant="danger">
-                              Failed to load company usage data.
-                            </Alert>
-                          ) : (
-                            <OncoKBTable<
-                              UserOverviewUsage & {
-                                dayUsage: Record<string, UserStats>;
-                                monthUsage: Record<string, UserStats>;
-                                yearUsage: Record<string, UserStats>;
-                              }
-                            >
-                              data={this.users.result}
-                              columns={[
-                                {
-                                  id: 'userEmail',
-                                  Header: emailHeader,
-                                  accessor: 'userEmail',
-                                  minWidth: 200,
-                                  onFilter: (data, keyword) =>
-                                    filterByKeyword(data.userEmail, keyword),
-                                },
-                                this.resourcesTypeToggleValue ===
-                                ToggleValue.ALL_RESOURCES
-                                  ? {
-                                      id: 'totalUsage',
-                                      Header: usageHeader,
-                                      minWidth: 100,
-                                      Cell(props: {
-                                        original: UserOverviewUsage;
-                                      }) {
-                                        return (
-                                          <UsageText
-                                            usage={
-                                              props.original.yearUsage[
-                                                currentYearStr
-                                              ]?.totalUsage
-                                            }
-                                          />
-                                        );
-                                      },
-                                    }
-                                  : {
-                                      id: 'totalUsage',
-                                      Header: usageHeader,
-                                      minWidth: 100,
-                                      Cell(props: {
-                                        original: UserOverviewUsage;
-                                      }) {
-                                        return (
-                                          <UsageText
-                                            usage={
-                                              props.original.yearUsage[
-                                                currentYearStr
-                                              ]?.totalPublicUsage
-                                            }
-                                          />
-                                        );
-                                      },
-                                    },
-                                this.resourcesTypeToggleValue ===
-                                ToggleValue.ALL_RESOURCES
-                                  ? {
-                                      id: 'mostUsedEndpoint',
-                                      Header: endpointHeader,
-                                      minWidth: 200,
-                                      onFilter: (data, keyword) =>
-                                        filterByKeyword(
-                                          data.yearUsage[currentYearStr]
-                                            ?.mostUsedEndpoint,
-                                          keyword
-                                        ),
-                                      accessor: x =>
-                                        x.yearUsage[currentYearStr]
-                                          ?.mostUsedEndpoint,
-                                    }
-                                  : {
-                                      id: 'mostUsedPublicEndpoint',
-                                      Header: publicEndpointHeader,
-                                      minWidth: 200,
-                                      accessor: x =>
-                                        x.yearUsage[currentYearStr]
-                                          ?.mostUsedPublicEndpoint,
-                                      onFilter: (data, keyword) =>
-                                        filterByKeyword(
-                                          data.yearUsage[currentYearStr]
-                                            ?.mostUsedPublicEndpoint,
-                                          keyword
-                                        ),
-                                    },
-                                {
-                                  ...getUsageTableColumnDefinition(
-                                    UsageTableColumnKey.OPERATION
-                                  ),
-                                  sortable: false,
-                                  className: 'd-flex justify-content-center',
-                                  Cell(props: { original: UserOverviewUsage }) {
-                                    return (
-                                      <Link
-                                        to={`${PAGE_ROUTE.ADMIN_USER_USAGE_DETAILS_LINK}${props.original.userId}`}
-                                      >
-                                        <i className="fa fa-info-circle"></i>
-                                      </Link>
-                                    );
-                                  },
-                                },
-                              ]}
-                              loading={this.users.isPending}
-                              defaultSorted={[
-                                {
-                                  id: 'totalUsage',
-                                  desc: true,
-                                },
-                              ]}
-                              showPagination={true}
-                              minRows={1}
-                              defaultPageSize={5}
-                              filters={() => {
-                                return (
-                                  <Row>
-                                    <UsageToggleGroup
-                                      defaultValue={
-                                        this.resourcesTypeToggleValue
-                                      }
-                                      toggleValues={[
-                                        ToggleValue.ALL_RESOURCES,
-                                        ToggleValue.PUBLIC_RESOURCES,
-                                      ]}
-                                      handleToggle={
-                                        this.handleResourcesTypeToggleChange
-                                      }
-                                    />
-                                  </Row>
-                                );
-                              }}
-                            />
-                          )}
+                          <UsageAnalysisTable
+                            mode="userSummary"
+                            companyId={this.company.id}
+                            defaultResourcesType={
+                              ResourceToggleValue.PUBLIC_RESOURCES
+                            }
+                            defaultTimeType={TimeToggleValue.RESULTS_BY_YEAR}
+                            defaultPageSize={5}
+                            timeToggleValues={[TimeToggleValue.RESULTS_BY_YEAR]}
+                            showTimeColumn={false}
+                          />
                         </div>
                       </Col>
                     </Row>

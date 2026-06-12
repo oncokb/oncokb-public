@@ -20,7 +20,7 @@ import {
   formatRegistrationSummaryAsTsv,
   getRegistrationTimeHeader,
 } from './registration-utils';
-import { ToggleValue } from './usage-analysis-utils';
+import { TimeToggleValue } from './usage-analysis-utils';
 import { UserRegistrationSummary } from 'app/shared/api/generated/API';
 
 type RegistrationDetailsTableProps = {
@@ -32,7 +32,8 @@ type RegistrationDetailsTableProps = {
 export default class RegistrationDetailsTable extends React.Component<
   RegistrationDetailsTableProps
 > {
-  @observable timeTypeToggleValue: ToggleValue = ToggleValue.RESULTS_BY_WEEK;
+  @observable timeTypeToggleValue: TimeToggleValue =
+    TimeToggleValue.RESULTS_BY_WEEK;
   @observable selectedLicenseType: LicenseType | undefined = undefined;
   @observable fromDate: string | undefined;
   @observable toDate: string | undefined;
@@ -55,7 +56,7 @@ export default class RegistrationDetailsTable extends React.Component<
 
   @autobind
   @action
-  handleTimeTypeToggleChange(value: ToggleValue) {
+  handleTimeTypeToggleChange(value: TimeToggleValue) {
     this.timeTypeToggleValue = value;
     this.sorted = this.defaultSorted;
   }
@@ -157,9 +158,9 @@ export default class RegistrationDetailsTable extends React.Component<
         <UsageToggleGroup
           defaultValue={this.timeTypeToggleValue}
           toggleValues={[
-            ToggleValue.RESULTS_BY_WEEK,
-            ToggleValue.RESULTS_BY_YEAR,
-            ToggleValue.RESULTS_BY_DAY,
+            TimeToggleValue.RESULTS_BY_WEEK,
+            TimeToggleValue.RESULTS_BY_YEAR,
+            TimeToggleValue.RESULTS_BY_DAY,
           ]}
           handleToggle={this.handleTimeTypeToggleChange}
         />

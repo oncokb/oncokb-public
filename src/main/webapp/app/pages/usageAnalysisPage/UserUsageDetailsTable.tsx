@@ -8,7 +8,7 @@ import { Row } from 'react-bootstrap';
 import {
   getUsageTableColumnDefinition,
   UsageTableColumnKey,
-} from 'app/pages/usageAnalysisPage/UsageAnalysisPage';
+} from 'app/pages/usageAnalysisPage/usage-table-columns';
 import {
   PAGE_ROUTE,
   TABLE_DAY_FORMAT,
@@ -24,21 +24,22 @@ import moment from 'moment';
 import {
   filterDependentResourceHeader,
   filterDependentTimeHeader,
-} from 'app/components/oncokbTable/HeaderConstants';
+} from 'app/components/oncokbTable/header-constants';
 import UsageText from 'app/shared/texts/UsageText';
 import { Link } from 'react-router-dom';
 import {
   TimeGroupedUsageRecords,
   UsageRecord,
   isPrivateResource,
-  ToggleValue,
+  ResourceToggleValue,
+  TimeToggleValue,
 } from './usage-analysis-utils';
 
 type IUserUsageDetailsTable = {
   data: TimeGroupedUsageRecords;
   loadedData: boolean;
-  defaultResourcesType: ToggleValue;
-  defaultTimeType: ToggleValue;
+  defaultResourcesType: ResourceToggleValue;
+  defaultTimeType: TimeToggleValue;
   defaultPageSize?: number;
 };
 
@@ -47,9 +48,9 @@ export default class UserUsageDetailsTable extends React.Component<
   IUserUsageDetailsTable,
   {}
 > {
-  @observable resourcesTypeToggleValue: ToggleValue = this.props
+  @observable resourcesTypeToggleValue: ResourceToggleValue = this.props
     .defaultResourcesType;
-  @observable timeTypeToggleValue: ToggleValue = this.props.defaultTimeType;
+  @observable timeTypeToggleValue: TimeToggleValue = this.props.defaultTimeType;
   @observable fromDate: string | undefined;
   @observable toDate: string | undefined;
   @observable filterToggled: boolean;
@@ -57,31 +58,31 @@ export default class UserUsageDetailsTable extends React.Component<
 
   @autobind
   @action
-  handleResourcesTypeToggleChange(value: ToggleValue) {
+  handleResourcesTypeToggleChange(value: ResourceToggleValue) {
     this.resourcesTypeToggleValue = value;
   }
 
   @autobind
   @action
-  handleTimeTypeToggleChange(value: ToggleValue) {
+  handleTimeTypeToggleChange(value: TimeToggleValue) {
     this.timeTypeToggleValue = value;
   }
 
   @computed get calculateData(): UsageRecord[] {
     let data = this.props.data[
-      this.timeTypeToggleValue === ToggleValue.RESULTS_BY_YEAR
+      this.timeTypeToggleValue === TimeToggleValue.RESULTS_BY_YEAR
         ? USAGE_YEAR_DETAIL_TIME_KEY
-        : this.timeTypeToggleValue === ToggleValue.RESULTS_BY_MONTH
+        : this.timeTypeToggleValue === TimeToggleValue.RESULTS_BY_MONTH
         ? USAGE_MONTH_DETAIL_TIME_KEY
         : USAGE_DAY_DETAIL_TIME_KEY
     ];
     if (this.filterToggled && data) {
       let tableFormat: string;
-      if (this.timeTypeToggleValue === ToggleValue.RESULTS_BY_MONTH) {
+      if (this.timeTypeToggleValue === TimeToggleValue.RESULTS_BY_MONTH) {
         tableFormat = TABLE_MONTH_FORMAT;
-      } else if (this.timeTypeToggleValue === ToggleValue.RESULTS_BY_DAY) {
+      } else if (this.timeTypeToggleValue === TimeToggleValue.RESULTS_BY_DAY) {
         tableFormat = TABLE_DAY_FORMAT;
-      } else if (this.timeTypeToggleValue === ToggleValue.RESULTS_BY_YEAR) {
+      } else if (this.timeTypeToggleValue === TimeToggleValue.RESULTS_BY_YEAR) {
         tableFormat = TABLE_YEAR_FORMAT;
       }
       data = data.filter(resource => {
@@ -90,13 +91,17 @@ export default class UserUsageDetailsTable extends React.Component<
         return resource.time >= fromTime && resource.time <= toTime;
       });
     }
-    if (this.resourcesTypeToggleValue === ToggleValue.ALL_RESOURCES) {
+    if (this.resourcesTypeToggleValue === ResourceToggleValue.ALL_RESOURCES) {
       return data || [];
-    } else if (this.resourcesTypeToggleValue === ToggleValue.PUBLIC_RESOURCES) {
+    } else if (
+      this.resourcesTypeToggleValue === ResourceToggleValue.PUBLIC_RESOURCES
+    ) {
       return (data || []).filter(function (usage) {
         return !isPrivateResource(usage.resource);
       });
-    } else if (this.resourcesTypeToggleValue === ToggleValue.CUMULATIVE_USAGE) {
+    } else if (
+      this.resourcesTypeToggleValue === ResourceToggleValue.CUMULATIVE_USAGE
+    ) {
       if (data) {
         const cumulativeData: Map<string, UsageRecord> = new Map<
           string,
@@ -133,20 +138,20 @@ export default class UserUsageDetailsTable extends React.Component<
           columns={[
             {
               ...getUsageTableColumnDefinition(UsageTableColumnKey.RESOURCES),
-              Header: filterDependentResourceHeader(this.timeTypeToggleValue),
+              Header: filterDependentTimeHeader(this.timeTypeToggleValue),
               onFilter: (row: UsageRecord, keyword) =>
                 filterByKeyword(row.resource, keyword),
               Cell(props: { original: UsageRecord }) {
                 return props.original.resource === 'ALL' ? (
                   <div>ALL</div>
-                ) : (
+                ) : props.original.resourceId !== undefined ? (
                   <Link
-                    to={`${
-                      PAGE_ROUTE.ADMIN_RESOURCE_DETAILS_LINK
-                    }${props.original.resource.replace(/\//g, '!')}`}
+                    to={`${PAGE_ROUTE.ADMIN_RESOURCE_DETAILS_LINK}${props.original.resourceId}`}
                   >
                     {props.original.resource}
                   </Link>
+                ) : (
+                  <div>{props.original.resource}</div>
                 );
               },
             },
@@ -183,18 +188,18 @@ export default class UserUsageDetailsTable extends React.Component<
                 <UsageToggleGroup
                   defaultValue={this.resourcesTypeToggleValue}
                   toggleValues={[
-                    ToggleValue.ALL_RESOURCES,
-                    ToggleValue.PUBLIC_RESOURCES,
-                    ToggleValue.CUMULATIVE_USAGE,
+                    ResourceToggleValue.ALL_RESOURCES,
+                    ResourceToggleValue.PUBLIC_RESOURCES,
+                    ResourceToggleValue.CUMULATIVE_USAGE,
                   ]}
                   handleToggle={this.handleResourcesTypeToggleChange}
                 />
                 <UsageToggleGroup
                   defaultValue={this.timeTypeToggleValue}
                   toggleValues={[
-                    ToggleValue.RESULTS_BY_YEAR,
-                    ToggleValue.RESULTS_BY_MONTH,
-                    ToggleValue.RESULTS_BY_DAY,
+                    TimeToggleValue.RESULTS_BY_YEAR,
+                    TimeToggleValue.RESULTS_BY_MONTH,
+                    TimeToggleValue.RESULTS_BY_DAY,
                   ]}
                   handleToggle={this.handleTimeTypeToggleChange}
                 />
