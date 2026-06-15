@@ -79,7 +79,7 @@ module.exports = options =>
               '/h2-console',
               '/auth',
             ],
-            target: `http${options.tls ? 's' : ''}://localhost:9090`,
+            target: `http${options.tls ? 's' : ''}://localhost:9095`,
             secure: false,
             changeOrigin: options.tls,
           },
