@@ -891,6 +891,8 @@ export type SomaticVariantAnnotation = {
 
         'variantSummary': string
 
+        'alternativeOncoKbVariant': AlternativeOncoKbVariant | null
+
         'vue': boolean
 
         'vus': boolean

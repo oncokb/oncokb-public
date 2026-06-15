@@ -329,7 +329,6 @@ export const LEVEL_CLASSIFICATION: { [key in LEVELS]: LEVEL_TYPES } = {
   [LEVELS.Tx3]: LEVEL_TYPES.TX,
   [LEVELS.Tx3A]: LEVEL_TYPES.TX,
   [LEVELS.Tx3B]: LEVEL_TYPES.TX,
-  [LEVELS.Tx3]: LEVEL_TYPES.TX,
   [LEVELS.Tx4]: LEVEL_TYPES.TX,
   [LEVELS.R1]: LEVEL_TYPES.TX,
   [LEVELS.R2]: LEVEL_TYPES.TX,
@@ -576,10 +575,10 @@ export const DEFAULT_ANNOTATION: SomaticVariantAnnotation = {
 
   variantSummary: '',
 
+  alternativeOncoKbVariant: null,
+
   vue: false,
   vus: false,
-  germline: DEFAULT_GERMLINE_VARIANT,
-  alternativeOncoKbVariant: null,
 };
 
 export const DEFAULT_GERMLINE_ANNOTATION: GermlineVariantAnnotation = {
@@ -1177,6 +1176,13 @@ export const CLINVAR_VARIANT_BASE_URL =
   'https://www.ncbi.nlm.nih.gov/clinvar/variation';
 export const GENOME_NEXUS_ANNOTATION_BASE_URL =
   'https://www.genomenexus.org/annotation';
+
+export const getGenomeNexusVariantBaseUrl = (
+  referenceGenome: REFERENCE_GENOME
+) =>
+  referenceGenome === REFERENCE_GENOME.GRCh38
+    ? 'https://grch38.genomenexus.org/variant/'
+    : 'https://www.genomenexus.org/variant/';
 
 export const ALLELE_STATE_MONOALLELIC = 'monoallelic';
 export const ALLELE_STATE_BIALLELEIC = 'biallelic';
