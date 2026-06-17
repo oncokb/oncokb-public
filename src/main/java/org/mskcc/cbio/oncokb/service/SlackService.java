@@ -870,6 +870,8 @@ public class SlackService {
                 subject = DEFAULT_SUBJECT;
                 if (MailType.CLARIFY_COMMERCIAL_USE.equals(mailOption.get().getMailType())) {
                     intro = "Thank you for your interest in OncoKB.\n\n";
+                } else if (MailType.HOSPITAL_APPROVAL_HIGH_VOLUME.equals(mailOption.get().getMailType())) {
+                    intro = "";
                 }
             } catch (Exception e) {
                 log.warn("Unable to find email template file");
