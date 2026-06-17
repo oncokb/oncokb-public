@@ -83,7 +83,9 @@ public class CustomOAuthSuccessHandler implements AuthenticationSuccessHandler {
                 );
                 setLocalAuthentication(createdUser.getEmail(), oidcUser);
             } else {
-                setLocalAuthentication(existingUser.get().getEmail(), oidcUser);
+                User user = existingUser.get();
+                getOptionalJobTitle(oidcUser).ifPresent(jobTitle -> userService.updateUserJobTitle(user, jobTitle));
+                setLocalAuthentication(user.getEmail(), oidcUser);
             }
 
             response.sendRedirect(buildLoginRedirect(KEYCLOAK_LOGIN_SUCCESS_QUERY_PARAM, Boolean.TRUE.toString()));
