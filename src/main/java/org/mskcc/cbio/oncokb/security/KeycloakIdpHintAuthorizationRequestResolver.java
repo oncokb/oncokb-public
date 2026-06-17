@@ -11,6 +11,8 @@ import javax.servlet.http.HttpServletRequest;
 import java.util.LinkedHashMap;
 import java.util.Map;
 
+// Forwards the kc_idp_hint query parameter to Keycloak so the login page can skip
+// the IdP selection screen and go directly to the correct identity provider (e.g. MSKCC SSO).
 public class KeycloakIdpHintAuthorizationRequestResolver implements OAuth2AuthorizationRequestResolver {
 
     public static final String KC_IDP_HINT_PARAMETER = "kc_idp_hint";

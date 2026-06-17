@@ -2,6 +2,8 @@ package org.mskcc.cbio.oncokb.security;
 
 import org.apache.commons.lang3.StringUtils;
 import org.mskcc.cbio.oncokb.config.application.ApplicationProperties;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.mskcc.cbio.oncokb.domain.User;
 import org.mskcc.cbio.oncokb.service.UserService;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
@@ -27,6 +29,8 @@ import java.util.stream.Collectors;
 
 @Component
 public class CustomOAuthSuccessHandler implements AuthenticationSuccessHandler {
+
+    private final Logger log = LoggerFactory.getLogger(CustomOAuthSuccessHandler.class);
 
     private static final String SUPPORT_EMAIL = "support@oncokb.org";
     public static final String KEYCLOAK_LOGIN_SUCCESS_QUERY_PARAM = "login_success";
@@ -90,6 +94,7 @@ public class CustomOAuthSuccessHandler implements AuthenticationSuccessHandler {
 
             response.sendRedirect(buildLoginRedirect(KEYCLOAK_LOGIN_SUCCESS_QUERY_PARAM, Boolean.TRUE.toString()));
         } catch (Exception exception) {
+            log.error("Keycloak OAuth authentication failed", exception);
             SecurityContextHolder.clearContext();
             response.sendRedirect(buildLoginRedirect(KEYCLOAK_ERROR_QUERY_PARAM, exception.getMessage()));
         }
@@ -116,9 +121,7 @@ public class CustomOAuthSuccessHandler implements AuthenticationSuccessHandler {
     }
 
     private Optional<String> getOptionalJobTitle(OidcUser oidcUser) {
-        return getOptionalClaim(oidcUser, "job_title")
-            .map(Optional::of)
-            .orElseGet(() -> getOptionalClaim(oidcUser, "position"));
+        return getOptionalClaim(oidcUser, "job_title");
     }
 
     private Optional<String> getOptionalClaim(OidcUser oidcUser, String claim) {

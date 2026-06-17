@@ -4,10 +4,11 @@ package org.mskcc.cbio.oncokb.config.application;
  * Created by Hongxin Zhang on 3/27/20.
  */
 public class EmailAddresses {
-    private String licenseAddress;
-    private String registrationAddress;
-    private String contactAddress;
-    private String techDevAddress;
+    private String licenseAddress = "licenses@oncokb.org";
+    private String registrationAddress = "registration@oncokb.org";
+    private String contactAddress = "contact@oncokb.org";
+    private String techDevAddress = "dev@oncokb.org";
+    private String supportAddress = "support@oncokb.org";
 
     public String getLicenseAddress() {
         return licenseAddress;
@@ -39,5 +40,13 @@ public class EmailAddresses {
 
     public void setTechDevAddress(String techDevAddress) {
         this.techDevAddress = techDevAddress;
+    }
+
+    public String getSupportAddress() {
+        return supportAddress;
+    }
+
+    public void setSupportAddress(String supportAddress) {
+        this.supportAddress = supportAddress;
     }
 }

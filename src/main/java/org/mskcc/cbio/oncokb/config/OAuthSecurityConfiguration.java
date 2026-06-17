@@ -20,7 +20,7 @@ import org.zalando.problem.spring.web.advice.security.SecurityProblemSupport;
 @Configuration
 @Order(1)
 @Import(SecurityProblemSupport.class)
-public class SecurityConfigurationOAuth extends WebSecurityConfigurerAdapter {
+public class OAuthSecurityConfiguration extends WebSecurityConfigurerAdapter {
 
     private final SecurityProblemSupport problemSupport;
     private final ApplicationProperties applicationProperties;
@@ -28,7 +28,7 @@ public class SecurityConfigurationOAuth extends WebSecurityConfigurerAdapter {
     private final ClientRegistration oidcClientRegistration;
     private final OAuth2AuthorizationRequestResolver authorizationRequestResolver;
 
-    public SecurityConfigurationOAuth(
+    public OAuthSecurityConfiguration(
         SecurityProblemSupport problemSupport,
         ApplicationProperties applicationProperties,
         CustomOAuthSuccessHandler customOAuthSuccessHandler,

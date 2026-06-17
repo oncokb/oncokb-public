@@ -28,14 +28,14 @@ import org.zalando.problem.spring.web.advice.security.SecurityProblemSupport;
 @EnableWebSecurity
 @EnableGlobalMethodSecurity(prePostEnabled = true, securedEnabled = true)
 @Import(SecurityProblemSupport.class)
-public class SecurityConfigurationToken extends WebSecurityConfigurerAdapter {
+public class TokenSecurityConfiguration extends WebSecurityConfigurerAdapter {
 
     private final TokenProvider tokenProvider;
     private final CorsFilter corsFilter;
     private final SecurityProblemSupport problemSupport;
     private final DomainUserDetailsService domainUserDetailsService;
 
-    public SecurityConfigurationToken(
+    public TokenSecurityConfiguration(
         TokenProvider tokenProvider,
         CorsFilter corsFilter,
         SecurityProblemSupport problemSupport,

@@ -29,7 +29,7 @@ public class ApplicationProperties {
     private RedisProperties redis;
     private String academicEmailClarifyDomain;
     private String googleWebmasterVerification;
-    private EmailAddresses emailAddresses;
+    private EmailAddresses emailAddresses = new EmailAddresses();
     private String tokenUsageCheck;
     private String tokenUsageCheckWhitelist;
     private int publicWebsiteApiThreshold;

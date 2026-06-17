@@ -146,10 +146,11 @@ application:
     password: 'oncokb-public-redis-password'
     address: 'redis://localhost:6379'
   email-addresses:
-    license-address:
-    registration-address:
-    contact-address:
-    tech-dev-address:
+    license-address: licenses@localhost
+    registration-address: registration@localhost
+    contact-address: contact@localhost
+    tech-dev-address: dev@localhost
+    support-address: support@localhost
   public-website-api-threshold: 10
   academic-email-clarify-domain:
   frontend:
