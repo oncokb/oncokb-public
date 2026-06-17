@@ -4,6 +4,7 @@ import org.mskcc.cbio.oncokb.domain.Company;
 import org.mskcc.cbio.oncokb.domain.User;
 import org.mskcc.cbio.oncokb.domain.enumeration.AccountRequestStatus;
 import org.mskcc.cbio.oncokb.domain.enumeration.LicenseType;
+import org.mskcc.cbio.oncokb.config.application.ApplicationProperties;
 import org.mskcc.cbio.oncokb.repository.CompanyRepository;
 import org.mskcc.cbio.oncokb.service.SlackService;
 import org.mskcc.cbio.oncokb.service.UserService;
@@ -23,23 +24,25 @@ public class OAuthAutoRegistrationService {
     private static final String DEFAULT_CITY = "New York";
     private static final String DEFAULT_COUNTRY = "USA";
     private static final String DEFAULT_JOB_TITLE = "MSK Employee";
-    private static final String SUPPORT_EMAIL = "support@oncokb.org";
 
     private final UserService userService;
     private final SlackService slackService;
     private final UserMapper userMapper;
     private final CompanyRepository companyRepository;
+    private final ApplicationProperties applicationProperties;
 
     public OAuthAutoRegistrationService(
         UserService userService,
         SlackService slackService,
         UserMapper userMapper,
-        CompanyRepository companyRepository
+        CompanyRepository companyRepository,
+        ApplicationProperties applicationProperties
     ) {
         this.userService = userService;
         this.slackService = slackService;
         this.userMapper = userMapper;
         this.companyRepository = companyRepository;
+        this.applicationProperties = applicationProperties;
     }
 
     public User registerMskUser(String email, String firstName, String lastName, Optional<String> jobTitle) {
@@ -67,7 +70,7 @@ public class OAuthAutoRegistrationService {
     private void applyMskCompanyFlow(UserDTO userDTO) {
         Company company = companyRepository.findOneByNameIgnoreCase(MSK_COMPANY_NAME)
             .orElseThrow(() -> new IllegalStateException(
-                "There was an error creating your MSK account. Please contact " + SUPPORT_EMAIL + "."
+                "There was an error creating your MSK account. Please contact " + applicationProperties.getEmailAddresses().getSupportAddress() + "."
             ));
 
         UserDTO updatedUserDTO = userService.updateUserWithCompanyLicense(userDTO, company, false, false).orElse(userDTO);

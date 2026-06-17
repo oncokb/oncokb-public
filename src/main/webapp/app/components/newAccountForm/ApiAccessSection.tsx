@@ -21,7 +21,6 @@ export function supportsApiAccessRequest(licenseType?: LicenseType) {
 type ApiAccessSectionProps = {
   apiAccessRequested: boolean;
   apiAccessJustificationFieldName: string;
-  inline?: boolean;
   licenseType?: LicenseType;
   onToggleApiAccess: () => void;
   requestApiAccessFieldName: string;
@@ -30,7 +29,6 @@ type ApiAccessSectionProps = {
 export default function ApiAccessSection({
   apiAccessRequested,
   apiAccessJustificationFieldName,
-  inline = false,
   licenseType,
   onToggleApiAccess,
   requestApiAccessFieldName,
@@ -40,17 +38,11 @@ export default function ApiAccessSection({
   }
 
   return (
-    <Row className={inline ? undefined : getSectionClassName()}>
-      {inline ? (
-        <Col>
-          <h5>API Access</h5>
-        </Col>
-      ) : (
-        <Col md="3">
-          <h5>API Access</h5>
-        </Col>
-      )}
-      <Col md={inline ? '12' : '9'}>
+    <Row className={getSectionClassName()}>
+      <Col md="3">
+        <h5>API Access</h5>
+      </Col>
+      <Col md="9">
         {licenseType === LicenseType.ACADEMIC && (
           <>
             <p>
