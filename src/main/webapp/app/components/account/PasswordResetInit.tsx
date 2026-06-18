@@ -51,7 +51,7 @@ export class PasswordResetInit extends React.Component<{}> {
   render() {
     return (
       <SmallPageContainer>
-        <h2>Forgot password?</h2>
+        <h1 className="h2">Forgot password?</h1>
         <p>No worries, we'll send you reset instructions</p>
         <Alert variant={'warning'}>
           <span>Enter the email address you used to register</span>

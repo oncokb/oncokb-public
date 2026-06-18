@@ -4,6 +4,7 @@ import org.mskcc.cbio.oncokb.config.application.ApplicationProperties;
 import org.mskcc.cbio.oncokb.security.CustomOAuthSuccessHandler;
 import org.mskcc.cbio.oncokb.security.KeycloakIdpHintAuthorizationRequestResolver;
 import org.mskcc.cbio.oncokb.security.SecurityUtils;
+import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.Import;
 import org.springframework.core.annotation.Order;
@@ -20,6 +21,7 @@ import org.zalando.problem.spring.web.advice.security.SecurityProblemSupport;
 @Configuration
 @Order(1)
 @Import(SecurityProblemSupport.class)
+@ConditionalOnProperty(prefix = "application.keycloak", name = "enabled", havingValue = "true")
 public class OAuthSecurityConfiguration extends WebSecurityConfigurerAdapter {
 
     private final SecurityProblemSupport problemSupport;
