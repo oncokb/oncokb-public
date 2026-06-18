@@ -125,11 +125,11 @@ export function createHighestLevelOfEvidenceTileProps(
             <div className={classnames('d-flex', 'flex-row')}>
               <HighestLevelEvidence
                 type="Sensitive"
-                level={highestSensitiveLevel}
+                level={highestSensitiveLevel ?? undefined}
               />
               <HighestLevelEvidence
                 type="Resistance"
-                level={highestResistanceLevel}
+                level={highestResistanceLevel ?? undefined}
               />
             </div>
           ),
@@ -140,7 +140,7 @@ export function createHighestLevelOfEvidenceTileProps(
           value: (
             <HighestLevelEvidence
               type="DiagnosticImplication"
-              level={highestDiagnosticImplicationLevel}
+              level={highestDiagnosticImplicationLevel ?? undefined}
             />
           ),
         },
@@ -152,14 +152,19 @@ export function createHighestLevelOfEvidenceTileProps(
           value: (
             <HighestLevelEvidence
               type="PrognosticImplication"
-              level={highestPrognosticImplicationLevel}
+              level={highestPrognosticImplicationLevel ?? undefined}
             />
           ),
         },
         {
           title: 'FDA',
           show: !hideFda && !!highestFdaLevel,
-          value: <HighestLevelEvidence type="Fda" level={highestFdaLevel} />,
+          value: (
+            <HighestLevelEvidence
+              type="Fda"
+              level={highestFdaLevel ?? undefined}
+            />
+          ),
         },
       ],
     ],

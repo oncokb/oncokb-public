@@ -38,7 +38,7 @@ export type OncogenicityEntity = {
 export type Query = {
     'alteration': string
 
-        'alterationType': "MUTATION" | "COPY_NUMBER_ALTERATION" | "STRUCTURAL_VARIANT"
+        'alterationType': "MUTATION" | "COPY_NUMBER_ALTERATION" | "STRUCTURAL_VARIANT" | null
 
         'canonicalTranscript': string
 
@@ -60,7 +60,7 @@ export type Query = {
 
         'referenceGenome': "GRCh37" | "GRCh38"
 
-        'svType': "DELETION" | "TRANSLOCATION" | "DUPLICATION" | "INSERTION" | "INVERSION" | "FUSION" | "UNKNOWN"
+        'svType': "DELETION" | "TRANSLOCATION" | "DUPLICATION" | "INSERTION" | "INVERSION" | "FUSION" | "UNKNOWN" | null
 
         'tumorType': string
 
@@ -140,13 +140,13 @@ export type GermlineVariantAnnotation = {
 
         'genomicIndicators': Array < GenomicIndicator >
 
-        'highestDiagnosticImplicationLevel': "LEVEL_Dx1" | "LEVEL_Dx2" | "LEVEL_Dx3"
+        'highestDiagnosticImplicationLevel': "LEVEL_Dx1" | "LEVEL_Dx2" | "LEVEL_Dx3" | null
 
-        'highestPrognosticImplicationLevel': "LEVEL_Px1" | "LEVEL_Px2" | "LEVEL_Px3"
+        'highestPrognosticImplicationLevel': "LEVEL_Px1" | "LEVEL_Px2" | "LEVEL_Px3" | null
 
-        'highestResistanceLevel': "LEVEL_R1" | "LEVEL_R2"
+        'highestResistanceLevel': "LEVEL_R1" | "LEVEL_R2" | null
 
-        'highestSensitiveLevel': "LEVEL_1" | "LEVEL_2" | "LEVEL_3A" | "LEVEL_3B" | "LEVEL_4"
+        'highestSensitiveLevel': "LEVEL_1" | "LEVEL_2" | "LEVEL_3A" | "LEVEL_3B" | "LEVEL_4" | null
 
         'lastUpdate': string
 
@@ -794,15 +794,15 @@ export type SomaticVariantAnnotation = {
 
         'geneSummary': string
 
-        'highestDiagnosticImplicationLevel': "LEVEL_Dx1" | "LEVEL_Dx2" | "LEVEL_Dx3"
+        'highestDiagnosticImplicationLevel': "LEVEL_Dx1" | "LEVEL_Dx2" | "LEVEL_Dx3" | null
 
-        'highestFdaLevel': "LEVEL_Fda1" | "LEVEL_Fda2" | "LEVEL_Fda3"
+        'highestFdaLevel': "LEVEL_Fda1" | "LEVEL_Fda2" | "LEVEL_Fda3" | null
 
-        'highestPrognosticImplicationLevel': "LEVEL_Px1" | "LEVEL_Px2" | "LEVEL_Px3"
+        'highestPrognosticImplicationLevel': "LEVEL_Px1" | "LEVEL_Px2" | "LEVEL_Px3" | null
 
-        'highestResistanceLevel': "LEVEL_R1" | "LEVEL_R2"
+        'highestResistanceLevel': "LEVEL_R1" | "LEVEL_R2" | null
 
-        'highestSensitiveLevel': "LEVEL_1" | "LEVEL_2" | "LEVEL_3A" | "LEVEL_3B" | "LEVEL_4"
+        'highestSensitiveLevel': "LEVEL_1" | "LEVEL_2" | "LEVEL_3A" | "LEVEL_3B" | "LEVEL_4" | null
 
         'hotspot': boolean
 
