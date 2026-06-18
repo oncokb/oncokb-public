@@ -560,7 +560,7 @@ export const DEFAULT_ANNOTATION: SomaticVariantAnnotation = {
   hotspot: false,
   lastUpdate: '',
   mutationEffect: DEFAULT_MUTATION_EFFECT,
-  oncogenic: '' as any,
+  oncogenic: 'Unknown',
   exon: '',
   otherSignificantResistanceLevels: [],
   otherSignificantSensitiveLevels: [],
