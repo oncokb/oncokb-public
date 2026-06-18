@@ -312,12 +312,8 @@ input[type='checkbox'] + label:hover {
 
 input[type='checkbox'] + label:before {
   color: $grey;
-  margin-right: 0.45rem;
   transform: translateY(1px) scale(1);
-  transition:
-    color 0.18s ease,
-    opacity 0.18s ease,
-    transform 0.18s ease;
+  transition: color 0.18s ease, opacity 0.18s ease, transform 0.18s ease;
 }
 
 input[type='checkbox'] {
