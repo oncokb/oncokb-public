@@ -6,6 +6,7 @@ import { UserDTO } from 'app/shared/api/generated/API';
 import { formatEnumLabel } from 'app/shared/utils/Utils';
 import styles from './UserQuickViewModal.module.scss';
 import { Link } from 'react-router-dom';
+import { EmailTable } from 'app/shared/table/EmailTable';
 
 type UserQuickViewModalProps = {
   user: UserDTO | undefined;
@@ -39,6 +40,7 @@ export const UserQuickViewModal: React.FunctionComponent<UserQuickViewModalProps
   const apiAccessJustification =
     user?.additionalInfo?.apiAccessRequest?.justification;
   const activationVariant = user?.activated ? 'danger' : 'success';
+  const userMails = user?.userMails ?? [];
 
   return (
     <Modal
@@ -130,6 +132,17 @@ export const UserQuickViewModal: React.FunctionComponent<UserQuickViewModalProps
         <InfoRow
           title={<h6>API Access Justification</h6>}
           content={getDisplayValue(apiAccessJustification)}
+          direction={'vertical'}
+        />
+        <InfoRow
+          title={<h6>Email History</h6>}
+          content={
+            userMails.length > 0 ? (
+              <EmailTable data={userMails} defaultPageSize={5} />
+            ) : (
+              'No emails sent'
+            )
+          }
           direction={'vertical'}
         />
       </Modal.Body>

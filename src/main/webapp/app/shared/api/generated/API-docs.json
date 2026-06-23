@@ -2135,6 +2135,7 @@
               "CLARIFY_HOSPITAL_USE",
               "HOSPITAL_APPROVAL_HIGH_VOLUME",
               "CLARIFY_COMMERCIAL_USE",
+              "LICENSE_OPTIONS",
               "VERIFY_EMAIL_BEFORE_ACCOUNT_EXPIRES",
               "ACTIVATE_FREE_TRIAL",
               "TRIAL_ACCOUNT_IS_ABOUT_TO_EXPIRE",
@@ -4048,6 +4049,7 @@
             "CLARIFY_HOSPITAL_USE",
             "HOSPITAL_APPROVAL_HIGH_VOLUME",
             "CLARIFY_COMMERCIAL_USE",
+            "LICENSE_OPTIONS",
             "VERIFY_EMAIL_BEFORE_ACCOUNT_EXPIRES",
             "ACTIVATE_FREE_TRIAL",
             "TRIAL_ACCOUNT_IS_ABOUT_TO_EXPIRE",
@@ -4199,6 +4201,12 @@
         "tokenValidDays": {
           "type": "integer",
           "format": "int32"
+        },
+        "userMails": {
+          "type": "array",
+          "items": {
+            "$ref": "#/definitions/UserMailsDTO"
+          }
         }
       },
       "title": "ManagedUserVM"
@@ -4579,6 +4587,12 @@
         },
         "resetKey": {
           "type": "string"
+        },
+        "userMails": {
+          "type": "array",
+          "items": {
+            "$ref": "#/definitions/UserMailsDTO"
+          }
         }
       },
       "title": "UserDTO"
@@ -4673,6 +4687,7 @@
             "CLARIFY_HOSPITAL_USE",
             "HOSPITAL_APPROVAL_HIGH_VOLUME",
             "CLARIFY_COMMERCIAL_USE",
+            "LICENSE_OPTIONS",
             "VERIFY_EMAIL_BEFORE_ACCOUNT_EXPIRES",
             "ACTIVATE_FREE_TRIAL",
             "TRIAL_ACCOUNT_IS_ABOUT_TO_EXPIRE",

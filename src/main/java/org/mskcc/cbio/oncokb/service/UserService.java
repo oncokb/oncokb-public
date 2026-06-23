@@ -22,6 +22,7 @@ import org.mskcc.cbio.oncokb.security.uuid.TokenProvider;
 import org.mskcc.cbio.oncokb.service.dto.useradditionalinfo.*;
 import org.mskcc.cbio.oncokb.service.dto.CompanyDTO;
 import org.mskcc.cbio.oncokb.service.dto.UserDTO;
+import org.mskcc.cbio.oncokb.service.mapper.UserMailsMapper;
 import org.mskcc.cbio.oncokb.service.mapper.UserMapper;
 import org.mskcc.cbio.oncokb.service.mapper.CompanyMapper;
 import org.mskcc.cbio.oncokb.util.StringUtil;
@@ -104,6 +105,9 @@ public class UserService {
 
     @Autowired
     private CompanyMapper companyMapper;
+
+    @Autowired
+    private UserMailsMapper userMailsMapper;
 
     public UserService(
         UserRepository userRepository,
@@ -574,12 +578,17 @@ public class UserService {
         List<Object[]> usersWithDetails = userRepository.findAllUsersWithUserDetailsByUsersIn(users);
         return usersWithDetails
             .stream()
-            .map(u -> {
-                User user = (User) u[0];
-                UserDetails userDetails = (UserDetails) u[1];
-                return userMapper.userToUserDTO(user, userDetails);
-            })
+            .map(this::toUserDTOWithMails)
             .collect(Collectors.toList());
+    }
+
+    private UserDTO toUserDTOWithMails(Object[] userWithDetails) {
+        User user = (User) userWithDetails[0];
+        UserDetails userDetails = (UserDetails) userWithDetails[1];
+
+        UserDTO dto = userMapper.userToUserDTO(user, userDetails);
+        dto.setUserMails(userMailsMapper.toDto(user.getUserMails()));
+        return dto;
     }
 
     @Transactional(readOnly = true)

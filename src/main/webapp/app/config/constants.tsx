@@ -9,6 +9,7 @@ import {
 import React from 'react';
 import { Link } from 'react-router-dom';
 import { Feedback, FeedbackType } from 'app/components/feedback/types';
+import { MailTypeInfo } from 'app/shared/api/generated/API';
 
 /* eslint no-shadow: 0 */
 
@@ -1194,3 +1195,37 @@ export type InheritanceMechanism =
   | typeof MECHANISM_OF_INHERITANCE_AUTOSOMAL_RECESSIVE
   | typeof MECHANISM_OF_INHERITANCE_X_LINKED_RECESSIVE
   | 'Carrier';
+
+export type MailCategory =
+  | 'ACTIVATION'
+  | 'CREATION'
+  | 'APPROVAL'
+  | 'API_APPROVAL'
+  | 'REJECTION'
+  | 'CLARIFICATION'
+  | 'LICENSE_OPTIONS'
+  | 'TRIAL'
+  | 'TERMINATION';
+
+export const USER_MAIL_TAGS: Partial<Record<
+  MailTypeInfo['mailType'],
+  MailCategory
+>> = {
+  ACTIVATION: 'ACTIVATION',
+  CREATION: 'CREATION',
+  APPROVAL: 'APPROVAL',
+  API_ACCESS_APPROVAL: 'API_APPROVAL',
+  REJECTION: 'REJECTION',
+  REJECTION_US_SANCTION: 'REJECTION',
+  REJECT_ALUMNI_ADDRESS: 'REJECTION',
+  CLARIFY_ACADEMIC_FOR_PROFIT: 'CLARIFICATION',
+  CLARIFY_ACADEMIC_NON_INSTITUTE_EMAIL: 'CLARIFICATION',
+  CLARIFY_USE_CASE: 'CLARIFICATION',
+  CLARIFY_DUPLICATE_USER: 'CLARIFICATION',
+  CLARIFY_REGISTRATION_INFO: 'CLARIFICATION',
+  CLARIFY_HOSPITAL_USE: 'LICENSE_OPTIONS',
+  CLARIFY_COMMERCIAL_USE: 'LICENSE_OPTIONS',
+  LICENSE_OPTIONS: 'LICENSE_OPTIONS',
+  ACTIVATE_FREE_TRIAL: 'TRIAL',
+  TERMINATION_NOTIFICATION_EMAIL: 'TERMINATION',
+};
