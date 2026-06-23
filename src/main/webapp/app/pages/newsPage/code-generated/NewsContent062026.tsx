@@ -20,20 +20,16 @@ export default function NewsContent062026() {
           </a>{' '}
           for trastuzumab deruxtecan (T-DXd), the Level 1 annotation for ERBB2
           alterations associated with T-DXd in non-small cell lung cancer has
-          been updated from{' '}
-          <em>
-            <strong>ERBB2</strong> Oncogenic Mutations
-          </em>{' '}
-          to{' '}
-          <em>
-            <strong>ERBB2</strong>
-          </em>{' '}
+          been updated from <strong>*ERBB2</strong> Oncogenic Mutations* to{' '}
+          <strong>
+            <em>ERBB2</em>
+          </strong>{' '}
           <strong>
             Oncogenic Missense Mutations and Exon 20 In-Frame Insertions
-            (770_831ins)
+            (770_831ins)*
           </strong>
-          <em>.</em> As a result, ERBB2 fusions and in-frame insertions outside
-          exon 20 are no longer included in this Level 1 association.
+          .* As a result, ERBB2 fusions and in-frame insertions outside exon 20
+          are no longer included in this Level 1 association.
         </li>
       </ul>
       <p>
@@ -283,8 +279,7 @@ export default function NewsContent062026() {
                 </AlterationPageLink>
               </td>
               <td>
-                Chronic Myelogenous Leukemia, B-Lymphoblastic <br />
-                <br /> Leukemia/Lymphoma
+                Chronic Myelogenous Leukemia, B-Lymphoblastic Leukemia/Lymphoma
               </td>
               <td>
                 Resistance Imatinib, Nilotinib (Level R1) <br />
