@@ -43,7 +43,6 @@ import AuthenticationStore from 'app/store/AuthenticationStore';
 import {
   EVIDENCE_TYPES,
   REFERENCE_GENOME,
-  getGenomeNexusVariantBaseUrl,
   ANNOTATION_PAGE_TAB_KEYS,
   TREATMENT_EVIDENCE_TYPES,
   ONCOGENICITY,
@@ -82,6 +81,7 @@ import VariantOverView from 'app/shared/sections/VariantOverview';
 import GeneAdditionalInfoSection from 'app/shared/sections/GeneAdditionalInfoSection';
 import InfoIcon from 'app/shared/icons/InfoIcon';
 import { UnknownGeneAlert } from 'app/shared/alert/UnknownGeneAlert';
+import AlternativeVariantSummary from 'app/shared/sections/AlternativeVariantSummary';
 
 type MatchParams = {
   hugoSymbol: string;
@@ -677,6 +677,7 @@ export class SomaticGermlineAlterationPage extends React.Component<
                   />
                 </Col>
                 <Col md={11}>
+                  {/* Show canonical-transcript mapping when available; otherwise render the default variant overview content. */}
                   {alternativeVariant ? (
                     <Row
                       className={classnames(
@@ -685,37 +686,12 @@ export class SomaticGermlineAlterationPage extends React.Component<
                       )}
                     >
                       <Col>
-                        <div>
-                          The {alternativeVariant.gene}{' '}
-                          {alternativeVariant.inputVariant} mutation is not
-                          present on the OncoKB canonical transcript. However,
-                          OncoKB annotations are available for{' '}
-                          <AlterationPageLink
-                            hugoSymbol={alternativeVariant.gene}
-                            alteration={
-                              alternativeVariant.foundAlteration.alteration
-                            }
-                            cancerType={this.store.cancerTypeName}
-                            germline={this.store.germline}
-                          >
-                            {alternativeVariant.gene}{' '}
-                            {alternativeVariant.foundAlteration.alteration}
-                          </AlterationPageLink>
-                          , the equivalent mutation on the canonical transcript,
-                          as identified by{' '}
-                          <a
-                            href={`${getGenomeNexusVariantBaseUrl(
-                              this.store.referenceGenomeQuery
-                            )}${alternativeVariant.transcriptId}:p.${
-                              alternativeVariant.foundAlteration.alteration
-                            }`}
-                            target="_blank"
-                            rel="noopener noreferrer"
-                          >
-                            Genome Nexus
-                          </a>
-                          .
-                        </div>
+                        <AlternativeVariantSummary
+                          alternativeVariant={alternativeVariant}
+                          referenceGenomeQuery={this.store.referenceGenomeQuery}
+                          cancerType={this.store.cancerTypeName}
+                          germline={this.store.germline}
+                        />
                       </Col>
                     </Row>
                   ) : (
