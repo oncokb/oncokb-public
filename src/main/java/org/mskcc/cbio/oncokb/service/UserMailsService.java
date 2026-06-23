@@ -155,10 +155,18 @@ public class UserMailsService {
     }
 
     private void clearUserCaches(User user) {
-        Objects.requireNonNull(cacheManager.getCache(this.cacheNameResolver.getCacheName(USERS_BY_LOGIN_CACHE))).evict(user.getLogin());
-        if (user.getEmail() != null) {
-            Objects.requireNonNull(cacheManager.getCache(this.cacheNameResolver.getCacheName(USERS_BY_EMAIL_CACHE))).evict(user.getEmail());
+        if (user != null && user.getLogin() != null) {
+            evictCacheKey(this.cacheNameResolver.getCacheName(USERS_BY_LOGIN_CACHE), user.getLogin());
         }
-        Objects.requireNonNull(cacheManager.getCache(this.cacheNameResolver.getCacheName(ALL_USERS_CACHE))).evict("getAllManagedUsers");
+        if (user != null && user.getEmail() != null) {
+            evictCacheKey(this.cacheNameResolver.getCacheName(USERS_BY_EMAIL_CACHE), user.getEmail());
+        }
+        evictCacheKey(this.cacheNameResolver.getCacheName(ALL_USERS_CACHE), "getAllManagedUsers");
+    }
+
+    private void evictCacheKey(String cacheName, String key) {
+        if (cacheManager.getCache(cacheName) != null) {
+            Objects.requireNonNull(cacheManager.getCache(cacheName)).evict(key);
+        }
     }
 }
