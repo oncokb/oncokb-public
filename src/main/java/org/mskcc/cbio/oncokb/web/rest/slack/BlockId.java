@@ -16,6 +16,7 @@ public enum BlockId {
     , DUPLICATE_USER_INFO("duplicate-user-info")
     , REGISTRATION_INFO_CLARIFICATION_NOTE("registration-info-clarification-note")
     , HOSPITAL_USE_CLARIFICATION_NOTE("hospital-use-clarification-note")
+    , HOSPITAL_APPROVAL_HIGH_VOLUME_NOTE("hospital-approval-high-volume-note")
     , COMMERCIAL_USE_CLARIFICATION_NOTE("commercial-use-clarification-note")
     , REJECTION_NOTE("rejection-note")
     , REJECTION_US_SANCTION_NOTE("rejection-us-sanction-note")

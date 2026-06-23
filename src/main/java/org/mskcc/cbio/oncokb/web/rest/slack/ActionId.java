@@ -26,6 +26,8 @@ public enum ActionId {
     , CONFIRM_SEND_REGISTRATION_INFO_CLARIFICATION_EMAIL("confirm-send-registration-info-clarification-email")
     , SEND_HOSPITAL_USE_CLARIFICATION_EMAIL("send-hospital-use-clarification-email")
     , CONFIRM_SEND_HOSPITAL_USE_CLARIFICATION_EMAIL("confirm-send-hospital-use-clarification-email")
+    , SEND_HOSPITAL_APPROVAL_HIGH_VOLUME_EMAIL("send-hospital-approval-high-volume-email")
+    , CONFIRM_SEND_HOSPITAL_APPROVAL_HIGH_VOLUME_EMAIL("confirm-send-hospital-approval-high-volume-email")
     , SEND_COMMERCIAL_USE_CLARIFICATION_EMAIL("send-commercial-use-clarification-email")
     , CONFIRM_SEND_COMMERCIAL_USE_CLARIFICATION_EMAIL("confirm-send-commercial-use-clarification-email")
     , SEND_REJECTION_EMAIL("send-rejection-email")

@@ -1,0 +1,5 @@
+Thank you for your interest in the Hospital Use license for OncoKB.
+
+We're happy to approve your request. We noticed that your report volume is quite high, and your workflow may benefit from programmatic access to OncoKB through the API. Is this something you would be interested in learning more about?
+
+Thank you for your interest, and we look forward to hearing from you.
