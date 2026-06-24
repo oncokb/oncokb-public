@@ -3,6 +3,7 @@ import { LongText } from 'app/oncokb-frontend-commons/src/components/LongText';
 import { Link } from 'react-router-dom';
 import { PAGE_ROUTE } from 'app/config/constants';
 import { DescriptionTooltip } from 'app/pages/annotationPage/DescriptionTooltip';
+import { getLoginRouteForRegister } from 'app/shared/utils/UrlUtils';
 
 export const ImplicationDescriptionCell: React.FunctionComponent<{
   userAuthenticated: boolean;
@@ -22,7 +23,8 @@ export const ImplicationDescriptionCell: React.FunctionComponent<{
           <span>
             Get access to our treatment descriptions by{' '}
             <Link to={PAGE_ROUTE.LOGIN}> logging in </Link> or by{' '}
-            <Link to={PAGE_ROUTE.REGISTER}>registering</Link> an account.
+            <Link to={getLoginRouteForRegister()}>registering</Link> an
+            account.
           </span>
         }
       />
