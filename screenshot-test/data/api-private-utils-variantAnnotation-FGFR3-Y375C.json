@@ -8,9 +8,9 @@
     "alterationType": "MUTATION",
     "svType": null,
     "tumorType": null,
-    "consequence": "NA",
-    "proteinStart": -1,
-    "proteinEnd": 100000,
+    "consequence": "missense_variant",
+    "proteinStart": 375,
+    "proteinEnd": 375,
     "hgvs": null,
     "hgvsInfo": null,
     "canonicalTranscript": null,
@@ -48,7 +48,45 @@
   "otherSignificantResistanceLevels": [],
   "exon": null,
   "background": "FGFR3 is a receptor tyrosine kinase that is a member of the fibroblast growth factor receptor (FGFR) family. Binding of FGF ligands to FGFR3 results in the rapid dimerization and activation of downstream signaling pathways including the PI3K/AKT and MAPK pathways (PMID: 28030802). FGFR3 is most highly expressed in neuronal and sensory cell types and FGFR3 signaling contributes to a variety of cellular functions including proliferation, differentiation, cell migration and apoptosis (PMID: 7542215, 20094046). Alternative splicing events in the FGFR3 gene generate two isoforms, FGFR3b and FGFR3c, which have unique tissue expression patterns and ligand-binding specificity (PMID: 8663044, 7512569). Germline mutations in FGFR3 have been identified in syndromes of craniosynostosis, which are characterized by abnormal bone development, in addition to skin and hair follicle disorders (PMID: 10541159, 17568799). Somatic activating mutations in FGFR3 have been identified in up to 70% of bladder cancers and in a low percentage of other solid tumor types (PMID: 11395371, 12743143, 16338952). In addition, a specific FGFR3 translocation is observed in approximately 15% of patients with multiple myeloma, resulting in constitutive expression of FGFR3 (PMID: 17107900). Currently, a number of small molecule inhibitors of the FGFR proteins are in use, with the major difference among them being their specificity to FGFR versus other receptor tyrosine kinases (RTKs) (PMID: PMID: 23696246, 24265351).",
-  "alternativeOncoKbVariant": null,
+  "alternativeOncoKbVariant": {
+    "foundAlteration": {
+      "gene": {
+        "entrezGeneId": 2261,
+        "hugoSymbol": "FGFR3",
+        "geneType": "ONCOGENE",
+        "grch37Isoform": "ENST00000260795",
+        "grch37RefSeq": "NM_000142.5",
+        "grch38Isoform": "ENST00000440486",
+        "grch38RefSeq": "NM_000142.5",
+        "geneAliases": [
+          "JTK4",
+          "ACH",
+          "CEK2",
+          "CD333"
+        ],
+        "genesets": []
+      },
+      "consequence": {
+        "term": "missense_variant",
+        "isGenerallyTruncating": false,
+        "description": "A sequence variant, that changes one or more bases, resulting in a different amino acid sequence but where the length is preserved"
+      },
+      "alteration": "Y373C",
+      "proteinChange": null,
+      "name": "Y373C",
+      "refResidues": "Y",
+      "proteinStart": 373,
+      "proteinEnd": 373,
+      "variantResidues": "C",
+      "referenceGenomes": [
+        "GRCh38",
+        "GRCh37"
+      ]
+    },
+    "gene": "FGFR3",
+    "inputVariant": "Y375C",
+    "transcriptId": "ENST00000260795"
+  },
   "alteration": {
     "gene": {
       "entrezGeneId": 2261,
@@ -67,17 +105,17 @@
       "genesets": []
     },
     "consequence": {
-      "term": "NA",
+      "term": "missense_variant",
       "isGenerallyTruncating": false,
-      "description": null
+      "description": "A sequence variant, that changes one or more bases, resulting in a different amino acid sequence but where the length is preserved"
     },
     "alteration": "Y375C",
     "proteinChange": null,
     "name": "Y375C",
-    "refResidues": null,
-    "proteinStart": -1,
-    "proteinEnd": 100000,
-    "variantResidues": null,
+    "refResidues": "Y",
+    "proteinStart": 375,
+    "proteinEnd": 375,
+    "variantResidues": "C",
     "referenceGenomes": [
       "GRCh37"
     ]
