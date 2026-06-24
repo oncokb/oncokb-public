@@ -1,0 +1,41 @@
+version: '3.8'
+
+services:
+  keycloak-db:
+    image: postgres:17
+    restart: unless-stopped
+    environment:
+      POSTGRES_DB: keycloak
+      POSTGRES_USER: root
+      POSTGRES_PASSWORD: root
+    volumes:
+      - kc-db:/var/lib/postgresql/data
+    networks:
+      - kc-network
+
+  keycloak:
+    image: quay.io/keycloak/keycloak:26.6.2
+    command: start-dev --import-realm
+    environment:
+      KC_BOOTSTRAP_ADMIN_USERNAME: admin
+      KC_BOOTSTRAP_ADMIN_PASSWORD: admin
+      KC_DB: postgres
+      KC_DB_URL_HOST: keycloak-db
+      KC_DB_URL_PORT: 5432
+      KC_DB_URL_DATABASE: keycloak
+      KC_DB_USERNAME: root
+      KC_DB_PASSWORD: root
+    depends_on:
+      - keycloak-db
+    volumes:
+      - ./keycloak:/opt/keycloak/data/import:ro
+    networks:
+      - kc-network
+    ports:
+      - 8085:8080
+
+volumes:
+  kc-db:
+
+networks:
+  kc-network:

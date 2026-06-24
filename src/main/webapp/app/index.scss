@@ -74,7 +74,8 @@ strong {
         border-bottom: $navbar-item-border-bottom solid $nav-bg-color;
       }
 
-      &.mr-auto > .nav-item {
+      &.mr-auto > .nav-item,
+      & > .login-nav-item {
         transition: border-bottom-color 0.15s ease;
 
         &.active {
@@ -297,6 +298,24 @@ input[type='radio']:checked {
   }
 }
 
+input[type='checkbox'] + label {
+  cursor: pointer;
+  display: inline-flex;
+  align-items: flex-start;
+  transition: color 0.18s ease, transform 0.18s ease;
+}
+
+input[type='checkbox'] + label:hover {
+  color: $blue;
+  transform: translateX(2px);
+}
+
+input[type='checkbox'] + label:before {
+  color: $grey;
+  transform: translateY(1px) scale(1);
+  transition: color 0.18s ease, opacity 0.18s ease, transform 0.18s ease;
+}
+
 input[type='checkbox'] {
   + label:before {
     content: '\f096';
@@ -312,7 +331,18 @@ input[type='radio'] {
 input[type='checkbox']:checked {
   + label:before {
     content: '\f046';
+    color: $blue;
+    opacity: 1;
+    transform: translateY(1px) scale(1.02);
   }
+}
+
+input[type='checkbox'] + label:hover:before,
+input[type='checkbox']:focus + label:before {
+  content: '\f046';
+  color: $blue;
+  opacity: 0.75;
+  transform: translateY(1px) scale(1.08);
 }
 
 input[type='radio']:checked {

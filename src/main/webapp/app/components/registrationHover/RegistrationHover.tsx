@@ -5,6 +5,7 @@ import { Link, useLocation } from 'react-router-dom';
 import { ONCOKB_TM, PAGE_ROUTE } from 'app/config/constants';
 import AuthenticationStore from 'app/store/AuthenticationStore';
 import { AppConfig } from 'app/appConfig';
+import { getLoginRouteForRegister } from 'app/shared/utils/UrlUtils';
 
 const REGISTRATION_HOVER_COOKIE = 'registration_hover_count';
 const REGISTRATION_HOVER_COOKIE_MAX_AGE_SECONDS = 60 * 60 * 24 * 30;
@@ -185,7 +186,7 @@ export default function RegistrationHover({
                   'btn',
                   'btn-primary'
                 )}
-                to={PAGE_ROUTE.REGISTER}
+                to={getLoginRouteForRegister()}
               >
                 {content.button}
               </Link>

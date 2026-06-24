@@ -23,6 +23,10 @@ export const SERVER_API_URL = process.env.SERVER_API_URL;
 
 export const LOCAL_DEV_OPT = 'localdev';
 export const DISABLE_BANNER_OPT = 'disablebanner';
+export const KEYCLOAK_LOGIN_SUCCESS_QUERY_PARAM = 'login_success';
+export const KEYCLOAK_ERROR_QUERY_PARAM = 'keycloak_error';
+export const KEYCLOAK_IDP_HINT_QUERY_PARAM = 'kc_idp_hint';
+export const MSK_PING_IDP_ALIAS = 'msk-ping';
 
 export const DEV_URL = 'http://localhost:9095';
 
@@ -645,7 +649,7 @@ export enum PAGE_TITLE {
   FDA_NGS = 'FDA fact sheet',
 
   LOGOUT = 'Log out',
-  LOGIN = 'Log in',
+  LOGIN = 'Login/Sign up',
   NEWS = 'Latest News',
   ONCOLOGY_TX = 'FDA-Approved Oncology Therapies',
   PRIVACY = 'OncoKB™ Digital Tracker Governance Privacy Policy',
@@ -748,6 +752,8 @@ export enum PAGE_ROUTE {
   ACCOUNT_ACTIVE_TRIAL_FINISH = '/account/active-trial/finish',
   GENOMIC_REPORT = '/genomic-report',
 }
+
+export const SHOW_KEYCLOAK_TEMP_PAGE_QUERY_PARAM = 'showKeycloakTempPage';
 
 export enum API_ROUTE {
   AUTHENTICATE = '/api/authenticate',
