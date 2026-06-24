@@ -1,0 +1,4196 @@
+[
+  {
+    "mutationEffectDescription": "The FGFR3 R621H mutation is located in the kinase domain of the protein. In vitro studies with Ba/F3 cells expressing FGFR3 R621H demonstrate this mutation is likely neutral as measured by transformation activity and proliferation comparable to wildtype (PMID: 34272467).",
+    "pathogenic": null,
+    "pathogenicPmids": [],
+    "pathogenicAbstracts": [],
+    "penetrance": null,
+    "cancerRisk": null,
+    "variant": {
+      "gene": {
+        "entrezGeneId": 2261,
+        "hugoSymbol": "FGFR3",
+        "geneType": "ONCOGENE",
+        "grch37Isoform": "ENST00000260795",
+        "grch37RefSeq": "NM_000142.5",
+        "grch38Isoform": "ENST00000440486",
+        "grch38RefSeq": "NM_000142.5",
+        "geneAliases": [
+          "JTK4",
+          "ACH",
+          "CEK2",
+          "CD333"
+        ],
+        "genesets": []
+      },
+      "consequence": {
+        "term": "missense_variant",
+        "isGenerallyTruncating": false,
+        "description": "A sequence variant, that changes one or more bases, resulting in a different amino acid sequence but where the length is preserved"
+      },
+      "alteration": "R621H",
+      "proteinChange": null,
+      "name": "R621H",
+      "refResidues": "R",
+      "proteinStart": 621,
+      "proteinEnd": 621,
+      "variantResidues": "H",
+      "referenceGenomes": [
+        "GRCh38",
+        "GRCh37"
+      ]
+    },
+    "mutationEffect": "Likely Neutral",
+    "mutationEffectPmids": [
+      "34272467"
+    ],
+    "mutationEffectAbstracts": [],
+    "oncogenic": "Likely Neutral",
+    "oncogenicPmids": [],
+    "oncogenicAbstracts": []
+  },
+  {
+    "mutationEffectDescription": "The FGFR3 V555L mutation is located in the kinase domain of the protein. This mutation has been found in transitional cell carcinoma (PMID: 28572459). In vitro studies demonstrate that this mutation is resistant to the FGFR inhibitor BGJ398 when expressed in TEL-FGFR3 fusion-positive murine fibroblasts as measured by sustained proliferation upon drug treatment (PMID: 28034880).",
+    "pathogenic": null,
+    "pathogenicPmids": [],
+    "pathogenicAbstracts": [],
+    "penetrance": null,
+    "cancerRisk": null,
+    "variant": {
+      "gene": {
+        "entrezGeneId": 2261,
+        "hugoSymbol": "FGFR3",
+        "geneType": "ONCOGENE",
+        "grch37Isoform": "ENST00000260795",
+        "grch37RefSeq": "NM_000142.5",
+        "grch38Isoform": "ENST00000440486",
+        "grch38RefSeq": "NM_000142.5",
+        "geneAliases": [
+          "JTK4",
+          "ACH",
+          "CEK2",
+          "CD333"
+        ],
+        "genesets": []
+      },
+      "consequence": {
+        "term": "missense_variant",
+        "isGenerallyTruncating": false,
+        "description": "A sequence variant, that changes one or more bases, resulting in a different amino acid sequence but where the length is preserved"
+      },
+      "alteration": "V555L",
+      "proteinChange": null,
+      "name": "V555L",
+      "refResidues": "V",
+      "proteinStart": 555,
+      "proteinEnd": 555,
+      "variantResidues": "L",
+      "referenceGenomes": [
+        "GRCh38",
+        "GRCh37"
+      ]
+    },
+    "mutationEffect": "Inconclusive",
+    "mutationEffectPmids": [
+      "28034880",
+      "28572459"
+    ],
+    "mutationEffectAbstracts": [],
+    "oncogenic": "Inconclusive",
+    "oncogenicPmids": [],
+    "oncogenicAbstracts": []
+  },
+  {
+    "mutationEffectDescription": "The FGFR3 M529I mutation is located in the cytoplasmic domain of the protein. In silico analysis suggests that the mutation is damaging (PMID: 30403900).",
+    "pathogenic": null,
+    "pathogenicPmids": [],
+    "pathogenicAbstracts": [],
+    "penetrance": null,
+    "cancerRisk": null,
+    "variant": {
+      "gene": {
+        "entrezGeneId": 2261,
+        "hugoSymbol": "FGFR3",
+        "geneType": "ONCOGENE",
+        "grch37Isoform": "ENST00000260795",
+        "grch37RefSeq": "NM_000142.5",
+        "grch38Isoform": "ENST00000440486",
+        "grch38RefSeq": "NM_000142.5",
+        "geneAliases": [
+          "JTK4",
+          "ACH",
+          "CEK2",
+          "CD333"
+        ],
+        "genesets": []
+      },
+      "consequence": {
+        "term": "missense_variant",
+        "isGenerallyTruncating": false,
+        "description": "A sequence variant, that changes one or more bases, resulting in a different amino acid sequence but where the length is preserved"
+      },
+      "alteration": "M529I",
+      "proteinChange": null,
+      "name": "M529I",
+      "refResidues": "M",
+      "proteinStart": 529,
+      "proteinEnd": 529,
+      "variantResidues": "I",
+      "referenceGenomes": [
+        "GRCh38",
+        "GRCh37"
+      ]
+    },
+    "mutationEffect": "Inconclusive",
+    "mutationEffectPmids": [
+      "30403900"
+    ],
+    "mutationEffectAbstracts": [],
+    "oncogenic": "Inconclusive",
+    "oncogenicPmids": [],
+    "oncogenicAbstracts": []
+  },
+  {
+    "mutationEffectDescription": "The FGFR3 R124W mutation is located in the Ig-like C2-type domain 1 of the protein. This mutation has been identified in colorectal cancer (PMID: 28481359). In vitro studies with MCF10A cells expressing FGFR3 R124W demonstrate that the mutation is activating as measured by increased cellular proliferation and viability compared to wildtype (PMID: 29533785).",
+    "pathogenic": null,
+    "pathogenicPmids": [],
+    "pathogenicAbstracts": [],
+    "penetrance": null,
+    "cancerRisk": null,
+    "variant": {
+      "gene": {
+        "entrezGeneId": 2261,
+        "hugoSymbol": "FGFR3",
+        "geneType": "ONCOGENE",
+        "grch37Isoform": "ENST00000260795",
+        "grch37RefSeq": "NM_000142.5",
+        "grch38Isoform": "ENST00000440486",
+        "grch38RefSeq": "NM_000142.5",
+        "geneAliases": [
+          "JTK4",
+          "ACH",
+          "CEK2",
+          "CD333"
+        ],
+        "genesets": []
+      },
+      "consequence": {
+        "term": "missense_variant",
+        "isGenerallyTruncating": false,
+        "description": "A sequence variant, that changes one or more bases, resulting in a different amino acid sequence but where the length is preserved"
+      },
+      "alteration": "R124W",
+      "proteinChange": null,
+      "name": "R124W",
+      "refResidues": "R",
+      "proteinStart": 124,
+      "proteinEnd": 124,
+      "variantResidues": "W",
+      "referenceGenomes": [
+        "GRCh38",
+        "GRCh37"
+      ]
+    },
+    "mutationEffect": "Likely Gain-of-function",
+    "mutationEffectPmids": [
+      "29533785",
+      "28481359"
+    ],
+    "mutationEffectAbstracts": [],
+    "oncogenic": "Likely Oncogenic",
+    "oncogenicPmids": [],
+    "oncogenicAbstracts": []
+  },
+  {
+    "mutationEffectDescription": "The FGFR3 N540S mutation is located in the kinase domain of the protein. This mutation has been found in urinary tract cancer. Expression of this mutation in a murine fibroblast cell line demonstrated that it is activating as measured by increased protein activity compared to wildtype (PMID: 26992226).",
+    "pathogenic": null,
+    "pathogenicPmids": [],
+    "pathogenicAbstracts": [],
+    "penetrance": null,
+    "cancerRisk": null,
+    "variant": {
+      "gene": {
+        "entrezGeneId": 2261,
+        "hugoSymbol": "FGFR3",
+        "geneType": "ONCOGENE",
+        "grch37Isoform": "ENST00000260795",
+        "grch37RefSeq": "NM_000142.5",
+        "grch38Isoform": "ENST00000440486",
+        "grch38RefSeq": "NM_000142.5",
+        "geneAliases": [
+          "JTK4",
+          "ACH",
+          "CEK2",
+          "CD333"
+        ],
+        "genesets": []
+      },
+      "consequence": {
+        "term": "missense_variant",
+        "isGenerallyTruncating": false,
+        "description": "A sequence variant, that changes one or more bases, resulting in a different amino acid sequence but where the length is preserved"
+      },
+      "alteration": "N540S",
+      "proteinChange": null,
+      "name": "N540S",
+      "refResidues": "N",
+      "proteinStart": 540,
+      "proteinEnd": 540,
+      "variantResidues": "S",
+      "referenceGenomes": [
+        "GRCh38",
+        "GRCh37"
+      ]
+    },
+    "mutationEffect": "Gain-of-function",
+    "mutationEffectPmids": [
+      "26992226"
+    ],
+    "mutationEffectAbstracts": [],
+    "oncogenic": "Likely Oncogenic",
+    "oncogenicPmids": [],
+    "oncogenicAbstracts": []
+  },
+  {
+    "mutationEffectDescription": "The FGFR3 Y647C mutation is located in the kinase domain of the protein. This mutation has been found in lung cancer. Expression of this mutation in a murine fibroblast cell line demonstrated that it is neutral as measured by no change in protein activity compared to wildtype (PMID: 26992226).",
+    "pathogenic": null,
+    "pathogenicPmids": [],
+    "pathogenicAbstracts": [],
+    "penetrance": null,
+    "cancerRisk": null,
+    "variant": {
+      "gene": {
+        "entrezGeneId": 2261,
+        "hugoSymbol": "FGFR3",
+        "geneType": "ONCOGENE",
+        "grch37Isoform": "ENST00000260795",
+        "grch37RefSeq": "NM_000142.5",
+        "grch38Isoform": "ENST00000440486",
+        "grch38RefSeq": "NM_000142.5",
+        "geneAliases": [
+          "JTK4",
+          "ACH",
+          "CEK2",
+          "CD333"
+        ],
+        "genesets": []
+      },
+      "consequence": {
+        "term": "missense_variant",
+        "isGenerallyTruncating": false,
+        "description": "A sequence variant, that changes one or more bases, resulting in a different amino acid sequence but where the length is preserved"
+      },
+      "alteration": "Y647C",
+      "proteinChange": null,
+      "name": "Y647C",
+      "refResidues": "Y",
+      "proteinStart": 647,
+      "proteinEnd": 647,
+      "variantResidues": "C",
+      "referenceGenomes": [
+        "GRCh38",
+        "GRCh37"
+      ]
+    },
+    "mutationEffect": "Likely Gain-of-function",
+    "mutationEffectPmids": [
+      "26992226"
+    ],
+    "mutationEffectAbstracts": [],
+    "oncogenic": "Likely Oncogenic",
+    "oncogenicPmids": [],
+    "oncogenicAbstracts": []
+  },
+  {
+    "mutationEffectDescription": "The FGFR3 H643D mutation is located in the kinase domain of the protein. This mutation has been found in urinary tract cancer. Expression of this mutation in a murine fibroblast cell line demonstrated that it is neutral as measured by no change in protein activity compared to wildtype (PMID: 26992226)",
+    "pathogenic": null,
+    "pathogenicPmids": [],
+    "pathogenicAbstracts": [],
+    "penetrance": null,
+    "cancerRisk": null,
+    "variant": {
+      "gene": {
+        "entrezGeneId": 2261,
+        "hugoSymbol": "FGFR3",
+        "geneType": "ONCOGENE",
+        "grch37Isoform": "ENST00000260795",
+        "grch37RefSeq": "NM_000142.5",
+        "grch38Isoform": "ENST00000440486",
+        "grch38RefSeq": "NM_000142.5",
+        "geneAliases": [
+          "JTK4",
+          "ACH",
+          "CEK2",
+          "CD333"
+        ],
+        "genesets": []
+      },
+      "consequence": {
+        "term": "missense_variant",
+        "isGenerallyTruncating": false,
+        "description": "A sequence variant, that changes one or more bases, resulting in a different amino acid sequence but where the length is preserved"
+      },
+      "alteration": "H643D",
+      "proteinChange": null,
+      "name": "H643D",
+      "refResidues": "H",
+      "proteinStart": 643,
+      "proteinEnd": 643,
+      "variantResidues": "D",
+      "referenceGenomes": [
+        "GRCh38",
+        "GRCh37"
+      ]
+    },
+    "mutationEffect": "Likely Neutral",
+    "mutationEffectPmids": [
+      "26992226"
+    ],
+    "mutationEffectAbstracts": [],
+    "oncogenic": "Likely Neutral",
+    "oncogenicPmids": [],
+    "oncogenicAbstracts": []
+  },
+  {
+    "mutationEffectDescription": "The FGFR3-TACC3 fusion involves the N-terminus of FGFR3, including the FGFR3 extracellular and kinase domains, fused to the C-terminus of TACC3, including the TACC3 coiled-coil domain. This mutation has been found in glioma. Expression of this mutation in a rat fibroblast cell line and murine astrocytes demonstrated that it is activating as measured by increased anchorage-independent growth, chromosome segregation defects and formation of in vivo brain tumors compared to vector control and wildtype FGFR3 and TACC3 (PMID: 22837387). In vitro and in vivo studies demonstrate that this mutation is sensitive to the FGFR3 tyrosine kinase inhibitor erdafitinib when expressed in glioma cells or mouse astrocytes as measured by decreased cell proliferation and tumor growth upon drug treatment (PMID: 25609060). Two patients with glioma harboring this mutation demonstrated clinical responses to erdafitinib (PMID: 25609060). A patient with gastric cancer harboring an FGFR3–TACC3 fusion had a confirmed response to the highly selective, irreversible FGFR1–4 inhibitor futibatinib (PMID 34551969). In the Phase II FIGHT-207 trial examining pemigatinib treatment in patients harboring FGFR3-TACC, four patients with central nervous system tumors and two patients with non-small cell lung cancer demonstrated progressive disease, two patients with central nervous system tumors and one patient with non-small cell lung cancer demonstrated stable disease, one patient with a central nervous system tumor demonstrated partial response and one patient with a central nervous system tumor demonstrated complete response  (Abstract: Rodon et al. Abstract# CT016. AACR 2023. https://aacrjournals.org/cancerres/article/83/8_Supplement/CT016/725419).",
+    "pathogenic": null,
+    "pathogenicPmids": [],
+    "pathogenicAbstracts": [],
+    "penetrance": null,
+    "cancerRisk": null,
+    "variant": {
+      "gene": {
+        "entrezGeneId": 2261,
+        "hugoSymbol": "FGFR3",
+        "geneType": "ONCOGENE",
+        "grch37Isoform": "ENST00000260795",
+        "grch37RefSeq": "NM_000142.5",
+        "grch38Isoform": "ENST00000440486",
+        "grch38RefSeq": "NM_000142.5",
+        "geneAliases": [
+          "JTK4",
+          "ACH",
+          "CEK2",
+          "CD333"
+        ],
+        "genesets": []
+      },
+      "consequence": {
+        "term": "NA",
+        "isGenerallyTruncating": false,
+        "description": "NA"
+      },
+      "alteration": "FGFR3-TACC3 Fusion",
+      "proteinChange": null,
+      "name": "FGFR3-TACC3 Fusion",
+      "refResidues": null,
+      "proteinStart": -1,
+      "proteinEnd": 100000,
+      "variantResidues": null,
+      "referenceGenomes": [
+        "GRCh38",
+        "GRCh37"
+      ]
+    },
+    "mutationEffect": "Gain-of-function",
+    "mutationEffectPmids": [
+      "25609060",
+      "22837387",
+      "34551969"
+    ],
+    "mutationEffectAbstracts": [
+      {
+        "link": "https://aacrjournals.org/cancerres/article/83/8_Supplement/CT016/725419",
+        "abstract": "Rodon et al. Abstract# CT016. AACR 2023."
+      }
+    ],
+    "oncogenic": "Oncogenic",
+    "oncogenicPmids": [],
+    "oncogenicAbstracts": []
+  },
+  {
+    "mutationEffectDescription": "The FGFR3 V630M mutation is located in the kinase domain of the protein. This mutation has been found in actinic cheilitis and squamous cell carcinoma (PMID: 19327639). Expression of this mutation in a murine fibroblast cell line demonstrated that it is neutral as measured by no change in protein activity compared to wildtype (PMID: 26992226).",
+    "pathogenic": null,
+    "pathogenicPmids": [],
+    "pathogenicAbstracts": [],
+    "penetrance": null,
+    "cancerRisk": null,
+    "variant": {
+      "gene": {
+        "entrezGeneId": 2261,
+        "hugoSymbol": "FGFR3",
+        "geneType": "ONCOGENE",
+        "grch37Isoform": "ENST00000260795",
+        "grch37RefSeq": "NM_000142.5",
+        "grch38Isoform": "ENST00000440486",
+        "grch38RefSeq": "NM_000142.5",
+        "geneAliases": [
+          "JTK4",
+          "ACH",
+          "CEK2",
+          "CD333"
+        ],
+        "genesets": []
+      },
+      "consequence": {
+        "term": "missense_variant",
+        "isGenerallyTruncating": false,
+        "description": "A sequence variant, that changes one or more bases, resulting in a different amino acid sequence but where the length is preserved"
+      },
+      "alteration": "V630M",
+      "proteinChange": null,
+      "name": "V630M",
+      "refResidues": "V",
+      "proteinStart": 630,
+      "proteinEnd": 630,
+      "variantResidues": "M",
+      "referenceGenomes": [
+        "GRCh38",
+        "GRCh37"
+      ]
+    },
+    "mutationEffect": "Likely Neutral",
+    "mutationEffectPmids": [
+      "26992226",
+      "19327639"
+    ],
+    "mutationEffectAbstracts": [],
+    "oncogenic": "Likely Neutral",
+    "oncogenicPmids": [],
+    "oncogenicAbstracts": []
+  },
+  {
+    "mutationEffectDescription": "The FGFR3 E140K mutation is located in the extracellular domain of the protein. In vitro studies with Ba/F3 cells expressing FGFR3 E140K demonstrated this mutation is likely neutral as measured by transformation activity and proliferation comparable to wildtype (PMID: 34272467).",
+    "pathogenic": null,
+    "pathogenicPmids": [],
+    "pathogenicAbstracts": [],
+    "penetrance": null,
+    "cancerRisk": null,
+    "variant": {
+      "gene": {
+        "entrezGeneId": 2261,
+        "hugoSymbol": "FGFR3",
+        "geneType": "ONCOGENE",
+        "grch37Isoform": "ENST00000260795",
+        "grch37RefSeq": "NM_000142.5",
+        "grch38Isoform": "ENST00000440486",
+        "grch38RefSeq": "NM_000142.5",
+        "geneAliases": [
+          "JTK4",
+          "ACH",
+          "CEK2",
+          "CD333"
+        ],
+        "genesets": []
+      },
+      "consequence": {
+        "term": "missense_variant",
+        "isGenerallyTruncating": false,
+        "description": "A sequence variant, that changes one or more bases, resulting in a different amino acid sequence but where the length is preserved"
+      },
+      "alteration": "E140K",
+      "proteinChange": null,
+      "name": "E140K",
+      "refResidues": "E",
+      "proteinStart": 140,
+      "proteinEnd": 140,
+      "variantResidues": "K",
+      "referenceGenomes": [
+        "GRCh38",
+        "GRCh37"
+      ]
+    },
+    "mutationEffect": "Likely Neutral",
+    "mutationEffectPmids": [
+      "34272467"
+    ],
+    "mutationEffectAbstracts": [],
+    "oncogenic": "Likely Neutral",
+    "oncogenicPmids": [],
+    "oncogenicAbstracts": []
+  },
+  {
+    "mutationEffectDescription": "The FGFR3 T394M mutation is located in the transmembrane domain of the protein. In vitro studies with MCF10A cells expressing FGFR3 T394M demonstrate that the mutation is neutral as measured by cellular proliferation and viability comparable to wildtype (PMID: 29533785).",
+    "pathogenic": null,
+    "pathogenicPmids": [],
+    "pathogenicAbstracts": [],
+    "penetrance": null,
+    "cancerRisk": null,
+    "variant": {
+      "gene": {
+        "entrezGeneId": 2261,
+        "hugoSymbol": "FGFR3",
+        "geneType": "ONCOGENE",
+        "grch37Isoform": "ENST00000260795",
+        "grch37RefSeq": "NM_000142.5",
+        "grch38Isoform": "ENST00000440486",
+        "grch38RefSeq": "NM_000142.5",
+        "geneAliases": [
+          "JTK4",
+          "ACH",
+          "CEK2",
+          "CD333"
+        ],
+        "genesets": []
+      },
+      "consequence": {
+        "term": "missense_variant",
+        "isGenerallyTruncating": false,
+        "description": "A sequence variant, that changes one or more bases, resulting in a different amino acid sequence but where the length is preserved"
+      },
+      "alteration": "T394M",
+      "proteinChange": null,
+      "name": "T394M",
+      "refResidues": "T",
+      "proteinStart": 394,
+      "proteinEnd": 394,
+      "variantResidues": "M",
+      "referenceGenomes": [
+        "GRCh38",
+        "GRCh37"
+      ]
+    },
+    "mutationEffect": "Likely Neutral",
+    "mutationEffectPmids": [
+      "29533785"
+    ],
+    "mutationEffectAbstracts": [],
+    "oncogenic": "Likely Neutral",
+    "oncogenicPmids": [],
+    "oncogenicAbstracts": []
+  },
+  {
+    "mutationEffectDescription": "The FGFR3 K650R mutation is located in the kinase domain of the protein (PMID: 19749790). Expression of this mutation in vitro demonstrated that it is activating as measured by moderately increased protein activity compared to wildtype (PMID: 11055896).",
+    "pathogenic": null,
+    "pathogenicPmids": [],
+    "pathogenicAbstracts": [],
+    "penetrance": null,
+    "cancerRisk": null,
+    "variant": {
+      "gene": {
+        "entrezGeneId": 2261,
+        "hugoSymbol": "FGFR3",
+        "geneType": "ONCOGENE",
+        "grch37Isoform": "ENST00000260795",
+        "grch37RefSeq": "NM_000142.5",
+        "grch38Isoform": "ENST00000440486",
+        "grch38RefSeq": "NM_000142.5",
+        "geneAliases": [
+          "JTK4",
+          "ACH",
+          "CEK2",
+          "CD333"
+        ],
+        "genesets": []
+      },
+      "consequence": {
+        "term": "missense_variant",
+        "isGenerallyTruncating": false,
+        "description": "A sequence variant, that changes one or more bases, resulting in a different amino acid sequence but where the length is preserved"
+      },
+      "alteration": "K650R",
+      "proteinChange": null,
+      "name": "K650R",
+      "refResidues": "K",
+      "proteinStart": 650,
+      "proteinEnd": 650,
+      "variantResidues": "R",
+      "referenceGenomes": [
+        "GRCh38",
+        "GRCh37"
+      ]
+    },
+    "mutationEffect": "Likely Gain-of-function",
+    "mutationEffectPmids": [
+      "11055896",
+      "19749790"
+    ],
+    "mutationEffectAbstracts": [],
+    "oncogenic": "Likely Oncogenic",
+    "oncogenicPmids": [],
+    "oncogenicAbstracts": []
+  },
+  {
+    "mutationEffectDescription": "The FGFR3 A391E mutation is located in the transmembrane domain of the protein. This mutation has been found in Crouzon syndrome and bladder cancer (PMID: 23437153 ). Expression of this variant in an embryonic kidney cell line demonstrated that it is activating, as measured by increased activation in the absence of ligand compared to wildtype (PMID: 23437153).",
+    "pathogenic": null,
+    "pathogenicPmids": [],
+    "pathogenicAbstracts": [],
+    "penetrance": null,
+    "cancerRisk": null,
+    "variant": {
+      "gene": {
+        "entrezGeneId": 2261,
+        "hugoSymbol": "FGFR3",
+        "geneType": "ONCOGENE",
+        "grch37Isoform": "ENST00000260795",
+        "grch37RefSeq": "NM_000142.5",
+        "grch38Isoform": "ENST00000440486",
+        "grch38RefSeq": "NM_000142.5",
+        "geneAliases": [
+          "JTK4",
+          "ACH",
+          "CEK2",
+          "CD333"
+        ],
+        "genesets": []
+      },
+      "consequence": {
+        "term": "missense_variant",
+        "isGenerallyTruncating": false,
+        "description": "A sequence variant, that changes one or more bases, resulting in a different amino acid sequence but where the length is preserved"
+      },
+      "alteration": "A391E",
+      "proteinChange": null,
+      "name": "A391E",
+      "refResidues": "A",
+      "proteinStart": 391,
+      "proteinEnd": 391,
+      "variantResidues": "E",
+      "referenceGenomes": [
+        "GRCh38",
+        "GRCh37"
+      ]
+    },
+    "mutationEffect": "Gain-of-function",
+    "mutationEffectPmids": [
+      "23437153"
+    ],
+    "mutationEffectAbstracts": [],
+    "oncogenic": "Likely Oncogenic",
+    "oncogenicPmids": [],
+    "oncogenicAbstracts": []
+  },
+  {
+    "mutationEffectDescription": "The FGFR3 M528I mutation is located in the kinase domain of the protein. This mutation has been found as a germline variant that segregates with proportionate short stature. Expression of this mutation in rat chondrosarcoma chondrocytes, embryonic kidney and murine fibroblast cell lines demonstrated that it is activating as measured by increased pathway activation compared to wildtype (PMID: 25777271).",
+    "pathogenic": null,
+    "pathogenicPmids": [],
+    "pathogenicAbstracts": [],
+    "penetrance": null,
+    "cancerRisk": null,
+    "variant": {
+      "gene": {
+        "entrezGeneId": 2261,
+        "hugoSymbol": "FGFR3",
+        "geneType": "ONCOGENE",
+        "grch37Isoform": "ENST00000260795",
+        "grch37RefSeq": "NM_000142.5",
+        "grch38Isoform": "ENST00000440486",
+        "grch38RefSeq": "NM_000142.5",
+        "geneAliases": [
+          "JTK4",
+          "ACH",
+          "CEK2",
+          "CD333"
+        ],
+        "genesets": []
+      },
+      "consequence": {
+        "term": "missense_variant",
+        "isGenerallyTruncating": false,
+        "description": "A sequence variant, that changes one or more bases, resulting in a different amino acid sequence but where the length is preserved"
+      },
+      "alteration": "M528I",
+      "proteinChange": null,
+      "name": "M528I",
+      "refResidues": "M",
+      "proteinStart": 528,
+      "proteinEnd": 528,
+      "variantResidues": "I",
+      "referenceGenomes": [
+        "GRCh38",
+        "GRCh37"
+      ]
+    },
+    "mutationEffect": "Likely Gain-of-function",
+    "mutationEffectPmids": [
+      "25777271"
+    ],
+    "mutationEffectAbstracts": [],
+    "oncogenic": "Likely Oncogenic",
+    "oncogenicPmids": [],
+    "oncogenicAbstracts": []
+  },
+  {
+    "mutationEffectDescription": "The FGFR3 K508M mutation is located in the extracellular domain of the protein. While this mutation has only been studied in the context of an FGFR3 fusion, expression of this mutation in an FGFR3-TACC3 positive-rat fibroblast cell line demonstrated that it is inactivating as measured by decreased protein activity and colony formation compared to FGFR3-TACC3 alone (PMID: 22837387).",
+    "pathogenic": null,
+    "pathogenicPmids": [],
+    "pathogenicAbstracts": [],
+    "penetrance": null,
+    "cancerRisk": null,
+    "variant": {
+      "gene": {
+        "entrezGeneId": 2261,
+        "hugoSymbol": "FGFR3",
+        "geneType": "ONCOGENE",
+        "grch37Isoform": "ENST00000260795",
+        "grch37RefSeq": "NM_000142.5",
+        "grch38Isoform": "ENST00000440486",
+        "grch38RefSeq": "NM_000142.5",
+        "geneAliases": [
+          "JTK4",
+          "ACH",
+          "CEK2",
+          "CD333"
+        ],
+        "genesets": []
+      },
+      "consequence": {
+        "term": "missense_variant",
+        "isGenerallyTruncating": false,
+        "description": "A sequence variant, that changes one or more bases, resulting in a different amino acid sequence but where the length is preserved"
+      },
+      "alteration": "K508M",
+      "proteinChange": null,
+      "name": "K508M",
+      "refResidues": "K",
+      "proteinStart": 508,
+      "proteinEnd": 508,
+      "variantResidues": "M",
+      "referenceGenomes": [
+        "GRCh38",
+        "GRCh37"
+      ]
+    },
+    "mutationEffect": "Inconclusive",
+    "mutationEffectPmids": [
+      "22837387"
+    ],
+    "mutationEffectAbstracts": [],
+    "oncogenic": "Inconclusive",
+    "oncogenicPmids": [],
+    "oncogenicAbstracts": []
+  },
+  {
+    "mutationEffectDescription": "The FGFR3 R248H mutation is located in the extracellular domain of the protein. This mutation has been identified in glioma (PMID: 28263318). In vitro studies with Ba/F3 cells expressing FGFR3 R248H demonstrated this mutation is likely neutral as measured by transformation activity and proliferation comparable to wildtype (PMID: 34272467).",
+    "pathogenic": null,
+    "pathogenicPmids": [],
+    "pathogenicAbstracts": [],
+    "penetrance": null,
+    "cancerRisk": null,
+    "variant": {
+      "gene": {
+        "entrezGeneId": 2261,
+        "hugoSymbol": "FGFR3",
+        "geneType": "ONCOGENE",
+        "grch37Isoform": "ENST00000260795",
+        "grch37RefSeq": "NM_000142.5",
+        "grch38Isoform": "ENST00000440486",
+        "grch38RefSeq": "NM_000142.5",
+        "geneAliases": [
+          "JTK4",
+          "ACH",
+          "CEK2",
+          "CD333"
+        ],
+        "genesets": []
+      },
+      "consequence": {
+        "term": "missense_variant",
+        "isGenerallyTruncating": false,
+        "description": "A sequence variant, that changes one or more bases, resulting in a different amino acid sequence but where the length is preserved"
+      },
+      "alteration": "R248H",
+      "proteinChange": null,
+      "name": "R248H",
+      "refResidues": "R",
+      "proteinStart": 248,
+      "proteinEnd": 248,
+      "variantResidues": "H",
+      "referenceGenomes": [
+        "GRCh38",
+        "GRCh37"
+      ]
+    },
+    "mutationEffect": "Likely Neutral",
+    "mutationEffectPmids": [
+      "34272467",
+      "28263318"
+    ],
+    "mutationEffectAbstracts": [],
+    "oncogenic": "Likely Neutral",
+    "oncogenicPmids": [],
+    "oncogenicAbstracts": []
+  },
+  {
+    "mutationEffectDescription": "The FGFR3 R669G mutation is located in the kinase domain of the protein. Expression of this mutation in a murine fibroblast cell line demonstrated that it is activating as measured by increased protein activity compared to wildtype (PMID: 26992226).",
+    "pathogenic": null,
+    "pathogenicPmids": [],
+    "pathogenicAbstracts": [],
+    "penetrance": null,
+    "cancerRisk": null,
+    "variant": {
+      "gene": {
+        "entrezGeneId": 2261,
+        "hugoSymbol": "FGFR3",
+        "geneType": "ONCOGENE",
+        "grch37Isoform": "ENST00000260795",
+        "grch37RefSeq": "NM_000142.5",
+        "grch38Isoform": "ENST00000440486",
+        "grch38RefSeq": "NM_000142.5",
+        "geneAliases": [
+          "JTK4",
+          "ACH",
+          "CEK2",
+          "CD333"
+        ],
+        "genesets": []
+      },
+      "consequence": {
+        "term": "missense_variant",
+        "isGenerallyTruncating": false,
+        "description": "A sequence variant, that changes one or more bases, resulting in a different amino acid sequence but where the length is preserved"
+      },
+      "alteration": "R669G",
+      "proteinChange": null,
+      "name": "R669G",
+      "refResidues": "R",
+      "proteinStart": 669,
+      "proteinEnd": 669,
+      "variantResidues": "G",
+      "referenceGenomes": [
+        "GRCh38",
+        "GRCh37"
+      ]
+    },
+    "mutationEffect": "Gain-of-function",
+    "mutationEffectPmids": [
+      "26992226"
+    ],
+    "mutationEffectAbstracts": [],
+    "oncogenic": "Likely Oncogenic",
+    "oncogenicPmids": [],
+    "oncogenicAbstracts": []
+  },
+  {
+    "mutationEffectDescription": "The FGFR3 S249C mutation is located in the extracellular domain of the protein. This mutation has been found in bladder cancer (PMID: 28572459). Expression of this mutation in murine fibroblast and bladder cell lines demonstrated that it is activating as measured by increased protein and pathway activation, colony formation, and tumor formation in a xenograft model compared to wildtype (PMID: 16338952, 19749790). In the Phase II FIGHT-207 trial examining pemigatinib treatment with patients harboring FGFR3 S249C, three patients with bladder cancer and one patient with cancer of unknown primary demonstrated progressive disease, and four patients with bladder cancer and one patient with cancer of unknown primary demonstrated stable disease (Abstract: Rodon et al. Abstract# CT016. AACR 2023. https://aacrjournals.org/cancerres/article/83/8_Supplement/CT016/725419). In a Phase I trial, two patients with urothelial carcinoma harboring FGFR3 S249C were treated with futibatinib and demonstrated partial response with progression-free survivals of 2.7 months and 4.7 months, respectively (PMID: 34551969).",
+    "pathogenic": null,
+    "pathogenicPmids": [],
+    "pathogenicAbstracts": [],
+    "penetrance": null,
+    "cancerRisk": null,
+    "variant": {
+      "gene": {
+        "entrezGeneId": 2261,
+        "hugoSymbol": "FGFR3",
+        "geneType": "ONCOGENE",
+        "grch37Isoform": "ENST00000260795",
+        "grch37RefSeq": "NM_000142.5",
+        "grch38Isoform": "ENST00000440486",
+        "grch38RefSeq": "NM_000142.5",
+        "geneAliases": [
+          "JTK4",
+          "ACH",
+          "CEK2",
+          "CD333"
+        ],
+        "genesets": []
+      },
+      "consequence": {
+        "term": "missense_variant",
+        "isGenerallyTruncating": false,
+        "description": "A sequence variant, that changes one or more bases, resulting in a different amino acid sequence but where the length is preserved"
+      },
+      "alteration": "S249C",
+      "proteinChange": null,
+      "name": "S249C",
+      "refResidues": "S",
+      "proteinStart": 249,
+      "proteinEnd": 249,
+      "variantResidues": "C",
+      "referenceGenomes": [
+        "GRCh38",
+        "GRCh37"
+      ]
+    },
+    "mutationEffect": "Gain-of-function",
+    "mutationEffectPmids": [
+      "19749790",
+      "16338952",
+      "28572459",
+      "34551969"
+    ],
+    "mutationEffectAbstracts": [
+      {
+        "link": "https://aacrjournals.org/cancerres/article/83/8_Supplement/CT016/725419",
+        "abstract": "Rodon et al. Abstract# CT016. AACR 2023."
+      }
+    ],
+    "oncogenic": "Oncogenic",
+    "oncogenicPmids": [],
+    "oncogenicAbstracts": []
+  },
+  {
+    "mutationEffectDescription": "The FGFR3 P572A mutation is located in the kinase domain of the protein. This mutation has been found in brain cancer. Expression of this mutation in a murine fibroblast cell line demonstrated that it is neutral as measured by no change in protein activity compared to wildtype (PMID: 26992226).",
+    "pathogenic": null,
+    "pathogenicPmids": [],
+    "pathogenicAbstracts": [],
+    "penetrance": null,
+    "cancerRisk": null,
+    "variant": {
+      "gene": {
+        "entrezGeneId": 2261,
+        "hugoSymbol": "FGFR3",
+        "geneType": "ONCOGENE",
+        "grch37Isoform": "ENST00000260795",
+        "grch37RefSeq": "NM_000142.5",
+        "grch38Isoform": "ENST00000440486",
+        "grch38RefSeq": "NM_000142.5",
+        "geneAliases": [
+          "JTK4",
+          "ACH",
+          "CEK2",
+          "CD333"
+        ],
+        "genesets": []
+      },
+      "consequence": {
+        "term": "missense_variant",
+        "isGenerallyTruncating": false,
+        "description": "A sequence variant, that changes one or more bases, resulting in a different amino acid sequence but where the length is preserved"
+      },
+      "alteration": "P572A",
+      "proteinChange": null,
+      "name": "P572A",
+      "refResidues": "P",
+      "proteinStart": 572,
+      "proteinEnd": 572,
+      "variantResidues": "A",
+      "referenceGenomes": [
+        "GRCh38",
+        "GRCh37"
+      ]
+    },
+    "mutationEffect": "Likely Neutral",
+    "mutationEffectPmids": [
+      "26992226"
+    ],
+    "mutationEffectAbstracts": [],
+    "oncogenic": "Likely Neutral",
+    "oncogenicPmids": [],
+    "oncogenicAbstracts": []
+  },
+  {
+    "mutationEffectDescription": "The FGFR3 G802_X807del stop-loss mutation likely extends the FGFR3 protein, disrupting the inhibitory function of the C-terminal domain with the addition of an alpha helix that may act as a second transmembrane domain or inhibit glycosylation of FGFR3 (PMID: 26003532, 7647778, 17320202). FGFR3 stop-loss mutations are associated with thanatophoric dysplasia type I, but have also been seen in cancer (PMID: 7647778, 8845844, 36639200, 35819403; GENIE Cohort v19.0, accessed 03/24/26). While FGFR3 G802_X807del has not been functionally characterized, similar mutations that also result in read-through of the FGFR3 stop codon have demonstrated gain-of-function activity (PMID: 36639200). Expression of FGFR3 *807Rext*141 in a HEK cell line demonstrated increased tyrosine-phosphorylated intracellular puncta as measured by phosphotyrosine immunoprecipitation and Western blot assays compared to wildtype FGFR3 (PMID: 36639200). A patient with multiple myeloma and t(4;14) who harbored a subclonal FGFR3 G802_X807del mutation demonstrated loss of FGFR3 G802_X807del-containing cells upon treatment with erdafitinib, though did not demonstrate a clinical response to erdafitinib (PMID: 36639200).",
+    "pathogenic": null,
+    "pathogenicPmids": [],
+    "pathogenicAbstracts": [],
+    "penetrance": null,
+    "cancerRisk": null,
+    "variant": {
+      "gene": {
+        "entrezGeneId": 2261,
+        "hugoSymbol": "FGFR3",
+        "geneType": "ONCOGENE",
+        "grch37Isoform": "ENST00000260795",
+        "grch37RefSeq": "NM_000142.5",
+        "grch38Isoform": "ENST00000440486",
+        "grch38RefSeq": "NM_000142.5",
+        "geneAliases": [
+          "JTK4",
+          "ACH",
+          "CEK2",
+          "CD333"
+        ],
+        "genesets": []
+      },
+      "consequence": {
+        "term": "inframe_deletion",
+        "isGenerallyTruncating": false,
+        "description": "An inframe non synonymous variant that deletes bases from the coding sequence"
+      },
+      "alteration": "G802_X807del",
+      "proteinChange": null,
+      "name": "G802_X807del",
+      "refResidues": null,
+      "proteinStart": 802,
+      "proteinEnd": 807,
+      "variantResidues": null,
+      "referenceGenomes": [
+        "GRCh38",
+        "GRCh37"
+      ]
+    },
+    "mutationEffect": "Likely Gain-of-function",
+    "mutationEffectPmids": [
+      "36639200",
+      "7647778",
+      "26003532",
+      "8845844",
+      "17320202",
+      "35819403"
+    ],
+    "mutationEffectAbstracts": [],
+    "oncogenic": "Likely Oncogenic",
+    "oncogenicPmids": [],
+    "oncogenicAbstracts": []
+  },
+  {
+    "mutationEffectDescription": "The FGFR3 G66fs*32 mutation is located in the Ig-like C2-type I domain of the protein. In vitro studies with Ba/F3 cells expressing FGFR3 G66fs*32 demonstrated this mutation is likely neutral as measured by transformation activity and proliferation comparable to wildtype (PMID: 34272467).",
+    "pathogenic": null,
+    "pathogenicPmids": [],
+    "pathogenicAbstracts": [],
+    "penetrance": null,
+    "cancerRisk": null,
+    "variant": {
+      "gene": {
+        "entrezGeneId": 2261,
+        "hugoSymbol": "FGFR3",
+        "geneType": "ONCOGENE",
+        "grch37Isoform": "ENST00000260795",
+        "grch37RefSeq": "NM_000142.5",
+        "grch38Isoform": "ENST00000440486",
+        "grch38RefSeq": "NM_000142.5",
+        "geneAliases": [
+          "JTK4",
+          "ACH",
+          "CEK2",
+          "CD333"
+        ],
+        "genesets": []
+      },
+      "consequence": {
+        "term": "frameshift_variant",
+        "isGenerallyTruncating": true,
+        "description": "A sequence variant which causes a disruption of the translational reading frame, because the number of nucleotides inserted or deleted is not a multiple of three"
+      },
+      "alteration": "G66fs*32",
+      "proteinChange": null,
+      "name": "G66fs*32",
+      "refResidues": "G",
+      "proteinStart": 66,
+      "proteinEnd": 66,
+      "variantResidues": null,
+      "referenceGenomes": [
+        "GRCh38",
+        "GRCh37"
+      ]
+    },
+    "mutationEffect": "Likely Neutral",
+    "mutationEffectPmids": [
+      "34272467"
+    ],
+    "mutationEffectAbstracts": [],
+    "oncogenic": "Likely Neutral",
+    "oncogenicPmids": [],
+    "oncogenicAbstracts": []
+  },
+  {
+    "mutationEffectDescription": "The FGFR3 G375C mutation is located in the transmembrane domain of the protein. This mutation has been found in skeletal disorders. Expression of this mutation in an embryonic kidney cell line demonstrated that it is activating as measured by increased protein activity compared to wildtype (PMID: 22529939).",
+    "pathogenic": null,
+    "pathogenicPmids": [],
+    "pathogenicAbstracts": [],
+    "penetrance": null,
+    "cancerRisk": null,
+    "variant": {
+      "gene": {
+        "entrezGeneId": 2261,
+        "hugoSymbol": "FGFR3",
+        "geneType": "ONCOGENE",
+        "grch37Isoform": "ENST00000260795",
+        "grch37RefSeq": "NM_000142.5",
+        "grch38Isoform": "ENST00000440486",
+        "grch38RefSeq": "NM_000142.5",
+        "geneAliases": [
+          "JTK4",
+          "ACH",
+          "CEK2",
+          "CD333"
+        ],
+        "genesets": []
+      },
+      "consequence": {
+        "term": "missense_variant",
+        "isGenerallyTruncating": false,
+        "description": "A sequence variant, that changes one or more bases, resulting in a different amino acid sequence but where the length is preserved"
+      },
+      "alteration": "G375C",
+      "proteinChange": null,
+      "name": "G375C",
+      "refResidues": "G",
+      "proteinStart": 375,
+      "proteinEnd": 375,
+      "variantResidues": "C",
+      "referenceGenomes": [
+        "GRCh38",
+        "GRCh37"
+      ]
+    },
+    "mutationEffect": "Gain-of-function",
+    "mutationEffectPmids": [
+      "22529939"
+    ],
+    "mutationEffectAbstracts": [],
+    "oncogenic": "Likely Oncogenic",
+    "oncogenicPmids": [],
+    "oncogenicAbstracts": []
+  },
+  {
+    "mutationEffectDescription": "The FGFR3*807Rext*141 stop-loss mutation extends the FGFR3 protein by 141 amino acids, disrupting the inhibitory function of the C-terminal domain with the addition of an alpha helix that may act as a second transmembrane domain or inhibit glycosylation of FGFR3 (PMID: 26003532, 7647778, 17320202). FGFR3 stop-loss mutations are associated with thanatophoric dysplasia type I, but have also been seen in cancer (PMID: 7647778, 8845844, 36639200, 35819403; GENIE Cohort v19.0, accessed 03/24/26). In a HEK cell line demonstrated increased tyrosine-phosphorylated intracellular puncta as measured by phosphotyrosine immunoprecipitation and Western blot assays compared to wildtype FGFR3 (PMID: 36639200). While FGFR3 *807Wext*141 has not been documented in clinical studies, a patient with multiple myeloma and t(4;14) who harbored a subclonal stop-loss mutation, FGFR3 G802_X807del, demonstrated loss of FGFR3 G802_X807del-containing cells upon treatment with erdafitinib, though did not demonstrate a clinical response to erdafitinib (PMID: 36639200).",
+    "pathogenic": null,
+    "pathogenicPmids": [],
+    "pathogenicAbstracts": [],
+    "penetrance": null,
+    "cancerRisk": null,
+    "variant": {
+      "gene": {
+        "entrezGeneId": 2261,
+        "hugoSymbol": "FGFR3",
+        "geneType": "ONCOGENE",
+        "grch37Isoform": "ENST00000260795",
+        "grch37RefSeq": "NM_000142.5",
+        "grch38Isoform": "ENST00000440486",
+        "grch38RefSeq": "NM_000142.5",
+        "geneAliases": [
+          "JTK4",
+          "ACH",
+          "CEK2",
+          "CD333"
+        ],
+        "genesets": []
+      },
+      "consequence": {
+        "term": "stop_lost",
+        "isGenerallyTruncating": false,
+        "description": "A sequence variant where at least one base of the terminator codon (stop) is changed, resulting in an elongated transcript"
+      },
+      "alteration": "*807Rext*141",
+      "proteinChange": null,
+      "name": "*807Rext*141",
+      "refResidues": "*",
+      "proteinStart": 807,
+      "proteinEnd": 807,
+      "variantResidues": null,
+      "referenceGenomes": [
+        "GRCh38",
+        "GRCh37"
+      ]
+    },
+    "mutationEffect": "Likely Gain-of-function",
+    "mutationEffectPmids": [
+      "36639200",
+      "7647778",
+      "26003532",
+      "8845844",
+      "17320202",
+      "35819403"
+    ],
+    "mutationEffectAbstracts": [],
+    "oncogenic": "Likely Oncogenic",
+    "oncogenicPmids": [],
+    "oncogenicAbstracts": []
+  },
+  {
+    "mutationEffectDescription": "The FGFR3 A500T mutation is located in the kinase domain of the protein. This mutation has been found in pancreatic cancer. Expression of this mutation in a murine fibroblast cell line demonstrated that it is neutral as measured by no change in protein activity compared to wildtype (PMID: 26992226)",
+    "pathogenic": null,
+    "pathogenicPmids": [],
+    "pathogenicAbstracts": [],
+    "penetrance": null,
+    "cancerRisk": null,
+    "variant": {
+      "gene": {
+        "entrezGeneId": 2261,
+        "hugoSymbol": "FGFR3",
+        "geneType": "ONCOGENE",
+        "grch37Isoform": "ENST00000260795",
+        "grch37RefSeq": "NM_000142.5",
+        "grch38Isoform": "ENST00000440486",
+        "grch38RefSeq": "NM_000142.5",
+        "geneAliases": [
+          "JTK4",
+          "ACH",
+          "CEK2",
+          "CD333"
+        ],
+        "genesets": []
+      },
+      "consequence": {
+        "term": "missense_variant",
+        "isGenerallyTruncating": false,
+        "description": "A sequence variant, that changes one or more bases, resulting in a different amino acid sequence but where the length is preserved"
+      },
+      "alteration": "A500T",
+      "proteinChange": null,
+      "name": "A500T",
+      "refResidues": "A",
+      "proteinStart": 500,
+      "proteinEnd": 500,
+      "variantResidues": "T",
+      "referenceGenomes": [
+        "GRCh38",
+        "GRCh37"
+      ]
+    },
+    "mutationEffect": "Likely Neutral",
+    "mutationEffectPmids": [
+      "26992226"
+    ],
+    "mutationEffectAbstracts": [],
+    "oncogenic": "Likely Neutral",
+    "oncogenicPmids": [],
+    "oncogenicAbstracts": []
+  },
+  {
+    "mutationEffectDescription": "The FGFR3 I538V mutation is located in the kinase domain of the protein. This mutation has been found as a germline mutation in hypochondroplasia (PMID: 29736252). Expression of this mutation in a murine fibroblast cell line demonstrated that it is activating as measured by increased protein activity compared to wildtype (PMID: 26992226).",
+    "pathogenic": null,
+    "pathogenicPmids": [],
+    "pathogenicAbstracts": [],
+    "penetrance": null,
+    "cancerRisk": null,
+    "variant": {
+      "gene": {
+        "entrezGeneId": 2261,
+        "hugoSymbol": "FGFR3",
+        "geneType": "ONCOGENE",
+        "grch37Isoform": "ENST00000260795",
+        "grch37RefSeq": "NM_000142.5",
+        "grch38Isoform": "ENST00000440486",
+        "grch38RefSeq": "NM_000142.5",
+        "geneAliases": [
+          "JTK4",
+          "ACH",
+          "CEK2",
+          "CD333"
+        ],
+        "genesets": []
+      },
+      "consequence": {
+        "term": "missense_variant",
+        "isGenerallyTruncating": false,
+        "description": "A sequence variant, that changes one or more bases, resulting in a different amino acid sequence but where the length is preserved"
+      },
+      "alteration": "I538V",
+      "proteinChange": null,
+      "name": "I538V",
+      "refResidues": "I",
+      "proteinStart": 538,
+      "proteinEnd": 538,
+      "variantResidues": "V",
+      "referenceGenomes": [
+        "GRCh38",
+        "GRCh37"
+      ]
+    },
+    "mutationEffect": "Gain-of-function",
+    "mutationEffectPmids": [
+      "26992226",
+      "29736252"
+    ],
+    "mutationEffectAbstracts": [],
+    "oncogenic": "Likely Oncogenic",
+    "oncogenicPmids": [],
+    "oncogenicAbstracts": []
+  },
+  {
+    "mutationEffectDescription": "The FGFR3 P63S mutation is located in the Ig-like C2-type I domain of the protein. In vitro studies with Ba/F3 cells expressing FGFR3 P63S demonstrated this mutation is likely neutral as measured by transformation activity and proliferation comparable to wildtype (PMID: 34272467).",
+    "pathogenic": null,
+    "pathogenicPmids": [],
+    "pathogenicAbstracts": [],
+    "penetrance": null,
+    "cancerRisk": null,
+    "variant": {
+      "gene": {
+        "entrezGeneId": 2261,
+        "hugoSymbol": "FGFR3",
+        "geneType": "ONCOGENE",
+        "grch37Isoform": "ENST00000260795",
+        "grch37RefSeq": "NM_000142.5",
+        "grch38Isoform": "ENST00000440486",
+        "grch38RefSeq": "NM_000142.5",
+        "geneAliases": [
+          "JTK4",
+          "ACH",
+          "CEK2",
+          "CD333"
+        ],
+        "genesets": []
+      },
+      "consequence": {
+        "term": "missense_variant",
+        "isGenerallyTruncating": false,
+        "description": "A sequence variant, that changes one or more bases, resulting in a different amino acid sequence but where the length is preserved"
+      },
+      "alteration": "P63S",
+      "proteinChange": null,
+      "name": "P63S",
+      "refResidues": "P",
+      "proteinStart": 63,
+      "proteinEnd": 63,
+      "variantResidues": "S",
+      "referenceGenomes": [
+        "GRCh38",
+        "GRCh37"
+      ]
+    },
+    "mutationEffect": "Likely Neutral",
+    "mutationEffectPmids": [
+      "34272467"
+    ],
+    "mutationEffectAbstracts": [],
+    "oncogenic": "Likely Neutral",
+    "oncogenicPmids": [],
+    "oncogenicAbstracts": []
+  },
+  {
+    "mutationEffectDescription": "The FGFR3 N653H mutation is located in the kinase domain of the protein. This mutation has been found in urinary tract cancer. Expression of this mutation in a murine fibroblast cell line demonstrated that it is neutral as measured by no change in protein activity compared to wildtype (PMID: 26992226)",
+    "pathogenic": null,
+    "pathogenicPmids": [],
+    "pathogenicAbstracts": [],
+    "penetrance": null,
+    "cancerRisk": null,
+    "variant": {
+      "gene": {
+        "entrezGeneId": 2261,
+        "hugoSymbol": "FGFR3",
+        "geneType": "ONCOGENE",
+        "grch37Isoform": "ENST00000260795",
+        "grch37RefSeq": "NM_000142.5",
+        "grch38Isoform": "ENST00000440486",
+        "grch38RefSeq": "NM_000142.5",
+        "geneAliases": [
+          "JTK4",
+          "ACH",
+          "CEK2",
+          "CD333"
+        ],
+        "genesets": []
+      },
+      "consequence": {
+        "term": "missense_variant",
+        "isGenerallyTruncating": false,
+        "description": "A sequence variant, that changes one or more bases, resulting in a different amino acid sequence but where the length is preserved"
+      },
+      "alteration": "N653H",
+      "proteinChange": null,
+      "name": "N653H",
+      "refResidues": "N",
+      "proteinStart": 653,
+      "proteinEnd": 653,
+      "variantResidues": "H",
+      "referenceGenomes": [
+        "GRCh38",
+        "GRCh37"
+      ]
+    },
+    "mutationEffect": "Likely Neutral",
+    "mutationEffectPmids": [
+      "26992226"
+    ],
+    "mutationEffectAbstracts": [],
+    "oncogenic": "Likely Neutral",
+    "oncogenicPmids": [],
+    "oncogenicAbstracts": []
+  },
+  {
+    "mutationEffectDescription": "The FGFR3 V555M mutation is located in the kinase domain of the protein. This mutation has been found in hematopoietic cancers (PMID: 26992226). Expression of this mutation in a murine fibroblast cell line demonstrated that it is activating as measured by increased protein activity compared to wildtype (PMID: 26992226). In vitro studies demonstrate that this mutation is resistant to the FGFR inhibitor BGH398 when present in a TEL-FGFR3 Fusion-expressing murine B-cell line as measured by sustained cell proliferation following drug treatment (PMID: 28034880).",
+    "pathogenic": null,
+    "pathogenicPmids": [],
+    "pathogenicAbstracts": [],
+    "penetrance": null,
+    "cancerRisk": null,
+    "variant": {
+      "gene": {
+        "entrezGeneId": 2261,
+        "hugoSymbol": "FGFR3",
+        "geneType": "ONCOGENE",
+        "grch37Isoform": "ENST00000260795",
+        "grch37RefSeq": "NM_000142.5",
+        "grch38Isoform": "ENST00000440486",
+        "grch38RefSeq": "NM_000142.5",
+        "geneAliases": [
+          "JTK4",
+          "ACH",
+          "CEK2",
+          "CD333"
+        ],
+        "genesets": []
+      },
+      "consequence": {
+        "term": "missense_variant",
+        "isGenerallyTruncating": false,
+        "description": "A sequence variant, that changes one or more bases, resulting in a different amino acid sequence but where the length is preserved"
+      },
+      "alteration": "V555M",
+      "proteinChange": null,
+      "name": "V555M",
+      "refResidues": "V",
+      "proteinStart": 555,
+      "proteinEnd": 555,
+      "variantResidues": "M",
+      "referenceGenomes": [
+        "GRCh38",
+        "GRCh37"
+      ]
+    },
+    "mutationEffect": "Likely Gain-of-function",
+    "mutationEffectPmids": [
+      "26992226",
+      "28034880"
+    ],
+    "mutationEffectAbstracts": [],
+    "oncogenic": "Likely Oncogenic",
+    "oncogenicPmids": [],
+    "oncogenicAbstracts": []
+  },
+  {
+    "mutationEffectDescription": "The FGFR3 Q209H mutation is located in the Ig-like C2-type II domain of the protein. In vitro studies with Ba/F3 cells expressing FGFR3 Q209H demonstrated this mutation is likely neutral as measured by transformation activity and proliferation comparable to wildtype (PMID: 34272467).",
+    "pathogenic": null,
+    "pathogenicPmids": [],
+    "pathogenicAbstracts": [],
+    "penetrance": null,
+    "cancerRisk": null,
+    "variant": {
+      "gene": {
+        "entrezGeneId": 2261,
+        "hugoSymbol": "FGFR3",
+        "geneType": "ONCOGENE",
+        "grch37Isoform": "ENST00000260795",
+        "grch37RefSeq": "NM_000142.5",
+        "grch38Isoform": "ENST00000440486",
+        "grch38RefSeq": "NM_000142.5",
+        "geneAliases": [
+          "JTK4",
+          "ACH",
+          "CEK2",
+          "CD333"
+        ],
+        "genesets": []
+      },
+      "consequence": {
+        "term": "missense_variant",
+        "isGenerallyTruncating": false,
+        "description": "A sequence variant, that changes one or more bases, resulting in a different amino acid sequence but where the length is preserved"
+      },
+      "alteration": "Q209H",
+      "proteinChange": null,
+      "name": "Q209H",
+      "refResidues": "Q",
+      "proteinStart": 209,
+      "proteinEnd": 209,
+      "variantResidues": "H",
+      "referenceGenomes": [
+        "GRCh38",
+        "GRCh37"
+      ]
+    },
+    "mutationEffect": "Likely Neutral",
+    "mutationEffectPmids": [
+      "34272467"
+    ],
+    "mutationEffectAbstracts": [],
+    "oncogenic": "Likely Neutral",
+    "oncogenicPmids": [],
+    "oncogenicAbstracts": []
+  },
+  {
+    "mutationEffectDescription": "The FGFR3-ELAVL3 fusion protein results from exon 17 of FGFR3 fusing with exon 2 of ELAVL3, retaining the kinase domain of FGFR3. In vitro studies with MCF10A cells expressing FGFR3-ELAVL3 demonstrate that the fusion is activating as measured by increased colony formation and upregulation of ERK1/2 phosphorylation compared to wildtype (PMID: 35138907).",
+    "pathogenic": null,
+    "pathogenicPmids": [],
+    "pathogenicAbstracts": [],
+    "penetrance": null,
+    "cancerRisk": null,
+    "variant": {
+      "gene": {
+        "entrezGeneId": 2261,
+        "hugoSymbol": "FGFR3",
+        "geneType": "ONCOGENE",
+        "grch37Isoform": "ENST00000260795",
+        "grch37RefSeq": "NM_000142.5",
+        "grch38Isoform": "ENST00000440486",
+        "grch38RefSeq": "NM_000142.5",
+        "geneAliases": [
+          "JTK4",
+          "ACH",
+          "CEK2",
+          "CD333"
+        ],
+        "genesets": []
+      },
+      "consequence": {
+        "term": "NA",
+        "isGenerallyTruncating": false,
+        "description": "NA"
+      },
+      "alteration": "FGFR3-ELAVL3 Fusion",
+      "proteinChange": null,
+      "name": "FGFR3-ELAVL3 Fusion",
+      "refResidues": null,
+      "proteinStart": -1,
+      "proteinEnd": 100000,
+      "variantResidues": null,
+      "referenceGenomes": [
+        "GRCh38",
+        "GRCh37"
+      ]
+    },
+    "mutationEffect": "Likely Gain-of-function",
+    "mutationEffectPmids": [
+      "35138907"
+    ],
+    "mutationEffectAbstracts": [],
+    "oncogenic": "Likely Oncogenic",
+    "oncogenicPmids": [],
+    "oncogenicAbstracts": []
+  },
+  {
+    "mutationEffectDescription": "The FGFR3 V677I mutation is located in the kinase domain of the protein. This mutation has been found in intestinal cancer. Expression of this mutation in a murine fibroblast cell line demonstrated that it is neutral as measured by no change in protein activity compared to wildtype (PMID: 26992226)",
+    "pathogenic": null,
+    "pathogenicPmids": [],
+    "pathogenicAbstracts": [],
+    "penetrance": null,
+    "cancerRisk": null,
+    "variant": {
+      "gene": {
+        "entrezGeneId": 2261,
+        "hugoSymbol": "FGFR3",
+        "geneType": "ONCOGENE",
+        "grch37Isoform": "ENST00000260795",
+        "grch37RefSeq": "NM_000142.5",
+        "grch38Isoform": "ENST00000440486",
+        "grch38RefSeq": "NM_000142.5",
+        "geneAliases": [
+          "JTK4",
+          "ACH",
+          "CEK2",
+          "CD333"
+        ],
+        "genesets": []
+      },
+      "consequence": {
+        "term": "missense_variant",
+        "isGenerallyTruncating": false,
+        "description": "A sequence variant, that changes one or more bases, resulting in a different amino acid sequence but where the length is preserved"
+      },
+      "alteration": "V677I",
+      "proteinChange": null,
+      "name": "V677I",
+      "refResidues": "V",
+      "proteinStart": 677,
+      "proteinEnd": 677,
+      "variantResidues": "I",
+      "referenceGenomes": [
+        "GRCh38",
+        "GRCh37"
+      ]
+    },
+    "mutationEffect": "Likely Neutral",
+    "mutationEffectPmids": [
+      "26992226"
+    ],
+    "mutationEffectAbstracts": [],
+    "oncogenic": "Likely Neutral",
+    "oncogenicPmids": [],
+    "oncogenicAbstracts": []
+  },
+  {
+    "mutationEffectDescription": "The FGFR3 G370C mutation is located in the transmembrane domain of the protein. This mutation has been found in skeletal disorders. Expression of this mutation in embryonic kidney and chondrocyte cell lines demonstrated that it is activating as measured by increased protein activity compared to wildtype (PMID: 12009017). In the Phase II FIGHT-207 trial examining pemigatinib treatment in patients harboring FGFR3 G370C, one patient with bladder cancer demonstrated progressive disease and two patients with bladder cancer demonstrated stable disease (Abstract: Rodon et al. Abstract# CT016. AACR 2023. https://aacrjournals.org/cancerres/article/83/8_Supplement/CT016/725419).",
+    "pathogenic": null,
+    "pathogenicPmids": [],
+    "pathogenicAbstracts": [],
+    "penetrance": null,
+    "cancerRisk": null,
+    "variant": {
+      "gene": {
+        "entrezGeneId": 2261,
+        "hugoSymbol": "FGFR3",
+        "geneType": "ONCOGENE",
+        "grch37Isoform": "ENST00000260795",
+        "grch37RefSeq": "NM_000142.5",
+        "grch38Isoform": "ENST00000440486",
+        "grch38RefSeq": "NM_000142.5",
+        "geneAliases": [
+          "JTK4",
+          "ACH",
+          "CEK2",
+          "CD333"
+        ],
+        "genesets": []
+      },
+      "consequence": {
+        "term": "missense_variant",
+        "isGenerallyTruncating": false,
+        "description": "A sequence variant, that changes one or more bases, resulting in a different amino acid sequence but where the length is preserved"
+      },
+      "alteration": "G370C",
+      "proteinChange": null,
+      "name": "G370C",
+      "refResidues": "G",
+      "proteinStart": 370,
+      "proteinEnd": 370,
+      "variantResidues": "C",
+      "referenceGenomes": [
+        "GRCh38",
+        "GRCh37"
+      ]
+    },
+    "mutationEffect": "Gain-of-function",
+    "mutationEffectPmids": [
+      "12009017"
+    ],
+    "mutationEffectAbstracts": [
+      {
+        "link": "https://aacrjournals.org/cancerres/article/83/8_Supplement/CT016/725419",
+        "abstract": "Rodon et al. Abstract# CT016. AACR 2023."
+      }
+    ],
+    "oncogenic": "Likely Oncogenic",
+    "oncogenicPmids": [],
+    "oncogenicAbstracts": []
+  },
+  {
+    "mutationEffectDescription": "The FGFR3 D786N mutation is located in the cytoplasmic domain of the protein. In vitro studies with MCF10A cells expressing FGFR3 D786N demonstrate that the mutation is activating as measured by increased cellular proliferation and viability compared to wildtype (PMID: 29533785).",
+    "pathogenic": null,
+    "pathogenicPmids": [],
+    "pathogenicAbstracts": [],
+    "penetrance": null,
+    "cancerRisk": null,
+    "variant": {
+      "gene": {
+        "entrezGeneId": 2261,
+        "hugoSymbol": "FGFR3",
+        "geneType": "ONCOGENE",
+        "grch37Isoform": "ENST00000260795",
+        "grch37RefSeq": "NM_000142.5",
+        "grch38Isoform": "ENST00000440486",
+        "grch38RefSeq": "NM_000142.5",
+        "geneAliases": [
+          "JTK4",
+          "ACH",
+          "CEK2",
+          "CD333"
+        ],
+        "genesets": []
+      },
+      "consequence": {
+        "term": "missense_variant",
+        "isGenerallyTruncating": false,
+        "description": "A sequence variant, that changes one or more bases, resulting in a different amino acid sequence but where the length is preserved"
+      },
+      "alteration": "D786N",
+      "proteinChange": null,
+      "name": "D786N",
+      "refResidues": "D",
+      "proteinStart": 786,
+      "proteinEnd": 786,
+      "variantResidues": "N",
+      "referenceGenomes": [
+        "GRCh38",
+        "GRCh37"
+      ]
+    },
+    "mutationEffect": "Likely Gain-of-function",
+    "mutationEffectPmids": [
+      "29533785"
+    ],
+    "mutationEffectAbstracts": [],
+    "oncogenic": "Likely Oncogenic",
+    "oncogenicPmids": [],
+    "oncogenicAbstracts": []
+  },
+  {
+    "mutationEffectDescription": "The FGFR3 K650E mutation is located in the kinase domain of the protein (PMID: 19749790). This mutation has been found in multiple myeloma (PMID: 28572459). Expression of this mutation in murine fibroblast, multiple myeloma and epithelial cell lines demonstrated that it is activating as measured by increased protein and pathway activation, cell proliferation and colony formation compared to wildtype (PMID: 11429702, 19749790, 11429702). In vitro studies demonstrate that this mutation is resistant to the FGFR inhibitor BGH398 when present in a TEL-FGFR3 Fusion-expressing murine B-cell line as measured by the sustained cell proliferation following drug treatment (PMID: 28034880).",
+    "pathogenic": null,
+    "pathogenicPmids": [],
+    "pathogenicAbstracts": [],
+    "penetrance": null,
+    "cancerRisk": null,
+    "variant": {
+      "gene": {
+        "entrezGeneId": 2261,
+        "hugoSymbol": "FGFR3",
+        "geneType": "ONCOGENE",
+        "grch37Isoform": "ENST00000260795",
+        "grch37RefSeq": "NM_000142.5",
+        "grch38Isoform": "ENST00000440486",
+        "grch38RefSeq": "NM_000142.5",
+        "geneAliases": [
+          "JTK4",
+          "ACH",
+          "CEK2",
+          "CD333"
+        ],
+        "genesets": []
+      },
+      "consequence": {
+        "term": "missense_variant",
+        "isGenerallyTruncating": false,
+        "description": "A sequence variant, that changes one or more bases, resulting in a different amino acid sequence but where the length is preserved"
+      },
+      "alteration": "K650E",
+      "proteinChange": null,
+      "name": "K650E",
+      "refResidues": "K",
+      "proteinStart": 650,
+      "proteinEnd": 650,
+      "variantResidues": "E",
+      "referenceGenomes": [
+        "GRCh38",
+        "GRCh37"
+      ]
+    },
+    "mutationEffect": "Gain-of-function",
+    "mutationEffectPmids": [
+      "28034880",
+      "19749790",
+      "28572459",
+      "11429702"
+    ],
+    "mutationEffectAbstracts": [],
+    "oncogenic": "Oncogenic",
+    "oncogenicPmids": [],
+    "oncogenicAbstracts": []
+  },
+  {
+    "mutationEffectDescription": "The FGFR3 K650M mutation is located in the kinase domain of the protein (PMID: 19749790). This mutation has been found as a germline mutation in achondroplasia and acanthosis nigricans (PMID: 17320202). Expression of this mutation in a murine fibroblast cell line demonstrated that it is activating as measured by increased protein activity compared to wildtype (PMID: 11055896, 10053006).",
+    "pathogenic": null,
+    "pathogenicPmids": [],
+    "pathogenicAbstracts": [],
+    "penetrance": null,
+    "cancerRisk": null,
+    "variant": {
+      "gene": {
+        "entrezGeneId": 2261,
+        "hugoSymbol": "FGFR3",
+        "geneType": "ONCOGENE",
+        "grch37Isoform": "ENST00000260795",
+        "grch37RefSeq": "NM_000142.5",
+        "grch38Isoform": "ENST00000440486",
+        "grch38RefSeq": "NM_000142.5",
+        "geneAliases": [
+          "JTK4",
+          "ACH",
+          "CEK2",
+          "CD333"
+        ],
+        "genesets": []
+      },
+      "consequence": {
+        "term": "missense_variant",
+        "isGenerallyTruncating": false,
+        "description": "A sequence variant, that changes one or more bases, resulting in a different amino acid sequence but where the length is preserved"
+      },
+      "alteration": "K650M",
+      "proteinChange": null,
+      "name": "K650M",
+      "refResidues": "K",
+      "proteinStart": 650,
+      "proteinEnd": 650,
+      "variantResidues": "M",
+      "referenceGenomes": [
+        "GRCh38",
+        "GRCh37"
+      ]
+    },
+    "mutationEffect": "Likely Gain-of-function",
+    "mutationEffectPmids": [
+      "11055896",
+      "19749790",
+      "17320202",
+      "10053006"
+    ],
+    "mutationEffectAbstracts": [],
+    "oncogenic": "Likely Oncogenic",
+    "oncogenicPmids": [],
+    "oncogenicAbstracts": []
+  },
+  {
+    "mutationEffectDescription": "The FGFR3 R399C mutation is located in the cytoplasmic domain of the protein. This mutation has been identified in prostate cancer (PMID: 32268276). In vitro studies with MCF10A cells expressing FGFR3 R399C demonstrate that the mutation is likely neutral as measured by cellular proliferation and viability comparable to wildtype (PMID: 29533785).",
+    "pathogenic": null,
+    "pathogenicPmids": [],
+    "pathogenicAbstracts": [],
+    "penetrance": null,
+    "cancerRisk": null,
+    "variant": {
+      "gene": {
+        "entrezGeneId": 2261,
+        "hugoSymbol": "FGFR3",
+        "geneType": "ONCOGENE",
+        "grch37Isoform": "ENST00000260795",
+        "grch37RefSeq": "NM_000142.5",
+        "grch38Isoform": "ENST00000440486",
+        "grch38RefSeq": "NM_000142.5",
+        "geneAliases": [
+          "JTK4",
+          "ACH",
+          "CEK2",
+          "CD333"
+        ],
+        "genesets": []
+      },
+      "consequence": {
+        "term": "missense_variant",
+        "isGenerallyTruncating": false,
+        "description": "A sequence variant, that changes one or more bases, resulting in a different amino acid sequence but where the length is preserved"
+      },
+      "alteration": "R399C",
+      "proteinChange": null,
+      "name": "R399C",
+      "refResidues": "R",
+      "proteinStart": 399,
+      "proteinEnd": 399,
+      "variantResidues": "C",
+      "referenceGenomes": [
+        "GRCh38",
+        "GRCh37"
+      ]
+    },
+    "mutationEffect": "Likely Neutral",
+    "mutationEffectPmids": [
+      "29533785",
+      "32268276"
+    ],
+    "mutationEffectAbstracts": [],
+    "oncogenic": "Likely Neutral",
+    "oncogenicPmids": [],
+    "oncogenicAbstracts": []
+  },
+  {
+    "mutationEffectDescription": "The FGFR3 L608V mutation is located in the kinase domain of the protein. This mutation has been found in transitional cell carcinoma (PMID: 28572459). In vitro studies have demonstrated that this mutation is resistant to the FGFR inhibitor BGJ398 when expressed in TEL-FGFR3 fusion-positive murine fibroblasts as measured by sustained proliferation upon drug treatment (PMID: 28034880).",
+    "pathogenic": null,
+    "pathogenicPmids": [],
+    "pathogenicAbstracts": [],
+    "penetrance": null,
+    "cancerRisk": null,
+    "variant": {
+      "gene": {
+        "entrezGeneId": 2261,
+        "hugoSymbol": "FGFR3",
+        "geneType": "ONCOGENE",
+        "grch37Isoform": "ENST00000260795",
+        "grch37RefSeq": "NM_000142.5",
+        "grch38Isoform": "ENST00000440486",
+        "grch38RefSeq": "NM_000142.5",
+        "geneAliases": [
+          "JTK4",
+          "ACH",
+          "CEK2",
+          "CD333"
+        ],
+        "genesets": []
+      },
+      "consequence": {
+        "term": "missense_variant",
+        "isGenerallyTruncating": false,
+        "description": "A sequence variant, that changes one or more bases, resulting in a different amino acid sequence but where the length is preserved"
+      },
+      "alteration": "L608V",
+      "proteinChange": null,
+      "name": "L608V",
+      "refResidues": "L",
+      "proteinStart": 608,
+      "proteinEnd": 608,
+      "variantResidues": "V",
+      "referenceGenomes": [
+        "GRCh38",
+        "GRCh37"
+      ]
+    },
+    "mutationEffect": "Inconclusive",
+    "mutationEffectPmids": [
+      "28034880",
+      "28572459"
+    ],
+    "mutationEffectAbstracts": [],
+    "oncogenic": "Inconclusive",
+    "oncogenicPmids": [],
+    "oncogenicAbstracts": []
+  },
+  {
+    "mutationEffectDescription": "The FGFR3 G380R mutation is located in the transmembrane domain of the protein and is a hotspot residue. This mutation has been found as a germline mutation in dwarfism (PMID: 10611230). There is conflicting functional data for this mutation. Expression of this mutation in vitro, in embryonic kidney and rat mesenchymal stem cell lines and in a transgenic mouse model demonstrated that it is activating as measured by increased protein activity and protein accumulation in mouse growth plates compared to wildtype (PMID: 10611230, 21324899, 12461689). However, expression of this mutation in a chondrocyte cell line demonstrated that it is inactivating as measured by decreased proliferation and differentiation compared to wildtype (PMID: 10646125).",
+    "pathogenic": null,
+    "pathogenicPmids": [],
+    "pathogenicAbstracts": [],
+    "penetrance": null,
+    "cancerRisk": null,
+    "variant": {
+      "gene": {
+        "entrezGeneId": 2261,
+        "hugoSymbol": "FGFR3",
+        "geneType": "ONCOGENE",
+        "grch37Isoform": "ENST00000260795",
+        "grch37RefSeq": "NM_000142.5",
+        "grch38Isoform": "ENST00000440486",
+        "grch38RefSeq": "NM_000142.5",
+        "geneAliases": [
+          "JTK4",
+          "ACH",
+          "CEK2",
+          "CD333"
+        ],
+        "genesets": []
+      },
+      "consequence": {
+        "term": "missense_variant",
+        "isGenerallyTruncating": false,
+        "description": "A sequence variant, that changes one or more bases, resulting in a different amino acid sequence but where the length is preserved"
+      },
+      "alteration": "G380R",
+      "proteinChange": null,
+      "name": "G380R",
+      "refResidues": "G",
+      "proteinStart": 380,
+      "proteinEnd": 380,
+      "variantResidues": "R",
+      "referenceGenomes": [
+        "GRCh38",
+        "GRCh37"
+      ]
+    },
+    "mutationEffect": "Gain-of-function",
+    "mutationEffectPmids": [
+      "12461689",
+      "10646125",
+      "10611230",
+      "21324899"
+    ],
+    "mutationEffectAbstracts": [],
+    "oncogenic": "Likely Oncogenic",
+    "oncogenicPmids": [],
+    "oncogenicAbstracts": []
+  },
+  {
+    "mutationEffectDescription": "The FGFR3 *807Wext*101 stop-loss mutation extends the FGFR3 protein by 101 amino acids, disrupting the inhibitory function of the C-terminal domain with the addition of an alpha helix that may act as a second transmembrane domain or inhibit glycosylation of FGFR3 (PMID: 26003532, 7647778, 17320202). FGFR3 stop-loss mutations are associated with thanatophoric dysplasia type I, but have also been seen in cancer (PMID: 7647778, 8845844, 36639200, 35819403, 28572459)(GENIE Cohort v18.0, accessed 01/26/26). While FGFR3 *807Wext*101 has not been functionally characterized, similar mutations that also result in read-through of the FGFR3 stop codon have demonstrated gain-of-function activity (PMID: 36639200). Expression of FGFR3 *807Rext*141 in a HEK cell line demonstrated increased tyrosine-phosphorylated intracellular puncta as measured by phosphotyrosine immunoprecipitation and Western blot assays compared to wildtype FGFR3 (PMID: 36639200). A patient with multiple myeloma and t(4;14) who harbored a subclonal stop-loss mutation, FGFR3 G802_X807del, demonstrated loss of FGFR3 G802_X807del-containing cells upon treatment with erdafitinib, though did not demonstrate a clinical response to erdafitinib (PMID: 36639200).",
+    "pathogenic": null,
+    "pathogenicPmids": [],
+    "pathogenicAbstracts": [],
+    "penetrance": null,
+    "cancerRisk": null,
+    "variant": {
+      "gene": {
+        "entrezGeneId": 2261,
+        "hugoSymbol": "FGFR3",
+        "geneType": "ONCOGENE",
+        "grch37Isoform": "ENST00000260795",
+        "grch37RefSeq": "NM_000142.5",
+        "grch38Isoform": "ENST00000440486",
+        "grch38RefSeq": "NM_000142.5",
+        "geneAliases": [
+          "JTK4",
+          "ACH",
+          "CEK2",
+          "CD333"
+        ],
+        "genesets": []
+      },
+      "consequence": {
+        "term": "stop_lost",
+        "isGenerallyTruncating": false,
+        "description": "A sequence variant where at least one base of the terminator codon (stop) is changed, resulting in an elongated transcript"
+      },
+      "alteration": "*807Wext*101",
+      "proteinChange": null,
+      "name": "*807Wext*101",
+      "refResidues": "*",
+      "proteinStart": 807,
+      "proteinEnd": 807,
+      "variantResidues": null,
+      "referenceGenomes": [
+        "GRCh38",
+        "GRCh37"
+      ]
+    },
+    "mutationEffect": "Likely Gain-of-function",
+    "mutationEffectPmids": [
+      "36639200",
+      "7647778",
+      "26003532",
+      "8845844",
+      "17320202",
+      "28572459",
+      "35819403"
+    ],
+    "mutationEffectAbstracts": [],
+    "oncogenic": "Likely Oncogenic",
+    "oncogenicPmids": [],
+    "oncogenicAbstracts": []
+  },
+  {
+    "mutationEffectDescription": "The FGFR3 I538F mutation is located in the kinase domain of the protein. This mutation has been found in hematopoietic cancers (PMID: 26992226). There is conflicting functional information for this mutation. Expression of this mutation in a murine fibroblast cell line demonstrated that it is neutral as measured by no change in protein activity compared to wildtype (PMID: 26992226). However, expression of this mutation in vitro demonstrated that it is likely activating as measured by increased protein stability (PMID: 29478821).",
+    "pathogenic": null,
+    "pathogenicPmids": [],
+    "pathogenicAbstracts": [],
+    "penetrance": null,
+    "cancerRisk": null,
+    "variant": {
+      "gene": {
+        "entrezGeneId": 2261,
+        "hugoSymbol": "FGFR3",
+        "geneType": "ONCOGENE",
+        "grch37Isoform": "ENST00000260795",
+        "grch37RefSeq": "NM_000142.5",
+        "grch38Isoform": "ENST00000440486",
+        "grch38RefSeq": "NM_000142.5",
+        "geneAliases": [
+          "JTK4",
+          "ACH",
+          "CEK2",
+          "CD333"
+        ],
+        "genesets": []
+      },
+      "consequence": {
+        "term": "missense_variant",
+        "isGenerallyTruncating": false,
+        "description": "A sequence variant, that changes one or more bases, resulting in a different amino acid sequence but where the length is preserved"
+      },
+      "alteration": "I538F",
+      "proteinChange": null,
+      "name": "I538F",
+      "refResidues": "I",
+      "proteinStart": 538,
+      "proteinEnd": 538,
+      "variantResidues": "F",
+      "referenceGenomes": [
+        "GRCh38",
+        "GRCh37"
+      ]
+    },
+    "mutationEffect": "Inconclusive",
+    "mutationEffectPmids": [
+      "29478821",
+      "26992226"
+    ],
+    "mutationEffectAbstracts": [],
+    "oncogenic": "Inconclusive",
+    "oncogenicPmids": [],
+    "oncogenicAbstracts": []
+  },
+  {
+    "mutationEffectDescription": "The FGFR3 P283S mutation is located in the Ig-like C2-type III domain of the protein. This mutation has been identified in bladder cancer (PMID: 21822268). In vitro studies with Ba/F3 cells expressing FGFR3 P283S demonstrated this mutation is likely neutral as measured by transformation activity and proliferation comparable to wildtype (PMID: 34272467).",
+    "pathogenic": null,
+    "pathogenicPmids": [],
+    "pathogenicAbstracts": [],
+    "penetrance": null,
+    "cancerRisk": null,
+    "variant": {
+      "gene": {
+        "entrezGeneId": 2261,
+        "hugoSymbol": "FGFR3",
+        "geneType": "ONCOGENE",
+        "grch37Isoform": "ENST00000260795",
+        "grch37RefSeq": "NM_000142.5",
+        "grch38Isoform": "ENST00000440486",
+        "grch38RefSeq": "NM_000142.5",
+        "geneAliases": [
+          "JTK4",
+          "ACH",
+          "CEK2",
+          "CD333"
+        ],
+        "genesets": []
+      },
+      "consequence": {
+        "term": "missense_variant",
+        "isGenerallyTruncating": false,
+        "description": "A sequence variant, that changes one or more bases, resulting in a different amino acid sequence but where the length is preserved"
+      },
+      "alteration": "P283S",
+      "proteinChange": null,
+      "name": "P283S",
+      "refResidues": "P",
+      "proteinStart": 283,
+      "proteinEnd": 283,
+      "variantResidues": "S",
+      "referenceGenomes": [
+        "GRCh38",
+        "GRCh37"
+      ]
+    },
+    "mutationEffect": "Likely Neutral",
+    "mutationEffectPmids": [
+      "21822268",
+      "34272467"
+    ],
+    "mutationEffectAbstracts": [],
+    "oncogenic": "Likely Neutral",
+    "oncogenicPmids": [],
+    "oncogenicAbstracts": []
+  },
+  {
+    "mutationEffectDescription": "The FGFR3 R669Q mutation is located in the kinase domain of the protein. In vitro kinase activity assays with FGFR3 R669Q demonstrate that the mutation is activating as measured by increased autophosphorylation compared to wildtype (PMID: 26992226).",
+    "pathogenic": null,
+    "pathogenicPmids": [],
+    "pathogenicAbstracts": [],
+    "penetrance": null,
+    "cancerRisk": null,
+    "variant": {
+      "gene": {
+        "entrezGeneId": 2261,
+        "hugoSymbol": "FGFR3",
+        "geneType": "ONCOGENE",
+        "grch37Isoform": "ENST00000260795",
+        "grch37RefSeq": "NM_000142.5",
+        "grch38Isoform": "ENST00000440486",
+        "grch38RefSeq": "NM_000142.5",
+        "geneAliases": [
+          "JTK4",
+          "ACH",
+          "CEK2",
+          "CD333"
+        ],
+        "genesets": []
+      },
+      "consequence": {
+        "term": "missense_variant",
+        "isGenerallyTruncating": false,
+        "description": "A sequence variant, that changes one or more bases, resulting in a different amino acid sequence but where the length is preserved"
+      },
+      "alteration": "R669Q",
+      "proteinChange": null,
+      "name": "R669Q",
+      "refResidues": "R",
+      "proteinStart": 669,
+      "proteinEnd": 669,
+      "variantResidues": "Q",
+      "referenceGenomes": [
+        "GRCh38",
+        "GRCh37"
+      ]
+    },
+    "mutationEffect": "Likely Gain-of-function",
+    "mutationEffectPmids": [
+      "26992226"
+    ],
+    "mutationEffectAbstracts": [],
+    "oncogenic": "Likely Oncogenic",
+    "oncogenicPmids": [],
+    "oncogenicAbstracts": []
+  },
+  {
+    "mutationEffectDescription": "The FGFR3 T689M mutation is located in the kinase domain of the protein. In vitro studies with Ba/F3 cells expressing FGFR3 T689M demonstrate this mutation is likely neutral as measured by transformation activity and proliferation comparable to wildtype (PMID: 34272467).",
+    "pathogenic": null,
+    "pathogenicPmids": [],
+    "pathogenicAbstracts": [],
+    "penetrance": null,
+    "cancerRisk": null,
+    "variant": {
+      "gene": {
+        "entrezGeneId": 2261,
+        "hugoSymbol": "FGFR3",
+        "geneType": "ONCOGENE",
+        "grch37Isoform": "ENST00000260795",
+        "grch37RefSeq": "NM_000142.5",
+        "grch38Isoform": "ENST00000440486",
+        "grch38RefSeq": "NM_000142.5",
+        "geneAliases": [
+          "JTK4",
+          "ACH",
+          "CEK2",
+          "CD333"
+        ],
+        "genesets": []
+      },
+      "consequence": {
+        "term": "missense_variant",
+        "isGenerallyTruncating": false,
+        "description": "A sequence variant, that changes one or more bases, resulting in a different amino acid sequence but where the length is preserved"
+      },
+      "alteration": "T689M",
+      "proteinChange": null,
+      "name": "T689M",
+      "refResidues": "T",
+      "proteinStart": 689,
+      "proteinEnd": 689,
+      "variantResidues": "M",
+      "referenceGenomes": [
+        "GRCh38",
+        "GRCh37"
+      ]
+    },
+    "mutationEffect": "Likely Neutral",
+    "mutationEffectPmids": [
+      "34272467"
+    ],
+    "mutationEffectAbstracts": [],
+    "oncogenic": "Likely Neutral",
+    "oncogenicPmids": [],
+    "oncogenicAbstracts": []
+  },
+  {
+    "mutationEffectDescription": "The FGFR3 D641G mutation is located in the kinase domain of the protein. This mutation has been found in intestinal cancer. Expression of this mutation in a murine fibroblast cell line demonstrated that it is activating as measured by increased protein activity compared to wildtype (PMID: 26992226).",
+    "pathogenic": null,
+    "pathogenicPmids": [],
+    "pathogenicAbstracts": [],
+    "penetrance": null,
+    "cancerRisk": null,
+    "variant": {
+      "gene": {
+        "entrezGeneId": 2261,
+        "hugoSymbol": "FGFR3",
+        "geneType": "ONCOGENE",
+        "grch37Isoform": "ENST00000260795",
+        "grch37RefSeq": "NM_000142.5",
+        "grch38Isoform": "ENST00000440486",
+        "grch38RefSeq": "NM_000142.5",
+        "geneAliases": [
+          "JTK4",
+          "ACH",
+          "CEK2",
+          "CD333"
+        ],
+        "genesets": []
+      },
+      "consequence": {
+        "term": "missense_variant",
+        "isGenerallyTruncating": false,
+        "description": "A sequence variant, that changes one or more bases, resulting in a different amino acid sequence but where the length is preserved"
+      },
+      "alteration": "D641G",
+      "proteinChange": null,
+      "name": "D641G",
+      "refResidues": "D",
+      "proteinStart": 641,
+      "proteinEnd": 641,
+      "variantResidues": "G",
+      "referenceGenomes": [
+        "GRCh38",
+        "GRCh37"
+      ]
+    },
+    "mutationEffect": "Gain-of-function",
+    "mutationEffectPmids": [
+      "26992226"
+    ],
+    "mutationEffectAbstracts": [],
+    "oncogenic": "Likely Oncogenic",
+    "oncogenicPmids": [],
+    "oncogenicAbstracts": []
+  },
+  {
+    "mutationEffectDescription": "The FGFR3 G346E mutation is located in the Ig-like C2-type III domain of the protein. In vitro studies with Ba/F3 cells expressing FGFR3 G346E demonstrate this mutation is likely neutral as measured by transformation activity and proliferation comparable to wildtype (PMID: 34272467).",
+    "pathogenic": null,
+    "pathogenicPmids": [],
+    "pathogenicAbstracts": [],
+    "penetrance": null,
+    "cancerRisk": null,
+    "variant": {
+      "gene": {
+        "entrezGeneId": 2261,
+        "hugoSymbol": "FGFR3",
+        "geneType": "ONCOGENE",
+        "grch37Isoform": "ENST00000260795",
+        "grch37RefSeq": "NM_000142.5",
+        "grch38Isoform": "ENST00000440486",
+        "grch38RefSeq": "NM_000142.5",
+        "geneAliases": [
+          "JTK4",
+          "ACH",
+          "CEK2",
+          "CD333"
+        ],
+        "genesets": []
+      },
+      "consequence": {
+        "term": "missense_variant",
+        "isGenerallyTruncating": false,
+        "description": "A sequence variant, that changes one or more bases, resulting in a different amino acid sequence but where the length is preserved"
+      },
+      "alteration": "G346E",
+      "proteinChange": null,
+      "name": "G346E",
+      "refResidues": "G",
+      "proteinStart": 346,
+      "proteinEnd": 346,
+      "variantResidues": "E",
+      "referenceGenomes": [
+        "GRCh38",
+        "GRCh37"
+      ]
+    },
+    "mutationEffect": "Likely Neutral",
+    "mutationEffectPmids": [
+      "34272467"
+    ],
+    "mutationEffectAbstracts": [],
+    "oncogenic": "Likely Neutral",
+    "oncogenicPmids": [],
+    "oncogenicAbstracts": []
+  },
+  {
+    "mutationEffectDescription": "The FGFR3 G697C mutation is located in the kinase domain of the protein. This mutation has been found in aerodigestive tract cancer. Expression of this mutation in a murine fibroblast cell line demonstrated that it is neutral as measured by no change in protein activity compared to wildtype (PMID: 26992226)",
+    "pathogenic": null,
+    "pathogenicPmids": [],
+    "pathogenicAbstracts": [],
+    "penetrance": null,
+    "cancerRisk": null,
+    "variant": {
+      "gene": {
+        "entrezGeneId": 2261,
+        "hugoSymbol": "FGFR3",
+        "geneType": "ONCOGENE",
+        "grch37Isoform": "ENST00000260795",
+        "grch37RefSeq": "NM_000142.5",
+        "grch38Isoform": "ENST00000440486",
+        "grch38RefSeq": "NM_000142.5",
+        "geneAliases": [
+          "JTK4",
+          "ACH",
+          "CEK2",
+          "CD333"
+        ],
+        "genesets": []
+      },
+      "consequence": {
+        "term": "missense_variant",
+        "isGenerallyTruncating": false,
+        "description": "A sequence variant, that changes one or more bases, resulting in a different amino acid sequence but where the length is preserved"
+      },
+      "alteration": "G697C",
+      "proteinChange": null,
+      "name": "G697C",
+      "refResidues": "G",
+      "proteinStart": 697,
+      "proteinEnd": 697,
+      "variantResidues": "C",
+      "referenceGenomes": [
+        "GRCh38",
+        "GRCh37"
+      ]
+    },
+    "mutationEffect": "Likely Neutral",
+    "mutationEffectPmids": [
+      "26992226"
+    ],
+    "mutationEffectAbstracts": [],
+    "oncogenic": "Likely Neutral",
+    "oncogenicPmids": [],
+    "oncogenicAbstracts": []
+  },
+  {
+    "mutationEffectDescription": "The FGFR3 A265T mutation is located in the Ig-like C2-type III domain of the protein. This mutation has been identified in adenocarcinoma (PMID: 27149842). In vitro studies with Ba/F3 cells expressing FGFR3 A265T demonstrated this mutation is likely neutral as measured by transformation activity and proliferation comparable to wildtype (PMID: 34272467).",
+    "pathogenic": null,
+    "pathogenicPmids": [],
+    "pathogenicAbstracts": [],
+    "penetrance": null,
+    "cancerRisk": null,
+    "variant": {
+      "gene": {
+        "entrezGeneId": 2261,
+        "hugoSymbol": "FGFR3",
+        "geneType": "ONCOGENE",
+        "grch37Isoform": "ENST00000260795",
+        "grch37RefSeq": "NM_000142.5",
+        "grch38Isoform": "ENST00000440486",
+        "grch38RefSeq": "NM_000142.5",
+        "geneAliases": [
+          "JTK4",
+          "ACH",
+          "CEK2",
+          "CD333"
+        ],
+        "genesets": []
+      },
+      "consequence": {
+        "term": "missense_variant",
+        "isGenerallyTruncating": false,
+        "description": "A sequence variant, that changes one or more bases, resulting in a different amino acid sequence but where the length is preserved"
+      },
+      "alteration": "A265T",
+      "proteinChange": null,
+      "name": "A265T",
+      "refResidues": "A",
+      "proteinStart": 265,
+      "proteinEnd": 265,
+      "variantResidues": "T",
+      "referenceGenomes": [
+        "GRCh38",
+        "GRCh37"
+      ]
+    },
+    "mutationEffect": "Likely Neutral",
+    "mutationEffectPmids": [
+      "27149842",
+      "34272467"
+    ],
+    "mutationEffectAbstracts": [],
+    "oncogenic": "Likely Neutral",
+    "oncogenicPmids": [],
+    "oncogenicAbstracts": []
+  },
+  {
+    "mutationEffectDescription": "The IGH-FGFR3 fusion involves the N-terminus of IGH fused to the C-terminus of FGFR3, resulting in overexpression of the FGFR3 protein. This mutation has been found in multiple myeloma (PMID: 17107900). This mutation has not yet been functionally characterized, but is a prognostic and diagnostic marker in plasma cell myeloma (PMID: 9865713, 9354676, 28584253, 23456262).",
+    "pathogenic": null,
+    "pathogenicPmids": [],
+    "pathogenicAbstracts": [],
+    "penetrance": null,
+    "cancerRisk": null,
+    "variant": {
+      "gene": {
+        "entrezGeneId": 2261,
+        "hugoSymbol": "FGFR3",
+        "geneType": "ONCOGENE",
+        "grch37Isoform": "ENST00000260795",
+        "grch37RefSeq": "NM_000142.5",
+        "grch38Isoform": "ENST00000440486",
+        "grch38RefSeq": "NM_000142.5",
+        "geneAliases": [
+          "JTK4",
+          "ACH",
+          "CEK2",
+          "CD333"
+        ],
+        "genesets": []
+      },
+      "consequence": {
+        "term": "NA",
+        "isGenerallyTruncating": false,
+        "description": "NA"
+      },
+      "alteration": "IGH-FGFR3 Fusion",
+      "proteinChange": null,
+      "name": "IGH-FGFR3 Fusion",
+      "refResidues": null,
+      "proteinStart": -1,
+      "proteinEnd": 100000,
+      "variantResidues": null,
+      "referenceGenomes": [
+        "GRCh38",
+        "GRCh37"
+      ]
+    },
+    "mutationEffect": "Likely Gain-of-function",
+    "mutationEffectPmids": [
+      "9354676",
+      "23456262",
+      "28584253",
+      "17107900",
+      "9865713"
+    ],
+    "mutationEffectAbstracts": [],
+    "oncogenic": "Likely Oncogenic",
+    "oncogenicPmids": [],
+    "oncogenicAbstracts": []
+  },
+  {
+    "mutationEffectDescription": "The FGFR3 S371C mutation is located in the transmembrane domain of the protein. This mutation has been found in skeletal disorders. Expression of this mutation in embryonic kidney and chondrocyte cell lines demonstrated that it is activating as measured by increased protein and pathway activation compared to wildtype (PMID: 12009017). In a Phase II trial, a patient with cancer of unknown primary harboring FGFR3 S371C was treated with pemigatinib and demonstrated stable disease (Abstract: Rodon et al. Abstract# CT016. AACR 2023. https://aacrjournals.org/cancerres/article/83/8_Supplement/CT016/725419).",
+    "pathogenic": null,
+    "pathogenicPmids": [],
+    "pathogenicAbstracts": [],
+    "penetrance": null,
+    "cancerRisk": null,
+    "variant": {
+      "gene": {
+        "entrezGeneId": 2261,
+        "hugoSymbol": "FGFR3",
+        "geneType": "ONCOGENE",
+        "grch37Isoform": "ENST00000260795",
+        "grch37RefSeq": "NM_000142.5",
+        "grch38Isoform": "ENST00000440486",
+        "grch38RefSeq": "NM_000142.5",
+        "geneAliases": [
+          "JTK4",
+          "ACH",
+          "CEK2",
+          "CD333"
+        ],
+        "genesets": []
+      },
+      "consequence": {
+        "term": "missense_variant",
+        "isGenerallyTruncating": false,
+        "description": "A sequence variant, that changes one or more bases, resulting in a different amino acid sequence but where the length is preserved"
+      },
+      "alteration": "S371C",
+      "proteinChange": null,
+      "name": "S371C",
+      "refResidues": "S",
+      "proteinStart": 371,
+      "proteinEnd": 371,
+      "variantResidues": "C",
+      "referenceGenomes": [
+        "GRCh38",
+        "GRCh37"
+      ]
+    },
+    "mutationEffect": "Gain-of-function",
+    "mutationEffectPmids": [
+      "12009017"
+    ],
+    "mutationEffectAbstracts": [
+      {
+        "link": "https://aacrjournals.org/cancerres/article/83/8_Supplement/CT016/725419",
+        "abstract": "Rodon et al. Abstract# CT016. AACR 2023."
+      }
+    ],
+    "oncogenic": "Likely Oncogenic",
+    "oncogenicPmids": [],
+    "oncogenicAbstracts": []
+  },
+  {
+    "mutationEffectDescription": "The FGFR3 G637W mutation is located in the kinase domain of the protein. This mutation has been found in kidney cancer. Expression of this mutation in a murine fibroblast cell line demonstrated that it is inactivating as measured by decreased protein activity compared to wildtype (PMID: 26992226).",
+    "pathogenic": null,
+    "pathogenicPmids": [],
+    "pathogenicAbstracts": [],
+    "penetrance": null,
+    "cancerRisk": null,
+    "variant": {
+      "gene": {
+        "entrezGeneId": 2261,
+        "hugoSymbol": "FGFR3",
+        "geneType": "ONCOGENE",
+        "grch37Isoform": "ENST00000260795",
+        "grch37RefSeq": "NM_000142.5",
+        "grch38Isoform": "ENST00000440486",
+        "grch38RefSeq": "NM_000142.5",
+        "geneAliases": [
+          "JTK4",
+          "ACH",
+          "CEK2",
+          "CD333"
+        ],
+        "genesets": []
+      },
+      "consequence": {
+        "term": "missense_variant",
+        "isGenerallyTruncating": false,
+        "description": "A sequence variant, that changes one or more bases, resulting in a different amino acid sequence but where the length is preserved"
+      },
+      "alteration": "G637W",
+      "proteinChange": null,
+      "name": "G637W",
+      "refResidues": "G",
+      "proteinStart": 637,
+      "proteinEnd": 637,
+      "variantResidues": "W",
+      "referenceGenomes": [
+        "GRCh38",
+        "GRCh37"
+      ]
+    },
+    "mutationEffect": "Likely Loss-of-function",
+    "mutationEffectPmids": [
+      "26992226"
+    ],
+    "mutationEffectAbstracts": [],
+    "oncogenic": "Likely Neutral",
+    "oncogenicPmids": [],
+    "oncogenicAbstracts": []
+  },
+  {
+    "mutationEffectDescription": "The FGFR3 C582F mutation is located in the kinase domain of the protein. This mutation has been found in ovarian cancer. Expression of this mutation in a murine fibroblast cell line demonstrated that it is neutral as measured by no change in protein activity compared to wildtype (PMID: 26992226)",
+    "pathogenic": null,
+    "pathogenicPmids": [],
+    "pathogenicAbstracts": [],
+    "penetrance": null,
+    "cancerRisk": null,
+    "variant": {
+      "gene": {
+        "entrezGeneId": 2261,
+        "hugoSymbol": "FGFR3",
+        "geneType": "ONCOGENE",
+        "grch37Isoform": "ENST00000260795",
+        "grch37RefSeq": "NM_000142.5",
+        "grch38Isoform": "ENST00000440486",
+        "grch38RefSeq": "NM_000142.5",
+        "geneAliases": [
+          "JTK4",
+          "ACH",
+          "CEK2",
+          "CD333"
+        ],
+        "genesets": []
+      },
+      "consequence": {
+        "term": "missense_variant",
+        "isGenerallyTruncating": false,
+        "description": "A sequence variant, that changes one or more bases, resulting in a different amino acid sequence but where the length is preserved"
+      },
+      "alteration": "C582F",
+      "proteinChange": null,
+      "name": "C582F",
+      "refResidues": "C",
+      "proteinStart": 582,
+      "proteinEnd": 582,
+      "variantResidues": "F",
+      "referenceGenomes": [
+        "GRCh38",
+        "GRCh37"
+      ]
+    },
+    "mutationEffect": "Likely Neutral",
+    "mutationEffectPmids": [
+      "26992226"
+    ],
+    "mutationEffectAbstracts": [],
+    "oncogenic": "Likely Neutral",
+    "oncogenicPmids": [],
+    "oncogenicAbstracts": []
+  },
+  {
+    "mutationEffectDescription": "The FGFR3 T79S mutation is located in the Ig-like C2-type I domain of the protein. In vitro studies with Ba/F3 cells expressing FGFR3 T79S demonstrated this mutation is likely neutral as measured by transformation activity and proliferation comparable to wildtype (PMID: 34272467).",
+    "pathogenic": null,
+    "pathogenicPmids": [],
+    "pathogenicAbstracts": [],
+    "penetrance": null,
+    "cancerRisk": null,
+    "variant": {
+      "gene": {
+        "entrezGeneId": 2261,
+        "hugoSymbol": "FGFR3",
+        "geneType": "ONCOGENE",
+        "grch37Isoform": "ENST00000260795",
+        "grch37RefSeq": "NM_000142.5",
+        "grch38Isoform": "ENST00000440486",
+        "grch38RefSeq": "NM_000142.5",
+        "geneAliases": [
+          "JTK4",
+          "ACH",
+          "CEK2",
+          "CD333"
+        ],
+        "genesets": []
+      },
+      "consequence": {
+        "term": "missense_variant",
+        "isGenerallyTruncating": false,
+        "description": "A sequence variant, that changes one or more bases, resulting in a different amino acid sequence but where the length is preserved"
+      },
+      "alteration": "T79S",
+      "proteinChange": null,
+      "name": "T79S",
+      "refResidues": "T",
+      "proteinStart": 79,
+      "proteinEnd": 79,
+      "variantResidues": "S",
+      "referenceGenomes": [
+        "GRCh38",
+        "GRCh37"
+      ]
+    },
+    "mutationEffect": "Likely Neutral",
+    "mutationEffectPmids": [
+      "34272467"
+    ],
+    "mutationEffectAbstracts": [],
+    "oncogenic": "Likely Neutral",
+    "oncogenicPmids": [],
+    "oncogenicAbstracts": []
+  },
+  {
+    "mutationEffectDescription": "FGFR3 fusions typically involve the N-terminus of FGFR3 fused to the C-terminus of a fusion partner, although there are some instances in which the N-terminus of a fusion partner is fused to the C-terminus of FGFR3. Expression of these fusions in murine and rat cell lines demonstrated that they are activating as measured by increased cell proliferation (PMID: 23661334, 23558953, 22837387).",
+    "pathogenic": null,
+    "pathogenicPmids": [],
+    "pathogenicAbstracts": [],
+    "penetrance": null,
+    "cancerRisk": null,
+    "variant": {
+      "gene": {
+        "entrezGeneId": 2261,
+        "hugoSymbol": "FGFR3",
+        "geneType": "ONCOGENE",
+        "grch37Isoform": "ENST00000260795",
+        "grch37RefSeq": "NM_000142.5",
+        "grch38Isoform": "ENST00000440486",
+        "grch38RefSeq": "NM_000142.5",
+        "geneAliases": [
+          "JTK4",
+          "ACH",
+          "CEK2",
+          "CD333"
+        ],
+        "genesets": []
+      },
+      "consequence": {
+        "term": "NA",
+        "isGenerallyTruncating": false,
+        "description": "NA"
+      },
+      "alteration": "Fusions",
+      "proteinChange": null,
+      "name": "Fusions",
+      "refResidues": null,
+      "proteinStart": -1,
+      "proteinEnd": 100000,
+      "variantResidues": null,
+      "referenceGenomes": [
+        "GRCh38",
+        "GRCh37"
+      ]
+    },
+    "mutationEffect": "Likely Gain-of-function",
+    "mutationEffectPmids": [
+      "23661334",
+      "22837387",
+      "23558953"
+    ],
+    "mutationEffectAbstracts": [],
+    "oncogenic": "Likely Oncogenic",
+    "oncogenicPmids": [],
+    "oncogenicAbstracts": []
+  },
+  {
+    "mutationEffectDescription": "The FGFR3 D617G mutation is located in the kinase domain of the protein. This mutation has been found in aerodigestive tract cancer. Expression of this mutation in a murine fibroblast cell line demonstrated that it is inactivating as measured by decreased protein activity compared to wildtype (PMID: 26992226).",
+    "pathogenic": null,
+    "pathogenicPmids": [],
+    "pathogenicAbstracts": [],
+    "penetrance": null,
+    "cancerRisk": null,
+    "variant": {
+      "gene": {
+        "entrezGeneId": 2261,
+        "hugoSymbol": "FGFR3",
+        "geneType": "ONCOGENE",
+        "grch37Isoform": "ENST00000260795",
+        "grch37RefSeq": "NM_000142.5",
+        "grch38Isoform": "ENST00000440486",
+        "grch38RefSeq": "NM_000142.5",
+        "geneAliases": [
+          "JTK4",
+          "ACH",
+          "CEK2",
+          "CD333"
+        ],
+        "genesets": []
+      },
+      "consequence": {
+        "term": "missense_variant",
+        "isGenerallyTruncating": false,
+        "description": "A sequence variant, that changes one or more bases, resulting in a different amino acid sequence but where the length is preserved"
+      },
+      "alteration": "D617G",
+      "proteinChange": null,
+      "name": "D617G",
+      "refResidues": "D",
+      "proteinStart": 617,
+      "proteinEnd": 617,
+      "variantResidues": "G",
+      "referenceGenomes": [
+        "GRCh38",
+        "GRCh37"
+      ]
+    },
+    "mutationEffect": "Likely Loss-of-function",
+    "mutationEffectPmids": [
+      "26992226"
+    ],
+    "mutationEffectAbstracts": [],
+    "oncogenic": "Likely Neutral",
+    "oncogenicPmids": [],
+    "oncogenicAbstracts": []
+  },
+  {
+    "mutationEffectDescription": "The FGFR2 G380E mutation is located in the transmembrane domain of the protein. In vitro studies with Ba/F3 cells expressing FGFR2 G380E demonstrate this mutation is activating as measured by increased transformation activity and proliferation compared to wildtype (PMID: 34272467).",
+    "pathogenic": null,
+    "pathogenicPmids": [],
+    "pathogenicAbstracts": [],
+    "penetrance": null,
+    "cancerRisk": null,
+    "variant": {
+      "gene": {
+        "entrezGeneId": 2261,
+        "hugoSymbol": "FGFR3",
+        "geneType": "ONCOGENE",
+        "grch37Isoform": "ENST00000260795",
+        "grch37RefSeq": "NM_000142.5",
+        "grch38Isoform": "ENST00000440486",
+        "grch38RefSeq": "NM_000142.5",
+        "geneAliases": [
+          "JTK4",
+          "ACH",
+          "CEK2",
+          "CD333"
+        ],
+        "genesets": []
+      },
+      "consequence": {
+        "term": "missense_variant",
+        "isGenerallyTruncating": false,
+        "description": "A sequence variant, that changes one or more bases, resulting in a different amino acid sequence but where the length is preserved"
+      },
+      "alteration": "G380E",
+      "proteinChange": null,
+      "name": "G380E",
+      "refResidues": "G",
+      "proteinStart": 380,
+      "proteinEnd": 380,
+      "variantResidues": "E",
+      "referenceGenomes": [
+        "GRCh38",
+        "GRCh37"
+      ]
+    },
+    "mutationEffect": "Likely Gain-of-function",
+    "mutationEffectPmids": [
+      "34272467"
+    ],
+    "mutationEffectAbstracts": [],
+    "oncogenic": "Likely Oncogenic",
+    "oncogenicPmids": [],
+    "oncogenicAbstracts": []
+  },
+  {
+    "mutationEffectDescription": "The FGFR3 D641N mutation is located in the kinase domain of the protein. This mutation has been found in urinary tract cancer. Expression of this mutation in a murine fibroblast cell line demonstrated that it is activating as measured by increased protein activity compared to wildtype (PMID: 26992226).",
+    "pathogenic": null,
+    "pathogenicPmids": [],
+    "pathogenicAbstracts": [],
+    "penetrance": null,
+    "cancerRisk": null,
+    "variant": {
+      "gene": {
+        "entrezGeneId": 2261,
+        "hugoSymbol": "FGFR3",
+        "geneType": "ONCOGENE",
+        "grch37Isoform": "ENST00000260795",
+        "grch37RefSeq": "NM_000142.5",
+        "grch38Isoform": "ENST00000440486",
+        "grch38RefSeq": "NM_000142.5",
+        "geneAliases": [
+          "JTK4",
+          "ACH",
+          "CEK2",
+          "CD333"
+        ],
+        "genesets": []
+      },
+      "consequence": {
+        "term": "missense_variant",
+        "isGenerallyTruncating": false,
+        "description": "A sequence variant, that changes one or more bases, resulting in a different amino acid sequence but where the length is preserved"
+      },
+      "alteration": "D641N",
+      "proteinChange": null,
+      "name": "D641N",
+      "refResidues": "D",
+      "proteinStart": 641,
+      "proteinEnd": 641,
+      "variantResidues": "N",
+      "referenceGenomes": [
+        "GRCh38",
+        "GRCh37"
+      ]
+    },
+    "mutationEffect": "Gain-of-function",
+    "mutationEffectPmids": [
+      "26992226"
+    ],
+    "mutationEffectAbstracts": [],
+    "oncogenic": "Likely Oncogenic",
+    "oncogenicPmids": [],
+    "oncogenicAbstracts": []
+  },
+  {
+    "mutationEffectDescription": "The FGFR3 A265V mutation is located in the Ig-like C2-type III domain of the protein. This mutation has been identified in adenocarcinoma (PMID: 28481359). In vitro studies with Ba/F3 cells expressing FGFR3 A265V demonstrated this mutation is likely neutral as measured by transformation activity and proliferation comparable to wildtype (PMID: 34272467).",
+    "pathogenic": null,
+    "pathogenicPmids": [],
+    "pathogenicAbstracts": [],
+    "penetrance": null,
+    "cancerRisk": null,
+    "variant": {
+      "gene": {
+        "entrezGeneId": 2261,
+        "hugoSymbol": "FGFR3",
+        "geneType": "ONCOGENE",
+        "grch37Isoform": "ENST00000260795",
+        "grch37RefSeq": "NM_000142.5",
+        "grch38Isoform": "ENST00000440486",
+        "grch38RefSeq": "NM_000142.5",
+        "geneAliases": [
+          "JTK4",
+          "ACH",
+          "CEK2",
+          "CD333"
+        ],
+        "genesets": []
+      },
+      "consequence": {
+        "term": "missense_variant",
+        "isGenerallyTruncating": false,
+        "description": "A sequence variant, that changes one or more bases, resulting in a different amino acid sequence but where the length is preserved"
+      },
+      "alteration": "A265V",
+      "proteinChange": null,
+      "name": "A265V",
+      "refResidues": "A",
+      "proteinStart": 265,
+      "proteinEnd": 265,
+      "variantResidues": "V",
+      "referenceGenomes": [
+        "GRCh38",
+        "GRCh37"
+      ]
+    },
+    "mutationEffect": "Likely Neutral",
+    "mutationEffectPmids": [
+      "34272467",
+      "28481359"
+    ],
+    "mutationEffectAbstracts": [],
+    "oncogenic": "Likely Neutral",
+    "oncogenicPmids": [],
+    "oncogenicAbstracts": []
+  },
+  {
+    "mutationEffectDescription": "The FGFR3 K650T mutation is located in the kinase domain of the protein (PMID: 19749790). This mutation has been found as a germline mutation in acanthosis nigricans (PMID: 17875876). Expression of this mutation in vitro demonstrated that it is activating as measured by increased protein activity compared to wildtype (PMID: 11055896).",
+    "pathogenic": null,
+    "pathogenicPmids": [],
+    "pathogenicAbstracts": [],
+    "penetrance": null,
+    "cancerRisk": null,
+    "variant": {
+      "gene": {
+        "entrezGeneId": 2261,
+        "hugoSymbol": "FGFR3",
+        "geneType": "ONCOGENE",
+        "grch37Isoform": "ENST00000260795",
+        "grch37RefSeq": "NM_000142.5",
+        "grch38Isoform": "ENST00000440486",
+        "grch38RefSeq": "NM_000142.5",
+        "geneAliases": [
+          "JTK4",
+          "ACH",
+          "CEK2",
+          "CD333"
+        ],
+        "genesets": []
+      },
+      "consequence": {
+        "term": "missense_variant",
+        "isGenerallyTruncating": false,
+        "description": "A sequence variant, that changes one or more bases, resulting in a different amino acid sequence but where the length is preserved"
+      },
+      "alteration": "K650T",
+      "proteinChange": null,
+      "name": "K650T",
+      "refResidues": "K",
+      "proteinStart": 650,
+      "proteinEnd": 650,
+      "variantResidues": "T",
+      "referenceGenomes": [
+        "GRCh38",
+        "GRCh37"
+      ]
+    },
+    "mutationEffect": "Likely Gain-of-function",
+    "mutationEffectPmids": [
+      "11055896",
+      "19749790",
+      "17875876"
+    ],
+    "mutationEffectAbstracts": [],
+    "oncogenic": "Likely Oncogenic",
+    "oncogenicPmids": [],
+    "oncogenicAbstracts": []
+  },
+  {
+    "mutationEffectDescription": "The FGFR3 F384L mutation is located in the transmembrane domain of the protein. Expression of this mutant in a murine fibroblast cell line demonstrated that it is neutral as measured by no change in colony formation compared to wildtype (PMID: 11157491).",
+    "pathogenic": null,
+    "pathogenicPmids": [],
+    "pathogenicAbstracts": [],
+    "penetrance": null,
+    "cancerRisk": null,
+    "variant": {
+      "gene": {
+        "entrezGeneId": 2261,
+        "hugoSymbol": "FGFR3",
+        "geneType": "ONCOGENE",
+        "grch37Isoform": "ENST00000260795",
+        "grch37RefSeq": "NM_000142.5",
+        "grch38Isoform": "ENST00000440486",
+        "grch38RefSeq": "NM_000142.5",
+        "geneAliases": [
+          "JTK4",
+          "ACH",
+          "CEK2",
+          "CD333"
+        ],
+        "genesets": []
+      },
+      "consequence": {
+        "term": "missense_variant",
+        "isGenerallyTruncating": false,
+        "description": "A sequence variant, that changes one or more bases, resulting in a different amino acid sequence but where the length is preserved"
+      },
+      "alteration": "F384L",
+      "proteinChange": null,
+      "name": "F384L",
+      "refResidues": "F",
+      "proteinStart": 384,
+      "proteinEnd": 384,
+      "variantResidues": "L",
+      "referenceGenomes": [
+        "GRCh38",
+        "GRCh37"
+      ]
+    },
+    "mutationEffect": "Likely Neutral",
+    "mutationEffectPmids": [
+      "11157491"
+    ],
+    "mutationEffectAbstracts": [],
+    "oncogenic": "Likely Neutral",
+    "oncogenicPmids": [],
+    "oncogenicAbstracts": []
+  },
+  {
+    "mutationEffectDescription": "The FGFR3 R248C mutation is located in the extracellular domain of the protein. This mutation has been found in bladder cancer (PMID: 28572459). Expression of this mutant in a murine B-cell line demonstrated that it is activating as measured by increased constitutive protein activity compared to wildtype (PMID: 8640234).",
+    "pathogenic": null,
+    "pathogenicPmids": [],
+    "pathogenicAbstracts": [],
+    "penetrance": null,
+    "cancerRisk": null,
+    "variant": {
+      "gene": {
+        "entrezGeneId": 2261,
+        "hugoSymbol": "FGFR3",
+        "geneType": "ONCOGENE",
+        "grch37Isoform": "ENST00000260795",
+        "grch37RefSeq": "NM_000142.5",
+        "grch38Isoform": "ENST00000440486",
+        "grch38RefSeq": "NM_000142.5",
+        "geneAliases": [
+          "JTK4",
+          "ACH",
+          "CEK2",
+          "CD333"
+        ],
+        "genesets": []
+      },
+      "consequence": {
+        "term": "missense_variant",
+        "isGenerallyTruncating": false,
+        "description": "A sequence variant, that changes one or more bases, resulting in a different amino acid sequence but where the length is preserved"
+      },
+      "alteration": "R248C",
+      "proteinChange": null,
+      "name": "R248C",
+      "refResidues": "R",
+      "proteinStart": 248,
+      "proteinEnd": 248,
+      "variantResidues": "C",
+      "referenceGenomes": [
+        "GRCh38",
+        "GRCh37"
+      ]
+    },
+    "mutationEffect": "Gain-of-function",
+    "mutationEffectPmids": [
+      "28572459",
+      "8640234"
+    ],
+    "mutationEffectAbstracts": [],
+    "oncogenic": "Oncogenic",
+    "oncogenicPmids": [],
+    "oncogenicAbstracts": []
+  },
+  {
+    "mutationEffectDescription": "The FGFR3 D646Y mutation is located in the kinase domain of the protein. This mutation has been found in urinary tract cancer. Expression of this mutation in a murine fibroblast cell line demonstrated that it is neutral as measured by no change in protein activity compared to wildtype (PMID: 26992226)",
+    "pathogenic": null,
+    "pathogenicPmids": [],
+    "pathogenicAbstracts": [],
+    "penetrance": null,
+    "cancerRisk": null,
+    "variant": {
+      "gene": {
+        "entrezGeneId": 2261,
+        "hugoSymbol": "FGFR3",
+        "geneType": "ONCOGENE",
+        "grch37Isoform": "ENST00000260795",
+        "grch37RefSeq": "NM_000142.5",
+        "grch38Isoform": "ENST00000440486",
+        "grch38RefSeq": "NM_000142.5",
+        "geneAliases": [
+          "JTK4",
+          "ACH",
+          "CEK2",
+          "CD333"
+        ],
+        "genesets": []
+      },
+      "consequence": {
+        "term": "missense_variant",
+        "isGenerallyTruncating": false,
+        "description": "A sequence variant, that changes one or more bases, resulting in a different amino acid sequence but where the length is preserved"
+      },
+      "alteration": "D646Y",
+      "proteinChange": null,
+      "name": "D646Y",
+      "refResidues": "D",
+      "proteinStart": 646,
+      "proteinEnd": 646,
+      "variantResidues": "Y",
+      "referenceGenomes": [
+        "GRCh38",
+        "GRCh37"
+      ]
+    },
+    "mutationEffect": "Likely Neutral",
+    "mutationEffectPmids": [
+      "26992226"
+    ],
+    "mutationEffectAbstracts": [],
+    "oncogenic": "Likely Neutral",
+    "oncogenicPmids": [],
+    "oncogenicAbstracts": []
+  },
+  {
+    "mutationEffectDescription": "The FGFR3 R603Q mutation is located in the kinase domain of the protein. In vitro studies with Ba/F3 cells expressing FGFR3 R603Q demonstrate this mutation is likely neutral as measured by transformation activity and proliferation comparable to wildtype (PMID: 34272467).",
+    "pathogenic": null,
+    "pathogenicPmids": [],
+    "pathogenicAbstracts": [],
+    "penetrance": null,
+    "cancerRisk": null,
+    "variant": {
+      "gene": {
+        "entrezGeneId": 2261,
+        "hugoSymbol": "FGFR3",
+        "geneType": "ONCOGENE",
+        "grch37Isoform": "ENST00000260795",
+        "grch37RefSeq": "NM_000142.5",
+        "grch38Isoform": "ENST00000440486",
+        "grch38RefSeq": "NM_000142.5",
+        "geneAliases": [
+          "JTK4",
+          "ACH",
+          "CEK2",
+          "CD333"
+        ],
+        "genesets": []
+      },
+      "consequence": {
+        "term": "missense_variant",
+        "isGenerallyTruncating": false,
+        "description": "A sequence variant, that changes one or more bases, resulting in a different amino acid sequence but where the length is preserved"
+      },
+      "alteration": "R603Q",
+      "proteinChange": null,
+      "name": "R603Q",
+      "refResidues": "R",
+      "proteinStart": 603,
+      "proteinEnd": 603,
+      "variantResidues": "Q",
+      "referenceGenomes": [
+        "GRCh38",
+        "GRCh37"
+      ]
+    },
+    "mutationEffect": "Likely Neutral",
+    "mutationEffectPmids": [
+      "34272467"
+    ],
+    "mutationEffectAbstracts": [],
+    "oncogenic": "Likely Neutral",
+    "oncogenicPmids": [],
+    "oncogenicAbstracts": []
+  },
+  {
+    "mutationEffectDescription": "The FGFR3 G382D mutation is located in the transmembrane domain of the protein. There is conflicting functional data for this mutation. Expression of this variant in an embryonic kidney cell line demonstrated that it is activating as measured by increased protein and pathway activation compared to wildtype. However, expression of this mutation in a murine fibroblast cell line demonstrated that it is likely neutral as measured by no change in colony formation compared to wildtype (PMID: 11429702).",
+    "pathogenic": null,
+    "pathogenicPmids": [],
+    "pathogenicAbstracts": [],
+    "penetrance": null,
+    "cancerRisk": null,
+    "variant": {
+      "gene": {
+        "entrezGeneId": 2261,
+        "hugoSymbol": "FGFR3",
+        "geneType": "ONCOGENE",
+        "grch37Isoform": "ENST00000260795",
+        "grch37RefSeq": "NM_000142.5",
+        "grch38Isoform": "ENST00000440486",
+        "grch38RefSeq": "NM_000142.5",
+        "geneAliases": [
+          "JTK4",
+          "ACH",
+          "CEK2",
+          "CD333"
+        ],
+        "genesets": []
+      },
+      "consequence": {
+        "term": "missense_variant",
+        "isGenerallyTruncating": false,
+        "description": "A sequence variant, that changes one or more bases, resulting in a different amino acid sequence but where the length is preserved"
+      },
+      "alteration": "G382D",
+      "proteinChange": null,
+      "name": "G382D",
+      "refResidues": "G",
+      "proteinStart": 382,
+      "proteinEnd": 382,
+      "variantResidues": "D",
+      "referenceGenomes": [
+        "GRCh38",
+        "GRCh37"
+      ]
+    },
+    "mutationEffect": "Inconclusive",
+    "mutationEffectPmids": [
+      "11429702"
+    ],
+    "mutationEffectAbstracts": [],
+    "oncogenic": "Inconclusive",
+    "oncogenicPmids": [],
+    "oncogenicAbstracts": []
+  },
+  {
+    "mutationEffectDescription": "The FGFR3 N540K mutation is located in the kinase domain of the protein. This mutation has been found as a germline mutation in hypochondroplasia (PMID: 21225389). Expression of this mutation in a murine fibroblast cell line demonstrated that it is activating as measured by increased protein activity compared to wildtype (PMID: 26992226).",
+    "pathogenic": null,
+    "pathogenicPmids": [],
+    "pathogenicAbstracts": [],
+    "penetrance": null,
+    "cancerRisk": null,
+    "variant": {
+      "gene": {
+        "entrezGeneId": 2261,
+        "hugoSymbol": "FGFR3",
+        "geneType": "ONCOGENE",
+        "grch37Isoform": "ENST00000260795",
+        "grch37RefSeq": "NM_000142.5",
+        "grch38Isoform": "ENST00000440486",
+        "grch38RefSeq": "NM_000142.5",
+        "geneAliases": [
+          "JTK4",
+          "ACH",
+          "CEK2",
+          "CD333"
+        ],
+        "genesets": []
+      },
+      "consequence": {
+        "term": "missense_variant",
+        "isGenerallyTruncating": false,
+        "description": "A sequence variant, that changes one or more bases, resulting in a different amino acid sequence but where the length is preserved"
+      },
+      "alteration": "N540K",
+      "proteinChange": null,
+      "name": "N540K",
+      "refResidues": "N",
+      "proteinStart": 540,
+      "proteinEnd": 540,
+      "variantResidues": "K",
+      "referenceGenomes": [
+        "GRCh38",
+        "GRCh37"
+      ]
+    },
+    "mutationEffect": "Gain-of-function",
+    "mutationEffectPmids": [
+      "26992226",
+      "21225389"
+    ],
+    "mutationEffectAbstracts": [],
+    "oncogenic": "Oncogenic",
+    "oncogenicPmids": [],
+    "oncogenicAbstracts": []
+  },
+  {
+    "mutationEffectDescription": "The FGFR3-BAIAP2L1 fusion involves the N-terminus of FGFR3 fused to the C-terminus of BAIAP2L1. Expression of this mutation in a murine fibroblast cell line demonstrated that it is activating, as measured by increased protein activation and anchorage-independent growth compared to wildtype (PMID: 23175443).",
+    "pathogenic": null,
+    "pathogenicPmids": [],
+    "pathogenicAbstracts": [],
+    "penetrance": null,
+    "cancerRisk": null,
+    "variant": {
+      "gene": {
+        "entrezGeneId": 2261,
+        "hugoSymbol": "FGFR3",
+        "geneType": "ONCOGENE",
+        "grch37Isoform": "ENST00000260795",
+        "grch37RefSeq": "NM_000142.5",
+        "grch38Isoform": "ENST00000440486",
+        "grch38RefSeq": "NM_000142.5",
+        "geneAliases": [
+          "JTK4",
+          "ACH",
+          "CEK2",
+          "CD333"
+        ],
+        "genesets": []
+      },
+      "consequence": {
+        "term": "NA",
+        "isGenerallyTruncating": false,
+        "description": "NA"
+      },
+      "alteration": "FGFR3-BAIAP2L1 Fusion",
+      "proteinChange": null,
+      "name": "FGFR3-BAIAP2L1 Fusion",
+      "refResidues": null,
+      "proteinStart": -1,
+      "proteinEnd": 100000,
+      "variantResidues": null,
+      "referenceGenomes": [
+        "GRCh38",
+        "GRCh37"
+      ]
+    },
+    "mutationEffect": "Gain-of-function",
+    "mutationEffectPmids": [
+      "23175443"
+    ],
+    "mutationEffectAbstracts": [],
+    "oncogenic": "Oncogenic",
+    "oncogenicPmids": [],
+    "oncogenicAbstracts": []
+  },
+  {
+    "mutationEffectDescription": "The FGFR2 R248_S249insC mutation is located in the extracellular domain of the protein. In vitro studies with Ba/F3 cells expressing FGFR2 R248_S249insC demonstrated this mutation is activating as measured by increased transformation activity and proliferation compared to wildtype (PMID: 34272467).",
+    "pathogenic": null,
+    "pathogenicPmids": [],
+    "pathogenicAbstracts": [],
+    "penetrance": null,
+    "cancerRisk": null,
+    "variant": {
+      "gene": {
+        "entrezGeneId": 2261,
+        "hugoSymbol": "FGFR3",
+        "geneType": "ONCOGENE",
+        "grch37Isoform": "ENST00000260795",
+        "grch37RefSeq": "NM_000142.5",
+        "grch38Isoform": "ENST00000440486",
+        "grch38RefSeq": "NM_000142.5",
+        "geneAliases": [
+          "JTK4",
+          "ACH",
+          "CEK2",
+          "CD333"
+        ],
+        "genesets": []
+      },
+      "consequence": {
+        "term": "inframe_insertion",
+        "isGenerallyTruncating": false,
+        "description": "An inframe non synonymous variant that inserts bases into in the coding sequence"
+      },
+      "alteration": "R248_S249insC",
+      "proteinChange": null,
+      "name": "R248_S249insC",
+      "refResidues": null,
+      "proteinStart": 248,
+      "proteinEnd": 249,
+      "variantResidues": null,
+      "referenceGenomes": [
+        "GRCh38",
+        "GRCh37"
+      ]
+    },
+    "mutationEffect": "Likely Gain-of-function",
+    "mutationEffectPmids": [
+      "34272467"
+    ],
+    "mutationEffectAbstracts": [],
+    "oncogenic": "Likely Oncogenic",
+    "oncogenicPmids": [],
+    "oncogenicAbstracts": []
+  },
+  {
+    "mutationEffectDescription": "The FGFR3 P716H mutation is located in the kinase domain of the protein. In vitro studies with Ba/F3 cells expressing FGFR3 P716H demonstrate this mutation is likely neutral as measured by transformation activity and proliferation comparable to wildtype (PMID: 34272467).",
+    "pathogenic": null,
+    "pathogenicPmids": [],
+    "pathogenicAbstracts": [],
+    "penetrance": null,
+    "cancerRisk": null,
+    "variant": {
+      "gene": {
+        "entrezGeneId": 2261,
+        "hugoSymbol": "FGFR3",
+        "geneType": "ONCOGENE",
+        "grch37Isoform": "ENST00000260795",
+        "grch37RefSeq": "NM_000142.5",
+        "grch38Isoform": "ENST00000440486",
+        "grch38RefSeq": "NM_000142.5",
+        "geneAliases": [
+          "JTK4",
+          "ACH",
+          "CEK2",
+          "CD333"
+        ],
+        "genesets": []
+      },
+      "consequence": {
+        "term": "missense_variant",
+        "isGenerallyTruncating": false,
+        "description": "A sequence variant, that changes one or more bases, resulting in a different amino acid sequence but where the length is preserved"
+      },
+      "alteration": "P716H",
+      "proteinChange": null,
+      "name": "P716H",
+      "refResidues": "P",
+      "proteinStart": 716,
+      "proteinEnd": 716,
+      "variantResidues": "H",
+      "referenceGenomes": [
+        "GRCh38",
+        "GRCh37"
+      ]
+    },
+    "mutationEffect": "Likely Neutral",
+    "mutationEffectPmids": [
+      "34272467"
+    ],
+    "mutationEffectAbstracts": [],
+    "oncogenic": "Likely Neutral",
+    "oncogenicPmids": [],
+    "oncogenicAbstracts": []
+  },
+  {
+    "mutationEffectDescription": "The FGFR3 E627D mutation is located in the kinase domain of the protein. This mutation has been found in urinary tract cancer. Expression of this mutation in a murine fibroblast cell line demonstrated that it is neutral as measured by no change in protein activity compared to wildtype (PMID: 26992226)",
+    "pathogenic": null,
+    "pathogenicPmids": [],
+    "pathogenicAbstracts": [],
+    "penetrance": null,
+    "cancerRisk": null,
+    "variant": {
+      "gene": {
+        "entrezGeneId": 2261,
+        "hugoSymbol": "FGFR3",
+        "geneType": "ONCOGENE",
+        "grch37Isoform": "ENST00000260795",
+        "grch37RefSeq": "NM_000142.5",
+        "grch38Isoform": "ENST00000440486",
+        "grch38RefSeq": "NM_000142.5",
+        "geneAliases": [
+          "JTK4",
+          "ACH",
+          "CEK2",
+          "CD333"
+        ],
+        "genesets": []
+      },
+      "consequence": {
+        "term": "missense_variant",
+        "isGenerallyTruncating": false,
+        "description": "A sequence variant, that changes one or more bases, resulting in a different amino acid sequence but where the length is preserved"
+      },
+      "alteration": "E627D",
+      "proteinChange": null,
+      "name": "E627D",
+      "refResidues": "E",
+      "proteinStart": 627,
+      "proteinEnd": 627,
+      "variantResidues": "D",
+      "referenceGenomes": [
+        "GRCh38",
+        "GRCh37"
+      ]
+    },
+    "mutationEffect": "Likely Neutral",
+    "mutationEffectPmids": [
+      "26992226"
+    ],
+    "mutationEffectAbstracts": [],
+    "oncogenic": "Likely Neutral",
+    "oncogenicPmids": [],
+    "oncogenicAbstracts": []
+  },
+  {
+    "mutationEffectDescription": "The FGFR2 A391V mutation is located in the transmembrane domain of the protein. There is conflicting functional data for this variant. In vitro studies with Ba/F3 cells expressing FGFR2 A391V demonstrate this mutation is activating as measured by increased transformation activity compared to wildtype (PMID: 34272467). However, in vitro studies with MCF10A cells demonstrate that this mutation is neutral as measured by similar cellular proliferation and viability as compared to wildtype (PMID: 29533785).",
+    "pathogenic": null,
+    "pathogenicPmids": [],
+    "pathogenicAbstracts": [],
+    "penetrance": null,
+    "cancerRisk": null,
+    "variant": {
+      "gene": {
+        "entrezGeneId": 2261,
+        "hugoSymbol": "FGFR3",
+        "geneType": "ONCOGENE",
+        "grch37Isoform": "ENST00000260795",
+        "grch37RefSeq": "NM_000142.5",
+        "grch38Isoform": "ENST00000440486",
+        "grch38RefSeq": "NM_000142.5",
+        "geneAliases": [
+          "JTK4",
+          "ACH",
+          "CEK2",
+          "CD333"
+        ],
+        "genesets": []
+      },
+      "consequence": {
+        "term": "missense_variant",
+        "isGenerallyTruncating": false,
+        "description": "A sequence variant, that changes one or more bases, resulting in a different amino acid sequence but where the length is preserved"
+      },
+      "alteration": "A391V",
+      "proteinChange": null,
+      "name": "A391V",
+      "refResidues": "A",
+      "proteinStart": 391,
+      "proteinEnd": 391,
+      "variantResidues": "V",
+      "referenceGenomes": [
+        "GRCh38",
+        "GRCh37"
+      ]
+    },
+    "mutationEffect": "Inconclusive",
+    "mutationEffectPmids": [
+      "29533785",
+      "34272467"
+    ],
+    "mutationEffectAbstracts": [],
+    "oncogenic": "Inconclusive",
+    "oncogenicPmids": [],
+    "oncogenicAbstracts": []
+  },
+  {
+    "mutationEffectDescription": "The FGFR3 Y373C mutation is located in the transmembrane domain of the protein. This mutation has been found in bladder cancer (PMID: 28572459). Expression of this mutation in murine fibroblast and bladder cell lines demonstrated that it is activating as measured by increased protein activation, colony formation and tumor formation in a xenograft model compared to wildtype (PMID: 16338952, 11429702, 19749790). In the Phase II FIGHT-207 trial examining pemigatinib treatment with patients harboring FGFR3 Y373C, three patients with bladder cancer demonstrated progressive disease, stable disease and partial response with a progression-free survival of 3 months, 5 months and 10 months, respectively (Abstract: Rodon et al. Abstract# CT016. AACR 2023. https://aacrjournals.org/cancerres/article/83/8_Supplement/CT016/725419).",
+    "pathogenic": null,
+    "pathogenicPmids": [],
+    "pathogenicAbstracts": [],
+    "penetrance": null,
+    "cancerRisk": null,
+    "variant": {
+      "gene": {
+        "entrezGeneId": 2261,
+        "hugoSymbol": "FGFR3",
+        "geneType": "ONCOGENE",
+        "grch37Isoform": "ENST00000260795",
+        "grch37RefSeq": "NM_000142.5",
+        "grch38Isoform": "ENST00000440486",
+        "grch38RefSeq": "NM_000142.5",
+        "geneAliases": [
+          "JTK4",
+          "ACH",
+          "CEK2",
+          "CD333"
+        ],
+        "genesets": []
+      },
+      "consequence": {
+        "term": "missense_variant",
+        "isGenerallyTruncating": false,
+        "description": "A sequence variant, that changes one or more bases, resulting in a different amino acid sequence but where the length is preserved"
+      },
+      "alteration": "Y373C",
+      "proteinChange": null,
+      "name": "Y373C",
+      "refResidues": "Y",
+      "proteinStart": 373,
+      "proteinEnd": 373,
+      "variantResidues": "C",
+      "referenceGenomes": [
+        "GRCh38",
+        "GRCh37"
+      ]
+    },
+    "mutationEffect": "Gain-of-function",
+    "mutationEffectPmids": [
+      "19749790",
+      "16338952",
+      "28572459",
+      "11429702"
+    ],
+    "mutationEffectAbstracts": [
+      {
+        "link": "https://aacrjournals.org/cancerres/article/83/8_Supplement/CT016/725419",
+        "abstract": "Rodon et al. Abstract# CT016. AACR 2023."
+      }
+    ],
+    "oncogenic": "Oncogenic",
+    "oncogenicPmids": [],
+    "oncogenicAbstracts": []
+  },
+  {
+    "mutationEffectDescription": "The FGFR3 A257V mutation is located in the Ig-like C2-type III domain of the protein. In vitro studies with Ba/F3 cells expressing FGFR3 A257V demonstrated this mutation is likely neutral as measured by transformation activity and proliferation comparable to wildtype (PMID: 34272467).",
+    "pathogenic": null,
+    "pathogenicPmids": [],
+    "pathogenicAbstracts": [],
+    "penetrance": null,
+    "cancerRisk": null,
+    "variant": {
+      "gene": {
+        "entrezGeneId": 2261,
+        "hugoSymbol": "FGFR3",
+        "geneType": "ONCOGENE",
+        "grch37Isoform": "ENST00000260795",
+        "grch37RefSeq": "NM_000142.5",
+        "grch38Isoform": "ENST00000440486",
+        "grch38RefSeq": "NM_000142.5",
+        "geneAliases": [
+          "JTK4",
+          "ACH",
+          "CEK2",
+          "CD333"
+        ],
+        "genesets": []
+      },
+      "consequence": {
+        "term": "missense_variant",
+        "isGenerallyTruncating": false,
+        "description": "A sequence variant, that changes one or more bases, resulting in a different amino acid sequence but where the length is preserved"
+      },
+      "alteration": "A257V",
+      "proteinChange": null,
+      "name": "A257V",
+      "refResidues": "A",
+      "proteinStart": 257,
+      "proteinEnd": 257,
+      "variantResidues": "V",
+      "referenceGenomes": [
+        "GRCh38",
+        "GRCh37"
+      ]
+    },
+    "mutationEffect": "Likely Neutral",
+    "mutationEffectPmids": [
+      "34272467"
+    ],
+    "mutationEffectAbstracts": [],
+    "oncogenic": "Likely Neutral",
+    "oncogenicPmids": [],
+    "oncogenicAbstracts": []
+  },
+  {
+    "mutationEffectDescription": "The FGFR3 K650Q mutation is located in the extracellular domain of the protein (PMID: 19749790). This mutation has been found as a germline mutation in acanthosis nigricans (PMID: 18000903). Expression of this mutation in vitro demonstrated that it is activating as measured by increased protein activity compared to wildtype (PMID: 11055896).",
+    "pathogenic": null,
+    "pathogenicPmids": [],
+    "pathogenicAbstracts": [],
+    "penetrance": null,
+    "cancerRisk": null,
+    "variant": {
+      "gene": {
+        "entrezGeneId": 2261,
+        "hugoSymbol": "FGFR3",
+        "geneType": "ONCOGENE",
+        "grch37Isoform": "ENST00000260795",
+        "grch37RefSeq": "NM_000142.5",
+        "grch38Isoform": "ENST00000440486",
+        "grch38RefSeq": "NM_000142.5",
+        "geneAliases": [
+          "JTK4",
+          "ACH",
+          "CEK2",
+          "CD333"
+        ],
+        "genesets": []
+      },
+      "consequence": {
+        "term": "missense_variant",
+        "isGenerallyTruncating": false,
+        "description": "A sequence variant, that changes one or more bases, resulting in a different amino acid sequence but where the length is preserved"
+      },
+      "alteration": "K650Q",
+      "proteinChange": null,
+      "name": "K650Q",
+      "refResidues": "K",
+      "proteinStart": 650,
+      "proteinEnd": 650,
+      "variantResidues": "Q",
+      "referenceGenomes": [
+        "GRCh38",
+        "GRCh37"
+      ]
+    },
+    "mutationEffect": "Likely Gain-of-function",
+    "mutationEffectPmids": [
+      "11055896",
+      "19749790",
+      "18000903"
+    ],
+    "mutationEffectAbstracts": [],
+    "oncogenic": "Likely Oncogenic",
+    "oncogenicPmids": [],
+    "oncogenicAbstracts": []
+  },
+  {
+    "mutationEffectDescription": "The FGFR3 R640W mutation is located in the kinase domain of the protein. In vitro studies with Ba/F3 cells expressing FGFR3 R640W demonstrate this mutation is likely neutral as measured by transformation activity and proliferation comparable to wildtype (PMID: 34272467).",
+    "pathogenic": null,
+    "pathogenicPmids": [],
+    "pathogenicAbstracts": [],
+    "penetrance": null,
+    "cancerRisk": null,
+    "variant": {
+      "gene": {
+        "entrezGeneId": 2261,
+        "hugoSymbol": "FGFR3",
+        "geneType": "ONCOGENE",
+        "grch37Isoform": "ENST00000260795",
+        "grch37RefSeq": "NM_000142.5",
+        "grch38Isoform": "ENST00000440486",
+        "grch38RefSeq": "NM_000142.5",
+        "geneAliases": [
+          "JTK4",
+          "ACH",
+          "CEK2",
+          "CD333"
+        ],
+        "genesets": []
+      },
+      "consequence": {
+        "term": "missense_variant",
+        "isGenerallyTruncating": false,
+        "description": "A sequence variant, that changes one or more bases, resulting in a different amino acid sequence but where the length is preserved"
+      },
+      "alteration": "R640W",
+      "proteinChange": null,
+      "name": "R640W",
+      "refResidues": "R",
+      "proteinStart": 640,
+      "proteinEnd": 640,
+      "variantResidues": "W",
+      "referenceGenomes": [
+        "GRCh38",
+        "GRCh37"
+      ]
+    },
+    "mutationEffect": "Likely Neutral",
+    "mutationEffectPmids": [
+      "34272467"
+    ],
+    "mutationEffectAbstracts": [],
+    "oncogenic": "Likely Neutral",
+    "oncogenicPmids": [],
+    "oncogenicAbstracts": []
+  },
+  {
+    "mutationEffectDescription": "The FGFR3 E322K mutation is located in the Ig-like C2-type III domain of the protein. In vitro studies with Ba/F3 cells expressing FGFR3 E322K demonstrated this mutation is likely neutral as measured by transformation activity and proliferation comparable to wildtype (PMID: 34272467).",
+    "pathogenic": null,
+    "pathogenicPmids": [],
+    "pathogenicAbstracts": [],
+    "penetrance": null,
+    "cancerRisk": null,
+    "variant": {
+      "gene": {
+        "entrezGeneId": 2261,
+        "hugoSymbol": "FGFR3",
+        "geneType": "ONCOGENE",
+        "grch37Isoform": "ENST00000260795",
+        "grch37RefSeq": "NM_000142.5",
+        "grch38Isoform": "ENST00000440486",
+        "grch38RefSeq": "NM_000142.5",
+        "geneAliases": [
+          "JTK4",
+          "ACH",
+          "CEK2",
+          "CD333"
+        ],
+        "genesets": []
+      },
+      "consequence": {
+        "term": "missense_variant",
+        "isGenerallyTruncating": false,
+        "description": "A sequence variant, that changes one or more bases, resulting in a different amino acid sequence but where the length is preserved"
+      },
+      "alteration": "E322K",
+      "proteinChange": null,
+      "name": "E322K",
+      "refResidues": "E",
+      "proteinStart": 322,
+      "proteinEnd": 322,
+      "variantResidues": "K",
+      "referenceGenomes": [
+        "GRCh38",
+        "GRCh37"
+      ]
+    },
+    "mutationEffect": "Likely Neutral",
+    "mutationEffectPmids": [
+      "34272467"
+    ],
+    "mutationEffectAbstracts": [],
+    "oncogenic": "Likely Neutral",
+    "oncogenicPmids": [],
+    "oncogenicAbstracts": []
+  },
+  {
+    "mutationEffectDescription": "The FGFR3 T311fs*55 mutation is located in the Ig-like C2-type III domain of the protein. In vitro studies with Ba/F3 cells expressing FGFR3 T311fs*55 demonstrated this mutation is likely neutral as measured by transformation activity and proliferation comparable to wildtype (PMID: 34272467).",
+    "pathogenic": null,
+    "pathogenicPmids": [],
+    "pathogenicAbstracts": [],
+    "penetrance": null,
+    "cancerRisk": null,
+    "variant": {
+      "gene": {
+        "entrezGeneId": 2261,
+        "hugoSymbol": "FGFR3",
+        "geneType": "ONCOGENE",
+        "grch37Isoform": "ENST00000260795",
+        "grch37RefSeq": "NM_000142.5",
+        "grch38Isoform": "ENST00000440486",
+        "grch38RefSeq": "NM_000142.5",
+        "geneAliases": [
+          "JTK4",
+          "ACH",
+          "CEK2",
+          "CD333"
+        ],
+        "genesets": []
+      },
+      "consequence": {
+        "term": "frameshift_variant",
+        "isGenerallyTruncating": true,
+        "description": "A sequence variant which causes a disruption of the translational reading frame, because the number of nucleotides inserted or deleted is not a multiple of three"
+      },
+      "alteration": "T311fs*55",
+      "proteinChange": null,
+      "name": "T311fs*55",
+      "refResidues": "T",
+      "proteinStart": 311,
+      "proteinEnd": 311,
+      "variantResidues": null,
+      "referenceGenomes": [
+        "GRCh38",
+        "GRCh37"
+      ]
+    },
+    "mutationEffect": "Likely Neutral",
+    "mutationEffectPmids": [
+      "34272467"
+    ],
+    "mutationEffectAbstracts": [],
+    "oncogenic": "Likely Neutral",
+    "oncogenicPmids": [],
+    "oncogenicAbstracts": []
+  },
+  {
+    "mutationEffectDescription": "The FGFR3 K403fs*93 mutation is located in the cytoplasmic domain of the protein. In vitro studies with Ba/F3 cells expressing FGFR3 K403fs*93  demonstrate this mutation is likely neutral as measured by transformation activity and proliferation comparable to wildtype (PMID: 34272467).",
+    "pathogenic": null,
+    "pathogenicPmids": [],
+    "pathogenicAbstracts": [],
+    "penetrance": null,
+    "cancerRisk": null,
+    "variant": {
+      "gene": {
+        "entrezGeneId": 2261,
+        "hugoSymbol": "FGFR3",
+        "geneType": "ONCOGENE",
+        "grch37Isoform": "ENST00000260795",
+        "grch37RefSeq": "NM_000142.5",
+        "grch38Isoform": "ENST00000440486",
+        "grch38RefSeq": "NM_000142.5",
+        "geneAliases": [
+          "JTK4",
+          "ACH",
+          "CEK2",
+          "CD333"
+        ],
+        "genesets": []
+      },
+      "consequence": {
+        "term": "frameshift_variant",
+        "isGenerallyTruncating": true,
+        "description": "A sequence variant which causes a disruption of the translational reading frame, because the number of nucleotides inserted or deleted is not a multiple of three"
+      },
+      "alteration": "K403fs*93",
+      "proteinChange": null,
+      "name": "K403fs*93",
+      "refResidues": "K",
+      "proteinStart": 403,
+      "proteinEnd": 403,
+      "variantResidues": null,
+      "referenceGenomes": [
+        "GRCh38",
+        "GRCh37"
+      ]
+    },
+    "mutationEffect": "Likely Neutral",
+    "mutationEffectPmids": [
+      "34272467"
+    ],
+    "mutationEffectAbstracts": [],
+    "oncogenic": "Likely Neutral",
+    "oncogenicPmids": [],
+    "oncogenicAbstracts": []
+  },
+  {
+    "mutationEffectDescription": "The FGFR3 E466K mutation is located in the kinase domain of the protein. This mutation has been found in urinary tract cancer (PMID: 26992226). There is conflicting functional information for this mutation. Expression of this mutation in a murine fibroblast cell line demonstrated that it is neutral as measured by no change in protein activity compared to wildtype (PMID: 26992226). However, expression of this mutation in vitro demonstrated that it is activating as measured by increased protein stability (PMID: 29478821)",
+    "pathogenic": null,
+    "pathogenicPmids": [],
+    "pathogenicAbstracts": [],
+    "penetrance": null,
+    "cancerRisk": null,
+    "variant": {
+      "gene": {
+        "entrezGeneId": 2261,
+        "hugoSymbol": "FGFR3",
+        "geneType": "ONCOGENE",
+        "grch37Isoform": "ENST00000260795",
+        "grch37RefSeq": "NM_000142.5",
+        "grch38Isoform": "ENST00000440486",
+        "grch38RefSeq": "NM_000142.5",
+        "geneAliases": [
+          "JTK4",
+          "ACH",
+          "CEK2",
+          "CD333"
+        ],
+        "genesets": []
+      },
+      "consequence": {
+        "term": "missense_variant",
+        "isGenerallyTruncating": false,
+        "description": "A sequence variant, that changes one or more bases, resulting in a different amino acid sequence but where the length is preserved"
+      },
+      "alteration": "E466K",
+      "proteinChange": null,
+      "name": "E466K",
+      "refResidues": "E",
+      "proteinStart": 466,
+      "proteinEnd": 466,
+      "variantResidues": "K",
+      "referenceGenomes": [
+        "GRCh38",
+        "GRCh37"
+      ]
+    },
+    "mutationEffect": "Inconclusive",
+    "mutationEffectPmids": [
+      "29478821",
+      "26992226"
+    ],
+    "mutationEffectAbstracts": [],
+    "oncogenic": "Inconclusive",
+    "oncogenicPmids": [],
+    "oncogenicAbstracts": []
+  },
+  {
+    "mutationEffectDescription": "The FGFR3-RGS12 fusion is a fusion of the N-terminal end of the FGFR1 gene with the C-terminal end of the RGS12 gene. Fusions of FGFR3 have been shown to be oncogenic, and therefore the FGFR3-RGS12 fusion is considered likely oncogenic (PMID: 23661334, 23558953, 22837387). In a Phase II trial, a patient with cancer of unknown primary harboring FGFR3-RGS12 was treated with pemigatnib and demonstrated progressive disease (Abstract: Rodon et al. Abstract# CT016. AACR 2023. https://aacrjournals.org/cancerres/article/83/8_Supplement/CT016/725419).",
+    "pathogenic": null,
+    "pathogenicPmids": [],
+    "pathogenicAbstracts": [],
+    "penetrance": null,
+    "cancerRisk": null,
+    "variant": {
+      "gene": {
+        "entrezGeneId": 2261,
+        "hugoSymbol": "FGFR3",
+        "geneType": "ONCOGENE",
+        "grch37Isoform": "ENST00000260795",
+        "grch37RefSeq": "NM_000142.5",
+        "grch38Isoform": "ENST00000440486",
+        "grch38RefSeq": "NM_000142.5",
+        "geneAliases": [
+          "JTK4",
+          "ACH",
+          "CEK2",
+          "CD333"
+        ],
+        "genesets": []
+      },
+      "consequence": {
+        "term": "NA",
+        "isGenerallyTruncating": false,
+        "description": "NA"
+      },
+      "alteration": "FGFR3-RGS12 Fusion",
+      "proteinChange": null,
+      "name": "FGFR3-RGS12 Fusion",
+      "refResidues": null,
+      "proteinStart": -1,
+      "proteinEnd": 100000,
+      "variantResidues": null,
+      "referenceGenomes": [
+        "GRCh38",
+        "GRCh37"
+      ]
+    },
+    "mutationEffect": "Likely Gain-of-function",
+    "mutationEffectPmids": [
+      "23661334",
+      "22837387",
+      "23558953"
+    ],
+    "mutationEffectAbstracts": [
+      {
+        "link": "https://aacrjournals.org/cancerres/article/83/8_Supplement/CT016/725419",
+        "abstract": "Rodon et al. Abstract# CT016. AACR 2023."
+      }
+    ],
+    "oncogenic": "Likely Oncogenic",
+    "oncogenicPmids": [],
+    "oncogenicAbstracts": []
+  },
+  {
+    "mutationEffectDescription": "The FGFR3 E686K mutation is located in the kinase domain of the protein. In vitro studies with Ba/F3 cells expressing FGFR3 E686K demonstrate this mutation is likely neutral as measured by transformation activity and proliferation comparable to wildtype (PMID: 34272467).",
+    "pathogenic": null,
+    "pathogenicPmids": [],
+    "pathogenicAbstracts": [],
+    "penetrance": null,
+    "cancerRisk": null,
+    "variant": {
+      "gene": {
+        "entrezGeneId": 2261,
+        "hugoSymbol": "FGFR3",
+        "geneType": "ONCOGENE",
+        "grch37Isoform": "ENST00000260795",
+        "grch37RefSeq": "NM_000142.5",
+        "grch38Isoform": "ENST00000440486",
+        "grch38RefSeq": "NM_000142.5",
+        "geneAliases": [
+          "JTK4",
+          "ACH",
+          "CEK2",
+          "CD333"
+        ],
+        "genesets": []
+      },
+      "consequence": {
+        "term": "missense_variant",
+        "isGenerallyTruncating": false,
+        "description": "A sequence variant, that changes one or more bases, resulting in a different amino acid sequence but where the length is preserved"
+      },
+      "alteration": "E686K",
+      "proteinChange": null,
+      "name": "E686K",
+      "refResidues": "E",
+      "proteinStart": 686,
+      "proteinEnd": 686,
+      "variantResidues": "K",
+      "referenceGenomes": [
+        "GRCh38",
+        "GRCh37"
+      ]
+    },
+    "mutationEffect": "Likely Neutral",
+    "mutationEffectPmids": [
+      "34272467"
+    ],
+    "mutationEffectAbstracts": [],
+    "oncogenic": "Likely Neutral",
+    "oncogenicPmids": [],
+    "oncogenicAbstracts": []
+  },
+  {
+    "mutationEffectDescription": "The FGFR3 H284fs*10 mutation is located in the Ig-like C2-type III domain of the protein. In vitro studies with Ba/F3 cells expressing FGFR3 H284fs*10 demonstrated this mutation is activating as measured by increased transformation activity compared to wildtype (PMID: 34272467).",
+    "pathogenic": null,
+    "pathogenicPmids": [],
+    "pathogenicAbstracts": [],
+    "penetrance": null,
+    "cancerRisk": null,
+    "variant": {
+      "gene": {
+        "entrezGeneId": 2261,
+        "hugoSymbol": "FGFR3",
+        "geneType": "ONCOGENE",
+        "grch37Isoform": "ENST00000260795",
+        "grch37RefSeq": "NM_000142.5",
+        "grch38Isoform": "ENST00000440486",
+        "grch38RefSeq": "NM_000142.5",
+        "geneAliases": [
+          "JTK4",
+          "ACH",
+          "CEK2",
+          "CD333"
+        ],
+        "genesets": []
+      },
+      "consequence": {
+        "term": "frameshift_variant",
+        "isGenerallyTruncating": true,
+        "description": "A sequence variant which causes a disruption of the translational reading frame, because the number of nucleotides inserted or deleted is not a multiple of three"
+      },
+      "alteration": "H284fs*10",
+      "proteinChange": null,
+      "name": "H284fs*10",
+      "refResidues": "H",
+      "proteinStart": 284,
+      "proteinEnd": 284,
+      "variantResidues": null,
+      "referenceGenomes": [
+        "GRCh38",
+        "GRCh37"
+      ]
+    },
+    "mutationEffect": "Likely Gain-of-function",
+    "mutationEffectPmids": [
+      "34272467"
+    ],
+    "mutationEffectAbstracts": [],
+    "oncogenic": "Likely Oncogenic",
+    "oncogenicPmids": [],
+    "oncogenicAbstracts": []
+  },
+  {
+    "mutationEffectDescription": "The FGFR3 E194K mutation is located in the Ig-like C2-type II domain of the protein. In vitro studies with Ba/F3 cells expressing FGFR3 E194K demonstrated this mutation is likely neutral as measured by transformation activity and proliferation comparable to wildtype (PMID: 34272467).",
+    "pathogenic": null,
+    "pathogenicPmids": [],
+    "pathogenicAbstracts": [],
+    "penetrance": null,
+    "cancerRisk": null,
+    "variant": {
+      "gene": {
+        "entrezGeneId": 2261,
+        "hugoSymbol": "FGFR3",
+        "geneType": "ONCOGENE",
+        "grch37Isoform": "ENST00000260795",
+        "grch37RefSeq": "NM_000142.5",
+        "grch38Isoform": "ENST00000440486",
+        "grch38RefSeq": "NM_000142.5",
+        "geneAliases": [
+          "JTK4",
+          "ACH",
+          "CEK2",
+          "CD333"
+        ],
+        "genesets": []
+      },
+      "consequence": {
+        "term": "missense_variant",
+        "isGenerallyTruncating": false,
+        "description": "A sequence variant, that changes one or more bases, resulting in a different amino acid sequence but where the length is preserved"
+      },
+      "alteration": "E194K",
+      "proteinChange": null,
+      "name": "E194K",
+      "refResidues": "E",
+      "proteinStart": 194,
+      "proteinEnd": 194,
+      "variantResidues": "K",
+      "referenceGenomes": [
+        "GRCh38",
+        "GRCh37"
+      ]
+    },
+    "mutationEffect": "Likely Neutral",
+    "mutationEffectPmids": [
+      "34272467"
+    ],
+    "mutationEffectAbstracts": [],
+    "oncogenic": "Likely Neutral",
+    "oncogenicPmids": [],
+    "oncogenicAbstracts": []
+  },
+  {
+    "mutationEffectDescription": "The FGFR3 K650N mutation is located in the kinase domain of the protein (PMID: 19749790). This mutation has been found as a germline mutation in hypochondroplasia (PMID: 20453470). Expression of this mutation in vitro demonstrated that it is activating as measured by increased protein activity compared to wildtype (PMID: 11055896).",
+    "pathogenic": null,
+    "pathogenicPmids": [],
+    "pathogenicAbstracts": [],
+    "penetrance": null,
+    "cancerRisk": null,
+    "variant": {
+      "gene": {
+        "entrezGeneId": 2261,
+        "hugoSymbol": "FGFR3",
+        "geneType": "ONCOGENE",
+        "grch37Isoform": "ENST00000260795",
+        "grch37RefSeq": "NM_000142.5",
+        "grch38Isoform": "ENST00000440486",
+        "grch38RefSeq": "NM_000142.5",
+        "geneAliases": [
+          "JTK4",
+          "ACH",
+          "CEK2",
+          "CD333"
+        ],
+        "genesets": []
+      },
+      "consequence": {
+        "term": "missense_variant",
+        "isGenerallyTruncating": false,
+        "description": "A sequence variant, that changes one or more bases, resulting in a different amino acid sequence but where the length is preserved"
+      },
+      "alteration": "K650N",
+      "proteinChange": null,
+      "name": "K650N",
+      "refResidues": "K",
+      "proteinStart": 650,
+      "proteinEnd": 650,
+      "variantResidues": "N",
+      "referenceGenomes": [
+        "GRCh38",
+        "GRCh37"
+      ]
+    },
+    "mutationEffect": "Likely Gain-of-function",
+    "mutationEffectPmids": [
+      "11055896",
+      "19749790",
+      "20453470"
+    ],
+    "mutationEffectAbstracts": [],
+    "oncogenic": "Likely Oncogenic",
+    "oncogenicPmids": [],
+    "oncogenicAbstracts": []
+  }
+]

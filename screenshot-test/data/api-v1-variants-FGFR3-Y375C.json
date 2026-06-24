@@ -1,0 +1,35 @@
+[
+  {
+    "gene": {
+      "entrezGeneId": 2261,
+      "hugoSymbol": "FGFR3",
+      "grch37Isoform": "ENST00000260795",
+      "grch37RefSeq": "NM_000142.5",
+      "grch38Isoform": "ENST00000440486",
+      "grch38RefSeq": "NM_000142.5",
+      "geneAliases": [
+        "JTK4",
+        "ACH",
+        "CEK2",
+        "CD333"
+      ],
+      "genesets": [],
+      "geneType": "ONCOGENE"
+    },
+    "consequence": {
+      "term": "missense_variant",
+      "isGenerallyTruncating": false,
+      "description": "A sequence variant, that changes one or more bases, resulting in a different amino acid sequence but where the length is preserved"
+    },
+    "alteration": "Y375C",
+    "name": "Y375C",
+    "refResidues": "Y",
+    "proteinStart": 375,
+    "proteinEnd": 375,
+    "variantResidues": "C",
+    "referenceGenomes": [
+      "GRCh37",
+      "GRCh38"
+    ]
+  }
+]

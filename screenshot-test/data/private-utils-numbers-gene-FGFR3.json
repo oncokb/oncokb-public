@@ -1,0 +1,26 @@
+{
+  "highestSensitiveLevel": "LEVEL_1",
+  "highestResistanceLevel": null,
+  "highestDiagnosticImplicationLevel": "LEVEL_Dx2",
+  "highestPrognosticImplicationLevel": "LEVEL_Px1",
+  "highestFdaLevel": "LEVEL_Fda2",
+  "penetrance": null,
+  "gene": {
+    "entrezGeneId": 2261,
+    "hugoSymbol": "FGFR3",
+    "geneType": "ONCOGENE",
+    "grch37Isoform": "ENST00000260795",
+    "grch37RefSeq": "NM_000142.5",
+    "grch38Isoform": "ENST00000440486",
+    "grch38RefSeq": "NM_000142.5",
+    "geneAliases": [
+      "JTK4",
+      "ACH",
+      "CEK2",
+      "CD333"
+    ],
+    "genesets": []
+  },
+  "alteration": 84,
+  "tumorType": null
+}
