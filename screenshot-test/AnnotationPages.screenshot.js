@@ -89,6 +89,12 @@ const brafV600eMelanomaVariantAnnotation = fs.readFileSync(`${DATA_DIR}api-priva
 
 // FGFR3 Y375C page - API response data
 // Mainly test the alternative variant message
+const fgfr3GeneQuery = fs.readFileSync(`${DATA_DIR}api-v1-genes-FGFR3.json`).toString();
+const fgfr3GeneNumbers = fs.readFileSync(`${DATA_DIR}private-utils-numbers-gene-FGFR3.json`).toString();
+const fgfr3BiologicalVariants = fs.readFileSync(`${DATA_DIR}api-private-search-variants-bio-FGFR3.json`).toString();
+const fgfr3ClinicalVariants = fs.readFileSync(`${DATA_DIR}api-private-search-variants-cli-FGFR3.json`).toString();
+const fgfr3EnsemblGenes = fs.readFileSync(`${DATA_DIR}api-private-utils-ensembleGenes-FGFR3.json`).toString();
+const fgfr3Y375cQuery = fs.readFileSync(`${DATA_DIR}api-v1-variants-FGFR3-Y375C.json`).toString();
 const fgfr3Y375cVariantAnnotation = fs.readFileSync(`${DATA_DIR}api-private-utils-variantAnnotation-FGFR3-Y375C.json`).toString();
 
 const genomeNexusClinvarTp53 = fs.readFileSync(
@@ -532,6 +538,57 @@ function getMockResponse(url){
         status: 200,
         contentType: 'application/json',
         body: apcFSHgvsgVariantAnnotation
+      };
+      break;
+
+    // FGFR3 Y375C
+    case `${SERVER_URL}api/private/utils/numbers/gene/FGFR3?germline=false`:
+      res = {
+        status: 200,
+        contentType: 'application/json',
+        body: fgfr3GeneNumbers
+      };
+      break;
+    case `${SERVER_URL}api/v1/genes/lookup?query=FGFR3`:
+      res = {
+        status: 200,
+        contentType: 'application/json',
+        body: fgfr3GeneQuery
+      };
+      break;
+    case `${SERVER_URL}api/private/search/variants/biological?hugoSymbol=FGFR3&germline=false`:
+      res = {
+        status: 200,
+        contentType: 'application/json',
+        body: fgfr3BiologicalVariants
+      };
+      break;
+    case `${SERVER_URL}api/private/search/variants/clinical?hugoSymbol=FGFR3&germline=false`:
+      res = {
+        status: 200,
+        contentType: 'application/json',
+        body: fgfr3ClinicalVariants
+      };
+      break;
+    case `${SERVER_URL}api/private/utils/ensembleGenes?entrezGeneId=2261`:
+      res = {
+        status: 200,
+        contentType: 'application/json',
+        body: fgfr3EnsemblGenes
+      };
+      break;
+    case `${SERVER_URL}api/v1/variants/lookup?hugoSymbol=FGFR3&variant=Y375C`:
+      res = {
+        status: 200,
+        contentType: 'application/json',
+        body: fgfr3Y375cQuery
+      };
+      break;
+    case `${SERVER_URL}api/private/utils/relevantAlterations?referenceGenome=GRCh37&entrezGeneId=2261&alteration=Y375C`:
+      res = {
+        status: 200,
+        contentType: 'application/json',
+        body: '[]'
       };
       break;
     case `${SERVER_URL}api/private/utils/variantAnnotation?hugoSymbol=FGFR3&referenceGenome=GRCh37&alteration=Y375C`:

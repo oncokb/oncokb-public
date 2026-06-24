@@ -1,0 +1,18 @@
+[
+  {
+    "entrezGeneId": 2261,
+    "hugoSymbol": "FGFR3",
+    "geneType": "ONCOGENE",
+    "grch37Isoform": "ENST00000260795",
+    "grch37RefSeq": "NM_000142.5",
+    "grch38Isoform": "ENST00000440486",
+    "grch38RefSeq": "NM_000142.5",
+    "geneAliases": [
+      "JTK4",
+      "ACH",
+      "CEK2",
+      "CD333"
+    ],
+    "genesets": []
+  }
+]
