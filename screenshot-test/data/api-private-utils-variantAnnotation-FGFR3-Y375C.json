@@ -1,0 +1,88 @@
+{
+  "query": {
+    "id": null,
+    "referenceGenome": "GRCh37",
+    "hugoSymbol": "FGFR3",
+    "entrezGeneId": 2261,
+    "alteration": "Y375C",
+    "alterationType": "MUTATION",
+    "svType": null,
+    "tumorType": null,
+    "consequence": "NA",
+    "proteinStart": -1,
+    "proteinEnd": 100000,
+    "hgvs": null,
+    "hgvsInfo": null,
+    "canonicalTranscript": null,
+    "germline": false
+  },
+  "geneExist": true,
+  "variantExist": false,
+  "mutationEffect": {
+    "knownEffect": "Unknown",
+    "description": "",
+    "citations": {
+      "pmids": [],
+      "abstracts": []
+    }
+  },
+  "highestSensitiveLevel": null,
+  "highestResistanceLevel": null,
+  "highestDiagnosticImplicationLevel": null,
+  "highestPrognosticImplicationLevel": null,
+  "geneSummary": "FGFR3, a receptor tyrosine kinase, is altered by mutation, chromosomal rearrangement or amplification in various cancers, most frequently in bladder cancer.",
+  "variantSummary": "The FGFR3 Y375C mutation has not specifically been reviewed by the OncoKB team, and therefore its biological significance is unknown.",
+  "tumorTypeSummary": "",
+  "prognosticSummary": "",
+  "diagnosticSummary": "",
+  "diagnosticImplications": [],
+  "prognosticImplications": [],
+  "treatments": [],
+  "dataVersion": "v7.2",
+  "lastUpdate": "01/10/2017",
+  "alleleExist": false,
+  "oncogenic": "Unknown",
+  "hotspot": false,
+  "highestFdaLevel": null,
+  "otherSignificantSensitiveLevels": [],
+  "otherSignificantResistanceLevels": [],
+  "exon": null,
+  "background": "FGFR3 is a receptor tyrosine kinase that is a member of the fibroblast growth factor receptor (FGFR) family. Binding of FGF ligands to FGFR3 results in the rapid dimerization and activation of downstream signaling pathways including the PI3K/AKT and MAPK pathways (PMID: 28030802). FGFR3 is most highly expressed in neuronal and sensory cell types and FGFR3 signaling contributes to a variety of cellular functions including proliferation, differentiation, cell migration and apoptosis (PMID: 7542215, 20094046). Alternative splicing events in the FGFR3 gene generate two isoforms, FGFR3b and FGFR3c, which have unique tissue expression patterns and ligand-binding specificity (PMID: 8663044, 7512569). Germline mutations in FGFR3 have been identified in syndromes of craniosynostosis, which are characterized by abnormal bone development, in addition to skin and hair follicle disorders (PMID: 10541159, 17568799). Somatic activating mutations in FGFR3 have been identified in up to 70% of bladder cancers and in a low percentage of other solid tumor types (PMID: 11395371, 12743143, 16338952). In addition, a specific FGFR3 translocation is observed in approximately 15% of patients with multiple myeloma, resulting in constitutive expression of FGFR3 (PMID: 17107900). Currently, a number of small molecule inhibitors of the FGFR proteins are in use, with the major difference among them being their specificity to FGFR versus other receptor tyrosine kinases (RTKs) (PMID: PMID: 23696246, 24265351).",
+  "alternativeOncoKbVariant": null,
+  "alteration": {
+    "gene": {
+      "entrezGeneId": 2261,
+      "hugoSymbol": "FGFR3",
+      "geneType": "ONCOGENE",
+      "grch37Isoform": "ENST00000260795",
+      "grch37RefSeq": "NM_000142.5",
+      "grch38Isoform": "ENST00000440486",
+      "grch38RefSeq": "NM_000142.5",
+      "geneAliases": [
+        "JTK4",
+        "ACH",
+        "CEK2",
+        "CD333"
+      ],
+      "genesets": []
+    },
+    "consequence": {
+      "term": "NA",
+      "isGenerallyTruncating": false,
+      "description": null
+    },
+    "alteration": "Y375C",
+    "proteinChange": null,
+    "name": "Y375C",
+    "refResidues": null,
+    "proteinStart": -1,
+    "proteinEnd": 100000,
+    "variantResidues": null,
+    "referenceGenomes": [
+      "GRCh37"
+    ]
+  },
+  "tumorTypes": [],
+  "vue": false,
+  "vus": false
+}

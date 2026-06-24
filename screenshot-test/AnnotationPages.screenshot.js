@@ -87,6 +87,10 @@ const brafV600eHairyCellLeukemiaVariantAnnotation = fs.readFileSync(`${DATA_DIR}
 // Mainly test the therapeutic/fda data for solid disease
 const brafV600eMelanomaVariantAnnotation = fs.readFileSync(`${DATA_DIR}api-private-utils-variantAnnotation-BRAF-V600E-MEL.json`).toString();
 
+// FGFR3 Y375C page - API response data
+// Mainly test the alternative variant message
+const fgfr3Y375cVariantAnnotation = fs.readFileSync(`${DATA_DIR}api-private-utils-variantAnnotation-FGFR3-Y375C.json`).toString();
+
 const genomeNexusClinvarTp53 = fs.readFileSync(
   `${DATA_DIR}genome-nexus-clinvar-TP53-c.1000G-C.json`
 ).toString();
@@ -530,8 +534,13 @@ function getMockResponse(url){
         body: apcFSHgvsgVariantAnnotation
       };
       break;
-
-
+    case `${SERVER_URL}api/private/utils/variantAnnotation?hugoSymbol=FGFR3&referenceGenome=GRCh37&alteration=Y375C`:
+      res = {
+        status: 200,
+        contentType: 'application/json',
+        body: fgfr3Y375cVariantAnnotation
+      };
+      break;
 
     default:
       res = undefined
