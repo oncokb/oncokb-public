@@ -14,22 +14,35 @@ export default function NewsContent062026() {
     <>
       <ul>
         <li>
+          OncoKB™ Annotator v4.0 now supports germline annotations. See changes{' '}
+          <a href="https://github.com/oncokb/oncokb-annotator#v40">here</a>.
+        </li>
+        <li>
+          We now support MSK Single Sign-On (SSO), allowing Memorial Sloan
+          Kettering employees to access the platform using their institutional
+          credentials.
+        </li>
+        <li>
           To align with the FDA-approved{' '}
           <a href="https://www.thermofisher.com/us/en/home/clinical/diagnostic-testing/condition-disease-diagnostics/oncology-diagnostics/oncomine-dx-target-test/oncomine-dx-target-test-us-only.html">
             companion diagnostic
           </a>{' '}
           for trastuzumab deruxtecan (T-DXd), the Level 1 annotation for ERBB2
           alterations associated with T-DXd in non-small cell lung cancer has
-          been updated from <strong>*ERBB2</strong> Oncogenic Mutations* to{' '}
-          <strong>
-            <em>ERBB2</em>
-          </strong>{' '}
+          been updated from{' '}
+          <em>
+            <strong>ERBB2</strong> Oncogenic Mutations
+          </em>{' '}
+          to{' '}
+          <em>
+            <strong>ERBB2</strong>
+          </em>{' '}
           <strong>
             Oncogenic Missense Mutations and Exon 20 In-Frame Insertions
-            (770_831ins)*
+            (770_831ins)
           </strong>
-          .* As a result, ERBB2 fusions and in-frame insertions outside exon 20
-          are no longer included in this Level 1 association.
+          <em>.</em> As a result, ERBB2 fusions and in-frame insertions outside
+          exon 20 are no longer included in this Level 1 association.
         </li>
       </ul>
       <p>
