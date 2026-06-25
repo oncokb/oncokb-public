@@ -1,3 +1,5 @@
+- OncoKB™ Annotator v4.0 now supports germline annotations. See changes [here](https://github.com/oncokb/oncokb-annotator#v40).
+- We now support MSK Single Sign-On (SSO), allowing Memorial Sloan Kettering employees to access the platform using their institutional credentials.
 - To align with the FDA-approved [companion diagnostic](https://www.thermofisher.com/us/en/home/clinical/diagnostic-testing/condition-disease-diagnostics/oncology-diagnostics/oncomine-dx-target-test/oncomine-dx-target-test-us-only.html) for trastuzumab deruxtecan (T-DXd), the Level 1 annotation for ERBB2 alterations associated with T-DXd in non-small cell lung cancer has been updated from **\*ERBB2** Oncogenic Mutations\* to **_ERBB2_** **Oncogenic Missense Mutations and Exon 20 In-Frame Insertions (770_831ins)\***.\* As a result, ERBB2 fusions and in-frame insertions outside exon 20 are no longer included in this Level 1 association.
 
 **Updated Therapeutic Implications**
