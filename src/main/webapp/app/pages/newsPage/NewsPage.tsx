@@ -53,7 +53,7 @@ interface NewsPageState {
   softwareReleases: SoftwareRelease[];
 }
 
-const RELEASE_NOTES_REPO = 'bprize15/oncokb';
+const RELEASE_NOTES_REPO = 'oncokb/oncokb';
 const RELEASE_NOTES_RAW_URL = `https://raw.githubusercontent.com/${RELEASE_NOTES_REPO}/refs/heads/master/release-notes`;
 const RELEASE_NOTES_DISPLAY_URL = `https://github.com/${RELEASE_NOTES_REPO}/blob/master`;
 const RELEASE_NOTES_API_URL = `https://api.github.com/repos/${RELEASE_NOTES_REPO}/contents/release-notes`;
