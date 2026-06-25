@@ -63,6 +63,7 @@ export const ONCOKB_NEWS_GROUP_SUBSCRIPTION_LINK =
   'http://groups.google.com/group/oncokb-news/boxsubscribe';
 
 export const ONCOKB_CONTACT_EMAIL = 'contact@oncokb.org';
+export const ONCOKB_DEV_EMAIL = 'dev@oncokb.org';
 export const ONCOKB_LICENSE_EMAIL = 'licenses@oncokb.org';
 export const GRID_BREAKPOINTS = {
   SM: 576,
