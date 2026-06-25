@@ -14,35 +14,50 @@ export default function NewsContent062026() {
     <>
       <ul>
         <li>
-          OncoKB™ Annotator v4.0 now supports germline annotations. See changes{' '}
+          Registered users may now take advantage of the OncoKB™ Annotator v4.0
+          tool to annotate germline variant datasets! Please note however, not
+          all somatic annotation formats have corresponding germline support.
+          Germline annotation is currently available for supported HGVSg,
+          genomic location, and HGVSc query formats only. Make sure to read all
+          changes{' '}
           <a href="https://github.com/oncokb/oncokb-annotator#v40">here</a>.
         </li>
         <li>
-          We now support MSK Single Sign-On (SSO), allowing Memorial Sloan
-          Kettering employees to access the platform using their institutional
-          credentials.
-        </li>
-        <li>
-          To align with the FDA-approved{' '}
+          Trastuzumab deruxtecan (T-DXd) is{' '}
+          <a href="https://www.accessdata.fda.gov/drugsatfda_docs/label/2025/761139s032s035lbl.pdf">
+            FDA-approved in non-small cell lung cancer (NSCLC) with activating
+            HER2 (<em>ERBB2</em>) mutations
+          </a>
+          , as detected by an FDA-approved test. To align with the FDA-approved
+          approved test (
           <a href="https://www.thermofisher.com/us/en/home/clinical/diagnostic-testing/condition-disease-diagnostics/oncology-diagnostics/oncomine-dx-target-test/oncomine-dx-target-test-us-only.html">
             companion diagnostic
-          </a>{' '}
-          for trastuzumab deruxtecan (T-DXd), the Level 1 annotation for ERBB2
-          alterations associated with T-DXd in non-small cell lung cancer has
-          been updated from{' '}
+          </a>
+          ) for T-DXd , the Level 1 annotation for <em>ERBB2</em> alterations
+          has been updated from{' '}
           <em>
-            <strong>ERBB2</strong> Oncogenic Mutations
+            ERBB2{' '}
+            <em>
+              <Link to="/gene/ERBB2/somatic/Oncogenic%20Mutations">
+                Oncogenic Mutations
+              </Link>{' '}
+              to{' '}
+              <em>
+                <strong>ERBB2</strong>
+              </em>{' '}
+              <Link to="/gene/ERBB2/somatic/Oncogenic%20Missense%20Mutations">
+                **Oncogenic Missense Mutations
+              </Link>
+            </em>
           </em>{' '}
-          to{' '}
-          <em>
-            <strong>ERBB2</strong>
-          </em>{' '}
+          and{' '}
           <strong>
-            Oncogenic Missense Mutations and Exon 20 In-Frame Insertions
-            (770_831ins)
-          </strong>
-          <em>.</em> As a result, ERBB2 fusions and in-frame insertions outside
-          exon 20 are no longer included in this Level 1 association.
+            <Link to="/gene/ERBB2/somatic/Exon%2020%20in-frame%20insertions">
+              Exon 20 In-Frame Insertions (770_831ins)
+            </Link>
+          </strong>{' '}
+          and <em>ERBB2</em> fusions and in-frame insertions outside exon 20 are
+          no longer considered Level 1 alterations in NSCLC.
         </li>
       </ul>
       <p>
@@ -101,7 +116,10 @@ export default function NewsContent062026() {
               </td>
               <td>Asciminib</td>
               <td>
-                PMID:{' '}
+                Inclusion of the listed ABL1 mutations in association with
+                Asciminib as &quot;contraindicated” in the Chronic Myelogenous
+                Leukemia NCCN Guidelines and “associated with resistance” in the
+                Acute Lymphoblastic Leukemia NCCN Guidelines; PMID:{' '}
                 <a href="https://pubmed.ncbi.nlm.nih.gov/40334072/">40334072</a>
                 ,{' '}
                 <a href="https://pubmed.ncbi.nlm.nih.gov/39300220/">39300220</a>
@@ -300,7 +318,10 @@ export default function NewsContent062026() {
               </td>
               <td>Asciminib (Level R1)</td>
               <td>
-                PMID:{' '}
+                Inclusion of the listed ABL1 mutations in association with
+                Asciminib as &quot;contraindicated” in the Chronic Myelogenous
+                Leukemia NCCN Guidelines and “associated with resistance” in the
+                Acute Lymphoblastic Leukemia NCCN Guidelines; PMID:{' '}
                 <a href="https://pubmed.ncbi.nlm.nih.gov/40334072/">40334072</a>
                 ,{' '}
                 <a href="https://pubmed.ncbi.nlm.nih.gov/39300220/">39300220</a>
