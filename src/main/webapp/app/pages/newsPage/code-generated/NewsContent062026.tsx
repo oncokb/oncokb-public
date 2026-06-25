@@ -34,30 +34,26 @@ export default function NewsContent062026() {
             companion diagnostic
           </a>
           ) for T-DXd , the Level 1 annotation for <em>ERBB2</em> alterations
-          has been updated from{' '}
-          <em>
-            ERBB2{' '}
-            <em>
-              <Link to="/gene/ERBB2/somatic/Oncogenic%20Mutations">
-                Oncogenic Mutations
-              </Link>{' '}
-              to{' '}
-              <em>
-                <strong>ERBB2</strong>
-              </em>{' '}
-              <Link to="/gene/ERBB2/somatic/Oncogenic%20Missense%20Mutations">
-                **Oncogenic Missense Mutations
-              </Link>
-            </em>
-          </em>{' '}
-          and{' '}
+          has been updated from _ERBB2 _
+          <Link to="/gene/ERBB2/somatic/Oncogenic%20Mutations">
+            Oncogenic Mutations
+          </Link>{' '}
+          to{' '}
           <strong>
+            <em>ERBB2</em>{' '}
+            <Link to="/gene/ERBB2/somatic/Oncogenic%20Missense%20Mutations">
+              Oncogenic Missense Mutations
+            </Link>
+          </strong>{' '}
+          and *
+          <em>
             <Link to="/gene/ERBB2/somatic/Exon%2020%20in-frame%20insertions">
               Exon 20 In-Frame Insertions (770_831ins)
             </Link>
-          </strong>{' '}
-          and <em>ERBB2</em> fusions and in-frame insertions outside exon 20 are
-          no longer considered Level 1 alterations in NSCLC.
+            *
+          </em>{' '}
+          and *ERBB2* fusions and in-frame insertions outside exon 20 are no
+          longer considered Level 1 alterations in NSCLC.
         </li>
       </ul>
       <p>
