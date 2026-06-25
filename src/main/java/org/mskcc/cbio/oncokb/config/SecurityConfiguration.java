@@ -1,16 +1,12 @@
 package org.mskcc.cbio.oncokb.config;
 
 import org.mskcc.cbio.oncokb.security.AuthoritiesConstants;
-import org.mskcc.cbio.oncokb.security.DomainUserDetailsService;
 import org.mskcc.cbio.oncokb.security.uuid.TokenProvider;
 import org.mskcc.cbio.oncokb.security.uuid.UUIDConfigurer;
 import org.springframework.context.annotation.Bean;
-import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.Import;
 import org.springframework.http.HttpMethod;
-import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.config.annotation.method.configuration.EnableGlobalMethodSecurity;
-import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.builders.WebSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
@@ -24,45 +20,25 @@ import org.springframework.security.web.header.writers.ReferrerPolicyHeaderWrite
 import org.springframework.web.filter.CorsFilter;
 import org.zalando.problem.spring.web.advice.security.SecurityProblemSupport;
 
-@Configuration
 @EnableWebSecurity
 @EnableGlobalMethodSecurity(prePostEnabled = true, securedEnabled = true)
 @Import(SecurityProblemSupport.class)
-public class TokenSecurityConfiguration extends WebSecurityConfigurerAdapter {
+public class SecurityConfiguration extends WebSecurityConfigurerAdapter {
 
     private final TokenProvider tokenProvider;
+
     private final CorsFilter corsFilter;
     private final SecurityProblemSupport problemSupport;
-    private final DomainUserDetailsService domainUserDetailsService;
 
-    public TokenSecurityConfiguration(
-        TokenProvider tokenProvider,
-        CorsFilter corsFilter,
-        SecurityProblemSupport problemSupport,
-        DomainUserDetailsService domainUserDetailsService
-    ) {
+    public SecurityConfiguration(TokenProvider tokenProvider, CorsFilter corsFilter, SecurityProblemSupport problemSupport) {
         this.tokenProvider = tokenProvider;
         this.corsFilter = corsFilter;
         this.problemSupport = problemSupport;
-        this.domainUserDetailsService = domainUserDetailsService;
     }
 
     @Bean
     public PasswordEncoder passwordEncoder() {
         return new BCryptPasswordEncoder();
-    }
-
-    @Override
-    protected void configure(AuthenticationManagerBuilder auth) throws Exception {
-        auth
-            .userDetailsService(domainUserDetailsService)
-            .passwordEncoder(passwordEncoder());
-    }
-
-    @Bean
-    @Override
-    public AuthenticationManager authenticationManagerBean() throws Exception {
-        return super.authenticationManagerBean();
     }
 
     @Override
@@ -83,7 +59,8 @@ public class TokenSecurityConfiguration extends WebSecurityConfigurerAdapter {
     }
 
     @Override
-    protected void configure(HttpSecurity http) throws Exception {
+    public void configure(HttpSecurity http) throws Exception {
+        // @formatter:off
         http
             .csrf()
             .disable()
@@ -116,10 +93,11 @@ public class TokenSecurityConfiguration extends WebSecurityConfigurerAdapter {
             .antMatchers("/api/register/grace-period-blacklist").permitAll()
             .antMatchers("/api/activate").permitAll()
             .antMatchers("/api/slack").permitAll()
+            // Permits the api swagger definitions through proxy
             .antMatchers("/api/v1/v2/api-docs").permitAll()
             .antMatchers("/api/private/utils/data/**").hasAnyAuthority(AuthoritiesConstants.DATA_DOWNLOAD, AuthoritiesConstants.PREMIUM_USER)
 
-            .antMatchers("/api/v1/annotate/sample").hasAnyAuthority(AuthoritiesConstants.PREMIUM_USER, AuthoritiesConstants.ADMIN)
+            .antMatchers("/api/v1/annotate/sample").hasAnyAuthority(AuthoritiesConstants.PREMIUM_USER, AuthoritiesConstants.ADMIN) // Order matters here
             .antMatchers("/api/v1/annotate/**").hasAnyAuthority(AuthoritiesConstants.API, AuthoritiesConstants.ROLE_SERVICE_ACCOUNT)
 
             .antMatchers("/api/v1/genes/lookup").hasAnyAuthority(AuthoritiesConstants.PUBLIC_WEBSITE, AuthoritiesConstants.USER, AuthoritiesConstants.ADMIN)
@@ -175,11 +153,13 @@ public class TokenSecurityConfiguration extends WebSecurityConfigurerAdapter {
 
             .antMatchers("/api/**").hasAnyAuthority(AuthoritiesConstants.PUBLIC_WEBSITE, AuthoritiesConstants.USER)
 
+
             .antMatchers("/management/**").hasAuthority(AuthoritiesConstants.ADMIN)
         .and()
             .httpBasic()
         .and()
             .apply(securityConfigurerAdapter());
+        // @formatter:on
     }
 
     private UUIDConfigurer securityConfigurerAdapter() {

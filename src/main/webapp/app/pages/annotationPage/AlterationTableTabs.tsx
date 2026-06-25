@@ -29,10 +29,7 @@ import {
   getDefaultColumnDefinition,
   IAlteration,
 } from 'app/shared/utils/Utils';
-import {
-  AlterationPageLink,
-  getLoginRouteForRegister,
-} from 'app/shared/utils/UrlUtils';
+import { AlterationPageLink } from 'app/shared/utils/UrlUtils';
 import { Citations } from 'app/shared/api/generated/OncoKbAPI';
 import { CitationTooltip } from 'app/components/CitationTooltip';
 import { getTabDefaultActiveKey } from 'app/shared/utils/TempAnnotationUtils';
@@ -281,8 +278,8 @@ export default class AlterationTableTabs extends React.Component<
                   <span>
                     Get access to our treatment descriptions by{' '}
                     <Link to={PAGE_ROUTE.LOGIN}> logging in </Link> or by{' '}
-                    <Link to={getLoginRouteForRegister()}>registering</Link>{' '}
-                    an account.
+                    <Link to={PAGE_ROUTE.REGISTER}>registering</Link> an
+                    account.
                   </span>
                 }
               />

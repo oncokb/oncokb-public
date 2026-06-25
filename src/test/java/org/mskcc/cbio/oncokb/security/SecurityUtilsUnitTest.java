@@ -3,15 +3,11 @@ package org.mskcc.cbio.oncokb.security;
 import org.junit.jupiter.api.Test;
 import org.mskcc.cbio.oncokb.domain.User;
 import org.mskcc.cbio.oncokb.domain.enumeration.LicenseType;
-import org.springframework.security.authentication.TestingAuthenticationToken;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.context.SecurityContext;
 import org.springframework.security.core.context.SecurityContextHolder;
-import org.springframework.security.oauth2.client.registration.ClientRegistration;
-import org.springframework.security.oauth2.core.AuthorizationGrantType;
-import org.springframework.web.util.UriComponentsBuilder;
 
 import java.time.Duration;
 import java.time.Instant;
@@ -19,7 +15,6 @@ import java.time.LocalDate;
 import java.time.ZoneOffset;
 import java.util.ArrayList;
 import java.util.Collection;
-import java.util.Collections;
 import java.util.Optional;
 import java.util.UUID;
 
@@ -147,54 +142,6 @@ public class SecurityUtilsUnitTest {
             SecurityUtils.getActivationGracePeriodDaysRemaining(flooredUser, LicenseType.COMMERCIAL);
 
         assertThat(olderUserDaysRemaining).isEqualTo(flooredUserDaysRemaining);
-    }
-
-    @Test
-    public void getKeycloakLogoutURLUsesIdTokenWhenAuthenticationMatchesExpectedType() {
-        ClientRegistration clientRegistration = createClientRegistration();
-        UsernamePasswordAuthenticationToken authentication =
-            new UsernamePasswordAuthenticationToken("user", "token-value");
-
-        String logoutUrl = SecurityUtils.getKeycloakLogoutURL(
-            clientRegistration,
-            authentication,
-            "https://beta.oncokb.org"
-        );
-
-        assertThat(UriComponentsBuilder.fromUriString(logoutUrl).build().getPath())
-            .isEqualTo("/realms/test/protocol/openid-connect/logout");
-        assertThat(UriComponentsBuilder.fromUriString(logoutUrl).build().getQueryParams())
-            .containsEntry("id_token_hint", Collections.singletonList("token-value"))
-            .containsEntry("post_logout_redirect_uri", Collections.singletonList("https://beta.oncokb.org"));
-    }
-
-    @Test
-    public void getKeycloakLogoutURLFallsBackToLocalRedirectWhenAuthenticationIsNotUsernamePassword() {
-        ClientRegistration clientRegistration = createClientRegistration();
-        TestingAuthenticationToken authentication = new TestingAuthenticationToken("user", "token-value");
-
-        String logoutUrl = SecurityUtils.getKeycloakLogoutURL(
-            clientRegistration,
-            authentication,
-            "https://beta.oncokb.org"
-        );
-
-        assertThat(logoutUrl).isEqualTo("https://beta.oncokb.org");
-    }
-
-    private ClientRegistration createClientRegistration() {
-        return ClientRegistration.withRegistrationId("oidc")
-            .authorizationUri("https://keycloak.example.org/realms/test/protocol/openid-connect/auth")
-            .tokenUri("https://keycloak.example.org/realms/test/protocol/openid-connect/token")
-            .redirectUriTemplate("{baseUrl}/login/oauth2/code/{registrationId}")
-            .clientId("client-id")
-            .authorizationGrantType(AuthorizationGrantType.AUTHORIZATION_CODE)
-            .scope("openid")
-            .userInfoUri("https://keycloak.example.org/realms/test/protocol/openid-connect/userinfo")
-            .userNameAttributeName("sub")
-            .jwkSetUri("https://keycloak.example.org/realms/test/protocol/openid-connect/certs")
-            .clientName("oidc")
-            .build();
     }
 
     private User createUserWithCreatedDate(Instant createdDate) {

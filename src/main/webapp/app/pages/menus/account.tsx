@@ -4,15 +4,13 @@ import { observer } from 'mobx-react';
 import { Dropdown, NavItem } from 'react-bootstrap';
 import NavLink from 'react-bootstrap/NavLink';
 import { PAGE_ROUTE, PAGE_TITLE } from 'app/config/constants';
+import { UserDTO } from 'app/shared/api/generated/API';
 import {
   getGracePeriodDaysRemaining,
   hasGracePeriodAccess,
 } from 'app/shared/utils/GracePeriodUtils';
-import { getLoginRouteForRegister } from 'app/shared/utils/UrlUtils';
-import AuthenticationStore from 'app/store/AuthenticationStore';
 
 const AccountMenuItemsAuthenticated: React.FunctionComponent<{
-  authStore: AuthenticationStore;
   isAdmin: boolean;
   onItemClick: () => void;
 }> = props => (
@@ -24,15 +22,13 @@ const AccountMenuItemsAuthenticated: React.FunctionComponent<{
     >
       {PAGE_TITLE.ACCOUNT_SETTINGS}
     </MenuItem>
-    {!props.authStore.isMskUser && (
-      <MenuItem
-        icon="lock"
-        to={PAGE_ROUTE.ACCOUNT_PASSWORD}
-        onClick={props.onItemClick}
-      >
-        {PAGE_TITLE.ACCOUNT_PASSWORD}
-      </MenuItem>
-    )}
+    <MenuItem
+      icon="lock"
+      to={PAGE_ROUTE.ACCOUNT_PASSWORD}
+      onClick={props.onItemClick}
+    >
+      {PAGE_TITLE.ACCOUNT_PASSWORD}
+    </MenuItem>
     {props.isAdmin ? (
       <>
         <MenuItem
@@ -103,7 +99,7 @@ const AccountMenuItems: React.FunctionComponent<{
     </MenuItem>
     <MenuItem
       icon="sign-in"
-      to={getLoginRouteForRegister()}
+      to={PAGE_ROUTE.REGISTER}
       onClick={props.onItemClick}
     >
       {PAGE_TITLE.REGISTER}
@@ -112,10 +108,10 @@ const AccountMenuItems: React.FunctionComponent<{
 );
 
 interface IAccountMenuProps {
-  authStore: AuthenticationStore;
   isAuthenticated: boolean;
   isAdmin: boolean;
   showAccountText?: boolean;
+  account?: UserDTO;
   onMenuItemClick?: () => void;
 }
 
@@ -153,14 +149,12 @@ export default class AccountMenu extends React.Component<IAccountMenuProps> {
   };
 
   render() {
-    const graceDaysRemaining = getGracePeriodDaysRemaining(
-      this.props.authStore.account
-    );
+    const graceDaysRemaining = getGracePeriodDaysRemaining(this.props.account);
     const showGraceIndicator =
       this.props.isAuthenticated &&
-      hasGracePeriodAccess(this.props.authStore.account) &&
-      this.props.authStore.account?.licenseType !== 'HOSPITAL' &&
-      this.props.authStore.account?.licenseType !== 'ACADEMIC';
+      hasGracePeriodAccess(this.props.account) &&
+      this.props.account?.licenseType !== 'HOSPITAL' &&
+      this.props.account?.licenseType !== 'ACADEMIC';
     const dayLabel = graceDaysRemaining === 1 ? 'day' : 'days';
     const reviewLicenseText = `We are reviewing your license application. Meanwhile, you can view limited content for ${graceDaysRemaining} ${dayLabel}.`;
     return (
@@ -205,7 +199,6 @@ export default class AccountMenu extends React.Component<IAccountMenuProps> {
           )}
           {this.props.isAuthenticated ? (
             <AccountMenuItemsAuthenticated
-              authStore={this.props.authStore}
               isAdmin={this.props.isAdmin}
               onItemClick={this.handleItemClick}
             />

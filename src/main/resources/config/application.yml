@@ -71,23 +71,6 @@ management:
 spring:
   application:
     name: OncoKB
-  security:
-    oauth2:
-      client:
-        provider:
-          oidc:
-            authorization-uri: http://localhost:8085/realms/oncokb-public/protocol/openid-connect/auth
-            token-uri: http://localhost:8085/realms/oncokb-public/protocol/openid-connect/token
-            user-info-uri: http://localhost:8085/realms/oncokb-public/protocol/openid-connect/userinfo
-            jwk-set-uri: http://localhost:8085/realms/oncokb-public/protocol/openid-connect/certs
-            user-name-attribute: preferred_username
-        registration:
-          oidc:
-            client-id: web_app
-            client-secret: CLIENT_SECRET
-            authorization-grant-type: authorization_code
-            redirect-uri: "{baseUrl}/login/oauth2/code/{registrationId}"
-            scope: openid,profile,email
   profiles:
     # The commented value for `active` can be replaced with valid Spring profiles to load.
     # Otherwise, it will be filled in by maven when building the JAR file

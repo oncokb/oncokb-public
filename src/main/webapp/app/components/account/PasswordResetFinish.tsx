@@ -89,7 +89,7 @@ export default class PasswordResetFinish extends React.Component<{
           </div>
         </Alert>
         <Link
-          className="btn btn-outline-primary btn-block font-medium"
+          className="btn btn-primary"
           to={PAGE_ROUTE.ACCOUNT_PASSWORD_RESET_REQUEST}
         >
           Request a new reset link
@@ -151,12 +151,7 @@ export default class PasswordResetFinish extends React.Component<{
             },
           }}
         />
-        <Button
-          block
-          variant="outline-primary"
-          className="font-medium"
-          type="submit"
-        >
+        <Button color="success" type="submit">
           Validate new password
         </Button>
       </AvForm>
