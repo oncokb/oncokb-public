@@ -1,5 +1,4 @@
 import React from 'react';
-import { Link } from 'react-router-dom';
 import {
   AvCheckbox,
   AvCheckboxGroup,
@@ -29,9 +28,6 @@ import {
   LicenseStatus,
   LicenseType,
   ONCOKB_TM,
-  PAGE_ROUTE,
-  KEYCLOAK_IDP_HINT_QUERY_PARAM,
-  MSK_PING_IDP_ALIAS,
   THRESHOLD_TRIAL_TOKEN_VALID_DEFAULT,
 } from 'app/config/constants';
 import { Alert, Button, Col, Row } from 'react-bootstrap';
@@ -67,7 +63,6 @@ export type INewAccountForm = {
   isLargeScreen: boolean;
   byAdmin: boolean;
   defaultLicense?: LicenseType;
-  initialEmail?: string;
   visibleSections?: FormSection[];
   gracePeriodBlacklistedDomains?: string[];
   onSelectLicense?: (newLicenseType: LicenseType | undefined) => void;
@@ -121,7 +116,6 @@ export class NewAccountForm extends React.Component<INewAccountForm> {
 
   constructor(props: INewAccountForm) {
     super(props);
-    this.email = props.initialEmail || '';
     if (props.defaultLicense) {
       this.selectedLicense = props.defaultLicense;
     }
@@ -417,16 +411,6 @@ export class NewAccountForm extends React.Component<INewAccountForm> {
     return this.props.gracePeriodBlacklistedDomains?.includes(domain) ?? false;
   }
 
-  @computed
-  get isMskEmail() {
-    return this.email.trim().toLowerCase().endsWith('@mskcc.org');
-  }
-
-  @computed
-  get mskSsoLoginLink() {
-    return `/oauth2/authorization/oidc?${KEYCLOAK_IDP_HINT_QUERY_PARAM}=${MSK_PING_IDP_ALIAS}`;
-  }
-
   render() {
     return (
       <AvForm
@@ -486,41 +470,6 @@ export class NewAccountForm extends React.Component<INewAccountForm> {
                 </Col>
                 <Col md="9">
                   <AvField
-                    name="email"
-                    label={getAccountInfoTitle(
-                      ACCOUNT_TITLES.EMAIL,
-                      this.selectedLicense
-                    )}
-                    type="email"
-                    value={this.email}
-                    onChange={(event: any) => {
-                      this.email = event.target.value;
-                    }}
-                    validate={EMAIL_VAL}
-                  />
-                  {this.isMskEmail ? (
-                    <Alert variant={'warning'}>
-                      <i className={'mr-2 fa fa-exclamation-triangle'}></i>
-                      <span>
-                        MSK users should not use this registration form. Please{' '}
-                        <Link to={this.mskSsoLoginLink}>
-                          sign in with MSK SSO
-                        </Link>{' '}
-                        to complete a quick account setup.
-                      </span>
-                    </Alert>
-                  ) : null}
-                  {this.showNoGracePeriodWarning ? (
-                    <Alert variant={'warning'}>
-                      <i className={'mr-2 fa fa-exclamation-triangle'}></i>
-                      <span>
-                        You are using a personal email address. You will not
-                        receive a grace period while your account request is
-                        under review.
-                      </span>
-                    </Alert>
-                  ) : null}
-                  <AvField
                     name="firstName"
                     autoComplete="given-name"
                     label={getAccountInfoTitle(
@@ -564,6 +513,29 @@ export class NewAccountForm extends React.Component<INewAccountForm> {
                       ...TEXT_VAL,
                     }}
                   />
+                  <AvField
+                    name="email"
+                    label={getAccountInfoTitle(
+                      ACCOUNT_TITLES.EMAIL,
+                      this.selectedLicense
+                    )}
+                    type="email"
+                    value={this.email}
+                    onChange={(event: any) => {
+                      this.email = event.target.value;
+                    }}
+                    validate={EMAIL_VAL}
+                  />
+                  {this.showNoGracePeriodWarning ? (
+                    <Alert variant={'warning'}>
+                      <i className={'mr-2 fa fa-exclamation-triangle'}></i>
+                      <span>
+                        You are using a personal email address. You will not
+                        receive a grace period while your account request is
+                        under review.
+                      </span>
+                    </Alert>
+                  ) : null}
                   {this.showEmailMismatchConfirmation ? (
                     <Alert variant={'warning'}>
                       <i className={'mr-2 fa fa-exclamation-triangle'}></i>

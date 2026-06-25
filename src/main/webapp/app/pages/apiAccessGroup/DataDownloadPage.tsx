@@ -29,7 +29,6 @@ import { Linkout } from 'app/shared/links/Linkout';
 import { If, Then, Else } from 'react-if';
 import { getPageTitle } from 'app/shared/utils/Utils';
 import { Helmet } from 'react-helmet-async';
-import { getLoginRouteForRegister } from 'app/shared/utils/UrlUtils';
 
 type DownloadAvailabilityWithDate = DataRelease & DownloadAvailability;
 
@@ -205,11 +204,7 @@ export default class DataDownloadPage extends React.Component<{
 
   @action
   onApplyForLicense = () => {
-    if (this.props.authenticationStore.isUserAuthenticated) {
-      this.props.routing.history.push(PAGE_ROUTE.REGISTER);
-    } else {
-      this.props.routing.history.push(getLoginRouteForRegister());
-    }
+    this.props.routing.history.push(PAGE_ROUTE.REGISTER);
   };
 
   @computed
@@ -331,10 +326,8 @@ export default class DataDownloadPage extends React.Component<{
                   all other uses require a fee. Please review the{' '}
                   <Link to={PAGE_ROUTE.TERMS}>terms of use</Link> before
                   proceeding. <CitationText /> Please visit the{' '}
-                  <Link to={getLoginRouteForRegister()}>
-                    registration page
-                  </Link>{' '}
-                  to apply for a license.
+                  <Link to={PAGE_ROUTE.REGISTER}>registration page</Link> to
+                  apply for a license.
                 </p>
                 <p>
                   You can also use our{' '}

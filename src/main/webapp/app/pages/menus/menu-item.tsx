@@ -1,11 +1,10 @@
 import React from 'react';
 import { NavLink as Link } from 'react-router-dom';
 import DropdownItem from 'react-bootstrap/DropdownItem';
-import { LocationDescriptor } from 'history';
 
 export interface IMenuItem {
   icon: string;
-  to: LocationDescriptor;
+  to: string;
   id?: string;
   onClick?: () => void;
 }

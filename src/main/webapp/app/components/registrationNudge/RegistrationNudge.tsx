@@ -6,7 +6,6 @@ import WindowStore from 'app/store/WindowStore';
 import AuthenticationStore from 'app/store/AuthenticationStore';
 import { useLocation, Link } from 'react-router-dom';
 import { PAGE_ROUTE } from 'app/config/constants';
-import { getLoginRouteForRegister } from 'app/shared/utils/UrlUtils';
 
 export function parseCookieNumber(
   cookieHeader: string,
@@ -113,7 +112,7 @@ export default function RegistrationNudgeInternal({
               Enjoying OncoKB?{' '}
               <Link
                 id="nudge-register-link"
-                to={getLoginRouteForRegister()}
+                to={PAGE_ROUTE.REGISTER}
                 onClick={dismissNudge}
               >
                 Register

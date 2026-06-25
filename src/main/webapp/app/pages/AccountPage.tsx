@@ -239,13 +239,12 @@ export class AccountPage extends React.Component<IRegisterProps> {
     const noApiAccess = (
       <span>
         You do not have API access. Click{' '}
-        <button
-          type="button"
-          className="btn btn-link p-0 align-baseline"
+        <span
+          style={{ cursor: 'pointer' }}
           onClick={() => (this.showApiAccessConfirmModal = true)}
         >
           HERE
-        </button>{' '}
+        </span>{' '}
         to request API access.
       </span>
     );

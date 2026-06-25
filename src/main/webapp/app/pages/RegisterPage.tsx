@@ -192,13 +192,6 @@ export class RegisterPage extends React.Component<IRegisterProps> {
     return this.getErrorMessage(getErrorMessage(this.registerError));
   }
 
-  @computed
-  get initialEmail() {
-    const queryStrings = QueryString.parse(this.props.routing.location.search);
-    const email = queryStrings.email;
-    return typeof email === 'string' ? email : undefined;
-  }
-
   @autobind
   @action
   onSelectLicense(license: LicenseType | undefined) {
@@ -285,7 +278,6 @@ export class RegisterPage extends React.Component<IRegisterProps> {
         <NewAccountForm
           isLargeScreen={this.props.windowStore.isLargeScreen}
           defaultLicense={this.selectedLicense}
-          initialEmail={this.initialEmail}
           onSubmit={this.handleValidSubmit}
           visibleSections={this.visibleSections}
           gracePeriodBlacklistedDomains={this.blacklistedDomains}

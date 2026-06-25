@@ -248,40 +248,7 @@ For example, to start a mysql database in a docker container, run:
 docker-compose -f src/main/docker/mysql.yml up -d
 ```
 
-To start a local Keycloak instance for test or development authentication flows, run:
-
-```
-docker-compose -f src/main/docker/keycloak.yml up -d
-```
-
-This stack imports the `oncokb-public` realm from
-`src/main/docker/keycloak/oncokb-public-realm.json` on startup. The imported
-OIDC client is:
-
-- realm: `oncokb-public`
-- client-id: `web_app`
-- client-secret: `CLIENT_SECRET`
-
-The sample realm also creates two local Keycloak users:
-
-- username: `dev@mskcc.org`
-- username: `test@myorg.org`
-- password: `password`
-
-For the OncoKB app to accept those logins, the same emails must also exist as
-OncoKB users in your local application database. You can seed both app users and
-long-lived local bearer tokens with:
-
-```bash
-scripts/bootstrap-local-test-users.sh
-```
-
-The script prints the generated tokens for:
-
-- `dev@mskcc.org`
-- `test@myorg.org`
-
-To stop a service and remove its container, run the matching `down` command, for example:
+To stop it and remove the container, run:
 
 ```
 docker-compose -f src/main/docker/mysql.yml down

@@ -395,19 +395,6 @@ public class UserService {
         return user;
     }
 
-    public void updateUserJobTitle(User user, String jobTitle) {
-        if (StringUtils.isBlank(jobTitle)) {
-            return;
-        }
-        userDetailsRepository.findOneByUser(user).ifPresent(userDetails -> {
-            if (!Objects.equals(userDetails.getJobTitle(), jobTitle)) {
-                userDetails.setJobTitle(jobTitle);
-                userDetailsRepository.save(userDetails);
-                this.clearUserCaches(user);
-            }
-        });
-    }
-
     public Optional<UserDTO> updateUserFromUserDTO(UserDTO userDTO) {
         Optional<UserDTO> updatedUserDTO = Optional.of(userRepository
         .findById(userDTO.getId()))

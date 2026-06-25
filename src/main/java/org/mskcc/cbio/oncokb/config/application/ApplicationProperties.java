@@ -29,7 +29,7 @@ public class ApplicationProperties {
     private RedisProperties redis;
     private String academicEmailClarifyDomain;
     private String googleWebmasterVerification;
-    private EmailAddresses emailAddresses = new EmailAddresses();
+    private EmailAddresses emailAddresses;
     private String tokenUsageCheck;
     private String tokenUsageCheckWhitelist;
     private int publicWebsiteApiThreshold;
@@ -41,7 +41,6 @@ public class ApplicationProperties {
     private RecaptchaProperties recaptcha;
     private RateLimitProperties rateLimit = new RateLimitProperties();
     private TokenStatsProperties tokenStats = new TokenStatsProperties();
-    private KeycloakProperties keycloak = new KeycloakProperties();
 
     public String getName() {
         return name;
@@ -224,13 +223,5 @@ public class ApplicationProperties {
 
     public void setTokenStats(TokenStatsProperties tokenStats) {
         this.tokenStats = tokenStats;
-    }
-
-    public KeycloakProperties getKeycloak() {
-        return keycloak;
-    }
-
-    public void setKeycloak(KeycloakProperties keycloak) {
-        this.keycloak = keycloak;
     }
 }

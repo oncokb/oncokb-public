@@ -125,12 +125,7 @@ export default class AccountPassword extends React.Component<{}> {
             },
           }}
         />
-        <Button
-          block
-          variant="outline-primary"
-          className="font-medium"
-          type="submit"
-        >
+        <Button color="success" type="submit">
           Save
         </Button>
       </AvForm>
@@ -146,7 +141,7 @@ export default class AccountPassword extends React.Component<{}> {
         {this.resetStatus === API_CALL_STATUS.FAILURE
           ? this.getFailureMessage()
           : null}
-        <h2>Change password</h2>
+        <h1>Change password</h1>
         <div>{this.getResetForm()}</div>
       </SmallPageContainer>
     );

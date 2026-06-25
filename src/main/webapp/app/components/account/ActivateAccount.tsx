@@ -70,9 +70,7 @@ export default class ActivateAccount extends React.Component<{
             />
           </Form.Group>
           <Button
-            block
-            variant="outline-primary"
-            className="font-medium"
+            variant="primary"
             disabled={!this.manualKey.trim()}
             onClick={this.submitManualKey}
           >

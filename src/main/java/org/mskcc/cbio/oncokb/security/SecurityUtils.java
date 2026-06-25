@@ -1,11 +1,5 @@
 package org.mskcc.cbio.oncokb.security;
 
-import org.apache.commons.lang3.StringUtils;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-import org.springframework.security.oauth2.client.registration.ClientRegistration;
-import org.springframework.web.util.UriComponentsBuilder;
-
 import java.time.Duration;
 import java.time.Instant;
 import java.time.LocalDate;
@@ -15,7 +9,6 @@ import java.util.UUID;
 import java.util.stream.Stream;
 import org.mskcc.cbio.oncokb.domain.User;
 import org.mskcc.cbio.oncokb.domain.enumeration.LicenseType;
-import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.context.SecurityContext;
@@ -26,11 +19,8 @@ import org.springframework.security.core.userdetails.UserDetails;
  * Utility class for Spring Security.
  */
 public final class SecurityUtils {
-    private static final Logger log = LoggerFactory.getLogger(SecurityUtils.class);
 
     private static final Duration ACTIVATION_GRACE_PERIOD = Duration.ofDays(30);
-    private static final String KEYCLOAK_AUTHORIZATION_PATH = "/protocol/openid-connect/auth";
-    private static final String KEYCLOAK_LOGOUT_PATH = "/protocol/openid-connect/logout";
     // For users created before April 1, 2026, we will use April 1, 2026 as the created date for calculating the grace period end
     // This is to ensure that all users have at least 30 days of grace period, even if they were created a long time ago
     // This should be removed 30 days after April 1st, 2026
@@ -147,41 +137,6 @@ public final class SecurityUtils {
         return ACTIVATION_GRACE_PERIOD.toDays();
     }
 
-    public static String getKeycloakLogoutURL(
-        ClientRegistration clientRegistration,
-        Authentication authentication,
-        String postLogoutRedirectUri
-    ) {
-        // Get keycloak logout endpoint (host/auth/realms/<my_realm>/protocol/openid-connect/logout)
-        String endSessionEndpoint = getEndSessionEndpoint(clientRegistration);
-        if (StringUtils.isBlank(endSessionEndpoint)) {
-            return StringUtils.defaultIfBlank(postLogoutRedirectUri, "/");
-        }
-
-        // Get id token
-        if (authentication instanceof UsernamePasswordAuthenticationToken) {
-            UsernamePasswordAuthenticationToken authToken = (UsernamePasswordAuthenticationToken) authentication;
-            Object credentials = authToken.getCredentials();
-            if (credentials instanceof String) {
-                String idToken = (String) credentials;
-                return UriComponentsBuilder.fromUriString(endSessionEndpoint)
-                    .queryParam("id_token_hint", idToken)
-                    .queryParam("post_logout_redirect_uri", postLogoutRedirectUri)
-                    .build()
-                    .encode()
-                    .toUriString();
-            }
-            log.warn("Skipping Keycloak logout because authentication credentials are not an ID token string.");
-        } else {
-            log.warn(
-                "Skipping Keycloak logout because authentication is not UsernamePasswordAuthenticationToken: {}",
-                authentication == null ? "null" : authentication.getClass().getName()
-            );
-        }
-
-        return StringUtils.defaultIfBlank(postLogoutRedirectUri, "/");
-    }
-
     private static Optional<Instant> getGracePeriodEnd(User user) {
         if (user == null || user.getCreatedDate() == null) {
             return Optional.empty();
@@ -190,26 +145,5 @@ public final class SecurityUtils {
             ? ACTIVATION_GRACE_PERIOD_CREATED_DATE_FLOOR
             : user.getCreatedDate();
         return Optional.of(effectiveCreatedDate.plus(ACTIVATION_GRACE_PERIOD));
-    }
-
-    private static String getEndSessionEndpoint(ClientRegistration clientRegistration) {
-        if (clientRegistration == null) {
-            return null;
-        }
-
-        Object endSessionEndpoint = clientRegistration
-            .getProviderDetails()
-            .getConfigurationMetadata()
-            .get("end_session_endpoint");
-        if (endSessionEndpoint != null) {
-            return endSessionEndpoint.toString();
-        }
-
-        String authorizationUri = clientRegistration.getProviderDetails().getAuthorizationUri();
-        if (StringUtils.endsWith(authorizationUri, KEYCLOAK_AUTHORIZATION_PATH)) {
-            return StringUtils.removeEnd(authorizationUri, KEYCLOAK_AUTHORIZATION_PATH) + KEYCLOAK_LOGOUT_PATH;
-        }
-
-        return null;
     }
 }
