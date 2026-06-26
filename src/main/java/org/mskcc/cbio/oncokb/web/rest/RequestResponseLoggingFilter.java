@@ -21,6 +21,7 @@ public class RequestResponseLoggingFilter extends OncePerRequestFilter {
     RequestResponseLoggingFilter.class
   );
   private static final String REQUEST_ID_HEADER = "X-Request-ID";
+  private static final String USER_AGENT_HEADER = "User-Agent";
   private static final String MDC_REQUEST_ID_KEY = "requestId";
 
   @Override
@@ -31,8 +32,12 @@ public class RequestResponseLoggingFilter extends OncePerRequestFilter {
   )
     throws ServletException, IOException {
     String requestId = request.getHeader(REQUEST_ID_HEADER);
+    String userAgent = request.getHeader(USER_AGENT_HEADER);
     if (requestId == null || requestId.isEmpty()) {
       requestId = UUID.randomUUID().toString();
+    }
+    if (userAgent == null || userAgent.isEmpty()) {
+      userAgent = "unknown";
     }
 
     MDC.put(MDC_REQUEST_ID_KEY, requestId);
@@ -41,6 +46,7 @@ public class RequestResponseLoggingFilter extends OncePerRequestFilter {
       String url = request.getRequestURI();
       String method = request.getMethod();
       LOGGER.info("Incoming Request: {} {}", method, url);
+      LOGGER.info("User Agent: {}", userAgent);
       filterChain.doFilter(request, response);
       int status = response.getStatus();
       LOGGER.info("Response status: {}", status);
