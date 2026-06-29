@@ -8,10 +8,13 @@ import org.mskcc.cbio.oncokb.domain.User;
 import org.mskcc.cbio.oncokb.service.UserService;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContext;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.oauth2.core.oidc.user.OidcUser;
 import org.springframework.security.web.authentication.AuthenticationSuccessHandler;
+import org.springframework.security.web.context.HttpSessionSecurityContextRepository;
+import org.springframework.security.web.context.SecurityContextRepository;
 import org.springframework.stereotype.Component;
 import org.springframework.web.util.UriComponentsBuilder;
 
@@ -40,6 +43,7 @@ public class CustomOAuthSuccessHandler implements AuthenticationSuccessHandler {
     private final DomainUserDetailsService domainUserDetailsService;
     private final UserService userService;
     private final OAuthAutoRegistrationService oauthAutoRegistrationService;
+    private final SecurityContextRepository securityContextRepository = new HttpSessionSecurityContextRepository();
 
     public CustomOAuthSuccessHandler(
         ApplicationProperties applicationProperties,
@@ -85,11 +89,11 @@ public class CustomOAuthSuccessHandler implements AuthenticationSuccessHandler {
                     lastName,
                     getOptionalJobTitle(oidcUser)
                 );
-                setLocalAuthentication(createdUser.getEmail(), oidcUser);
+                setLocalAuthentication(createdUser.getEmail(), oidcUser, request, response);
             } else {
                 User user = existingUser.get();
                 getOptionalJobTitle(oidcUser).ifPresent(jobTitle -> userService.updateUserJobTitle(user, jobTitle));
-                setLocalAuthentication(user.getEmail(), oidcUser);
+                setLocalAuthentication(user.getEmail(), oidcUser, request, response);
             }
 
             response.sendRedirect(buildLoginRedirect(KEYCLOAK_LOGIN_SUCCESS_QUERY_PARAM, Boolean.TRUE.toString()));
@@ -134,11 +138,22 @@ public class CustomOAuthSuccessHandler implements AuthenticationSuccessHandler {
         return "Keycloak account is missing required attribute: " + attribute + ". Please contact " + SUPPORT_EMAIL + ".";
     }
 
-    private void setLocalAuthentication(String email, OidcUser oidcUser) {
+    private void setLocalAuthentication(
+        String email,
+        OidcUser oidcUser,
+        HttpServletRequest request,
+        HttpServletResponse response
+    ) {
         UserDetails userDetails = domainUserDetailsService.loadUserByUsername(email);
         UsernamePasswordAuthenticationToken localAuthentication =
             new UsernamePasswordAuthenticationToken(userDetails, oidcUser.getIdToken().getTokenValue(), userDetails.getAuthorities());
-        SecurityContextHolder.getContext().setAuthentication(localAuthentication);
+
+        // Build a fresh context and persist it explicitly via the SecurityContextRepository
+        // instead of relying on SecurityContextPersistenceFilter's implicit end-of-request save.
+        SecurityContext context = SecurityContextHolder.createEmptyContext();
+        context.setAuthentication(localAuthentication);
+        SecurityContextHolder.setContext(context);
+        securityContextRepository.saveContext(context, request, response);
     }
 
     private boolean isAllowedEmail(String email) {

@@ -139,12 +139,17 @@ application:
     slack-base-url:
     user-registration-channel-id:
   redis:
-    # Add the following if you want to opt in to using Redis
+    # Add the following if you want to opt in to using Redis as the data cache
     # Not using Redis
     enabled: false
     type: 'single'
     password: 'oncokb-public-redis-password'
     address: 'redis://localhost:6379'
+  session:
+    # Idle timeout (seconds) for JDBC-backed HTTP sessions.
+    timeout-seconds: 60
+    # Deletes expired rows from SPRING_SESSION and SPRING_SESSION_ATTRIBUTES once per minute.
+    cleanup-cron: '0 * * * * *'
   email-addresses:
     license-address: licenses@localhost
     registration-address: registration@localhost

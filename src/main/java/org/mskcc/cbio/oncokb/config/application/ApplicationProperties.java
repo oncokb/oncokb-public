@@ -27,6 +27,8 @@ public class ApplicationProperties {
     private ProjectProfile profile;
     private Boolean sitemapEnabled;
     private RedisProperties redis;
+    // JDBC-backed HTTP session config; see HttpSessionConfiguration.
+    private SessionProperties session = new SessionProperties();
     private String academicEmailClarifyDomain;
     private String googleWebmasterVerification;
     private EmailAddresses emailAddresses = new EmailAddresses();
@@ -109,6 +111,14 @@ public class ApplicationProperties {
 
     public void setRedis(RedisProperties redis) {
         this.redis = redis;
+    }
+
+    public SessionProperties getSession() {
+        return session;
+    }
+
+    public void setSession(SessionProperties session) {
+        this.session = session;
     }
 
     public String getGoogleWebmasterVerification() {
