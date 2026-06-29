@@ -1,5 +1,7 @@
 package org.mskcc.cbio.oncokb.config;
 
+import org.apache.commons.lang3.StringUtils;
+import org.mskcc.cbio.oncokb.config.application.ApplicationProperties;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
@@ -37,18 +39,29 @@ public class SessionPrincipalIndexCleanup {
 
     private static final Logger log = LoggerFactory.getLogger(SessionPrincipalIndexCleanup.class);
 
-    private static final String SESSION_NAMESPACE = "spring:session:";
-    private static final String SESSION_KEY_PREFIX = SESSION_NAMESPACE + "sessions:";
-    private static final String PRINCIPAL_INDEX_KEY_PREFIX = SESSION_NAMESPACE +
-        "index:" +
-        FindByIndexNameSessionRepository.PRINCIPAL_NAME_INDEX_NAME +
-        ":";
+    private static final String DEFAULT_SESSION_NAMESPACE = "spring:session";
 
     private final RedisOperations<Object, Object> redisOperations;
     private final StringRedisSerializer stringRedisSerializer = new StringRedisSerializer();
+    private final String sessionKeyPrefix;
+    private final String principalIndexKeyPrefix;
 
-    public SessionPrincipalIndexCleanup(RedisIndexedSessionRepository redisIndexedSessionRepository) {
+    public SessionPrincipalIndexCleanup(RedisIndexedSessionRepository redisIndexedSessionRepository, ApplicationProperties applicationProperties) {
         this.redisOperations = redisIndexedSessionRepository.getSessionRedisOperations();
+        String sessionNamespace = getSessionNamespace(applicationProperties) + ":";
+        this.sessionKeyPrefix = sessionNamespace + "sessions:";
+        this.principalIndexKeyPrefix = sessionNamespace +
+            "index:" +
+            FindByIndexNameSessionRepository.PRINCIPAL_NAME_INDEX_NAME +
+            ":";
+    }
+
+    public static String getSessionNamespace(ApplicationProperties applicationProperties) {
+        String appName = StringUtils.trimToNull(applicationProperties.getName());
+        if (appName == null) {
+            return DEFAULT_SESSION_NAMESPACE;
+        }
+        return DEFAULT_SESSION_NAMESPACE + ":" + appName;
     }
 
     @EventListener(ApplicationReadyEvent.class)
@@ -94,7 +107,7 @@ public class SessionPrincipalIndexCleanup {
         List<String> keys = redisOperations.execute((RedisCallback<List<String>>) connection -> {
             List<String> scannedKeys = new ArrayList<>();
             ScanOptions options = ScanOptions.scanOptions()
-                .match(PRINCIPAL_INDEX_KEY_PREFIX + "*")
+                .match(principalIndexKeyPrefix + "*")
                 .count(100)
                 .build();
 
@@ -127,7 +140,7 @@ public class SessionPrincipalIndexCleanup {
                 log.debug("Skipping Spring Session principal index member with unexpected type {}", sessionId.getClass().getName());
                 continue;
             }
-            if (Boolean.TRUE.equals(redisOperations.hasKey(SESSION_KEY_PREFIX + sessionId))) {
+            if (Boolean.TRUE.equals(redisOperations.hasKey(sessionKeyPrefix + sessionId))) {
                 continue;
             }
 

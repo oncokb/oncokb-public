@@ -147,6 +147,7 @@ application:
     address: 'redis://localhost:6379'
   session:
     # Idle timeout (seconds) for Redis-backed HTTP sessions; only applies when session.redis.enabled is true
+    # Redis keys are scoped to application.name under spring:session:<application.name>
     timeout-seconds: 600
     redis:
       # Redis used to persist HTTP sessions (separate from the data cache above); opt in by enabling

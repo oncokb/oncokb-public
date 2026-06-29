@@ -32,6 +32,7 @@ public class HttpSessionConfiguration extends RedisHttpSessionConfiguration {
 
     public HttpSessionConfiguration(ApplicationProperties applicationProperties) {
         setMaxInactiveIntervalInSeconds(applicationProperties.getSession().getTimeoutSeconds());
+        setRedisNamespace(SessionPrincipalIndexCleanup.getSessionNamespace(applicationProperties));
     }
 
     @Bean
