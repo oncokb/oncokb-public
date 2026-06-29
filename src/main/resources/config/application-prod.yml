@@ -144,7 +144,7 @@ application:
     address: 'redis://oncokb-public-sentinel-redis:6379'
   session:
     # Idle timeout (seconds) for Redis-backed HTTP sessions; only applies when session.redis.enabled is true
-    timeout-seconds: 6
+    timeout-seconds: 600
     redis:
       # Redis used to persist HTTP sessions (separate from the data cache above)
       enabled: true

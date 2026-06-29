@@ -1,63 +1,84 @@
 package org.mskcc.cbio.oncokb.config;
 
 import org.mskcc.cbio.oncokb.config.application.ApplicationProperties;
-import org.redisson.Redisson;
-import org.redisson.api.RedissonClient;
-import org.redisson.config.Config;
-import org.redisson.spring.session.RedissonSessionRepository;
-import org.redisson.spring.session.config.RedissonHttpSessionConfiguration;
-import org.springframework.beans.factory.annotation.Qualifier;
+import org.mskcc.oncokb.meta.enumeration.RedisType;
+import org.mskcc.oncokb.meta.model.application.RedisProperties;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
-import org.springframework.context.ApplicationEventPublisher;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.data.redis.connection.RedisClusterConfiguration;
+import org.springframework.data.redis.connection.RedisNode;
+import org.springframework.data.redis.connection.RedisPassword;
+import org.springframework.data.redis.connection.RedisSentinelConfiguration;
+import org.springframework.data.redis.connection.RedisStandaloneConfiguration;
+import org.springframework.data.redis.connection.lettuce.LettuceClientConfiguration;
+import org.springframework.data.redis.connection.lettuce.LettuceConnectionFactory;
+import org.springframework.session.data.redis.config.annotation.SpringSessionRedisConnectionFactory;
+import org.springframework.session.data.redis.config.annotation.web.http.RedisHttpSessionConfiguration;
+
+import java.net.URI;
+import java.time.Duration;
 
 /**
- * Persists HTTP sessions in Redis so that authenticated OAuth sessions survive pod restarts and are
- * shared across instances. Spring Session swaps the container's HttpSession for a Redis-backed one via
- * a SessionRepositoryFilter, so the SecurityContext saved in {@code CustomOAuthSuccessHandler} is stored
- * in Redis transparently.
+ * Persists HTTP sessions in Redis so authenticated OAuth sessions survive pod restarts and are shared
+ * across instances.
  *
- * <p>This uses a dedicated {@code application.session.redis} connection, separate from the data-cache
- * {@code application.redis} used by {@link CacheConfiguration}. The two serve different purposes and are
- * enabled independently: persisting sessions does not require the data cache, and vice versa. When
- * {@code application.session.redis.enabled} is false, sessions fall back to the in-memory HttpSession.
- *
- * <p>This extends {@link RedissonHttpSessionConfiguration} directly (instead of using
- * {@code @EnableRedissonHttpSession}) so the idle session timeout can be driven by the
- * {@code application.session.timeout-seconds} property rather than a compile-time annotation constant.
+ * <p>This uses Spring Session's Redis repository instead of Redisson's session repository. Redisson is
+ * still used separately by {@link CacheConfiguration} for application data caching/rate-limit plumbing.
  */
 @Configuration
 @ConditionalOnProperty(prefix = "application.session.redis", name = "enabled", havingValue = "true")
-public class HttpSessionConfiguration extends RedissonHttpSessionConfiguration {
+public class HttpSessionConfiguration extends RedisHttpSessionConfiguration {
 
     public HttpSessionConfiguration(ApplicationProperties applicationProperties) {
-        // Set before the sessionRepository @Bean method is invoked. @EnableRedissonHttpSession would
-        // normally supply this via setImportMetadata, which is not called when we subclass directly.
         setMaxInactiveIntervalInSeconds(applicationProperties.getSession().getTimeoutSeconds());
     }
 
-    /**
-     * Dedicated Redisson client for the session store. Named distinctly so it does not collide with the
-     * data-cache {@code redissonClient} bean when both Redis instances are enabled.
-     */
-    @Bean(destroyMethod = "shutdown")
-    public RedissonClient sessionRedissonClient(ApplicationProperties applicationProperties) throws Exception {
-        Config config = RedissonConfigFactory.createConfig(applicationProperties.getSession().getRedis(), applicationProperties.getName());
-        return Redisson.create(config);
+    @Bean
+    @SpringSessionRedisConnectionFactory
+    public LettuceConnectionFactory springSessionRedisConnectionFactory(ApplicationProperties applicationProperties) {
+        RedisProperties redis = applicationProperties.getSession().getRedis();
+        LettuceClientConfiguration clientConfiguration = LettuceClientConfiguration.builder()
+            .commandTimeout(Duration.ofMillis(redis.getTimeout()))
+            .build();
+
+        if (RedisType.SINGLE.getType().equals(redis.getType())) {
+            return new LettuceConnectionFactory(createStandaloneConfiguration(redis), clientConfiguration);
+        } else if (RedisType.SENTINEL.getType().equals(redis.getType())) {
+            return new LettuceConnectionFactory(createSentinelConfiguration(redis), clientConfiguration);
+        } else if (RedisType.CLUSTER.getType().equals(redis.getType())) {
+            return new LettuceConnectionFactory(createClusterConfiguration(redis), clientConfiguration);
+        }
+
+        throw new IllegalArgumentException("The redis type " + redis.getType() + " is not supported. Only single, sentinel, and cluster are supported.");
     }
 
-    /**
-     * Overrides the parent @Bean to pin the session repository to {@link #sessionRedissonClient}. The
-     * parent injects an unqualified {@code RedissonClient}, which would otherwise resolve to the data-cache
-     * client when both are present.
-     */
-    @Bean
-    @Override
-    public RedissonSessionRepository sessionRepository(
-        @Qualifier("sessionRedissonClient") RedissonClient redissonClient,
-        ApplicationEventPublisher eventPublisher
-    ) {
-        return super.sessionRepository(redissonClient, eventPublisher);
+    private RedisStandaloneConfiguration createStandaloneConfiguration(RedisProperties redis) {
+        RedisNode node = parseRedisNode(redis.getAddress());
+        RedisStandaloneConfiguration configuration = new RedisStandaloneConfiguration(node.getHost(), node.getPort());
+        configuration.setPassword(RedisPassword.of(redis.getPassword()));
+        return configuration;
+    }
+
+    private RedisSentinelConfiguration createSentinelConfiguration(RedisProperties redis) {
+        RedisNode node = parseRedisNode(redis.getAddress());
+        RedisSentinelConfiguration configuration = new RedisSentinelConfiguration();
+        configuration.master(redis.getSentinelMasterName());
+        configuration.sentinel(node.getHost(), node.getPort());
+        configuration.setPassword(RedisPassword.of(redis.getPassword()));
+        return configuration;
+    }
+
+    private RedisClusterConfiguration createClusterConfiguration(RedisProperties redis) {
+        RedisNode node = parseRedisNode(redis.getAddress());
+        RedisClusterConfiguration configuration = new RedisClusterConfiguration();
+        configuration.addClusterNode(node);
+        configuration.setPassword(RedisPassword.of(redis.getPassword()));
+        return configuration;
+    }
+
+    private RedisNode parseRedisNode(String address) {
+        URI uri = URI.create(address);
+        return new RedisNode(uri.getHost(), uri.getPort());
     }
 }

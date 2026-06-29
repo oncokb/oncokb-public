@@ -5,10 +5,7 @@ import org.mskcc.oncokb.meta.model.application.RedisProperties;
 import org.redisson.config.Config;
 
 /**
- * Builds a Redisson {@link Config} from a {@link RedisProperties} block. Shared by the data cache
- * ({@link CacheConfiguration}) and the Spring Session store ({@link HttpSessionConfiguration}) so the
- * single/sentinel/cluster wiring lives in one place even though each consumer reads a different
- * {@code application.*-redis} property group and opens its own connection.
+ * Builds a Redisson {@link Config} from the application data-cache Redis properties.
  */
 public final class RedissonConfigFactory {
 
