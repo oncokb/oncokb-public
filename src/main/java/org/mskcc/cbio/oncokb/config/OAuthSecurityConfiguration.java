@@ -66,12 +66,13 @@ public class OAuthSecurityConfiguration extends WebSecurityConfigurerAdapter {
             .logout(logout -> logout
                 // by default, Spring Security uses POST for logout, but we want to support GET for easier integration with Keycloak's logout flow
                 // CSRF protected logout is less of a security risk since the logout endpoint does not perform any state-changing operations and does not require authentication (it will simply invalidate the session if it exists)
-                // Note for future: If we need to support persisted sessions in the future, we need to consider having a shared persisted session storage using Redis. If a pod is restarted,
-                // the session will not be lost if we have session stored elsewhere.
+                // When application.redis.enabled is true, sessions are persisted in Redis via Spring Session (see HttpSessionConfiguration),
+                // so they survive pod restarts and are shared across instances. invalidateHttpSession(true) removes the Redis-backed session on logout.
                 .logoutRequestMatcher(new AntPathRequestMatcher("/oauth2/logout", "GET"))
                 .invalidateHttpSession(true)
                 .clearAuthentication(true)
-                .deleteCookies("JSESSIONID")
+                // JSESSIONID is the default container cookie; SESSION is the cookie Spring Session uses when Redis-backed sessions are enabled
+                .deleteCookies("JSESSIONID", "SESSION")
                 .logoutSuccessHandler((request, response, authentication) ->
                     response.sendRedirect(
                         SecurityUtils.getKeycloakLogoutURL(

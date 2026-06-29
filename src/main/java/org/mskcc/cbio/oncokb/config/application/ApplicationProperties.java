@@ -27,6 +27,9 @@ public class ApplicationProperties {
     private ProjectProfile profile;
     private Boolean sitemapEnabled;
     private RedisProperties redis;
+    // Redis-backed HTTP session config; see HttpSessionConfiguration. Its `redis` is kept independent from the
+    // data-cache `redis` block above because the two serve different purposes and may be enabled independently.
+    private SessionProperties session = new SessionProperties();
     private String academicEmailClarifyDomain;
     private String googleWebmasterVerification;
     private EmailAddresses emailAddresses = new EmailAddresses();
@@ -109,6 +112,14 @@ public class ApplicationProperties {
 
     public void setRedis(RedisProperties redis) {
         this.redis = redis;
+    }
+
+    public SessionProperties getSession() {
+        return session;
+    }
+
+    public void setSession(SessionProperties session) {
+        this.session = session;
     }
 
     public String getGoogleWebmasterVerification() {

@@ -2,7 +2,6 @@ package org.mskcc.cbio.oncokb.config;
 
 import org.mskcc.cbio.oncokb.config.application.ApplicationProperties;
 import org.mskcc.cbio.oncokb.config.cache.*;
-import org.mskcc.oncokb.meta.enumeration.RedisType;
 import org.redisson.api.RedissonClient;
 import org.springframework.cache.CacheManager;
 import org.springframework.cache.annotation.CachingConfigurerSupport;
@@ -43,40 +42,7 @@ public class CacheConfiguration extends CachingConfigurerSupport {
     @Bean
     @ConditionalOnProperty(prefix = PROP_PREFIX, name = PROP_NAME, havingValue = "true")
     public Config redissonConfig(ApplicationProperties applicationProperties) throws Exception {
-        Config config = new Config();
-        if (applicationProperties.getRedis().getType().equals(RedisType.SINGLE.getType())) {
-            config.useSingleServer()
-                .setTimeout(applicationProperties.getRedis().getTimeout())
-                .setRetryAttempts(applicationProperties.getRedis().getRetryAttempts())
-                .setRetryInterval(applicationProperties.getRedis().getRetryInterval())
-                .setAddress(applicationProperties.getRedis().getAddress())
-                .setPassword(applicationProperties.getRedis().getPassword());
-        } else if (applicationProperties.getRedis().getType().equals(RedisType.SENTINEL.getType())) {
-            config.useSentinelServers()
-                .setTimeout(applicationProperties.getRedis().getTimeout())
-                .setRetryAttempts(applicationProperties.getRedis().getRetryAttempts())
-                .setRetryInterval(applicationProperties.getRedis().getRetryInterval())
-                .setMasterName(applicationProperties.getRedis().getSentinelMasterName())
-                .setCheckSentinelsList(false)
-                .addSentinelAddress(
-                    applicationProperties
-                        .getRedis()
-                        .getAddress()
-                )
-                .setPassword(applicationProperties.getRedis().getPassword());
-        } else if (applicationProperties.getRedis().getType().equals(RedisType.CLUSTER.getType())) {
-            config
-                .useClusterServers()
-                .setTimeout(applicationProperties.getRedis().getTimeout())
-                .setRetryAttempts(applicationProperties.getRedis().getRetryAttempts())
-                .setRetryInterval(applicationProperties.getRedis().getRetryInterval())
-                .addNodeAddress(applicationProperties.getRedis().getAddress())
-                .setPassword(applicationProperties.getRedis().getPassword())
-                .setClientName(applicationProperties.getName());
-        } else {
-            throw new Exception("The redis type " + applicationProperties.getRedis().getType() + " is not supported. Only single, sentinel, and cluster are supported.");
-        }
-        return config;
+        return RedissonConfigFactory.createConfig(applicationProperties.getRedis(), applicationProperties.getName());
     }
 
     @Bean

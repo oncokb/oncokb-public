@@ -139,12 +139,22 @@ application:
     slack-base-url:
     user-registration-channel-id:
   redis:
-    # Add the following if you want to opt in to using Redis
+    # Add the following if you want to opt in to using Redis as the data cache
     # Not using Redis
     enabled: false
     type: 'single'
     password: 'oncokb-public-redis-password'
     address: 'redis://localhost:6379'
+  session:
+    # Idle timeout (seconds) for Redis-backed HTTP sessions; only applies when session.redis.enabled is true
+    timeout-seconds: 600
+    redis:
+      # Redis used to persist HTTP sessions (separate from the data cache above); opt in by enabling
+      # Not using Redis
+      enabled: false
+      type: 'single'
+      password: 'oncokb-public-redis-password'
+      address: 'redis://localhost:6379'
   email-addresses:
     license-address: licenses@localhost
     registration-address: registration@localhost
