@@ -176,7 +176,7 @@ export default class NewsPage extends React.Component<
               </div>
               <div className="mt-4">
                 <NewsList date={'06252026'} />
-          <NewsList date={'05292026'} />
+                <NewsList date={'05292026'} />
                 <NewsList date={'04302026'} />
                 <NewsList date={'03302026'} />
                 <NewsList date={'02272026'} />
@@ -637,7 +637,9 @@ export default class NewsPage extends React.Component<
                       <div className="card h-100">
                         <div className="card-body">
                           <div className="d-flex justify-content-between align-items-center mb-3">
-                            <h5 className="card-title mb-0">{release.name}</h5>
+                            <h5 className="card-title mb-0">
+                              Software Version: {release.name}
+                            </h5>
                             {release.publishedAt && (
                               <h6 className="text-primary mb-0">
                                 {new Date(
