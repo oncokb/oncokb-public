@@ -98,6 +98,7 @@ function MutationEffectIcon({
     </span>
   );
 }
+
 export function createHighestLevelOfEvidenceTileProps(
   variantAnnotation: VariantAnnotation | GeneNumber,
   includeTitle: boolean,
@@ -105,11 +106,14 @@ export function createHighestLevelOfEvidenceTileProps(
 ): AlterationTileProps {
   const {
     highestDiagnosticImplicationLevel,
-    highestFdaLevel,
     highestPrognosticImplicationLevel,
     highestResistanceLevel,
     highestSensitiveLevel,
   } = variantAnnotation;
+  const highestFdaLevel =
+    'highestFdaLevel' in variantAnnotation
+      ? variantAnnotation.highestFdaLevel
+      : undefined;
   return {
     title: includeTitle ? 'Highest Level of Evidence' : undefined,
     items: [
@@ -121,11 +125,11 @@ export function createHighestLevelOfEvidenceTileProps(
             <div className={classnames('d-flex', 'flex-row')}>
               <HighestLevelEvidence
                 type="Sensitive"
-                level={highestSensitiveLevel}
+                level={highestSensitiveLevel ?? undefined}
               />
               <HighestLevelEvidence
                 type="Resistance"
-                level={highestResistanceLevel}
+                level={highestResistanceLevel ?? undefined}
               />
             </div>
           ),
@@ -136,7 +140,7 @@ export function createHighestLevelOfEvidenceTileProps(
           value: (
             <HighestLevelEvidence
               type="DiagnosticImplication"
-              level={highestDiagnosticImplicationLevel}
+              level={highestDiagnosticImplicationLevel ?? undefined}
             />
           ),
         },
@@ -148,14 +152,19 @@ export function createHighestLevelOfEvidenceTileProps(
           value: (
             <HighestLevelEvidence
               type="PrognosticImplication"
-              level={highestPrognosticImplicationLevel}
+              level={highestPrognosticImplicationLevel ?? undefined}
             />
           ),
         },
         {
           title: 'FDA',
           show: !hideFda && !!highestFdaLevel,
-          value: <HighestLevelEvidence type="Fda" level={highestFdaLevel} />,
+          value: (
+            <HighestLevelEvidence
+              type="Fda"
+              level={highestFdaLevel ?? undefined}
+            />
+          ),
         },
       ],
     ],

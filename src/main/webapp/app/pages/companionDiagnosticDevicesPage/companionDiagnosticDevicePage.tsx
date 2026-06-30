@@ -28,7 +28,10 @@ import {
   tumorTypeSortMethod,
 } from 'app/shared/utils/ReactTableUtils';
 import privateClient from 'app/shared/api/oncokbPrivateClientInstance';
-import { TumorType } from 'app/shared/api/generated/OncoKbPrivateAPI';
+import {
+  TumorType,
+  TumorTypeEntity,
+} from 'app/shared/api/generated/OncoKbPrivateAPI';
 import { FdaSubmissionLink } from 'app/shared/links/FdaSubmissionLink';
 import { Linkout } from 'app/shared/links/Linkout';
 import InfoIcon from 'app/shared/icons/InfoIcon';
@@ -275,7 +278,7 @@ const CompanionDiagnosticDevicePage: React.FunctionComponent<{}> = () => {
 
     const getFilteredCdx = async () => {
       if (filterPresent) {
-        let rcts: TumorType[] = [];
+        let rcts: TumorTypeEntity[] = [];
         for (const ct of selectedCancerTypes) {
           rcts = rcts.concat(
             await privateClient.utilRelevantTumorTypesGetUsingGET({
