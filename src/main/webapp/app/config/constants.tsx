@@ -747,8 +747,6 @@ export enum PAGE_ROUTE {
   GENOMIC_REPORT = '/genomic-report',
 }
 
-export const SHOW_KEYCLOAK_TEMP_PAGE_QUERY_PARAM = 'showKeycloakTempPage';
-
 export enum API_ROUTE {
   AUTHENTICATE = '/api/authenticate',
 }

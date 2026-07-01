@@ -33,7 +33,6 @@ import {
   KEYCLOAK_LOGIN_SUCCESS_QUERY_PARAM,
   MSK_PING_IDP_ALIAS,
   PAGE_ROUTE,
-  SHOW_KEYCLOAK_TEMP_PAGE_QUERY_PARAM,
 } from 'app/config/constants';
 import { TrialActivationPageLink } from 'app/shared/utils/UrlUtils';
 import { AppConfig } from 'app/appConfig';
@@ -121,11 +120,22 @@ export default class LoginPage extends React.Component<ILoginProps> {
   @computed
   get shouldShowOAuthLoginLoadingState() {
     const queryStrings = QueryString.parse(this.props.routing.location.search);
-    return (
-      this.showOAuthLoginLoadingState ||
-      queryStrings[KEYCLOAK_LOGIN_SUCCESS_QUERY_PARAM] === 'true' ||
-      queryStrings[SHOW_KEYCLOAK_TEMP_PAGE_QUERY_PARAM] === 'true'
-    );
+    const isOAuthCallback =
+      queryStrings[KEYCLOAK_LOGIN_SUCCESS_QUERY_PARAM] === 'true';
+
+    if (this.props.authenticationStore.loginError) {
+      return false;
+    }
+
+    if (isOAuthCallback) {
+      return true;
+    }
+
+    if (!this.showOAuthLoginLoadingState) {
+      return false;
+    }
+
+    return this.props.authenticationStore.loading;
   }
 
   componentDidMount() {
