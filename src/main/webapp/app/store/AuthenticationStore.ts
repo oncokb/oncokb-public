@@ -5,6 +5,7 @@ import {
   IReactionDisposer,
   reaction,
 } from 'mobx';
+import * as request from 'superagent';
 import { Storage } from 'react-jhipster';
 import autobind from 'autobind-decorator';
 import client from 'app/shared/api/clientInstance';
@@ -18,6 +19,8 @@ import {
 import { notifyError } from 'app/shared/utils/NotificationUtils';
 import { OncoKBError } from 'app/shared/alert/ErrorAlertUtils';
 import { daysDiff } from 'app/shared/utils/Utils';
+import { getClientInstanceURL } from 'app/shared/utils/DevUtils';
+import { getXsrfToken, XSRF_TOKEN_HEADER } from 'app/shared/utils/CsrfUtils';
 
 export const ACTION_TYPES = {
   LOGIN: 'authentication/LOGIN',
@@ -43,7 +46,6 @@ class AuthenticationStore {
   @observable errorMessage = ''; // Errors returned from server side
   @observable redirectMessage = '';
   @observable idToken = '';
-  @observable logoutUrl = '';
   @observable account: UserDTO | undefined;
   @observable tokens: Token[] = [];
 
@@ -195,6 +197,13 @@ class AuthenticationStore {
   }
 
   @computed
+  get isMskUser() {
+    return (
+      this.account?.email?.trim().toLowerCase().endsWith('@mskcc.org') ?? false
+    );
+  }
+
+  @computed
   get accountStatus() {
     const tokenValid = this.tokens.filter(
       token => new Date(token.expiration).getDate() <= Date.now()
@@ -233,6 +242,17 @@ class AuthenticationStore {
         },
       })
       .then(this.loginSuccessCallback, this.loginErrorCallback);
+  }
+
+  @autobind
+  @action
+  public authenticateKeycloakLogin() {
+    this.loading = true;
+    request
+      .post(getClientInstanceURL('oauth2/oncokb-token'))
+      .set(XSRF_TOKEN_HEADER, getXsrfToken() || '')
+      .then(response => this.loginSuccessCallback(response.body))
+      .catch(this.loginErrorCallback);
   }
 
   @action.bound

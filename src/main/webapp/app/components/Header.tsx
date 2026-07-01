@@ -143,18 +143,19 @@ class Header extends React.Component<IHeaderProps> {
           title: PAGE_TITLE.ACCOUNT_SETTINGS,
           link: PAGE_ROUTE.ACCOUNT_SETTINGS,
         },
-        {
-          title: PAGE_TITLE.ACCOUNT_PASSWORD,
-          link: PAGE_ROUTE.ACCOUNT_PASSWORD,
-        },
+        ...(!this.props.authStore.isMskUser
+          ? [
+              {
+                title: PAGE_TITLE.ACCOUNT_PASSWORD,
+                link: PAGE_ROUTE.ACCOUNT_PASSWORD,
+              },
+            ]
+          : []),
         ...(this.props.isAdmin ? COLLAPSED_NAV_ADMIN_ACCOUNT_ITEMS : []),
         { title: PAGE_TITLE.LOGOUT, link: PAGE_ROUTE.LOGOUT },
       ];
     }
-    return [
-      { title: PAGE_TITLE.LOGIN, link: PAGE_ROUTE.LOGIN },
-      { title: PAGE_TITLE.REGISTER, link: PAGE_ROUTE.REGISTER },
-    ];
+    return [{ title: PAGE_TITLE.LOGIN, link: PAGE_ROUTE.LOGIN }];
   }
 
   componentDidMount() {
@@ -408,15 +409,37 @@ class Header extends React.Component<IHeaderProps> {
                 <Nav>
                   {this.renderSearchBar()}
                   {AppConfig.serverConfig.enableAuth && !this.isNonLargeScreen && (
-                    <AccountMenu
-                      isAuthenticated={this.props.isUserAuthenticated}
-                      isAdmin={this.props.isAdmin}
-                      showAccountText={this.props.windowStore.isXLscreen}
-                      account={this.props.authStore.account}
-                      onMenuItemClick={() => {
-                        this.isNavExpanded = false;
-                      }}
-                    />
+                    <>
+                      {this.props.isUserAuthenticated ? (
+                        <AccountMenu
+                          isAuthenticated={this.props.isUserAuthenticated}
+                          isAdmin={this.props.isAdmin}
+                          showAccountText={this.props.windowStore.isXLscreen}
+                          authStore={this.props.authStore}
+                          onMenuItemClick={() => {
+                            this.isNavExpanded = false;
+                          }}
+                        />
+                      ) : (
+                        <Nav.Item
+                          className={classnames('login-nav-item', {
+                            active:
+                              this.props.location?.pathname ===
+                              PAGE_ROUTE.LOGIN,
+                          })}
+                        >
+                          <NavLink
+                            className="nav-link"
+                            to={PAGE_ROUTE.LOGIN}
+                            onClick={() => {
+                              this.isNavExpanded = false;
+                            }}
+                          >
+                            {PAGE_TITLE.LOGIN}
+                          </NavLink>
+                        </Nav.Item>
+                      )}
+                    </>
                   )}
                   <Nav.Item style={{ paddingRight: 0 }}>
                     <MskccLogo

@@ -1,10 +1,9 @@
 import React from 'react';
 import AuthenticationStore from 'app/store/AuthenticationStore';
 import { inject } from 'mobx-react';
-import { observable, action } from 'mobx';
 import { observer } from 'mobx-react';
-import { Redirect } from 'react-router-dom';
 import { Row } from 'react-bootstrap';
+import { Redirect } from 'react-router-dom';
 import { PAGE_ROUTE } from 'app/config/constants';
 
 @inject('authenticationStore')
@@ -12,36 +11,28 @@ import { PAGE_ROUTE } from 'app/config/constants';
 export class Logout extends React.Component<{
   authenticationStore: AuthenticationStore;
 }> {
-  @observable redirect = false;
-
-  @action toggleRedirect = () => (this.redirect = !this.redirect);
+  private redirectHome = false;
 
   componentDidMount() {
+    const shouldLogoutFromKeycloak = this.props.authenticationStore.isMskUser;
     this.props.authenticationStore.logout();
-    setTimeout(this.toggleRedirect, 1000);
+    if (shouldLogoutFromKeycloak) {
+      window.location.href = '/oauth2/logout';
+      return;
+    }
+    this.redirectHome = true;
+    this.forceUpdate();
   }
 
   render() {
-    const logoutUrl = this.props.authenticationStore.logoutUrl;
-    if (logoutUrl) {
-      // if Keycloak, logoutUrl has protocol/openid-connect in it
-      window.location.href = logoutUrl.includes('/protocol')
-        ? logoutUrl + '?redirect_uri=' + window.location.origin
-        : logoutUrl +
-          '?id_token_hint=' +
-          this.props.authenticationStore.idToken +
-          '&post_logout_redirect_uri=' +
-          window.location.origin;
+    if (this.redirectHome) {
+      return <Redirect to={PAGE_ROUTE.HOME} />;
     }
 
-    if (this.redirect) {
-      return <Redirect to={PAGE_ROUTE.HOME} />;
-    } else {
-      return (
-        <Row className="justify-content-center">
-          <h4>Logged out successfully!</h4>
-        </Row>
-      );
-    }
+    return (
+      <Row className="justify-content-center">
+        <h4>Logging out...</h4>
+      </Row>
+    );
   }
 }

@@ -142,6 +142,11 @@ application:
     password: 'oncokb-public-redis-password'
     sentinel-master-name: 'oncokb-master'
     address: 'redis://oncokb-public-sentinel-redis:6379'
+  session:
+    # Idle timeout (seconds) for JDBC-backed HTTP sessions.
+    timeout-seconds: 60
+    # Deletes expired rows from SPRING_SESSION and SPRING_SESSION_ATTRIBUTES once per minute.
+    cleanup-cron: '0 * * * * *'
   public-website-api-threshold: 2000
   db-read-only: false # Certain endpoints will be disabled when readonly is set to true
   frontend:
