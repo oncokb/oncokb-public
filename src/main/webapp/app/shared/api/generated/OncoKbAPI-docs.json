@@ -2457,6 +2457,89 @@
         }
       }
     },
+    "/utils/allGenomicIndicators": {
+      "get": {
+        "tags": [
+          "Variants",
+          "Cancer Genes"
+        ],
+        "summary": "utilsAllGenomicIndicatorsGet",
+        "description": "Get all genomic indicators.",
+        "operationId": "utilsAllGenomicIndicatorsGetUsingGET",
+        "consumes": [
+          "application/json"
+        ],
+        "produces": [
+          "application/json"
+        ],
+        "parameters": [
+          {
+            "name": "version",
+            "in": "query",
+            "description": "The data version",
+            "required": false,
+            "type": "string"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "schema": {
+              "type": "array",
+              "items": {
+                "$ref": "#/definitions/AllGenomicIndicator"
+              }
+            }
+          },
+          "404": {
+            "description": "Not Found"
+          },
+          "503": {
+            "description": "Service Unavailable"
+          }
+        }
+      }
+    },
+    "/utils/allGenomicIndicators.txt": {
+      "get": {
+        "tags": [
+          "Variants",
+          "Cancer Genes"
+        ],
+        "summary": "utilsAllGenomicIndicatorsTxtGet",
+        "description": "Get all genomic indicators in text file.",
+        "operationId": "utilsAllGenomicIndicatorsTxtGetUsingGET",
+        "consumes": [
+          "application/json"
+        ],
+        "produces": [
+          "text/plain;charset=UTF-8"
+        ],
+        "parameters": [
+          {
+            "name": "version",
+            "in": "query",
+            "description": "The data version",
+            "required": false,
+            "type": "string"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "schema": {
+              "type": "string"
+            }
+          },
+          "404": {
+            "description": "Not Found"
+          },
+          "503": {
+            "description": "Service Unavailable"
+          }
+        }
+      }
+    },
     "/utils/allVariantsOfUnknownSignificance": {
       "get": {
         "tags": [
@@ -3636,6 +3719,26 @@
           ]
         },
         "tumorType": {
+          "type": "string"
+        }
+      }
+    },
+    "AllGenomicIndicator": {
+      "type": "object",
+      "properties": {
+        "associatedVariants": {
+          "type": "string"
+        },
+        "description": {
+          "type": "string"
+        },
+        "hugoSymbol": {
+          "type": "string"
+        },
+        "inheritanceMechanism": {
+          "type": "string"
+        },
+        "name": {
           "type": "string"
         }
       }

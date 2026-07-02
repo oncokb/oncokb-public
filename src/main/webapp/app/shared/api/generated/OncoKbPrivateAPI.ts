@@ -281,6 +281,16 @@ export type DrugSynonym = {
         'name': string
 
 };
+export type AlternativeOncoKbVariant = {
+    'foundAlteration': Alteration
+
+        'gene': string
+
+        'inputVariant': string
+
+        'transcriptId': string
+
+};
 export type BiologicalVariant = {
     'cancerRisk': string
 
@@ -779,6 +789,8 @@ export type SomaticVariantAnnotation = {
     'alleleExist': boolean
 
         'alteration': Alteration
+
+        'alternativeOncoKbVariant': AlternativeOncoKbVariant
 
         'background': string
 
