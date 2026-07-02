@@ -18,6 +18,7 @@ public final class ErrorConstants {
     public static URI LICENSE_AGREEMENT_NOT_ACCEPTED;
     public static URI DATABASE_READ_ONLY;
     public static URI TOO_MANY_TOKENS;
+    public static URI ACTIVATION_KEY_NOT_FOUND_TYPE;
 
     private ErrorConstants(ApplicationProperties applicationProperties) {
         PROBLEM_BASE_URL = applicationProperties.getBaseUrl() + "/problem";
@@ -30,5 +31,6 @@ public final class ErrorConstants {
         LICENSE_AGREEMENT_NOT_ACCEPTED = URI.create(PROBLEM_BASE_URL + "/license-agreement-not-accepted");
         DATABASE_READ_ONLY = URI.create(PROBLEM_BASE_URL + "/database-read-only");
         TOO_MANY_TOKENS = URI.create(PROBLEM_BASE_URL + "/too-many-tokens");
+        ACTIVATION_KEY_NOT_FOUND_TYPE = URI.create(PROBLEM_BASE_URL + "/activation-key-not-found");
     }
 }

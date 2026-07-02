@@ -149,7 +149,7 @@ public class AccountResource {
     public AccountActivationVM activateAccount(@RequestParam(value = "key") String key) {
         Optional<User> userOptional = userService.getUserByActivationKey(key);
         if (!userOptional.isPresent()) {
-            throw new CustomMessageRuntimeException("Your account could not be activated because the activation key is invalid or has already been used.");
+            throw new ActivationKeyNotFoundException();
         }
 
         User existingUser = userOptional.get();
