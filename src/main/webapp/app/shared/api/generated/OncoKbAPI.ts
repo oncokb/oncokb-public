@@ -355,6 +355,18 @@ export type AnnotateCopyNumberAlterationQuery = {
         'tumorType': string
 
 };
+export type AllGenomicIndicator = {
+    'associatedVariants': string
+
+        'description': string
+
+        'hugoSymbol': string
+
+        'inheritanceMechanism': string
+
+        'name': string
+
+};
 export type GenomicIndicator = {
     'description': string
 
@@ -5479,6 +5491,155 @@ export default class OncoKbAPI {
             $domain ? : string
     }): Promise < string > {
         return this.utilsAllCuratedGenesTxtGetUsingGETWithHttpInfo(parameters).then(function(response: request.Response) {
+            return response.body;
+        });
+    };
+    utilsAllGenomicIndicatorsGetUsingGETURL(parameters: {
+        'version' ? : string,
+        $queryParameters ? : any
+    }): string {
+        let queryParameters: any = {};
+        let path = '/utils/allGenomicIndicators';
+        if (parameters['version'] !== undefined) {
+            queryParameters['version'] = parameters['version'];
+        }
+
+        if (parameters.$queryParameters) {
+            Object.keys(parameters.$queryParameters).forEach(function(parameterName) {
+                var parameter = parameters.$queryParameters[parameterName];
+                queryParameters[parameterName] = parameter;
+            });
+        }
+        let keys = Object.keys(queryParameters);
+        return this.domain + path + (keys.length > 0 ? '?' + (keys.map(key => key + '=' + encodeURIComponent(queryParameters[key])).join('&')) : '');
+    };
+
+    /**
+     * Get all genomic indicators.
+     * @method
+     * @name OncoKbAPI#utilsAllGenomicIndicatorsGetUsingGET
+     * @param {string} version - The data version
+     */
+    utilsAllGenomicIndicatorsGetUsingGETWithHttpInfo(parameters: {
+        'version' ? : string,
+        $queryParameters ? : any,
+            $domain ? : string
+    }): Promise < request.Response > {
+        const domain = parameters.$domain ? parameters.$domain : this.domain;
+        const errorHandlers = this.errorHandlers;
+        const request = this.request;
+        let path = '/utils/allGenomicIndicators';
+        let body: any;
+        let queryParameters: any = {};
+        let headers: any = {};
+        let form: any = {};
+        return new Promise(function(resolve, reject) {
+            headers['Accept'] = 'application/json';
+            headers['Content-Type'] = 'application/json';
+
+            if (parameters['version'] !== undefined) {
+                queryParameters['version'] = parameters['version'];
+            }
+
+            if (parameters.$queryParameters) {
+                Object.keys(parameters.$queryParameters).forEach(function(parameterName) {
+                    var parameter = parameters.$queryParameters[parameterName];
+                    queryParameters[parameterName] = parameter;
+                });
+            }
+
+            request('GET', domain + path, body, headers, queryParameters, form, reject, resolve, errorHandlers);
+
+        });
+    };
+
+    /**
+     * Get all genomic indicators.
+     * @method
+     * @name OncoKbAPI#utilsAllGenomicIndicatorsGetUsingGET
+     * @param {string} version - The data version
+     */
+    utilsAllGenomicIndicatorsGetUsingGET(parameters: {
+            'version' ? : string,
+            $queryParameters ? : any,
+                $domain ? : string
+        }): Promise < Array < AllGenomicIndicator >
+        > {
+            return this.utilsAllGenomicIndicatorsGetUsingGETWithHttpInfo(parameters).then(function(response: request.Response) {
+                return response.body;
+            });
+        };
+    utilsAllGenomicIndicatorsTxtGetUsingGETURL(parameters: {
+        'version' ? : string,
+        $queryParameters ? : any
+    }): string {
+        let queryParameters: any = {};
+        let path = '/utils/allGenomicIndicators.txt';
+        if (parameters['version'] !== undefined) {
+            queryParameters['version'] = parameters['version'];
+        }
+
+        if (parameters.$queryParameters) {
+            Object.keys(parameters.$queryParameters).forEach(function(parameterName) {
+                var parameter = parameters.$queryParameters[parameterName];
+                queryParameters[parameterName] = parameter;
+            });
+        }
+        let keys = Object.keys(queryParameters);
+        return this.domain + path + (keys.length > 0 ? '?' + (keys.map(key => key + '=' + encodeURIComponent(queryParameters[key])).join('&')) : '');
+    };
+
+    /**
+     * Get all genomic indicators in text file.
+     * @method
+     * @name OncoKbAPI#utilsAllGenomicIndicatorsTxtGetUsingGET
+     * @param {string} version - The data version
+     */
+    utilsAllGenomicIndicatorsTxtGetUsingGETWithHttpInfo(parameters: {
+        'version' ? : string,
+        $queryParameters ? : any,
+            $domain ? : string
+    }): Promise < request.Response > {
+        const domain = parameters.$domain ? parameters.$domain : this.domain;
+        const errorHandlers = this.errorHandlers;
+        const request = this.request;
+        let path = '/utils/allGenomicIndicators.txt';
+        let body: any;
+        let queryParameters: any = {};
+        let headers: any = {};
+        let form: any = {};
+        return new Promise(function(resolve, reject) {
+            headers['Accept'] = 'text/plain;charset=UTF-8';
+            headers['Content-Type'] = 'application/json';
+
+            if (parameters['version'] !== undefined) {
+                queryParameters['version'] = parameters['version'];
+            }
+
+            if (parameters.$queryParameters) {
+                Object.keys(parameters.$queryParameters).forEach(function(parameterName) {
+                    var parameter = parameters.$queryParameters[parameterName];
+                    queryParameters[parameterName] = parameter;
+                });
+            }
+
+            request('GET', domain + path, body, headers, queryParameters, form, reject, resolve, errorHandlers);
+
+        });
+    };
+
+    /**
+     * Get all genomic indicators in text file.
+     * @method
+     * @name OncoKbAPI#utilsAllGenomicIndicatorsTxtGetUsingGET
+     * @param {string} version - The data version
+     */
+    utilsAllGenomicIndicatorsTxtGetUsingGET(parameters: {
+        'version' ? : string,
+        $queryParameters ? : any,
+            $domain ? : string
+    }): Promise < string > {
+        return this.utilsAllGenomicIndicatorsTxtGetUsingGETWithHttpInfo(parameters).then(function(response: request.Response) {
             return response.body;
         });
     };
