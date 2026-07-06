@@ -550,6 +550,37 @@ const DEFAULT_ALTERATION: Alteration = {
 };
 
 export const DEFAULT_ANNOTATION: SomaticVariantAnnotation = {
+  alternativeOncoKbVariant: {
+    gene: '',
+    inputVariant: '',
+    transcriptId: '',
+    foundAlteration: {
+      alteration: '',
+      consequence: {
+        description: '',
+        isGenerallyTruncating: false,
+        term: '',
+      },
+      gene: {
+        entrezGeneId: 0,
+        geneAliases: [],
+        geneType: 'INSUFFICIENT_EVIDENCE',
+        genesets: [],
+        grch37Isoform: '',
+        grch37RefSeq: '',
+        grch38Isoform: '',
+        grch38RefSeq: '',
+        hugoSymbol: '',
+      },
+      name: '',
+      proteinChange: '',
+      proteinEnd: 0,
+      proteinStart: 0,
+      refResidues: '',
+      referenceGenomes: ['GRCh37'],
+      variantResidues: '',
+    },
+  },
   alleleExist: false,
   alteration: DEFAULT_ALTERATION,
   background: '',
