@@ -35,9 +35,7 @@ import {
   Token,
   UserDTO,
   UserMailsDTO,
-  UserUsage,
   UserCompany,
-  UsageSummary,
 } from 'app/shared/api/generated/API';
 import client from 'app/shared/api/clientInstance';
 import { DefaultTooltip, remoteData } from 'cbioportal-frontend-commons';
@@ -89,7 +87,10 @@ import {
 } from 'app/shared/utils/UrlUtils';
 import { sortBy } from 'app/shared/utils/LodashUtils';
 import { Helmet } from 'react-helmet-async';
-import { ToggleValue } from '../usageAnalysisPage/usage-analysis-utils';
+import {
+  ResourceToggleValue,
+  TimeToggleValue,
+} from '../usageAnalysisPage/usage-analysis-utils';
 import UsageAnalysisTable from '../usageAnalysisPage/UsageAnalysisTable';
 import styles from './UserPage.module.scss';
 
@@ -141,7 +142,6 @@ export default class UserPage extends React.Component<IUserPage> {
   @observable selectedEmailVerifiedStatus: EmailVerifiedStatus | undefined;
   @observable userTokens: Token[] = [];
   @observable user: UserDTO;
-  @observable userUsage: UserUsage;
   @observable getUserStatus: PromiseStatus;
   @observable showTrialAccountModal = false;
   @observable showSimpleConfirmModal = false;
@@ -180,23 +180,6 @@ export default class UserPage extends React.Component<IUserPage> {
   componentWillUnmount() {
     this.reactions.forEach(disposer => disposer());
   }
-
-  readonly usageDetail = remoteData<UsageSummary>({
-    await: () => [],
-    invoke: async () => {
-      this.userUsage = await client.userUsageGetUsingGET({
-        userId: this.user.id,
-      });
-      return this.userUsage.summary;
-    },
-    onError: (error: Error) =>
-      notifyError(error, 'Failed to load user usage data.'),
-    default: {
-      day: {},
-      month: {},
-      year: {},
-    },
-  });
 
   readonly usersUserMails = remoteData<UserMailsDTO[]>({
     invoke: () => {
@@ -1198,21 +1181,15 @@ export default class UserPage extends React.Component<IUserPage> {
                             Data usage
                           </div>
 
-                          {this.usageDetail.isError ? (
-                            <Alert variant="danger">
-                              Failed to load user usage data.
-                            </Alert>
-                          ) : (
-                            <UsageAnalysisTable
-                              data={this.usageDetail.result}
-                              loadedData={this.usageDetail.isComplete}
-                              defaultResourcesType={
-                                ToggleValue.PUBLIC_RESOURCES
-                              }
-                              defaultTimeType={ToggleValue.RESULTS_BY_DAY}
-                              defaultPageSize={5}
-                            />
-                          )}
+                          <UsageAnalysisTable
+                            mode="resourceSummary"
+                            userId={this.user.id}
+                            defaultResourcesType={
+                              ResourceToggleValue.PUBLIC_RESOURCES
+                            }
+                            defaultTimeType={TimeToggleValue.RESULTS_BY_DAY}
+                            defaultPageSize={5}
+                          />
                         </Col>
                       </Row>
                       <Row>

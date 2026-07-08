@@ -8,7 +8,7 @@ import { Row } from 'react-bootstrap';
 import {
   getUsageTableColumnDefinition,
   UsageTableColumnKey,
-} from 'app/pages/usageAnalysisPage/UsageAnalysisPage';
+} from 'app/pages/usageAnalysisPage/usage-table-columns';
 import {
   USAGE_MONTH_DETAIL_TIME_KEY,
   PAGE_ROUTE,
@@ -18,19 +18,19 @@ import { UsageToggleGroup } from './UsageToggleGroup';
 import {
   emailHeader,
   filterDependentTimeHeader,
-} from 'app/components/oncokbTable/HeaderConstants';
+} from 'app/components/oncokbTable/header-constants';
 import UsageText from 'app/shared/texts/UsageText';
 import { Link } from 'react-router-dom';
 import {
   UsageRecord,
   TimeGroupedUsageRecords,
-  ToggleValue,
+  TimeToggleValue,
 } from './usage-analysis-utils';
 
 type IResourceUsageDetailsTable = {
   data: TimeGroupedUsageRecords;
   loadedData: boolean;
-  defaultTimeType: ToggleValue;
+  defaultTimeType: TimeToggleValue;
 };
 
 @observer
@@ -38,11 +38,11 @@ export default class ResourceUsageDetailsTable extends React.Component<
   IResourceUsageDetailsTable,
   {}
 > {
-  @observable timeTypeToggleValue: ToggleValue = this.props.defaultTimeType;
+  @observable timeTypeToggleValue: TimeToggleValue = this.props.defaultTimeType;
 
   @autobind
   @action
-  handleTimeTypeToggleChange(value: ToggleValue) {
+  handleTimeTypeToggleChange(value: TimeToggleValue) {
     this.timeTypeToggleValue = value;
   }
 
@@ -51,7 +51,7 @@ export default class ResourceUsageDetailsTable extends React.Component<
       <>
         <OncoKBTable
           data={
-            this.timeTypeToggleValue === ToggleValue.RESULTS_BY_YEAR
+            this.timeTypeToggleValue === TimeToggleValue.RESULTS_BY_YEAR
               ? this.props.data[USAGE_YEAR_DETAIL_TIME_KEY]
               : this.props.data[USAGE_MONTH_DETAIL_TIME_KEY]
           }
@@ -105,8 +105,8 @@ export default class ResourceUsageDetailsTable extends React.Component<
                 <UsageToggleGroup
                   defaultValue={this.timeTypeToggleValue}
                   toggleValues={[
-                    ToggleValue.RESULTS_BY_YEAR,
-                    ToggleValue.RESULTS_BY_MONTH,
+                    TimeToggleValue.RESULTS_BY_YEAR,
+                    TimeToggleValue.RESULTS_BY_MONTH,
                   ]}
                   handleToggle={this.handleTimeTypeToggleChange}
                 />
