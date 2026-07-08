@@ -2901,6 +2901,23 @@
         }
       }
     },
+    "AlternativeOncoKbVariant": {
+      "type": "object",
+      "properties": {
+        "foundAlteration": {
+          "$ref": "#/definitions/Alteration"
+        },
+        "gene": {
+          "type": "string"
+        },
+        "inputVariant": {
+          "type": "string"
+        },
+        "transcriptId": {
+          "type": "string"
+        }
+      }
+    },
     "BiologicalVariant": {
       "type": "object",
       "properties": {
@@ -4136,6 +4153,9 @@
         },
         "alteration": {
           "$ref": "#/definitions/Alteration"
+        },
+        "alternativeOncoKbVariant": {
+          "$ref": "#/definitions/AlternativeOncoKbVariant"
         },
         "background": {
           "type": "string"
