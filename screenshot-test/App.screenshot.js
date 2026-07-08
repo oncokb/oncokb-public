@@ -76,6 +76,10 @@ const usageUserDetail = fs
 const usageResourceDetail = fs
   .readFileSync(`${DATA_DIR}api-usage-resources-example.json`)
   .toString();
+const usageResourceName = JSON.stringify({
+  resourceId: 101,
+  resource: '/api/v1/example',
+});
 const gracePeriodBlacklist = fs
   .readFileSync(`${DATA_DIR}api-register-grace-period-blacklist.json`)
   .toString();
@@ -130,6 +134,62 @@ if (!fs.existsSync(LATEST_SNAPSHOTS_DIR)) {
 }
 
 function getMockResponse(url) {
+  if (url.startsWith(`${SERVER_URL}api/usage/summary/users`)) {
+    return {
+      status: 200,
+      contentType: 'application/json',
+      body: usageUsersOverview,
+    };
+  }
+
+  if (url.startsWith(`${SERVER_URL}api/usage/summary/resources`)) {
+    return {
+      status: 200,
+      contentType: 'application/json',
+      body: usageResourcesOverview,
+    };
+  }
+
+  if (url.startsWith(`${SERVER_URL}api/usage/users/2021`)) {
+    return {
+      status: 200,
+      contentType: 'application/json',
+      body: usageUserDetail,
+    };
+  }
+
+  if (url.startsWith(`${SERVER_URL}api/usage/users/3`)) {
+    return {
+      status: 200,
+      contentType: 'application/json',
+      body: usageUserDetail,
+    };
+  }
+
+  if (url.startsWith(`${SERVER_URL}api/usage/users/4`)) {
+    return {
+      status: 200,
+      contentType: 'application/json',
+      body: usageUserDetail,
+    };
+  }
+
+  if (url.startsWith(`${SERVER_URL}api/usage/resources/101`)) {
+    return {
+      status: 200,
+      contentType: 'application/json',
+      body: usageResourceName,
+    };
+  }
+
+  if (url.startsWith(`${SERVER_URL}api/usage/resources`)) {
+    return {
+      status: 200,
+      contentType: 'application/json',
+      body: usageResourceDetail,
+    };
+  }
+
   let res = undefined;
   switch (url) {
     case `${SERVER_URL}api/account`:
@@ -294,60 +354,11 @@ function getMockResponse(url) {
         body: companyUserToken,
       };
       break;
-    case `${SERVER_URL}api/usage/summary/users`:
-      res = {
-        status: 200,
-        contentType: 'application/json',
-        body: usageUsersOverview,
-      };
-      break;
-    case `${SERVER_URL}api/usage/summary/users?companyId=1`:
-      res = {
-        status: 200,
-        contentType: 'application/json',
-        body: usageUsersOverview,
-      };
-      break;
     case `${SERVER_URL}api/usage/summary/registrations`:
       res = {
         status: 200,
         contentType: 'application/json',
         body: usageRegistrationsOverview,
-      };
-      break;
-    case `${SERVER_URL}api/usage/summary/resources`:
-      res = {
-        status: 200,
-        contentType: 'application/json',
-        body: usageResourcesOverview,
-      };
-      break;
-    case `${SERVER_URL}api/usage/users/2021`:
-      res = {
-        status: 200,
-        contentType: 'application/json',
-        body: usageUserDetail,
-      };
-      break;
-    case `${SERVER_URL}api/usage/users/3`:
-      res = {
-        status: 200,
-        contentType: 'application/json',
-        body: usageUserDetail,
-      };
-      break;
-    case `${SERVER_URL}api/usage/users/4`:
-      res = {
-        status: 200,
-        contentType: 'application/json',
-        body: usageUserDetail,
-      };
-      break;
-    case `${SERVER_URL}api/usage/resources?endpoint=%2Fapi%2Fv1%2Fexample`:
-      res = {
-        status: 200,
-        contentType: 'application/json',
-        body: usageResourceDetail,
       };
       break;
     case `${SERVER_URL}api/private/search/variants/biological?hugoSymbol=`:
@@ -663,7 +674,7 @@ describe('Tests with login', () => {
 
   it('Usage Analysis Page#Resource Detail', async () => {
     await page.goto(
-      `${CLIENT_URL}admin/usage-analysis/resources/!api!v1!example`
+      `${CLIENT_URL}admin/usage-analysis/resources/101`
     );
     await page.setViewport(VIEW_PORT_1080);
     await page.waitFor(WAITING_TIME);
