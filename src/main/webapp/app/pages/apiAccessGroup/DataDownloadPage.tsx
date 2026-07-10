@@ -29,6 +29,7 @@ import { Linkout } from 'app/shared/links/Linkout';
 import { If, Then, Else } from 'react-if';
 import { getPageTitle } from 'app/shared/utils/Utils';
 import { Helmet } from 'react-helmet-async';
+import { getLoginRouteForRegister } from 'app/shared/utils/UrlUtils';
 
 type DownloadAvailabilityWithDate = DataRelease & DownloadAvailability;
 
@@ -54,6 +55,8 @@ const DownloadButtonGroups: React.FunctionComponent<{
   const majorVersion = getMajorVersion(props.data.version) ?? 0;
   const minorVersion = getMinorVersion(props.data.version) ?? 0;
   const versionIsLessThan4 = majorVersion < 4;
+  const versionsIsLessThan73 =
+    majorVersion < 7 || (majorVersion === 7 && minorVersion < 3);
   return (
     <>
       {props.data.hasAllCuratedGenes ? (
@@ -110,6 +113,25 @@ const DownloadButtonGroups: React.FunctionComponent<{
           buttonText="All Annotated Variants"
         />
       )}
+      <AuthDownloadButton
+        disabled={versionsIsLessThan73}
+        title={
+          versionsIsLessThan73
+            ? 'Not available for versions below 7.3'
+            : undefined
+        }
+        className={BUTTON_CLASS_NAME}
+        fileName={`all_genomic_indicators_${props.data.version}.tsv`}
+        getDownloadData={async () => {
+          const data = await oncokbClient.utilsAllGenomicIndicatorsTxtGetUsingGET(
+            {
+              version: props.data.version,
+            }
+          );
+          return data;
+        }}
+        buttonText="All Genomic Indicators"
+      />
       {props.data.hasSqlDump ? (
         <>
           <AuthDownloadButton
@@ -204,7 +226,11 @@ export default class DataDownloadPage extends React.Component<{
 
   @action
   onApplyForLicense = () => {
-    this.props.routing.history.push(PAGE_ROUTE.REGISTER);
+    if (this.props.authenticationStore.isUserAuthenticated) {
+      this.props.routing.history.push(PAGE_ROUTE.REGISTER);
+    } else {
+      this.props.routing.history.push(getLoginRouteForRegister());
+    }
   };
 
   @computed
@@ -326,8 +352,8 @@ export default class DataDownloadPage extends React.Component<{
                   all other uses require a fee. Please review the{' '}
                   <Link to={PAGE_ROUTE.TERMS}>terms of use</Link> before
                   proceeding. <CitationText /> Please visit the{' '}
-                  <Link to={PAGE_ROUTE.REGISTER}>registration page</Link> to
-                  apply for a license.
+                  <Link to={getLoginRouteForRegister()}>registration page</Link>{' '}
+                  to apply for a license.
                 </p>
                 <p>
                   You can also use our{' '}

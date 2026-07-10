@@ -35,6 +35,7 @@ import {
   Tag,
   SomaticVariantAnnotation,
   TumorType,
+  TumorTypeEntity,
 } from 'app/shared/api/generated/OncoKbPrivateAPI';
 import { BarChartDatum } from 'app/components/barChart/BarChart';
 import {
@@ -629,7 +630,7 @@ export class AnnotationStore {
     default: [],
   });
 
-  readonly allCancerTypes = remoteData<TumorType[]>({
+  readonly allCancerTypes = remoteData<TumorTypeEntity[]>({
     await: () => [],
     async invoke() {
       const result = await privateClient.utilsTumorTypesGetUsingGET({});

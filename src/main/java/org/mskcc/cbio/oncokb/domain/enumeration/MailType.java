@@ -89,11 +89,20 @@ public enum MailType {
         .description("Clarify - Hospital use")
         .titleKey("email.license.clarify.title")
         .stringTemplateName("clarifyHospitalUseString.txt"))
+    , HOSPITAL_APPROVAL_HIGH_VOLUME(new MailTypeBuilder()
+        .templateName("hospitalApprovalHighVolume")
+        .description("Hospital approval - high report volume")
+        .titleKey("email.approval.title")
+        .stringTemplateName("hospitalApprovalHighVolumeString.txt"))
     , CLARIFY_COMMERCIAL_USE(new MailTypeBuilder()
         .templateName("clarifyCommercialUse")
         .description("Clarify - Commercial use")
         .titleKey("email.license.clarify.title")
         .stringTemplateName("clarifyCommercialUseString.txt"))
+    , LICENSE_OPTIONS(new MailTypeBuilder() // This mail is no more used but we still need to keep the record of past mails that have been sent with this mail type
+        .templateName("licenseOptions")
+        .description("License Options - Legacy mail type")
+        .titleKey("email.license.title"))
     , VERIFY_EMAIL_BEFORE_ACCOUNT_EXPIRES(new MailTypeBuilder()
         .templateName("verifyEmailBeforeAccountExpires")
         .description("Verify user still owns the email address")
@@ -139,6 +148,9 @@ public enum MailType {
         private String titleKey = "email.default.title";
         private Optional<String> stringTemplateName = Optional.empty();
         private Optional<String> attachmentFileNames = Optional.empty();
+
+        MailTypeBuilder() {
+        }
 
         private MailTypeBuilder templateName(String templateName) {
             this.templateName = templateName;

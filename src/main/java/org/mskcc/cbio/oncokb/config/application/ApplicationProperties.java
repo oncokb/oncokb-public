@@ -27,9 +27,11 @@ public class ApplicationProperties {
     private ProjectProfile profile;
     private Boolean sitemapEnabled;
     private RedisProperties redis;
+    // JDBC-backed HTTP session config; see HttpSessionConfiguration.
+    private SessionProperties session = new SessionProperties();
     private String academicEmailClarifyDomain;
     private String googleWebmasterVerification;
-    private EmailAddresses emailAddresses;
+    private EmailAddresses emailAddresses = new EmailAddresses();
     private String tokenUsageCheck;
     private String tokenUsageCheckWhitelist;
     private int publicWebsiteApiThreshold;
@@ -41,6 +43,8 @@ public class ApplicationProperties {
     private RecaptchaProperties recaptcha;
     private RateLimitProperties rateLimit = new RateLimitProperties();
     private TokenStatsProperties tokenStats = new TokenStatsProperties();
+    private KeycloakProperties keycloak = new KeycloakProperties();
+    private UsageLiquibaseProperties usageLiquibase = new UsageLiquibaseProperties();
 
     public String getName() {
         return name;
@@ -108,6 +112,14 @@ public class ApplicationProperties {
 
     public void setRedis(RedisProperties redis) {
         this.redis = redis;
+    }
+
+    public SessionProperties getSession() {
+        return session;
+    }
+
+    public void setSession(SessionProperties session) {
+        this.session = session;
     }
 
     public String getGoogleWebmasterVerification() {
@@ -223,5 +235,21 @@ public class ApplicationProperties {
 
     public void setTokenStats(TokenStatsProperties tokenStats) {
         this.tokenStats = tokenStats;
+    }
+
+    public KeycloakProperties getKeycloak() {
+        return keycloak;
+    }
+
+    public void setKeycloak(KeycloakProperties keycloak) {
+        this.keycloak = keycloak;
+    }
+
+    public UsageLiquibaseProperties getUsageLiquibase() {
+        return usageLiquibase;
+    }
+
+    public void setUsageLiquibase(UsageLiquibaseProperties usageLiquibase) {
+        this.usageLiquibase = usageLiquibase;
     }
 }

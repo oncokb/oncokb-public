@@ -11,6 +11,7 @@ import { inject, observer } from 'mobx-react';
 import { Alert, Form, Button } from 'react-bootstrap';
 import SmallPageContainer from '../SmallPageContainer';
 import MessageToContact from 'app/shared/texts/MessageToContact';
+import { ContactLink } from 'app/shared/links/ContactLink';
 import * as styles from '../../index.module.scss';
 
 @inject('routing')
@@ -70,7 +71,9 @@ export default class ActivateAccount extends React.Component<{
             />
           </Form.Group>
           <Button
-            variant="primary"
+            block
+            variant="outline-primary"
+            className="font-medium"
             disabled={!this.manualKey.trim()}
             onClick={this.submitManualKey}
           >
@@ -132,15 +135,50 @@ export default class ActivateAccount extends React.Component<{
   getFailureMessage = () => {
     // the server attaches more information into the error which the type does not allow
     const error = this.activateAccount.error as any;
+    const serverDetail: string | undefined =
+      error?.response?.body?.detail ?? error?.response?.body?.title;
+
+    // When the activation key can't be found, we can't tell whether it was
+    // already used (e.g. the user clicked the verification link twice) or was
+    // never valid. Rather than showing an alarming "invalid or already used"
+    // message, guide the user to the action that fits their situation. The
+    // server flags this case with a dedicated errorKey.
+    const activationKeyNotUsable: boolean =
+      error?.response?.body?.errorKey === 'activationkeynotfound';
+
+    if (activationKeyNotUsable) {
+      return (
+        <div>
+          <Alert variant={'warning'}>
+            <Alert.Heading>Activation key already used</Alert.Heading>
+            <p>
+              Please try signing in. This activation key can only be used once
+              and may have already been used.
+            </p>
+            <Link
+              className="btn btn-primary btn-block font-medium"
+              to={PAGE_ROUTE.LOGIN}
+            >
+              Sign in to {ONCOKB_TM}
+            </Link>
+            <div className={'mt-3'}>
+              Need help?{' '}
+              <ContactLink emailSubject={'Account Activation Question'}>
+                Contact support
+              </ContactLink>
+            </div>
+          </Alert>
+        </div>
+      );
+    }
+
     const defaultInfo = 'Your user account could not be activated.';
     return (
       <div>
         <Alert variant={'warning'} className={styles.biggerText}>
           {this.activateAccount.error
-            ? error.response &&
-              error.response.body &&
-              error.response.body.detail
-              ? error.response.body.detail
+            ? serverDetail
+              ? serverDetail
               : `${defaultInfo} due to ${error.message}`
             : defaultInfo}
         </Alert>

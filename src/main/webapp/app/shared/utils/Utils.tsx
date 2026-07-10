@@ -45,6 +45,7 @@ import {
   Tag,
   Treatment,
   TumorType,
+  TumorTypeEntity,
 } from 'app/shared/api/generated/OncoKbPrivateAPI';
 import InfoIcon from 'app/shared/icons/InfoIcon';
 import { LevelOfEvidencePageLink } from 'app/shared/links/LevelOfEvidencePageLink';
@@ -96,7 +97,7 @@ export function shortenTextByCharacters(text: string, cutoff: number) {
 }
 
 export function getCancerTypeNameFromOncoTreeType(
-  oncoTreeType: TumorType
+  oncoTreeType: TumorTypeEntity
 ): string {
   return oncoTreeType.subtype || oncoTreeType.mainType || 'NA';
 }
@@ -124,8 +125,8 @@ export function formatEnumLabel(value?: string | null): string {
 }
 
 export function getCancerTypesNameFromOncoTreeType(
-  cancerTypes: TumorType[],
-  excludedCancerTypes?: TumorType[]
+  cancerTypes: TumorTypeEntity[],
+  excludedCancerTypes?: TumorTypeEntity[]
 ): string {
   return getCancerTypesName(
     cancerTypes.map(cancerType =>
@@ -189,7 +190,7 @@ export function getAllAlterationsName(alterations: Alteration[]) {
     : '';
 }
 
-export function getAllTumorTypesName(tumorTypes: TumorType[]) {
+export function getAllTumorTypesName(tumorTypes: TumorTypeEntity[]) {
   return tumorTypes
     ? tumorTypes.map(getCancerTypeNameFromOncoTreeType).sort().join(', ')
     : '';

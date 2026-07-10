@@ -10,7 +10,7 @@ import {
   getAllTumorTypesName,
   levelOfEvidence2Level,
 } from 'app/shared/utils/Utils';
-import { TumorType } from '../api/generated/OncoKbPrivateAPI';
+import { TumorType, TumorTypeEntity } from '../api/generated/OncoKbPrivateAPI';
 import { isNumber } from 'app/shared/utils/LodashUtils';
 
 export function sortByArrayIndexAsc(aIndex: number, bIndex: number) {
@@ -206,6 +206,9 @@ export function mutationEffectSortMethod(
   );
 }
 
-export function tumorTypeSortMethod(a: TumorType[], b: TumorType[]) {
+export function tumorTypeSortMethod(
+  a: TumorTypeEntity[],
+  b: TumorTypeEntity[]
+) {
   return getAllTumorTypesName(a).localeCompare(getAllTumorTypesName(b));
 }

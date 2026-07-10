@@ -1,0 +1,3 @@
+usage_year;user_id;user_email;company_id;total_usage;total_public_usage;top_resource_id;top_resource_usage;top_public_resource_id;top_public_resource_usage
+2026-01-01;4;user@localhost;1;240;180;1;180;1;180
+2026-01-01;3;admin@localhost;null;185;140;2;140;2;140

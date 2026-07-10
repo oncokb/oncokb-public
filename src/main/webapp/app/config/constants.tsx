@@ -4,11 +4,14 @@ import {
   GeneNumber,
   GermlineVariantAnnotation,
   MainNumber,
+  MutationEffectResp,
+  Query,
   SomaticVariantAnnotation,
 } from 'app/shared/api/generated/OncoKbPrivateAPI';
 import React from 'react';
 import { Link } from 'react-router-dom';
 import { Feedback, FeedbackType } from 'app/components/feedback/types';
+import { MailTypeInfo } from 'app/shared/api/generated/API';
 
 /* eslint no-shadow: 0 */
 
@@ -22,6 +25,10 @@ export const SERVER_API_URL = process.env.SERVER_API_URL;
 
 export const LOCAL_DEV_OPT = 'localdev';
 export const DISABLE_BANNER_OPT = 'disablebanner';
+export const KEYCLOAK_LOGIN_SUCCESS_QUERY_PARAM = 'login_success';
+export const KEYCLOAK_ERROR_QUERY_PARAM = 'keycloak_error';
+export const KEYCLOAK_IDP_HINT_QUERY_PARAM = 'kc_idp_hint';
+export const MSK_PING_IDP_ALIAS = 'msk-ping';
 
 export const DEV_URL = 'http://localhost:9095';
 
@@ -62,6 +69,7 @@ export const ONCOKB_NEWS_GROUP_SUBSCRIPTION_LINK =
   'http://groups.google.com/group/oncokb-news/boxsubscribe';
 
 export const ONCOKB_CONTACT_EMAIL = 'contact@oncokb.org';
+export const ONCOKB_DEV_EMAIL = 'dev@oncokb.org';
 export const ONCOKB_LICENSE_EMAIL = 'licenses@oncokb.org';
 export const GRID_BREAKPOINTS = {
   SM: 576,
@@ -473,7 +481,7 @@ export const DEFAULT_GENE_NUMBER: GeneNumber = {
   tumorType: 0,
 };
 
-export const DEFAULT_MUTATION_EFFECT = {
+export const DEFAULT_MUTATION_EFFECT: MutationEffectResp = {
   citations: {
     abstracts: [],
     pmids: [],
@@ -496,9 +504,9 @@ export const DEFAULT_GERMLINE_VARIANT = {
   penetranceDescription: '',
 };
 
-export const DEFAULT_QUERY = {
+export const DEFAULT_QUERY: Query = {
   alteration: '',
-  alterationType: '',
+  alterationType: 'MUTATION',
   consequence: '',
   entrezGeneId: -1,
   hgvs: '',
@@ -507,12 +515,9 @@ export const DEFAULT_QUERY = {
   id: '',
   proteinEnd: -1,
   proteinStart: -1,
-  referenceGenome: 'GRCH37' as any,
-  svType: 'UNKNOWN' as 'UNKNOWN',
+  referenceGenome: 'GRCh37',
+  svType: 'UNKNOWN',
   tumorType: '',
-  type: '',
-  germline: false,
-  alleleState: '',
   canonicalTranscript: '',
 };
 
@@ -544,6 +549,37 @@ const DEFAULT_ALTERATION: Alteration = {
 };
 
 export const DEFAULT_ANNOTATION: SomaticVariantAnnotation = {
+  alternativeOncoKbVariant: {
+    gene: '',
+    inputVariant: '',
+    transcriptId: '',
+    foundAlteration: {
+      alteration: '',
+      consequence: {
+        description: '',
+        isGenerallyTruncating: false,
+        term: '',
+      },
+      gene: {
+        entrezGeneId: 0,
+        geneAliases: [],
+        geneType: 'INSUFFICIENT_EVIDENCE',
+        genesets: [],
+        grch37Isoform: '',
+        grch37RefSeq: '',
+        grch38Isoform: '',
+        grch38RefSeq: '',
+        hugoSymbol: '',
+      },
+      name: '',
+      proteinChange: '',
+      proteinEnd: 0,
+      proteinStart: 0,
+      refResidues: '',
+      referenceGenomes: ['GRCh37'],
+      variantResidues: '',
+    },
+  },
   alleleExist: false,
   alteration: DEFAULT_ALTERATION,
   background: '',
@@ -552,15 +588,15 @@ export const DEFAULT_ANNOTATION: SomaticVariantAnnotation = {
   diagnosticSummary: '',
   geneExist: false,
   geneSummary: '',
-  highestDiagnosticImplicationLevel: 'NO',
-  highestPrognosticImplicationLevel: 'NO',
-  highestResistanceLevel: 'NO',
-  highestSensitiveLevel: 'NO',
-  highestFdaLevel: 'NO',
+  highestDiagnosticImplicationLevel: 'NO' as any,
+  highestPrognosticImplicationLevel: 'NO' as any,
+  highestResistanceLevel: 'NO' as any,
+  highestSensitiveLevel: 'NO' as any,
+  highestFdaLevel: 'NO' as any,
   hotspot: false,
   lastUpdate: '',
   mutationEffect: DEFAULT_MUTATION_EFFECT,
-  oncogenic: '',
+  oncogenic: 'Unknown',
   exon: '',
   otherSignificantResistanceLevels: [],
   otherSignificantSensitiveLevels: [],
@@ -582,24 +618,18 @@ export const DEFAULT_ANNOTATION: SomaticVariantAnnotation = {
 };
 
 export const DEFAULT_GERMLINE_ANNOTATION: GermlineVariantAnnotation = {
-  alleleExist: false,
-  clinVarId: '',
   dataVersion: '',
   diagnosticImplications: [],
   diagnosticSummary: '',
-  exon: '',
   geneExist: false,
   geneSummary: '',
   genomicIndicators: [],
-  highestDiagnosticImplicationLevel: 'NO',
-  highestFdaLevel: 'NO',
-  highestPrognosticImplicationLevel: 'NO',
-  highestResistanceLevel: 'NO',
-  highestSensitiveLevel: 'NO',
+  highestDiagnosticImplicationLevel: 'NO' as any,
+  highestPrognosticImplicationLevel: 'NO' as any,
+  highestResistanceLevel: 'NO' as any,
+  highestSensitiveLevel: 'NO' as any,
   lastUpdate: '',
   mutationEffect: DEFAULT_MUTATION_EFFECT,
-  otherSignificantResistanceLevels: [],
-  otherSignificantSensitiveLevels: [],
   pathogenic: '',
   penetrance: '',
   prognosticImplications: [],
@@ -645,7 +675,7 @@ export enum PAGE_TITLE {
   FDA_NGS = 'FDA fact sheet',
 
   LOGOUT = 'Log out',
-  LOGIN = 'Log in',
+  LOGIN = 'Login/Sign up',
   NEWS = 'Latest News',
   ONCOLOGY_TX = 'FDA-Approved Oncology Therapies',
   PRIVACY = 'OncoKB™ Digital Tracker Governance Privacy Policy',
@@ -729,7 +759,7 @@ export enum PAGE_ROUTE {
   ADMIN_USAGE_ANALYSIS = '/admin/usage-analysis',
   ADMIN_USER_USAGE_DETAILS = '/admin/usage-analysis/users/:id',
   ADMIN_USER_USAGE_DETAILS_LINK = '/admin/usage-analysis/users/',
-  ADMIN_RESOURCE_DETAILS = '/admin/usage-analysis/resources/:endpoint',
+  ADMIN_RESOURCE_DETAILS = '/admin/usage-analysis/resources/:resourceId',
   ADMIN_RESOURCE_DETAILS_LINK = '/admin/usage-analysis/resources/',
   ADMIN_ADD_COMPANY = '/admin/create-company',
   ADMIN_ADD_USER_BANNER_MESSAGE = '/admin/create-user-banner-messages',
@@ -1007,6 +1037,7 @@ export type DataRelease = {
 };
 
 export const DATA_RELEASES: DataRelease[] = [
+  { date: '06252026', version: 'v7.3' },
   { date: '05292026', version: 'v7.2' },
   { date: '04302026', version: 'v7.1' },
   { date: '03302026', version: 'v7.0' },
@@ -1202,3 +1233,37 @@ export type InheritanceMechanism =
   | typeof MECHANISM_OF_INHERITANCE_AUTOSOMAL_RECESSIVE
   | typeof MECHANISM_OF_INHERITANCE_X_LINKED_RECESSIVE
   | 'Carrier';
+
+export type MailCategory =
+  | 'ACTIVATION'
+  | 'CREATION'
+  | 'APPROVAL'
+  | 'API_APPROVAL'
+  | 'REJECTION'
+  | 'CLARIFICATION'
+  | 'LICENSE_OPTIONS'
+  | 'TRIAL'
+  | 'TERMINATION';
+
+export const USER_MAIL_TAGS: Partial<Record<
+  MailTypeInfo['mailType'],
+  MailCategory
+>> = {
+  ACTIVATION: 'ACTIVATION',
+  CREATION: 'CREATION',
+  APPROVAL: 'APPROVAL',
+  API_ACCESS_APPROVAL: 'API_APPROVAL',
+  REJECTION: 'REJECTION',
+  REJECTION_US_SANCTION: 'REJECTION',
+  REJECT_ALUMNI_ADDRESS: 'REJECTION',
+  CLARIFY_ACADEMIC_FOR_PROFIT: 'CLARIFICATION',
+  CLARIFY_ACADEMIC_NON_INSTITUTE_EMAIL: 'CLARIFICATION',
+  CLARIFY_USE_CASE: 'CLARIFICATION',
+  CLARIFY_DUPLICATE_USER: 'CLARIFICATION',
+  CLARIFY_REGISTRATION_INFO: 'CLARIFICATION',
+  CLARIFY_HOSPITAL_USE: 'LICENSE_OPTIONS',
+  CLARIFY_COMMERCIAL_USE: 'LICENSE_OPTIONS',
+  LICENSE_OPTIONS: 'LICENSE_OPTIONS',
+  ACTIVATE_FREE_TRIAL: 'TRIAL',
+  TERMINATION_NOTIFICATION_EMAIL: 'TERMINATION',
+};

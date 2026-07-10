@@ -63,3 +63,28 @@
   padding: 4px var(--radius-8, 0.5rem);
   border: var(--radius-2, 2px) solid var(--Color-11, $primary);
 }
+
+.featureTag {
+  @extend .tag;
+  color: $primary;
+  border: var(--radius-2, 2px) solid var(--Color-11, $primary);
+  border-color: rgba(21, 190, 83, 1);
+  color: rgba(21, 190, 83, 1);
+  background-color: rgba(21, 190, 83, 0.07);
+}
+
+.fixTag {
+  @extend .tag;
+  border: var(--radius-2, 2px) solid var(--Color-11, $primary);
+  border-color: rgba(185, 115, 10, 1);
+  color: rgba(185, 115, 10, 1);
+  background-color: rgba(185, 115, 10, 0.07);
+}
+
+.choreTag {
+  @extend .tag;
+  border: var(--radius-2, 2px) solid var(--Color-11, $primary);
+  border-color: rgba(130, 100, 230, 1);
+  color: rgba(130, 100, 230, 1);
+  background-color: rgba(130, 100, 230, 0.07);
+}

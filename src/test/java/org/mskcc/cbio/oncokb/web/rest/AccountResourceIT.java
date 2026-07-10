@@ -548,7 +548,7 @@ public class AccountResourceIT {
         userRepository.saveAndFlush(user);
 
         restAccountMockMvc.perform(get("/api/activate?key=wrongActivationKey&login={userLogin}", userLogin))
-            .andExpect(status().isInternalServerError());
+            .andExpect(status().isBadRequest());
     }
 
     @Test

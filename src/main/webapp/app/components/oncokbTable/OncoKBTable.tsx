@@ -19,6 +19,9 @@ interface ITableWithSearchBox<T> extends Partial<TableProps<T>> {
   loading?: boolean;
   filters?: React.FunctionComponent;
   className?: string;
+  serverSideSearch?: boolean;
+  searchKeyword?: string;
+  onSearchChange?: (keyword: string) => void;
 }
 
 @observer
@@ -36,6 +39,9 @@ export default class OncoKBTable<T> extends React.Component<
 
   @computed
   get filteredData() {
+    if (this.props.serverSideSearch) {
+      return this.props.data;
+    }
     return this.props.data.filter((item: T) => {
       const filterableColumns = this.props.columns.filter(
         column => !!column.onFilter
@@ -51,6 +57,11 @@ export default class OncoKBTable<T> extends React.Component<
   }
 
   render() {
+    const sorted = this.props.sorted ? [...this.props.sorted] : undefined;
+    const defaultSorted = this.props.defaultSorted
+      ? [...this.props.defaultSorted]
+      : undefined;
+
     return (
       <div>
         {this.props.filters === undefined && this.props.disableSearch ? (
@@ -72,8 +83,18 @@ export default class OncoKBTable<T> extends React.Component<
                   <div className="ml-auto">
                     <input
                       onChange={(event: any) => {
-                        this.searchKeyword = event.target.value.toLowerCase();
+                        const newKeyword = event.target.value.toLowerCase();
+                        if (this.props.onSearchChange) {
+                          this.props.onSearchChange(newKeyword);
+                        } else {
+                          this.searchKeyword = newKeyword;
+                        }
                       }}
+                      value={
+                        this.props.onSearchChange
+                          ? this.props.searchKeyword || ''
+                          : this.searchKeyword
+                      }
                       className="form-control input-sm"
                       type="text"
                       placeholder="Search ..."
@@ -87,6 +108,8 @@ export default class OncoKBTable<T> extends React.Component<
         <div className="mt-2">
           <ReactTable
             {...this.props}
+            sorted={sorted}
+            defaultSorted={defaultSorted}
             showPagination={this.props.showPagination}
             className={classNames(
               `-striped -highlight oncokbReactTable ${

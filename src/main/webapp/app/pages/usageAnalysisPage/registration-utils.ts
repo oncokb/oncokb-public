@@ -1,7 +1,7 @@
 import { LicenseType } from 'app/config/constants';
 import { TABLE_DAY_FORMAT, TABLE_YEAR_FORMAT } from 'app/config/constants';
 import moment from 'moment';
-import { ToggleValue } from './usage-analysis-utils';
+import { TimeToggleValue } from './usage-analysis-utils';
 import { UserRegistrationSummary } from 'app/shared/api/generated/API';
 
 export type AggregatedUserRegistrationSummary = {
@@ -15,15 +15,15 @@ export const NO_CREATION_DATE_LABEL = 'No creation date';
 
 export function getRegistrationPeriodStart(
   periodStart: string,
-  timeTypeToggleValue: ToggleValue
+  timeTypeToggleValue: TimeToggleValue
 ) {
   if (periodStart === NO_CREATION_DATE_LABEL) {
     return NO_CREATION_DATE_LABEL;
   }
-  if (timeTypeToggleValue === ToggleValue.RESULTS_BY_YEAR) {
+  if (timeTypeToggleValue === TimeToggleValue.RESULTS_BY_YEAR) {
     return moment(periodStart).format(TABLE_YEAR_FORMAT);
   }
-  if (timeTypeToggleValue === ToggleValue.RESULTS_BY_WEEK) {
+  if (timeTypeToggleValue === TimeToggleValue.RESULTS_BY_WEEK) {
     return moment(periodStart)
       .startOf('isoWeek')
       .format(REGISTRATION_WEEK_FORMAT);
@@ -31,11 +31,13 @@ export function getRegistrationPeriodStart(
   return moment(periodStart).format(TABLE_DAY_FORMAT);
 }
 
-export function getRegistrationTimeHeader(timeTypeToggleValue: ToggleValue) {
-  if (timeTypeToggleValue === ToggleValue.RESULTS_BY_YEAR) {
+export function getRegistrationTimeHeader(
+  timeTypeToggleValue: TimeToggleValue
+) {
+  if (timeTypeToggleValue === TimeToggleValue.RESULTS_BY_YEAR) {
     return 'Year';
   }
-  if (timeTypeToggleValue === ToggleValue.RESULTS_BY_WEEK) {
+  if (timeTypeToggleValue === TimeToggleValue.RESULTS_BY_WEEK) {
     return 'Week Start';
   }
   return 'Date';
@@ -61,7 +63,7 @@ export function compareRegistrationPeriodStart(
 
 export function aggregateRegistrationData(
   data: UserRegistrationSummary[],
-  timeTypeToggleValue: ToggleValue,
+  timeTypeToggleValue: TimeToggleValue,
   selectedLicenseType?: LicenseType
 ) {
   const groupedData = new Map<string, AggregatedUserRegistrationSummary>();
@@ -94,7 +96,7 @@ export function aggregateRegistrationData(
 
 export function filterRegistrationDataByDateRange(
   data: AggregatedUserRegistrationSummary[],
-  timeTypeToggleValue: ToggleValue,
+  timeTypeToggleValue: TimeToggleValue,
   filterToggled: boolean,
   fromDate?: string,
   toDate?: string
@@ -104,9 +106,9 @@ export function filterRegistrationDataByDateRange(
   }
 
   let tableFormat: string;
-  if (timeTypeToggleValue === ToggleValue.RESULTS_BY_YEAR) {
+  if (timeTypeToggleValue === TimeToggleValue.RESULTS_BY_YEAR) {
     tableFormat = TABLE_YEAR_FORMAT;
-  } else if (timeTypeToggleValue === ToggleValue.RESULTS_BY_WEEK) {
+  } else if (timeTypeToggleValue === TimeToggleValue.RESULTS_BY_WEEK) {
     tableFormat = REGISTRATION_WEEK_FORMAT;
   } else {
     tableFormat = TABLE_DAY_FORMAT;

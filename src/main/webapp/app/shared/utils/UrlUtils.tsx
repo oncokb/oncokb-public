@@ -28,6 +28,16 @@ import { YEAR_END_SUMMARY_RANGE } from 'app/pages/newsPage/NewsPageNavTab';
 import { ALTERNATIVE_ALLELES_REGEX } from 'app/config/constants/regex';
 import WithSeparator from 'react-with-separator';
 import { GENETIC_TYPE } from 'app/components/geneticTypeTabs/GeneticTypeTabs';
+import { LocationDescriptorObject } from 'history';
+
+export const getLoginRouteForRegister = (): LocationDescriptorObject => ({
+  pathname: PAGE_ROUTE.LOGIN,
+  state: {
+    from: {
+      pathname: PAGE_ROUTE.REGISTER,
+    },
+  },
+});
 
 export const getHostLinkWithProtocol = (): string => {
   return `${window.location.protocol}//${window.location.host}`;

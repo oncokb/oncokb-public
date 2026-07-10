@@ -1,5 +1,6 @@
 package org.mskcc.cbio.oncokb.service;
 
+import org.mskcc.cbio.oncokb.config.cache.CacheNameResolver;
 import org.mskcc.cbio.oncokb.domain.User;
 import org.mskcc.cbio.oncokb.domain.UserMails;
 import org.mskcc.cbio.oncokb.domain.enumeration.MailType;
@@ -9,14 +10,20 @@ import org.mskcc.cbio.oncokb.service.mapper.UserMailsMapper;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import org.springframework.cache.CacheManager;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.Objects;
 import java.time.Instant;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
+
+import static org.mskcc.cbio.oncokb.config.cache.UserCacheResolver.ALL_USERS_CACHE;
+import static org.mskcc.cbio.oncokb.config.cache.UserCacheResolver.USERS_BY_EMAIL_CACHE;
+import static org.mskcc.cbio.oncokb.config.cache.UserCacheResolver.USERS_BY_LOGIN_CACHE;
 
 /**
  * Service Implementation for managing {@link UserMails}.
@@ -31,9 +38,20 @@ public class UserMailsService {
 
     private final UserMailsMapper userMailsMapper;
 
-    public UserMailsService(UserMailsRepository userMailsRepository, UserMailsMapper userMailsMapper) {
+    private final CacheManager cacheManager;
+
+    private final CacheNameResolver cacheNameResolver;
+
+    public UserMailsService(
+        UserMailsRepository userMailsRepository,
+        UserMailsMapper userMailsMapper,
+        CacheManager cacheManager,
+        CacheNameResolver cacheNameResolver
+    ) {
         this.userMailsRepository = userMailsRepository;
         this.userMailsMapper = userMailsMapper;
+        this.cacheManager = cacheManager;
+        this.cacheNameResolver = cacheNameResolver;
     }
 
     /**
@@ -46,6 +64,7 @@ public class UserMailsService {
         log.debug("Request to save UserMails : {}", userMailsDTO);
         UserMails userMails = userMailsMapper.toEntity(userMailsDTO);
         userMails = userMailsRepository.save(userMails);
+        clearUserCaches(userMails.getUser());
         return userMailsMapper.toDto(userMails);
     }
 
@@ -117,7 +136,11 @@ public class UserMailsService {
      */
     public void delete(Long id) {
         log.debug("Request to delete UserMails : {}", id);
+        Optional<UserMails> userMails = userMailsRepository.findById(id);
         userMailsRepository.deleteById(id);
+        if (userMails.isPresent()) {
+            clearUserCaches(userMails.get().getUser());
+        }
     }
 
     /**
@@ -128,5 +151,22 @@ public class UserMailsService {
     public void deleteAllByUser(User user) {
         log.debug("Request to delete all UserMails related to user: {}", user);
         userMailsRepository.deleteAllByUser(user);
+        clearUserCaches(user);
+    }
+
+    private void clearUserCaches(User user) {
+        if (user != null && user.getLogin() != null) {
+            evictCacheKey(this.cacheNameResolver.getCacheName(USERS_BY_LOGIN_CACHE), user.getLogin());
+        }
+        if (user != null && user.getEmail() != null) {
+            evictCacheKey(this.cacheNameResolver.getCacheName(USERS_BY_EMAIL_CACHE), user.getEmail());
+        }
+        evictCacheKey(this.cacheNameResolver.getCacheName(ALL_USERS_CACHE), "getAllManagedUsers");
+    }
+
+    private void evictCacheKey(String cacheName, String key) {
+        if (cacheManager.getCache(cacheName) != null) {
+            Objects.requireNonNull(cacheManager.getCache(cacheName)).evict(key);
+        }
     }
 }

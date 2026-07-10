@@ -17,7 +17,13 @@ import {
   formatEnumLabel,
   toAppLocalDateFormat,
 } from 'app/shared/utils/Utils';
-import { AUTHORITIES, LicenseType, USER_AUTHORITY } from 'app/config/constants';
+import {
+  AUTHORITIES,
+  LicenseType,
+  MailCategory,
+  USER_AUTHORITY,
+  USER_MAIL_TAGS,
+} from 'app/config/constants';
 import styles from './UserDetailsPage.module.scss';
 import LoadingIndicator, {
   LoaderSize,
@@ -266,6 +272,15 @@ export default class UserDetailsPage extends React.Component<{
     return `Yes (${getGracePeriodDaysRemaining(user)} days)`;
   }
 
+  private getUserMailTags(user: UserDTO) {
+    const userMails = user.userMails || [];
+    const tags = userMails
+      .map(userMail => USER_MAIL_TAGS[userMail.mailType])
+      .filter(tag => tag !== undefined);
+
+    return Array.from(new Set(tags));
+  }
+
   private columns: SearchColumn<UserDTO>[] = [
     {
       id: 'quickView',
@@ -471,6 +486,30 @@ export default class UserDetailsPage extends React.Component<{
       onFilter: (data: UserDTO, keyword) =>
         data.licenseType ? filterByKeyword(data.licenseType, keyword) : false,
       accessor: 'licenseType',
+    },
+    {
+      id: 'userMails',
+      Header: <span className={styles.tableHeader}>Emails Sent to User</span>,
+      minWidth: 200,
+      sortable: false,
+      onFilter: (data: UserDTO, keyword) =>
+        this.getUserMailTags(data).some(tag => filterByKeyword(tag, keyword)),
+      Cell: (props: { original: UserDTO }) => {
+        const tags = this.getUserMailTags(props.original);
+        if (tags.length === 0) {
+          return <span>—</span>;
+        }
+
+        return (
+          <div className="d-flex flex-wrap">
+            {tags.map(tag => (
+              <span key={tag} className="badge badge-info mr-1 mb-1">
+                {tag}
+              </span>
+            ))}
+          </div>
+        );
+      },
     },
     {
       id: 'operations',

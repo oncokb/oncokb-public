@@ -2,7 +2,7 @@
   "swagger": "2.0",
   "info": {
     "description": "OncoKB, a comprehensive and curated precision oncology knowledge base, offers oncologists detailed, evidence-based information about individual somatic mutations and structural alterations present in patient tumors with the goal of supporting optimal treatment decisions.",
-    "version": "v1.5.0",
+    "version": "v1.6.0",
     "title": "OncoKB APIs",
     "contact": {
       "name": "OncoKB",
@@ -570,7 +570,7 @@
         }
       }
     },
-     "/tags/{hugoSymbol}/{name}/{tumorType}": {
+    "/tags/{hugoSymbol}/{name}/{tumorType}": {
       "get": {
         "tags": [
           "tags-controller"
@@ -2095,6 +2095,7 @@
               "STANDARD_THERAPEUTIC_IMPLICATIONS_FOR_DRUG_RESISTANCE",
               "INVESTIGATIONAL_THERAPEUTIC_IMPLICATIONS_DRUG_SENSITIVITY",
               "INVESTIGATIONAL_THERAPEUTIC_IMPLICATIONS_DRUG_RESISTANCE",
+              "TX_ADDENDUM",
               "PATHOGENIC",
               "GENOMIC_INDICATOR",
               "GENE_PENETRANCE",
@@ -2105,6 +2106,9 @@
         },
         "genomicLocation": {
           "type": "string"
+        },
+        "germline": {
+          "type": "boolean"
         },
         "id": {
           "type": "string"
@@ -2294,6 +2298,160 @@
         }
       }
     },
+    "LevelInfo": {
+      "type": "object",
+      "properties": {
+        "highestDiagnosticLevel": {
+          "type": "string",
+          "enum": [
+            "LEVEL_1",
+            "LEVEL_2",
+            "LEVEL_3A",
+            "LEVEL_3B",
+            "LEVEL_4",
+            "LEVEL_R1",
+            "LEVEL_R2",
+            "LEVEL_Px1",
+            "LEVEL_Px2",
+            "LEVEL_Px3",
+            "LEVEL_Dx1",
+            "LEVEL_Dx2",
+            "LEVEL_Dx3",
+            "LEVEL_Fda1",
+            "LEVEL_Fda2",
+            "LEVEL_Fda3",
+            "NO"
+          ]
+        },
+        "highestFDALevel": {
+          "type": "string",
+          "enum": [
+            "LEVEL_1",
+            "LEVEL_2",
+            "LEVEL_3A",
+            "LEVEL_3B",
+            "LEVEL_4",
+            "LEVEL_R1",
+            "LEVEL_R2",
+            "LEVEL_Px1",
+            "LEVEL_Px2",
+            "LEVEL_Px3",
+            "LEVEL_Dx1",
+            "LEVEL_Dx2",
+            "LEVEL_Dx3",
+            "LEVEL_Fda1",
+            "LEVEL_Fda2",
+            "LEVEL_Fda3",
+            "NO"
+          ]
+        },
+        "highestPrognosticLevel": {
+          "type": "string",
+          "enum": [
+            "LEVEL_1",
+            "LEVEL_2",
+            "LEVEL_3A",
+            "LEVEL_3B",
+            "LEVEL_4",
+            "LEVEL_R1",
+            "LEVEL_R2",
+            "LEVEL_Px1",
+            "LEVEL_Px2",
+            "LEVEL_Px3",
+            "LEVEL_Dx1",
+            "LEVEL_Dx2",
+            "LEVEL_Dx3",
+            "LEVEL_Fda1",
+            "LEVEL_Fda2",
+            "LEVEL_Fda3",
+            "NO"
+          ]
+        },
+        "highestResistanceLevel": {
+          "type": "string",
+          "enum": [
+            "LEVEL_1",
+            "LEVEL_2",
+            "LEVEL_3A",
+            "LEVEL_3B",
+            "LEVEL_4",
+            "LEVEL_R1",
+            "LEVEL_R2",
+            "LEVEL_Px1",
+            "LEVEL_Px2",
+            "LEVEL_Px3",
+            "LEVEL_Dx1",
+            "LEVEL_Dx2",
+            "LEVEL_Dx3",
+            "LEVEL_Fda1",
+            "LEVEL_Fda2",
+            "LEVEL_Fda3",
+            "NO"
+          ]
+        },
+        "highestSensitiveLevel": {
+          "type": "string",
+          "enum": [
+            "LEVEL_1",
+            "LEVEL_2",
+            "LEVEL_3A",
+            "LEVEL_3B",
+            "LEVEL_4",
+            "LEVEL_R1",
+            "LEVEL_R2",
+            "LEVEL_Px1",
+            "LEVEL_Px2",
+            "LEVEL_Px3",
+            "LEVEL_Dx1",
+            "LEVEL_Dx2",
+            "LEVEL_Dx3",
+            "LEVEL_Fda1",
+            "LEVEL_Fda2",
+            "LEVEL_Fda3",
+            "NO"
+          ]
+        }
+      }
+    },
+    "MainNumber": {
+      "type": "object",
+      "properties": {
+        "alteration": {
+          "type": "integer",
+          "format": "int32"
+        },
+        "drug": {
+          "type": "integer",
+          "format": "int32"
+        },
+        "gene": {
+          "type": "integer",
+          "format": "int32"
+        },
+        "level": {
+          "type": "array",
+          "items": {
+            "$ref": "#/definitions/MainNumberLevel"
+          }
+        },
+        "tumorType": {
+          "type": "integer",
+          "format": "int32"
+        }
+      }
+    },
+    "CancerTypeCount": {
+      "type": "object",
+      "properties": {
+        "cancerType": {
+          "type": "string"
+        },
+        "count": {
+          "type": "integer",
+          "format": "int32"
+        }
+      }
+    },
     "Implication": {
       "type": "object",
       "properties": {
@@ -2354,14 +2512,6 @@
     "GermlineVariantAnnotation": {
       "type": "object",
       "properties": {
-        "alleleExist": {
-          "type": "boolean",
-          "example": false,
-          "description": "Indicates whether the alternate allele has been curated. See SOP Protocol 9.1"
-        },
-        "clinVarId": {
-          "type": "string"
-        },
         "dataVersion": {
           "type": "string",
           "example": "v4.25",
@@ -2377,10 +2527,6 @@
         "diagnosticSummary": {
           "type": "string",
           "description": "Diagnostic summary. Defaulted to \"\""
-        },
-        "exon": {
-          "type": "string",
-          "description": "(Nullable) The affected exon of this variant, if applicable (currently only supported when annotating via HGVSg or Genomic Location)"
         },
         "geneExist": {
           "type": "boolean",
@@ -2401,92 +2547,26 @@
           "type": "string",
           "description": "(Nullable) The highest diagnostic level from a list of diagnostic evidences.",
           "enum": [
-            "LEVEL_1",
-            "LEVEL_2",
-            "LEVEL_3A",
-            "LEVEL_3B",
-            "LEVEL_4",
-            "LEVEL_R1",
-            "LEVEL_R2",
-            "LEVEL_Px1",
-            "LEVEL_Px2",
-            "LEVEL_Px3",
             "LEVEL_Dx1",
             "LEVEL_Dx2",
-            "LEVEL_Dx3",
-            "LEVEL_Fda1",
-            "LEVEL_Fda2",
-            "LEVEL_Fda3",
-            "NO"
-          ]
-        },
-        "highestFdaLevel": {
-          "type": "string",
-          "description": "(Nullable) The highest FDA level from a list of therapeutic evidences.",
-          "enum": [
-            "LEVEL_1",
-            "LEVEL_2",
-            "LEVEL_3A",
-            "LEVEL_3B",
-            "LEVEL_4",
-            "LEVEL_R1",
-            "LEVEL_R2",
-            "LEVEL_Px1",
-            "LEVEL_Px2",
-            "LEVEL_Px3",
-            "LEVEL_Dx1",
-            "LEVEL_Dx2",
-            "LEVEL_Dx3",
-            "LEVEL_Fda1",
-            "LEVEL_Fda2",
-            "LEVEL_Fda3",
-            "NO"
+            "LEVEL_Dx3"
           ]
         },
         "highestPrognosticImplicationLevel": {
           "type": "string",
           "description": "(Nullable) The highest prognostic level from a list of prognostic evidences.",
           "enum": [
-            "LEVEL_1",
-            "LEVEL_2",
-            "LEVEL_3A",
-            "LEVEL_3B",
-            "LEVEL_4",
-            "LEVEL_R1",
-            "LEVEL_R2",
             "LEVEL_Px1",
             "LEVEL_Px2",
-            "LEVEL_Px3",
-            "LEVEL_Dx1",
-            "LEVEL_Dx2",
-            "LEVEL_Dx3",
-            "LEVEL_Fda1",
-            "LEVEL_Fda2",
-            "LEVEL_Fda3",
-            "NO"
+            "LEVEL_Px3"
           ]
         },
         "highestResistanceLevel": {
           "type": "string",
           "description": "(Nullable) The highest resistance level from a list of therapeutic evidences.",
           "enum": [
-            "LEVEL_1",
-            "LEVEL_2",
-            "LEVEL_3A",
-            "LEVEL_3B",
-            "LEVEL_4",
             "LEVEL_R1",
-            "LEVEL_R2",
-            "LEVEL_Px1",
-            "LEVEL_Px2",
-            "LEVEL_Px3",
-            "LEVEL_Dx1",
-            "LEVEL_Dx2",
-            "LEVEL_Dx3",
-            "LEVEL_Fda1",
-            "LEVEL_Fda2",
-            "LEVEL_Fda3",
-            "NO"
+            "LEVEL_R2"
           ]
         },
         "highestSensitiveLevel": {
@@ -2497,19 +2577,7 @@
             "LEVEL_2",
             "LEVEL_3A",
             "LEVEL_3B",
-            "LEVEL_4",
-            "LEVEL_R1",
-            "LEVEL_R2",
-            "LEVEL_Px1",
-            "LEVEL_Px2",
-            "LEVEL_Px3",
-            "LEVEL_Dx1",
-            "LEVEL_Dx2",
-            "LEVEL_Dx3",
-            "LEVEL_Fda1",
-            "LEVEL_Fda2",
-            "LEVEL_Fda3",
-            "NO"
+            "LEVEL_4"
           ]
         },
         "lastUpdate": {
@@ -2520,63 +2588,13 @@
         "mutationEffect": {
           "$ref": "#/definitions/MutationEffectResp"
         },
-        "otherSignificantResistanceLevels": {
-          "type": "array",
-          "description": "DEPRECATED",
-          "items": {
-            "type": "string",
-            "enum": [
-              "LEVEL_1",
-              "LEVEL_2",
-              "LEVEL_3A",
-              "LEVEL_3B",
-              "LEVEL_4",
-              "LEVEL_R1",
-              "LEVEL_R2",
-              "LEVEL_Px1",
-              "LEVEL_Px2",
-              "LEVEL_Px3",
-              "LEVEL_Dx1",
-              "LEVEL_Dx2",
-              "LEVEL_Dx3",
-              "LEVEL_Fda1",
-              "LEVEL_Fda2",
-              "LEVEL_Fda3",
-              "NO"
-            ]
-          }
-        },
-        "otherSignificantSensitiveLevels": {
-          "type": "array",
-          "description": "DEPRECATED",
-          "items": {
-            "type": "string",
-            "enum": [
-              "LEVEL_1",
-              "LEVEL_2",
-              "LEVEL_3A",
-              "LEVEL_3B",
-              "LEVEL_4",
-              "LEVEL_R1",
-              "LEVEL_R2",
-              "LEVEL_Px1",
-              "LEVEL_Px2",
-              "LEVEL_Px3",
-              "LEVEL_Dx1",
-              "LEVEL_Dx2",
-              "LEVEL_Dx3",
-              "LEVEL_Fda1",
-              "LEVEL_Fda2",
-              "LEVEL_Fda3",
-              "NO"
-            ]
-          }
-        },
         "pathogenic": {
-          "type": "string"
+          "type": "string",
+          "description": "(Nullable) The classification of the likelihood that a germline variant will cause disease."
         },
         "penetrance": {
-          "type": "string"
+          "type": "string",
+          "description": "(Nullable) The likelihood that individuals with a specific variant will become affected"
         },
         "prognosticImplications": {
           "type": "array",
@@ -2602,6 +2620,12 @@
         "tumorTypeSummary": {
           "type": "string",
           "description": "Tumor type summary. Defaulted to \"\""
+        },
+        "tumorTypes": {
+          "type": "array",
+          "items": {
+            "$ref": "#/definitions/VariantAnnotationTumorType"
+          }
         },
         "variantExist": {
           "type": "boolean",
@@ -2877,6 +2901,23 @@
         }
       }
     },
+    "AlternativeOncoKbVariant": {
+      "type": "object",
+      "properties": {
+        "foundAlteration": {
+          "$ref": "#/definitions/Alteration"
+        },
+        "gene": {
+          "type": "string"
+        },
+        "inputVariant": {
+          "type": "string"
+        },
+        "transcriptId": {
+          "type": "string"
+        }
+      }
+    },
     "BiologicalVariant": {
       "type": "object",
       "properties": {
@@ -2943,10 +2984,12 @@
       "type": "object",
       "properties": {
         "description": {
-          "type": "string"
+          "type": "string",
+          "description": "Description of the genomic indicator"
         },
         "inheritanceMechanism": {
           "type": "string",
+          "description": "Describes how a genetic trait/allele may be passed to offspring",
           "enum": [
             "AUTOSOMAL_DOMINANT",
             "AUTOSOMAL_RECESSIVE",
@@ -2955,9 +2998,11 @@
           ]
         },
         "name": {
-          "type": "string"
+          "type": "string",
+          "description": "Name of the clinical syndrome"
         }
-      }
+      },
+      "description": "clinical syndromes associated with specific germline variants/alleles that describe the clinical consequences associated with that variant"
     },
     "TumorTypeEntity": {
       "type": "object",
@@ -3107,406 +3152,6 @@
         }
       }
     },
-    "LevelInfo": {
-      "type": "object",
-      "properties": {
-        "highestDiagnosticLevel": {
-          "type": "string",
-          "enum": [
-            "LEVEL_1",
-            "LEVEL_2",
-            "LEVEL_3A",
-            "LEVEL_3B",
-            "LEVEL_4",
-            "LEVEL_R1",
-            "LEVEL_R2",
-            "LEVEL_Px1",
-            "LEVEL_Px2",
-            "LEVEL_Px3",
-            "LEVEL_Dx1",
-            "LEVEL_Dx2",
-            "LEVEL_Dx3",
-            "LEVEL_Fda1",
-            "LEVEL_Fda2",
-            "LEVEL_Fda3",
-            "NO"
-          ]
-        },
-        "highestFDALevel": {
-          "type": "string",
-          "enum": [
-            "LEVEL_1",
-            "LEVEL_2",
-            "LEVEL_3A",
-            "LEVEL_3B",
-            "LEVEL_4",
-            "LEVEL_R1",
-            "LEVEL_R2",
-            "LEVEL_Px1",
-            "LEVEL_Px2",
-            "LEVEL_Px3",
-            "LEVEL_Dx1",
-            "LEVEL_Dx2",
-            "LEVEL_Dx3",
-            "LEVEL_Fda1",
-            "LEVEL_Fda2",
-            "LEVEL_Fda3",
-            "NO"
-          ]
-        },
-        "highestPrognosticLevel": {
-          "type": "string",
-          "enum": [
-            "LEVEL_1",
-            "LEVEL_2",
-            "LEVEL_3A",
-            "LEVEL_3B",
-            "LEVEL_4",
-            "LEVEL_R1",
-            "LEVEL_R2",
-            "LEVEL_Px1",
-            "LEVEL_Px2",
-            "LEVEL_Px3",
-            "LEVEL_Dx1",
-            "LEVEL_Dx2",
-            "LEVEL_Dx3",
-            "LEVEL_Fda1",
-            "LEVEL_Fda2",
-            "LEVEL_Fda3",
-            "NO"
-          ]
-        },
-        "highestResistanceLevel": {
-          "type": "string",
-          "enum": [
-            "LEVEL_1",
-            "LEVEL_2",
-            "LEVEL_3A",
-            "LEVEL_3B",
-            "LEVEL_4",
-            "LEVEL_R1",
-            "LEVEL_R2",
-            "LEVEL_Px1",
-            "LEVEL_Px2",
-            "LEVEL_Px3",
-            "LEVEL_Dx1",
-            "LEVEL_Dx2",
-            "LEVEL_Dx3",
-            "LEVEL_Fda1",
-            "LEVEL_Fda2",
-            "LEVEL_Fda3",
-            "NO"
-          ]
-        },
-        "highestSensitiveLevel": {
-          "type": "string",
-          "enum": [
-            "LEVEL_1",
-            "LEVEL_2",
-            "LEVEL_3A",
-            "LEVEL_3B",
-            "LEVEL_4",
-            "LEVEL_R1",
-            "LEVEL_R2",
-            "LEVEL_Px1",
-            "LEVEL_Px2",
-            "LEVEL_Px3",
-            "LEVEL_Dx1",
-            "LEVEL_Dx2",
-            "LEVEL_Dx3",
-            "LEVEL_Fda1",
-            "LEVEL_Fda2",
-            "LEVEL_Fda3",
-            "NO"
-          ]
-        }
-      }
-    },
-    "MainNumber": {
-      "type": "object",
-      "properties": {
-        "alteration": {
-          "type": "integer",
-          "format": "int32"
-        },
-        "drug": {
-          "type": "integer",
-          "format": "int32"
-        },
-        "gene": {
-          "type": "integer",
-          "format": "int32"
-        },
-        "level": {
-          "type": "array",
-          "items": {
-            "$ref": "#/definitions/MainNumberLevel"
-          }
-        },
-        "tumorType": {
-          "type": "integer",
-          "format": "int32"
-        }
-      }
-    },
-    "CancerTypeCount": {
-      "type": "object",
-      "properties": {
-        "cancerType": {
-          "type": "string"
-        },
-        "count": {
-          "type": "integer",
-          "format": "int32"
-        }
-      }
-    },
-    "VariantAnnotation": {
-      "type": "object",
-      "properties": {
-        "alleleExist": {
-          "type": "boolean"
-        },
-        "alteration": {
-          "$ref": "#/definitions/Alteration"
-        },
-        "background": {
-          "type": "string"
-        },
-        "dataVersion": {
-          "type": "string"
-        },
-        "diagnosticImplications": {
-          "type": "array",
-          "items": {
-            "$ref": "#/definitions/Implication"
-          }
-        },
-        "diagnosticSummary": {
-          "type": "string"
-        },
-        "geneExist": {
-          "type": "boolean"
-        },
-        "geneSummary": {
-          "type": "string"
-        },
-        "germline": {
-          "$ref": "#/definitions/GermlineVariant"
-        },
-        "highestDiagnosticImplicationLevel": {
-          "type": "string",
-          "enum": [
-            "LEVEL_1",
-            "LEVEL_2",
-            "LEVEL_3A",
-            "LEVEL_3B",
-            "LEVEL_4",
-            "LEVEL_R1",
-            "LEVEL_R2",
-            "LEVEL_Px1",
-            "LEVEL_Px2",
-            "LEVEL_Px3",
-            "LEVEL_Dx1",
-            "LEVEL_Dx2",
-            "LEVEL_Dx3",
-            "LEVEL_Fda1",
-            "LEVEL_Fda2",
-            "LEVEL_Fda3",
-            "NO"
-          ]
-        },
-        "highestFdaLevel": {
-          "type": "string",
-          "enum": [
-            "LEVEL_1",
-            "LEVEL_2",
-            "LEVEL_3A",
-            "LEVEL_3B",
-            "LEVEL_4",
-            "LEVEL_R1",
-            "LEVEL_R2",
-            "LEVEL_Px1",
-            "LEVEL_Px2",
-            "LEVEL_Px3",
-            "LEVEL_Dx1",
-            "LEVEL_Dx2",
-            "LEVEL_Dx3",
-            "LEVEL_Fda1",
-            "LEVEL_Fda2",
-            "LEVEL_Fda3",
-            "NO"
-          ]
-        },
-        "highestPrognosticImplicationLevel": {
-          "type": "string",
-          "enum": [
-            "LEVEL_1",
-            "LEVEL_2",
-            "LEVEL_3A",
-            "LEVEL_3B",
-            "LEVEL_4",
-            "LEVEL_R1",
-            "LEVEL_R2",
-            "LEVEL_Px1",
-            "LEVEL_Px2",
-            "LEVEL_Px3",
-            "LEVEL_Dx1",
-            "LEVEL_Dx2",
-            "LEVEL_Dx3",
-            "LEVEL_Fda1",
-            "LEVEL_Fda2",
-            "LEVEL_Fda3",
-            "NO"
-          ]
-        },
-        "highestResistanceLevel": {
-          "type": "string",
-          "enum": [
-            "LEVEL_1",
-            "LEVEL_2",
-            "LEVEL_3A",
-            "LEVEL_3B",
-            "LEVEL_4",
-            "LEVEL_R1",
-            "LEVEL_R2",
-            "LEVEL_Px1",
-            "LEVEL_Px2",
-            "LEVEL_Px3",
-            "LEVEL_Dx1",
-            "LEVEL_Dx2",
-            "LEVEL_Dx3",
-            "LEVEL_Fda1",
-            "LEVEL_Fda2",
-            "LEVEL_Fda3",
-            "NO"
-          ]
-        },
-        "highestSensitiveLevel": {
-          "type": "string",
-          "enum": [
-            "LEVEL_1",
-            "LEVEL_2",
-            "LEVEL_3A",
-            "LEVEL_3B",
-            "LEVEL_4",
-            "LEVEL_R1",
-            "LEVEL_R2",
-            "LEVEL_Px1",
-            "LEVEL_Px2",
-            "LEVEL_Px3",
-            "LEVEL_Dx1",
-            "LEVEL_Dx2",
-            "LEVEL_Dx3",
-            "LEVEL_Fda1",
-            "LEVEL_Fda2",
-            "LEVEL_Fda3",
-            "NO"
-          ]
-        },
-        "hotspot": {
-          "type": "boolean"
-        },
-        "lastUpdate": {
-          "type": "string"
-        },
-        "mutationEffect": {
-          "$ref": "#/definitions/MutationEffectResp"
-        },
-        "oncogenic": {
-          "type": "string"
-        },
-        "otherSignificantResistanceLevels": {
-          "type": "array",
-          "items": {
-            "type": "string",
-            "enum": [
-              "LEVEL_1",
-              "LEVEL_2",
-              "LEVEL_3A",
-              "LEVEL_3B",
-              "LEVEL_4",
-              "LEVEL_R1",
-              "LEVEL_R2",
-              "LEVEL_Px1",
-              "LEVEL_Px2",
-              "LEVEL_Px3",
-              "LEVEL_Dx1",
-              "LEVEL_Dx2",
-              "LEVEL_Dx3",
-              "LEVEL_Fda1",
-              "LEVEL_Fda2",
-              "LEVEL_Fda3",
-              "NO"
-            ]
-          }
-        },
-        "otherSignificantSensitiveLevels": {
-          "type": "array",
-          "items": {
-            "type": "string",
-            "enum": [
-              "LEVEL_1",
-              "LEVEL_2",
-              "LEVEL_3A",
-              "LEVEL_3B",
-              "LEVEL_4",
-              "LEVEL_R1",
-              "LEVEL_R2",
-              "LEVEL_Px1",
-              "LEVEL_Px2",
-              "LEVEL_Px3",
-              "LEVEL_Dx1",
-              "LEVEL_Dx2",
-              "LEVEL_Dx3",
-              "LEVEL_Fda1",
-              "LEVEL_Fda2",
-              "LEVEL_Fda3",
-              "NO"
-            ]
-          }
-        },
-        "prognosticImplications": {
-          "type": "array",
-          "items": {
-            "$ref": "#/definitions/Implication"
-          }
-        },
-        "prognosticSummary": {
-          "type": "string"
-        },
-        "query": {
-          "$ref": "#/definitions/Query"
-        },
-        "treatments": {
-          "type": "array",
-          "items": {
-            "$ref": "#/definitions/IndicatorQueryTreatment"
-          }
-        },
-        "tumorTypeSummary": {
-          "type": "string"
-        },
-        "tumorTypes": {
-          "type": "array",
-          "items": {
-            "$ref": "#/definitions/VariantAnnotationTumorType"
-          }
-        },
-        "variantExist": {
-          "type": "boolean"
-        },
-        "variantSummary": {
-          "type": "string"
-        },
-        "vue": {
-          "type": "boolean"
-        },
-        "vus": {
-          "type": "boolean"
-        }
-      }
-    },
     "AnnotatedVariant": {
       "type": "object",
       "properties": {
@@ -3548,6 +3193,9 @@
           "type": "string"
         },
         "referenceGenome": {
+          "type": "string"
+        },
+        "setting": {
           "type": "string"
         },
         "variant": {
@@ -3672,10 +3320,6 @@
             "type": "string"
           }
         },
-        "evidenceId": {
-          "type": "integer",
-          "format": "int32"
-        },
         "excludedCancerTypes": {
           "type": "array",
           "items": {
@@ -3696,6 +3340,9 @@
         },
         "solidPropagationLevel": {
           "type": "string"
+        },
+        "tag": {
+          "$ref": "#/definitions/Tag"
         },
         "variant": {
           "$ref": "#/definitions/Alteration"
@@ -3779,6 +3426,7 @@
             "STANDARD_THERAPEUTIC_IMPLICATIONS_FOR_DRUG_RESISTANCE",
             "INVESTIGATIONAL_THERAPEUTIC_IMPLICATIONS_DRUG_SENSITIVITY",
             "INVESTIGATIONAL_THERAPEUTIC_IMPLICATIONS_DRUG_RESISTANCE",
+            "TX_ADDENDUM",
             "PATHOGENIC",
             "GENOMIC_INDICATOR",
             "GENE_PENETRANCE",
@@ -4345,7 +3993,19 @@
         },
         "knownEffect": {
           "type": "string",
-          "description": "Indicates the effect of the mutation on the gene. Defaulted to \"\""
+          "description": "Indicates the effect of the mutation on the gene. Defaulted to \"\"",
+          "enum": [
+            "Gain-of-function",
+            "Inconclusive",
+            "Loss-of-function",
+            "Likely Loss-of-function",
+            "Likely Gain-of-function",
+            "Neutral",
+            "Unknown",
+            "Likely Switch-of-function",
+            "Switch-of-function",
+            "Likely Neutral"
+          ]
         }
       }
     },
@@ -4373,6 +4033,7 @@
               "STANDARD_THERAPEUTIC_IMPLICATIONS_FOR_DRUG_RESISTANCE",
               "INVESTIGATIONAL_THERAPEUTIC_IMPLICATIONS_DRUG_SENSITIVITY",
               "INVESTIGATIONAL_THERAPEUTIC_IMPLICATIONS_DRUG_RESISTANCE",
+              "TX_ADDENDUM",
               "PATHOGENIC",
               "GENOMIC_INDICATOR",
               "GENE_PENETRANCE",
@@ -4380,6 +4041,9 @@
               "VARIANT_CANCER_RISK"
             ]
           }
+        },
+        "germline": {
+          "type": "boolean"
         },
         "hgvsg": {
           "type": "string"
@@ -4399,7 +4063,7 @@
         }
       }
     },
-     "Tag": {
+    "Tag": {
       "type": "object",
       "properties": {
         "description": {
@@ -4490,6 +4154,9 @@
         "alteration": {
           "$ref": "#/definitions/Alteration"
         },
+        "alternativeOncoKbVariant": {
+          "$ref": "#/definitions/AlternativeOncoKbVariant"
+        },
         "background": {
           "type": "string"
         },
@@ -4511,7 +4178,7 @@
         },
         "exon": {
           "type": "string",
-          "description": "(Nullable) The affected exon of this variant, if applicable (currently only supported when annotating via HGVSg or Genomic Location)"
+          "description": "DEPRECATED. (Nullable) The affected exon of this variant, if applicable (currently only supported when annotating via HGVSg or Genomic Location)"
         },
         "geneExist": {
           "type": "boolean",
@@ -4526,92 +4193,35 @@
           "type": "string",
           "description": "(Nullable) The highest diagnostic level from a list of diagnostic evidences.",
           "enum": [
-            "LEVEL_1",
-            "LEVEL_2",
-            "LEVEL_3A",
-            "LEVEL_3B",
-            "LEVEL_4",
-            "LEVEL_R1",
-            "LEVEL_R2",
-            "LEVEL_Px1",
-            "LEVEL_Px2",
-            "LEVEL_Px3",
             "LEVEL_Dx1",
             "LEVEL_Dx2",
-            "LEVEL_Dx3",
-            "LEVEL_Fda1",
-            "LEVEL_Fda2",
-            "LEVEL_Fda3",
-            "NO"
+            "LEVEL_Dx3"
           ]
         },
         "highestFdaLevel": {
           "type": "string",
           "description": "(Nullable) The highest FDA level from a list of therapeutic evidences.",
           "enum": [
-            "LEVEL_1",
-            "LEVEL_2",
-            "LEVEL_3A",
-            "LEVEL_3B",
-            "LEVEL_4",
-            "LEVEL_R1",
-            "LEVEL_R2",
-            "LEVEL_Px1",
-            "LEVEL_Px2",
-            "LEVEL_Px3",
-            "LEVEL_Dx1",
-            "LEVEL_Dx2",
-            "LEVEL_Dx3",
             "LEVEL_Fda1",
             "LEVEL_Fda2",
-            "LEVEL_Fda3",
-            "NO"
+            "LEVEL_Fda3"
           ]
         },
         "highestPrognosticImplicationLevel": {
           "type": "string",
           "description": "(Nullable) The highest prognostic level from a list of prognostic evidences.",
           "enum": [
-            "LEVEL_1",
-            "LEVEL_2",
-            "LEVEL_3A",
-            "LEVEL_3B",
-            "LEVEL_4",
-            "LEVEL_R1",
-            "LEVEL_R2",
             "LEVEL_Px1",
             "LEVEL_Px2",
-            "LEVEL_Px3",
-            "LEVEL_Dx1",
-            "LEVEL_Dx2",
-            "LEVEL_Dx3",
-            "LEVEL_Fda1",
-            "LEVEL_Fda2",
-            "LEVEL_Fda3",
-            "NO"
+            "LEVEL_Px3"
           ]
         },
         "highestResistanceLevel": {
           "type": "string",
           "description": "(Nullable) The highest resistance level from a list of therapeutic evidences.",
           "enum": [
-            "LEVEL_1",
-            "LEVEL_2",
-            "LEVEL_3A",
-            "LEVEL_3B",
-            "LEVEL_4",
             "LEVEL_R1",
-            "LEVEL_R2",
-            "LEVEL_Px1",
-            "LEVEL_Px2",
-            "LEVEL_Px3",
-            "LEVEL_Dx1",
-            "LEVEL_Dx2",
-            "LEVEL_Dx3",
-            "LEVEL_Fda1",
-            "LEVEL_Fda2",
-            "LEVEL_Fda3",
-            "NO"
+            "LEVEL_R2"
           ]
         },
         "highestSensitiveLevel": {
@@ -4622,19 +4232,7 @@
             "LEVEL_2",
             "LEVEL_3A",
             "LEVEL_3B",
-            "LEVEL_4",
-            "LEVEL_R1",
-            "LEVEL_R2",
-            "LEVEL_Px1",
-            "LEVEL_Px2",
-            "LEVEL_Px3",
-            "LEVEL_Dx1",
-            "LEVEL_Dx2",
-            "LEVEL_Dx3",
-            "LEVEL_Fda1",
-            "LEVEL_Fda2",
-            "LEVEL_Fda3",
-            "NO"
+            "LEVEL_4"
           ]
         },
         "hotspot": {
@@ -4652,7 +4250,15 @@
         },
         "oncogenic": {
           "type": "string",
-          "description": "The oncogenicity status of the variant. Defaulted to \"Unknown\"."
+          "description": "The oncogenicity status of the variant. Defaulted to \"Unknown\".",
+          "enum": [
+            "Oncogenic",
+            "Likely Oncogenic",
+            "Likely Neutral",
+            "Inconclusive",
+            "Resistance",
+            "Unknown"
+          ]
         },
         "otherSignificantResistanceLevels": {
           "type": "array",

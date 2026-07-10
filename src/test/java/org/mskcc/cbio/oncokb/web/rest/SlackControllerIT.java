@@ -7,9 +7,11 @@ import com.slack.api.app_backend.views.payload.ViewSubmissionPayload;
 import com.slack.api.methods.MethodsClient;
 import com.slack.api.methods.SlackApiException;
 import com.slack.api.methods.request.views.ViewsOpenRequest;
+import com.slack.api.model.block.InputBlock;
 import com.slack.api.model.block.LayoutBlock;
 import com.slack.api.model.block.SectionBlock;
 import com.slack.api.model.block.composition.TextObject;
+import com.slack.api.model.block.element.PlainTextInputElement;
 import com.slack.api.model.view.View;
 import com.slack.api.model.view.ViewState;
 import com.slack.api.util.json.GsonFactory;
@@ -658,11 +660,27 @@ public class SlackControllerIT {
         assertThat(view.getType()).isEqualTo("modal");
         assertThat(view.getPrivateMetadata()).isEqualTo(slackService.getOptionValue(USER_REGISTRATION_WEBHOOK, DEFAULT_USER_EMAIL));
         assertThat(view.getTitle().getText()).isEqualTo(option.getModalTitle().orElseThrow(NullPointerException::new));
+        if (option.getMailType() == MailType.HOSPITAL_APPROVAL_HIGH_VOLUME) {
+            InputBlock bodyInput = (InputBlock) view.getBlocks().stream()
+                .filter(InputBlock.class::isInstance)
+                .filter(block -> BlockId.BODY_INPUT.getId().equals(((InputBlock) block).getBlockId()))
+                .findFirst()
+                .orElseThrow(NoSuchElementException::new);
+            String body = ((PlainTextInputElement) bodyInput.getElement()).getInitialValue();
+            assertThat(body).contains(
+                "Dear " + DEFAULT_USER_FIRST_NAME + " " + DEFAULT_USER_LAST_NAME + ",",
+                "Thank you for your interest in the Hospital Use license for OncoKB.",
+                "We're happy to approve your request. We noticed that your report volume is quite high, and your workflow may benefit from programmatic access to OncoKB through the API.",
+                "Sincerely,\nThe OncoKB Team"
+            );
+        }
     }
 
     private void checkEmail(MimeMessage message, MailType mailType) throws IOException, MessagingException {
         assertThat(message.getAllRecipients()[0].toString()).isEqualTo(DEFAULT_USER_EMAIL);
-        if (mailType == MailType.CLARIFY_HOSPITAL_USE || mailType == MailType.CLARIFY_COMMERCIAL_USE) {
+        if (mailType == MailType.CLARIFY_HOSPITAL_USE
+            || mailType == MailType.HOSPITAL_APPROVAL_HIGH_VOLUME
+            || mailType == MailType.CLARIFY_COMMERCIAL_USE) {
             assertThat(message.getFrom()[0].toString()).isEqualTo(LICENSE_ADDR);
         } else if (mailType == MailType.ACTIVATE_FREE_TRIAL) {
             assertThat(message.getFrom()[0].toString()).isEqualTo(DEFAULT_ADDR);

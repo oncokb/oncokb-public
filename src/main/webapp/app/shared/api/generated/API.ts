@@ -154,8 +154,7 @@ export type LoginVM = {
 export type MailTypeInfo = {
     'description': string
 
-        'mailType': "ACTIVATION" | "CREATION" | "APPROVAL" | "API_ACCESS_APPROVAL" | "APPROVAL_ALIGN_LICENSE_WITH_COMPANY" | "REJECTION" | "REJECTION_US_SANCTION" | "REJECT_ALUMNI_ADDRESS" | "PASSWORD_RESET" | "LICENSE_REVIEW_COMMERCIAL" | "LICENSE_REVIEW_RESEARCH_COMMERCIAL" | "LICENSE_REVIEW_HOSPITAL" | "CLARIFY_ACADEMIC_FOR_PROFIT" | "CLARIFY_ACADEMIC_NON_INSTITUTE_EMAIL" | "CLARIFY_USE_CASE" | "CLARIFY_DUPLICATE_USER" | "CLARIFY_REGISTRATION_INFO" | "CLARIFY_HOSPITAL_USE" | "CLARIFY_COMMERCIAL_USE" | "VERIFY_EMAIL_BEFORE_ACCOUNT_EXPIRES" | "ACTIVATE_FREE_TRIAL" | "TRIAL_ACCOUNT_IS_ABOUT_TO_EXPIRE" | "TRIAL_ACCOUNT_IS_ACTIVATED" | "DATA_USAGE_EXCEEDS_THRESHOLD" | "TOKEN_HAS_BEEN_EXPOSED" | "TOKEN_HAS_BEEN_EXPOSED_USER" | "SEARCHING_RESPONSE_STRUCTURE_HAS_CHANGED" | "LIST_OF_UNAPPROVED_USERS" | "TERMINATION_NOTIFICATION_EMAIL" | "TEST"
-
+        'mailType': "ACTIVATION" | "CREATION" | "APPROVAL" | "API_ACCESS_APPROVAL" | "APPROVAL_ALIGN_LICENSE_WITH_COMPANY" | "REJECTION" | "REJECTION_US_SANCTION" | "REJECT_ALUMNI_ADDRESS" | "PASSWORD_RESET" | "LICENSE_REVIEW_COMMERCIAL" | "LICENSE_REVIEW_RESEARCH_COMMERCIAL" | "LICENSE_REVIEW_HOSPITAL" | "CLARIFY_ACADEMIC_FOR_PROFIT" | "CLARIFY_ACADEMIC_NON_INSTITUTE_EMAIL" | "CLARIFY_USE_CASE" | "CLARIFY_DUPLICATE_USER" | "CLARIFY_REGISTRATION_INFO" | "CLARIFY_HOSPITAL_USE" | "CLARIFY_COMMERCIAL_USE" | "HOSPITAL_APPROVAL_HIGH_VOLUME" | "LICENSE_OPTIONS" | "VERIFY_EMAIL_BEFORE_ACCOUNT_EXPIRES" | "ACTIVATE_FREE_TRIAL" | "TRIAL_ACCOUNT_IS_ABOUT_TO_EXPIRE" | "TRIAL_ACCOUNT_IS_ACTIVATED" | "DATA_USAGE_EXCEEDS_THRESHOLD" | "TOKEN_HAS_BEEN_EXPOSED" | "TOKEN_HAS_BEEN_EXPOSED_USER" | "SEARCHING_RESPONSE_STRUCTURE_HAS_CHANGED" | "LIST_OF_UNAPPROVED_USERS" | "TERMINATION_NOTIFICATION_EMAIL" | "TEST"
 };
 export type ManagedUserVM = {
     'accountRequestStatus': "UNKNOWN" | "PENDING" | "PENDING_NO_GRACE_PERIOD" | "APPROVED" | "REJECTED"
@@ -218,12 +217,37 @@ export type ManagedUserVM = {
 
         'tokenValidDays': number
 
+        'userMails': Array < UserMailsDTO >
+
 };
-export type MapOfstringAndlong = {};
 export type PasswordChangeDTO = {
     'currentPassword': string
 
         'newPassword': string
+
+};
+export type ResourceUsageAnalysisRow = {
+    'company': string
+
+        'jobTitle': string
+
+        'licenseType': string
+
+        'resource': string
+
+        'resourceId': number
+
+        'time': string
+
+        'usage': number
+
+        'userEmail': string
+
+        'userFirstName': string
+
+        'userId': number
+
+        'userLastName': string
 
 };
 export type TerminationEmailDTO = {
@@ -266,12 +290,26 @@ export type TrialAccount = {
         'licenseAgreement': LicenseAgreement
 
 };
-export type UsageSummary = {
-    'day': {}
+export type UsageAnalysisRow = {
+    'maxUsageProportion': number
 
-    'month': {}
+        'resource': string
 
-    'year': {}
+        'resourceId': number
+
+        'time': string
+
+        'usage': number
+
+        'userEmail': string
+
+        'userId': string
+
+};
+export type UsageResourceName = {
+    'resource': string
+
+        'resourceId': number
 
 };
 export type User = {
@@ -375,6 +413,8 @@ export type UserDTO = {
 
         'resetKey': string
 
+        'userMails': Array < UserMailsDTO >
+
 };
 export type UserDetailsDTO = {
     'accountRequestStatus': "UNKNOWN" | "PENDING" | "PENDING_NO_GRACE_PERIOD" | "APPROVED" | "REJECTED"
@@ -403,8 +443,8 @@ export type UserDetailsDTO = {
 export type UserMailsDTO = {
     'id': number
 
-        'mailType': "ACTIVATION" | "CREATION" | "APPROVAL" | "API_ACCESS_APPROVAL" | "APPROVAL_ALIGN_LICENSE_WITH_COMPANY" | "REJECTION" | "REJECTION_US_SANCTION" | "REJECT_ALUMNI_ADDRESS" | "PASSWORD_RESET" | "LICENSE_REVIEW_COMMERCIAL" | "LICENSE_REVIEW_RESEARCH_COMMERCIAL" | "LICENSE_REVIEW_HOSPITAL" | "CLARIFY_ACADEMIC_FOR_PROFIT" | "CLARIFY_ACADEMIC_NON_INSTITUTE_EMAIL" | "CLARIFY_USE_CASE" | "CLARIFY_DUPLICATE_USER" | "CLARIFY_REGISTRATION_INFO" | "CLARIFY_HOSPITAL_USE" | "CLARIFY_COMMERCIAL_USE" | "VERIFY_EMAIL_BEFORE_ACCOUNT_EXPIRES" | "ACTIVATE_FREE_TRIAL" | "TRIAL_ACCOUNT_IS_ABOUT_TO_EXPIRE" | "TRIAL_ACCOUNT_IS_ACTIVATED" | "DATA_USAGE_EXCEEDS_THRESHOLD" | "TOKEN_HAS_BEEN_EXPOSED" | "TOKEN_HAS_BEEN_EXPOSED_USER" | "SEARCHING_RESPONSE_STRUCTURE_HAS_CHANGED" | "LIST_OF_UNAPPROVED_USERS" | "TERMINATION_NOTIFICATION_EMAIL" | "TEST"
-
+        'mailType': "ACTIVATION" | "CREATION" | "APPROVAL" | "API_ACCESS_APPROVAL" | "APPROVAL_ALIGN_LICENSE_WITH_COMPANY" | "REJECTION" | "REJECTION_US_SANCTION" | "REJECT_ALUMNI_ADDRESS" | "PASSWORD_RESET" | "LICENSE_REVIEW_COMMERCIAL" | "LICENSE_REVIEW_RESEARCH_COMMERCIAL" | "LICENSE_REVIEW_HOSPITAL" | "CLARIFY_ACADEMIC_FOR_PROFIT" | "CLARIFY_ACADEMIC_NON_INSTITUTE_EMAIL" | "CLARIFY_USE_CASE" | "CLARIFY_DUPLICATE_USER" | "CLARIFY_REGISTRATION_INFO" | "CLARIFY_HOSPITAL_USE" | "CLARIFY_COMMERCIAL_USE" | "HOSPITAL_APPROVAL_HIGH_VOLUME" | "LICENSE_OPTIONS" | "VERIFY_EMAIL_BEFORE_ACCOUNT_EXPIRES" | "ACTIVATE_FREE_TRIAL" | "TRIAL_ACCOUNT_IS_ABOUT_TO_EXPIRE" | "TRIAL_ACCOUNT_IS_ACTIVATED" | "DATA_USAGE_EXCEEDS_THRESHOLD" | "TOKEN_HAS_BEEN_EXPOSED" | "TOKEN_HAS_BEEN_EXPOSED_USER" | "SEARCHING_RESPONSE_STRUCTURE_HAS_CHANGED" | "LIST_OF_UNAPPROVED_USERS" | "TERMINATION_NOTIFICATION_EMAIL" | "TEST"
+        
         'sentBy': string
 
         'sentDate': string
@@ -416,22 +456,10 @@ export type UserMailsDTO = {
         'userLogin': string
 
 };
-export type UserOverviewUsage = {
-    'dayUsage': {}
-
-    'monthUsage': {}
-
-    'userEmail': string
-
-        'userId': string
-
-        'yearUsage': {}
-
-};
 export type UserRegistrationSummary = {
-    'licenseType': string
+    'date': string
 
-        'date': string
+        'licenseType': string
 
         'total': number
 
@@ -457,13 +485,7 @@ export type UserUsage = {
 
         'licenseType': string
 
-        'summary': UsageSummary
-
-        'userEmail': string
-
-        'userFirstName': string
-
-        'userLastName': string
+        'total': number
 
 };
 export type VerifyCompanyNameVM = {
@@ -4277,7 +4299,7 @@ export default class API {
         'by': string,
         'cc' ? : string,
         'from': string,
-        'mailType': "ACTIVATION" | "CREATION" | "APPROVAL" | "API_ACCESS_APPROVAL" | "APPROVAL_ALIGN_LICENSE_WITH_COMPANY" | "REJECTION" | "REJECTION_US_SANCTION" | "REJECT_ALUMNI_ADDRESS" | "PASSWORD_RESET" | "LICENSE_REVIEW_COMMERCIAL" | "LICENSE_REVIEW_RESEARCH_COMMERCIAL" | "LICENSE_REVIEW_HOSPITAL" | "CLARIFY_ACADEMIC_FOR_PROFIT" | "CLARIFY_ACADEMIC_NON_INSTITUTE_EMAIL" | "CLARIFY_USE_CASE" | "CLARIFY_DUPLICATE_USER" | "CLARIFY_REGISTRATION_INFO" | "CLARIFY_HOSPITAL_USE" | "CLARIFY_COMMERCIAL_USE" | "VERIFY_EMAIL_BEFORE_ACCOUNT_EXPIRES" | "ACTIVATE_FREE_TRIAL" | "TRIAL_ACCOUNT_IS_ABOUT_TO_EXPIRE" | "TRIAL_ACCOUNT_IS_ACTIVATED" | "DATA_USAGE_EXCEEDS_THRESHOLD" | "TOKEN_HAS_BEEN_EXPOSED" | "TOKEN_HAS_BEEN_EXPOSED_USER" | "SEARCHING_RESPONSE_STRUCTURE_HAS_CHANGED" | "LIST_OF_UNAPPROVED_USERS" | "TERMINATION_NOTIFICATION_EMAIL" | "TEST",
+        'mailType': "ACTIVATION" | "CREATION" | "APPROVAL" | "API_ACCESS_APPROVAL" | "APPROVAL_ALIGN_LICENSE_WITH_COMPANY" | "REJECTION" | "REJECTION_US_SANCTION" | "REJECT_ALUMNI_ADDRESS" | "PASSWORD_RESET" | "LICENSE_REVIEW_COMMERCIAL" | "LICENSE_REVIEW_RESEARCH_COMMERCIAL" | "LICENSE_REVIEW_HOSPITAL" | "CLARIFY_ACADEMIC_FOR_PROFIT" | "CLARIFY_ACADEMIC_NON_INSTITUTE_EMAIL" | "CLARIFY_USE_CASE" | "CLARIFY_DUPLICATE_USER" | "CLARIFY_REGISTRATION_INFO" | "CLARIFY_HOSPITAL_USE" | "CLARIFY_COMMERCIAL_USE" | "HOSPITAL_APPROVAL_HIGH_VOLUME" | "LICENSE_OPTIONS" | "VERIFY_EMAIL_BEFORE_ACCOUNT_EXPIRES" | "ACTIVATE_FREE_TRIAL" | "TRIAL_ACCOUNT_IS_ABOUT_TO_EXPIRE" | "TRIAL_ACCOUNT_IS_ACTIVATED" | "DATA_USAGE_EXCEEDS_THRESHOLD" | "TOKEN_HAS_BEEN_EXPOSED" | "TOKEN_HAS_BEEN_EXPOSED_USER" | "SEARCHING_RESPONSE_STRUCTURE_HAS_CHANGED" | "LIST_OF_UNAPPROVED_USERS" | "TERMINATION_NOTIFICATION_EMAIL" | "TEST"
         'to': string,
         $queryParameters ? : any
     }): string {
@@ -4327,7 +4349,7 @@ export default class API {
         'by': string,
         'cc' ? : string,
         'from': string,
-        'mailType': "ACTIVATION" | "CREATION" | "APPROVAL" | "API_ACCESS_APPROVAL" | "APPROVAL_ALIGN_LICENSE_WITH_COMPANY" | "REJECTION" | "REJECTION_US_SANCTION" | "REJECT_ALUMNI_ADDRESS" | "PASSWORD_RESET" | "LICENSE_REVIEW_COMMERCIAL" | "LICENSE_REVIEW_RESEARCH_COMMERCIAL" | "LICENSE_REVIEW_HOSPITAL" | "CLARIFY_ACADEMIC_FOR_PROFIT" | "CLARIFY_ACADEMIC_NON_INSTITUTE_EMAIL" | "CLARIFY_USE_CASE" | "CLARIFY_DUPLICATE_USER" | "CLARIFY_REGISTRATION_INFO" | "CLARIFY_HOSPITAL_USE" | "CLARIFY_COMMERCIAL_USE" | "VERIFY_EMAIL_BEFORE_ACCOUNT_EXPIRES" | "ACTIVATE_FREE_TRIAL" | "TRIAL_ACCOUNT_IS_ABOUT_TO_EXPIRE" | "TRIAL_ACCOUNT_IS_ACTIVATED" | "DATA_USAGE_EXCEEDS_THRESHOLD" | "TOKEN_HAS_BEEN_EXPOSED" | "TOKEN_HAS_BEEN_EXPOSED_USER" | "SEARCHING_RESPONSE_STRUCTURE_HAS_CHANGED" | "LIST_OF_UNAPPROVED_USERS" | "TERMINATION_NOTIFICATION_EMAIL" | "TEST",
+        'mailType': "ACTIVATION" | "CREATION" | "APPROVAL" | "API_ACCESS_APPROVAL" | "APPROVAL_ALIGN_LICENSE_WITH_COMPANY" | "REJECTION" | "REJECTION_US_SANCTION" | "REJECT_ALUMNI_ADDRESS" | "PASSWORD_RESET" | "LICENSE_REVIEW_COMMERCIAL" | "LICENSE_REVIEW_RESEARCH_COMMERCIAL" | "LICENSE_REVIEW_HOSPITAL" | "CLARIFY_ACADEMIC_FOR_PROFIT" | "CLARIFY_ACADEMIC_NON_INSTITUTE_EMAIL" | "CLARIFY_USE_CASE" | "CLARIFY_DUPLICATE_USER" | "CLARIFY_REGISTRATION_INFO" | "CLARIFY_HOSPITAL_USE" | "CLARIFY_COMMERCIAL_USE" | "HOSPITAL_APPROVAL_HIGH_VOLUME" | "LICENSE_OPTIONS" | "VERIFY_EMAIL_BEFORE_ACCOUNT_EXPIRES" | "ACTIVATE_FREE_TRIAL" | "TRIAL_ACCOUNT_IS_ABOUT_TO_EXPIRE" | "TRIAL_ACCOUNT_IS_ACTIVATED" | "DATA_USAGE_EXCEEDS_THRESHOLD" | "TOKEN_HAS_BEEN_EXPOSED" | "TOKEN_HAS_BEEN_EXPOSED_USER" | "SEARCHING_RESPONSE_STRUCTURE_HAS_CHANGED" | "LIST_OF_UNAPPROVED_USERS" | "TERMINATION_NOTIFICATION_EMAIL" | "TEST",
         'to': string,
         $queryParameters ? : any,
         $domain ? : string
@@ -4410,7 +4432,7 @@ export default class API {
         'by': string,
         'cc' ? : string,
         'from': string,
-        'mailType': "ACTIVATION" | "CREATION" | "APPROVAL" | "API_ACCESS_APPROVAL" | "APPROVAL_ALIGN_LICENSE_WITH_COMPANY" | "REJECTION" | "REJECTION_US_SANCTION" | "REJECT_ALUMNI_ADDRESS" | "PASSWORD_RESET" | "LICENSE_REVIEW_COMMERCIAL" | "LICENSE_REVIEW_RESEARCH_COMMERCIAL" | "LICENSE_REVIEW_HOSPITAL" | "CLARIFY_ACADEMIC_FOR_PROFIT" | "CLARIFY_ACADEMIC_NON_INSTITUTE_EMAIL" | "CLARIFY_USE_CASE" | "CLARIFY_DUPLICATE_USER" | "CLARIFY_REGISTRATION_INFO" | "CLARIFY_HOSPITAL_USE" | "CLARIFY_COMMERCIAL_USE" | "VERIFY_EMAIL_BEFORE_ACCOUNT_EXPIRES" | "ACTIVATE_FREE_TRIAL" | "TRIAL_ACCOUNT_IS_ABOUT_TO_EXPIRE" | "TRIAL_ACCOUNT_IS_ACTIVATED" | "DATA_USAGE_EXCEEDS_THRESHOLD" | "TOKEN_HAS_BEEN_EXPOSED" | "TOKEN_HAS_BEEN_EXPOSED_USER" | "SEARCHING_RESPONSE_STRUCTURE_HAS_CHANGED" | "LIST_OF_UNAPPROVED_USERS" | "TERMINATION_NOTIFICATION_EMAIL" | "TEST",
+        'mailType': "ACTIVATION" | "CREATION" | "APPROVAL" | "API_ACCESS_APPROVAL" | "APPROVAL_ALIGN_LICENSE_WITH_COMPANY" | "REJECTION" | "REJECTION_US_SANCTION" | "REJECT_ALUMNI_ADDRESS" | "PASSWORD_RESET" | "LICENSE_REVIEW_COMMERCIAL" | "LICENSE_REVIEW_RESEARCH_COMMERCIAL" | "LICENSE_REVIEW_HOSPITAL" | "CLARIFY_ACADEMIC_FOR_PROFIT" | "CLARIFY_ACADEMIC_NON_INSTITUTE_EMAIL" | "CLARIFY_USE_CASE" | "CLARIFY_DUPLICATE_USER" | "CLARIFY_REGISTRATION_INFO" | "CLARIFY_HOSPITAL_USE" | "CLARIFY_COMMERCIAL_USE" | "HOSPITAL_APPROVAL_HIGH_VOLUME" | "LICENSE_OPTIONS" | "VERIFY_EMAIL_BEFORE_ACCOUNT_EXPIRES" | "ACTIVATE_FREE_TRIAL" | "TRIAL_ACCOUNT_IS_ABOUT_TO_EXPIRE" | "TRIAL_ACCOUNT_IS_ACTIVATED" | "DATA_USAGE_EXCEEDS_THRESHOLD" | "TOKEN_HAS_BEEN_EXPOSED" | "TOKEN_HAS_BEEN_EXPOSED_USER" | "SEARCHING_RESPONSE_STRUCTURE_HAS_CHANGED" | "LIST_OF_UNAPPROVED_USERS" | "TERMINATION_NOTIFICATION_EMAIL" | "TEST",
         'to': string,
         $queryParameters ? : any,
         $domain ? : string
@@ -4920,15 +4942,14 @@ export default class API {
             return response.body;
         });
     };
-    resourceDetailGetUsingGETURL(parameters: {
-        'endpoint': string,
+    usageResourceGetUsingGETURL(parameters: {
+        'resourceId': number,
         $queryParameters ? : any
     }): string {
         let queryParameters: any = {};
-        let path = '/api/usage/resources';
-        if (parameters['endpoint'] !== undefined) {
-            queryParameters['endpoint'] = parameters['endpoint'];
-        }
+        let path = '/api/usage/resources/{resourceId}';
+
+        path = path.replace('{resourceId}', parameters['resourceId'] + '');
 
         if (parameters.$queryParameters) {
             Object.keys(parameters.$queryParameters).forEach(function(parameterName) {
@@ -4941,20 +4962,20 @@ export default class API {
     };
 
     /**
-     * resourceDetailGet
+     * usageResourceGet
      * @method
-     * @name API#resourceDetailGetUsingGET
-     * @param {string} endpoint - endpoint
+     * @name API#usageResourceGetUsingGET
+     * @param {integer} resourceId - resourceId
      */
-    resourceDetailGetUsingGETWithHttpInfo(parameters: {
-        'endpoint': string,
+    usageResourceGetUsingGETWithHttpInfo(parameters: {
+        'resourceId': number,
         $queryParameters ? : any,
         $domain ? : string
     }): Promise < request.Response > {
         const domain = parameters.$domain ? parameters.$domain : this.domain;
         const errorHandlers = this.errorHandlers;
         const request = this.request;
-        let path = '/api/usage/resources';
+        let path = '/api/usage/resources/{resourceId}';
         let body: any;
         let queryParameters: any = {};
         let headers: any = {};
@@ -4962,12 +4983,10 @@ export default class API {
         return new Promise(function(resolve, reject) {
             headers['Accept'] = '*/*';
 
-            if (parameters['endpoint'] !== undefined) {
-                queryParameters['endpoint'] = parameters['endpoint'];
-            }
+            path = path.replace('{resourceId}', parameters['resourceId'] + '');
 
-            if (parameters['endpoint'] === undefined) {
-                reject(new Error('Missing required  parameter: endpoint'));
+            if (parameters['resourceId'] === undefined) {
+                reject(new Error('Missing required  parameter: resourceId'));
                 return;
             }
 
@@ -4984,17 +5003,17 @@ export default class API {
     };
 
     /**
-     * resourceDetailGet
+     * usageResourceGet
      * @method
-     * @name API#resourceDetailGetUsingGET
-     * @param {string} endpoint - endpoint
+     * @name API#usageResourceGetUsingGET
+     * @param {integer} resourceId - resourceId
      */
-    resourceDetailGetUsingGET(parameters: {
-        'endpoint': string,
+    usageResourceGetUsingGET(parameters: {
+        'resourceId': number,
         $queryParameters ? : any,
         $domain ? : string
-    }): Promise < UsageSummary > {
-        return this.resourceDetailGetUsingGETWithHttpInfo(parameters).then(function(response: request.Response) {
+    }): Promise < UsageResourceName > {
+        return this.usageResourceGetUsingGETWithHttpInfo(parameters).then(function(response: request.Response) {
             return response.body;
         });
     };
@@ -5061,10 +5080,89 @@ export default class API {
             });
         };
     resourceUsageGetUsingGETURL(parameters: {
-        $queryParameters ? : any
+        'fromDate' ? : string,
+        'interval' ? : "DAY" | "MONTH" | "YEAR",
+        'offset' ? : number,
+        'page' ? : number,
+        'pageNumber' ? : number,
+        'pageSize' ? : number,
+        'paged' ? : boolean,
+        'publicOnly' ? : boolean,
+        'resourceId' ? : number,
+        'search' ? : string,
+        'size' ? : number,
+        'sort' ? : Array < string > ,
+            'sortSorted' ? : boolean,
+            'sortUnsorted' ? : boolean,
+            'toDate' ? : string,
+            'unpaged' ? : boolean,
+            $queryParameters ? : any
     }): string {
         let queryParameters: any = {};
         let path = '/api/usage/summary/resources';
+        if (parameters['fromDate'] !== undefined) {
+            queryParameters['fromDate'] = parameters['fromDate'];
+        }
+
+        if (parameters['interval'] !== undefined) {
+            queryParameters['interval'] = parameters['interval'];
+        }
+
+        if (parameters['offset'] !== undefined) {
+            queryParameters['offset'] = parameters['offset'];
+        }
+
+        if (parameters['page'] !== undefined) {
+            queryParameters['page'] = parameters['page'];
+        }
+
+        if (parameters['pageNumber'] !== undefined) {
+            queryParameters['pageNumber'] = parameters['pageNumber'];
+        }
+
+        if (parameters['pageSize'] !== undefined) {
+            queryParameters['pageSize'] = parameters['pageSize'];
+        }
+
+        if (parameters['paged'] !== undefined) {
+            queryParameters['paged'] = parameters['paged'];
+        }
+
+        if (parameters['publicOnly'] !== undefined) {
+            queryParameters['publicOnly'] = parameters['publicOnly'];
+        }
+
+        if (parameters['resourceId'] !== undefined) {
+            queryParameters['resourceId'] = parameters['resourceId'];
+        }
+
+        if (parameters['search'] !== undefined) {
+            queryParameters['search'] = parameters['search'];
+        }
+
+        if (parameters['size'] !== undefined) {
+            queryParameters['size'] = parameters['size'];
+        }
+
+        if (parameters['sort'] !== undefined) {
+            queryParameters['sort'] = parameters['sort'];
+        }
+
+        if (parameters['sortSorted'] !== undefined) {
+            queryParameters['sort.sorted'] = parameters['sortSorted'];
+        }
+
+        if (parameters['sortUnsorted'] !== undefined) {
+            queryParameters['sort.unsorted'] = parameters['sortUnsorted'];
+        }
+
+        if (parameters['toDate'] !== undefined) {
+            queryParameters['toDate'] = parameters['toDate'];
+        }
+
+        if (parameters['unpaged'] !== undefined) {
+            queryParameters['unpaged'] = parameters['unpaged'];
+        }
 
         if (parameters.$queryParameters) {
             Object.keys(parameters.$queryParameters).forEach(function(parameterName) {
@@ -5080,9 +5178,41 @@ export default class API {
      * resourceUsageGet
      * @method
      * @name API#resourceUsageGetUsingGET
+     * @param {string} fromDate - fromDate
+     * @param {string} interval - interval
+     * @param {integer} offset - OncoKB™ is a precision oncology knowledge base developed at Memorial Sloan Kettering Cancer Center that contains biological and clinical information about genomic alterations in cancer.
+     * @param {integer} page - Page number of the requested page
+     * @param {integer} pageNumber - OncoKB™ is a precision oncology knowledge base developed at Memorial Sloan Kettering Cancer Center that contains biological and clinical information about genomic alterations in cancer.
+     * @param {integer} pageSize - OncoKB™ is a precision oncology knowledge base developed at Memorial Sloan Kettering Cancer Center that contains biological and clinical information about genomic alterations in cancer.
+     * @param {boolean} paged - OncoKB™ is a precision oncology knowledge base developed at Memorial Sloan Kettering Cancer Center that contains biological and clinical information about genomic alterations in cancer.
+     * @param {boolean} publicOnly - publicOnly
+     * @param {integer} resourceId - resourceId
+     * @param {string} search - search
+     * @param {integer} size - Size of a page
+     * @param {array} sort - Sorting criteria in the format: property(,asc|desc). Default sort order is ascending. Multiple sort criteria are supported.
+     * @param {boolean} sortSorted - OncoKB™ is a precision oncology knowledge base developed at Memorial Sloan Kettering Cancer Center that contains biological and clinical information about genomic alterations in cancer.
+     * @param {boolean} sortUnsorted - OncoKB™ is a precision oncology knowledge base developed at Memorial Sloan Kettering Cancer Center that contains biological and clinical information about genomic alterations in cancer.
+     * @param {string} toDate - toDate
+     * @param {boolean} unpaged - OncoKB™ is a precision oncology knowledge base developed at Memorial Sloan Kettering Cancer Center that contains biological and clinical information about genomic alterations in cancer.
      */
     resourceUsageGetUsingGETWithHttpInfo(parameters: {
-        $queryParameters ? : any,
+        'fromDate' ? : string,
+        'interval' ? : "DAY" | "MONTH" | "YEAR",
+        'offset' ? : number,
+        'page' ? : number,
+        'pageNumber' ? : number,
+        'pageSize' ? : number,
+        'paged' ? : boolean,
+        'publicOnly' ? : boolean,
+        'resourceId' ? : number,
+        'search' ? : string,
+        'size' ? : number,
+        'sort' ? : Array < string > ,
+            'sortSorted' ? : boolean,
+            'sortUnsorted' ? : boolean,
+            'toDate' ? : string,
+            'unpaged' ? : boolean,
+            $queryParameters ? : any,
             $domain ? : string
     }): Promise < request.Response > {
         const domain = parameters.$domain ? parameters.$domain : this.domain;
@@ -5095,6 +5225,70 @@ export default class API {
         let form: any = {};
         return new Promise(function(resolve, reject) {
             headers['Accept'] = '*/*';
+
+            if (parameters['fromDate'] !== undefined) {
+                queryParameters['fromDate'] = parameters['fromDate'];
+            }
+
+            if (parameters['interval'] !== undefined) {
+                queryParameters['interval'] = parameters['interval'];
+            }
+
+            if (parameters['offset'] !== undefined) {
+                queryParameters['offset'] = parameters['offset'];
+            }
+
+            if (parameters['page'] !== undefined) {
+                queryParameters['page'] = parameters['page'];
+            }
+
+            if (parameters['pageNumber'] !== undefined) {
+                queryParameters['pageNumber'] = parameters['pageNumber'];
+            }
+
+            if (parameters['pageSize'] !== undefined) {
+                queryParameters['pageSize'] = parameters['pageSize'];
+            }
+
+            if (parameters['paged'] !== undefined) {
+                queryParameters['paged'] = parameters['paged'];
+            }
+
+            if (parameters['publicOnly'] !== undefined) {
+                queryParameters['publicOnly'] = parameters['publicOnly'];
+            }
+
+            if (parameters['resourceId'] !== undefined) {
+                queryParameters['resourceId'] = parameters['resourceId'];
+            }
+
+            if (parameters['search'] !== undefined) {
+                queryParameters['search'] = parameters['search'];
+            }
+
+            if (parameters['size'] !== undefined) {
+                queryParameters['size'] = parameters['size'];
+            }
+
+            if (parameters['sort'] !== undefined) {
+                queryParameters['sort'] = parameters['sort'];
+            }
+
+            if (parameters['sortSorted'] !== undefined) {
+                queryParameters['sort.sorted'] = parameters['sortSorted'];
+            }
+
+            if (parameters['sortUnsorted'] !== undefined) {
+                queryParameters['sort.unsorted'] = parameters['sortUnsorted'];
+            }
+
+            if (parameters['toDate'] !== undefined) {
+                queryParameters['toDate'] = parameters['toDate'];
+            }
+
+            if (parameters['unpaged'] !== undefined) {
+                queryParameters['unpaged'] = parameters['unpaged'];
+            }
 
             if (parameters.$queryParameters) {
                 Object.keys(parameters.$queryParameters).forEach(function(parameterName) {
@@ -5112,23 +5306,136 @@ export default class API {
      * resourceUsageGet
      * @method
      * @name API#resourceUsageGetUsingGET
+     * @param {string} fromDate - fromDate
+     * @param {string} interval - interval
+     * @param {integer} offset - OncoKB™ is a precision oncology knowledge base developed at Memorial Sloan Kettering Cancer Center that contains biological and clinical information about genomic alterations in cancer.
+     * @param {integer} page - Page number of the requested page
+     * @param {integer} pageNumber - OncoKB™ is a precision oncology knowledge base developed at Memorial Sloan Kettering Cancer Center that contains biological and clinical information about genomic alterations in cancer.
+     * @param {integer} pageSize - OncoKB™ is a precision oncology knowledge base developed at Memorial Sloan Kettering Cancer Center that contains biological and clinical information about genomic alterations in cancer.
+     * @param {boolean} paged - OncoKB™ is a precision oncology knowledge base developed at Memorial Sloan Kettering Cancer Center that contains biological and clinical information about genomic alterations in cancer.
+     * @param {boolean} publicOnly - publicOnly
+     * @param {integer} resourceId - resourceId
+     * @param {string} search - search
+     * @param {integer} size - Size of a page
+     * @param {array} sort - Sorting criteria in the format: property(,asc|desc). Default sort order is ascending. Multiple sort criteria are supported.
+     * @param {boolean} sortSorted - OncoKB™ is a precision oncology knowledge base developed at Memorial Sloan Kettering Cancer Center that contains biological and clinical information about genomic alterations in cancer.
+     * @param {boolean} sortUnsorted - OncoKB™ is a precision oncology knowledge base developed at Memorial Sloan Kettering Cancer Center that contains biological and clinical information about genomic alterations in cancer.
+     * @param {string} toDate - toDate
+     * @param {boolean} unpaged - OncoKB™ is a precision oncology knowledge base developed at Memorial Sloan Kettering Cancer Center that contains biological and clinical information about genomic alterations in cancer.
      */
     resourceUsageGetUsingGET(parameters: {
-        $queryParameters ? : any,
-            $domain ? : string
-    }): Promise < UsageSummary > {
-        return this.resourceUsageGetUsingGETWithHttpInfo(parameters).then(function(response: request.Response) {
-            return response.body;
-        });
-    };
-    userOverviewUsageGetUsingGETURL(parameters: {
+            'fromDate' ? : string,
+            'interval' ? : "DAY" | "MONTH" | "YEAR",
+            'offset' ? : number,
+            'page' ? : number,
+            'pageNumber' ? : number,
+            'pageSize' ? : number,
+            'paged' ? : boolean,
+            'publicOnly' ? : boolean,
+            'resourceId' ? : number,
+            'search' ? : string,
+            'size' ? : number,
+            'sort' ? : Array < string > ,
+                'sortSorted' ? : boolean,
+                'sortUnsorted' ? : boolean,
+                'toDate' ? : string,
+                'unpaged' ? : boolean,
+                $queryParameters ? : any,
+                $domain ? : string
+        }): Promise < Array < ResourceUsageAnalysisRow >
+        > {
+            return this.resourceUsageGetUsingGETWithHttpInfo(parameters).then(function(response: request.Response) {
+                return response.body;
+            });
+        };
+    userUsageSummaryGetUsingGETURL(parameters: {
         'companyId' ? : number,
-        $queryParameters ? : any
+        'fromDate' ? : string,
+        'interval' ? : "DAY" | "MONTH" | "YEAR",
+        'offset' ? : number,
+        'page' ? : number,
+        'pageNumber' ? : number,
+        'pageSize' ? : number,
+        'paged' ? : boolean,
+        'publicOnly' ? : boolean,
+        'resource' ? : string,
+        'search' ? : string,
+        'size' ? : number,
+        'sort' ? : Array < string > ,
+            'sortSorted' ? : boolean,
+            'sortUnsorted' ? : boolean,
+            'toDate' ? : string,
+            'unpaged' ? : boolean,
+            $queryParameters ? : any
     }): string {
         let queryParameters: any = {};
         let path = '/api/usage/summary/users';
         if (parameters['companyId'] !== undefined) {
             queryParameters['companyId'] = parameters['companyId'];
+        }
+
+        if (parameters['fromDate'] !== undefined) {
+            queryParameters['fromDate'] = parameters['fromDate'];
+        }
+
+        if (parameters['interval'] !== undefined) {
+            queryParameters['interval'] = parameters['interval'];
+        }
+
+        if (parameters['offset'] !== undefined) {
+            queryParameters['offset'] = parameters['offset'];
+        }
+
+        if (parameters['page'] !== undefined) {
+            queryParameters['page'] = parameters['page'];
+        }
+
+        if (parameters['pageNumber'] !== undefined) {
+            queryParameters['pageNumber'] = parameters['pageNumber'];
+        }
+
+        if (parameters['pageSize'] !== undefined) {
+            queryParameters['pageSize'] = parameters['pageSize'];
+        }
+
+        if (parameters['paged'] !== undefined) {
+            queryParameters['paged'] = parameters['paged'];
+        }
+
+        if (parameters['publicOnly'] !== undefined) {
+            queryParameters['publicOnly'] = parameters['publicOnly'];
+        }
+
+        if (parameters['resource'] !== undefined) {
+            queryParameters['resource'] = parameters['resource'];
+        }
+
+        if (parameters['search'] !== undefined) {
+            queryParameters['search'] = parameters['search'];
+        }
+
+        if (parameters['size'] !== undefined) {
+            queryParameters['size'] = parameters['size'];
+        }
+
+        if (parameters['sort'] !== undefined) {
+            queryParameters['sort'] = parameters['sort'];
+        }
+
+        if (parameters['sortSorted'] !== undefined) {
+            queryParameters['sort.sorted'] = parameters['sortSorted'];
+        }
+
+        if (parameters['sortUnsorted'] !== undefined) {
+            queryParameters['sort.unsorted'] = parameters['sortUnsorted'];
+        }
+
+        if (parameters['toDate'] !== undefined) {
+            queryParameters['toDate'] = parameters['toDate'];
+        }
+
+        if (parameters['unpaged'] !== undefined) {
+            queryParameters['unpaged'] = parameters['unpaged'];
         }
 
         if (parameters.$queryParameters) {
@@ -5142,14 +5449,46 @@ export default class API {
     };
 
     /**
-     * userOverviewUsageGet
+     * userUsageSummaryGet
      * @method
-     * @name API#userOverviewUsageGetUsingGET
+     * @name API#userUsageSummaryGetUsingGET
      * @param {integer} companyId - companyId
+     * @param {string} fromDate - fromDate
+     * @param {string} interval - interval
+     * @param {integer} offset - OncoKB™ is a precision oncology knowledge base developed at Memorial Sloan Kettering Cancer Center that contains biological and clinical information about genomic alterations in cancer.
+     * @param {integer} page - Page number of the requested page
+     * @param {integer} pageNumber - OncoKB™ is a precision oncology knowledge base developed at Memorial Sloan Kettering Cancer Center that contains biological and clinical information about genomic alterations in cancer.
+     * @param {integer} pageSize - OncoKB™ is a precision oncology knowledge base developed at Memorial Sloan Kettering Cancer Center that contains biological and clinical information about genomic alterations in cancer.
+     * @param {boolean} paged - OncoKB™ is a precision oncology knowledge base developed at Memorial Sloan Kettering Cancer Center that contains biological and clinical information about genomic alterations in cancer.
+     * @param {boolean} publicOnly - publicOnly
+     * @param {string} resource - resource
+     * @param {string} search - search
+     * @param {integer} size - Size of a page
+     * @param {array} sort - Sorting criteria in the format: property(,asc|desc). Default sort order is ascending. Multiple sort criteria are supported.
+     * @param {boolean} sortSorted - OncoKB™ is a precision oncology knowledge base developed at Memorial Sloan Kettering Cancer Center that contains biological and clinical information about genomic alterations in cancer.
+     * @param {boolean} sortUnsorted - OncoKB™ is a precision oncology knowledge base developed at Memorial Sloan Kettering Cancer Center that contains biological and clinical information about genomic alterations in cancer.
+     * @param {string} toDate - toDate
+     * @param {boolean} unpaged - OncoKB™ is a precision oncology knowledge base developed at Memorial Sloan Kettering Cancer Center that contains biological and clinical information about genomic alterations in cancer.
      */
-    userOverviewUsageGetUsingGETWithHttpInfo(parameters: {
+    userUsageSummaryGetUsingGETWithHttpInfo(parameters: {
         'companyId' ? : number,
-        $queryParameters ? : any,
+        'fromDate' ? : string,
+        'interval' ? : "DAY" | "MONTH" | "YEAR",
+        'offset' ? : number,
+        'page' ? : number,
+        'pageNumber' ? : number,
+        'pageSize' ? : number,
+        'paged' ? : boolean,
+        'publicOnly' ? : boolean,
+        'resource' ? : string,
+        'search' ? : string,
+        'size' ? : number,
+        'sort' ? : Array < string > ,
+            'sortSorted' ? : boolean,
+            'sortUnsorted' ? : boolean,
+            'toDate' ? : string,
+            'unpaged' ? : boolean,
+            $queryParameters ? : any,
             $domain ? : string
     }): Promise < request.Response > {
         const domain = parameters.$domain ? parameters.$domain : this.domain;
@@ -5167,6 +5506,70 @@ export default class API {
                 queryParameters['companyId'] = parameters['companyId'];
             }
 
+            if (parameters['fromDate'] !== undefined) {
+                queryParameters['fromDate'] = parameters['fromDate'];
+            }
+
+            if (parameters['interval'] !== undefined) {
+                queryParameters['interval'] = parameters['interval'];
+            }
+
+            if (parameters['offset'] !== undefined) {
+                queryParameters['offset'] = parameters['offset'];
+            }
+
+            if (parameters['page'] !== undefined) {
+                queryParameters['page'] = parameters['page'];
+            }
+
+            if (parameters['pageNumber'] !== undefined) {
+                queryParameters['pageNumber'] = parameters['pageNumber'];
+            }
+
+            if (parameters['pageSize'] !== undefined) {
+                queryParameters['pageSize'] = parameters['pageSize'];
+            }
+
+            if (parameters['paged'] !== undefined) {
+                queryParameters['paged'] = parameters['paged'];
+            }
+
+            if (parameters['publicOnly'] !== undefined) {
+                queryParameters['publicOnly'] = parameters['publicOnly'];
+            }
+
+            if (parameters['resource'] !== undefined) {
+                queryParameters['resource'] = parameters['resource'];
+            }
+
+            if (parameters['search'] !== undefined) {
+                queryParameters['search'] = parameters['search'];
+            }
+
+            if (parameters['size'] !== undefined) {
+                queryParameters['size'] = parameters['size'];
+            }
+
+            if (parameters['sort'] !== undefined) {
+                queryParameters['sort'] = parameters['sort'];
+            }
+
+            if (parameters['sortSorted'] !== undefined) {
+                queryParameters['sort.sorted'] = parameters['sortSorted'];
+            }
+
+            if (parameters['sortUnsorted'] !== undefined) {
+                queryParameters['sort.unsorted'] = parameters['sortUnsorted'];
+            }
+
+            if (parameters['toDate'] !== undefined) {
+                queryParameters['toDate'] = parameters['toDate'];
+            }
+
+            if (parameters['unpaged'] !== undefined) {
+                queryParameters['unpaged'] = parameters['unpaged'];
+            }
+
             if (parameters.$queryParameters) {
                 Object.keys(parameters.$queryParameters).forEach(function(parameterName) {
                     var parameter = parameters.$queryParameters[parameterName];
@@ -5180,27 +5583,138 @@ export default class API {
     };
 
     /**
-     * userOverviewUsageGet
+     * userUsageSummaryGet
      * @method
-     * @name API#userOverviewUsageGetUsingGET
+     * @name API#userUsageSummaryGetUsingGET
      * @param {integer} companyId - companyId
+     * @param {string} fromDate - fromDate
+     * @param {string} interval - interval
+     * @param {integer} offset - OncoKB™ is a precision oncology knowledge base developed at Memorial Sloan Kettering Cancer Center that contains biological and clinical information about genomic alterations in cancer.
+     * @param {integer} page - Page number of the requested page
+     * @param {integer} pageNumber - OncoKB™ is a precision oncology knowledge base developed at Memorial Sloan Kettering Cancer Center that contains biological and clinical information about genomic alterations in cancer.
+     * @param {integer} pageSize - OncoKB™ is a precision oncology knowledge base developed at Memorial Sloan Kettering Cancer Center that contains biological and clinical information about genomic alterations in cancer.
+     * @param {boolean} paged - OncoKB™ is a precision oncology knowledge base developed at Memorial Sloan Kettering Cancer Center that contains biological and clinical information about genomic alterations in cancer.
+     * @param {boolean} publicOnly - publicOnly
+     * @param {string} resource - resource
+     * @param {string} search - search
+     * @param {integer} size - Size of a page
+     * @param {array} sort - Sorting criteria in the format: property(,asc|desc). Default sort order is ascending. Multiple sort criteria are supported.
+     * @param {boolean} sortSorted - OncoKB™ is a precision oncology knowledge base developed at Memorial Sloan Kettering Cancer Center that contains biological and clinical information about genomic alterations in cancer.
+     * @param {boolean} sortUnsorted - OncoKB™ is a precision oncology knowledge base developed at Memorial Sloan Kettering Cancer Center that contains biological and clinical information about genomic alterations in cancer.
+     * @param {string} toDate - toDate
+     * @param {boolean} unpaged - OncoKB™ is a precision oncology knowledge base developed at Memorial Sloan Kettering Cancer Center that contains biological and clinical information about genomic alterations in cancer.
      */
-    userOverviewUsageGetUsingGET(parameters: {
+    userUsageSummaryGetUsingGET(parameters: {
             'companyId' ? : number,
-            $queryParameters ? : any,
+            'fromDate' ? : string,
+            'interval' ? : "DAY" | "MONTH" | "YEAR",
+            'offset' ? : number,
+            'page' ? : number,
+            'pageNumber' ? : number,
+            'pageSize' ? : number,
+            'paged' ? : boolean,
+            'publicOnly' ? : boolean,
+            'resource' ? : string,
+            'search' ? : string,
+            'size' ? : number,
+            'sort' ? : Array < string > ,
+                'sortSorted' ? : boolean,
+                'sortUnsorted' ? : boolean,
+                'toDate' ? : string,
+                'unpaged' ? : boolean,
+                $queryParameters ? : any,
                 $domain ? : string
-        }): Promise < Array < UserOverviewUsage >
+        }): Promise < Array < UsageAnalysisRow >
         > {
-            return this.userOverviewUsageGetUsingGETWithHttpInfo(parameters).then(function(response: request.Response) {
+            return this.userUsageSummaryGetUsingGETWithHttpInfo(parameters).then(function(response: request.Response) {
                 return response.body;
             });
         };
     userUsageGetUsingGETURL(parameters: {
-        'userId': number,
-        $queryParameters ? : any
+        'fromDate' ? : string,
+        'interval' ? : "DAY" | "MONTH" | "YEAR",
+        'offset' ? : number,
+        'page' ? : number,
+        'pageNumber' ? : number,
+        'pageSize' ? : number,
+        'paged' ? : boolean,
+        'publicOnly' ? : boolean,
+        'resource' ? : string,
+        'search' ? : string,
+        'size' ? : number,
+        'sort' ? : Array < string > ,
+            'sortSorted' ? : boolean,
+            'sortUnsorted' ? : boolean,
+            'toDate' ? : string,
+            'unpaged' ? : boolean,
+            'userId': number,
+            $queryParameters ? : any
     }): string {
         let queryParameters: any = {};
         let path = '/api/usage/users/{userId}';
+        if (parameters['fromDate'] !== undefined) {
+            queryParameters['fromDate'] = parameters['fromDate'];
+        }
+
+        if (parameters['interval'] !== undefined) {
+            queryParameters['interval'] = parameters['interval'];
+        }
+
+        if (parameters['offset'] !== undefined) {
+            queryParameters['offset'] = parameters['offset'];
+        }
+
+        if (parameters['page'] !== undefined) {
+            queryParameters['page'] = parameters['page'];
+        }
+
+        if (parameters['pageNumber'] !== undefined) {
+            queryParameters['pageNumber'] = parameters['pageNumber'];
+        }
+
+        if (parameters['pageSize'] !== undefined) {
+            queryParameters['pageSize'] = parameters['pageSize'];
+        }
+
+        if (parameters['paged'] !== undefined) {
+            queryParameters['paged'] = parameters['paged'];
+        }
+
+        if (parameters['publicOnly'] !== undefined) {
+            queryParameters['publicOnly'] = parameters['publicOnly'];
+        }
+
+        if (parameters['resource'] !== undefined) {
+            queryParameters['resource'] = parameters['resource'];
+        }
+
+        if (parameters['search'] !== undefined) {
+            queryParameters['search'] = parameters['search'];
+        }
+
+        if (parameters['size'] !== undefined) {
+            queryParameters['size'] = parameters['size'];
+        }
+
+        if (parameters['sort'] !== undefined) {
+            queryParameters['sort'] = parameters['sort'];
+        }
+
+        if (parameters['sortSorted'] !== undefined) {
+            queryParameters['sort.sorted'] = parameters['sortSorted'];
+        }
+
+        if (parameters['sortUnsorted'] !== undefined) {
+            queryParameters['sort.unsorted'] = parameters['sortUnsorted'];
+        }
+
+        if (parameters['toDate'] !== undefined) {
+            queryParameters['toDate'] = parameters['toDate'];
+        }
+
+        if (parameters['unpaged'] !== undefined) {
+            queryParameters['unpaged'] = parameters['unpaged'];
+        }
 
         path = path.replace('{userId}', parameters['userId'] + '');
 
@@ -5218,12 +5732,44 @@ export default class API {
      * userUsageGet
      * @method
      * @name API#userUsageGetUsingGET
+     * @param {string} fromDate - fromDate
+     * @param {string} interval - interval
+     * @param {integer} offset - OncoKB™ is a precision oncology knowledge base developed at Memorial Sloan Kettering Cancer Center that contains biological and clinical information about genomic alterations in cancer.
+     * @param {integer} page - Page number of the requested page
+     * @param {integer} pageNumber - OncoKB™ is a precision oncology knowledge base developed at Memorial Sloan Kettering Cancer Center that contains biological and clinical information about genomic alterations in cancer.
+     * @param {integer} pageSize - OncoKB™ is a precision oncology knowledge base developed at Memorial Sloan Kettering Cancer Center that contains biological and clinical information about genomic alterations in cancer.
+     * @param {boolean} paged - OncoKB™ is a precision oncology knowledge base developed at Memorial Sloan Kettering Cancer Center that contains biological and clinical information about genomic alterations in cancer.
+     * @param {boolean} publicOnly - publicOnly
+     * @param {string} resource - resource
+     * @param {string} search - search
+     * @param {integer} size - Size of a page
+     * @param {array} sort - Sorting criteria in the format: property(,asc|desc). Default sort order is ascending. Multiple sort criteria are supported.
+     * @param {boolean} sortSorted - OncoKB™ is a precision oncology knowledge base developed at Memorial Sloan Kettering Cancer Center that contains biological and clinical information about genomic alterations in cancer.
+     * @param {boolean} sortUnsorted - OncoKB™ is a precision oncology knowledge base developed at Memorial Sloan Kettering Cancer Center that contains biological and clinical information about genomic alterations in cancer.
+     * @param {string} toDate - toDate
+     * @param {boolean} unpaged - OncoKB™ is a precision oncology knowledge base developed at Memorial Sloan Kettering Cancer Center that contains biological and clinical information about genomic alterations in cancer.
      * @param {integer} userId - userId
      */
     userUsageGetUsingGETWithHttpInfo(parameters: {
-        'userId': number,
-        $queryParameters ? : any,
-        $domain ? : string
+        'fromDate' ? : string,
+        'interval' ? : "DAY" | "MONTH" | "YEAR",
+        'offset' ? : number,
+        'page' ? : number,
+        'pageNumber' ? : number,
+        'pageSize' ? : number,
+        'paged' ? : boolean,
+        'publicOnly' ? : boolean,
+        'resource' ? : string,
+        'search' ? : string,
+        'size' ? : number,
+        'sort' ? : Array < string > ,
+            'sortSorted' ? : boolean,
+            'sortUnsorted' ? : boolean,
+            'toDate' ? : string,
+            'unpaged' ? : boolean,
+            'userId': number,
+            $queryParameters ? : any,
+            $domain ? : string
     }): Promise < request.Response > {
         const domain = parameters.$domain ? parameters.$domain : this.domain;
         const errorHandlers = this.errorHandlers;
@@ -5235,6 +5781,70 @@ export default class API {
         let form: any = {};
         return new Promise(function(resolve, reject) {
             headers['Accept'] = '*/*';
+
+            if (parameters['fromDate'] !== undefined) {
+                queryParameters['fromDate'] = parameters['fromDate'];
+            }
+
+            if (parameters['interval'] !== undefined) {
+                queryParameters['interval'] = parameters['interval'];
+            }
+
+            if (parameters['offset'] !== undefined) {
+                queryParameters['offset'] = parameters['offset'];
+            }
+
+            if (parameters['page'] !== undefined) {
+                queryParameters['page'] = parameters['page'];
+            }
+
+            if (parameters['pageNumber'] !== undefined) {
+                queryParameters['pageNumber'] = parameters['pageNumber'];
+            }
+
+            if (parameters['pageSize'] !== undefined) {
+                queryParameters['pageSize'] = parameters['pageSize'];
+            }
+
+            if (parameters['paged'] !== undefined) {
+                queryParameters['paged'] = parameters['paged'];
+            }
+
+            if (parameters['publicOnly'] !== undefined) {
+                queryParameters['publicOnly'] = parameters['publicOnly'];
+            }
+
+            if (parameters['resource'] !== undefined) {
+                queryParameters['resource'] = parameters['resource'];
+            }
+
+            if (parameters['search'] !== undefined) {
+                queryParameters['search'] = parameters['search'];
+            }
+
+            if (parameters['size'] !== undefined) {
+                queryParameters['size'] = parameters['size'];
+            }
+
+            if (parameters['sort'] !== undefined) {
+                queryParameters['sort'] = parameters['sort'];
+            }
+
+            if (parameters['sortSorted'] !== undefined) {
+                queryParameters['sort.sorted'] = parameters['sortSorted'];
+            }
+
+            if (parameters['sortUnsorted'] !== undefined) {
+                queryParameters['sort.unsorted'] = parameters['sortUnsorted'];
+            }
+
+            if (parameters['toDate'] !== undefined) {
+                queryParameters['toDate'] = parameters['toDate'];
+            }
+
+            if (parameters['unpaged'] !== undefined) {
+                queryParameters['unpaged'] = parameters['unpaged'];
+            }
 
             path = path.replace('{userId}', parameters['userId'] + '');
 
@@ -5259,17 +5869,50 @@ export default class API {
      * userUsageGet
      * @method
      * @name API#userUsageGetUsingGET
+     * @param {string} fromDate - fromDate
+     * @param {string} interval - interval
+     * @param {integer} offset - OncoKB™ is a precision oncology knowledge base developed at Memorial Sloan Kettering Cancer Center that contains biological and clinical information about genomic alterations in cancer.
+     * @param {integer} page - Page number of the requested page
+     * @param {integer} pageNumber - OncoKB™ is a precision oncology knowledge base developed at Memorial Sloan Kettering Cancer Center that contains biological and clinical information about genomic alterations in cancer.
+     * @param {integer} pageSize - OncoKB™ is a precision oncology knowledge base developed at Memorial Sloan Kettering Cancer Center that contains biological and clinical information about genomic alterations in cancer.
+     * @param {boolean} paged - OncoKB™ is a precision oncology knowledge base developed at Memorial Sloan Kettering Cancer Center that contains biological and clinical information about genomic alterations in cancer.
+     * @param {boolean} publicOnly - publicOnly
+     * @param {string} resource - resource
+     * @param {string} search - search
+     * @param {integer} size - Size of a page
+     * @param {array} sort - Sorting criteria in the format: property(,asc|desc). Default sort order is ascending. Multiple sort criteria are supported.
+     * @param {boolean} sortSorted - OncoKB™ is a precision oncology knowledge base developed at Memorial Sloan Kettering Cancer Center that contains biological and clinical information about genomic alterations in cancer.
+     * @param {boolean} sortUnsorted - OncoKB™ is a precision oncology knowledge base developed at Memorial Sloan Kettering Cancer Center that contains biological and clinical information about genomic alterations in cancer.
+     * @param {string} toDate - toDate
+     * @param {boolean} unpaged - OncoKB™ is a precision oncology knowledge base developed at Memorial Sloan Kettering Cancer Center that contains biological and clinical information about genomic alterations in cancer.
      * @param {integer} userId - userId
      */
     userUsageGetUsingGET(parameters: {
-        'userId': number,
-        $queryParameters ? : any,
-        $domain ? : string
-    }): Promise < UserUsage > {
-        return this.userUsageGetUsingGETWithHttpInfo(parameters).then(function(response: request.Response) {
-            return response.body;
-        });
-    };
+            'fromDate' ? : string,
+            'interval' ? : "DAY" | "MONTH" | "YEAR",
+            'offset' ? : number,
+            'page' ? : number,
+            'pageNumber' ? : number,
+            'pageSize' ? : number,
+            'paged' ? : boolean,
+            'publicOnly' ? : boolean,
+            'resource' ? : string,
+            'search' ? : string,
+            'size' ? : number,
+            'sort' ? : Array < string > ,
+                'sortSorted' ? : boolean,
+                'sortUnsorted' ? : boolean,
+                'toDate' ? : string,
+                'unpaged' ? : boolean,
+                'userId': number,
+                $queryParameters ? : any,
+                $domain ? : string
+        }): Promise < Array < ResourceUsageAnalysisRow >
+        > {
+            return this.userUsageGetUsingGETWithHttpInfo(parameters).then(function(response: request.Response) {
+                return response.body;
+            });
+        };
     getAllUserBannerMessagesUsingGETURL(parameters: {
         $queryParameters ? : any
     }): string {

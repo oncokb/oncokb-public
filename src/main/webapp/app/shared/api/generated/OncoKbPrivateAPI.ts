@@ -2,9 +2,11 @@ import * as request from "superagent";
 
 type CallbackHandler = (err: any, res ? : request.Response) => void;
 export type AnnotateMutationByGenomicChangeQuery = {
-    'evidenceTypes': Array < "GENE_SUMMARY" | "MUTATION_SUMMARY" | "TUMOR_TYPE_SUMMARY" | "GENE_TUMOR_TYPE_SUMMARY" | "PROGNOSTIC_SUMMARY" | "DIAGNOSTIC_SUMMARY" | "GENE_BACKGROUND" | "ONCOGENIC" | "MUTATION_EFFECT" | "VUS" | "PROGNOSTIC_IMPLICATION" | "DIAGNOSTIC_IMPLICATION" | "STANDARD_THERAPEUTIC_IMPLICATIONS_FOR_DRUG_SENSITIVITY" | "STANDARD_THERAPEUTIC_IMPLICATIONS_FOR_DRUG_RESISTANCE" | "INVESTIGATIONAL_THERAPEUTIC_IMPLICATIONS_DRUG_SENSITIVITY" | "INVESTIGATIONAL_THERAPEUTIC_IMPLICATIONS_DRUG_RESISTANCE" | "PATHOGENIC" | "GENOMIC_INDICATOR" | "GENE_PENETRANCE" | "VARIANT_PENETRANCE" | "VARIANT_CANCER_RISK" >
+    'evidenceTypes': Array < "GENE_SUMMARY" | "MUTATION_SUMMARY" | "TUMOR_TYPE_SUMMARY" | "GENE_TUMOR_TYPE_SUMMARY" | "PROGNOSTIC_SUMMARY" | "DIAGNOSTIC_SUMMARY" | "GENE_BACKGROUND" | "ONCOGENIC" | "MUTATION_EFFECT" | "VUS" | "PROGNOSTIC_IMPLICATION" | "DIAGNOSTIC_IMPLICATION" | "STANDARD_THERAPEUTIC_IMPLICATIONS_FOR_DRUG_SENSITIVITY" | "STANDARD_THERAPEUTIC_IMPLICATIONS_FOR_DRUG_RESISTANCE" | "INVESTIGATIONAL_THERAPEUTIC_IMPLICATIONS_DRUG_SENSITIVITY" | "INVESTIGATIONAL_THERAPEUTIC_IMPLICATIONS_DRUG_RESISTANCE" | "TX_ADDENDUM" | "PATHOGENIC" | "GENOMIC_INDICATOR" | "GENE_PENETRANCE" | "VARIANT_PENETRANCE" | "VARIANT_CANCER_RISK" >
 
         'genomicLocation': string
+
+        'germline': boolean
 
         'id': string
 
@@ -36,7 +38,7 @@ export type OncogenicityEntity = {
 export type Query = {
     'alteration': string
 
-        'alterationType': string
+        'alterationType': "MUTATION" | "COPY_NUMBER_ALTERATION" | "STRUCTURAL_VARIANT" | null
 
         'canonicalTranscript': string
 
@@ -58,7 +60,7 @@ export type Query = {
 
         'referenceGenome': "GRCh37" | "GRCh38"
 
-        'svType': "DELETION" | "TRANSLOCATION" | "DUPLICATION" | "INSERTION" | "INVERSION" | "FUSION" | "UNKNOWN"
+        'svType': "DELETION" | "TRANSLOCATION" | "DUPLICATION" | "INSERTION" | "INVERSION" | "FUSION" | "UNKNOWN" | null
 
         'tumorType': string
 
@@ -81,6 +83,36 @@ export type ApiHttpError = {
         'title': string
 
 };
+export type LevelInfo = {
+    'highestDiagnosticLevel': "LEVEL_1" | "LEVEL_2" | "LEVEL_3A" | "LEVEL_3B" | "LEVEL_4" | "LEVEL_R1" | "LEVEL_R2" | "LEVEL_Px1" | "LEVEL_Px2" | "LEVEL_Px3" | "LEVEL_Dx1" | "LEVEL_Dx2" | "LEVEL_Dx3" | "LEVEL_Fda1" | "LEVEL_Fda2" | "LEVEL_Fda3" | "NO"
+
+        'highestFDALevel': "LEVEL_1" | "LEVEL_2" | "LEVEL_3A" | "LEVEL_3B" | "LEVEL_4" | "LEVEL_R1" | "LEVEL_R2" | "LEVEL_Px1" | "LEVEL_Px2" | "LEVEL_Px3" | "LEVEL_Dx1" | "LEVEL_Dx2" | "LEVEL_Dx3" | "LEVEL_Fda1" | "LEVEL_Fda2" | "LEVEL_Fda3" | "NO"
+
+        'highestPrognosticLevel': "LEVEL_1" | "LEVEL_2" | "LEVEL_3A" | "LEVEL_3B" | "LEVEL_4" | "LEVEL_R1" | "LEVEL_R2" | "LEVEL_Px1" | "LEVEL_Px2" | "LEVEL_Px3" | "LEVEL_Dx1" | "LEVEL_Dx2" | "LEVEL_Dx3" | "LEVEL_Fda1" | "LEVEL_Fda2" | "LEVEL_Fda3" | "NO"
+
+        'highestResistanceLevel': "LEVEL_1" | "LEVEL_2" | "LEVEL_3A" | "LEVEL_3B" | "LEVEL_4" | "LEVEL_R1" | "LEVEL_R2" | "LEVEL_Px1" | "LEVEL_Px2" | "LEVEL_Px3" | "LEVEL_Dx1" | "LEVEL_Dx2" | "LEVEL_Dx3" | "LEVEL_Fda1" | "LEVEL_Fda2" | "LEVEL_Fda3" | "NO"
+
+        'highestSensitiveLevel': "LEVEL_1" | "LEVEL_2" | "LEVEL_3A" | "LEVEL_3B" | "LEVEL_4" | "LEVEL_R1" | "LEVEL_R2" | "LEVEL_Px1" | "LEVEL_Px2" | "LEVEL_Px3" | "LEVEL_Dx1" | "LEVEL_Dx2" | "LEVEL_Dx3" | "LEVEL_Fda1" | "LEVEL_Fda2" | "LEVEL_Fda3" | "NO"
+
+};
+export type MainNumber = {
+    'alteration': number
+
+        'drug': number
+
+        'gene': number
+
+        'level': Array < MainNumberLevel >
+
+        'tumorType': number
+
+};
+export type CancerTypeCount = {
+    'cancerType': string
+
+        'count': number
+
+};
 export type Implication = {
     'abstracts': Array < ArticleAbstract >
 
@@ -96,17 +128,11 @@ export type Implication = {
 
 };
 export type GermlineVariantAnnotation = {
-    'alleleExist': boolean
-
-        'clinVarId': string
-
-        'dataVersion': string
+    'dataVersion': string
 
         'diagnosticImplications': Array < Implication >
 
         'diagnosticSummary': string
-
-        'exon': string
 
         'geneExist': boolean
 
@@ -114,23 +140,17 @@ export type GermlineVariantAnnotation = {
 
         'genomicIndicators': Array < GenomicIndicator >
 
-        'highestDiagnosticImplicationLevel': "LEVEL_1" | "LEVEL_2" | "LEVEL_3A" | "LEVEL_3B" | "LEVEL_4" | "LEVEL_R1" | "LEVEL_R2" | "LEVEL_Px1" | "LEVEL_Px2" | "LEVEL_Px3" | "LEVEL_Dx1" | "LEVEL_Dx2" | "LEVEL_Dx3" | "LEVEL_Fda1" | "LEVEL_Fda2" | "LEVEL_Fda3" | "NO"
+        'highestDiagnosticImplicationLevel': "LEVEL_Dx1" | "LEVEL_Dx2" | "LEVEL_Dx3" | null
 
-        'highestFdaLevel': "LEVEL_1" | "LEVEL_2" | "LEVEL_3A" | "LEVEL_3B" | "LEVEL_4" | "LEVEL_R1" | "LEVEL_R2" | "LEVEL_Px1" | "LEVEL_Px2" | "LEVEL_Px3" | "LEVEL_Dx1" | "LEVEL_Dx2" | "LEVEL_Dx3" | "LEVEL_Fda1" | "LEVEL_Fda2" | "LEVEL_Fda3" | "NO"
+        'highestPrognosticImplicationLevel': "LEVEL_Px1" | "LEVEL_Px2" | "LEVEL_Px3" | null
 
-        'highestPrognosticImplicationLevel': "LEVEL_1" | "LEVEL_2" | "LEVEL_3A" | "LEVEL_3B" | "LEVEL_4" | "LEVEL_R1" | "LEVEL_R2" | "LEVEL_Px1" | "LEVEL_Px2" | "LEVEL_Px3" | "LEVEL_Dx1" | "LEVEL_Dx2" | "LEVEL_Dx3" | "LEVEL_Fda1" | "LEVEL_Fda2" | "LEVEL_Fda3" | "NO"
+        'highestResistanceLevel': "LEVEL_R1" | "LEVEL_R2" | null
 
-        'highestResistanceLevel': "LEVEL_1" | "LEVEL_2" | "LEVEL_3A" | "LEVEL_3B" | "LEVEL_4" | "LEVEL_R1" | "LEVEL_R2" | "LEVEL_Px1" | "LEVEL_Px2" | "LEVEL_Px3" | "LEVEL_Dx1" | "LEVEL_Dx2" | "LEVEL_Dx3" | "LEVEL_Fda1" | "LEVEL_Fda2" | "LEVEL_Fda3" | "NO"
-
-        'highestSensitiveLevel': "LEVEL_1" | "LEVEL_2" | "LEVEL_3A" | "LEVEL_3B" | "LEVEL_4" | "LEVEL_R1" | "LEVEL_R2" | "LEVEL_Px1" | "LEVEL_Px2" | "LEVEL_Px3" | "LEVEL_Dx1" | "LEVEL_Dx2" | "LEVEL_Dx3" | "LEVEL_Fda1" | "LEVEL_Fda2" | "LEVEL_Fda3" | "NO"
+        'highestSensitiveLevel': "LEVEL_1" | "LEVEL_2" | "LEVEL_3A" | "LEVEL_3B" | "LEVEL_4" | null
 
         'lastUpdate': string
 
         'mutationEffect': MutationEffectResp
-
-        'otherSignificantResistanceLevels': Array < "LEVEL_1" | "LEVEL_2" | "LEVEL_3A" | "LEVEL_3B" | "LEVEL_4" | "LEVEL_R1" | "LEVEL_R2" | "LEVEL_Px1" | "LEVEL_Px2" | "LEVEL_Px3" | "LEVEL_Dx1" | "LEVEL_Dx2" | "LEVEL_Dx3" | "LEVEL_Fda1" | "LEVEL_Fda2" | "LEVEL_Fda3" | "NO" >
-
-        'otherSignificantSensitiveLevels': Array < "LEVEL_1" | "LEVEL_2" | "LEVEL_3A" | "LEVEL_3B" | "LEVEL_4" | "LEVEL_R1" | "LEVEL_R2" | "LEVEL_Px1" | "LEVEL_Px2" | "LEVEL_Px3" | "LEVEL_Dx1" | "LEVEL_Dx2" | "LEVEL_Dx3" | "LEVEL_Fda1" | "LEVEL_Fda2" | "LEVEL_Fda3" | "NO" >
 
         'pathogenic': string
 
@@ -144,9 +164,9 @@ export type GermlineVariantAnnotation = {
 
         'treatments': Array < IndicatorQueryTreatment >
 
-        'tumorTypes': Array < VariantAnnotationTumorType >
-
         'tumorTypeSummary': string
+
+        'tumorTypes': Array < VariantAnnotationTumorType >
 
         'variantExist': boolean
 
@@ -175,7 +195,28 @@ export type Gene = {
         'hugoSymbol': string
 
 };
+export type TumorType = {
+    'children': {}
 
+    'code': string
+
+        'color': string
+
+        'id': number
+
+        'level': number
+
+        'mainType': MainType
+
+        'name': string
+
+        'parent': string
+
+        'tissue': string
+
+        'tumorForm': "SOLID" | "LIQUID" | "MIXED"
+
+};
 export type EnsemblTranscript = {
     'ccdsId': string
 
@@ -240,6 +281,16 @@ export type DrugSynonym = {
         'name': string
 
 };
+export type AlternativeOncoKbVariant = {
+    'foundAlteration': Alteration
+
+        'gene': string
+
+        'inputVariant': string
+
+        'transcriptId': string
+
+};
 export type BiologicalVariant = {
     'cancerRisk': string
 
@@ -276,7 +327,7 @@ export type GenomicIndicator = {
         'name': string
 
 };
-export type TumorType = {
+export type TumorTypeEntity = {
     'code': string
 
         'color': string
@@ -489,6 +540,8 @@ export type AnnotatedVariant = {
 
         'referenceGenome': string
 
+        'setting': string
+
         'variant': string
 
 };
@@ -519,7 +572,7 @@ export type Exon = {
 
 };
 export type ClinicalVariant = {
-    'cancerTypes': Array < TumorType >
+    'cancerTypes': Array < TumorTypeEntity >
 
         'drug': Array < string >
 
@@ -529,9 +582,7 @@ export type ClinicalVariant = {
 
         'drugPmids': Array < string >
 
-        'evidenceId': number
-
-        'excludedCancerTypes': Array < TumorType >
+        'excludedCancerTypes': Array < TumorTypeEntity >
 
         'fdaLevel': string
 
@@ -542,6 +593,8 @@ export type ClinicalVariant = {
         'oncogenic': string
 
         'solidPropagationLevel': string
+
+        'tag': Tag
 
         'variant': Alteration
 
@@ -571,13 +624,13 @@ export type Evidence = {
 
         'articles': Array < Article >
 
-        'cancerTypes': Array < TumorType >
+        'cancerTypes': Array < TumorTypeEntity >
 
         'description': string
 
-        'evidenceType': "GENE_SUMMARY" | "MUTATION_SUMMARY" | "TUMOR_TYPE_SUMMARY" | "GENE_TUMOR_TYPE_SUMMARY" | "PROGNOSTIC_SUMMARY" | "DIAGNOSTIC_SUMMARY" | "GENE_BACKGROUND" | "ONCOGENIC" | "MUTATION_EFFECT" | "VUS" | "PROGNOSTIC_IMPLICATION" | "DIAGNOSTIC_IMPLICATION" | "STANDARD_THERAPEUTIC_IMPLICATIONS_FOR_DRUG_SENSITIVITY" | "STANDARD_THERAPEUTIC_IMPLICATIONS_FOR_DRUG_RESISTANCE" | "INVESTIGATIONAL_THERAPEUTIC_IMPLICATIONS_DRUG_SENSITIVITY" | "INVESTIGATIONAL_THERAPEUTIC_IMPLICATIONS_DRUG_RESISTANCE" | "PATHOGENIC" | "GENOMIC_INDICATOR" | "GENE_PENETRANCE" | "VARIANT_PENETRANCE" | "VARIANT_CANCER_RISK"
+        'evidenceType': "GENE_SUMMARY" | "MUTATION_SUMMARY" | "TUMOR_TYPE_SUMMARY" | "GENE_TUMOR_TYPE_SUMMARY" | "PROGNOSTIC_SUMMARY" | "DIAGNOSTIC_SUMMARY" | "GENE_BACKGROUND" | "ONCOGENIC" | "MUTATION_EFFECT" | "VUS" | "PROGNOSTIC_IMPLICATION" | "DIAGNOSTIC_IMPLICATION" | "STANDARD_THERAPEUTIC_IMPLICATIONS_FOR_DRUG_SENSITIVITY" | "STANDARD_THERAPEUTIC_IMPLICATIONS_FOR_DRUG_RESISTANCE" | "INVESTIGATIONAL_THERAPEUTIC_IMPLICATIONS_DRUG_SENSITIVITY" | "INVESTIGATIONAL_THERAPEUTIC_IMPLICATIONS_DRUG_RESISTANCE" | "TX_ADDENDUM" | "PATHOGENIC" | "GENOMIC_INDICATOR" | "GENE_PENETRANCE" | "VARIANT_PENETRANCE" | "VARIANT_CANCER_RISK"
 
-        'excludedCancerTypes': Array < TumorType >
+        'excludedCancerTypes': Array < TumorTypeEntity >
 
         'fdaLevel': "LEVEL_1" | "LEVEL_2" | "LEVEL_3A" | "LEVEL_3B" | "LEVEL_4" | "LEVEL_R1" | "LEVEL_R2" | "LEVEL_Px1" | "LEVEL_Px2" | "LEVEL_Px3" | "LEVEL_Dx1" | "LEVEL_Dx2" | "LEVEL_Dx3" | "LEVEL_Fda1" | "LEVEL_Fda2" | "LEVEL_Fda3" | "NO"
 
@@ -597,7 +650,7 @@ export type Evidence = {
 
         'name': string
 
-        'relevantCancerTypes': Array < TumorType >
+        'relevantCancerTypes': Array < TumorTypeEntity >
 
         'solidPropagationLevel': "LEVEL_1" | "LEVEL_2" | "LEVEL_3A" | "LEVEL_3B" | "LEVEL_4" | "LEVEL_R1" | "LEVEL_R2" | "LEVEL_Px1" | "LEVEL_Px2" | "LEVEL_Px3" | "LEVEL_Dx1" | "LEVEL_Dx2" | "LEVEL_Dx3" | "LEVEL_Fda1" | "LEVEL_Fda2" | "LEVEL_Fda3" | "NO"
 
@@ -653,7 +706,7 @@ export type TypeaheadSearchResp = {
 
         'queryType': "GENE" | "VARIANT" | "DRUG" | "TEXT" | "GENOMIC" | "CANCER_TYPE"
 
-        'tumorTypes': Array < TumorType >
+        'tumorTypes': Array < TumorTypeEntity >
 
         'variantExist': boolean
 
@@ -667,7 +720,7 @@ export type VariantAnnotationTumorType = {
 
         'relevantTumorType': boolean
 
-        'tumorType': TumorType
+        'tumorType': TumorTypeEntity
 
 };
 export type ArticleAbstract = {
@@ -785,11 +838,13 @@ export type MutationEffectResp = {
 
         'description': string
 
-        'knownEffect': string
+        'knownEffect': "Gain-of-function" | "Inconclusive" | "Loss-of-function" | "Likely Loss-of-function" | "Likely Gain-of-function" | "Neutral" | "Unknown" | "Likely Switch-of-function" | "Switch-of-function" | "Likely Neutral"
 
 };
 export type AnnotateMutationByHGVSgQuery = {
-    'evidenceTypes': Array < "GENE_SUMMARY" | "MUTATION_SUMMARY" | "TUMOR_TYPE_SUMMARY" | "GENE_TUMOR_TYPE_SUMMARY" | "PROGNOSTIC_SUMMARY" | "DIAGNOSTIC_SUMMARY" | "GENE_BACKGROUND" | "ONCOGENIC" | "MUTATION_EFFECT" | "VUS" | "PROGNOSTIC_IMPLICATION" | "DIAGNOSTIC_IMPLICATION" | "STANDARD_THERAPEUTIC_IMPLICATIONS_FOR_DRUG_SENSITIVITY" | "STANDARD_THERAPEUTIC_IMPLICATIONS_FOR_DRUG_RESISTANCE" | "INVESTIGATIONAL_THERAPEUTIC_IMPLICATIONS_DRUG_SENSITIVITY" | "INVESTIGATIONAL_THERAPEUTIC_IMPLICATIONS_DRUG_RESISTANCE" | "PATHOGENIC" | "GENOMIC_INDICATOR" | "GENE_PENETRANCE" | "VARIANT_PENETRANCE" | "VARIANT_CANCER_RISK" >
+    'evidenceTypes': Array < "GENE_SUMMARY" | "MUTATION_SUMMARY" | "TUMOR_TYPE_SUMMARY" | "GENE_TUMOR_TYPE_SUMMARY" | "PROGNOSTIC_SUMMARY" | "DIAGNOSTIC_SUMMARY" | "GENE_BACKGROUND" | "ONCOGENIC" | "MUTATION_EFFECT" | "VUS" | "PROGNOSTIC_IMPLICATION" | "DIAGNOSTIC_IMPLICATION" | "STANDARD_THERAPEUTIC_IMPLICATIONS_FOR_DRUG_SENSITIVITY" | "STANDARD_THERAPEUTIC_IMPLICATIONS_FOR_DRUG_RESISTANCE" | "INVESTIGATIONAL_THERAPEUTIC_IMPLICATIONS_DRUG_SENSITIVITY" | "INVESTIGATIONAL_THERAPEUTIC_IMPLICATIONS_DRUG_RESISTANCE" | "TX_ADDENDUM" | "PATHOGENIC" | "GENOMIC_INDICATOR" | "GENE_PENETRANCE" | "VARIANT_PENETRANCE" | "VARIANT_CANCER_RISK" >
+
+        'germline': boolean
 
         'hgvsg': string
 
@@ -839,6 +894,8 @@ export type SomaticVariantAnnotation = {
 
         'alteration': Alteration
 
+        'alternativeOncoKbVariant': AlternativeOncoKbVariant
+
         'background': string
 
         'dataVersion': string
@@ -853,15 +910,15 @@ export type SomaticVariantAnnotation = {
 
         'geneSummary': string
 
-        'highestDiagnosticImplicationLevel': "LEVEL_1" | "LEVEL_2" | "LEVEL_3A" | "LEVEL_3B" | "LEVEL_4" | "LEVEL_R1" | "LEVEL_R2" | "LEVEL_Px1" | "LEVEL_Px2" | "LEVEL_Px3" | "LEVEL_Dx1" | "LEVEL_Dx2" | "LEVEL_Dx3" | "LEVEL_Fda1" | "LEVEL_Fda2" | "LEVEL_Fda3" | "NO"
+        'highestDiagnosticImplicationLevel': "LEVEL_Dx1" | "LEVEL_Dx2" | "LEVEL_Dx3" | null
 
-        'highestFdaLevel': "LEVEL_1" | "LEVEL_2" | "LEVEL_3A" | "LEVEL_3B" | "LEVEL_4" | "LEVEL_R1" | "LEVEL_R2" | "LEVEL_Px1" | "LEVEL_Px2" | "LEVEL_Px3" | "LEVEL_Dx1" | "LEVEL_Dx2" | "LEVEL_Dx3" | "LEVEL_Fda1" | "LEVEL_Fda2" | "LEVEL_Fda3" | "NO"
+        'highestFdaLevel': "LEVEL_Fda1" | "LEVEL_Fda2" | "LEVEL_Fda3" | null
 
-        'highestPrognosticImplicationLevel': "LEVEL_1" | "LEVEL_2" | "LEVEL_3A" | "LEVEL_3B" | "LEVEL_4" | "LEVEL_R1" | "LEVEL_R2" | "LEVEL_Px1" | "LEVEL_Px2" | "LEVEL_Px3" | "LEVEL_Dx1" | "LEVEL_Dx2" | "LEVEL_Dx3" | "LEVEL_Fda1" | "LEVEL_Fda2" | "LEVEL_Fda3" | "NO"
+        'highestPrognosticImplicationLevel': "LEVEL_Px1" | "LEVEL_Px2" | "LEVEL_Px3" | null
 
-        'highestResistanceLevel': "LEVEL_1" | "LEVEL_2" | "LEVEL_3A" | "LEVEL_3B" | "LEVEL_4" | "LEVEL_R1" | "LEVEL_R2" | "LEVEL_Px1" | "LEVEL_Px2" | "LEVEL_Px3" | "LEVEL_Dx1" | "LEVEL_Dx2" | "LEVEL_Dx3" | "LEVEL_Fda1" | "LEVEL_Fda2" | "LEVEL_Fda3" | "NO"
+        'highestResistanceLevel': "LEVEL_R1" | "LEVEL_R2" | null
 
-        'highestSensitiveLevel': "LEVEL_1" | "LEVEL_2" | "LEVEL_3A" | "LEVEL_3B" | "LEVEL_4" | "LEVEL_R1" | "LEVEL_R2" | "LEVEL_Px1" | "LEVEL_Px2" | "LEVEL_Px3" | "LEVEL_Dx1" | "LEVEL_Dx2" | "LEVEL_Dx3" | "LEVEL_Fda1" | "LEVEL_Fda2" | "LEVEL_Fda3" | "NO"
+        'highestSensitiveLevel': "LEVEL_1" | "LEVEL_2" | "LEVEL_3A" | "LEVEL_3B" | "LEVEL_4" | null
 
         'hotspot': boolean
 
@@ -869,7 +926,7 @@ export type SomaticVariantAnnotation = {
 
         'mutationEffect': MutationEffectResp
 
-        'oncogenic': string
+        'oncogenic': "Oncogenic" | "Likely Oncogenic" | "Likely Neutral" | "Inconclusive" | "Resistance" | "Unknown"
 
         'otherSignificantResistanceLevels': Array < "LEVEL_1" | "LEVEL_2" | "LEVEL_3A" | "LEVEL_3B" | "LEVEL_4" | "LEVEL_R1" | "LEVEL_R2" | "LEVEL_Px1" | "LEVEL_Px2" | "LEVEL_Px3" | "LEVEL_Dx1" | "LEVEL_Dx2" | "LEVEL_Dx3" | "LEVEL_Fda1" | "LEVEL_Fda2" | "LEVEL_Fda3" | "NO" >
 
@@ -3465,7 +3522,7 @@ export default class OncoKbPrivateAPI {
             'body': Array < RelevantCancerTypeQuery > ,
                 $queryParameters ? : any,
                 $domain ? : string
-        }): Promise < Array < TumorType >
+        }): Promise < Array < TumorTypeEntity >
         > {
             return this.utilRelevantCancerTypesPostUsingPOSTWithHttpInfo(parameters).then(function(response: request.Response) {
                 return response.body;
@@ -3540,7 +3597,7 @@ export default class OncoKbPrivateAPI {
             'tumorType' ? : string,
             $queryParameters ? : any,
                 $domain ? : string
-        }): Promise < Array < TumorType >
+        }): Promise < Array < TumorTypeEntity >
         > {
             return this.utilRelevantTumorTypesGetUsingGETWithHttpInfo(parameters).then(function(response: request.Response) {
                 return response.body;
@@ -3666,7 +3723,7 @@ export default class OncoKbPrivateAPI {
     utilsTumorTypesGetUsingGET(parameters: {
             $queryParameters ? : any,
                 $domain ? : string
-        }): Promise < Array < TumorType >
+        }): Promise < Array < TumorTypeEntity >
         > {
             return this.utilsTumorTypesGetUsingGETWithHttpInfo(parameters).then(function(response: request.Response) {
                 return response.body;

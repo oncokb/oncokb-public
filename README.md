@@ -45,6 +45,137 @@ For webpack frontend development, frontend-only runtime flags are initialized in
 `/src/main/webapp/app/devServerConfig.ts`.
 If a frontend change depends on `window.serverConfig` in local webpack dev, update that file instead of editing `index.html`.
 
+### Usage metrics schema
+
+This repo also contains a separate Liquibase changelog tree for usage-metrics rollups:
+
+- `src/main/resources/config/liquibase-usage/master.xml`
+
+This schema is intentionally separate from the main application schema.
+
+Reasoning:
+
+- we want metrics/rollup data separated from the application's main schema
+- the metrics schema is for aggregated usage data and pipeline-owned tables, not the raw application data model
+- we did not enable automatic local migrations for this schema by default because supporting it cleanly with the existing Liquibase flow would have required too many hacks and environment-specific assumptions
+
+Current behavior:
+
+- the normal application Liquibase flow remains unchanged
+- the usage metrics Liquibase runner exists in the application code, but it is disabled by default
+- local development will not auto-create or auto-migrate the metrics schema unless you explicitly opt in
+
+To enable it locally:
+
+```bash
+export APPLICATION_USAGE_LIQUIBASE_ENABLED=true
+```
+
+Optional overrides:
+
+```bash
+export APPLICATION_USAGE_LIQUIBASE_SCHEMA=oncokb_metrics
+export APPLICATION_USAGE_LIQUIBASE_CHANGE_LOG=classpath:config/liquibase-usage/master.xml
+```
+
+The usage Liquibase runner uses separate bookkeeping tables:
+
+- `DATABASECHANGELOG_USAGE`
+- `DATABASECHANGELOGLOCK_USAGE`
+
+Planned production usage:
+
+- raw token stats continue to be exported by the Java backend to S3
+- Airflow ingests those exports
+- Airflow populates the metrics schema rollup tables
+
+So the metrics schema is meant for rolled-up usage data and related pipeline state, not as a replacement for the raw `token_stats` flow.
+
+### Local Usage Metrics Schema Migrations
+
+> [!NOTE]
+> All arguments for liquibase must start with `-Dliquibase.`. So for example,
+> if you see `rollbackCount` as an argument, then you must put `-Dliquibase.rollbackCount=1`.
+> See `./mvnw liquibase:help` for a list of commands.
+
+1. Add liquibase migrations
+   `src/main/resources/config/liquibase-usage/changelog/XXXXXXXXXXXXXX.xml`
+2. Add your `xml` file to the `src/main/resources/config/liquibase-usage/master.xml` list.
+3. Update the command arguments below if you want a different schema name than `oncokb_metrics`
+4. Run the migration.
+
+   ```sh
+   ./mvnw liquibase:update \
+     -Dliquibase.changeLogFile=src/main/resources/config/liquibase-usage/master.xml \
+     -Dliquibase.databaseChangeLogTableName=DATABASECHANGELOG_USAGE \
+     -Dliquibase.databaseChangeLogLockTableName=DATABASECHANGELOGLOCK_USAGE \
+     -Dliquibase.expressionVars.usageSchemaName=oncokb_metrics
+   ```
+
+#### Create and Run a SQL Script for production
+
+1. Rollback create rollback script.
+   (If your local database has the migrations added already)
+
+   > [!NOTE]
+   > I couldn't find a way to just make a script for a specific tag without doing
+   > the rollback. Ideally we shouldn't need to rollback to create the sql script.
+
+   1. Create the script
+
+      ```sh
+      # Generates a rollback sql script
+      ./mvnw liquibase:rollbackSQL \
+        -Dliquibase.rollbackCount=1 \
+        -Dliquibase.changeLogFile=src/main/resources/config/liquibase-usage/master.xml \
+        -Dliquibase.databaseChangeLogTableName=DATABASECHANGELOG_USAGE \
+        -Dliquibase.databaseChangeLogLockTableName=DATABASECHANGELOGLOCK_USAGE \
+        -Dliquibase.expressionVars.usageSchemaName=oncokb_metrics
+      ```
+
+   2. Copy the migration script. The location is `target/liquibase/migrate.sql`
+      by default.
+
+      ```sh
+      # Puts the sql script into your clipboard and you paste it where you need it
+      cat ./target/liquibase/migrate.sql | pbcopy
+      ```
+
+   3. Run the script
+
+2. Make your database changes
+
+   1. Create the script
+
+      ```sh
+      # Generates a migration sql script
+      ./mvnw liquibase:updateSQL \
+        -Dliquibase.changeLogFile=src/main/resources/config/liquibase-usage/master.xml \
+        -Dliquibase.databaseChangeLogTableName=DATABASECHANGELOG_USAGE \
+        -Dliquibase.databaseChangeLogLockTableName=DATABASECHANGELOGLOCK_USAGE \
+        -Dliquibase.expressionVars.usageSchemaName=oncokb_metrics
+      ```
+
+   2. Copy the migration script. The location is `target/liquibase/migrate.sql`
+      by default.
+
+      ```sh
+      # Puts the sql script into your clipboard and you paste it where you need it
+      cat ./target/liquibase/migrate.sql | pbcopy
+      ```
+
+   3. Run the script.
+
+#### Notes
+
+- this schema is separate from the main application schema on purpose
+- this schema is intended for rolled-up metrics data and pipeline-owned tables, not the raw application data model
+- the usage metrics Liquibase runner in the app is disabled by default
+- the usage metrics runner uses its own changelog tables:
+  - `DATABASECHANGELOG_USAGE`
+  - `DATABASECHANGELOGLOCK_USAGE`
+- we did not make this follow the normal local auto-migration path by default because doing that cleanly would have required too many hacks around the existing schema and migration flow
+
 ### Building
 
 Before you can build this project, you must install and configure the following dependencies on your machine:
@@ -248,7 +379,40 @@ For example, to start a mysql database in a docker container, run:
 docker-compose -f src/main/docker/mysql.yml up -d
 ```
 
-To stop it and remove the container, run:
+To start a local Keycloak instance for test or development authentication flows, run:
+
+```
+docker-compose -f src/main/docker/keycloak.yml up -d
+```
+
+This stack imports the `oncokb-public` realm from
+`src/main/docker/keycloak/oncokb-public-realm.json` on startup. The imported
+OIDC client is:
+
+- realm: `oncokb-public`
+- client-id: `web_app`
+- client-secret: `CLIENT_SECRET`
+
+The sample realm also creates two local Keycloak users:
+
+- username: `dev@mskcc.org`
+- username: `test@myorg.org`
+- password: `password`
+
+For the OncoKB app to accept those logins, the same emails must also exist as
+OncoKB users in your local application database. You can seed both app users and
+long-lived local bearer tokens with:
+
+```bash
+scripts/bootstrap-local-test-users.sh
+```
+
+The script prints the generated tokens for:
+
+- `dev@mskcc.org`
+- `test@myorg.org`
+
+To stop a service and remove its container, run the matching `down` command, for example:
 
 ```
 docker-compose -f src/main/docker/mysql.yml down

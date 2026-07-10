@@ -13,6 +13,7 @@ import org.mskcc.cbio.oncokb.service.dto.useradditionalinfo.AdditionalInfoDTO;
 
 import javax.validation.constraints.*;
 import java.time.Instant;
+import java.util.List;
 import java.util.Set;
 import java.util.stream.Collectors;
 import java.io.Serializable;
@@ -87,6 +88,8 @@ public class UserDTO implements Serializable {
     private Instant lastModifiedDate;
 
     private Set<String> authorities;
+
+    private List<UserMailsDTO> userMails;
 
     public UserDTO() {
         // Empty constructor needed for Jackson.
@@ -326,6 +329,14 @@ public class UserDTO implements Serializable {
 
     public void setAuthorities(Set<String> authorities) {
         this.authorities = authorities;
+    }
+
+    public List<UserMailsDTO> getUserMails() {
+        return userMails;
+    }
+
+    public void setUserMails(List<UserMailsDTO> userMails) {
+        this.userMails = userMails;
     }
 
     // prettier-ignore

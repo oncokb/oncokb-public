@@ -258,7 +258,9 @@ public class MailService {
             String defaultEmailSendFrom = applicationProperties.getEmailAddresses().getRegistrationAddress();
             log.info("defaultEmailSendFrom in sendEmailFromSlack is '{}'", defaultEmailSendFrom);
             String ccAddress = null;
-            if (MailType.CLARIFY_HOSPITAL_USE.equals(mailType) || MailType.CLARIFY_COMMERCIAL_USE.equals(mailType)) {
+            if (MailType.CLARIFY_HOSPITAL_USE.equals(mailType)
+                || MailType.HOSPITAL_APPROVAL_HIGH_VOLUME.equals(mailType)
+                || MailType.CLARIFY_COMMERCIAL_USE.equals(mailType)) {
                 defaultEmailSendFrom = applicationProperties.getEmailAddresses().getLicenseAddress();
                 ccAddress = defaultEmailSendFrom;
             }

@@ -12,6 +12,8 @@
     <property name="clobType" value="clob" dbms="h2"/>
     <property name="clobType" value="clob" dbms="mysql, oracle, mssql, mariadb, postgresql"/>
     <property name="uuidType" value="varchar(36)" dbms="h2, mysql, mariadb"/>
+    <property name="sessionAttributeType" value="blob" dbms="h2"/>
+    <property name="sessionAttributeType" value="longblob" dbms="mysql, mariadb"/>
 
     <include file="config/liquibase/changelog/00000000000000_initial_schema.xml" relativeToChangelogFile="false"/>
     <include file="config/liquibase/changelog/20190823204705_added_entity_Token.xml" relativeToChangelogFile="false"/>
@@ -32,6 +34,7 @@
     <include file="config/liquibase/changelog/20251201162700_added_entity_UserBannerMessage.xml" relativeToChangelogFile="false"/>
     <include file="config/liquibase/changelog/20260205120000_add_status_to_user_details.xml" relativeToChangelogFile="false"/>
     <include file="config/liquibase/changelog/20260508120000_expand_user_login_and_email_lengths.xml" relativeToChangelogFile="false"/>
+    <include file="config/liquibase/changelog/20260629120000_add_spring_session_jdbc_tables.xml" relativeToChangelogFile="false"/>
     <!-- jhipster-needle-liquibase-add-constraints-changelog - JHipster will add liquibase constraints changelogs here -->
     <!-- jhipster-needle-liquibase-add-incremental-changelog - JHipster will add incremental liquibase changelogs here -->
 </databaseChangeLog>
