@@ -225,6 +225,11 @@ public class AccountResource {
                     log.info("User `{}` has been activated.", userDTO.getLogin());
                     userIsActivated = true;
                 }
+            } else {
+                // Company does not have a regular license (e.g., TRIAL, EXPIRED, TERMINATED).
+                // Do not associate or activate the user; send to Slack for manual review.
+                log.info("Company `{}` has a non-regular license status ({}). Sending user `{}` to Slack for manual review. The user will not be associated with the company.", company.getName(), company.getLicenseStatus(), userDTO.getLogin());
+                slackService.sendUserRegistrationToChannel(userDTO, userService.isUserOnTrial(userDTO), null);
             }
         }
 
