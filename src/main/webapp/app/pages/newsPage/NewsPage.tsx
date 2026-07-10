@@ -28,7 +28,11 @@ import {
   UserGoogleGroupLink,
 } from 'app/shared/links/SocialMediaLinks';
 import { GenePageLink, SopPageLink } from 'app/shared/utils/UrlUtils';
-import { getPageTitle, scrollWidthOffset } from 'app/shared/utils/Utils';
+import {
+  getPageTitle,
+  scrollWidthOffset,
+  compareSemver,
+} from 'app/shared/utils/Utils';
 import axios from 'axios';
 import AAC_IMAGE from 'content/images/level_AAC.png';
 import LevelChange from 'content/images/loe-change.png';
@@ -39,7 +43,7 @@ import { Nav, Row, Tab } from 'react-bootstrap';
 import { Helmet } from 'react-helmet-async';
 import { Link } from 'react-router-dom';
 
-type NewsTab = 'scientific' | 'developer';
+type NewsTab = 'scientific' | 'developer' | 'content';
 
 type SoftwareRelease = {
   name: string;
@@ -48,15 +52,42 @@ type SoftwareRelease = {
 };
 export type SoftwareReleaseType = 'feat' | 'fix' | 'chore';
 
+type ContentRelease = {
+  name: string;
+  somaticChanges: ContentUpdate;
+  germlineChanges: ContentUpdate;
+};
+type ContentUpdate = Record<string, ContentFieldChange[]>;
+type ContentFieldChange = {
+  location: string;
+  operation: ContentFieldChangeOperation;
+  old?: string;
+  new?: string;
+};
+const contentFieldChangeOperations = [
+  'Added',
+  'Deleted',
+  'Updated',
+  'Name Changed',
+  'Demoted',
+  'Promoted',
+] as const;
+type ContentFieldChangeOperation = typeof contentFieldChangeOperations[number];
+
 interface NewsPageState {
   activeTab: NewsTab;
   softwareReleases: SoftwareRelease[];
+  contentUpdates: ContentRelease[];
 }
 
 const RELEASE_NOTES_REPO = 'oncokb/oncokb';
 const RELEASE_NOTES_RAW_URL = `https://raw.githubusercontent.com/${RELEASE_NOTES_REPO}/refs/heads/master/release-notes`;
 const RELEASE_NOTES_DISPLAY_URL = `https://github.com/${RELEASE_NOTES_REPO}/blob/master`;
 const RELEASE_NOTES_API_URL = `https://api.github.com/repos/${RELEASE_NOTES_REPO}/contents/release-notes`;
+
+const CONTENT_UPDATES_REPO = 'oncokb/oncokb-datahub';
+const CONTENT_UPDATES_API_URL = `https://api.github.com/repos/${CONTENT_UPDATES_REPO}/contents/RELEASE`;
+const CONTENT_UPDATES_RAW_URL = `https://raw.githubusercontent.com/${CONTENT_UPDATES_REPO}/refs/heads/main/RELEASE`;
 
 @inject('routing')
 @observer
@@ -66,7 +97,11 @@ export default class NewsPage extends React.Component<
 > {
   constructor(props: { routing: RouterStore }) {
     super(props);
-    this.state = { activeTab: 'scientific', softwareReleases: [] };
+    this.state = {
+      activeTab: 'scientific',
+      softwareReleases: [],
+      contentUpdates: [],
+    };
   }
 
   componentDidMount(): void {
@@ -114,13 +149,90 @@ export default class NewsPage extends React.Component<
 
       const softwareReleases = await Promise.all(softwareReleasesPromises);
       softwareReleases.sort((r1, r2) => {
-        const [maj1, min1, pat1] = r1.name.slice(1).split('.').map(Number);
-        const [maj2, min2, pat2] = r2.name.slice(1).split('.').map(Number);
-        return maj2 - maj1 || min2 - min1 || pat2 - pat1;
+        return compareSemver(r1.name, r2.name);
       });
       this.setState({ ...this.state, softwareReleases });
     };
+
+    const fetchContentChanges = async () => {
+      /* eslint-disable no-console */
+      try {
+        const response = await axios.get(CONTENT_UPDATES_API_URL);
+        const contentUpdatesPromises: Promise<ContentRelease>[] = [];
+        for (const file of response.data ?? []) {
+          if (
+            !file.name ||
+            file.name === 'v4.29' ||
+            compareSemver('v4.10', file.name) <= 0
+          ) {
+            // v4.10 is the first valid release notes version
+            // v4.29 has no README.md
+            continue;
+          }
+
+          contentUpdatesPromises.push(
+            (async () => {
+              const contentUpdate = await axios.get<string>(
+                `${CONTENT_UPDATES_RAW_URL}/${file.name}/README.md`
+              );
+              const changes: ContentRelease = {
+                name: file.name,
+                somaticChanges: {},
+                germlineChanges: {},
+              };
+
+              let cellType: 'somatic' | 'germline' = 'somatic';
+              const lines = contentUpdate.data.split('\n');
+              for (let i = 0; i < lines.length; i++) {
+                let line = lines[i].replace(/^[#\s]+/, '').trimEnd();
+
+                if (line.startsWith('Somatic Changes')) {
+                  cellType = 'somatic';
+                } else if (line.startsWith('Germline Changes')) {
+                  cellType = 'germline';
+                } else {
+                  const matchedOperation = contentFieldChangeOperations.find(
+                    op => line.endsWith(op)
+                  );
+
+                  if (matchedOperation) {
+                    line = line.slice(0, -matchedOperation.length - 1); // remove space too
+                    const changesToModify =
+                      cellType === 'somatic'
+                        ? changes.somaticChanges
+                        : changes.germlineChanges;
+
+                    const firstSpace = line.indexOf(' ');
+                    const gene = line.slice(0, firstSpace);
+                    const location = line.slice(firstSpace + 1);
+
+                    const contentFieldChange: ContentFieldChange = {
+                      location,
+                      operation: matchedOperation,
+                    };
+                    if (changesToModify[gene]) {
+                      changesToModify[gene].push(contentFieldChange);
+                    } else {
+                      changesToModify[gene] = [contentFieldChange];
+                    }
+                  }
+                }
+              }
+
+              return changes;
+            })()
+          );
+        }
+
+        const contentUpdates = await Promise.all(contentUpdatesPromises);
+        console.log(contentUpdates);
+      } catch (error) {
+        console.log(error);
+      }
+    };
+
     fetchDeveloperNotes();
+    fetchContentChanges();
   }
 
   render() {
@@ -176,7 +288,7 @@ export default class NewsPage extends React.Component<
               </div>
               <div className="mt-4">
                 <NewsList date={'06252026'} />
-          <NewsList date={'05292026'} />
+                <NewsList date={'05292026'} />
                 <NewsList date={'04302026'} />
                 <NewsList date={'03302026'} />
                 <NewsList date={'02272026'} />
