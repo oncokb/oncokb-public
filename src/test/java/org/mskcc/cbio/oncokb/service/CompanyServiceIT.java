@@ -6,6 +6,7 @@ import org.mskcc.cbio.oncokb.domain.CompanyCandidate;
 import org.mskcc.cbio.oncokb.domain.Token;
 import org.mskcc.cbio.oncokb.domain.User;
 import org.mskcc.cbio.oncokb.domain.UserDetails;
+import org.mskcc.cbio.oncokb.domain.enumeration.CompanyApiAccessStatus;
 import org.mskcc.cbio.oncokb.domain.enumeration.CompanyType;
 import org.mskcc.cbio.oncokb.domain.enumeration.LicenseModel;
 import org.mskcc.cbio.oncokb.domain.enumeration.LicenseStatus;
@@ -119,6 +120,7 @@ public class CompanyServiceIT {
         companyDTO.setLicenseType(DEFAULT_LICENSE_TYPE);
         companyDTO.setLicenseModel(DEFAULT_LICENSE_MODEL);
         companyDTO.setLicenseStatus(DEFAULT_LICENSE_STATUS);
+        companyDTO.setApiAccessStatus(CompanyApiAccessStatus.USER_SPECIFIC);
         companyDTO.setBusinessContact(DEFAULT_BUSINESS_CONTACT);
         companyDTO.setLegalContact(DEFAULT_LEGAL_CONTACT);
         companyDTO.setCompanyDomains(DEFAULT_COMPANY_DOMAINS);
@@ -143,6 +145,7 @@ public class CompanyServiceIT {
         companyVM.setLicenseType(companyDTO.getLicenseType());
         companyVM.setLicenseModel(companyDTO.getLicenseModel());
         companyVM.setLicenseStatus(companyDTO.getLicenseStatus());
+        companyVM.setApiAccessStatus(companyDTO.getApiAccessStatus());
         companyVM.setBusinessContact(companyDTO.getBusinessContact());
         companyVM.setLegalContact(companyDTO.getLegalContact());
         companyVM.setCompanyDomains(companyDTO.getCompanyDomains());

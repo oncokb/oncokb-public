@@ -8,6 +8,7 @@ import org.mskcc.cbio.oncokb.domain.Company;
 import org.mskcc.cbio.oncokb.domain.User;
 import org.mskcc.cbio.oncokb.domain.UserDetails;
 import org.mskcc.cbio.oncokb.domain.enumeration.AccountRequestStatus;
+import org.mskcc.cbio.oncokb.domain.enumeration.CompanyApiAccessStatus;
 import org.mskcc.cbio.oncokb.domain.enumeration.CompanyType;
 import org.mskcc.cbio.oncokb.domain.enumeration.LicenseModel;
 import org.mskcc.cbio.oncokb.domain.enumeration.LicenseStatus;
@@ -621,6 +622,7 @@ public class AccountResourceIT {
         companyDTO.setLicenseStatus(LicenseStatus.REGULAR);
         companyDTO.setLicenseModel(LicenseModel.FULL);
         companyDTO.setCompanyType(CompanyType.PARENT);
+        companyDTO.setApiAccessStatus(CompanyApiAccessStatus.USER_SPECIFIC);
         companyDTO.setCompanyDomains(Collections.singleton(companyDomain));
         companyRepository.saveAndFlush(companyMapper.toEntity(companyDTO));
 
@@ -660,6 +662,7 @@ public class AccountResourceIT {
         companyDTO.setLicenseStatus(LicenseStatus.REGULAR);
         companyDTO.setLicenseModel(LicenseModel.FULL);
         companyDTO.setCompanyType(CompanyType.PARENT);
+        companyDTO.setApiAccessStatus(CompanyApiAccessStatus.USER_SPECIFIC);
         companyDTO.setCompanyDomains(Collections.singleton(companyDomain));
         companyRepository.saveAndFlush(companyMapper.toEntity(companyDTO));
 
@@ -736,6 +739,7 @@ public class AccountResourceIT {
         companyDTO.setLicenseStatus(LicenseStatus.REGULAR);
         companyDTO.setLicenseModel(LicenseModel.FULL);
         companyDTO.setCompanyType(CompanyType.PARENT);
+        companyDTO.setApiAccessStatus(CompanyApiAccessStatus.USER_SPECIFIC);
         companyDTO.setCompanyDomains(Collections.singleton(companyDomain));
         Company company = companyRepository.saveAndFlush(companyMapper.toEntity(companyDTO));
 
@@ -783,6 +787,7 @@ public class AccountResourceIT {
         companyDTO.setLicenseStatus(LicenseStatus.REGULAR);
         companyDTO.setLicenseModel(LicenseModel.FULL);
         companyDTO.setCompanyType(CompanyType.PARENT);
+        companyDTO.setApiAccessStatus(CompanyApiAccessStatus.USER_SPECIFIC);
         companyDTO.setCompanyDomains(Collections.singleton(companyDomain));
         Company company = companyRepository.saveAndFlush(companyMapper.toEntity(companyDTO));
 

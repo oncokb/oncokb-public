@@ -41,6 +41,7 @@ import org.mskcc.cbio.oncokb.domain.enumeration.CompanyType;
 import org.mskcc.cbio.oncokb.domain.enumeration.LicenseType;
 import org.mskcc.cbio.oncokb.domain.enumeration.LicenseModel;
 import org.mskcc.cbio.oncokb.domain.enumeration.LicenseStatus;
+import org.mskcc.cbio.oncokb.domain.enumeration.CompanyApiAccessStatus;
 /**
  * Integration tests for the {@link CompanyResource} REST controller.
  */
@@ -67,6 +68,9 @@ public class CompanyResourceIT {
 
     private static final LicenseStatus DEFAULT_LICENSE_STATUS = LicenseStatus.TRIAL;
     private static final LicenseStatus UPDATED_LICENSE_STATUS = LicenseStatus.REGULAR;
+
+    private static final CompanyApiAccessStatus DEFAULT_API_ACCESS_STATUS = CompanyApiAccessStatus.USER_SPECIFIC;
+    private static final CompanyApiAccessStatus UPDATED_API_ACCESS_STATUS = CompanyApiAccessStatus.ENABLED;
 
     private static final String DEFAULT_BUSINESS_CONTACT = "AAAAAAAAAA";
     private static final String UPDATED_BUSINESS_CONTACT = "BBBBBBBBBB";
@@ -118,6 +122,7 @@ public class CompanyResourceIT {
             .licenseType(DEFAULT_LICENSE_TYPE)
             .licenseModel(DEFAULT_LICENSE_MODEL)
             .licenseStatus(DEFAULT_LICENSE_STATUS)
+            .apiAccessStatus(DEFAULT_API_ACCESS_STATUS)
             .businessContact(DEFAULT_BUSINESS_CONTACT)
             .legalContact(DEFAULT_LEGAL_CONTACT)
             .additionalInfo(new Gson().toJson(DEFAULT_ADDITIONAL_INFO));
@@ -137,6 +142,7 @@ public class CompanyResourceIT {
             .licenseType(UPDATED_LICENSE_TYPE)
             .licenseModel(UPDATED_LICENSE_MODEL)
             .licenseStatus(UPDATED_LICENSE_STATUS)
+            .apiAccessStatus(UPDATED_API_ACCESS_STATUS)
             .businessContact(UPDATED_BUSINESS_CONTACT)
             .legalContact(UPDATED_LEGAL_CONTACT)
             .additionalInfo(new Gson().toJson(UPDATED_ADDITIONAL_INFO));
@@ -172,6 +178,7 @@ public class CompanyResourceIT {
         assertThat(testCompany.getLicenseType()).isEqualTo(DEFAULT_LICENSE_TYPE);
         assertThat(testCompany.getLicenseModel()).isEqualTo(DEFAULT_LICENSE_MODEL);
         assertThat(testCompany.getLicenseStatus()).isEqualTo(DEFAULT_LICENSE_STATUS);
+        assertThat(testCompany.getApiAccessStatus()).isEqualTo(DEFAULT_API_ACCESS_STATUS);
         assertThat(testCompany.getBusinessContact()).isEqualTo(DEFAULT_BUSINESS_CONTACT);
         assertThat(testCompany.getLegalContact()).isEqualTo(DEFAULT_LEGAL_CONTACT);
         assertThat(testCompany.getCompanyDomains())
@@ -418,6 +425,7 @@ public class CompanyResourceIT {
         companyVM.setLicenseType(UPDATED_LICENSE_TYPE);
         companyVM.setLicenseModel(UPDATED_LICENSE_MODEL);
         companyVM.setLicenseStatus(UPDATED_LICENSE_STATUS);
+        companyVM.setApiAccessStatus(UPDATED_API_ACCESS_STATUS);
         companyVM.setBusinessContact(UPDATED_BUSINESS_CONTACT);
         companyVM.setLegalContact(UPDATED_LEGAL_CONTACT);
         companyVM.setCompanyDomains(UPDATED_COMPANY_DOMAINS);
@@ -438,6 +446,7 @@ public class CompanyResourceIT {
         assertThat(testCompany.getLicenseType()).isEqualTo(UPDATED_LICENSE_TYPE);
         assertThat(testCompany.getLicenseModel()).isEqualTo(UPDATED_LICENSE_MODEL);
         assertThat(testCompany.getLicenseStatus()).isEqualTo(UPDATED_LICENSE_STATUS);
+        assertThat(testCompany.getApiAccessStatus()).isEqualTo(UPDATED_API_ACCESS_STATUS);
         assertThat(testCompany.getBusinessContact()).isEqualTo(UPDATED_BUSINESS_CONTACT);
         assertThat(testCompany.getLegalContact()).isEqualTo(UPDATED_LEGAL_CONTACT);
         assertThat(testCompany.getCompanyDomains())
@@ -464,6 +473,7 @@ public class CompanyResourceIT {
         companyVM.setLicenseType(UPDATED_LICENSE_TYPE);
         companyVM.setLicenseModel(UPDATED_LICENSE_MODEL);
         companyVM.setLicenseStatus(UPDATED_LICENSE_STATUS);
+        companyVM.setApiAccessStatus(UPDATED_API_ACCESS_STATUS);
         companyVM.setBusinessContact(UPDATED_BUSINESS_CONTACT);
         companyVM.setLegalContact(UPDATED_LEGAL_CONTACT);
         companyVM.setCompanyDomains(UPDATED_COMPANY_DOMAINS);

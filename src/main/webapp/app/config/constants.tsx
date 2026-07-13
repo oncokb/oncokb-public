@@ -894,6 +894,31 @@ export const LICENSE_STATUS_TITLES: { [key in LicenseStatus]: string } = {
   [LicenseStatus.TERMINATED]: 'Terminated',
 };
 
+export enum CompanyApiAccessStatus {
+  ENABLED = 'ENABLED',
+  DISABLED = 'DISABLED',
+  USER_SPECIFIC = 'USER_SPECIFIC',
+}
+
+export const COMPANY_API_ACCESS_STATUS_TITLES: {
+  [key in CompanyApiAccessStatus]: string;
+} = {
+  [CompanyApiAccessStatus.ENABLED]: 'Enabled (all users)',
+  [CompanyApiAccessStatus.DISABLED]: 'Disabled (all users)',
+  [CompanyApiAccessStatus.USER_SPECIFIC]: 'User-specific',
+};
+
+export const COMPANY_API_ACCESS_STATUS_DESCRIPTIONS: {
+  [key in CompanyApiAccessStatus]: string;
+} = {
+  [CompanyApiAccessStatus.ENABLED]:
+    'API access (ROLE_API) will be granted to all users in this company.',
+  [CompanyApiAccessStatus.DISABLED]:
+    'API access (ROLE_API) will be removed from all users in this company.',
+  [CompanyApiAccessStatus.USER_SPECIFIC]:
+    'API access is not enforced at the company level. Admins manage ROLE_API on a per-user basis.',
+};
+
 export enum LicenseModel {
   FULL = 'FULL',
   LIMITED = 'LIMITED',
