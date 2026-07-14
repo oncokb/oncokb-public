@@ -611,8 +611,6 @@ export const DEFAULT_ANNOTATION: SomaticVariantAnnotation = {
 
   variantSummary: '',
 
-  alternativeOncoKbVariant: null,
-
   vue: false,
   vus: false,
 };
