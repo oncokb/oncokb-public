@@ -1,0 +1,20 @@
+[
+  {
+    "ensemblGeneId": "ENSG00000068078",
+    "canonical": true,
+    "chromosome": "4",
+    "referenceGenome": "GRCh37",
+    "strand": 1,
+    "start": 1807892,
+    "end": 1817306
+  },
+  {
+    "ensemblGeneId": "ENSG00000068078",
+    "canonical": true,
+    "chromosome": "4",
+    "referenceGenome": "GRCh38",
+    "strand": 1,
+    "start": 1808669,
+    "end": 1817689
+  }
+]
