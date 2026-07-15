@@ -75,6 +75,7 @@ import { RouterStore } from 'mobx-react-router';
 import { SomaticGermlineAlterationTiles } from 'app/shared/tiles/tile-utils';
 import GeneticTypeTag from 'app/components/tag/GeneticTypeTag';
 import VariantOverView from 'app/shared/sections/VariantOverview';
+import ProteinChangeValidationView from 'app/shared/sections/ProteinChangeValidationView';
 import styles from './SomaticGermlineCancerTypePage.module.scss';
 import GeneAdditionalInfoSection from 'app/shared/sections/GeneAdditionalInfoSection';
 import { UnknownGeneAlert } from 'app/shared/alert/UnknownGeneAlert';
@@ -182,6 +183,29 @@ export class SomaticGermlineCancerTypePage extends React.Component<
     return this.store.germline
       ? this.store.germlineAnnotationData
       : this.store.somaticAnnotationData;
+  }
+
+  @computed
+  get alternativeVariant() {
+    // Germline annotation does not look for alternative variants
+    return this.store.germline
+      ? null
+      : this.store.somaticAnnotationData.result.alternativeOncoKbVariant;
+  }
+
+  @computed
+  get proteinChangeValidation() {
+    // Germline annotation does not validate the protein change. When we have an
+    // alternative variant to point the user to, it replaces the validation
+    // feedback entirely, so the page does not also flag the query as invalid.
+    return this.store.germline || this.alternativeVariant
+      ? undefined
+      : this.store.somaticAnnotationData.result.proteinChangeValidation;
+  }
+
+  @computed
+  get hasInvalidProteinChange() {
+    return this.proteinChangeValidation?.status === 'INVALID';
   }
 
   @computed
@@ -602,9 +626,7 @@ export class SomaticGermlineCancerTypePage extends React.Component<
     const showUnknownGene =
       this.store.gene.isComplete &&
       (this.store.gene.isError || this.store.gene.result === DEFAULT_GENE);
-    const alternativeVariant = this.store.germline
-      ? null
-      : this.store.somaticAnnotationData.result.alternativeOncoKbVariant;
+    const alternativeVariant = this.alternativeVariant;
     return (
       <div className="view-wrapper">
         <Helmet>
@@ -652,6 +674,7 @@ export class SomaticGermlineCancerTypePage extends React.Component<
                     alteration={this.store.alterationNameWithDiff}
                     proteinAlteration={this.store.alteration?.proteinChange}
                     isGermline={this.store.germline}
+                    isInvalid={this.hasInvalidProteinChange}
                     extra={
                       <SomaticGermlineCancerTypeSelect
                         pretext="in"
@@ -686,6 +709,19 @@ export class SomaticGermlineCancerTypePage extends React.Component<
                       />
                     }
                   />
+                  {this.proteinChangeValidation?.message && (
+                    <ProteinChangeValidationView
+                      validation={this.proteinChangeValidation}
+                      hugoSymbol={this.store.hugoSymbol}
+                      referenceGenome={this.store.referenceGenomeQuery}
+                      canonicalTranscript={
+                        this.store.referenceGenomeQuery ===
+                        REFERENCE_GENOME.GRCh38
+                          ? this.store.gene.result.grch38Isoform
+                          : this.store.gene.result.grch37Isoform
+                      }
+                    />
+                  )}
                   <GeneAdditionalInfoSection
                     gene={this.store.gene.result}
                     ensemblGenes={this.store.ensemblGenes.result}
@@ -709,7 +745,7 @@ export class SomaticGermlineCancerTypePage extends React.Component<
                         />
                       </Col>
                     </Row>
-                  ) : (
+                  ) : this.hasInvalidProteinChange ? null : (
                     <>
                       <Row className={classnames(styles.descriptionContainer)}>
                         <Col>
@@ -753,7 +789,7 @@ export class SomaticGermlineCancerTypePage extends React.Component<
                 </Col>
               </Row>
             </Container>
-            {!alternativeVariant && (
+            {!alternativeVariant && !this.hasInvalidProteinChange && (
               <>
                 <Container>
                   <Row className="justify-content-center">

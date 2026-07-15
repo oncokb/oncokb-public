@@ -5,6 +5,7 @@ import {
   GermlineVariantAnnotation,
   MainNumber,
   MutationEffectResp,
+  ProteinChangeValidation,
   Query,
   SomaticVariantAnnotation,
 } from 'app/shared/api/generated/OncoKbPrivateAPI';
@@ -69,6 +70,7 @@ export const ONCOKB_NEWS_GROUP_SUBSCRIPTION_LINK =
   'http://groups.google.com/group/oncokb-news/boxsubscribe';
 
 export const ONCOKB_CONTACT_EMAIL = 'contact@oncokb.org';
+export const ONCOKB_SUPPORT_EMAIL = 'support@oncokb.org';
 export const ONCOKB_DEV_EMAIL = 'dev@oncokb.org';
 export const ONCOKB_LICENSE_EMAIL = 'licenses@oncokb.org';
 export const GRID_BREAKPOINTS = {
@@ -78,6 +80,7 @@ export const GRID_BREAKPOINTS = {
   XL: 1500,
 };
 export const MSK_LOGO_ICON_CUTOFF = 1260;
+export const HGVS_NOMENCLATURE_LINK = 'https://hgvs-nomenclature.org/stable/';
 export const SOP_LINK = 'https://sop.oncokb.org';
 export const FAQ_LINK = 'https://faq.oncokb.org';
 export const FAQ_URL_PATTERNS_LINK = `${FAQ_LINK}/technical#what-are-the-url-patterns-of-oncokb-website`;
@@ -509,6 +512,7 @@ export const DEFAULT_QUERY: Query = {
   alterationType: 'MUTATION',
   consequence: '',
   entrezGeneId: -1,
+  germline: false,
   hgvs: '',
   hgvsInfo: '',
   hugoSymbol: '',
@@ -548,6 +552,13 @@ const DEFAULT_ALTERATION: Alteration = {
   variantResidues: '',
 };
 
+export const DEFAULT_PROTEIN_CHANGE_VALIDATION: ProteinChangeValidation = {
+  message: '',
+  messageType: '' as any,
+  normalizedProteinChange: '',
+  status: 'UNCHECKED',
+};
+
 export const DEFAULT_ANNOTATION: SomaticVariantAnnotation = {
   alternativeOncoKbVariant: {
     gene: '',
@@ -583,6 +594,7 @@ export const DEFAULT_ANNOTATION: SomaticVariantAnnotation = {
   alleleExist: false,
   alteration: DEFAULT_ALTERATION,
   background: '',
+  proteinChangeValidation: DEFAULT_PROTEIN_CHANGE_VALIDATION,
   dataVersion: '',
   diagnosticImplications: [],
   diagnosticSummary: '',
