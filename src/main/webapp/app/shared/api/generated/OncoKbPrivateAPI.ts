@@ -46,6 +46,8 @@ export type Query = {
 
         'entrezGeneId': number
 
+        'germline': boolean
+
         'hgvs': string
 
         'hgvsInfo': string
@@ -249,6 +251,16 @@ export type MatchVariantResult = {
     'query': Query
 
         'result': Array < MatchVariant >
+
+};
+export type ProteinChangeValidation = {
+    'message': string
+
+        'messageType': "INVALID_PROTEIN_CHANGE" | "NORMALIZED_DELETED_SEQUENCE" | "NO_PROTEIN_SEQUENCE" | "TRANSCRIPT_SERVICE_DISABLED" | "TRANSCRIPT_SERVICE_UNAVAILABLE"
+
+        'normalizedProteinChange': string
+
+        'status': "NORMALIZED" | "INVALID" | "UNCHECKED"
 
 };
 export type MatchVariantRequest = {
@@ -892,6 +904,8 @@ export type SomaticVariantAnnotation = {
         'prognosticImplications': Array < Implication >
 
         'prognosticSummary': string
+
+        'proteinChangeValidation': ProteinChangeValidation
 
         'query': Query
 

@@ -5,6 +5,7 @@ import { FeedbackIcon } from 'app/components/feedback/FeedbackIcon';
 import styles from './GermlineSomaticHeader.module.scss';
 import AppStore from 'app/store/AppStore';
 import GeneticTypeTag from 'app/components/tag/GeneticTypeTag';
+import InvalidVariantTag from 'app/components/tag/InvalidVariantTag';
 export default function GermlineSomaticHeader({
   includeEmailLink,
   annotation,
@@ -12,6 +13,7 @@ export default function GermlineSomaticHeader({
   alteration,
   proteinAlteration,
   isGermline,
+  isInvalid,
   extra,
 }: {
   includeEmailLink: boolean;
@@ -20,6 +22,7 @@ export default function GermlineSomaticHeader({
   proteinAlteration?: string;
   annotation: Parameters<typeof FeedbackIcon>[0]['feedback']['annotation'];
   isGermline: boolean;
+  isInvalid?: boolean;
   extra?: React.ReactNode;
 }) {
   const normalizedProteinAlteration =
@@ -48,6 +51,7 @@ export default function GermlineSomaticHeader({
           </span>
         )}
         <span className={classnames(styles.extraContent, styles.centerContent)}>
+          {isInvalid && <InvalidVariantTag />}
           <GeneticTypeTag isGermline={isGermline} />
           {extra}
           <span style={{ fontSize: '0.5em' }} className={'ml-2'}>
