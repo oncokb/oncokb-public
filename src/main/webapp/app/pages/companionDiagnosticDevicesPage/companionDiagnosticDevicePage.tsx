@@ -290,7 +290,9 @@ const CompanionDiagnosticDevicePage: React.FunctionComponent<{}> = () => {
           if (
             selectedCDxs.length > 0 &&
             selectedCDxs.filter(selectedCDx =>
-              cdx.name.toLowerCase().includes(selectedCDx.value.toLowerCase())
+              `${cdx.name} (${cdx.manufacturer})`
+                .toLowerCase()
+                .includes(selectedCDx.value.toLowerCase())
             ).length === 0
           ) {
             return false;
@@ -654,8 +656,8 @@ const CompanionDiagnosticDevicePage: React.FunctionComponent<{}> = () => {
             options={sortByKey(
               uniqBy(
                 parsedCDx.map(cdx => ({
-                  label: cdx.name,
-                  value: cdx.name,
+                  label: `${cdx.name} (${cdx.manufacturer})`,
+                  value: `${cdx.name} (${cdx.manufacturer})`,
                 })),
                 'label'
               ),
