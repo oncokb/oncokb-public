@@ -4,6 +4,7 @@ import org.mskcc.cbio.oncokb.OncokbPublicApp;
 import org.mskcc.cbio.oncokb.config.Constants;
 import org.mskcc.cbio.oncokb.config.application.ApplicationProperties;
 import org.mskcc.cbio.oncokb.config.application.RecaptchaProperties;
+import org.mskcc.cbio.oncokb.config.application.SlackProperties;
 import org.mskcc.cbio.oncokb.domain.Company;
 import org.mskcc.cbio.oncokb.domain.User;
 import org.mskcc.cbio.oncokb.domain.UserDetails;
@@ -15,6 +16,7 @@ import org.mskcc.cbio.oncokb.domain.enumeration.LicenseType;
 import org.mskcc.cbio.oncokb.repository.*;
 import org.mskcc.cbio.oncokb.security.AuthoritiesConstants;
 import org.mskcc.cbio.oncokb.service.GracePeriodBlackListService;
+import org.mskcc.cbio.oncokb.service.SlackService;
 import org.mskcc.cbio.oncokb.service.UserService;
 import org.mskcc.cbio.oncokb.service.dto.CompanyDTO;
 import org.mskcc.cbio.oncokb.service.dto.PasswordChangeDTO;
@@ -33,6 +35,7 @@ import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.boot.test.mock.mockito.SpyBean;
 import org.springframework.http.MediaType;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.test.context.support.WithMockUser;
@@ -46,6 +49,11 @@ import java.util.*;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.mskcc.cbio.oncokb.web.rest.AccountResourceIT.TEST_USER_LOGIN;
+import static org.mockito.ArgumentMatchers.anyBoolean;
+import static org.mockito.ArgumentMatchers.argThat;
+import static org.mockito.ArgumentMatchers.isNull;
+import static org.mockito.Mockito.timeout;
+import static org.mockito.Mockito.verify;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
 
@@ -101,8 +109,15 @@ public class AccountResourceIT {
     @Autowired
     private GracePeriodBlackListService gracePeriodBlackListService;
 
+    @SpyBean
+    private SlackService slackService;
+
     RecaptchaProperties recaptchaProp;
 
+    // Even though this variable is not used, we need to keep it here to make
+    // sure the CreateAssessment property is initialized.
+    // The recaptcha property on the CreateAssessment class is static, so it will be shared across all tests.
+    // If we don't initialize it here, the recaptcha property will be null and the tests will fail.
     private AccountResource accountResource;
 
     @BeforeEach
@@ -112,6 +127,7 @@ public class AccountResourceIT {
         recaptchaProp.setSiteKey("6LfAOe4jAAAAANjzxWQ8mKilcvk1QvLLohd7EV7F");
         recaptchaProp.setThreshold((float) 0.5);
         applicationProperties.setRecaptcha(recaptchaProp);
+        applicationProperties.setSlack(new SlackProperties());
 
         accountResource = new AccountResource(
             userRepository,
@@ -806,6 +822,104 @@ public class AccountResourceIT {
 
         // For commercial user with a valid company license, we should auto-approve when API access is requested
         assertThat(user.getActivated()).isTrue();
+    }
+
+    @Test
+    @Transactional
+    public void testActivateAccountWithTrialCompany() throws Exception {
+        final String activationKey = "some activation key";
+        final String userLogin = "activate-account";
+        final String companyDomain = "example.com";
+
+        User user = new User();
+        user.setLogin(userLogin);
+        user.setEmail("activate-account@" + companyDomain);
+        user.setPassword(RandomStringUtils.random(60));
+        user.setActivated(false);
+        user.setActivationKey(activationKey);
+
+        userRepository.saveAndFlush(user);
+
+        CompanyDTO companyDTO = new CompanyDTO();
+        companyDTO.setName("test trial company");
+        companyDTO.setLicenseType(LicenseType.ACADEMIC);
+        companyDTO.setLicenseStatus(LicenseStatus.TRIAL);
+        companyDTO.setLicenseModel(LicenseModel.FULL);
+        companyDTO.setCompanyType(CompanyType.PARENT);
+        companyDTO.setCompanyDomains(Collections.singleton(companyDomain));
+        companyRepository.saveAndFlush(companyMapper.toEntity(companyDTO));
+
+        UserDetails userDetails = new UserDetails();
+        userDetails.setUser(user);
+        userDetails.setAccountRequestStatus(AccountRequestStatus.PENDING);
+        userDetailsRepository.saveAndFlush(userDetails);
+
+        restAccountMockMvc.perform(get("/api/activate?key={activationKey}&login={userLogin}", activationKey, userLogin))
+            .andExpect(status().isOk());
+
+        user = userRepository.findOneWithAuthoritiesByLogin(user.getLogin()).orElse(null);
+
+        // For a user whose company is on a TRIAL license, they should NOT be auto-activated
+        assertThat(user.getActivated()).isFalse();
+
+        // The user should NOT be associated with the company (updateUserWithCompanyLicense was not called)
+        UserDetails updatedUserDetails = userDetailsRepository.findOneByUser(user).orElse(null);
+        assertThat(updatedUserDetails.getCompany()).isNull();
+
+        verify(slackService, timeout(3000).atLeastOnce()).sendUserRegistrationToChannel(
+            argThat(userDto -> userDto != null && userLogin.equals(userDto.getLogin())),
+            anyBoolean(),
+            isNull()
+        );
+    }
+
+    @Test
+    @Transactional
+    public void testActivateAccountWithExpiredCompany() throws Exception {
+        final String activationKey = "some activation key";
+        final String userLogin = "activate-account";
+        final String companyDomain = "example.com";
+
+        User user = new User();
+        user.setLogin(userLogin);
+        user.setEmail("activate-account@" + companyDomain);
+        user.setPassword(RandomStringUtils.random(60));
+        user.setActivated(false);
+        user.setActivationKey(activationKey);
+
+        userRepository.saveAndFlush(user);
+
+        CompanyDTO companyDTO = new CompanyDTO();
+        companyDTO.setName("test expired company");
+        companyDTO.setLicenseType(LicenseType.ACADEMIC);
+        companyDTO.setLicenseStatus(LicenseStatus.EXPIRED);
+        companyDTO.setLicenseModel(LicenseModel.FULL);
+        companyDTO.setCompanyType(CompanyType.PARENT);
+        companyDTO.setCompanyDomains(Collections.singleton(companyDomain));
+        companyRepository.saveAndFlush(companyMapper.toEntity(companyDTO));
+
+        UserDetails userDetails = new UserDetails();
+        userDetails.setUser(user);
+        userDetails.setAccountRequestStatus(AccountRequestStatus.PENDING);
+        userDetailsRepository.saveAndFlush(userDetails);
+
+        restAccountMockMvc.perform(get("/api/activate?key={activationKey}&login={userLogin}", activationKey, userLogin))
+            .andExpect(status().isOk());
+
+        user = userRepository.findOneWithAuthoritiesByLogin(user.getLogin()).orElse(null);
+
+        // For a user whose company has an EXPIRED license, they should NOT be auto-activated
+        assertThat(user.getActivated()).isFalse();
+
+        // The user should NOT be associated with the company (updateUserWithCompanyLicense was not called)
+        UserDetails updatedUserDetails = userDetailsRepository.findOneByUser(user).orElse(null);
+        assertThat(updatedUserDetails.getCompany()).isNull();
+
+        verify(slackService, timeout(3000).atLeastOnce()).sendUserRegistrationToChannel(
+            argThat(userDto -> userDto != null && userLogin.equals(userDto.getLogin())),
+            anyBoolean(),
+            isNull()
+        );
     }
 
     @Test
