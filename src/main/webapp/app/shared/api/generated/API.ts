@@ -38,6 +38,8 @@ export type CompanyAdditionalInfoDTO = {
 export type CompanyDTO = {
     'additionalInfo': CompanyAdditionalInfoDTO
 
+        'apiAccessStatus': "ENABLED" | "DISABLED" | "USER_SPECIFIC"
+
         'businessContact': string
 
         'companyDomains': Array < string >
@@ -87,6 +89,8 @@ export type CompanyTermination = {
 };
 export type CompanyVM = {
     'additionalInfo': CompanyAdditionalInfoDTO
+
+        'apiAccessStatus': "ENABLED" | "DISABLED" | "USER_SPECIFIC"
 
         'businessContact': string
 

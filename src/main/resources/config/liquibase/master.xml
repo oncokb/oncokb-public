@@ -35,6 +35,7 @@
     <include file="config/liquibase/changelog/20260205120000_add_status_to_user_details.xml" relativeToChangelogFile="false"/>
     <include file="config/liquibase/changelog/20260508120000_expand_user_login_and_email_lengths.xml" relativeToChangelogFile="false"/>
     <include file="config/liquibase/changelog/20260629120000_add_spring_session_jdbc_tables.xml" relativeToChangelogFile="false"/>
+    <include file="config/liquibase/changelog/20260713120000_added_apiAccessStatus_to_Company.xml" relativeToChangelogFile="false"/>
     <!-- jhipster-needle-liquibase-add-constraints-changelog - JHipster will add liquibase constraints changelogs here -->
     <!-- jhipster-needle-liquibase-add-incremental-changelog - JHipster will add incremental liquibase changelogs here -->
 </databaseChangeLog>

@@ -10,6 +10,7 @@ import org.mskcc.cbio.oncokb.domain.enumeration.LicenseType;
 import org.mskcc.cbio.oncokb.service.dto.companyadditionalinfo.CompanyAdditionalInfoDTO;
 import org.mskcc.cbio.oncokb.domain.enumeration.LicenseModel;
 import org.mskcc.cbio.oncokb.domain.enumeration.LicenseStatus;
+import org.mskcc.cbio.oncokb.domain.enumeration.CompanyApiAccessStatus;
 
 /**
  * A DTO for the {@link org.mskcc.cbio.oncokb.domain.Company} entity.
@@ -35,6 +36,9 @@ public class CompanyDTO implements Serializable {
 
     @NotNull
     private LicenseStatus licenseStatus;
+
+    @NotNull
+    private CompanyApiAccessStatus apiAccessStatus;
 
     private String businessContact;
 
@@ -102,6 +106,14 @@ public class CompanyDTO implements Serializable {
 
     public void setLicenseStatus(LicenseStatus licenseStatus) {
         this.licenseStatus = licenseStatus;
+    }
+
+    public CompanyApiAccessStatus getApiAccessStatus() {
+        return apiAccessStatus;
+    }
+
+    public void setApiAccessStatus(CompanyApiAccessStatus apiAccessStatus) {
+        this.apiAccessStatus = apiAccessStatus;
     }
 
     public String getBusinessContact() {
@@ -172,6 +184,7 @@ public class CompanyDTO implements Serializable {
             ", licenseType='" + getLicenseType() + "'" +
             ", licenseModel='" + getLicenseModel() + "'" +
             ", licenseStatus='" + getLicenseStatus() + "'" +
+            ", apiAccessStatus='" + getApiAccessStatus() + "'" +
             ", businessContact='" + getBusinessContact() + "'" +
             ", legalContact='" + getLegalContact() + "'" +
             ", additionalInfo='" + getAdditionalInfo() + "'" +

@@ -1,0 +1,32 @@
+<databaseChangeLog
+  xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+  xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+  xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog
+          http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-latest.xsd">
+
+  <changeSet author="oncokb" id="20260713120000-1">
+    <addColumn tableName="company">
+      <column name="api_access_status" type="varchar(50)">
+        <constraints nullable="true" />
+      </column>
+    </addColumn>
+  </changeSet>
+
+  <!--
+    Backfill all existing companies to USER_SPECIFIC so API access is not enforced at the company
+    level for now. Admins can opt individual companies into ENABLED/DISABLED as needed.
+  -->
+  <changeSet author="oncokb" id="20260713120000-2">
+    <sql>
+      UPDATE company
+      SET api_access_status = 'USER_SPECIFIC'
+      WHERE api_access_status IS NULL;
+    </sql>
+  </changeSet>
+
+  <changeSet author="oncokb" id="20260713120000-3">
+    <addDefaultValue tableName="company" columnName="api_access_status" columnDataType="varchar(50)" defaultValue="USER_SPECIFIC"/>
+    <addNotNullConstraint tableName="company" columnName="api_access_status" columnDataType="varchar(50)"/>
+  </changeSet>
+
+</databaseChangeLog>

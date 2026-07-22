@@ -9,6 +9,8 @@ import {
   LICENSE_TITLES,
   LicenseModel,
   LicenseStatus,
+  CompanyApiAccessStatus,
+  COMPANY_API_ACCESS_STATUS_TITLES,
   PAGE_ROUTE,
   REDIRECT_TIMEOUT_MILLISECONDS,
   USER_AUTHORITY,
@@ -904,6 +906,27 @@ export default class CompanyPage extends React.Component<ICompanyPage> {
                           }}
                           boldLabel
                         />
+                        <div className="form-group">
+                          <div className={'font-weight-bold'}>
+                            Company API Access
+                          </div>
+                          <AdditionalInfoSelect
+                            name={'apiAccessStatus'}
+                            defaultValue={{
+                              value: this.company.apiAccessStatus,
+                              label:
+                                COMPANY_API_ACCESS_STATUS_TITLES[
+                                  this.company
+                                    .apiAccessStatus as CompanyApiAccessStatus
+                                ],
+                            }}
+                            options={COMPANY_FORM_OPTIONS.apiAccessStatus}
+                            onSelection={(selectedOption: any) => {
+                              this.company.apiAccessStatus =
+                                selectedOption.value;
+                            }}
+                          />
+                        </div>
                       </Col>
                     </Row>
                     {this.selectedLicenseStatus !== 'TRIAL' && (
