@@ -1,4 +1,5 @@
 import { CitationText } from 'app/components/CitationText';
+import ContentChangeTag from 'app/components/tag/ContentChangeTag';
 import DeveloperChangeTag from 'app/components/tag/DeveloperChangeTag';
 import {
   FAQ_LINK,
@@ -28,7 +29,11 @@ import {
   UserGoogleGroupLink,
 } from 'app/shared/links/SocialMediaLinks';
 import { GenePageLink, SopPageLink } from 'app/shared/utils/UrlUtils';
-import { getPageTitle, scrollWidthOffset } from 'app/shared/utils/Utils';
+import {
+  getPageTitle,
+  scrollWidthOffset,
+  compareSemver,
+} from 'app/shared/utils/Utils';
 import axios from 'axios';
 import AAC_IMAGE from 'content/images/level_AAC.png';
 import LevelChange from 'content/images/loe-change.png';
@@ -39,7 +44,7 @@ import { Nav, Row, Tab } from 'react-bootstrap';
 import { Helmet } from 'react-helmet-async';
 import { Link } from 'react-router-dom';
 
-type NewsTab = 'scientific' | 'developer';
+type NewsTab = 'scientific' | 'developer' | 'content';
 
 type SoftwareRelease = {
   name: string;
@@ -48,15 +53,43 @@ type SoftwareRelease = {
 };
 export type SoftwareReleaseType = 'feat' | 'fix' | 'chore';
 
+type ContentRelease = {
+  name: string;
+  somaticChanges: ContentUpdate;
+  germlineChanges: ContentUpdate;
+};
+type ContentUpdate = Record<string, ContentFieldChange[]>;
+type ContentFieldChange = {
+  location: string;
+  operation: ContentFieldChangeOperation;
+  old?: string;
+  new?: string;
+};
+const contentFieldChangeOperations = [
+  'Added',
+  'Deleted',
+  'Updated',
+  'Name Changed',
+  'Demoted',
+  'Promoted',
+] as const;
+export type ContentFieldChangeOperation = typeof contentFieldChangeOperations[number];
+
 interface NewsPageState {
   activeTab: NewsTab;
   softwareReleases: SoftwareRelease[];
+  contentUpdates: ContentRelease[];
+  expandedContentUpdates: string[];
 }
 
 const RELEASE_NOTES_REPO = 'oncokb/oncokb';
 const RELEASE_NOTES_RAW_URL = `https://raw.githubusercontent.com/${RELEASE_NOTES_REPO}/refs/heads/master/release-notes`;
 const RELEASE_NOTES_DISPLAY_URL = `https://github.com/${RELEASE_NOTES_REPO}/blob/master`;
 const RELEASE_NOTES_API_URL = `https://api.github.com/repos/${RELEASE_NOTES_REPO}/contents/release-notes`;
+
+const CONTENT_UPDATES_REPO = 'oncokb/oncokb-datahub';
+const CONTENT_UPDATES_API_URL = `https://api.github.com/repos/${CONTENT_UPDATES_REPO}/contents/RELEASE`;
+const CONTENT_UPDATES_RAW_URL = `https://raw.githubusercontent.com/${CONTENT_UPDATES_REPO}/refs/heads/main/RELEASE`;
 
 @inject('routing')
 @observer
@@ -66,8 +99,64 @@ export default class NewsPage extends React.Component<
 > {
   constructor(props: { routing: RouterStore }) {
     super(props);
-    this.state = { activeTab: 'scientific', softwareReleases: [] };
+    this.state = {
+      activeTab: 'scientific',
+      softwareReleases: [],
+      contentUpdates: [],
+      expandedContentUpdates: [],
+    };
   }
+
+  private toggleContentUpdate = (updateName: string) => {
+    this.setState(prevState => {
+      const { expandedContentUpdates } = prevState;
+      const isExpanded = expandedContentUpdates.includes(updateName);
+
+      return {
+        expandedContentUpdates: isExpanded
+          ? expandedContentUpdates.filter(name => name !== updateName)
+          : [...expandedContentUpdates, updateName],
+      };
+    });
+  };
+
+  private getContentUpdateSummary = (update: ContentRelease) => {
+    const somaticChangeCount = Object.values(update.somaticChanges).reduce(
+      (total, changes) => total + changes.length,
+      0
+    );
+    const germlineChangeCount = Object.values(update.germlineChanges).reduce(
+      (total, changes) => total + changes.length,
+      0
+    );
+
+    const summaryParts = [
+      somaticChangeCount > 0 ? `${somaticChangeCount} somatic changes` : null,
+      germlineChangeCount > 0
+        ? `${germlineChangeCount} germline changes`
+        : null,
+    ].filter(Boolean);
+
+    return summaryParts.join(' • ');
+  };
+
+  private sortContentUpdates = (contentUpdates: ContentRelease[]) => {
+    return [...contentUpdates]
+      .sort((updateA, updateB) => compareSemver(updateA.name, updateB.name))
+      .map(update => ({
+        ...update,
+        somaticChanges: Object.fromEntries(
+          Object.entries(update.somaticChanges).sort(([geneA], [geneB]) =>
+            geneA.localeCompare(geneB)
+          )
+        ),
+        germlineChanges: Object.fromEntries(
+          Object.entries(update.germlineChanges).sort(([geneA], [geneB]) =>
+            geneA.localeCompare(geneB)
+          )
+        ),
+      }));
+  };
 
   componentDidMount(): void {
     // We have to add an offset when the page has a fix header
@@ -114,17 +203,124 @@ export default class NewsPage extends React.Component<
 
       const softwareReleases = await Promise.all(softwareReleasesPromises);
       softwareReleases.sort((r1, r2) => {
-        const [maj1, min1, pat1] = r1.name.slice(1).split('.').map(Number);
-        const [maj2, min2, pat2] = r2.name.slice(1).split('.').map(Number);
-        return maj2 - maj1 || min2 - min1 || pat2 - pat1;
+        return compareSemver(r1.name, r2.name);
       });
-      this.setState({ ...this.state, softwareReleases });
+      return softwareReleases;
     };
-    fetchDeveloperNotes();
+
+    const fetchContentChanges = async () => {
+      const response = await axios.get(CONTENT_UPDATES_API_URL);
+      const contentUpdatesPromises: Promise<ContentRelease>[] = [];
+      for (const file of response.data ?? []) {
+        if (
+          !file.name ||
+          file.name === 'v4.29' ||
+          compareSemver('v4.10', file.name) <= 0
+        ) {
+          // v4.10 is the first valid release notes version
+          // v4.29 has no README.md
+          continue;
+        }
+
+        contentUpdatesPromises.push(
+          (async () => {
+            const contentUpdate = await axios.get<string>(
+              `${CONTENT_UPDATES_RAW_URL}/${file.name}/README.md`
+            );
+            const changes: ContentRelease = {
+              name: file.name,
+              somaticChanges: {},
+              germlineChanges: {},
+            };
+
+            let cellType: 'somatic' | 'germline' = 'somatic';
+            const lines = contentUpdate.data.split('\n');
+            for (let i = 0; i < lines.length; i++) {
+              let line = lines[i].replace(/^[#\s]+/, '').trimEnd();
+
+              if (line.startsWith('Somatic Changes')) {
+                cellType = 'somatic';
+              } else if (line.startsWith('Germline Changes')) {
+                cellType = 'germline';
+              } else {
+                const matchedOperation = contentFieldChangeOperations.find(op =>
+                  line.endsWith(op)
+                );
+
+                if (matchedOperation) {
+                  line = line.slice(0, -matchedOperation.length - 1); // remove space too
+                  const changesToModify =
+                    cellType === 'somatic'
+                      ? changes.somaticChanges
+                      : changes.germlineChanges;
+
+                  const firstSpace = line.indexOf(' ');
+                  const gene = line.slice(0, firstSpace);
+                  const location = line.slice(firstSpace + 1);
+                  const contentFieldChange: ContentFieldChange = {
+                    location,
+                    operation: matchedOperation,
+                  };
+
+                  let nextLine = lines[i + 1].trim();
+                  const newPreix = 'New: ';
+                  if (nextLine.startsWith(newPreix)) {
+                    nextLine = nextLine.slice(newPreix.length);
+                    i++;
+                    contentFieldChange.new = nextLine.trim() || undefined;
+                  }
+                  if (nextLine) {
+                    nextLine = lines[i + 2].trim();
+                    const oldPrefix = 'Old: ';
+                    if (nextLine.startsWith(oldPrefix)) {
+                      nextLine = nextLine.slice(newPreix.length);
+                      i++;
+                      contentFieldChange.old = nextLine.trim() || undefined;
+                    }
+                  }
+
+                  if (changesToModify[gene]) {
+                    changesToModify[gene].push(contentFieldChange);
+                  } else {
+                    changesToModify[gene] = [contentFieldChange];
+                  }
+                }
+              }
+            }
+
+            return changes;
+          })()
+        );
+      }
+
+      const contentUpdates = await Promise.all(contentUpdatesPromises);
+      return contentUpdates;
+    };
+
+    const fetchDataFromGithub = async () => {
+      const [softwareReleases, contentUpdates] = await Promise.all([
+        fetchDeveloperNotes(),
+        fetchContentChanges(),
+      ]);
+      this.setState({
+        softwareReleases,
+        contentUpdates: this.sortContentUpdates(contentUpdates),
+      });
+    };
+
+    fetchDataFromGithub();
   }
 
   render() {
-    const { activeTab, softwareReleases } = this.state;
+    const {
+      activeTab,
+      softwareReleases,
+      contentUpdates,
+      expandedContentUpdates,
+    } = this.state;
+
+    /* eslint-disable no-console */
+    console.log(contentUpdates);
 
     return (
       <div className="news">
@@ -144,6 +340,9 @@ export default class NewsPage extends React.Component<
             </Nav.Item>
             <Nav.Item>
               <Nav.Link eventKey="developer">Developer News</Nav.Link>
+            </Nav.Item>
+            <Nav.Item>
+              <Nav.Link eventKey="content">Content News</Nav.Link>
             </Nav.Item>
           </Nav>
 
@@ -655,19 +854,10 @@ export default class NewsPage extends React.Component<
                           {release.pullRequests.length > 0 && (
                             <ul>
                               {release.pullRequests.map(pr => {
-                                let label = '';
-                                if (pr.type === 'feat') {
-                                  label = 'Feature';
-                                } else {
-                                  label =
-                                    pr.type[0].toUpperCase() +
-                                    pr.type.substring(1);
-                                }
-
                                 return (
                                   <li
                                     key={pr.name}
-                                    className="mb-3 d-flex align-items-center gap-3"
+                                    className="mb-3 d-flex align-items-center"
                                   >
                                     <a
                                       className="mr-2"
@@ -687,6 +877,193 @@ export default class NewsPage extends React.Component<
                       </div>
                     </div>
                   ))}
+                </div>
+              </div>
+            </Tab.Pane>
+            <Tab.Pane eventKey="content">
+              <div>
+                <p className="mb-3">
+                  Content news highlights recent changes to the OncoKB knowledge
+                  base, including newly added, updated, removed, promoted,
+                  demoted, or renamed content for somatic and germline
+                  annotations.
+                </p>
+                <div className="d-flex flex-wrap align-items-center">
+                  <div className="d-flex align-items-center mb-2">
+                    <ContentChangeTag type="Added" />
+                    <span className="ml-1">New content added</span>
+                  </div>
+                  <span className="mx-2 mb-2">&middot;</span>
+                  <div className="d-flex align-items-center mb-2">
+                    <ContentChangeTag type="Updated" />
+                    <span className="ml-1">Existing content updated</span>
+                  </div>
+                  <span className="mx-2 mb-2">&middot;</span>
+                  <div className="d-flex align-items-center mb-2">
+                    <ContentChangeTag type="Deleted" />
+                    <span className="ml-1">Content removed</span>
+                  </div>
+                  <span className="mx-2 mb-2">&middot;</span>
+                  <div className="d-flex align-items-center mb-2">
+                    <ContentChangeTag type="Name Changed" />
+                    <span className="ml-1">Name updated</span>
+                  </div>
+                  <span className="mx-2 mb-2">&middot;</span>
+                  <div className="d-flex align-items-center mb-2">
+                    <ContentChangeTag type="Promoted" />
+                    <span className="ml-1">Level promoted</span>
+                  </div>
+                  <span className="mx-2 mb-2">&middot;</span>
+                  <div className="d-flex align-items-center mb-2">
+                    <ContentChangeTag type="Demoted" />
+                    <span className="ml-1">Level demoted</span>
+                  </div>
+                </div>
+              </div>
+              <div className="mt-4">
+                <div className="row">
+                  {contentUpdates.map(update => {
+                    const isExpanded = expandedContentUpdates.includes(
+                      update.name
+                    );
+                    const hasSomaticChanges =
+                      Object.keys(update.somaticChanges).length > 0;
+                    const hasGermlineChanges =
+                      Object.keys(update.germlineChanges).length > 0;
+
+                    return (
+                      <div key={update.name} className="col-12 mb-4">
+                        <div
+                          className="card h-100 border-0 shadow-sm"
+                          style={{
+                            borderRadius: '0.85rem',
+                            overflow: 'hidden',
+                            background: '#f8fbff',
+                          }}
+                        >
+                          <div className="card-header border-0 bg-white px-4 py-3">
+                            <button
+                              type="button"
+                              className="btn btn-link p-0 w-100 text-left"
+                              onClick={() =>
+                                this.toggleContentUpdate(update.name)
+                              }
+                              aria-expanded={isExpanded}
+                              style={{
+                                textDecoration: 'none',
+                                color: 'inherit',
+                              }}
+                            >
+                              <div className="d-flex justify-content-between align-items-start">
+                                <div>
+                                  <h5 className="card-title mb-1 text-primary">
+                                    {update.name}
+                                  </h5>
+                                  <p className="text-muted mb-0 small">
+                                    {this.getContentUpdateSummary(update) ||
+                                      'No detailed changes listed'}
+                                  </p>
+                                </div>
+                                <span
+                                  className="text-primary font-weight-bold"
+                                  style={{ fontSize: '1.2rem' }}
+                                >
+                                  {isExpanded ? '−' : '+'}
+                                </span>
+                              </div>
+                            </button>
+                          </div>
+                          {isExpanded && (
+                            <div
+                              className="card-body border-top px-4 py-3"
+                              style={{ backgroundColor: '#ffffff' }}
+                            >
+                              {!hasSomaticChanges && !hasGermlineChanges && (
+                                <p className="text-muted mb-0">
+                                  No detailed changes were published for this
+                                  release.
+                                </p>
+                              )}
+                              {hasSomaticChanges && (
+                                <div className="mb-4">
+                                  <h6
+                                    className="text-uppercase text-muted mb-3"
+                                    style={{
+                                      fontSize: '0.8rem',
+                                      letterSpacing: '0.08em',
+                                    }}
+                                  >
+                                    Somatic changes
+                                  </h6>
+                                  {Object.entries(update.somaticChanges).map(
+                                    ([gene, changes]) => (
+                                      <div key={gene} className="mb-3">
+                                        <div className="font-weight-bold mb-2 text-dark">
+                                          {gene}
+                                        </div>
+                                        <ul className="pl-3 mb-0">
+                                          {changes.map(change => (
+                                            <li
+                                              key={`${gene}-${change.location}-${change.operation}`}
+                                              className="mb-2"
+                                            >
+                                              <span className="mr-2">
+                                                {change.location}
+                                              </span>
+                                              <ContentChangeTag
+                                                type={change.operation}
+                                              />
+                                            </li>
+                                          ))}
+                                        </ul>
+                                      </div>
+                                    )
+                                  )}
+                                </div>
+                              )}
+                              {hasGermlineChanges && (
+                                <div>
+                                  <h6
+                                    className="text-uppercase text-muted mb-3"
+                                    style={{
+                                      fontSize: '0.8rem',
+                                      letterSpacing: '0.08em',
+                                    }}
+                                  >
+                                    Germline changes
+                                  </h6>
+                                  {Object.entries(update.germlineChanges).map(
+                                    ([gene, changes]) => (
+                                      <div key={gene} className="mb-3">
+                                        <div className="font-weight-bold mb-2 text-dark">
+                                          {gene}
+                                        </div>
+                                        <ul className="pl-3 mb-0">
+                                          {changes.map(change => (
+                                            <li
+                                              key={`${gene}-${change.location}-${change.operation}`}
+                                              className="mb-2"
+                                            >
+                                              <span className="mr-2">
+                                                {change.location}
+                                              </span>
+                                              <ContentChangeTag
+                                                type={change.operation}
+                                              />
+                                            </li>
+                                          ))}
+                                        </ul>
+                                      </div>
+                                    )
+                                  )}
+                                </div>
+                              )}
+                            </div>
+                          )}
+                        </div>
+                      </div>
+                    );
+                  })}
                 </div>
               </div>
             </Tab.Pane>
