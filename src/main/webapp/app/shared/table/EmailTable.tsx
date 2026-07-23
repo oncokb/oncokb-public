@@ -5,10 +5,23 @@ import React from 'react';
 import { UserMailsDTO } from 'app/shared/api/generated/API';
 import { defaultSortMethod } from 'app/shared/utils/ReactTableUtils';
 import { filterByKeyword, toAppTimestampFormat } from 'app/shared/utils/Utils';
+import { SortingRule } from 'react-table';
 
 type EmailTableProps = {
   data: UserMailsDTO[];
   defaultPageSize?: number;
+  showPagination?: boolean;
+  loading?: boolean;
+  page?: number;
+  pageSize?: number;
+  pages?: number;
+  manual?: boolean;
+  sorted?: SortingRule[];
+  onSortedChange?: (newSorted: SortingRule[]) => void;
+  onFetchData?: (tableState: any) => void;
+  serverSideSearch?: boolean;
+  searchKeyword?: string;
+  onSearchChange?: (keyword: string) => void;
 };
 export const EmailTable: React.FunctionComponent<EmailTableProps> = tableProps => {
   const columns: SearchColumn<UserMailsDTO>[] = [
@@ -29,7 +42,7 @@ export const EmailTable: React.FunctionComponent<EmailTableProps> = tableProps =
         data.sentDate
           ? filterByKeyword(toAppTimestampFormat(data.sentDate), keyword)
           : false,
-      accessor: 'createdDate',
+      accessor: 'sentDate',
       Cell(props: { original: UserMailsDTO }): any {
         return <div>{toAppTimestampFormat(props.original.sentDate)}</div>;
       },
@@ -59,7 +72,18 @@ export const EmailTable: React.FunctionComponent<EmailTableProps> = tableProps =
       ]}
       data={tableProps.data}
       columns={columns}
-      showPagination={true}
+      showPagination={tableProps.showPagination !== false}
+      loading={tableProps.loading}
+      page={tableProps.page}
+      pageSize={tableProps.pageSize}
+      pages={tableProps.pages}
+      manual={tableProps.manual}
+      sorted={tableProps.sorted}
+      onSortedChange={tableProps.onSortedChange}
+      onFetchData={tableProps.onFetchData}
+      serverSideSearch={tableProps.serverSideSearch}
+      searchKeyword={tableProps.searchKeyword}
+      onSearchChange={tableProps.onSearchChange}
       minRows={1}
       defaultPageSize={tableProps.defaultPageSize}
     />

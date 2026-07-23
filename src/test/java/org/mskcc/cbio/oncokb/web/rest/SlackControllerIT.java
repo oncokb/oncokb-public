@@ -188,7 +188,12 @@ public class SlackControllerIT {
         // Inject mock dependencies
         mailService = new MailService(
             jHipsterProperties, javaMailSender, messageSource, templateEngine,
-            userMailsService, tokenService, userRepository, userDetailsRepository, applicationProperties
+            userMailsService,
+            tokenService,
+            userRepository,
+            userDetailsRepository,
+            applicationProperties,
+            new SendGridService(applicationProperties)
         );
         slackService = new SlackService(applicationProperties, mailService, userService, userMailsService, userMapper, slack);
         slackController = new SlackController(userService, userRepository, mailService, slackService, userMapper);

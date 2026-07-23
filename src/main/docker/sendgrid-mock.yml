@@ -1,0 +1,12 @@
+services:
+  sendgrid-mock:
+    build:
+      context: ./sendgrid-mock
+      dockerfile: Dockerfile
+    image: oncokb/sendgrid-mock:local
+    container_name: oncokb-sendgrid-mock
+    restart: unless-stopped
+    environment:
+      - LISTEN_ADDR=:8086
+    ports:
+      - 8086:8086

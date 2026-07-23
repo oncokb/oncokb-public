@@ -3,6 +3,7 @@ package org.mskcc.cbio.oncokb.service;
 import io.github.jhipster.config.JHipsterProperties;
 import org.apache.commons.lang3.StringUtils;
 import org.mskcc.cbio.oncokb.config.application.ApplicationProperties;
+import org.mskcc.cbio.oncokb.config.application.SendGridProperties;
 
 import javax.mail.MessagingException;
 
@@ -12,10 +13,14 @@ import org.mskcc.cbio.oncokb.domain.User;
 import org.mskcc.cbio.oncokb.domain.UserDetails;
 import org.mskcc.cbio.oncokb.domain.UserMessagePair;
 import org.mskcc.cbio.oncokb.domain.enumeration.AccountRequestStatus;
+import org.mskcc.cbio.oncokb.domain.enumeration.BulkEmailAudience;
 import org.mskcc.cbio.oncokb.domain.enumeration.MailType;
 import org.mskcc.cbio.oncokb.repository.UserDetailsRepository;
 import org.mskcc.cbio.oncokb.repository.UserRepository;
 import org.mskcc.cbio.oncokb.service.dto.TerminationEmailDTO;
+import org.mskcc.cbio.oncokb.service.dto.sendgrid.SendGridMailRequest;
+import org.mskcc.cbio.oncokb.service.dto.sendgrid.SendGridRecipient;
+import org.mskcc.cbio.oncokb.service.dto.sendgrid.SendGridSendResult;
 import org.mskcc.cbio.oncokb.service.dto.UserDTO;
 import org.mskcc.cbio.oncokb.service.dto.UserMailsDTO;
 import org.mskcc.cbio.oncokb.service.TokenService;
@@ -63,7 +68,6 @@ public class MailService {
 
     private static final String EXPIRE_IN_DAYS = "expiresInDays";
     private static final String EMAIL_TITLE = "emailTitle";
-
     private final JHipsterProperties jHipsterProperties;
 
     private final ApplicationProperties applicationProperties;
@@ -78,11 +82,14 @@ public class MailService {
     private final TokenService tokenService;
     private final UserRepository userRepository;
     private final UserDetailsRepository userDetailsRepository;
+    private final SendGridService sendGridService;
 
     public MailService(JHipsterProperties jHipsterProperties, JavaMailSender javaMailSender,
                        MessageSource messageSource, SpringTemplateEngine templateEngine,
                        UserMailsService userMailsService, TokenService tokenService, UserRepository userRepository,
-                       UserDetailsRepository userDetailsRepository, ApplicationProperties applicationProperties
+                       UserDetailsRepository userDetailsRepository,
+                       ApplicationProperties applicationProperties,
+                       SendGridService sendGridService
     ) {
 
         this.jHipsterProperties = jHipsterProperties;
@@ -94,6 +101,7 @@ public class MailService {
         this.userRepository = userRepository;
         this.userDetailsRepository = userDetailsRepository;
         this.applicationProperties = applicationProperties;
+        this.sendGridService = sendGridService;
     }
 
     private static class UnknownMailTypeException extends RuntimeException {
@@ -487,5 +495,184 @@ public class MailService {
         mailFrom.add(applicationProperties.getEmailAddresses().getLicenseAddress());
         mailFrom.add(applicationProperties.getEmailAddresses().getContactAddress());
         return mailFrom;
+    }
+
+    public String sendBulkEmailWithLicenseContext(
+        List<UserDTO> users,
+        String from,
+        String cc,
+        String by,
+        BulkEmailAudience audience,
+        Map<String, Object> dynamicContent
+    ) {
+        List<UserDTO> recipients = users == null
+            ? new ArrayList<>()
+            : users.stream()
+                .filter(Objects::nonNull)
+                .filter(user -> StringUtils.isNotBlank(user.getEmail()))
+                .collect(Collectors.collectingAndThen(
+                    Collectors.toMap(UserDTO::getId, user -> user, (left, right) -> left, LinkedHashMap::new),
+                    map -> new ArrayList<>(map.values())
+                ));
+
+        if (recipients.isEmpty()) {
+            throw new IllegalArgumentException("No valid recipients were provided.");
+        }
+
+        if (!sendGridService.isConfigured()) {
+            throw new IllegalStateException("SendGrid bulk email is not enabled. Please contact the dev team.");
+        }
+
+        String sender = StringUtils.isNotBlank(by) ? by : from;
+
+        SendGridProperties.BulkEmailTypeConfig bulkConfig = resolveBulkEmailTypeConfig(audience);
+        MailType mailType = resolveBulkMailType(audience);
+        String templateId = resolveSendGridTemplateId(mailType, audience);
+        if (bulkConfig == null
+            || mailType == null
+            || StringUtils.isBlank(templateId)) {
+            throw new IllegalStateException(
+                "Bulk email type " + (audience == null ? "UNKNOWN" : audience.name()) + " is not configured. Please contact the dev team."
+            );
+        }
+
+        SendGridMailRequest request = new SendGridMailRequest();
+        request.setFromEmail(from);
+        request.setTemplateId(templateId);
+
+        Long asmGroupId = bulkConfig.getAsmGroupId();
+        if (asmGroupId != null) {
+            request.setAsmGroupId(asmGroupId);
+            request.setGroupsToDisplay(resolveAllConfiguredAsmGroupIds());
+        }
+
+        List<SendGridRecipient> requestRecipients = recipients.stream().map(user -> {
+            Map<String, Object> dynamicData = new LinkedHashMap<>();
+            if (dynamicContent != null) {
+                dynamicData.putAll(dynamicContent);
+            }
+            dynamicData.put("firstName", user.getFirstName());
+            dynamicData.put("lastName", user.getLastName());
+
+            SendGridRecipient recipient = new SendGridRecipient();
+            recipient.setToEmail(user.getEmail());
+            recipient.setCcEmail(cc);
+            recipient.setDynamicTemplateData(dynamicData);
+            return recipient;
+        }).collect(Collectors.toList());
+        request.setRecipients(requestRecipients);
+
+        try {
+            SendGridSendResult response = sendGridService.sendTemplatedMail(request);
+
+            if (response.getStatusCode() < 200 || response.getStatusCode() >= 300) {
+                throw new IllegalStateException("SendGrid request was not accepted: " + response.getStatusCode());
+            }
+
+            recipients.forEach(user -> addUserMailsRecord(user, mailType, from, sender));
+            return "Queued " + recipients.size() + " emails via SendGrid for audience " + audience.name() + ".";
+        } catch (SendGridIntegrationException e) {
+            if (e.getStatusCode() != null) {
+                throw new IllegalStateException("SendGrid request failed with status " + e.getStatusCode() + ".", e);
+            }
+            throw new IllegalStateException("SendGrid request failed.", e);
+        }
+    }
+
+    private SendGridProperties.BulkEmailTypeConfig resolveBulkEmailTypeConfig(BulkEmailAudience audience) {
+        if (applicationProperties.getSendgrid() == null || audience == null) {
+            return null;
+        }
+
+        SendGridProperties.BulkEmailTypesConfig bulkEmailTypes = applicationProperties.getSendgrid().getBulkEmailTypes();
+        if (bulkEmailTypes == null) {
+            return null;
+        }
+
+        switch (audience) {
+            case CUSTOM:
+                return bulkEmailTypes.getCustom();
+            case ALL_USERS:
+                return bulkEmailTypes.getAllUsers();
+            case DEVELOPERS:
+                return bulkEmailTypes.getDevelopers();
+            case SCIENTIFIC_NEWS:
+                return bulkEmailTypes.getScientificNews();
+            default:
+                return null;
+        }
+    }
+
+    private List<Long> resolveAllConfiguredAsmGroupIds() {
+        if (applicationProperties.getSendgrid() == null) {
+            return Collections.emptyList();
+        }
+
+        SendGridProperties.BulkEmailTypesConfig bulkEmailTypes = applicationProperties.getSendgrid().getBulkEmailTypes();
+        if (bulkEmailTypes == null) {
+            return Collections.emptyList();
+        }
+
+        LinkedHashSet<Long> ids = new LinkedHashSet<>();
+        addAsmGroupId(ids, bulkEmailTypes.getCustom());
+        addAsmGroupId(ids, bulkEmailTypes.getAllUsers());
+        addAsmGroupId(ids, bulkEmailTypes.getDevelopers());
+        addAsmGroupId(ids, bulkEmailTypes.getScientificNews());
+        return new ArrayList<>(ids);
+    }
+
+    private void addAsmGroupId(Set<Long> ids, SendGridProperties.BulkEmailTypeConfig config) {
+        if (config == null || config.getAsmGroupId() == null) {
+            return;
+        }
+        ids.add(config.getAsmGroupId());
+    }
+
+    private MailType resolveBulkMailType(BulkEmailAudience audience) {
+        if (audience == null) {
+            return null;
+        }
+
+        switch (audience) {
+            case CUSTOM:
+                return MailType.BULK_CUSTOM;
+            case ALL_USERS:
+                return MailType.BULK_ALL_USERS;
+            case DEVELOPERS:
+                return MailType.BULK_DEVELOPERS;
+            case SCIENTIFIC_NEWS:
+                return MailType.BULK_SCIENTIFIC_NEWS;
+            default:
+                return null;
+        }
+    }
+
+    private String resolveSendGridTemplateId(MailType mailType, BulkEmailAudience audience) {
+        if (applicationProperties.getSendgrid() == null || mailType == null || audience == null) {
+            return null;
+        }
+
+        if (MailType.BULK_CUSTOM.equals(mailType)
+            || MailType.BULK_ALL_USERS.equals(mailType)
+            || MailType.BULK_DEVELOPERS.equals(mailType)
+            || MailType.BULK_SCIENTIFIC_NEWS.equals(mailType)) {
+            String noUnsubscribeTemplate = StringUtils.trimToNull(
+                applicationProperties.getSendgrid().getNewsTemplateNoUnsubscribe()
+            );
+            if (!hasAnyUnsubscribePreferenceGroup(audience) && StringUtils.isNotBlank(noUnsubscribeTemplate)) {
+                return noUnsubscribeTemplate;
+            }
+            return StringUtils.trimToNull(applicationProperties.getSendgrid().getNewsTemplate());
+        }
+
+        return null;
+    }
+
+    private boolean hasAnyUnsubscribePreferenceGroup(BulkEmailAudience audience) {
+        SendGridProperties.BulkEmailTypeConfig currentBulkConfig = resolveBulkEmailTypeConfig(audience);
+        if (currentBulkConfig == null || currentBulkConfig.getAsmGroupId() == null) {
+            return false;
+        }
+        return !resolveAllConfiguredAsmGroupIds().isEmpty();
     }
 }

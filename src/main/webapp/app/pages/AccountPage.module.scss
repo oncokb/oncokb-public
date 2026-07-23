@@ -1,0 +1,23 @@
+.customSwitch {
+  input[type='checkbox']:checked + label:before,
+  input[type='checkbox'] + label:before,
+  input[type='checkbox'] + label:hover:before,
+  input[type='checkbox']:focus + label:before {
+    content: '';
+  }
+  input[type='checkbox'] + label:hover:before,
+  input[type='checkbox'] + label:before,
+  input[type='checkbox'] + label:hover,
+  input[type='checkbox']:checked + label:before {
+    transition: none;
+    transform: none;
+  }
+  input[type='checkbox'] {
+    width: auto;
+  }
+
+  input[type='checkbox'] + label:before,
+  input[type='checkbox']:checked + label:before {
+    width: 1.75rem;
+  }
+}

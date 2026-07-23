@@ -45,6 +45,7 @@ public class ApplicationProperties {
     private TokenStatsProperties tokenStats = new TokenStatsProperties();
     private KeycloakProperties keycloak = new KeycloakProperties();
     private UsageLiquibaseProperties usageLiquibase = new UsageLiquibaseProperties();
+    private SendGridProperties sendgrid = new SendGridProperties();
 
     public String getName() {
         return name;
@@ -251,5 +252,13 @@ public class ApplicationProperties {
 
     public void setUsageLiquibase(UsageLiquibaseProperties usageLiquibase) {
         this.usageLiquibase = usageLiquibase;
+    }
+
+    public SendGridProperties getSendgrid() {
+        return sendgrid;
+    }
+
+    public void setSendgrid(SendGridProperties sendgrid) {
+        this.sendgrid = sendgrid;
     }
 }

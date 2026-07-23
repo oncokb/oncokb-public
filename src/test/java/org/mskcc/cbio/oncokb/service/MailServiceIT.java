@@ -119,7 +119,12 @@ public class MailServiceIT {
 
         mailService = new MailService(
             jHipsterProperties, javaMailSender, messageSource, templateEngine,
-            userMailsService, tokenService, userRepository, userDetailsRepository, applicationProperties
+            userMailsService,
+            tokenService,
+            userRepository,
+            userDetailsRepository,
+            applicationProperties,
+            new SendGridService(applicationProperties)
         );
     }
 

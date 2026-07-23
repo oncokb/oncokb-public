@@ -11,6 +11,7 @@ import org.mskcc.cbio.oncokb.domain.enumeration.LicenseModel;
 import org.mskcc.cbio.oncokb.domain.enumeration.LicenseStatus;
 import org.mskcc.cbio.oncokb.domain.enumeration.LicenseType;
 import org.mskcc.cbio.oncokb.domain.enumeration.AccountRequestStatus;
+import org.mskcc.cbio.oncokb.domain.enumeration.BulkEmailAudience;
 import org.mskcc.cbio.oncokb.repository.AuthorityRepository;
 import org.mskcc.cbio.oncokb.repository.CompanyDomainRepository;
 import org.mskcc.cbio.oncokb.repository.CompanyRepository;
@@ -21,6 +22,7 @@ import org.mskcc.cbio.oncokb.security.SecurityUtils;
 import org.mskcc.cbio.oncokb.security.uuid.TokenProvider;
 import org.mskcc.cbio.oncokb.service.dto.useradditionalinfo.*;
 import org.mskcc.cbio.oncokb.service.dto.CompanyDTO;
+import org.mskcc.cbio.oncokb.service.dto.SendEmailUserOptionDTO;
 import org.mskcc.cbio.oncokb.service.dto.UserDTO;
 import org.mskcc.cbio.oncokb.service.mapper.UserMailsMapper;
 import org.mskcc.cbio.oncokb.service.mapper.UserMapper;
@@ -39,6 +41,7 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -46,10 +49,13 @@ import org.springframework.cache.annotation.Cacheable;
 
 import javax.mail.MessagingException;
 import javax.validation.constraints.NotNull;
+
+import java.math.BigInteger;
 import java.time.Instant;
 import java.time.temporal.ChronoUnit;
 import java.util.*;
 import java.util.stream.Collectors;
+import java.util.Locale;
 
 import static org.mskcc.cbio.oncokb.config.Constants.*;
 import static org.mskcc.cbio.oncokb.config.cache.UserCacheResolver.USERS_BY_EMAIL_CACHE;
@@ -642,6 +648,120 @@ public class UserService {
     @Transactional(readOnly = true)
     public Optional<User> getUserById(Long id) {
         return userRepository.findOneById(id);
+    }
+
+    @Transactional(readOnly = true)
+    public List<UserDTO> getBulkEmailAudienceUsers(BulkEmailAudience audience) {
+        if (audience == null) {
+            return new ArrayList<>();
+        }
+
+        List<User> users;
+        switch (audience) {
+            case ALL_USERS:
+            case SCIENTIFIC_NEWS:
+                users = userRepository.findAllUsersWithoutAuthorityAndLoginNot(AuthoritiesConstants.ROLE_SERVICE_ACCOUNT, Constants.ANONYMOUS_USER);
+                break;
+            case DEVELOPERS:
+                users = userRepository.findAllApiUsers();
+                break;
+            default:
+                users = new ArrayList<>();
+                break;
+        }
+
+        return users.stream()
+            .filter(Objects::nonNull)
+            .filter(user -> StringUtils.isNotBlank(user.getEmail()))
+            .filter(user -> !StringUtils.endsWithIgnoreCase(user.getEmail(), "@localhost"))
+            .map(userMapper::userToUserDTO)
+            .collect(Collectors.toList());
+    }
+
+    @Transactional(readOnly = true)
+    public Map<String, UserDTO> getSendRecipientsByLoginsOrEmails(List<String> recipients) {
+        if (recipients == null || recipients.isEmpty()) {
+            return Collections.emptyMap();
+        }
+
+        Set<String> normalizedCandidates = recipients.stream()
+            .filter(StringUtils::isNotBlank)
+            .map(value -> StringUtils.lowerCase(value.trim(), Locale.ENGLISH))
+            .collect(Collectors.toCollection(LinkedHashSet::new));
+
+        if (normalizedCandidates.isEmpty()) {
+            return Collections.emptyMap();
+        }
+
+        List<Object[]> rows = userRepository.findUsersWithDetailsByLoginOrEmailIn(normalizedCandidates);
+        Map<String, UserDTO> byLogin = new HashMap<>();
+        Map<String, UserDTO> byEmail = new HashMap<>();
+
+        for (Object[] row : rows) {
+            User user = (User) row[0];
+            UserDetails userDetails = (UserDetails) row[1];
+            if (user == null) {
+                continue;
+            }
+            UserDTO dto = userMapper.userToUserDTO(user, userDetails);
+
+            if (StringUtils.isNotBlank(user.getLogin())) {
+                byLogin.put(StringUtils.lowerCase(user.getLogin(), Locale.ENGLISH), dto);
+            }
+            if (StringUtils.isNotBlank(user.getEmail())) {
+                byEmail.put(StringUtils.lowerCase(user.getEmail(), Locale.ENGLISH), dto);
+            }
+        }
+
+        Map<String, UserDTO> resolved = new LinkedHashMap<>();
+        for (String recipient : recipients) {
+            if (StringUtils.isBlank(recipient)) {
+                continue;
+            }
+            String key = StringUtils.lowerCase(recipient.trim(), Locale.ENGLISH);
+            UserDTO user = byEmail.get(key);
+            if (user == null) {
+                user = byLogin.get(key);
+            }
+            if (user != null) {
+                resolved.put(key, user);
+            }
+        }
+
+        return resolved;
+    }
+
+    @Transactional(readOnly = true)
+    public Page<SendEmailUserOptionDTO> getSendEmailUserOptions(String query, Pageable pageable) {
+        int pageNumber = pageable == null ? 0 : pageable.getPageNumber();
+        int pageSize = pageable == null || pageable.getPageSize() <= 0 ? 20 : pageable.getPageSize();
+        Sort sort = pageable == null || pageable.getSort().isUnsorted()
+            ? Sort.by(Sort.Order.asc("login"))
+            : pageable.getSort();
+        PageRequest effectivePage = PageRequest.of(pageNumber, pageSize, sort);
+
+        return userRepository.findSendEmailUserOptions(query, Constants.ANONYMOUS_USER, effectivePage)
+            .map(this::toSendEmailUserOptionDTO);
+    }
+
+    private SendEmailUserOptionDTO toSendEmailUserOptionDTO(Object[] row) {
+        String login = row != null && row.length > 0 ? (String) row[0] : null;
+        String email = row != null && row.length > 1 ? (String) row[1] : null;
+        String firstName = row != null && row.length > 2 ? (String) row[2] : null;
+        String lastName = row != null && row.length > 3 ? (String) row[3] : null;
+        Boolean activated = row != null && row.length > 4 ? (Boolean) row[4] : null;
+        String licenseType = row != null && row.length > 5 ? (String) row[5] : null;
+        Boolean isAdmin = row != null && row.length > 6 ? ((BigInteger) row[6]).equals(BigInteger.valueOf(1)) : null;
+
+        SendEmailUserOptionDTO dto = new SendEmailUserOptionDTO();
+        dto.setLogin(login);
+        dto.setEmail(email);
+        dto.setFirstName(firstName);
+        dto.setLastName(lastName);
+        dto.setActivated(Boolean.TRUE.equals(activated));
+        dto.setLicenseType(licenseType);
+        dto.setAdmin(Boolean.TRUE.equals(isAdmin));
+        return dto;
     }
 
     public Optional<UserDTO> approveUser(UserDTO userDTO, Boolean isTrial) {

@@ -4,6 +4,7 @@ import org.mskcc.cbio.oncokb.OncokbPublicApp;
 import org.mskcc.cbio.oncokb.config.Constants;
 import org.mskcc.cbio.oncokb.config.application.ApplicationProperties;
 import org.mskcc.cbio.oncokb.config.application.RecaptchaProperties;
+import org.mskcc.cbio.oncokb.config.application.SendGridProperties;
 import org.mskcc.cbio.oncokb.config.application.SlackProperties;
 import org.mskcc.cbio.oncokb.domain.Company;
 import org.mskcc.cbio.oncokb.domain.User;
@@ -16,6 +17,7 @@ import org.mskcc.cbio.oncokb.domain.enumeration.LicenseType;
 import org.mskcc.cbio.oncokb.repository.*;
 import org.mskcc.cbio.oncokb.security.AuthoritiesConstants;
 import org.mskcc.cbio.oncokb.service.GracePeriodBlackListService;
+import org.mskcc.cbio.oncokb.service.SendGridService;
 import org.mskcc.cbio.oncokb.service.SlackService;
 import org.mskcc.cbio.oncokb.service.UserService;
 import org.mskcc.cbio.oncokb.service.dto.CompanyDTO;
@@ -32,6 +34,7 @@ import org.apache.commons.lang3.RandomStringUtils;
 
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
+import com.sun.net.httpserver.HttpServer;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 import org.springframework.boot.test.context.SpringBootTest;
@@ -44,8 +47,14 @@ import org.springframework.transaction.annotation.Transactional;
 
 
 import java.io.IOException;
+import java.io.InputStream;
+import java.io.ByteArrayOutputStream;
+import java.net.InetSocketAddress;
+import java.nio.charset.StandardCharsets;
 import java.time.Instant;
 import java.util.*;
+import java.util.concurrent.atomic.AtomicBoolean;
+import java.util.concurrent.atomic.AtomicReference;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.mskcc.cbio.oncokb.web.rest.AccountResourceIT.TEST_USER_LOGIN;
@@ -136,12 +145,12 @@ public class AccountResourceIT {
             null,
             null,
             null,
-            null,
             passwordEncoder,
             null,
             null,
             applicationProperties,
-            gracePeriodBlackListService
+            gracePeriodBlackListService,
+            new SendGridService(applicationProperties)
         );
     }
 
@@ -1368,5 +1377,202 @@ public class AccountResourceIT {
                     .param("key", "wrong reset key"))
             .andExpect(status().isInternalServerError())
             .andExpect(jsonPath("$.detail").value("Password reset link is invalid or has already been used. It can only be used once. Please request a new password reset email and try again."));
+    }
+
+    @Test
+    @Transactional
+    @WithMockUser("account-subscription-defaults")
+    public void testGetEmailSubscriptionsReturnsConfiguredDefaults() throws Exception {
+        User user = new User();
+        user.setLogin("account-subscription-defaults");
+        user.setEmail("account-subscription-defaults@example.com");
+        user.setPassword(RandomStringUtils.random(60));
+        user.setActivated(true);
+        userRepository.saveAndFlush(user);
+
+        HttpServer server = HttpServer.create(new InetSocketAddress(0), 0);
+        server.createContext("/v3/asm/groups/", exchange -> {
+            exchange.sendResponseHeaders(500, -1);
+            exchange.close();
+        });
+        server.createContext("/v3/asm/suppressions/", exchange -> {
+            String path = exchange.getRequestURI().getPath();
+            if ("GET".equals(exchange.getRequestMethod())
+                && path.endsWith("/account-subscription-defaults@example.com")) {
+                String body = "{\"suppressions\":["
+                    + "{\"id\":1001,\"name\":\"Developers\",\"suppressed\":false},"
+                    + "{\"id\":1002,\"name\":\"Scientific News\",\"suppressed\":false}"
+                    + "]}";
+                byte[] bytes = body.getBytes(StandardCharsets.UTF_8);
+                exchange.getResponseHeaders().add("Content-Type", "application/json");
+                exchange.sendResponseHeaders(200, bytes.length);
+                exchange.getResponseBody().write(bytes);
+                exchange.close();
+                return;
+            }
+            exchange.sendResponseHeaders(500, -1);
+            exchange.close();
+        });
+        server.start();
+
+        try {
+            SendGridProperties sendGridProperties = new SendGridProperties();
+            sendGridProperties.setEnabled(true);
+            sendGridProperties.setApiKey("test-api-key");
+            sendGridProperties.setBaseUrl("http://localhost:" + server.getAddress().getPort());
+            applicationProperties.setSendgrid(sendGridProperties);
+
+            restAccountMockMvc.perform(get("/api/account/email-subscriptions"))
+                .andExpect(status().isOk())
+                .andExpect(content().contentType(MediaType.APPLICATION_JSON_VALUE))
+                .andExpect(jsonPath("$[0].groupId").value(1001))
+                .andExpect(jsonPath("$[0].audience").value("DEVELOPERS"))
+                .andExpect(jsonPath("$[0].subscribed").value(true))
+                .andExpect(jsonPath("$[1].groupId").value(1002))
+                .andExpect(jsonPath("$[1].audience").value("SCIENTIFIC_NEWS"))
+                .andExpect(jsonPath("$[1].subscribed").value(true));
+        } finally {
+            server.stop(0);
+        }
+    }
+
+    @Test
+    @Transactional
+    @WithMockUser("account-subscription-save")
+    public void testUpdateEmailSubscriptionPersistsValue() throws Exception {
+        User user = new User();
+        user.setLogin("account-subscription-save");
+        user.setEmail("account-subscription-save@example.com");
+        user.setPassword(RandomStringUtils.random(60));
+        user.setActivated(true);
+        userRepository.saveAndFlush(user);
+
+        AtomicBoolean developersSuppressed = new AtomicBoolean(false);
+        AtomicReference<String> suppressionPayload = new AtomicReference<>();
+        HttpServer server = HttpServer.create(new InetSocketAddress(0), 0);
+        server.createContext("/v3/asm/groups/", exchange -> {
+            String path = exchange.getRequestURI().getPath();
+            if ("POST".equals(exchange.getRequestMethod())
+                && path.endsWith("/2001/suppressions")) {
+                try (InputStream inputStream = exchange.getRequestBody()) {
+                    suppressionPayload.set(readRequestBody(inputStream));
+                }
+                developersSuppressed.set(true);
+                exchange.sendResponseHeaders(201, -1);
+                exchange.close();
+                return;
+            }
+            exchange.sendResponseHeaders(500, -1);
+            exchange.close();
+        });
+        server.createContext("/v3/asm/suppressions/", exchange -> {
+            String path = exchange.getRequestURI().getPath();
+            if ("GET".equals(exchange.getRequestMethod())
+                && path.endsWith("/account-subscription-save@example.com")) {
+                String body = "{\"suppressions\":["
+                    + "{\"id\":2001,\"name\":\"Developers\",\"suppressed\":" + developersSuppressed.get() + "},"
+                    + "{\"id\":2002,\"name\":\"Scientific News\",\"suppressed\":false}"
+                    + "]}";
+                byte[] bytes = body.getBytes(StandardCharsets.UTF_8);
+                exchange.getResponseHeaders().add("Content-Type", "application/json");
+                exchange.sendResponseHeaders(200, bytes.length);
+                exchange.getResponseBody().write(bytes);
+                exchange.close();
+                return;
+            }
+            exchange.sendResponseHeaders(500, -1);
+            exchange.close();
+        });
+        server.start();
+
+        try {
+            SendGridProperties sendGridProperties = new SendGridProperties();
+            sendGridProperties.setEnabled(true);
+            sendGridProperties.setApiKey("test-api-key");
+            sendGridProperties.setBaseUrl("http://localhost:" + server.getAddress().getPort());
+            applicationProperties.setSendgrid(sendGridProperties);
+
+            restAccountMockMvc.perform(
+                    post("/api/account/email-subscriptions")
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content("{\"groupId\":2001,\"subscribed\":false}")
+                )
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$[0].audience").value("DEVELOPERS"))
+                .andExpect(jsonPath("$[0].subscribed").value(false))
+                .andExpect(jsonPath("$[1].audience").value("SCIENTIFIC_NEWS"))
+                .andExpect(jsonPath("$[1].subscribed").value(true));
+
+            assertThat(suppressionPayload.get()).contains("account-subscription-save@example.com");
+
+            restAccountMockMvc.perform(get("/api/account/email-subscriptions"))
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$[0].audience").value("DEVELOPERS"))
+                .andExpect(jsonPath("$[0].subscribed").value(false));
+        } finally {
+            server.stop(0);
+        }
+    }
+
+    @Test
+    @Transactional
+    @WithMockUser("account-subscription-invalid")
+    public void testUpdateEmailSubscriptionRejectsInvalidAudience() throws Exception {
+        User user = new User();
+        user.setLogin("account-subscription-invalid");
+        user.setEmail("account-subscription-invalid@example.com");
+        user.setPassword(RandomStringUtils.random(60));
+        user.setActivated(true);
+        userRepository.saveAndFlush(user);
+
+        HttpServer server = HttpServer.create(new InetSocketAddress(0), 0);
+        server.createContext("/v3/asm/suppressions/", exchange -> {
+            String path = exchange.getRequestURI().getPath();
+            if ("GET".equals(exchange.getRequestMethod())
+                && path.endsWith("/account-subscription-invalid@example.com")) {
+                String body = "{\"suppressions\":[{\"id\":3001,\"name\":\"Developers\",\"suppressed\":false}]}";
+                byte[] bytes = body.getBytes(StandardCharsets.UTF_8);
+                exchange.getResponseHeaders().add("Content-Type", "application/json");
+                exchange.sendResponseHeaders(200, bytes.length);
+                exchange.getResponseBody().write(bytes);
+                exchange.close();
+                return;
+            }
+            exchange.sendResponseHeaders(500, -1);
+            exchange.close();
+        });
+        server.createContext("/v3/asm/groups/", exchange -> {
+            exchange.sendResponseHeaders(500, -1);
+            exchange.close();
+        });
+        server.start();
+
+        try {
+            SendGridProperties sendGridProperties = new SendGridProperties();
+            sendGridProperties.setEnabled(true);
+            sendGridProperties.setApiKey("test-api-key");
+            sendGridProperties.setBaseUrl("http://localhost:" + server.getAddress().getPort());
+            applicationProperties.setSendgrid(sendGridProperties);
+
+            restAccountMockMvc.perform(
+                    post("/api/account/email-subscriptions")
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content("{\"groupId\":9999,\"subscribed\":true}")
+                )
+                .andExpect(status().isBadRequest())
+                .andExpect(jsonPath("$.title").value("Subscription groupId is not available in SendGrid: 9999."));
+        } finally {
+            server.stop(0);
+        }
+    }
+
+    private String readRequestBody(InputStream inputStream) throws IOException {
+        ByteArrayOutputStream outputStream = new ByteArrayOutputStream();
+        byte[] buffer = new byte[1024];
+        int bytesRead;
+        while ((bytesRead = inputStream.read(buffer)) != -1) {
+            outputStream.write(buffer, 0, bytesRead);
+        }
+        return new String(outputStream.toByteArray(), StandardCharsets.UTF_8);
     }
 }
