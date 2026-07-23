@@ -2212,6 +2212,9 @@
           "format": "int32",
           "description": "(Nullable) Unique gene identifiers from NCBI. May be null if omitted from original query, otherwise filled in by OncoKB"
         },
+        "germline": {
+          "type": "boolean"
+        },
         "hgvs": {
           "type": "string",
           "description": "(Nullable) The hgvsg or genomic location from original query"
@@ -2828,6 +2831,35 @@
           "items": {
             "$ref": "#/definitions/MatchVariant"
           }
+        }
+      }
+    },
+    "ProteinChangeValidation": {
+      "type": "object",
+      "properties": {
+        "message": {
+          "type": "string"
+        },
+        "messageType": {
+          "type": "string",
+          "enum": [
+            "INVALID_PROTEIN_CHANGE",
+            "NORMALIZED_DELETED_SEQUENCE",
+            "NO_PROTEIN_SEQUENCE",
+            "TRANSCRIPT_SERVICE_DISABLED",
+            "TRANSCRIPT_SERVICE_UNAVAILABLE"
+          ]
+        },
+        "normalizedProteinChange": {
+          "type": "string"
+        },
+        "status": {
+          "type": "string",
+          "enum": [
+            "NORMALIZED",
+            "INVALID",
+            "UNCHECKED"
+          ]
         }
       }
     },
@@ -4322,6 +4354,9 @@
         "prognosticSummary": {
           "type": "string",
           "description": "Prognostic summary. Defaulted to \"\""
+        },
+        "proteinChangeValidation": {
+          "$ref": "#/definitions/ProteinChangeValidation"
         },
         "query": {
           "$ref": "#/definitions/Query"

@@ -1,0 +1,17 @@
+@import '../../variables';
+
+// Colors, padding, margin, border come from the Bootstrap
+// <Alert> component; the message is left-aligned by default.
+.message {
+  max-width: 42rem;
+  margin-bottom: 0;
+}
+
+// Secondary note telling the user which canonical transcript OncoKB uses.
+.meta {
+  max-width: 42rem;
+  margin-top: 0.5rem;
+  margin-bottom: 0;
+  font-size: 0.875rem;
+  opacity: 0.85;
+}

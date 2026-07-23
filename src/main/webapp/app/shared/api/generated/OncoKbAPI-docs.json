@@ -2799,6 +2799,9 @@
           "format": "int32",
           "description": "(Nullable) Unique gene identifiers from NCBI. May be null if omitted from original query, otherwise filled in by OncoKB"
         },
+        "germline": {
+          "type": "boolean"
+        },
         "hgvs": {
           "type": "string",
           "description": "(Nullable) The hgvsg or genomic location from original query"
