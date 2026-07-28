@@ -1136,6 +1136,9 @@ export default class ActionableGenesPage extends React.Component<
               getDownloadData={this.downloadAssociation}
               fileName={'oncokb_biomarker_drug_associations.tsv'}
               buttonText={'Associations'}
+              disabled={
+                !this.props.authenticationStore.isAuthenticatedAndApprovedUser
+              }
             />
             {this.treatmentsAreFiltered ? (
               <Button
