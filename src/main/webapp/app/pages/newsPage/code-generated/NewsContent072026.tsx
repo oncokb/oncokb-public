@@ -46,7 +46,7 @@ export default function NewsContent072026() {
               <th>Setting</th>
               <th>Gene(s)</th>
               <th>Mutation</th>
-              <th>Cancer Type(s)</th>
+              <th>Cancer Type</th>
               <th>Drug(s) added to OncoKB™</th>
               <th>Evidence</th>
             </tr>
@@ -65,7 +65,16 @@ export default function NewsContent072026() {
                   Oncogenic Mutations
                 </AlterationPageLink>
               </td>
-              <td>Myelodysplatic Syndromes</td>
+              <td>
+                <AlterationPageLink
+                  hugoSymbol="IDH2"
+                  alteration="Oncogenic Mutations"
+                  cancerType="Myelodysplatic Syndromes"
+                  germline={false}
+                >
+                  Myelodysplatic Syndromes
+                </AlterationPageLink>
+              </td>
               <td>Enasidenib</td>
               <td>
                 Inclusion of IDH2 mutations in association with Enasidenib as
@@ -115,7 +124,27 @@ export default function NewsContent072026() {
                   Oncogenic Mutations
                 </AlterationPageLink>
               </td>
-              <td>Prostate Cancer</td>
+              <td>
+                Prostate Cancer (
+                <AlterationPageLink
+                  hugoSymbol="PTEN"
+                  alteration="Deletion"
+                  cancerType="Prostate Cancer"
+                  germline={false}
+                >
+                  Deletion
+                </AlterationPageLink>
+                ,{' '}
+                <AlterationPageLink
+                  hugoSymbol="PTEN"
+                  alteration="Oncogenic Mutations"
+                  cancerType="Prostate Cancer"
+                  germline={false}
+                >
+                  Oncogenic Mutations
+                </AlterationPageLink>
+                )
+              </td>
               <td>Capivasertib + Abiraterone + Prednisone</td>
               <td>
                 <a href="https://www.fda.gov/drugs/resources-information-approved-drugs/fda-approves-capivasertib-abiraterone-and-prednisone-pten-deficient-androgen-pathway-modulation">
@@ -164,7 +193,16 @@ export default function NewsContent072026() {
                   Amplification
                 </AlterationPageLink>
               </td>
-              <td>Breast Cancer</td>
+              <td>
+                <AlterationPageLink
+                  hugoSymbol="ERBB2"
+                  alteration="Amplification"
+                  cancerType="Breast Cancer"
+                  germline={false}
+                >
+                  Breast Cancer
+                </AlterationPageLink>
+              </td>
               <td>
                 Ado-Trastuzumab Emtansine, Lapatinib + Capecitabine, Lapatinib +
                 Letrozole, Margetuximab + Chemotherapy, Neratinib, Neratinib +
@@ -231,7 +269,54 @@ export default function NewsContent072026() {
                   R132S
                 </AlterationPageLink>
               </td>
-              <td>Myelodysplatic Syndromes</td>
+              <td>
+                Myelodysplatic Syndromes (
+                <AlterationPageLink
+                  hugoSymbol="IDH1"
+                  alteration="R132C"
+                  cancerType="Myelodysplatic Syndromes"
+                  germline={false}
+                >
+                  R132C
+                </AlterationPageLink>
+                ,{' '}
+                <AlterationPageLink
+                  hugoSymbol="IDH1"
+                  alteration="R132G"
+                  cancerType="Myelodysplatic Syndromes"
+                  germline={false}
+                >
+                  R132G
+                </AlterationPageLink>
+                ,{' '}
+                <AlterationPageLink
+                  hugoSymbol="IDH1"
+                  alteration="R132H"
+                  cancerType="Myelodysplatic Syndromes"
+                  germline={false}
+                >
+                  R132H
+                </AlterationPageLink>
+                ,{' '}
+                <AlterationPageLink
+                  hugoSymbol="IDH1"
+                  alteration="R132L"
+                  cancerType="Myelodysplatic Syndromes"
+                  germline={false}
+                >
+                  R132L
+                </AlterationPageLink>
+                ,{' '}
+                <AlterationPageLink
+                  hugoSymbol="IDH1"
+                  alteration="R132S"
+                  cancerType="Myelodysplatic Syndromes"
+                  germline={false}
+                >
+                  R132S
+                </AlterationPageLink>
+                )
+              </td>
               <td>Ivosidenib (Level 1)</td>
               <td>Olutasidenib, Olutasidenib + Azacitidine (Level 3A)</td>
               <td>
@@ -258,7 +343,7 @@ export default function NewsContent072026() {
               <th>Setting</th>
               <th>Gene(s)</th>
               <th>Mutation</th>
-              <th>Cancer Type(s)</th>
+              <th>Cancer Type</th>
               <th>Drug(s) added to OncoKB™</th>
               <th>Evidence</th>
             </tr>
@@ -277,7 +362,16 @@ export default function NewsContent072026() {
                   L248V
                 </AlterationPageLink>
               </td>
-              <td>Chronic Myelogenous Leukemia</td>
+              <td>
+                <AlterationPageLink
+                  hugoSymbol="ABL1"
+                  alteration="L248V"
+                  cancerType="Chronic Myelogenous Leukemia"
+                  germline={false}
+                >
+                  Chronic Myelogenous Leukemia
+                </AlterationPageLink>
+              </td>
               <td>Imatinib</td>
               <td>
                 PMID:{' '}
@@ -301,7 +395,16 @@ export default function NewsContent072026() {
                   Q252H
                 </AlterationPageLink>
               </td>
-              <td>Chronic Myelogenous Leukemia</td>
+              <td>
+                <AlterationPageLink
+                  hugoSymbol="ABL1"
+                  alteration="Q252H"
+                  cancerType="Chronic Myelogenous Leukemia"
+                  germline={false}
+                >
+                  Chronic Myelogenous Leukemia
+                </AlterationPageLink>
+              </td>
               <td>Imatinib</td>
               <td>
                 PMID:{' '}
@@ -329,7 +432,16 @@ export default function NewsContent072026() {
                   Y253F
                 </AlterationPageLink>
               </td>
-              <td>Chronic Myelogenous Leukemia</td>
+              <td>
+                <AlterationPageLink
+                  hugoSymbol="ABL1"
+                  alteration="Y253F"
+                  cancerType="Chronic Myelogenous Leukemia"
+                  germline={false}
+                >
+                  Chronic Myelogenous Leukemia
+                </AlterationPageLink>
+              </td>
               <td>Imatinib</td>
               <td>
                 PMID:{' '}
@@ -355,7 +467,16 @@ export default function NewsContent072026() {
                   E279K
                 </AlterationPageLink>
               </td>
-              <td>Chronic Myelogenous Leukemia</td>
+              <td>
+                <AlterationPageLink
+                  hugoSymbol="ABL1"
+                  alteration="E279K"
+                  cancerType="Chronic Myelogenous Leukemia"
+                  germline={false}
+                >
+                  Chronic Myelogenous Leukemia
+                </AlterationPageLink>
+              </td>
               <td>Imatinib</td>
               <td>
                 PMID:{' '}
@@ -379,7 +500,16 @@ export default function NewsContent072026() {
                   V289F
                 </AlterationPageLink>
               </td>
-              <td>Chronic Myelogenous Leukemia</td>
+              <td>
+                <AlterationPageLink
+                  hugoSymbol="ABL1"
+                  alteration="V289F"
+                  cancerType="Chronic Myelogenous Leukemia"
+                  germline={false}
+                >
+                  Chronic Myelogenous Leukemia
+                </AlterationPageLink>
+              </td>
               <td>Imatinib</td>
               <td>
                 PMID:{' '}
@@ -403,7 +533,16 @@ export default function NewsContent072026() {
                   F311I
                 </AlterationPageLink>
               </td>
-              <td>Chronic Myelogenous Leukemia</td>
+              <td>
+                <AlterationPageLink
+                  hugoSymbol="ABL1"
+                  alteration="F311I"
+                  cancerType="Chronic Myelogenous Leukemia"
+                  germline={false}
+                >
+                  Chronic Myelogenous Leukemia
+                </AlterationPageLink>
+              </td>
               <td>Imatinib</td>
               <td>
                 PMID:{' '}
@@ -425,7 +564,16 @@ export default function NewsContent072026() {
                   M351T
                 </AlterationPageLink>
               </td>
-              <td>Chronic Myelogenous Leukemia</td>
+              <td>
+                <AlterationPageLink
+                  hugoSymbol="ABL1"
+                  alteration="M351T"
+                  cancerType="Chronic Myelogenous Leukemia"
+                  germline={false}
+                >
+                  Chronic Myelogenous Leukemia
+                </AlterationPageLink>
+              </td>
               <td>Imatinib</td>
               <td>
                 PMID:{' '}
@@ -455,7 +603,16 @@ export default function NewsContent072026() {
                   E355G
                 </AlterationPageLink>
               </td>
-              <td>Chronic Myelogenous Leukemia</td>
+              <td>
+                <AlterationPageLink
+                  hugoSymbol="ABL1"
+                  alteration="E355G"
+                  cancerType="Chronic Myelogenous Leukemia"
+                  germline={false}
+                >
+                  Chronic Myelogenous Leukemia
+                </AlterationPageLink>
+              </td>
               <td>Imatinib</td>
               <td>
                 PMID:{' '}
@@ -483,7 +640,16 @@ export default function NewsContent072026() {
                   V379I
                 </AlterationPageLink>
               </td>
-              <td>Chronic Myelogenous Leukemia</td>
+              <td>
+                <AlterationPageLink
+                  hugoSymbol="ABL1"
+                  alteration="V379I"
+                  cancerType="Chronic Myelogenous Leukemia"
+                  germline={false}
+                >
+                  Chronic Myelogenous Leukemia
+                </AlterationPageLink>
+              </td>
               <td>Imatinib</td>
               <td>
                 PMID:{' '}
@@ -507,7 +673,16 @@ export default function NewsContent072026() {
                   M388L
                 </AlterationPageLink>
               </td>
-              <td>Chronic Myelogenous Leukemia</td>
+              <td>
+                <AlterationPageLink
+                  hugoSymbol="ABL1"
+                  alteration="M388L"
+                  cancerType="Chronic Myelogenous Leukemia"
+                  germline={false}
+                >
+                  Chronic Myelogenous Leukemia
+                </AlterationPageLink>
+              </td>
               <td>Imatinib</td>
               <td>
                 PMID:{' '}
@@ -527,7 +702,16 @@ export default function NewsContent072026() {
                   H396P
                 </AlterationPageLink>
               </td>
-              <td>Chronic Myelogenous Leukemia</td>
+              <td>
+                <AlterationPageLink
+                  hugoSymbol="ABL1"
+                  alteration="H396P"
+                  cancerType="Chronic Myelogenous Leukemia"
+                  germline={false}
+                >
+                  Chronic Myelogenous Leukemia
+                </AlterationPageLink>
+              </td>
               <td>Imatinib</td>
               <td>
                 PMID:{' '}
@@ -555,7 +739,16 @@ export default function NewsContent072026() {
                   H396R
                 </AlterationPageLink>
               </td>
-              <td>Chronic Myelogenous Leukemia</td>
+              <td>
+                <AlterationPageLink
+                  hugoSymbol="ABL1"
+                  alteration="H396R"
+                  cancerType="Chronic Myelogenous Leukemia"
+                  germline={false}
+                >
+                  Chronic Myelogenous Leukemia
+                </AlterationPageLink>
+              </td>
               <td>Imatinib</td>
               <td>
                 PMID:{' '}
@@ -583,7 +776,16 @@ export default function NewsContent072026() {
                   E459K
                 </AlterationPageLink>
               </td>
-              <td>Chronic Myelogenous Leukemia</td>
+              <td>
+                <AlterationPageLink
+                  hugoSymbol="ABL1"
+                  alteration="E459K"
+                  cancerType="Chronic Myelogenous Leukemia"
+                  germline={false}
+                >
+                  Chronic Myelogenous Leukemia
+                </AlterationPageLink>
+              </td>
               <td>Imatinib</td>
               <td>
                 PMID:{' '}
@@ -592,6 +794,63 @@ export default function NewsContent072026() {
                 <a href="https://pubmed.ncbi.nlm.nih.gov/25132497/">25132497</a>
                 ,{' '}
                 <a href="https://pubmed.ncbi.nlm.nih.gov/19201023/">19201023</a>
+              </td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+      <ul style={{ marginBottom: 0 }}>
+        <li style={{ marginBottom: 0 }}>
+          Addition of drug(s) associated with an existing cancer type-specific
+          alteration with an assigned OncoKB™ level of evidence, without
+          changing the alteration's highest level of evidence
+        </li>
+      </ul>
+      <div className="table-responsive" style={{ marginBottom: '1.5rem' }}>
+        <table className="table">
+          <thead>
+            <tr>
+              <th>Level</th>
+              <th>Setting</th>
+              <th>Gene</th>
+              <th>Mutation</th>
+              <th>Cancer Type</th>
+              <th>Level-associated Drug(s) in OncoKB™</th>
+              <th>Drug(s) added to OncoKBTM</th>
+              <th>Evidence</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td>R2</td>
+              <td>Somatic</td>
+              <td>{getAlternativeGenePageLinks('ABL1', false)}</td>
+              <td>
+                <AlterationPageLink
+                  hugoSymbol="ABL1"
+                  alteration="M244V"
+                  germline={false}
+                >
+                  M244V
+                </AlterationPageLink>
+              </td>
+              <td>
+                <AlterationPageLink
+                  hugoSymbol="ABL1"
+                  alteration="M244V"
+                  cancerType="Chronic Myelogenous Leukemia"
+                  germline={false}
+                >
+                  Chronic Myelogenous Leukemia
+                </AlterationPageLink>
+              </td>
+              <td>Asciminib (Level R1)</td>
+              <td>Imatinib (Level R2)</td>
+              <td>
+                PMID:{' '}
+                <a href="https://pubmed.ncbi.nlm.nih.gov/12399961/">12399961</a>
+                ,{' '}
+                <a href="https://pubmed.ncbi.nlm.nih.gov/15930265/">15930265</a>
               </td>
             </tr>
           </tbody>

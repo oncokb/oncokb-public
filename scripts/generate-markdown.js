@@ -227,9 +227,12 @@ function addAutoTableLinks(md, state) {
   let columnIdx = 0;
   let geneIdx = -1;
   let mutationIdx = -1;
+  let cancerTypeIdx = -1;
   let settingIdx = -1;
   let currentGene = '';
   let currentGeneSetting = 'somatic';
+  let currentMutationLinkableForCancerType = false;
+  let currentMutationNamesForCancerType = [];
   for (const token of state.tokens) {
     if (token.type === 'th_open') {
       inTh = true;
@@ -245,6 +248,8 @@ function addAutoTableLinks(md, state) {
       columnIdx = 0;
       currentGene = '';
       currentGeneSetting = 'somatic';
+      currentMutationLinkableForCancerType = false;
+      currentMutationNamesForCancerType = [];
     } else if (inTd && columnIdx === settingIdx && token.type === 'inline') {
       const child = token.children[0];
       currentGeneSetting =
@@ -273,12 +278,16 @@ function addAutoTableLinks(md, state) {
       }
     } else if (inTd && columnIdx === mutationIdx && token.type === 'inline') {
       const child = token.children[0];
+      currentMutationLinkableForCancerType = false;
+      currentMutationNamesForCancerType = [];
       if (currentGene === '') {
         throw new Error(`No gene for this row and mutation "${child.content}"`);
       } else if (currentGene.includes(',')) {
         // Multi-gene rows should remain text in the mutation column.
       } else if (child.content.startsWith('Pathogenic Variants (excluding')) {
         const pathogenicVariantsStr = 'Pathogenic Variants';
+        currentMutationLinkableForCancerType = true;
+        currentMutationNamesForCancerType = [pathogenicVariantsStr];
         const exclusionSection = child.content.replace(
           `${pathogenicVariantsStr} `,
           ''
@@ -316,12 +325,15 @@ function addAutoTableLinks(md, state) {
         const activatingMutationTitleStr =
           'Tyrosine Kinase Domain Activating Mutations (';
         const mutationNames = child.content
-          .replace(`${activatingMutationTitleStr} `, '')
-          .trim()
+          .slice(activatingMutationTitleStr.length)
           // remove ')' at the end of the string
           .slice(0, -1)
           .split(',')
-          .map(x => x.trim());
+          .map(x => x.trim())
+          .filter(Boolean);
+
+        currentMutationLinkableForCancerType = true;
+        currentMutationNamesForCancerType = mutationNames;
 
         const allMutationLinks = createMutationLinks(
           md,
@@ -341,12 +353,15 @@ function addAutoTableLinks(md, state) {
         )
       ) {
         const tokens = [];
+        currentMutationLinkableForCancerType = true;
+        currentMutationNamesForCancerType = [];
         for (const section of child.content.split('_BREAK_')) {
           const [title, content] = section.split(':');
           const mutationNames = content
             .trim()
             .split(',')
             .map(x => x.trim());
+          currentMutationNamesForCancerType.push(...mutationNames);
           const mutationLinks = createMutationLinks(
             md,
             currentGene,
@@ -361,6 +376,8 @@ function addAutoTableLinks(md, state) {
         token.children = tokens;
       } else {
         const mutationNames = child.content.split(',').map(x => x.trim());
+        currentMutationLinkableForCancerType = true;
+        currentMutationNamesForCancerType = mutationNames;
         const allMutationLinks = createMutationLinks(
           md,
           currentGene,
@@ -369,14 +386,139 @@ function addAutoTableLinks(md, state) {
         );
         token.children = allMutationLinks;
       }
+    } else if (inTd && columnIdx === cancerTypeIdx && token.type === 'inline') {
+      const child = token.children[0];
+      if (
+        currentGene === '' ||
+        currentGene.includes(',') ||
+        !currentMutationLinkableForCancerType ||
+        currentMutationNamesForCancerType.length === 0
+      ) {
+        continue;
+      }
+
+      const cancerTypeName = child.content.trim();
+      if (cancerTypeName === '') {
+        continue;
+      }
+
+      if (enableCancerTypeLinks) {
+        const isGermline = currentGeneSetting === 'germline';
+        if (currentMutationNamesForCancerType.length === 1) {
+          token.children = createCancerTypeLink(
+            md,
+            currentGene,
+            currentMutationNamesForCancerType[0],
+            cancerTypeName,
+            cancerTypeName,
+            isGermline
+          );
+        } else {
+          const cancerTypeTokens = [
+            createMarkdownTextToken(md, cancerTypeName),
+            createMarkdownTextToken(md, ' ('),
+          ];
+          let idx = 0;
+          for (const mutationName of currentMutationNamesForCancerType) {
+            if (idx > 0) {
+              cancerTypeTokens.push(createMarkdownTextToken(md, ', '));
+            }
+            cancerTypeTokens.push(
+              ...createCancerTypeLink(
+                md,
+                currentGene,
+                mutationName,
+                cancerTypeName,
+                mutationName,
+                isGermline
+              )
+            );
+            idx++;
+          }
+          cancerTypeTokens.push(createMarkdownTextToken(md, ')'));
+          token.children = cancerTypeTokens;
+        }
+      }
     } else if (inTh && ['Gene', 'Gene(s)'].includes(token.content)) {
       geneIdx = columnIdx;
     } else if (inTh && token.content === 'Setting') {
       settingIdx = columnIdx;
     } else if (inTh && token.content === 'Mutation') {
       mutationIdx = columnIdx;
+    } else if (
+      inTh &&
+      ['Cancer Type', 'Cancer Type(s)', 'Tumor Type', 'Tumor Type(s)'].includes(
+        token.content
+      )
+    ) {
+      cancerTypeIdx = columnIdx;
     }
   }
+}
+
+function getMonthIndexFromName(monthName) {
+  const monthLookup = {
+    january: 1,
+    february: 2,
+    march: 3,
+    april: 4,
+    may: 5,
+    june: 6,
+    july: 7,
+    august: 8,
+    september: 9,
+    october: 10,
+    november: 11,
+    december: 12,
+  };
+  return monthLookup[monthName.toLowerCase()] || -1;
+}
+
+function shouldAddCancerTypeLinksForFile(fileName) {
+  const fileNameWithoutExt = path.basename(fileName, path.extname(fileName));
+  const numericDateMatch = fileNameWithoutExt.match(/NewsContent(\d{2})(\d{4})/i);
+  if (numericDateMatch) {
+    const month = parseInt(numericDateMatch[1], 10);
+    const year = parseInt(numericDateMatch[2], 10);
+    return year > 2026 || (year === 2026 && month >= 7);
+  }
+
+  const monthNameDateMatch = fileNameWithoutExt.match(
+    /(january|february|march|april|may|june|july|august|september|october|november|december)[^0-9]*(\d{4})/i
+  );
+  if (monthNameDateMatch) {
+    const month = getMonthIndexFromName(monthNameDateMatch[1]);
+    const year = parseInt(monthNameDateMatch[2], 10);
+    return year > 2026 || (year === 2026 && month >= 7);
+  }
+
+  return false;
+}
+
+let enableCancerTypeLinks = false;
+
+function createCancerTypeLink(
+  md,
+  currentGene,
+  mutationName,
+  cancerType,
+  linkText,
+  germline = false
+) {
+  const { isTag, mutationName: parsedMutationName } = parseTaggedMutation(
+    mutationName
+  );
+  const cancerTypeLinkTags = createMarkdownToken(md, 'AlterationPageLink');
+  cancerTypeLinkTags[0].attrSet('hugoSymbol', currentGene);
+  cancerTypeLinkTags[0].attrSet('alteration', parsedMutationName);
+  cancerTypeLinkTags[0].attrSet('cancerType', cancerType);
+  cancerTypeLinkTags[0].attrSet('germline', `${booleanPropertyMark}${germline}`);
+  if (isTag === true) {
+    cancerTypeLinkTags[0].attrSet('isTag', `${booleanPropertyMark}true`);
+  }
+  const linkEndToken = cancerTypeLinkTags.pop();
+  cancerTypeLinkTags.push(createMarkdownTextToken(md, linkText), linkEndToken);
+  return cancerTypeLinkTags;
 }
 
 function addTableHeaderListStyles(state) {
@@ -619,6 +761,7 @@ if (files.length === 0) {
 files.forEach(file => {
   const filePath = path.join(inputFolder, file);
   const content = fs.readFileSync(filePath, 'utf-8');
+  enableCancerTypeLinks = shouldAddCancerTypeLinksForFile(file);
   const htmlContent = fixHtmlString(md.render(content));
 
   const componentName = path
