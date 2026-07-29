@@ -3,7 +3,7 @@ import { inject, observer } from 'mobx-react';
 import { Button, Col, Row } from 'react-bootstrap';
 import classnames from 'classnames';
 import privateClient from 'app/shared/api/oncokbPrivateClientInstance';
-import { remoteData } from 'cbioportal-frontend-commons';
+import { DefaultTooltip, remoteData } from 'cbioportal-frontend-commons';
 import {
   action,
   computed,
@@ -981,6 +981,39 @@ export default class ActionableGenesPage extends React.Component<
     return <OncoKBTable key={this.oncokbTableKey} {...this.oncokbTableProps} />;
   }
 
+  renderDownloadButton() {
+    const canDownload = this.props.authenticationStore
+      .isAuthenticatedAndApprovedUser;
+    const downloadButton = (
+      <AuthDownloadButton
+        size={'sm'}
+        className={classnames('ml-2')}
+        getDownloadData={this.downloadAssociation}
+        fileName={'oncokb_biomarker_drug_associations.tsv'}
+        buttonText={'Associations'}
+        disabled={!canDownload}
+        style={canDownload ? undefined : { pointerEvents: 'none' }}
+      />
+    );
+
+    if (canDownload) {
+      return downloadButton;
+    }
+
+    // Account not approved yet: disable and explain why. The button is wrapped
+    // in a span so the tooltip still fires over the disabled (non-interactive)
+    // button. Unauthenticated users are already handled by the paywall.
+    return (
+      <DefaultTooltip
+        overlay={
+          'Your account has not been approved yet, so downloading is disabled.'
+        }
+      >
+        <span className={classnames('d-inline-block')}>{downloadButton}</span>
+      </DefaultTooltip>
+    );
+  }
+
   @computed
   get filterResult() {
     const evidencePostFix = this.fdaSectionIsOpen
@@ -1130,13 +1163,7 @@ export default class ActionableGenesPage extends React.Component<
         <Row className={'mb-2'}>
           <Col className="d-flex">
             <span>{this.filterResult}</span>
-            <AuthDownloadButton
-              size={'sm'}
-              className={classnames('ml-2')}
-              getDownloadData={this.downloadAssociation}
-              fileName={'oncokb_biomarker_drug_associations.tsv'}
-              buttonText={'Associations'}
-            />
+            {this.renderDownloadButton()}
             {this.treatmentsAreFiltered ? (
               <Button
                 variant="link"
