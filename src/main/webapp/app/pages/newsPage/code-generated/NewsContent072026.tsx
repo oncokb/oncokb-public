@@ -14,20 +14,19 @@ export default function NewsContent072026() {
     <>
       <ul>
         <li>
-          Following consultation with members of the{' '}
-          <Link to="/team">Clinical Genomics Annotation Committee (CGAC)</Link>{' '}
-          with hematologic expertise and consensus approval by CGAC, we have
-          updated our rules for assigning Level 3B to biomarkers detected in
-          hematologic cancers. Biomarkers with Level 1, 2, or 3A evidence in a
-          specified hematologic cancer will now propagate to Level 3B in other
-          hematologic cancers, unless specific evidence indicates otherwise.
-          Please see our updated <Link to="/sop">OncoKB™ SOP v6.3</Link> for
-          full details.
+          Following consultation and approval from hematologic experts in our{' '}
+          <Link to="/team">Clinical Genomics Annotation Committee (CGAC)</Link>,
+          we have updated our rules for assigning Level 3B to biomarkers
+          detected in hematologic cancers. Biomarkers assigned Levels 1, 2, or
+          3A in a specified hematologic cancer will now propagate to Level 3B in
+          other hematologic cancers, unless specific evidence indicates
+          otherwise. Please see our updated{' '}
+          <Link to="/sop">OncoKB™ SOP v6.3</Link> for full details.
         </li>
         <li>
-          Update to our <Link to="/faq">FAQ</Link> page regarding our rules on
-          Level 3B biomarker-drug association propagation in solid cancers and
-          hematologic cancers
+          Also, for specifics on the changes to the rule regarding biomarker
+          propagation to Level 3B in solid and hematologic cancers, please refer
+          to our <Link to="/faq">FAQ</Link> page.
         </li>
       </ul>
       <p>
@@ -69,10 +68,10 @@ export default function NewsContent072026() {
                 <AlterationPageLink
                   hugoSymbol="IDH2"
                   alteration="Oncogenic Mutations"
-                  cancerType="Myelodysplatic Syndromes"
+                  cancerType="Myelodysplastic Syndromes"
                   germline={false}
                 >
-                  Myelodysplatic Syndromes
+                  Myelodysplastic Syndromes
                 </AlterationPageLink>
               </td>
               <td>Enasidenib</td>
@@ -96,7 +95,7 @@ export default function NewsContent072026() {
                 (excluding R132C, R132G, R132H, R132L, R132S, which are already
                 leveled)
               </td>
-              <td>Myelodysplatic Syndromes</td>
+              <td>Myelodysplastic Syndromes</td>
               <td>Olutasidenib, Olutasidenib + Azacitidine</td>
               <td>
                 PMID:{' '}
@@ -192,7 +191,7 @@ export default function NewsContent072026() {
                 Pertuzumab (Level 1)
               </td>
               <td>
-                Palbociclib + Trastuzumab + Hormone Therapy + Pertuzumab,
+                Palbociclib + Trastuzumab + Hormone Therapy + Pertuzumab
                 Palbociclib + Trastuzumab + Hormone Therapy (Level 1)
               </td>
               <td>
@@ -249,7 +248,7 @@ export default function NewsContent072026() {
                   R132S
                 </AlterationPageLink>
               </td>
-              <td>Myelodysplatic Syndromes</td>
+              <td>Myelodysplastic Syndromes</td>
               <td>Ivosidenib (Level 1)</td>
               <td>Olutasidenib, Olutasidenib + Azacitidine (Level 3A)</td>
               <td>
@@ -513,8 +512,6 @@ export default function NewsContent072026() {
                 <a href="https://pubmed.ncbi.nlm.nih.gov/16172030/">16172030</a>
                 ,{' '}
                 <a href="https://pubmed.ncbi.nlm.nih.gov/12204532/">12204532</a>
-                ,{' '}
-                <a href="https://pubmed.ncbi.nlm.nih.gov/16172030/">16172030</a>
                 ,{' '}
                 <a href="https://pubmed.ncbi.nlm.nih.gov/15710326/">15710326</a>
                 ,{' '}
