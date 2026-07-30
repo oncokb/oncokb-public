@@ -400,7 +400,7 @@ function addAutoTableLinks(md, state) {
         currentGene === '' ||
         currentGene.includes(',') ||
         !currentMutationLinkableForCancerType ||
-        currentMutationNamesForCancerType.length !== 1
+        currentMutationNamesForCancerType.length === 0
       ) {
         continue;
       }

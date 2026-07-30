@@ -144,7 +144,16 @@ export default function NewsContent072026() {
                   Oncogenic Mutations
                 </AlterationPageLink>
               </td>
-              <td>Prostate Cancer</td>
+              <td>
+                <AlterationPageLink
+                  hugoSymbol="PTEN"
+                  alteration="Deletion"
+                  cancerType="Prostate Cancer"
+                  germline={false}
+                >
+                  Prostate Cancer
+                </AlterationPageLink>
+              </td>
               <td>Capivasertib + Abiraterone + Prednisone</td>
               <td>
                 <a href="https://www.fda.gov/drugs/resources-information-approved-drugs/fda-approves-capivasertib-abiraterone-and-prednisone-pten-deficient-androgen-pathway-modulation">
@@ -269,7 +278,16 @@ export default function NewsContent072026() {
                   R132S
                 </AlterationPageLink>
               </td>
-              <td>Myelodysplastic Syndromes</td>
+              <td>
+                <AlterationPageLink
+                  hugoSymbol="IDH1"
+                  alteration="R132C"
+                  cancerType="Myelodysplastic Syndromes"
+                  germline={false}
+                >
+                  Myelodysplastic Syndromes
+                </AlterationPageLink>
+              </td>
               <td>Ivosidenib (Level 1)</td>
               <td>Olutasidenib, Olutasidenib + Azacitidine (Level 3A)</td>
               <td>
