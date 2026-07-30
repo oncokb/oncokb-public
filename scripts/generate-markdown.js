@@ -392,7 +392,7 @@ function addAutoTableLinks(md, state) {
         currentGene === '' ||
         currentGene.includes(',') ||
         !currentMutationLinkableForCancerType ||
-        currentMutationNamesForCancerType.length === 0
+        currentMutationNamesForCancerType.length !== 1
       ) {
         continue;
       }
@@ -404,40 +404,14 @@ function addAutoTableLinks(md, state) {
 
       if (enableCancerTypeLinks) {
         const isGermline = currentGeneSetting === 'germline';
-        if (currentMutationNamesForCancerType.length === 1) {
-          token.children = createCancerTypeLink(
-            md,
-            currentGene,
-            currentMutationNamesForCancerType[0],
-            cancerTypeName,
-            cancerTypeName,
-            isGermline
-          );
-        } else {
-          const cancerTypeTokens = [
-            createMarkdownTextToken(md, cancerTypeName),
-            createMarkdownTextToken(md, ' ('),
-          ];
-          let idx = 0;
-          for (const mutationName of currentMutationNamesForCancerType) {
-            if (idx > 0) {
-              cancerTypeTokens.push(createMarkdownTextToken(md, ', '));
-            }
-            cancerTypeTokens.push(
-              ...createCancerTypeLink(
-                md,
-                currentGene,
-                mutationName,
-                cancerTypeName,
-                mutationName,
-                isGermline
-              )
-            );
-            idx++;
-          }
-          cancerTypeTokens.push(createMarkdownTextToken(md, ')'));
-          token.children = cancerTypeTokens;
-        }
+        token.children = createCancerTypeLink(
+          md,
+          currentGene,
+          currentMutationNamesForCancerType[0],
+          cancerTypeName,
+          cancerTypeName,
+          isGermline
+        );
       }
     } else if (inTh && ['Gene', 'Gene(s)'].includes(token.content)) {
       geneIdx = columnIdx;

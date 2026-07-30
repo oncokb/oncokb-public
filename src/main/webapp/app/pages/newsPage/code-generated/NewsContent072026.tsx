@@ -124,27 +124,7 @@ export default function NewsContent072026() {
                   Oncogenic Mutations
                 </AlterationPageLink>
               </td>
-              <td>
-                Prostate Cancer (
-                <AlterationPageLink
-                  hugoSymbol="PTEN"
-                  alteration="Deletion"
-                  cancerType="Prostate Cancer"
-                  germline={false}
-                >
-                  Deletion
-                </AlterationPageLink>
-                ,{' '}
-                <AlterationPageLink
-                  hugoSymbol="PTEN"
-                  alteration="Oncogenic Mutations"
-                  cancerType="Prostate Cancer"
-                  germline={false}
-                >
-                  Oncogenic Mutations
-                </AlterationPageLink>
-                )
-              </td>
+              <td>Prostate Cancer</td>
               <td>Capivasertib + Abiraterone + Prednisone</td>
               <td>
                 <a href="https://www.fda.gov/drugs/resources-information-approved-drugs/fda-approves-capivasertib-abiraterone-and-prednisone-pten-deficient-androgen-pathway-modulation">
@@ -269,54 +249,7 @@ export default function NewsContent072026() {
                   R132S
                 </AlterationPageLink>
               </td>
-              <td>
-                Myelodysplatic Syndromes (
-                <AlterationPageLink
-                  hugoSymbol="IDH1"
-                  alteration="R132C"
-                  cancerType="Myelodysplatic Syndromes"
-                  germline={false}
-                >
-                  R132C
-                </AlterationPageLink>
-                ,{' '}
-                <AlterationPageLink
-                  hugoSymbol="IDH1"
-                  alteration="R132G"
-                  cancerType="Myelodysplatic Syndromes"
-                  germline={false}
-                >
-                  R132G
-                </AlterationPageLink>
-                ,{' '}
-                <AlterationPageLink
-                  hugoSymbol="IDH1"
-                  alteration="R132H"
-                  cancerType="Myelodysplatic Syndromes"
-                  germline={false}
-                >
-                  R132H
-                </AlterationPageLink>
-                ,{' '}
-                <AlterationPageLink
-                  hugoSymbol="IDH1"
-                  alteration="R132L"
-                  cancerType="Myelodysplatic Syndromes"
-                  germline={false}
-                >
-                  R132L
-                </AlterationPageLink>
-                ,{' '}
-                <AlterationPageLink
-                  hugoSymbol="IDH1"
-                  alteration="R132S"
-                  cancerType="Myelodysplatic Syndromes"
-                  germline={false}
-                >
-                  R132S
-                </AlterationPageLink>
-                )
-              </td>
+              <td>Myelodysplatic Syndromes</td>
               <td>Ivosidenib (Level 1)</td>
               <td>Olutasidenib, Olutasidenib + Azacitidine (Level 3A)</td>
               <td>
