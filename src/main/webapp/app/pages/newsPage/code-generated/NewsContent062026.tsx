@@ -39,9 +39,9 @@ export default function NewsContent062026() {
             Oncogenic Mutations
           </Link>{' '}
           to{' '}
-          <em>
-            <strong>ERBB2</strong>
-          </em>{' '}
+          <strong>
+            <em>ERBB2</em>
+          </strong>{' '}
           <strong>
             <Link to="/gene/ERBB2/somatic/tag/Oncogenic%20Missense%20Mutations">
               Oncogenic Missense Mutations

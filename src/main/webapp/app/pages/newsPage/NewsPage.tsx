@@ -152,29 +152,34 @@ export default class NewsPage extends React.Component<
             <Tab.Pane eventKey="scientific">
               <div>
                 <p>
-                  While we aim to keep the information up to date and correct,
-                  there will inevitably be gaps or mistakes. Please help us to
-                  identify any issues by <b>sending an email to</b>{' '}
+                  Follow {ONCOKB_TM} here for data updates including improved
+                  annotations and new alterations plus new features as these
+                  roll out!
+                </p>
+                <p>
+                  While we work to keep {ONCOKB_TM} accurate and current, gaps
+                  and errors are inevitable. Help us catch them: email{' '}
                   <a
                     href={`mailto:${ONCOKB_CONTACT_EMAIL}?subject=${ONCOKB_TM} Feedback`}
                   >
                     {ONCOKB_CONTACT_EMAIL}
-                  </a>
-                  , or use the feedback button that appears next to alterations
-                  in cBioPortal.
+                  </a>{' '}
+                  or use the feedback button next to alterations in cBioPortal.
                 </p>
                 <p>
-                  <b>Stay tuned</b> for future data updates (improved
-                  annotations, new alterations), as well as new features. You
-                  can follow us on <LinkedInLink />, or subscribe to our{' '}
+                  To stay in the loop, follow us on <LinkedInLink short /> or
+                  subscribe to our{' '}
                   <UserGoogleGroupLink>
                     low-volume email list
-                  </UserGoogleGroupLink>{' '}
-                  for updates.
+                  </UserGoogleGroupLink>
+                  .
                 </p>
-                <CitationText />
+                <p>
+                  <CitationText />
+                </p>
               </div>
               <div className="mt-4">
+                <NewsList date={'07312026'} />
                 <NewsList date={'06252026'} />
                 <NewsList date={'05292026'} />
                 <NewsList date={'04302026'} />

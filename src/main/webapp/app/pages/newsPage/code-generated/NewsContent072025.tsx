@@ -48,7 +48,13 @@ export default function NewsContent072025() {
               <td>1</td>
               <td>{getAlternativeGenePageLinks('EGFR', false)}</td>
               <td>
-                Oncogenic Mutations
+                <AlterationPageLink
+                  hugoSymbol="EGFR"
+                  alteration="Oncogenic Mutations"
+                  germline={false}
+                >
+                  Oncogenic Mutations
+                </AlterationPageLink>
                 <br />
                 <br />
                 (excluding L858R, Exon 19 deletions, T790M, G719, L861Q, S768I,
