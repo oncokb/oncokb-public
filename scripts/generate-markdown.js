@@ -306,12 +306,20 @@ function addAutoTableLinks(md, state) {
         // Oncogenic Mutations with excluding do not need links, but they
         // need to have a few line breaks between "Mutations" and "(excluding"
         const oncogenicMutationsStr = 'Oncogenic Mutations';
+        currentMutationLinkableForCancerType = true;
+        currentMutationNamesForCancerType = [oncogenicMutationsStr];
         const excludingSection = child.content.replace(
           `${oncogenicMutationsStr} `,
           ''
         );
+        const oncogenicMutationLinks = createMutationLinks(
+          md,
+          currentGene,
+          [oncogenicMutationsStr],
+          currentGeneSetting === 'germline'
+        );
         token.children = [
-          createMarkdownTextToken(md, oncogenicMutationsStr),
+          ...oncogenicMutationLinks,
           // forcing <br/> to be the only tag added
           createMarkdownToken(md, 'br/')[0],
           createMarkdownToken(md, 'br/')[0],

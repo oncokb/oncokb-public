@@ -43,7 +43,13 @@ export default function NewsContent092025() {
               <td>2</td>
               <td>{getAlternativeGenePageLinks('ERBB2', false)}</td>
               <td>
-                Oncogenic Mutations
+                <AlterationPageLink
+                  hugoSymbol="ERBB2"
+                  alteration="Oncogenic Mutations"
+                  germline={false}
+                >
+                  Oncogenic Mutations
+                </AlterationPageLink>
                 <br />
                 <br />
                 (excluding select TKD activating mutations, which are currently

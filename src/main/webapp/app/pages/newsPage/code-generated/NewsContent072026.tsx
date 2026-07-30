@@ -95,13 +95,28 @@ export default function NewsContent072026() {
               <td>Somatic</td>
               <td>{getAlternativeGenePageLinks('IDH1', false)}</td>
               <td>
-                Oncogenic Mutations
+                <AlterationPageLink
+                  hugoSymbol="IDH1"
+                  alteration="Oncogenic Mutations"
+                  germline={false}
+                >
+                  Oncogenic Mutations
+                </AlterationPageLink>
                 <br />
                 <br />
                 (excluding R132C, R132G, R132H, R132L, R132S, which are already
                 leveled)
               </td>
-              <td>Myelodysplastic Syndromes</td>
+              <td>
+                <AlterationPageLink
+                  hugoSymbol="IDH1"
+                  alteration="Oncogenic Mutations"
+                  cancerType="Myelodysplastic Syndromes"
+                  germline={false}
+                >
+                  Myelodysplastic Syndromes
+                </AlterationPageLink>
+              </td>
               <td>Olutasidenib, Olutasidenib + Azacitidine</td>
               <td>
                 PMID:{' '}
