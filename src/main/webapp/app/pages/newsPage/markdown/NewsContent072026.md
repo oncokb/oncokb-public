@@ -1,7 +1,6 @@
 - Following consultation and approval from hematologic experts in our [Clinical Genomics Annotation Committee (CGAC)](https://www.oncokb.org/team), we have updated our rules for assigning Level 3B to biomarkers detected in hematologic cancers. Biomarkers assigned Levels 1, 2, or 3A in a specified hematologic cancer will now propagate to Level 3B in other hematologic cancers, unless specific evidence indicates otherwise. Please see our updated [OncoKB™ SOP v6.3](https://www.oncokb.org/sop) for full details.
-- Also, for specifics on the changes to the rule regarding biomarker propagation to Level 3B in solid and hematologic cancers, please refer to our [FAQ](https://www.oncokb.org/faq) page.
-
-**Updated Therapeutic Implications: Sensitivity**
+- Also, for specifics on the changes to the rule regarding biomarker propagation to Level 3B in solid and hematologic cancers, please refer to our [FAQ](https://faq.oncokb.org/data-curation#do-all-therapeutics-propagate-as-level-3b-in-other-indications) page.
+  **Updated Therapeutic Implications: Sensitivity**
 
 - New alteration(s) with a cancer type-specific level of evidence
 
