@@ -182,7 +182,7 @@ export default function NewsContent072026() {
               <th>Mutation</th>
               <th>Cancer Type</th>
               <th>Level-associated Drug(s) in OncoKB™</th>
-              <th>Drug(s) added to OncoKBTM</th>
+              <th>Drug(s) added to OncoKB™</th>
               <th>Evidence</th>
             </tr>
           </thead>
@@ -211,15 +211,15 @@ export default function NewsContent072026() {
                 </AlterationPageLink>
               </td>
               <td>
-                Ado-Trastuzumab Emtansine, Lapatinib + Capecitabine, Lapatinib +
-                Letrozole, Margetuximab + Chemotherapy, Neratinib, Neratinib +
-                Capecitabine, Trastuzumab, Trastuzumab + Chemotherapy,
-                Trastuzumab + Pertuzumab + Chemotherapy, Trastuzumab + Tucatinib
-                + Capecitabine, Trastuzumab Deruxtecan, Trastuzumab Deruxtecan +
-                Pertuzumab (Level 1)
+                Different treatment regimens that include HER2 targeting
+                antibodies: Ado-Trastuzumab Emtansine, Pertuzumab, Trastuzumab,
+                Trastuzumab Deruxtecan and/or HER2 kinase inhibitors: Lapatinib,
+                Neratinib, Tucatinib (Level 1)
               </td>
               <td>
                 Palbociclib + Trastuzumab + Hormone Therapy + Pertuzumab
+                <br />
+                <br />
                 Palbociclib + Trastuzumab + Hormone Therapy (Level 1)
               </td>
               <td>
@@ -783,7 +783,7 @@ export default function NewsContent072026() {
               <th>Mutation</th>
               <th>Cancer Type</th>
               <th>Level-associated Drug(s) in OncoKB™</th>
-              <th>Drug(s) added to OncoKBTM</th>
+              <th>Drug(s) added to OncoKB™</th>
               <th>Evidence</th>
             </tr>
           </thead>
