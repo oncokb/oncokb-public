@@ -33,6 +33,14 @@
       "description": "Mails Controller"
     },
     {
+      "name": "news-resource",
+      "description": "News Resource"
+    },
+    {
+      "name": "o-auth-token-controller",
+      "description": "O Auth Token Controller"
+    },
+    {
       "name": "o-auth-token-controller",
       "description": "O Auth Token Controller"
     },
@@ -2494,6 +2502,39 @@
         "deprecated": false
       }
     },
+    "/api/news/content-news": {
+      "get": {
+        "tags": [
+          "news-resource"
+        ],
+        "summary": "getContentNews",
+        "operationId": "getContentNewsUsingGET",
+        "produces": [
+          "*/*"
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "schema": {
+              "type": "array",
+              "items": {
+                "$ref": "#/definitions/ContentNews"
+              }
+            }
+          },
+          "401": {
+            "description": "Unauthorized"
+          },
+          "403": {
+            "description": "Forbidden"
+          },
+          "404": {
+            "description": "Not Found"
+          }
+        },
+        "deprecated": false
+      }
+    },
     "/api/mails/users/bulk": {
       "post": {
         "tags": [
@@ -4553,6 +4594,27 @@
       },
       "title": "AdditionalInfoDTO"
     },
+    "AlterationUpdates": {
+      "type": "object",
+      "properties": {
+        "alteration": {
+          "type": "string"
+        },
+        "cancerTypeUpdates": {
+          "type": "array",
+          "items": {
+            "$ref": "#/definitions/CancerTypeUpdates"
+          }
+        },
+        "updates": {
+          "type": "array",
+          "items": {
+            "$ref": "#/definitions/Update"
+          }
+        }
+      },
+      "title": "AlterationUpdates"
+    },
     "ApiAccessRequest": {
       "type": "object",
       "properties": {
@@ -4564,6 +4626,27 @@
         }
       },
       "title": "ApiAccessRequest"
+    },
+    "CancerTypeUpdates": {
+      "type": "object",
+      "properties": {
+        "cancerType": {
+          "type": "string"
+        },
+        "treatmentUpdates": {
+          "type": "array",
+          "items": {
+            "$ref": "#/definitions/TreatmentUpdates"
+          }
+        },
+        "updates": {
+          "type": "array",
+          "items": {
+            "$ref": "#/definitions/Update"
+          }
+        }
+      },
+      "title": "CancerTypeUpdates"
     },
     "BulkUserMailRequestVM": {
       "type": "object",
@@ -4834,6 +4917,42 @@
       },
       "title": "Contact"
     },
+    "ContentNews": {
+      "type": "object",
+      "properties": {
+        "dataVersion": {
+          "type": "string"
+        },
+        "germlineHistory": {
+          "$ref": "#/definitions/History"
+        },
+        "history": {
+          "$ref": "#/definitions/History"
+        }
+      },
+      "title": "ContentNews"
+    },
+    "GeneUpdates": {
+      "type": "object",
+      "properties": {
+        "alterationUpdates": {
+          "type": "array",
+          "items": {
+            "$ref": "#/definitions/AlterationUpdates"
+          }
+        },
+        "hugoSymbol": {
+          "type": "string"
+        },
+        "updates": {
+          "type": "array",
+          "items": {
+            "$ref": "#/definitions/Update"
+          }
+        }
+      },
+      "title": "GeneUpdates"
+    },
     "GracePeriodBlacklistVM": {
       "type": "object",
       "properties": {
@@ -4845,6 +4964,18 @@
         }
       },
       "title": "GracePeriodBlacklistVM"
+    },
+    "History": {
+      "type": "object",
+      "properties": {
+        "geneUpdates": {
+          "type": "array",
+          "items": {
+            "$ref": "#/definitions/GeneUpdates"
+          }
+        }
+      },
+      "title": "History"
     },
     "KeyAndPasswordVM": {
       "type": "object",
@@ -5271,6 +5402,21 @@
       },
       "title": "Token"
     },
+    "TreatmentUpdates": {
+      "type": "object",
+      "properties": {
+        "treatment": {
+          "type": "string"
+        },
+        "updates": {
+          "type": "array",
+          "items": {
+            "$ref": "#/definitions/Update"
+          }
+        }
+      },
+      "title": "TreatmentUpdates"
+    },
     "TrialAccount": {
       "type": "object",
       "properties": {
@@ -5282,6 +5428,28 @@
         }
       },
       "title": "TrialAccount"
+    },
+    "Update": {
+      "type": "object",
+      "properties": {
+        "field": {
+          "type": "string"
+        },
+        "new": {
+          "type": "string"
+        },
+        "old": {
+          "type": "string"
+        },
+        "operation": {
+          "type": "string"
+        },
+        "timestamp": {
+          "type": "integer",
+          "format": "int64"
+        }
+      },
+      "title": "Update"
     },
     "UpdateAllTokensResponse": {
       "type": "object",

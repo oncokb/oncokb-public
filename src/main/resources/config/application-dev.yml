@@ -205,3 +205,4 @@ application:
       all-users: {}
       developers: {}
       scientific-news: {}
+  oncokb-data-token: ## GitHub token granting read access to knowledgesystems/oncokb-data repo

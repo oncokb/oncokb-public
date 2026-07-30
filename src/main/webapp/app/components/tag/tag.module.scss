@@ -88,3 +88,27 @@
   color: rgba(130, 100, 230, 1);
   background-color: rgba(130, 100, 230, 0.07);
 }
+
+.deletedTag {
+  @extend .tag;
+  border: var(--radius-2, 2px) solid var(--Color-11, $primary);
+  border-color: rgba(220, 53, 69, 1);
+  color: rgba(220, 53, 69, 1);
+  background-color: rgba(220, 53, 69, 0.07);
+}
+
+.updatedTag {
+  @extend .tag;
+  border: var(--radius-2, 2px) solid var(--Color-11, $primary);
+  border-color: rgba(41, 128, 217, 1);
+  color: rgba(41, 128, 217, 1);
+  background-color: rgba(41, 128, 217, 0.07);
+}
+
+.promotedTag {
+  @extend .tag;
+  border: var(--radius-2, 2px) solid var(--Color-11, $primary);
+  border-color: rgba(19, 155, 122, 1);
+  color: rgba(19, 155, 122, 1);
+  background-color: rgba(19, 155, 122, 0.07);
+}

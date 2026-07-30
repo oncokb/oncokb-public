@@ -3,7 +3,6 @@ package org.mskcc.cbio.oncokb.config.application;
 import org.apache.commons.lang3.StringUtils;
 import org.mskcc.cbio.oncokb.domain.enumeration.ProjectProfile;
 import org.springframework.boot.context.properties.ConfigurationProperties;
-import org.mskcc.oncokb.meta.model.application.AWSProperties;
 import org.mskcc.oncokb.meta.model.application.RedisProperties;
 
 import java.util.ArrayList;
@@ -44,6 +43,7 @@ public class ApplicationProperties {
     private RateLimitProperties rateLimit = new RateLimitProperties();
     private TokenStatsProperties tokenStats = new TokenStatsProperties();
     private KeycloakProperties keycloak = new KeycloakProperties();
+    private String oncokbDataToken = "";
     private UsageLiquibaseProperties usageLiquibase = new UsageLiquibaseProperties();
     private SendGridProperties sendgrid = new SendGridProperties();
 
@@ -244,6 +244,14 @@ public class ApplicationProperties {
 
     public void setKeycloak(KeycloakProperties keycloak) {
         this.keycloak = keycloak;
+    }
+
+    public String getOncokbDataToken() {
+        return oncokbDataToken;
+    }
+
+    public void setOncokbDataToken(String oncokbDataToken) {
+        this.oncokbDataToken = oncokbDataToken;
     }
 
     public UsageLiquibaseProperties getUsageLiquibase() {
