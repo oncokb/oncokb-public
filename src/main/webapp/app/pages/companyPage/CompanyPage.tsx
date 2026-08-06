@@ -633,35 +633,30 @@ export default class CompanyPage extends React.Component<ICompanyPage> {
   }
 
   @action.bound
-  extendTrialAccess(newDate: string) {
-    Promise.all(
-      this.trialTokens.map(token => {
-        client
-          .updateTokenUsingPUT({
-            token: {
-              ...token,
-              expiration: newDate,
-            },
-          })
-          .then(
-            () => {},
-            (error: Error) => {
-              notifyError(error);
-            }
-          );
-      })
-    ).then(
-      () => {
-        this.getCompanyUserTokens().then(
-          tokens => {
-            this.companyUserTokens = tokens;
-            notifySuccess(`Extended all users' trial access to ${newDate}`);
-          },
-          error => notifyError(error)
+  async extendTrialAccess(newDate: string) {
+    try {
+      const response = await client.updateTokensUsingPUT({
+        tokens: this.trialTokens.map(token => ({
+          ...token,
+          expiration: newDate,
+        })),
+      });
+      if (response.failedTokens.length > 0) {
+        response.failedTokens.map(token => token.name);
+        notifyError(
+          new Error(
+            `Failed to update some user tokens: ${response.failedTokens
+              .map(token => token.token)
+              .join(', ')}.`
+          )
         );
-      },
-      error => notifyError(error)
-    );
+      } else {
+        this.companyUserTokens = await this.getCompanyUserTokens();
+        notifySuccess(`Extended all users' trial access to ${newDate}`);
+      }
+    } catch (error) {
+      notifyError(error as Error);
+    }
   }
 
   @computed

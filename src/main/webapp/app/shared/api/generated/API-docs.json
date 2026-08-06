@@ -2374,6 +2374,56 @@
         "deprecated": false
       }
     },
+    "/api/tokens/updateAll": {
+      "put": {
+        "tags": [
+          "token-resource"
+        ],
+        "summary": "updateTokens",
+        "operationId": "updateTokensUsingPUT",
+        "consumes": [
+          "application/json"
+        ],
+        "produces": [
+          "*/*"
+        ],
+        "parameters": [
+          {
+            "in": "body",
+            "name": "tokens",
+            "description": "tokens",
+            "required": true,
+            "schema": {
+              "type": "array",
+              "items": {
+                "$ref": "#/definitions/Token"
+              }
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "schema": {
+              "$ref": "#/definitions/UpdateAllTokensResponse"
+            }
+          },
+          "201": {
+            "description": "Created"
+          },
+          "401": {
+            "description": "Unauthorized"
+          },
+          "403": {
+            "description": "Forbidden"
+          },
+          "404": {
+            "description": "Not Found"
+          }
+        },
+        "deprecated": false
+      }
+    },
     "/api/tokens/{uuid}": {
       "get": {
         "tags": [
@@ -4717,6 +4767,24 @@
         }
       },
       "title": "TrialAccount"
+    },
+    "UpdateAllTokensResponse": {
+      "type": "object",
+      "properties": {
+        "failedTokens": {
+          "type": "array",
+          "items": {
+            "$ref": "#/definitions/Token"
+          }
+        },
+        "updatedTokens": {
+          "type": "array",
+          "items": {
+            "$ref": "#/definitions/Token"
+          }
+        }
+      },
+      "title": "UpdateAllTokensResponse"
     },
     "UsageAnalysisRow": {
       "type": "object",

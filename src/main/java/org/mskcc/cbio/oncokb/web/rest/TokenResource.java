@@ -14,6 +14,7 @@ import org.springframework.web.bind.annotation.*;
 import javax.validation.Valid;
 import java.net.URI;
 import java.net.URISyntaxException;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 import java.util.UUID;
@@ -74,6 +75,27 @@ public class TokenResource {
         Token result = tokenService.save(token);
         return ResponseEntity.ok()
             .body(result);
+    }
+
+    @PutMapping("/tokens/updateAll")
+    public ResponseEntity<UpdateAllTokensResponse> updateTokens(@Valid @RequestBody List<Token> tokens) {
+        log.debug("REST request to update all tokens : {}", tokens);
+        UpdateAllTokensResponse response = new UpdateAllTokensResponse();
+        for (int i = 0; i < tokens.size(); i++) {
+            Token newToken = tokens.get(i);
+            if (newToken != null) {
+                response.updatedTokens.add(tokenService.save(newToken));
+            } else {
+                log.warn("Token failed to updated because ID was null: {}", newToken);
+                response.failedTokens.add(newToken);
+            }
+        }
+        return  ResponseEntity.ok().body(response);
+    }
+
+    private static class UpdateAllTokensResponse {
+        public List<Token> updatedTokens = new ArrayList<>();
+        public List<Token> failedTokens = new ArrayList<>();;
     }
 
     /**
