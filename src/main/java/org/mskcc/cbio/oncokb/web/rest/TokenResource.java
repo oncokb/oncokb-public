@@ -83,7 +83,7 @@ public class TokenResource {
         UpdateAllTokensResponse response = new UpdateAllTokensResponse();
         for (int i = 0; i < tokens.size(); i++) {
             Token newToken = tokens.get(i);
-            if (newToken != null) {
+            if (newToken.getId() != null) {
                 response.updatedTokens.add(tokenService.save(newToken));
             } else {
                 log.warn("Token failed to updated because ID was null: {}", newToken);
