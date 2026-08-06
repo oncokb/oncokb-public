@@ -290,6 +290,12 @@ export type TrialAccount = {
         'licenseAgreement': LicenseAgreement
 
 };
+export type UpdateAllTokensResponse = {
+    'failedTokens': Array < Token >
+
+        'updatedTokens': Array < Token >
+
+};
 export type UsageAnalysisRow = {
     'maxUsageProportion': number
 
@@ -4789,6 +4795,82 @@ export default class API {
         $domain ? : string
     }): Promise < Token > {
         return this.updateTokenUsingPUTWithHttpInfo(parameters).then(function(response: request.Response) {
+            return response.body;
+        });
+    };
+    updateTokensUsingPUTURL(parameters: {
+        'tokens': Array < Token > ,
+        $queryParameters ? : any
+    }): string {
+        let queryParameters: any = {};
+        let path = '/api/tokens/updateAll';
+
+        if (parameters.$queryParameters) {
+            Object.keys(parameters.$queryParameters).forEach(function(parameterName) {
+                var parameter = parameters.$queryParameters[parameterName];
+                queryParameters[parameterName] = parameter;
+            });
+        }
+        let keys = Object.keys(queryParameters);
+        return this.domain + path + (keys.length > 0 ? '?' + (keys.map(key => key + '=' + encodeURIComponent(queryParameters[key])).join('&')) : '');
+    };
+
+    /**
+     * updateTokens
+     * @method
+     * @name API#updateTokensUsingPUT
+     * @param {} tokens - tokens
+     */
+    updateTokensUsingPUTWithHttpInfo(parameters: {
+        'tokens': Array < Token > ,
+        $queryParameters ? : any,
+        $domain ? : string
+    }): Promise < request.Response > {
+        const domain = parameters.$domain ? parameters.$domain : this.domain;
+        const errorHandlers = this.errorHandlers;
+        const request = this.request;
+        let path = '/api/tokens/updateAll';
+        let body: any;
+        let queryParameters: any = {};
+        let headers: any = {};
+        let form: any = {};
+        return new Promise(function(resolve, reject) {
+            headers['Accept'] = '*/*';
+            headers['Content-Type'] = 'application/json';
+
+            if (parameters['tokens'] !== undefined) {
+                body = parameters['tokens'];
+            }
+
+            if (parameters['tokens'] === undefined) {
+                reject(new Error('Missing required  parameter: tokens'));
+                return;
+            }
+
+            if (parameters.$queryParameters) {
+                Object.keys(parameters.$queryParameters).forEach(function(parameterName) {
+                    var parameter = parameters.$queryParameters[parameterName];
+                    queryParameters[parameterName] = parameter;
+                });
+            }
+
+            request('PUT', domain + path, body, headers, queryParameters, form, reject, resolve, errorHandlers);
+
+        });
+    };
+
+    /**
+     * updateTokens
+     * @method
+     * @name API#updateTokensUsingPUT
+     * @param {} tokens - tokens
+     */
+    updateTokensUsingPUT(parameters: {
+        'tokens': Array < Token > ,
+        $queryParameters ? : any,
+        $domain ? : string
+    }): Promise < UpdateAllTokensResponse > {
+        return this.updateTokensUsingPUTWithHttpInfo(parameters).then(function(response: request.Response) {
             return response.body;
         });
     };
