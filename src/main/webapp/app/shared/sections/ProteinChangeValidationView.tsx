@@ -15,8 +15,6 @@ type ProteinChangeValidationViewProps = {
   // Gene being annotated, e.g. "BRAF"
   hugoSymbol: string;
   referenceGenome: REFERENCE_GENOME;
-  // Canonical Ensembl transcript OncoKB annotates against, e.g. "ENST00000288602"
-  canonicalTranscript?: string;
 };
 
 const SupportEmailLink: React.FunctionComponent = () => (
@@ -27,7 +25,6 @@ const ProteinChangeValidationView: React.FunctionComponent<ProteinChangeValidati
   validation,
   hugoSymbol,
   referenceGenome,
-  canonicalTranscript,
 }) => {
   const geneName = hugoSymbol || 'the gene you are annotating';
 
@@ -80,12 +77,6 @@ const ProteinChangeValidationView: React.FunctionComponent<ProteinChangeValidati
       return (
         <Alert variant="warning">
           <p className={styles.message}>{validation.message}</p>
-          {canonicalTranscript && (
-            <p className={styles.meta}>
-              OncoKB annotates against the canonical transcript{' '}
-              {canonicalTranscript}.
-            </p>
-          )}
         </Alert>
       );
   }

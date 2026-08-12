@@ -112,7 +112,9 @@ export class SomaticGermlineAlterationPage extends React.Component<
   private selectedTab: ANNOTATION_PAGE_TAB_KEYS;
 
   @observable showMutationEffect = true;
-  @observable showAdditionalGeneInfo = false;
+  // Undefined until the user toggles the section, so an invalid protein change can
+  // open it by default without overriding an explicit choice afterwards.
+  @observable additionalGeneInfoToggledTo?: boolean;
 
   constructor(props: SomaticGermlineAlterationPageProps) {
     super(props);
@@ -157,7 +159,12 @@ export class SomaticGermlineAlterationPage extends React.Component<
 
   @action.bound
   toggleAdditionalGeneInfo() {
-    this.showAdditionalGeneInfo = !this.showAdditionalGeneInfo;
+    this.additionalGeneInfoToggledTo = !this.showAdditionalGeneInfo;
+  }
+
+  @computed
+  get showAdditionalGeneInfo() {
+    return this.additionalGeneInfoToggledTo ?? this.hasInvalidProteinChange;
   }
 
   @action.bound
@@ -697,12 +704,6 @@ export class SomaticGermlineAlterationPage extends React.Component<
                       validation={this.proteinChangeValidation}
                       hugoSymbol={this.store.hugoSymbol}
                       referenceGenome={this.store.referenceGenomeQuery}
-                      canonicalTranscript={
-                        this.store.referenceGenomeQuery ===
-                        REFERENCE_GENOME.GRCh38
-                          ? this.store.gene.result.grch38Isoform
-                          : this.store.gene.result.grch37Isoform
-                      }
                     />
                   )}
                   <GeneAdditionalInfoSection
