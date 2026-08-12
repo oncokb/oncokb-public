@@ -404,7 +404,7 @@ export const IMG_MAX_WIDTH = 800;
 export const COMPONENT_PADDING = ['pl-2', 'pr-2', 'mb-2'];
 export const H5_FONT_SIZE = '1.25rem';
 export const H5_MARGIN_BOTTOM = '.5rem';
-export const FONT_FAMILY = "'Gotham Book', sans-serif";
+export const FONT_FAMILY = "'Roboto', sans-serif";
 
 // Defaults for tooltip size
 export const TOOLTIP_MAX_HEIGHT = 300;

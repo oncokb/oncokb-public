@@ -270,7 +270,7 @@ const SomaticTagCancerTypePage = inject(
                               return {
                                 ...base,
                                 fontSize: '1rem',
-                                fontFamily: '"Gotham Book", serif',
+                                fontFamily: '"Roboto", sans-serif',
                               };
                             },
                           }}

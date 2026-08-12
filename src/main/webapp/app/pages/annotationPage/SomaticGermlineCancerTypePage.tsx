@@ -679,7 +679,7 @@ export class SomaticGermlineCancerTypePage extends React.Component<
                             return {
                               ...base,
                               fontSize: '1rem',
-                              fontFamily: '"Gotham Book", serif',
+                              fontFamily: '"Roboto", sans-serif',
                             };
                           },
                         }}

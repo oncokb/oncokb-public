@@ -1,5 +1,5 @@
 .app-loading {
-  font-family: 'Gotham Book', Arial, sans-serif;
+  font-family: 'Roboto', Arial, sans-serif;
   position: relative;
   display: flex;
   flex-direction: column;
@@ -29,7 +29,7 @@
 
 .oncokb-fallback-card h1 {
   margin: 0 0 16px;
-  font-family: 'Gotham Medium', Arial, sans-serif;
+  font-family: 'Roboto', Arial, sans-serif;
   font-size: 2rem;
   line-height: 1.2;
 }
@@ -59,7 +59,7 @@
   align-items: center;
   justify-content: center;
   border-radius: 4px;
-  font-family: 'Gotham Medium', Arial, sans-serif;
+  font-family: 'Roboto', Arial, sans-serif;
   font-size: 14px;
   min-height: 38px;
   text-decoration: none;
