@@ -1,8 +1,10 @@
+@import '../../variables';
+
 .simpleTable {
   margin-bottom: 0 !important;
 
   th {
-    font-family: 'Gotham Medium';
+    font-family: $font-family-gotham-medium;
     border-top: 0 !important;
   }
 

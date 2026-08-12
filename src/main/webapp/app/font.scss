@@ -1,3 +1,5 @@
+@import 'variables';
+
 $carbon--font-display: auto !default;
 $font-source-path: '~@mskcc/core/fonts' !default;
 
@@ -6,7 +8,7 @@ $font-source-path: '~@mskcc/core/fonts' !default;
 /* Gotham Light computer font lookup */
 
 @font-face {
-  font-family: 'Gotham Light';
+  font-family: $font-name-gotham-light;
   font-style: normal;
   font-weight: 300;
   src: local('Gotham Light'), local('Gotham-Light'),
@@ -18,7 +20,7 @@ $font-source-path: '~@mskcc/core/fonts' !default;
 }
 
 @font-face {
-  font-family: 'Gotham Light';
+  font-family: $font-name-gotham-light;
   font-style: italic;
   font-weight: 300;
   src: url('#{$font-source-path}/gotham/woff2/GothamSSm-LightItalic_Web.woff2')
@@ -29,7 +31,7 @@ $font-source-path: '~@mskcc/core/fonts' !default;
 /* Gotham Book computer font lookup */
 
 @font-face {
-  font-family: 'Gotham Book';
+  font-family: $font-name-gotham-book;
   font-style: normal;
   font-weight: 400;
   src: local('Gotham Book'), local('Gotham-Book'),
@@ -41,7 +43,7 @@ $font-source-path: '~@mskcc/core/fonts' !default;
 }
 
 @font-face {
-  font-family: 'Gotham Book';
+  font-family: $font-name-gotham-book;
   font-style: italic;
   font-weight: 400;
   src: url('#{$font-source-path}/gotham/woff2/GothamSSm-BookItalic_Web.woff2')
@@ -53,7 +55,7 @@ $font-source-path: '~@mskcc/core/fonts' !default;
 /* Gotham Medium computer font lookup */
 
 @font-face {
-  font-family: 'Gotham Medium';
+  font-family: $font-name-gotham-medium;
   font-style: normal;
   font-weight: 500;
   src: local('Gotham Medium'), local('Gotham-Medium'),
@@ -65,7 +67,7 @@ $font-source-path: '~@mskcc/core/fonts' !default;
 }
 
 @font-face {
-  font-family: 'Gotham Medium';
+  font-family: $font-name-gotham-medium;
   font-style: italic;
   font-weight: 500;
   src: url('#{$font-source-path}/gotham/woff2/GothamSSm-MediumItalic_Web.woff2')
@@ -77,7 +79,7 @@ $font-source-path: '~@mskcc/core/fonts' !default;
 /* Gotham Bold computer font lookup */
 
 @font-face {
-  font-family: 'Gotham Bold';
+  font-family: $font-name-gotham-bold;
   font-style: normal;
   font-weight: 700;
   src: local('Gotham Bold'), local('Gotham-Bold'),
@@ -89,7 +91,7 @@ $font-source-path: '~@mskcc/core/fonts' !default;
 }
 
 @font-face {
-  font-family: 'Gotham Bold';
+  font-family: $font-name-gotham-bold;
   font-style: italic;
   font-weight: 700;
   src: url('#{$font-source-path}/gotham/woff2/GothamSSm-BoldItalic_Web.woff2')
@@ -99,7 +101,7 @@ $font-source-path: '~@mskcc/core/fonts' !default;
 }
 
 @font-face {
-  font-family: 'Gotham Black';
+  font-family: $font-name-gotham-black;
   font-style: normal;
   font-weight: 800;
   src: local('Gotham Black'), local('Gotham-Black'),
@@ -111,7 +113,7 @@ $font-source-path: '~@mskcc/core/fonts' !default;
 }
 
 @font-face {
-  font-family: 'Gotham Black';
+  font-family: $font-name-gotham-black;
   font-style: italic;
   font-weight: 800;
   src: url('#{$font-source-path}/gotham/woff2/GothamSSm-BlackItalic_Web.woff2')

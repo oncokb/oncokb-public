@@ -2,10 +2,27 @@
 
 $oncokb-font-font-size: 15px;
 $oncokb-blue: #0968c3;
-/* Overwrite the bootstrap defaults */
-$font-family-sans-serif: 'Gotham Book', serif;
 
-$font-family-sans-serif-bold: 'Gotham Bold', serif;
+$font-name-gotham-light: 'Gotham Light';
+$font-name-gotham-book: 'Gotham Book';
+$font-name-gotham-medium: 'Gotham Medium';
+$font-name-gotham-bold: 'Gotham Bold';
+$font-name-gotham-black: 'Gotham Black';
+$font-name-gotham: 'Gotham';
+$font-name-font-awesome: 'FontAwesome';
+
+$font-family-gotham-light: $font-name-gotham-light, serif;
+$font-family-gotham-book: $font-name-gotham-book, serif;
+$font-family-gotham-medium: $font-name-gotham-medium, serif;
+$font-family-gotham-bold: $font-name-gotham-bold, serif;
+$font-family-gotham-black: $font-name-gotham-black, serif;
+$font-family-gotham: $font-name-gotham, $font-name-gotham-medium;
+$font-family-font-awesome: $font-name-font-awesome;
+
+/* Overwrite the bootstrap defaults */
+$font-family-sans-serif: $font-family-gotham-book;
+
+$font-family-sans-serif-bold: $font-family-gotham-bold;
 // color overwrite
 $blue: $oncokb-blue;
 $grey: #808080; // grey

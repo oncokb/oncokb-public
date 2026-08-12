@@ -4,7 +4,7 @@
   h2 {
     font-size: 1rem;
     font-weight: 400;
-    font-family: 'Gotham Book', serif;
+    font-family: $font-family-gotham-book;
     line-height: 1.5;
     color: #684e00;
   }
@@ -14,6 +14,6 @@
 }
 
 .aiMlEmphasis {
-  font-family: 'Gotham Bold', serif;
+  font-family: $font-family-gotham-bold;
   font-weight: 700;
 }

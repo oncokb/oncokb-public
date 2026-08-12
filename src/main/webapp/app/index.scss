@@ -51,7 +51,7 @@ strong {
 
 .nav-tabs > a,
 .RRT__tab {
-  font-family: 'Gotham Medium';
+  font-family: $font-family-gotham-medium;
 }
 
 .user-messager-container-button {
@@ -211,7 +211,7 @@ strong {
     }
 
     li:before {
-      font-family: 'FontAwesome';
+      font-family: $font-family-font-awesome;
       content: '\f0a4';
       margin: 0 0.5rem 0 -1.5rem;
     }
@@ -293,7 +293,7 @@ input[type='radio']:checked {
   + label:before {
     width: 21px;
     letter-spacing: 10px;
-    font-family: FontAwesome;
+    font-family: $font-family-font-awesome;
     display: inline-block;
   }
 }
@@ -370,7 +370,7 @@ input[type='radio']:checked {
     box-shadow: none !important;
 
     &:before {
-      font-family: FontAwesome;
+      font-family: $font-family-font-awesome;
       content: '\f0dd';
       float: right;
     }
@@ -380,7 +380,7 @@ input[type='radio']:checked {
     box-shadow: none !important;
 
     &:before {
-      font-family: FontAwesome;
+      font-family: $font-family-font-awesome;
       content: '\f0de';
       float: right;
     }
