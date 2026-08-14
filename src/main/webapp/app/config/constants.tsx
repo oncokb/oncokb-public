@@ -560,6 +560,7 @@ export const DEFAULT_PROTEIN_CHANGE_VALIDATION: ProteinChangeValidation = {
 };
 
 export const DEFAULT_ANNOTATION: SomaticVariantAnnotation = {
+  alterationValidationError: null,
   alternativeOncoKbVariant: {
     gene: '',
     inputVariant: '',

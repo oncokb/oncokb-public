@@ -3012,6 +3012,26 @@
         }
       }
     },
+    "AlterationValidationError": {
+      "type": "object",
+      "properties": {
+        "message": {
+          "type": "string",
+          "example": "BRAF A600E: The reference amino acid at position 600 is V instead of A on the OncoKB canonical transcript.",
+          "description": "The same reason in words, naming the queried alteration and what the OncoKB canonical sequence has instead."
+        },
+        "type": {
+          "type": "string",
+          "description": "The reason the alteration was rejected.",
+          "enum": [
+            "REFERENCE_ALLELE_MISMATCH",
+            "POSITION_OUT_OF_RANGE",
+            "REVERSED_POSITION_RANGE",
+            "MALFORMED_ALTERATION"
+          ]
+        }
+      }
+    },
     "GenomicIndicator": {
       "type": "object",
       "properties": {
@@ -4185,6 +4205,10 @@
         },
         "alteration": {
           "$ref": "#/definitions/Alteration"
+        },
+        "alterationValidationError": {
+          "description": "(Nullable) Why the queried alteration was rejected as impossible against the OncoKB canonical sequence, leaving the query annotated at the gene level only. Carries both the reason to branch on and the same reason in words. Null whenever the variant itself was annotated. See docs/alteration-validation-errors.md",
+          "$ref": "#/definitions/AlterationValidationError"
         },
         "alternativeOncoKbVariant": {
           "$ref": "#/definitions/AlternativeOncoKbVariant"
