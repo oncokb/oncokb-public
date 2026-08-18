@@ -3,9 +3,13 @@ package org.mskcc.cbio.oncokb.service;
 import org.apache.commons.lang3.StringUtils;
 import org.mskcc.cbio.oncokb.config.application.ApplicationProperties;
 import org.mskcc.cbio.oncokb.service.dto.sendgrid.SendGridMailRequest;
+import org.mskcc.cbio.oncokb.service.dto.sendgrid.SendGridMailSendPayload;
 import org.mskcc.cbio.oncokb.service.dto.sendgrid.SendGridRecipient;
+import org.mskcc.cbio.oncokb.service.dto.sendgrid.SendGridGroupSuppressionsRequest;
 import org.mskcc.cbio.oncokb.service.dto.sendgrid.SendGridSendResult;
 import org.mskcc.cbio.oncokb.service.dto.sendgrid.SendGridSuppression;
+import org.mskcc.cbio.oncokb.service.dto.sendgrid.SendGridSuppressionPayload;
+import org.mskcc.cbio.oncokb.service.dto.sendgrid.SendGridSuppressionsEnvelope;
 import org.springframework.http.HttpEntity;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpMethod;
@@ -18,9 +22,7 @@ import org.springframework.web.client.RestTemplate;
 
 import java.util.ArrayList;
 import java.util.Collections;
-import java.util.LinkedHashMap;
 import java.util.List;
-import java.util.Map;
 
 @Service
 public class SendGridService {
@@ -44,7 +46,7 @@ public class SendGridService {
     }
 
     public SendGridSendResult sendTemplatedMail(SendGridMailRequest request) {
-        Map<String, Object> payload = toSendPayload(request);
+        SendGridMailSendPayload payload = toSendPayload(request);
         try {
             RestTemplate restTemplate = new RestTemplate();
             ResponseEntity<String> response = restTemplate.postForEntity(
@@ -70,14 +72,31 @@ public class SendGridService {
     public List<SendGridSuppression> getSuppressionsForEmail(String email) {
         try {
             RestTemplate restTemplate = new RestTemplate();
-            ResponseEntity<Object> response = restTemplate.exchange(
+            ResponseEntity<SendGridSuppressionsEnvelope> response = restTemplate.exchange(
                 resolveUrl(SENDGRID_SUPPRESSIONS_PATH),
                 HttpMethod.GET,
                 new HttpEntity<>(buildSendGridHeaders()),
-                Object.class,
+                SendGridSuppressionsEnvelope.class,
                 email
             );
-            return parseSuppressions(response.getBody());
+
+            SendGridSuppressionsEnvelope envelope = response.getBody();
+            if (envelope == null || envelope.getSuppressions() == null) {
+                return Collections.emptyList();
+            }
+
+            List<SendGridSuppression> suppressions = new ArrayList<>();
+            for (SendGridSuppressionPayload rawSuppression : envelope.getSuppressions()) {
+                if (rawSuppression == null || rawSuppression.getId() == null) {
+                    continue;
+                }
+                suppressions.add(new SendGridSuppression(
+                    rawSuppression.getId(),
+                    rawSuppression.getName(),
+                    rawSuppression.getSuppressed() == null || rawSuppression.getSuppressed()
+                ));
+            }
+            return suppressions;
         } catch (HttpStatusCodeException e) {
             throw new SendGridIntegrationException(
                 "SendGrid suppressions request failed with status " + e.getRawStatusCode() + ".",
@@ -90,8 +109,8 @@ public class SendGridService {
     }
 
     public void addGroupSuppression(Long groupId, String email) {
-        Map<String, Object> body = new LinkedHashMap<>();
-        body.put("recipient_emails", Collections.singletonList(email));
+        SendGridGroupSuppressionsRequest body = new SendGridGroupSuppressionsRequest();
+        body.setRecipientEmails(Collections.singletonList(email));
 
         try {
             RestTemplate restTemplate = new RestTemplate();
@@ -134,90 +153,33 @@ public class SendGridService {
         }
     }
 
-    private Map<String, Object> toSendPayload(SendGridMailRequest request) {
-        Map<String, Object> payload = new LinkedHashMap<>();
-        payload.put("from", Collections.singletonMap("email", request.getFromEmail()));
-        payload.put("template_id", request.getTemplateId());
+    private SendGridMailSendPayload toSendPayload(SendGridMailRequest request) {
+        SendGridMailSendPayload payload = new SendGridMailSendPayload();
+        payload.setFrom(new SendGridMailSendPayload.EmailAddress(request.getFromEmail()));
+        payload.setTemplateId(request.getTemplateId());
 
-        List<Map<String, Object>> personalizations = new ArrayList<>();
+        List<SendGridMailSendPayload.Personalization> personalizations = new ArrayList<>();
         for (SendGridRecipient recipient : request.getRecipients()) {
-            Map<String, Object> personalization = new LinkedHashMap<>();
-            personalization.put("to", Collections.singletonList(Collections.singletonMap("email", recipient.getToEmail())));
+            SendGridMailSendPayload.Personalization personalization = new SendGridMailSendPayload.Personalization();
+            personalization.setTo(Collections.singletonList(new SendGridMailSendPayload.EmailAddress(recipient.getToEmail())));
             if (StringUtils.isNotBlank(recipient.getCcEmail())) {
-                personalization.put("cc", Collections.singletonList(Collections.singletonMap("email", recipient.getCcEmail())));
+                personalization.setCc(Collections.singletonList(new SendGridMailSendPayload.EmailAddress(recipient.getCcEmail())));
             }
-            personalization.put("dynamic_template_data", recipient.getDynamicTemplateData());
+            personalization.setDynamicTemplateData(recipient.getDynamicTemplateData());
             personalizations.add(personalization);
         }
-        payload.put("personalizations", personalizations);
+        payload.setPersonalizations(personalizations);
 
         if (request.getAsmGroupId() != null) {
-            Map<String, Object> asm = new LinkedHashMap<>();
-            asm.put("group_id", request.getAsmGroupId());
+            SendGridMailSendPayload.Asm asm = new SendGridMailSendPayload.Asm();
+            asm.setGroupId(request.getAsmGroupId());
             if (request.getGroupsToDisplay() != null && !request.getGroupsToDisplay().isEmpty()) {
-                asm.put("groups_to_display", request.getGroupsToDisplay());
+                asm.setGroupsToDisplay(request.getGroupsToDisplay());
             }
-            payload.put("asm", asm);
+            payload.setAsm(asm);
         }
 
         return payload;
-    }
-
-    private List<SendGridSuppression> parseSuppressions(Object responseBody) {
-        List<?> groups = Collections.emptyList();
-        if (responseBody instanceof Map) {
-            Object suppressions = ((Map<?, ?>) responseBody).get("suppressions");
-            if (suppressions instanceof List) {
-                groups = (List<?>) suppressions;
-            }
-        } else if (responseBody instanceof List) {
-            groups = (List<?>) responseBody;
-        }
-
-        List<SendGridSuppression> suppressions = new ArrayList<>();
-        for (Object groupObj : groups) {
-            if (!(groupObj instanceof Map)) {
-                continue;
-            }
-            Map<?, ?> groupMap = (Map<?, ?>) groupObj;
-            Long groupId = toLong(groupMap.get("id"));
-            if (groupId == null) {
-                continue;
-            }
-
-            String groupName = toStringOrNull(groupMap.get("name"));
-            boolean suppressed = toBoolean(groupMap.get("suppressed"), true);
-            suppressions.add(new SendGridSuppression(groupId, groupName, suppressed));
-        }
-        return suppressions;
-    }
-
-    private String toStringOrNull(Object value) {
-        return value == null ? null : String.valueOf(value);
-    }
-
-    private Long toLong(Object value) {
-        if (value == null) {
-            return null;
-        }
-        if (value instanceof Number) {
-            return ((Number) value).longValue();
-        }
-        try {
-            return Long.valueOf(String.valueOf(value));
-        } catch (NumberFormatException e) {
-            return null;
-        }
-    }
-
-    private boolean toBoolean(Object value, boolean defaultValue) {
-        if (value == null) {
-            return defaultValue;
-        }
-        if (value instanceof Boolean) {
-            return (Boolean) value;
-        }
-        return Boolean.parseBoolean(String.valueOf(value));
     }
 
     private HttpHeaders buildSendGridHeaders() {

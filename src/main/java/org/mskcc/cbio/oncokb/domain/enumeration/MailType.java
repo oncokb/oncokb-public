@@ -138,19 +138,19 @@ public enum MailType {
         .description("Notifies admins about companies with licenses about to expire"))
     // Bulk emails are sent through SendGrid templates; this local template is unused.
     , BULK_CUSTOM(new MailTypeBuilder()
-        .templateName("testEmail")
+        .templateName("placeholderEmail")
         .description("Bulk email - custom audience"))
     // Bulk emails are sent through SendGrid templates; this local template is unused.
     , BULK_ALL_USERS(new MailTypeBuilder()
-        .templateName("testEmail")
+        .templateName("placeholderEmail")
         .description("Bulk email - all users audience"))
     // Bulk emails are sent through SendGrid templates; this local template is unused.
     , BULK_DEVELOPERS(new MailTypeBuilder()
-        .templateName("testEmail")
+        .templateName("placeholderEmail")
         .description("Bulk email - developers audience"))
     // Bulk emails are sent through SendGrid templates; this local template is unused.
     , BULK_SCIENTIFIC_NEWS(new MailTypeBuilder()
-        .templateName("testEmail")
+        .templateName("placeholderEmail")
         .description("Bulk email - scientific news audience"))
     , TEST(new MailTypeBuilder()
         .templateName("testEmail")

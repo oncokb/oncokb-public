@@ -186,7 +186,7 @@ const BulkEmailComposerForm = ({
           <div className={styles.storyHeader}>
             <span className={styles.subLabel}>Stories</span>
             <Button
-              variant="outline-secondary"
+              variant="outline-primary"
               size="sm"
               type="button"
               onClick={() =>

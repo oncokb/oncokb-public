@@ -41,8 +41,6 @@ import React from 'react';
 import { Button, Col, Modal, Row } from 'react-bootstrap';
 import { Redirect } from 'react-router-dom';
 
-type EmailSubscriptions = EmailSubscriptionDTO[];
-
 export type IRegisterProps = {
   authenticationStore: AuthenticationStore;
 };
@@ -78,7 +76,7 @@ export class AccountPage extends React.Component<IRegisterProps> {
   @observable showCreateServiceAccountTokenModal = false;
   @observable isCreatingServiceAccountToken = false;
   @observable serviceAccountTokens: Token[] = [];
-  @observable emailSubscriptions: EmailSubscriptions = [];
+  @observable emailSubscriptions: EmailSubscriptionDTO[] = [];
   @observable isLoadingEmailSubscriptions = false;
   @observable isUpdatingEmailSubscription = observable.map<boolean>();
 
@@ -159,9 +157,7 @@ export class AccountPage extends React.Component<IRegisterProps> {
   async getEmailSubscriptions() {
     this.isLoadingEmailSubscriptions = true;
     try {
-      const subscriptions = (await client.getEmailSubscriptionsUsingGET(
-        {}
-      )) as EmailSubscriptions;
+      const subscriptions = await client.getEmailSubscriptionsUsingGET({});
       this.emailSubscriptions = subscriptions || [];
     } catch (error) {
       notifyError(error);
@@ -190,9 +186,9 @@ export class AccountPage extends React.Component<IRegisterProps> {
         groupId,
         subscribed,
       };
-      const subscriptions = (await client.updateEmailSubscriptionUsingPOST({
+      const subscriptions = await client.updateEmailSubscriptionUsingPOST({
         emailSubscriptionUpdateRequest,
-      })) as EmailSubscriptions;
+      });
       this.emailSubscriptions = subscriptions || [];
       notifySuccess('Email preference updated.');
     } catch (error) {

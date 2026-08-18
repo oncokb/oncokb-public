@@ -8,7 +8,7 @@ import java.util.List;
 public class SendGridProperties {
     private boolean enabled = false;
     private String apiKey;
-    private String baseUrl = "https://api.sendgrid.com";
+    private String baseUrl;
     private String newsTemplate;
     private String newsTemplateNoUnsubscribe;
     private BulkEmailTypesConfig bulkEmailTypes = new BulkEmailTypesConfig();

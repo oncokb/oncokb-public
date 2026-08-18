@@ -510,10 +510,7 @@ public class MailService {
             : users.stream()
                 .filter(Objects::nonNull)
                 .filter(user -> StringUtils.isNotBlank(user.getEmail()))
-                .collect(Collectors.collectingAndThen(
-                    Collectors.toMap(UserDTO::getId, user -> user, (left, right) -> left, LinkedHashMap::new),
-                    map -> new ArrayList<>(map.values())
-                ));
+                .collect(Collectors.toList());
 
         if (recipients.isEmpty()) {
             throw new IllegalArgumentException("No valid recipients were provided.");

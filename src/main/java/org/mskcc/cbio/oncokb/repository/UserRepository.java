@@ -1,6 +1,8 @@
 package org.mskcc.cbio.oncokb.repository;
 
 import org.mskcc.cbio.oncokb.domain.User;
+import org.mskcc.cbio.oncokb.repository.projection.SendEmailUserOptionProjection;
+import org.mskcc.cbio.oncokb.repository.projection.UserWithDetailsProjection;
 
 import org.springframework.cache.annotation.Cacheable;
 import org.springframework.data.domain.Page;
@@ -53,15 +55,19 @@ public interface UserRepository extends JpaRepository<User, Long> {
         return findAllUsersWithAuthorityAndLoginNot(AuthoritiesConstants.API, org.mskcc.cbio.oncokb.config.Constants.ANONYMOUS_USER);
     }
 
-    @Query("select user, userDetails from User as user left join UserDetails as userDetails on user.id = userDetails.user WHERE user in ?1")
-    List<Object[]> findAllUsersWithUserDetailsByUsersIn(List<User> users);
+    @Query(
+        "select new org.mskcc.cbio.oncokb.repository.projection.UserWithDetailsView(user, userDetails) " +
+            "from User as user left join UserDetails as userDetails on user.id = userDetails.user " +
+            "where user in ?1"
+    )
+    List<UserWithDetailsProjection> findAllUsersWithUserDetailsByUsersIn(List<User> users);
 
     @Query(
-        "select distinct user, userDetails from User user " +
+        "select distinct new org.mskcc.cbio.oncokb.repository.projection.UserWithDetailsView(user, userDetails) from User user " +
             "left join UserDetails userDetails on userDetails.user = user " +
             "where lower(user.login) in :candidates or lower(user.email) in :candidates"
     )
-    List<Object[]> findUsersWithDetailsByLoginOrEmailIn(@Param("candidates") java.util.Set<String> candidates);
+    List<UserWithDetailsProjection> findUsersWithDetailsByLoginOrEmailIn(@Param("candidates") java.util.List<String> candidates);
 
     @Query(
         value = "SELECT u.login AS login, u.email AS email, u.first_name AS firstName, u.last_name AS lastName, " +
@@ -88,7 +94,7 @@ public interface UserRepository extends JpaRepository<User, Long> {
             "  OR LOWER(u.last_name) LIKE CONCAT('%', LOWER(:query), '%'))",
         nativeQuery = true
     )
-    Page<Object[]> findSendEmailUserOptions(
+    Page<SendEmailUserOptionProjection> findSendEmailUserOptions(
         @Param("query") String query,
         @Param("anonymousLogin") String anonymousLogin,
         Pageable pageable

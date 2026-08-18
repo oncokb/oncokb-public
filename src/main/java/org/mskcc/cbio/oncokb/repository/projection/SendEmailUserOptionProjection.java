@@ -13,5 +13,9 @@ public interface SendEmailUserOptionProjection {
 
     String getLicenseType();
 
-    Boolean getIsAdmin();
+    /**
+     * Native query drivers can return CASE/boolean expressions as non-Boolean scalars
+     * (for example 0/1 as Number). Keep this as Object and normalize in service code.
+     */
+    Object getIsAdmin();
 }

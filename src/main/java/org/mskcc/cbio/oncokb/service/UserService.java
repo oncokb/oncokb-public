@@ -15,8 +15,10 @@ import org.mskcc.cbio.oncokb.domain.enumeration.BulkEmailAudience;
 import org.mskcc.cbio.oncokb.repository.AuthorityRepository;
 import org.mskcc.cbio.oncokb.repository.CompanyDomainRepository;
 import org.mskcc.cbio.oncokb.repository.CompanyRepository;
+import org.mskcc.cbio.oncokb.repository.projection.SendEmailUserOptionProjection;
 import org.mskcc.cbio.oncokb.repository.UserDetailsRepository;
 import org.mskcc.cbio.oncokb.repository.UserRepository;
+import org.mskcc.cbio.oncokb.repository.projection.UserWithDetailsProjection;
 import org.mskcc.cbio.oncokb.security.AuthoritiesConstants;
 import org.mskcc.cbio.oncokb.security.SecurityUtils;
 import org.mskcc.cbio.oncokb.security.uuid.TokenProvider;
@@ -50,7 +52,6 @@ import org.springframework.cache.annotation.Cacheable;
 import javax.mail.MessagingException;
 import javax.validation.constraints.NotNull;
 
-import java.math.BigInteger;
 import java.time.Instant;
 import java.time.temporal.ChronoUnit;
 import java.util.*;
@@ -594,16 +595,16 @@ public class UserService {
 
     @Transactional(readOnly = true)
     public List<UserDTO> findAllUsersWithUserDetailsByUsersIn(List<User> users) {
-        List<Object[]> usersWithDetails = userRepository.findAllUsersWithUserDetailsByUsersIn(users);
+        List<UserWithDetailsProjection> usersWithDetails = userRepository.findAllUsersWithUserDetailsByUsersIn(users);
         return usersWithDetails
             .stream()
             .map(this::toUserDTOWithMails)
             .collect(Collectors.toList());
     }
 
-    private UserDTO toUserDTOWithMails(Object[] userWithDetails) {
-        User user = (User) userWithDetails[0];
-        UserDetails userDetails = (UserDetails) userWithDetails[1];
+    private UserDTO toUserDTOWithMails(UserWithDetailsProjection userWithDetails) {
+        User user = userWithDetails.getUser();
+        UserDetails userDetails = userWithDetails.getUserDetails();
 
         UserDTO dto = userMapper.userToUserDTO(user, userDetails);
         dto.setUserMails(userMailsMapper.toDto(user.getUserMails()));
@@ -684,22 +685,22 @@ public class UserService {
             return Collections.emptyMap();
         }
 
-        Set<String> normalizedCandidates = recipients.stream()
+        List<String> normalizedCandidates = recipients.stream()
             .filter(StringUtils::isNotBlank)
             .map(value -> StringUtils.lowerCase(value.trim(), Locale.ENGLISH))
-            .collect(Collectors.toCollection(LinkedHashSet::new));
+            .collect(Collectors.toList());
 
         if (normalizedCandidates.isEmpty()) {
             return Collections.emptyMap();
         }
 
-        List<Object[]> rows = userRepository.findUsersWithDetailsByLoginOrEmailIn(normalizedCandidates);
+        List<UserWithDetailsProjection> rows = userRepository.findUsersWithDetailsByLoginOrEmailIn(normalizedCandidates);
         Map<String, UserDTO> byLogin = new HashMap<>();
         Map<String, UserDTO> byEmail = new HashMap<>();
 
-        for (Object[] row : rows) {
-            User user = (User) row[0];
-            UserDetails userDetails = (UserDetails) row[1];
+        for (UserWithDetailsProjection row : rows) {
+            User user = row.getUser();
+            UserDetails userDetails = row.getUserDetails();
             if (user == null) {
                 continue;
             }
@@ -744,14 +745,14 @@ public class UserService {
             .map(this::toSendEmailUserOptionDTO);
     }
 
-    private SendEmailUserOptionDTO toSendEmailUserOptionDTO(Object[] row) {
-        String login = row != null && row.length > 0 ? (String) row[0] : null;
-        String email = row != null && row.length > 1 ? (String) row[1] : null;
-        String firstName = row != null && row.length > 2 ? (String) row[2] : null;
-        String lastName = row != null && row.length > 3 ? (String) row[3] : null;
-        Boolean activated = row != null && row.length > 4 ? (Boolean) row[4] : null;
-        String licenseType = row != null && row.length > 5 ? (String) row[5] : null;
-        Boolean isAdmin = row != null && row.length > 6 ? ((BigInteger) row[6]).equals(BigInteger.valueOf(1)) : null;
+    private SendEmailUserOptionDTO toSendEmailUserOptionDTO(SendEmailUserOptionProjection row) {
+        String login = row == null ? null : row.getLogin();
+        String email = row == null ? null : row.getEmail();
+        String firstName = row == null ? null : row.getFirstName();
+        String lastName = row == null ? null : row.getLastName();
+        Boolean activated = row == null ? null : row.getActivated();
+        String licenseType = row == null ? null : row.getLicenseType();
+        Boolean isAdmin = toBoolean(row == null ? null : row.getIsAdmin());
 
         SendEmailUserOptionDTO dto = new SendEmailUserOptionDTO();
         dto.setLogin(login);
@@ -762,6 +763,19 @@ public class UserService {
         dto.setLicenseType(licenseType);
         dto.setAdmin(Boolean.TRUE.equals(isAdmin));
         return dto;
+    }
+
+    private Boolean toBoolean(Object value) {
+        if (value == null) {
+            return null;
+        }
+        if (value instanceof Boolean) {
+            return (Boolean) value;
+        }
+        if (value instanceof Number) {
+            return ((Number) value).intValue() != 0;
+        }
+        return Boolean.valueOf(String.valueOf(value));
     }
 
     public Optional<UserDTO> approveUser(UserDTO userDTO, Boolean isTrial) {
