@@ -310,7 +310,8 @@ public class AccountResource {
     private List<EmailSubscriptionDTO> toEmailSubscriptionDTOs(List<SendGridSuppression> groups) {
         List<EmailSubscriptionDTO> subscriptions = new ArrayList<>();
         for (SendGridSuppression group : groups) {
-            subscriptions.add(new EmailSubscriptionDTO(group.getGroupId(), normalizeAudienceKey(group.getGroupId(), group.getGroupName()), !group.isSuppressed()));
+            String audience = StringUtils.defaultIfBlank(group.getGroupName(), String.valueOf(group.getGroupId()));
+            subscriptions.add(new EmailSubscriptionDTO(group.getGroupId(), audience, !group.isSuppressed()));
         }
         return subscriptions;
     }
@@ -634,17 +635,6 @@ public class AccountResource {
 
     private boolean isSendGridConfigured() {
         return sendGridService != null && sendGridService.isConfigured();
-    }
-
-    private static String normalizeAudienceKey(Long groupId, String name) {
-        if (StringUtils.isBlank(name)) {
-            return String.valueOf(groupId);
-        }
-        String normalized = StringUtils.upperCase(name, Locale.ENGLISH)
-            .replaceAll("[^A-Z0-9]+", "_")
-            .replaceAll("^_+", "")
-            .replaceAll("_+$", "");
-        return StringUtils.isBlank(normalized) ? String.valueOf(groupId) : normalized;
     }
 
     public static class EmailSubscriptionDTO {

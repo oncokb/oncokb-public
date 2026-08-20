@@ -1426,10 +1426,10 @@ public class AccountResourceIT {
                 .andExpect(status().isOk())
                 .andExpect(content().contentType(MediaType.APPLICATION_JSON_VALUE))
                 .andExpect(jsonPath("$[0].groupId").value(1001))
-                .andExpect(jsonPath("$[0].audience").value("DEVELOPERS"))
+                .andExpect(jsonPath("$[0].audience").value("Developers"))
                 .andExpect(jsonPath("$[0].subscribed").value(true))
                 .andExpect(jsonPath("$[1].groupId").value(1002))
-                .andExpect(jsonPath("$[1].audience").value("SCIENTIFIC_NEWS"))
+                .andExpect(jsonPath("$[1].audience").value("Scientific News"))
                 .andExpect(jsonPath("$[1].subscribed").value(true));
         } finally {
             server.stop(0);
@@ -1498,16 +1498,16 @@ public class AccountResourceIT {
                         .content("{\"groupId\":2001,\"subscribed\":false}")
                 )
                 .andExpect(status().isOk())
-                .andExpect(jsonPath("$[0].audience").value("DEVELOPERS"))
+                .andExpect(jsonPath("$[0].audience").value("Developers"))
                 .andExpect(jsonPath("$[0].subscribed").value(false))
-                .andExpect(jsonPath("$[1].audience").value("SCIENTIFIC_NEWS"))
+                .andExpect(jsonPath("$[1].audience").value("Scientific News"))
                 .andExpect(jsonPath("$[1].subscribed").value(true));
 
             assertThat(suppressionPayload.get()).contains("account-subscription-save@example.com");
 
             restAccountMockMvc.perform(get("/api/account/email-subscriptions"))
                 .andExpect(status().isOk())
-                .andExpect(jsonPath("$[0].audience").value("DEVELOPERS"))
+                .andExpect(jsonPath("$[0].audience").value("Developers"))
                 .andExpect(jsonPath("$[0].subscribed").value(false));
         } finally {
             server.stop(0);

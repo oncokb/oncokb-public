@@ -206,12 +206,11 @@ export class AccountPage extends React.Component<IRegisterProps> {
   }
 
   formatSubscriptionLabel(audience: string) {
-    return audience
-      .split('_')
-      .filter(Boolean)
-      .map(word => word.charAt(0) + word.slice(1).toLowerCase())
-      .join(' ')
-      .replace(/Oncokb/gi, 'OncoKB™');
+    if (!audience) {
+      return '';
+    }
+
+    return audience.replace(/Oncokb/gi, 'OncoKB™');
   }
 
   @action.bound
