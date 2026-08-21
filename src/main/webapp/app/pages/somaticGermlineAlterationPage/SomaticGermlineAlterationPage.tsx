@@ -91,6 +91,7 @@ import GeneAdditionalInfoSection from 'app/shared/sections/GeneAdditionalInfoSec
 import InfoIcon from 'app/shared/icons/InfoIcon';
 import { UnknownGeneAlert } from 'app/shared/alert/UnknownGeneAlert';
 import AlternativeVariantSummary from 'app/shared/sections/AlternativeVariantSummary';
+import HotspotVariantsTable from 'app/pages/genePage/hotspot/HotspotVariantsTable';
 
 type MatchParams = {
   hugoSymbol: string;
@@ -273,7 +274,8 @@ export class SomaticGermlineAlterationPage extends React.Component<
       this.store.ensemblGenes.isComplete &&
       this.store.clinicalAlterations.isComplete &&
       this.store.biologicalAlterations.isComplete &&
-      this.annotationData.isComplete
+      this.annotationData.isComplete &&
+      this.store.positionalHotspot.isComplete
     );
   }
 
@@ -682,6 +684,12 @@ export class SomaticGermlineAlterationPage extends React.Component<
     this.selectedTab = newTabKey;
   }
 
+  // Set on a positional page of a single residue hotspot, eg BRAF V600.
+  @computed
+  get positionalHotspot() {
+    return this.store.positionalHotspot.result;
+  }
+
   @computed
   get isPositionalAlteration() {
     return isPositionalAlteration(
@@ -838,6 +846,7 @@ export class SomaticGermlineAlterationPage extends React.Component<
                         variantAnnotation={this.annotationData.result}
                         isGermline={this.store.germline}
                         grch37Isoform={this.store.gene.result.grch37Isoform}
+                        cancerHotspot={this.positionalHotspot}
                       />
                     </Col>
                   </Row>
@@ -905,6 +914,22 @@ export class SomaticGermlineAlterationPage extends React.Component<
                         onChangeTab={this.onChangeTab}
                         routing={this.props.routing}
                       />
+                      {this.positionalHotspot &&
+                        this.positionalHotspot.curatedVariants.length > 0 && (
+                          <>
+                            <MiniNavBarHeader id="annotated-hotspot-alterations">
+                              {`Annotated ${this.store.hugoSymbol} ${this.positionalHotspot.name} Alterations`}
+                            </MiniNavBarHeader>
+                            <HotspotVariantsTable
+                              hugoSymbol={this.store.hugoSymbol}
+                              variants={this.positionalHotspot.curatedVariants}
+                              description={
+                                this.positionalHotspot
+                                  .curatedVariantsDescription
+                              }
+                            />
+                          </>
+                        )}
                     </Col>
                   </Row>
                 </Container>

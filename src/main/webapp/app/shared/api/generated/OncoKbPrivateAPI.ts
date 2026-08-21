@@ -267,6 +267,14 @@ export type GenomicIndicatorQuery = {
         'variant': string
 
 };
+export type GenomicIndicatorQuery = {
+    'hugoSymbol': string
+
+        'inheritanceMechanisms': Array < "AUTOSOMAL_DOMINANT" | "AUTOSOMAL_RECESSIVE" | "X_LINKED_RECESSIVE" | "CARRIER" >
+
+        'variant': string
+
+};
 export type MatchVariantRequest = {
     'oncokbVariants': Array < MatchVariant >
 
@@ -309,6 +317,8 @@ export type AlternativeOncoKbVariant = {
 };
 export type BiologicalVariant = {
     'cancerRisk': string
+
+        'hotspot': VariantHotspot
 
         'mutationEffect': string
 
@@ -359,6 +369,38 @@ export type TumorTypeEntity = {
         'tissue': string
 
         'tumorForm': "SOLID" | "LIQUID" | "MIXED"
+
+};
+export type VariantHotspot = {
+    'isHotspot': boolean
+
+        'name': string
+
+        'residue': string
+
+        'type': string
+
+};
+export type CancerHotspot = {
+    'curatedVariants': Array < BiologicalVariant >
+
+        'curatedVariantsDescription': string
+
+        'hugoSymbol': string
+
+        'name': string
+
+        'pmids': Array < string >
+
+        'proteinEnd': number
+
+        'proteinStart': number
+
+        'residue': string
+
+        'tumorCount': number
+
+        'type': string
 
 };
 export type Article = {
@@ -825,6 +867,8 @@ export type SomaticVariantAnnotation = {
         'alternativeOncoKbVariant': AlternativeOncoKbVariant
 
         'background': string
+
+        'cancerHotspot': CancerHotspot
 
         'dataVersion': string
 
@@ -2657,6 +2701,132 @@ export default class OncoKbPrivateAPI {
                 return response.body;
             });
         };
+    utilHotspotAnnotationGetUsingGETURL(parameters: {
+        'hugoSymbol' ? : string,
+        'entrezGeneId' ? : number,
+        'residue' ? : string,
+        'alteration' ? : string,
+        'referenceGenome' ? : string,
+        $queryParameters ? : any
+    }): string {
+        let queryParameters: any = {};
+        let path = '/utils/hotspotAnnotation';
+        if (parameters['hugoSymbol'] !== undefined) {
+            queryParameters['hugoSymbol'] = parameters['hugoSymbol'];
+        }
+
+        if (parameters['entrezGeneId'] !== undefined) {
+            queryParameters['entrezGeneId'] = parameters['entrezGeneId'];
+        }
+
+        if (parameters['residue'] !== undefined) {
+            queryParameters['residue'] = parameters['residue'];
+        }
+
+        if (parameters['alteration'] !== undefined) {
+            queryParameters['alteration'] = parameters['alteration'];
+        }
+
+        if (parameters['referenceGenome'] !== undefined) {
+            queryParameters['referenceGenome'] = parameters['referenceGenome'];
+        }
+
+        if (parameters.$queryParameters) {
+            Object.keys(parameters.$queryParameters).forEach(function(parameterName) {
+                var parameter = parameters.$queryParameters[parameterName];
+                queryParameters[parameterName] = parameter;
+            });
+        }
+        let keys = Object.keys(queryParameters);
+        return this.domain + path + (keys.length > 0 ? '?' + (keys.map(key => key + '=' + encodeURIComponent(queryParameters[key])).join('&')) : '');
+    };
+
+    /**
+     * Get the annotation of a cancer hotspot, either by its residue or by an alteration on it. The residue is a single residue (e.g. V600), a splice site position (e.g. X307) or an in-frame indel range (e.g. 27-42).
+     * @method
+     * @name OncoKbPrivateAPI#utilHotspotAnnotationGetUsingGET
+     * @param {string} hugoSymbol - hugoSymbol
+     * @param {integer} entrezGeneId - entrezGeneId
+     * @param {string} residue - Hotspot residue. Example: V600, X307 or 27-42
+     * @param {string} alteration - An alteration on the hotspot, used when residue is not given. Example: V600E, K459del or X307_splice
+     * @param {string} referenceGenome - Reference genome, either GRCh37 or GRCh38. The default is GRCh37
+     */
+    utilHotspotAnnotationGetUsingGETWithHttpInfo(parameters: {
+        'hugoSymbol' ? : string,
+        'entrezGeneId' ? : number,
+        'residue' ? : string,
+        'alteration' ? : string,
+        'referenceGenome' ? : string,
+        $queryParameters ? : any,
+            $domain ? : string
+    }): Promise < request.Response > {
+        const domain = parameters.$domain ? parameters.$domain : this.domain;
+        const errorHandlers = this.errorHandlers;
+        const request = this.request;
+        let path = '/utils/hotspotAnnotation';
+        let body: any;
+        let queryParameters: any = {};
+        let headers: any = {};
+        let form: any = {};
+        return new Promise(function(resolve, reject) {
+            headers['Accept'] = 'application/json';
+            headers['Content-Type'] = 'application/json';
+
+            if (parameters['hugoSymbol'] !== undefined) {
+                queryParameters['hugoSymbol'] = parameters['hugoSymbol'];
+            }
+
+            if (parameters['entrezGeneId'] !== undefined) {
+                queryParameters['entrezGeneId'] = parameters['entrezGeneId'];
+            }
+
+            if (parameters['residue'] !== undefined) {
+                queryParameters['residue'] = parameters['residue'];
+            }
+
+            if (parameters['alteration'] !== undefined) {
+                queryParameters['alteration'] = parameters['alteration'];
+            }
+
+            if (parameters['referenceGenome'] !== undefined) {
+                queryParameters['referenceGenome'] = parameters['referenceGenome'];
+            }
+
+            if (parameters.$queryParameters) {
+                Object.keys(parameters.$queryParameters).forEach(function(parameterName) {
+                    var parameter = parameters.$queryParameters[parameterName];
+                    queryParameters[parameterName] = parameter;
+                });
+            }
+
+            request('GET', domain + path, body, headers, queryParameters, form, reject, resolve, errorHandlers);
+
+        });
+    };
+
+    /**
+     * Get the annotation of a cancer hotspot, either by its residue or by an alteration on it. The residue is a single residue (e.g. V600), a splice site position (e.g. X307) or an in-frame indel range (e.g. 27-42).
+     * @method
+     * @name OncoKbPrivateAPI#utilHotspotAnnotationGetUsingGET
+     * @param {string} hugoSymbol - hugoSymbol
+     * @param {integer} entrezGeneId - entrezGeneId
+     * @param {string} residue - Hotspot residue. Example: V600, X307 or 27-42
+     * @param {string} alteration - An alteration on the hotspot, used when residue is not given. Example: V600E, K459del or X307_splice
+     * @param {string} referenceGenome - Reference genome, either GRCh37 or GRCh38. The default is GRCh37
+     */
+    utilHotspotAnnotationGetUsingGET(parameters: {
+        'hugoSymbol' ? : string,
+        'entrezGeneId' ? : number,
+        'residue' ? : string,
+        'alteration' ? : string,
+        'referenceGenome' ? : string,
+        $queryParameters ? : any,
+            $domain ? : string
+    }): Promise < SomaticVariantAnnotation > {
+        return this.utilHotspotAnnotationGetUsingGETWithHttpInfo(parameters).then(function(response: request.Response) {
+            return response.body;
+        });
+    };
     utilsHotspotMutationGetUsingGETURL(parameters: {
         'hugoSymbol' ? : string,
         'variant' ? : string,

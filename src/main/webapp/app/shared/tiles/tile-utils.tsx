@@ -1,5 +1,6 @@
 import HighestLevelEvidence from 'app/pages/somaticGermlineAlterationPage/HighestLevelEvidence';
 import {
+  CancerHotspot,
   GermlineVariantAnnotation,
   MutationEffectResp,
   GeneNumber,
@@ -11,7 +12,10 @@ import classnames from 'classnames';
 import SomaticGermlineTiles, {
   AlterationTileProps,
 } from './SomaticGermlineTiles';
+import tileStyles from './SomaticGermlineTiles.module.scss';
 import config, {
+  CANCER_HOTSPOTS_LINK,
+  HOTSPOT_TYPE_LABEL,
   ONCOGENICITY,
   MUTATION_EFFECT,
   ONCOKB_TM,
@@ -30,6 +34,10 @@ import {
   COLOR_ICON_WITH_INFO,
   COLOR_ICON_WITHOUT_INFO,
 } from 'app/config/theme';
+import { CancerHotspotTooltipContent } from 'app/components/cancerHotspot/CancerHotspot';
+import cancerHotspotImg from 'content/images/cancer-hotspots.svg';
+import InfoIcon from 'app/shared/icons/InfoIcon';
+import ExternalLinkIcon from 'app/shared/icons/ExternalLinkIcon';
 import {
   MutationEffect,
   Oncogenicity,
@@ -48,7 +56,10 @@ function OncogenicInfo({
   className?: string;
 }) {
   return (
-    <span style={{ margin: '0px' }} className="h5">
+    <span
+      style={{ margin: '0px' }}
+      className={classnames('h5', 'd-inline-flex', 'align-items-center')}
+    >
       <span>
         {isUnknownOncogenicity
           ? `${ONCOGENICITY.UNKNOWN} Oncogenic Effect`
@@ -57,7 +68,7 @@ function OncogenicInfo({
       <OncoKBOncogenicityIcon
         oncogenicity={oncogenicity}
         isVus={isVus}
-        classNameParent={classnames('d-inline-block my-auto')}
+        classNameParent={classnames('d-inline-block')}
       />
     </span>
   );
@@ -218,6 +229,77 @@ function createMutationEffectTileProps(
   };
 }
 
+/**
+ * The Cancer Hotspot tile. Given the hotspot itself it also shows its type and
+ * tumor sample count, and takes an equal share of the row like the other
+ * tiles; without it the tile only flags the alteration as a hotspot, so it is
+ * capped to a narrow column.
+ */
+export function createCancerHotspotTileProps(
+  includeTitle: boolean,
+  hotspot?: CancerHotspot
+): AlterationTileProps {
+  const hotspotItem = {
+    title: 'Source',
+    value: (
+      <span
+        className={classnames(
+          'h5',
+          tileStyles.itemLink,
+          tileStyles.hotspotSourceLink
+        )}
+      >
+        <ExternalLinkIcon link={CANCER_HOTSPOTS_LINK}>
+          cancerhotspots.org
+        </ExternalLinkIcon>
+      </span>
+    ),
+  };
+  return {
+    title: includeTitle ? (
+      <span className="d-inline-flex align-items-center">
+        <img
+          className={tileStyles.hotspotTitleIcon}
+          src={cancerHotspotImg}
+          alt="Recurrent Hotspot Symbol"
+        />
+        Cancer Hotspot
+        <InfoIcon
+          className="ml-1"
+          overlay={() => <CancerHotspotTooltipContent />}
+          placement="top"
+        />
+      </span>
+    ) : undefined,
+    className: tileStyles.hotspotTile,
+    containerClassName: hotspot
+      ? tileStyles.hotspotTileShrink
+      : classnames(
+          tileStyles.hotspotTileContainer,
+          tileStyles.hotspotTileShrink
+        ),
+    items: [
+      hotspot
+        ? [
+            hotspotItem,
+            {
+              title: 'Type',
+              value: (
+                <span className="h5">
+                  {HOTSPOT_TYPE_LABEL[hotspot.type] ?? hotspot.type}
+                </span>
+              ),
+            },
+            {
+              title: 'Tumor Samples',
+              value: <span className="h5">{hotspot.tumorCount}</span>,
+            },
+          ]
+        : [hotspotItem],
+    ],
+  };
+}
+
 function createPathogenicityTileProps(
   variantAnnotation: GermlineVariantAnnotation,
   clinvarData: ClinvarData | undefined | null,
@@ -278,6 +360,9 @@ type SomaticGermlineAlterationTilesProps = {
   isGermline: boolean;
   variantAnnotation: VariantAnnotation;
   grch37Isoform: string;
+  // The hotspot the page is about, eg on the BRAF V600 positional page. Shows
+  // the detailed hotspot tile instead of the plain one.
+  cancerHotspot?: CancerHotspot;
 };
 
 type ClinvarData = { pathogenicity: string; clinvarId: number | undefined };
@@ -384,6 +469,11 @@ export function SomaticGermlineAlterationTiles({
         includeTitle
       )
     );
+    if ((rest.variantAnnotation as SomaticVariantAnnotation).hotspot) {
+      tiles.push(
+        createCancerHotspotTileProps(includeTitle, rest.cancerHotspot)
+      );
+    }
   }
 
   return <SomaticGermlineTiles tiles={tiles} />;
