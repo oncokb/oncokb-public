@@ -405,13 +405,36 @@ export default class AnnotationPage extends React.Component<
   @computed
   get alterationSummaries() {
     const orderedSummaries = [SummaryKey.GENE_SUMMARY];
-    if (!this.isCategoricalAlteration) {
+    if (!this.isCategoricalAlteration && !this.hotspotAnnotation) {
       orderedSummaries.push(SummaryKey.ALTERATION_SUMMARY);
     }
-    return getSummaries(
+    const summaries = getSummaries(
       this.props.store.somaticAnnotationData.result,
       orderedSummaries
     );
+    if (this.hotspotAnnotation) {
+      summaries.push({
+        key: SummaryKey.ALTERATION_SUMMARY,
+        title: 'Alteration Summary',
+        content: this.hotspotAnnotation.variantSummary,
+      });
+    }
+    return summaries;
+  }
+
+  @computed
+  get hotspotAnnotation() {
+    return this.props.store.hotspotAnnotation.result;
+  }
+
+  @computed
+  get mutationEffectDescription() {
+    const description = this.props.store.somaticAnnotationData.result
+      .mutationEffect.description;
+    if (description) {
+      return description;
+    }
+    return this.hotspotAnnotation?.mutationEffect.description;
   }
 
   @computed get isCategoricalAlteration() {
@@ -427,10 +450,14 @@ export default class AnnotationPage extends React.Component<
         this.props.store.ensemblGenes.isComplete &&
         this.props.store.clinicalAlterations.isComplete &&
         this.props.store.biologicalAlterations.isComplete &&
-        this.props.store.somaticAnnotationData.isComplete
+        this.props.store.somaticAnnotationData.isComplete &&
+        this.props.store.hotspotAnnotation.isComplete
       );
     } else {
-      return this.props.store.somaticAnnotationData.isComplete;
+      return (
+        this.props.store.somaticAnnotationData.isComplete &&
+        this.props.store.hotspotAnnotation.isComplete
+      );
     }
   }
 
@@ -640,8 +667,7 @@ export default class AnnotationPage extends React.Component<
               </Col>
             )}
           </Row>
-          {this.props.store.somaticAnnotationData.result.mutationEffect
-            .description && (
+          {this.mutationEffectDescription && (
             <Row>
               <Col>
                 <ShowHideText
@@ -650,10 +676,7 @@ export default class AnnotationPage extends React.Component<
                   content={
                     <MutationEffectDescription
                       hugoSymbol={this.props.store.hugoSymbol}
-                      description={
-                        this.props.store.somaticAnnotationData.result
-                          .mutationEffect.description
-                      }
+                      description={this.mutationEffectDescription}
                     />
                   }
                   onClick={() =>

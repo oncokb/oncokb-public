@@ -1,0 +1,8941 @@
+{
+  "NRAS": [
+    {
+      "residue": "Q61",
+      "proteinStart": 61,
+      "proteinEnd": 61,
+      "type": "single residue",
+      "tumorCount": 422
+    },
+    {
+      "residue": "G12",
+      "proteinStart": 12,
+      "proteinEnd": 12,
+      "type": "single residue",
+      "tumorCount": 74
+    },
+    {
+      "residue": "G13",
+      "proteinStart": 13,
+      "proteinEnd": 13,
+      "type": "single residue",
+      "tumorCount": 41
+    },
+    {
+      "residue": "G60",
+      "proteinStart": 60,
+      "proteinEnd": 60,
+      "type": "single residue",
+      "tumorCount": 7
+    },
+    {
+      "residue": "A146",
+      "proteinStart": 146,
+      "proteinEnd": 146,
+      "type": "single residue",
+      "tumorCount": 7
+    }
+  ],
+  "PIK3CA": [
+    {
+      "residue": "H1047",
+      "proteinStart": 1047,
+      "proteinEnd": 1047,
+      "type": "single residue",
+      "tumorCount": 647
+    },
+    {
+      "residue": "E545",
+      "proteinStart": 545,
+      "proteinEnd": 545,
+      "type": "single residue",
+      "tumorCount": 633
+    },
+    {
+      "residue": "E542",
+      "proteinStart": 542,
+      "proteinEnd": 542,
+      "type": "single residue",
+      "tumorCount": 372
+    },
+    {
+      "residue": "N345",
+      "proteinStart": 345,
+      "proteinEnd": 345,
+      "type": "single residue",
+      "tumorCount": 98
+    },
+    {
+      "residue": "Q546",
+      "proteinStart": 546,
+      "proteinEnd": 546,
+      "type": "single residue",
+      "tumorCount": 93
+    },
+    {
+      "residue": "R88",
+      "proteinStart": 88,
+      "proteinEnd": 88,
+      "type": "single residue",
+      "tumorCount": 75
+    },
+    {
+      "residue": "M1043",
+      "proteinStart": 1043,
+      "proteinEnd": 1043,
+      "type": "single residue",
+      "tumorCount": 58
+    },
+    {
+      "residue": "E726",
+      "proteinStart": 726,
+      "proteinEnd": 726,
+      "type": "single residue",
+      "tumorCount": 55
+    },
+    {
+      "residue": "C420",
+      "proteinStart": 420,
+      "proteinEnd": 420,
+      "type": "single residue",
+      "tumorCount": 46
+    },
+    {
+      "residue": "E453",
+      "proteinStart": 453,
+      "proteinEnd": 453,
+      "type": "single residue",
+      "tumorCount": 42
+    },
+    {
+      "residue": "G118",
+      "proteinStart": 118,
+      "proteinEnd": 118,
+      "type": "single residue",
+      "tumorCount": 40
+    },
+    {
+      "residue": "K111",
+      "proteinStart": 111,
+      "proteinEnd": 111,
+      "type": "single residue",
+      "tumorCount": 38
+    },
+    {
+      "residue": "R93",
+      "proteinStart": 93,
+      "proteinEnd": 93,
+      "type": "single residue",
+      "tumorCount": 31
+    },
+    {
+      "residue": "R108",
+      "proteinStart": 108,
+      "proteinEnd": 108,
+      "type": "single residue",
+      "tumorCount": 29
+    },
+    {
+      "residue": "V344",
+      "proteinStart": 344,
+      "proteinEnd": 344,
+      "type": "single residue",
+      "tumorCount": 26
+    },
+    {
+      "residue": "110-114",
+      "proteinStart": 110,
+      "proteinEnd": 114,
+      "type": "in-frame indel",
+      "tumorCount": 26
+    },
+    {
+      "residue": "E81",
+      "proteinStart": 81,
+      "proteinEnd": 81,
+      "type": "single residue",
+      "tumorCount": 25
+    },
+    {
+      "residue": "E418",
+      "proteinStart": 418,
+      "proteinEnd": 418,
+      "type": "single residue",
+      "tumorCount": 25
+    },
+    {
+      "residue": "G106",
+      "proteinStart": 106,
+      "proteinEnd": 106,
+      "type": "single residue",
+      "tumorCount": 22
+    },
+    {
+      "residue": "R38",
+      "proteinStart": 38,
+      "proteinEnd": 38,
+      "type": "single residue",
+      "tumorCount": 22
+    },
+    {
+      "residue": "G1049",
+      "proteinStart": 1049,
+      "proteinEnd": 1049,
+      "type": "single residue",
+      "tumorCount": 17
+    },
+    {
+      "residue": "436-466",
+      "proteinStart": 436,
+      "proteinEnd": 466,
+      "type": "in-frame indel",
+      "tumorCount": 17
+    },
+    {
+      "residue": "Y1021",
+      "proteinStart": 1021,
+      "proteinEnd": 1021,
+      "type": "single residue",
+      "tumorCount": 14
+    },
+    {
+      "residue": "N1044",
+      "proteinStart": 1044,
+      "proteinEnd": 1044,
+      "type": "single residue",
+      "tumorCount": 14
+    },
+    {
+      "residue": "C901",
+      "proteinStart": 901,
+      "proteinEnd": 901,
+      "type": "single residue",
+      "tumorCount": 13
+    },
+    {
+      "residue": "E365",
+      "proteinStart": 365,
+      "proteinEnd": 365,
+      "type": "single residue",
+      "tumorCount": 13
+    },
+    {
+      "residue": "Q75",
+      "proteinStart": 75,
+      "proteinEnd": 75,
+      "type": "single residue",
+      "tumorCount": 13
+    },
+    {
+      "residue": "D350",
+      "proteinStart": 350,
+      "proteinEnd": 350,
+      "type": "single residue",
+      "tumorCount": 12
+    },
+    {
+      "residue": "D725",
+      "proteinStart": 725,
+      "proteinEnd": 725,
+      "type": "single residue",
+      "tumorCount": 12
+    },
+    {
+      "residue": "P104",
+      "proteinStart": 104,
+      "proteinEnd": 104,
+      "type": "single residue",
+      "tumorCount": 11
+    },
+    {
+      "residue": "R115",
+      "proteinStart": 115,
+      "proteinEnd": 115,
+      "type": "single residue",
+      "tumorCount": 11
+    },
+    {
+      "residue": "G1007",
+      "proteinStart": 1007,
+      "proteinEnd": 1007,
+      "type": "single residue",
+      "tumorCount": 10
+    },
+    {
+      "residue": "P449",
+      "proteinStart": 449,
+      "proteinEnd": 449,
+      "type": "single residue",
+      "tumorCount": 10
+    },
+    {
+      "residue": "C378",
+      "proteinStart": 378,
+      "proteinEnd": 378,
+      "type": "single residue",
+      "tumorCount": 9
+    },
+    {
+      "residue": "M1004",
+      "proteinStart": 1004,
+      "proteinEnd": 1004,
+      "type": "single residue",
+      "tumorCount": 9
+    },
+    {
+      "residue": "E970",
+      "proteinStart": 970,
+      "proteinEnd": 970,
+      "type": "single residue",
+      "tumorCount": 9
+    },
+    {
+      "residue": "I112",
+      "proteinStart": 112,
+      "proteinEnd": 112,
+      "type": "single residue",
+      "tumorCount": 9
+    },
+    {
+      "residue": "G914",
+      "proteinStart": 914,
+      "proteinEnd": 914,
+      "type": "single residue",
+      "tumorCount": 9
+    },
+    {
+      "residue": "T1025",
+      "proteinStart": 1025,
+      "proteinEnd": 1025,
+      "type": "single residue",
+      "tumorCount": 8
+    },
+    {
+      "residue": "102-108",
+      "proteinStart": 102,
+      "proteinEnd": 108,
+      "type": "in-frame indel",
+      "tumorCount": 8
+    },
+    {
+      "residue": "P471",
+      "proteinStart": 471,
+      "proteinEnd": 471,
+      "type": "single residue",
+      "tumorCount": 7
+    },
+    {
+      "residue": "R357",
+      "proteinStart": 357,
+      "proteinEnd": 357,
+      "type": "single residue",
+      "tumorCount": 7
+    },
+    {
+      "residue": "M1",
+      "proteinStart": 1,
+      "proteinEnd": 1,
+      "type": "single residue",
+      "tumorCount": 6
+    },
+    {
+      "residue": "N107",
+      "proteinStart": 107,
+      "proteinEnd": 107,
+      "type": "single residue",
+      "tumorCount": 6
+    },
+    {
+      "residue": "E39",
+      "proteinStart": 39,
+      "proteinEnd": 39,
+      "type": "single residue",
+      "tumorCount": 6
+    },
+    {
+      "residue": "G364",
+      "proteinStart": 364,
+      "proteinEnd": 364,
+      "type": "single residue",
+      "tumorCount": 6
+    },
+    {
+      "residue": "P539",
+      "proteinStart": 539,
+      "proteinEnd": 539,
+      "type": "single residue",
+      "tumorCount": 6
+    },
+    {
+      "residue": "A1066",
+      "proteinStart": 1066,
+      "proteinEnd": 1066,
+      "type": "single residue",
+      "tumorCount": 6
+    },
+    {
+      "residue": "C604",
+      "proteinStart": 604,
+      "proteinEnd": 604,
+      "type": "single residue",
+      "tumorCount": 5
+    },
+    {
+      "residue": "T1052",
+      "proteinStart": 1052,
+      "proteinEnd": 1052,
+      "type": "single residue",
+      "tumorCount": 5
+    },
+    {
+      "residue": "H1065",
+      "proteinStart": 1065,
+      "proteinEnd": 1065,
+      "type": "single residue",
+      "tumorCount": 5
+    },
+    {
+      "residue": "D939",
+      "proteinStart": 939,
+      "proteinEnd": 939,
+      "type": "single residue",
+      "tumorCount": 4
+    },
+    {
+      "residue": "C90",
+      "proteinStart": 90,
+      "proteinEnd": 90,
+      "type": "single residue",
+      "tumorCount": 4
+    },
+    {
+      "residue": "419-422",
+      "proteinStart": 419,
+      "proteinEnd": 422,
+      "type": "in-frame indel",
+      "tumorCount": 4
+    },
+    {
+      "residue": "10-18",
+      "proteinStart": 10,
+      "proteinEnd": 18,
+      "type": "in-frame indel",
+      "tumorCount": 3
+    }
+  ],
+  "IDH1": [
+    {
+      "residue": "R132",
+      "proteinStart": 132,
+      "proteinEnd": 132,
+      "type": "single residue",
+      "tumorCount": 766
+    }
+  ],
+  "BRAF": [
+    {
+      "residue": "V600",
+      "proteinStart": 600,
+      "proteinEnd": 600,
+      "type": "single residue",
+      "tumorCount": 897
+    },
+    {
+      "residue": "G469",
+      "proteinStart": 469,
+      "proteinEnd": 469,
+      "type": "single residue",
+      "tumorCount": 61
+    },
+    {
+      "residue": "D594",
+      "proteinStart": 594,
+      "proteinEnd": 594,
+      "type": "single residue",
+      "tumorCount": 51
+    },
+    {
+      "residue": "K601",
+      "proteinStart": 601,
+      "proteinEnd": 601,
+      "type": "single residue",
+      "tumorCount": 38
+    },
+    {
+      "residue": "G466",
+      "proteinStart": 466,
+      "proteinEnd": 466,
+      "type": "single residue",
+      "tumorCount": 34
+    },
+    {
+      "residue": "N581",
+      "proteinStart": 581,
+      "proteinEnd": 581,
+      "type": "single residue",
+      "tumorCount": 21
+    },
+    {
+      "residue": "G464",
+      "proteinStart": 464,
+      "proteinEnd": 464,
+      "type": "single residue",
+      "tumorCount": 15
+    },
+    {
+      "residue": "F595",
+      "proteinStart": 595,
+      "proteinEnd": 595,
+      "type": "single residue",
+      "tumorCount": 11
+    },
+    {
+      "residue": "L597",
+      "proteinStart": 597,
+      "proteinEnd": 597,
+      "type": "single residue",
+      "tumorCount": 10
+    },
+    {
+      "residue": "G596",
+      "proteinStart": 596,
+      "proteinEnd": 596,
+      "type": "single residue",
+      "tumorCount": 8
+    },
+    {
+      "residue": "592-604",
+      "proteinStart": 592,
+      "proteinEnd": 604,
+      "type": "in-frame indel",
+      "tumorCount": 8
+    },
+    {
+      "residue": "486-494",
+      "proteinStart": 486,
+      "proteinEnd": 494,
+      "type": "in-frame indel",
+      "tumorCount": 7
+    },
+    {
+      "residue": "L485",
+      "proteinStart": 485,
+      "proteinEnd": 485,
+      "type": "single residue",
+      "tumorCount": 6
+    },
+    {
+      "residue": "X327",
+      "proteinStart": 327,
+      "proteinEnd": 327,
+      "type": "splice site",
+      "tumorCount": 3
+    }
+  ],
+  "EGFR": [
+    {
+      "residue": "745-759",
+      "proteinStart": 745,
+      "proteinEnd": 759,
+      "type": "in-frame indel",
+      "tumorCount": 155
+    },
+    {
+      "residue": "L858",
+      "proteinStart": 858,
+      "proteinEnd": 858,
+      "type": "single residue",
+      "tumorCount": 144
+    },
+    {
+      "residue": "T790",
+      "proteinStart": 790,
+      "proteinEnd": 790,
+      "type": "single residue",
+      "tumorCount": 60
+    },
+    {
+      "residue": "A289",
+      "proteinStart": 289,
+      "proteinEnd": 289,
+      "type": "single residue",
+      "tumorCount": 59
+    },
+    {
+      "residue": "G598",
+      "proteinStart": 598,
+      "proteinEnd": 598,
+      "type": "single residue",
+      "tumorCount": 33
+    },
+    {
+      "residue": "G719",
+      "proteinStart": 719,
+      "proteinEnd": 719,
+      "type": "single residue",
+      "tumorCount": 33
+    },
+    {
+      "residue": "764-774",
+      "proteinStart": 764,
+      "proteinEnd": 774,
+      "type": "in-frame indel",
+      "tumorCount": 33
+    },
+    {
+      "residue": "L861",
+      "proteinStart": 861,
+      "proteinEnd": 861,
+      "type": "single residue",
+      "tumorCount": 21
+    },
+    {
+      "residue": "R108",
+      "proteinStart": 108,
+      "proteinEnd": 108,
+      "type": "single residue",
+      "tumorCount": 19
+    },
+    {
+      "residue": "R222",
+      "proteinStart": 222,
+      "proteinEnd": 222,
+      "type": "single residue",
+      "tumorCount": 16
+    },
+    {
+      "residue": "R252",
+      "proteinStart": 252,
+      "proteinEnd": 252,
+      "type": "single residue",
+      "tumorCount": 16
+    },
+    {
+      "residue": "E709",
+      "proteinStart": 709,
+      "proteinEnd": 709,
+      "type": "single residue",
+      "tumorCount": 16
+    },
+    {
+      "residue": "S768",
+      "proteinStart": 768,
+      "proteinEnd": 768,
+      "type": "single residue",
+      "tumorCount": 15
+    },
+    {
+      "residue": "C797",
+      "proteinStart": 797,
+      "proteinEnd": 797,
+      "type": "single residue",
+      "tumorCount": 13
+    },
+    {
+      "residue": "R776",
+      "proteinStart": 776,
+      "proteinEnd": 776,
+      "type": "single residue",
+      "tumorCount": 13
+    },
+    {
+      "residue": "L62",
+      "proteinStart": 62,
+      "proteinEnd": 62,
+      "type": "single residue",
+      "tumorCount": 10
+    },
+    {
+      "residue": "709-710",
+      "proteinStart": 709,
+      "proteinEnd": 710,
+      "type": "in-frame indel",
+      "tumorCount": 9
+    },
+    {
+      "residue": "L747",
+      "proteinStart": 747,
+      "proteinEnd": 747,
+      "type": "single residue",
+      "tumorCount": 8
+    },
+    {
+      "residue": "P596",
+      "proteinStart": 596,
+      "proteinEnd": 596,
+      "type": "single residue",
+      "tumorCount": 8
+    },
+    {
+      "residue": "T363",
+      "proteinStart": 363,
+      "proteinEnd": 363,
+      "type": "single residue",
+      "tumorCount": 7
+    },
+    {
+      "residue": "V834",
+      "proteinStart": 834,
+      "proteinEnd": 834,
+      "type": "single residue",
+      "tumorCount": 7
+    },
+    {
+      "residue": "H304",
+      "proteinStart": 304,
+      "proteinEnd": 304,
+      "type": "single residue",
+      "tumorCount": 5
+    },
+    {
+      "residue": "L833",
+      "proteinStart": 833,
+      "proteinEnd": 833,
+      "type": "single residue",
+      "tumorCount": 5
+    },
+    {
+      "residue": "A755",
+      "proteinStart": 755,
+      "proteinEnd": 755,
+      "type": "single residue",
+      "tumorCount": 5
+    },
+    {
+      "residue": "T263",
+      "proteinStart": 263,
+      "proteinEnd": 263,
+      "type": "single residue",
+      "tumorCount": 4
+    },
+    {
+      "residue": "A750",
+      "proteinStart": 750,
+      "proteinEnd": 750,
+      "type": "single residue",
+      "tumorCount": 4
+    },
+    {
+      "residue": "L838",
+      "proteinStart": 838,
+      "proteinEnd": 838,
+      "type": "single residue",
+      "tumorCount": 3
+    },
+    {
+      "residue": "K754",
+      "proteinStart": 754,
+      "proteinEnd": 754,
+      "type": "single residue",
+      "tumorCount": 3
+    }
+  ],
+  "TP53": [
+    {
+      "residue": "R273",
+      "proteinStart": 273,
+      "proteinEnd": 273,
+      "type": "single residue",
+      "tumorCount": 609
+    },
+    {
+      "residue": "R248",
+      "proteinStart": 248,
+      "proteinEnd": 248,
+      "type": "single residue",
+      "tumorCount": 560
+    },
+    {
+      "residue": "R175",
+      "proteinStart": 175,
+      "proteinEnd": 175,
+      "type": "single residue",
+      "tumorCount": 416
+    },
+    {
+      "residue": "G245",
+      "proteinStart": 245,
+      "proteinEnd": 245,
+      "type": "single residue",
+      "tumorCount": 242
+    },
+    {
+      "residue": "R282",
+      "proteinStart": 282,
+      "proteinEnd": 282,
+      "type": "single residue",
+      "tumorCount": 219
+    },
+    {
+      "residue": "Y220",
+      "proteinStart": 220,
+      "proteinEnd": 220,
+      "type": "single residue",
+      "tumorCount": 152
+    },
+    {
+      "residue": "H179",
+      "proteinStart": 179,
+      "proteinEnd": 179,
+      "type": "single residue",
+      "tumorCount": 149
+    },
+    {
+      "residue": "H193",
+      "proteinStart": 193,
+      "proteinEnd": 193,
+      "type": "single residue",
+      "tumorCount": 123
+    },
+    {
+      "residue": "G266",
+      "proteinStart": 266,
+      "proteinEnd": 266,
+      "type": "single residue",
+      "tumorCount": 117
+    },
+    {
+      "residue": "C176",
+      "proteinStart": 176,
+      "proteinEnd": 176,
+      "type": "single residue",
+      "tumorCount": 115
+    },
+    {
+      "residue": "R280",
+      "proteinStart": 280,
+      "proteinEnd": 280,
+      "type": "single residue",
+      "tumorCount": 109
+    },
+    {
+      "residue": "R158",
+      "proteinStart": 158,
+      "proteinEnd": 158,
+      "type": "single residue",
+      "tumorCount": 106
+    },
+    {
+      "residue": "R249",
+      "proteinStart": 249,
+      "proteinEnd": 249,
+      "type": "single residue",
+      "tumorCount": 102
+    },
+    {
+      "residue": "X187",
+      "proteinStart": 187,
+      "proteinEnd": 187,
+      "type": "splice site",
+      "tumorCount": 100
+    },
+    {
+      "residue": "P278",
+      "proteinStart": 278,
+      "proteinEnd": 278,
+      "type": "single residue",
+      "tumorCount": 100
+    },
+    {
+      "residue": "E285",
+      "proteinStart": 285,
+      "proteinEnd": 285,
+      "type": "single residue",
+      "tumorCount": 99
+    },
+    {
+      "residue": "S241",
+      "proteinStart": 241,
+      "proteinEnd": 241,
+      "type": "single residue",
+      "tumorCount": 97
+    },
+    {
+      "residue": "K132",
+      "proteinStart": 132,
+      "proteinEnd": 132,
+      "type": "single residue",
+      "tumorCount": 83
+    },
+    {
+      "residue": "Y163",
+      "proteinStart": 163,
+      "proteinEnd": 163,
+      "type": "single residue",
+      "tumorCount": 79
+    },
+    {
+      "residue": "I195",
+      "proteinStart": 195,
+      "proteinEnd": 195,
+      "type": "single residue",
+      "tumorCount": 79
+    },
+    {
+      "residue": "P151",
+      "proteinStart": 151,
+      "proteinEnd": 151,
+      "type": "single residue",
+      "tumorCount": 79
+    },
+    {
+      "residue": "V173",
+      "proteinStart": 173,
+      "proteinEnd": 173,
+      "type": "single residue",
+      "tumorCount": 78
+    },
+    {
+      "residue": "X307",
+      "proteinStart": 307,
+      "proteinEnd": 307,
+      "type": "splice site",
+      "tumorCount": 77
+    },
+    {
+      "residue": "C238",
+      "proteinStart": 238,
+      "proteinEnd": 238,
+      "type": "single residue",
+      "tumorCount": 77
+    },
+    {
+      "residue": "V157",
+      "proteinStart": 157,
+      "proteinEnd": 157,
+      "type": "single residue",
+      "tumorCount": 77
+    },
+    {
+      "residue": "229-292",
+      "proteinStart": 229,
+      "proteinEnd": 292,
+      "type": "in-frame indel",
+      "tumorCount": 76
+    },
+    {
+      "residue": "X126",
+      "proteinStart": 126,
+      "proteinEnd": 126,
+      "type": "splice site",
+      "tumorCount": 75
+    },
+    {
+      "residue": "C135",
+      "proteinStart": 135,
+      "proteinEnd": 135,
+      "type": "single residue",
+      "tumorCount": 74
+    },
+    {
+      "residue": "E286",
+      "proteinStart": 286,
+      "proteinEnd": 286,
+      "type": "single residue",
+      "tumorCount": 73
+    },
+    {
+      "residue": "C275",
+      "proteinStart": 275,
+      "proteinEnd": 275,
+      "type": "single residue",
+      "tumorCount": 70
+    },
+    {
+      "residue": "D281",
+      "proteinStart": 281,
+      "proteinEnd": 281,
+      "type": "single residue",
+      "tumorCount": 69
+    },
+    {
+      "residue": "Y234",
+      "proteinStart": 234,
+      "proteinEnd": 234,
+      "type": "single residue",
+      "tumorCount": 68
+    },
+    {
+      "residue": "R337",
+      "proteinStart": 337,
+      "proteinEnd": 337,
+      "type": "single residue",
+      "tumorCount": 68
+    },
+    {
+      "residue": "V272",
+      "proteinStart": 272,
+      "proteinEnd": 272,
+      "type": "single residue",
+      "tumorCount": 66
+    },
+    {
+      "residue": "G244",
+      "proteinStart": 244,
+      "proteinEnd": 244,
+      "type": "single residue",
+      "tumorCount": 65
+    },
+    {
+      "residue": "M237",
+      "proteinStart": 237,
+      "proteinEnd": 237,
+      "type": "single residue",
+      "tumorCount": 64
+    },
+    {
+      "residue": "Y205",
+      "proteinStart": 205,
+      "proteinEnd": 205,
+      "type": "single residue",
+      "tumorCount": 61
+    },
+    {
+      "residue": "Y236",
+      "proteinStart": 236,
+      "proteinEnd": 236,
+      "type": "single residue",
+      "tumorCount": 59
+    },
+    {
+      "residue": "C242",
+      "proteinStart": 242,
+      "proteinEnd": 242,
+      "type": "single residue",
+      "tumorCount": 59
+    },
+    {
+      "residue": "E271",
+      "proteinStart": 271,
+      "proteinEnd": 271,
+      "type": "single residue",
+      "tumorCount": 53
+    },
+    {
+      "residue": "G199",
+      "proteinStart": 199,
+      "proteinEnd": 199,
+      "type": "single residue",
+      "tumorCount": 53
+    },
+    {
+      "residue": "A159",
+      "proteinStart": 159,
+      "proteinEnd": 159,
+      "type": "single residue",
+      "tumorCount": 52
+    },
+    {
+      "residue": "X261",
+      "proteinStart": 261,
+      "proteinEnd": 261,
+      "type": "splice site",
+      "tumorCount": 51
+    },
+    {
+      "residue": "S215",
+      "proteinStart": 215,
+      "proteinEnd": 215,
+      "type": "single residue",
+      "tumorCount": 50
+    },
+    {
+      "residue": "X331",
+      "proteinStart": 331,
+      "proteinEnd": 331,
+      "type": "splice site",
+      "tumorCount": 49
+    },
+    {
+      "residue": "L194",
+      "proteinStart": 194,
+      "proteinEnd": 194,
+      "type": "single residue",
+      "tumorCount": 49
+    },
+    {
+      "residue": "S127",
+      "proteinStart": 127,
+      "proteinEnd": 127,
+      "type": "single residue",
+      "tumorCount": 48
+    },
+    {
+      "residue": "X332",
+      "proteinStart": 332,
+      "proteinEnd": 332,
+      "type": "splice site",
+      "tumorCount": 48
+    },
+    {
+      "residue": "C141",
+      "proteinStart": 141,
+      "proteinEnd": 141,
+      "type": "single residue",
+      "tumorCount": 47
+    },
+    {
+      "residue": "E258",
+      "proteinStart": 258,
+      "proteinEnd": 258,
+      "type": "single residue",
+      "tumorCount": 47
+    },
+    {
+      "residue": "V274",
+      "proteinStart": 274,
+      "proteinEnd": 274,
+      "type": "single residue",
+      "tumorCount": 46
+    },
+    {
+      "residue": "X225",
+      "proteinStart": 225,
+      "proteinEnd": 225,
+      "type": "splice site",
+      "tumorCount": 46
+    },
+    {
+      "residue": "X125",
+      "proteinStart": 125,
+      "proteinEnd": 125,
+      "type": "splice site",
+      "tumorCount": 43
+    },
+    {
+      "residue": "R110",
+      "proteinStart": 110,
+      "proteinEnd": 110,
+      "type": "single residue",
+      "tumorCount": 43
+    },
+    {
+      "residue": "V216",
+      "proteinStart": 216,
+      "proteinEnd": 216,
+      "type": "single residue",
+      "tumorCount": 42
+    },
+    {
+      "residue": "E224",
+      "proteinStart": 224,
+      "proteinEnd": 224,
+      "type": "single residue",
+      "tumorCount": 42
+    },
+    {
+      "residue": "N239",
+      "proteinStart": 239,
+      "proteinEnd": 239,
+      "type": "single residue",
+      "tumorCount": 41
+    },
+    {
+      "residue": "H214",
+      "proteinStart": 214,
+      "proteinEnd": 214,
+      "type": "single residue",
+      "tumorCount": 40
+    },
+    {
+      "residue": "X224",
+      "proteinStart": 224,
+      "proteinEnd": 224,
+      "type": "splice site",
+      "tumorCount": 39
+    },
+    {
+      "residue": "128-163",
+      "proteinStart": 128,
+      "proteinEnd": 163,
+      "type": "in-frame indel",
+      "tumorCount": 39
+    },
+    {
+      "residue": "P152",
+      "proteinStart": 152,
+      "proteinEnd": 152,
+      "type": "single residue",
+      "tumorCount": 38
+    },
+    {
+      "residue": "R283",
+      "proteinStart": 283,
+      "proteinEnd": 283,
+      "type": "single residue",
+      "tumorCount": 38
+    },
+    {
+      "residue": "E180",
+      "proteinStart": 180,
+      "proteinEnd": 180,
+      "type": "single residue",
+      "tumorCount": 38
+    },
+    {
+      "residue": "M246",
+      "proteinStart": 246,
+      "proteinEnd": 246,
+      "type": "single residue",
+      "tumorCount": 37
+    },
+    {
+      "residue": "A138",
+      "proteinStart": 138,
+      "proteinEnd": 138,
+      "type": "single residue",
+      "tumorCount": 37
+    },
+    {
+      "residue": "R156",
+      "proteinStart": 156,
+      "proteinEnd": 156,
+      "type": "single residue",
+      "tumorCount": 37
+    },
+    {
+      "residue": "R267",
+      "proteinStart": 267,
+      "proteinEnd": 267,
+      "type": "single residue",
+      "tumorCount": 36
+    },
+    {
+      "residue": "X33",
+      "proteinStart": 33,
+      "proteinEnd": 33,
+      "type": "splice site",
+      "tumorCount": 35
+    },
+    {
+      "residue": "Y126",
+      "proteinStart": 126,
+      "proteinEnd": 126,
+      "type": "single residue",
+      "tumorCount": 33
+    },
+    {
+      "residue": "A276",
+      "proteinStart": 276,
+      "proteinEnd": 276,
+      "type": "single residue",
+      "tumorCount": 33
+    },
+    {
+      "residue": "I255",
+      "proteinStart": 255,
+      "proteinEnd": 255,
+      "type": "single residue",
+      "tumorCount": 32
+    },
+    {
+      "residue": "Q136",
+      "proteinStart": 136,
+      "proteinEnd": 136,
+      "type": "single residue",
+      "tumorCount": 31
+    },
+    {
+      "residue": "D259",
+      "proteinStart": 259,
+      "proteinEnd": 259,
+      "type": "single residue",
+      "tumorCount": 31
+    },
+    {
+      "residue": "F270",
+      "proteinStart": 270,
+      "proteinEnd": 270,
+      "type": "single residue",
+      "tumorCount": 30
+    },
+    {
+      "residue": "L130",
+      "proteinStart": 130,
+      "proteinEnd": 130,
+      "type": "single residue",
+      "tumorCount": 30
+    },
+    {
+      "residue": "T125",
+      "proteinStart": 125,
+      "proteinEnd": 125,
+      "type": "single residue",
+      "tumorCount": 30
+    },
+    {
+      "residue": "L145",
+      "proteinStart": 145,
+      "proteinEnd": 145,
+      "type": "single residue",
+      "tumorCount": 30
+    },
+    {
+      "residue": "C277",
+      "proteinStart": 277,
+      "proteinEnd": 277,
+      "type": "single residue",
+      "tumorCount": 28
+    },
+    {
+      "residue": "G105",
+      "proteinStart": 105,
+      "proteinEnd": 105,
+      "type": "single residue",
+      "tumorCount": 28
+    },
+    {
+      "residue": "G279",
+      "proteinStart": 279,
+      "proteinEnd": 279,
+      "type": "single residue",
+      "tumorCount": 28
+    },
+    {
+      "residue": "V143",
+      "proteinStart": 143,
+      "proteinEnd": 143,
+      "type": "single residue",
+      "tumorCount": 26
+    },
+    {
+      "residue": "A161",
+      "proteinStart": 161,
+      "proteinEnd": 161,
+      "type": "single residue",
+      "tumorCount": 26
+    },
+    {
+      "residue": "R181",
+      "proteinStart": 181,
+      "proteinEnd": 181,
+      "type": "single residue",
+      "tumorCount": 26
+    },
+    {
+      "residue": "G154",
+      "proteinStart": 154,
+      "proteinEnd": 154,
+      "type": "single residue",
+      "tumorCount": 25
+    },
+    {
+      "residue": "T253",
+      "proteinStart": 253,
+      "proteinEnd": 253,
+      "type": "single residue",
+      "tumorCount": 25
+    },
+    {
+      "residue": "P177",
+      "proteinStart": 177,
+      "proteinEnd": 177,
+      "type": "single residue",
+      "tumorCount": 25
+    },
+    {
+      "residue": "F134",
+      "proteinStart": 134,
+      "proteinEnd": 134,
+      "type": "single residue",
+      "tumorCount": 24
+    },
+    {
+      "residue": "P250",
+      "proteinStart": 250,
+      "proteinEnd": 250,
+      "type": "single residue",
+      "tumorCount": 24
+    },
+    {
+      "residue": "Q144",
+      "proteinStart": 144,
+      "proteinEnd": 144,
+      "type": "single residue",
+      "tumorCount": 23
+    },
+    {
+      "residue": "S240",
+      "proteinStart": 240,
+      "proteinEnd": 240,
+      "type": "single residue",
+      "tumorCount": 23
+    },
+    {
+      "residue": "173-187",
+      "proteinStart": 173,
+      "proteinEnd": 187,
+      "type": "in-frame indel",
+      "tumorCount": 21
+    },
+    {
+      "residue": "I162",
+      "proteinStart": 162,
+      "proteinEnd": 162,
+      "type": "single residue",
+      "tumorCount": 21
+    },
+    {
+      "residue": "K139",
+      "proteinStart": 139,
+      "proteinEnd": 139,
+      "type": "single residue",
+      "tumorCount": 21
+    },
+    {
+      "residue": "X32",
+      "proteinStart": 32,
+      "proteinEnd": 32,
+      "type": "splice site",
+      "tumorCount": 20
+    },
+    {
+      "residue": "191-206",
+      "proteinStart": 191,
+      "proteinEnd": 206,
+      "type": "in-frame indel",
+      "tumorCount": 20
+    },
+    {
+      "residue": "G334",
+      "proteinStart": 334,
+      "proteinEnd": 334,
+      "type": "single residue",
+      "tumorCount": 20
+    },
+    {
+      "residue": "H168",
+      "proteinStart": 168,
+      "proteinEnd": 168,
+      "type": "single residue",
+      "tumorCount": 19
+    },
+    {
+      "residue": "L265",
+      "proteinStart": 265,
+      "proteinEnd": 265,
+      "type": "single residue",
+      "tumorCount": 19
+    },
+    {
+      "residue": "T211",
+      "proteinStart": 211,
+      "proteinEnd": 211,
+      "type": "single residue",
+      "tumorCount": 19
+    },
+    {
+      "residue": "V172",
+      "proteinStart": 172,
+      "proteinEnd": 172,
+      "type": "single residue",
+      "tumorCount": 18
+    },
+    {
+      "residue": "T155",
+      "proteinStart": 155,
+      "proteinEnd": 155,
+      "type": "single residue",
+      "tumorCount": 18
+    },
+    {
+      "residue": "L111",
+      "proteinStart": 111,
+      "proteinEnd": 111,
+      "type": "single residue",
+      "tumorCount": 18
+    },
+    {
+      "residue": "L257",
+      "proteinStart": 257,
+      "proteinEnd": 257,
+      "type": "single residue",
+      "tumorCount": 17
+    },
+    {
+      "residue": "G262",
+      "proteinStart": 262,
+      "proteinEnd": 262,
+      "type": "single residue",
+      "tumorCount": 17
+    },
+    {
+      "residue": "F113",
+      "proteinStart": 113,
+      "proteinEnd": 113,
+      "type": "single residue",
+      "tumorCount": 17
+    },
+    {
+      "residue": "P190",
+      "proteinStart": 190,
+      "proteinEnd": 190,
+      "type": "single residue",
+      "tumorCount": 17
+    },
+    {
+      "residue": "V197",
+      "proteinStart": 197,
+      "proteinEnd": 197,
+      "type": "single residue",
+      "tumorCount": 17
+    },
+    {
+      "residue": "F109",
+      "proteinStart": 109,
+      "proteinEnd": 109,
+      "type": "single residue",
+      "tumorCount": 16
+    },
+    {
+      "residue": "R174",
+      "proteinStart": 174,
+      "proteinEnd": 174,
+      "type": "single residue",
+      "tumorCount": 16
+    },
+    {
+      "residue": "S106",
+      "proteinStart": 106,
+      "proteinEnd": 106,
+      "type": "single residue",
+      "tumorCount": 16
+    },
+    {
+      "residue": "R290",
+      "proteinStart": 290,
+      "proteinEnd": 290,
+      "type": "single residue",
+      "tumorCount": 16
+    },
+    {
+      "residue": "I251",
+      "proteinStart": 251,
+      "proteinEnd": 251,
+      "type": "single residue",
+      "tumorCount": 15
+    },
+    {
+      "residue": "N247",
+      "proteinStart": 247,
+      "proteinEnd": 247,
+      "type": "single residue",
+      "tumorCount": 15
+    },
+    {
+      "residue": "Y107",
+      "proteinStart": 107,
+      "proteinEnd": 107,
+      "type": "single residue",
+      "tumorCount": 15
+    },
+    {
+      "residue": "I232",
+      "proteinStart": 232,
+      "proteinEnd": 232,
+      "type": "single residue",
+      "tumorCount": 14
+    },
+    {
+      "residue": "K164",
+      "proteinStart": 164,
+      "proteinEnd": 164,
+      "type": "single residue",
+      "tumorCount": 13
+    },
+    {
+      "residue": "N131",
+      "proteinStart": 131,
+      "proteinEnd": 131,
+      "type": "single residue",
+      "tumorCount": 13
+    },
+    {
+      "residue": "I254",
+      "proteinStart": 254,
+      "proteinEnd": 254,
+      "type": "single residue",
+      "tumorCount": 13
+    },
+    {
+      "residue": "D208",
+      "proteinStart": 208,
+      "proteinEnd": 208,
+      "type": "single residue",
+      "tumorCount": 12
+    },
+    {
+      "residue": "H178",
+      "proteinStart": 178,
+      "proteinEnd": 178,
+      "type": "single residue",
+      "tumorCount": 12
+    },
+    {
+      "residue": "V147",
+      "proteinStart": 147,
+      "proteinEnd": 147,
+      "type": "single residue",
+      "tumorCount": 12
+    },
+    {
+      "residue": "L330",
+      "proteinStart": 330,
+      "proteinEnd": 330,
+      "type": "single residue",
+      "tumorCount": 11
+    },
+    {
+      "residue": "M133",
+      "proteinStart": 133,
+      "proteinEnd": 133,
+      "type": "single residue",
+      "tumorCount": 10
+    },
+    {
+      "residue": "K120",
+      "proteinStart": 120,
+      "proteinEnd": 120,
+      "type": "single residue",
+      "tumorCount": 9
+    },
+    {
+      "residue": "V218",
+      "proteinStart": 218,
+      "proteinEnd": 218,
+      "type": "single residue",
+      "tumorCount": 9
+    },
+    {
+      "residue": "F341",
+      "proteinStart": 341,
+      "proteinEnd": 341,
+      "type": "single residue",
+      "tumorCount": 8
+    },
+    {
+      "residue": "A347",
+      "proteinStart": 347,
+      "proteinEnd": 347,
+      "type": "single residue",
+      "tumorCount": 8
+    },
+    {
+      "residue": "L344",
+      "proteinStart": 344,
+      "proteinEnd": 344,
+      "type": "single residue",
+      "tumorCount": 7
+    }
+  ],
+  "KRAS": [
+    {
+      "residue": "G12",
+      "proteinStart": 12,
+      "proteinEnd": 12,
+      "type": "single residue",
+      "tumorCount": 2175
+    },
+    {
+      "residue": "G13",
+      "proteinStart": 13,
+      "proteinEnd": 13,
+      "type": "single residue",
+      "tumorCount": 264
+    },
+    {
+      "residue": "Q61",
+      "proteinStart": 61,
+      "proteinEnd": 61,
+      "type": "single residue",
+      "tumorCount": 190
+    },
+    {
+      "residue": "A146",
+      "proteinStart": 146,
+      "proteinEnd": 146,
+      "type": "single residue",
+      "tumorCount": 86
+    },
+    {
+      "residue": "G60",
+      "proteinStart": 60,
+      "proteinEnd": 60,
+      "type": "single residue",
+      "tumorCount": 24
+    },
+    {
+      "residue": "K117",
+      "proteinStart": 117,
+      "proteinEnd": 117,
+      "type": "single residue",
+      "tumorCount": 18
+    },
+    {
+      "residue": "V14",
+      "proteinStart": 14,
+      "proteinEnd": 14,
+      "type": "single residue",
+      "tumorCount": 18
+    },
+    {
+      "residue": "A59",
+      "proteinStart": 59,
+      "proteinEnd": 59,
+      "type": "single residue",
+      "tumorCount": 12
+    },
+    {
+      "residue": "L19",
+      "proteinStart": 19,
+      "proteinEnd": 19,
+      "type": "single residue",
+      "tumorCount": 12
+    },
+    {
+      "residue": "A11",
+      "proteinStart": 11,
+      "proteinEnd": 11,
+      "type": "single residue",
+      "tumorCount": 8
+    },
+    {
+      "residue": "Q22",
+      "proteinStart": 22,
+      "proteinEnd": 22,
+      "type": "single residue",
+      "tumorCount": 6
+    },
+    {
+      "residue": "D33",
+      "proteinStart": 33,
+      "proteinEnd": 33,
+      "type": "single residue",
+      "tumorCount": 4
+    },
+    {
+      "residue": "K5",
+      "proteinStart": 5,
+      "proteinEnd": 5,
+      "type": "single residue",
+      "tumorCount": 3
+    }
+  ],
+  "AKT1": [
+    {
+      "residue": "E17",
+      "proteinStart": 17,
+      "proteinEnd": 17,
+      "type": "single residue",
+      "tumorCount": 149
+    },
+    {
+      "residue": "W80",
+      "proteinStart": 80,
+      "proteinEnd": 80,
+      "type": "single residue",
+      "tumorCount": 11
+    },
+    {
+      "residue": "E40",
+      "proteinStart": 40,
+      "proteinEnd": 40,
+      "type": "single residue",
+      "tumorCount": 9
+    },
+    {
+      "residue": "Q79",
+      "proteinStart": 79,
+      "proteinEnd": 79,
+      "type": "single residue",
+      "tumorCount": 6
+    },
+    {
+      "residue": "L52",
+      "proteinStart": 52,
+      "proteinEnd": 52,
+      "type": "single residue",
+      "tumorCount": 5
+    },
+    {
+      "residue": "D323",
+      "proteinStart": 323,
+      "proteinEnd": 323,
+      "type": "single residue",
+      "tumorCount": 5
+    },
+    {
+      "residue": "65-77",
+      "proteinStart": 65,
+      "proteinEnd": 77,
+      "type": "in-frame indel",
+      "tumorCount": 2
+    }
+  ],
+  "GNAS": [
+    {
+      "residue": "R201",
+      "proteinStart": 201,
+      "proteinEnd": 201,
+      "type": "single residue",
+      "tumorCount": 139
+    },
+    {
+      "residue": "Q227",
+      "proteinStart": 227,
+      "proteinEnd": 227,
+      "type": "single residue",
+      "tumorCount": 11
+    },
+    {
+      "residue": "R160",
+      "proteinStart": 160,
+      "proteinEnd": 160,
+      "type": "single residue",
+      "tumorCount": 9
+    }
+  ],
+  "FGFR3": [
+    {
+      "residue": "S249",
+      "proteinStart": 249,
+      "proteinEnd": 249,
+      "type": "single residue",
+      "tumorCount": 114
+    },
+    {
+      "residue": "Y373",
+      "proteinStart": 373,
+      "proteinEnd": 373,
+      "type": "single residue",
+      "tumorCount": 32
+    },
+    {
+      "residue": "R248",
+      "proteinStart": 248,
+      "proteinEnd": 248,
+      "type": "single residue",
+      "tumorCount": 31
+    },
+    {
+      "residue": "G380",
+      "proteinStart": 380,
+      "proteinEnd": 380,
+      "type": "single residue",
+      "tumorCount": 11
+    },
+    {
+      "residue": "K650",
+      "proteinStart": 650,
+      "proteinEnd": 650,
+      "type": "single residue",
+      "tumorCount": 10
+    },
+    {
+      "residue": "G370",
+      "proteinStart": 370,
+      "proteinEnd": 370,
+      "type": "single residue",
+      "tumorCount": 8
+    },
+    {
+      "residue": "S371",
+      "proteinStart": 371,
+      "proteinEnd": 371,
+      "type": "single residue",
+      "tumorCount": 5
+    },
+    {
+      "residue": "L8",
+      "proteinStart": 8,
+      "proteinEnd": 8,
+      "type": "single residue",
+      "tumorCount": 4
+    }
+  ],
+  "PTEN": [
+    {
+      "residue": "R130",
+      "proteinStart": 130,
+      "proteinEnd": 130,
+      "type": "single residue",
+      "tumorCount": 168
+    },
+    {
+      "residue": "R173",
+      "proteinStart": 173,
+      "proteinEnd": 173,
+      "type": "single residue",
+      "tumorCount": 32
+    },
+    {
+      "residue": "G36",
+      "proteinStart": 36,
+      "proteinEnd": 36,
+      "type": "single residue",
+      "tumorCount": 23
+    },
+    {
+      "residue": "X212",
+      "proteinStart": 212,
+      "proteinEnd": 212,
+      "type": "splice site",
+      "tumorCount": 19
+    },
+    {
+      "residue": "D92",
+      "proteinStart": 92,
+      "proteinEnd": 92,
+      "type": "single residue",
+      "tumorCount": 18
+    },
+    {
+      "residue": "R15",
+      "proteinStart": 15,
+      "proteinEnd": 15,
+      "type": "single residue",
+      "tumorCount": 18
+    },
+    {
+      "residue": "G132",
+      "proteinStart": 132,
+      "proteinEnd": 132,
+      "type": "single residue",
+      "tumorCount": 17
+    },
+    {
+      "residue": "X70",
+      "proteinStart": 70,
+      "proteinEnd": 70,
+      "type": "splice site",
+      "tumorCount": 15
+    },
+    {
+      "residue": "X343",
+      "proteinStart": 343,
+      "proteinEnd": 343,
+      "type": "splice site",
+      "tumorCount": 15
+    },
+    {
+      "residue": "H123",
+      "proteinStart": 123,
+      "proteinEnd": 123,
+      "type": "single residue",
+      "tumorCount": 15
+    },
+    {
+      "residue": "D107",
+      "proteinStart": 107,
+      "proteinEnd": 107,
+      "type": "single residue",
+      "tumorCount": 15
+    },
+    {
+      "residue": "C136",
+      "proteinStart": 136,
+      "proteinEnd": 136,
+      "type": "single residue",
+      "tumorCount": 14
+    },
+    {
+      "residue": "G127",
+      "proteinStart": 127,
+      "proteinEnd": 127,
+      "type": "single residue",
+      "tumorCount": 14
+    },
+    {
+      "residue": "K128",
+      "proteinStart": 128,
+      "proteinEnd": 128,
+      "type": "single residue",
+      "tumorCount": 14
+    },
+    {
+      "residue": "H93",
+      "proteinStart": 93,
+      "proteinEnd": 93,
+      "type": "single residue",
+      "tumorCount": 12
+    },
+    {
+      "residue": "X268",
+      "proteinStart": 268,
+      "proteinEnd": 268,
+      "type": "splice site",
+      "tumorCount": 12
+    },
+    {
+      "residue": "G129",
+      "proteinStart": 129,
+      "proteinEnd": 129,
+      "type": "single residue",
+      "tumorCount": 12
+    },
+    {
+      "residue": "G165",
+      "proteinStart": 165,
+      "proteinEnd": 165,
+      "type": "single residue",
+      "tumorCount": 12
+    },
+    {
+      "residue": "D326",
+      "proteinStart": 326,
+      "proteinEnd": 326,
+      "type": "single residue",
+      "tumorCount": 12
+    },
+    {
+      "residue": "Y68",
+      "proteinStart": 68,
+      "proteinEnd": 68,
+      "type": "single residue",
+      "tumorCount": 11
+    },
+    {
+      "residue": "A126",
+      "proteinStart": 126,
+      "proteinEnd": 126,
+      "type": "single residue",
+      "tumorCount": 11
+    },
+    {
+      "residue": "P38",
+      "proteinStart": 38,
+      "proteinEnd": 38,
+      "type": "single residue",
+      "tumorCount": 11
+    },
+    {
+      "residue": "I135",
+      "proteinStart": 135,
+      "proteinEnd": 135,
+      "type": "single residue",
+      "tumorCount": 11
+    },
+    {
+      "residue": "N48",
+      "proteinStart": 48,
+      "proteinEnd": 48,
+      "type": "single residue",
+      "tumorCount": 11
+    },
+    {
+      "residue": "N276",
+      "proteinStart": 276,
+      "proteinEnd": 276,
+      "type": "single residue",
+      "tumorCount": 11
+    },
+    {
+      "residue": "P95",
+      "proteinStart": 95,
+      "proteinEnd": 95,
+      "type": "single residue",
+      "tumorCount": 11
+    },
+    {
+      "residue": "Y27",
+      "proteinStart": 27,
+      "proteinEnd": 27,
+      "type": "single residue",
+      "tumorCount": 10
+    },
+    {
+      "residue": "D24",
+      "proteinStart": 24,
+      "proteinEnd": 24,
+      "type": "single residue",
+      "tumorCount": 10
+    },
+    {
+      "residue": "K125",
+      "proteinStart": 125,
+      "proteinEnd": 125,
+      "type": "single residue",
+      "tumorCount": 10
+    },
+    {
+      "residue": "P204",
+      "proteinStart": 204,
+      "proteinEnd": 204,
+      "type": "single residue",
+      "tumorCount": 10
+    },
+    {
+      "residue": "P96",
+      "proteinStart": 96,
+      "proteinEnd": 96,
+      "type": "single residue",
+      "tumorCount": 10
+    },
+    {
+      "residue": "R159",
+      "proteinStart": 159,
+      "proteinEnd": 159,
+      "type": "single residue",
+      "tumorCount": 10
+    },
+    {
+      "residue": "D252",
+      "proteinStart": 252,
+      "proteinEnd": 252,
+      "type": "single residue",
+      "tumorCount": 10
+    },
+    {
+      "residue": "W111",
+      "proteinStart": 111,
+      "proteinEnd": 111,
+      "type": "single residue",
+      "tumorCount": 9
+    },
+    {
+      "residue": "C124",
+      "proteinStart": 124,
+      "proteinEnd": 124,
+      "type": "single residue",
+      "tumorCount": 8
+    },
+    {
+      "residue": "X85",
+      "proteinStart": 85,
+      "proteinEnd": 85,
+      "type": "splice site",
+      "tumorCount": 8
+    },
+    {
+      "residue": "X342",
+      "proteinStart": 342,
+      "proteinEnd": 342,
+      "type": "splice site",
+      "tumorCount": 8
+    },
+    {
+      "residue": "M35",
+      "proteinStart": 35,
+      "proteinEnd": 35,
+      "type": "single residue",
+      "tumorCount": 8
+    },
+    {
+      "residue": "S170",
+      "proteinStart": 170,
+      "proteinEnd": 170,
+      "type": "single residue",
+      "tumorCount": 8
+    },
+    {
+      "residue": "L108",
+      "proteinStart": 108,
+      "proteinEnd": 108,
+      "type": "single residue",
+      "tumorCount": 8
+    },
+    {
+      "residue": "C105",
+      "proteinStart": 105,
+      "proteinEnd": 105,
+      "type": "single residue",
+      "tumorCount": 7
+    },
+    {
+      "residue": "C71",
+      "proteinStart": 71,
+      "proteinEnd": 71,
+      "type": "single residue",
+      "tumorCount": 7
+    },
+    {
+      "residue": "Y138",
+      "proteinStart": 138,
+      "proteinEnd": 138,
+      "type": "single residue",
+      "tumorCount": 7
+    },
+    {
+      "residue": "L23",
+      "proteinStart": 23,
+      "proteinEnd": 23,
+      "type": "single residue",
+      "tumorCount": 7
+    },
+    {
+      "residue": "V119",
+      "proteinStart": 119,
+      "proteinEnd": 119,
+      "type": "single residue",
+      "tumorCount": 7
+    },
+    {
+      "residue": "Y346",
+      "proteinStart": 346,
+      "proteinEnd": 346,
+      "type": "single residue",
+      "tumorCount": 6
+    },
+    {
+      "residue": "H61",
+      "proteinStart": 61,
+      "proteinEnd": 61,
+      "type": "single residue",
+      "tumorCount": 6
+    },
+    {
+      "residue": "G251",
+      "proteinStart": 251,
+      "proteinEnd": 251,
+      "type": "single residue",
+      "tumorCount": 6
+    },
+    {
+      "residue": "T277",
+      "proteinStart": 277,
+      "proteinEnd": 277,
+      "type": "single residue",
+      "tumorCount": 6
+    },
+    {
+      "residue": "Y155",
+      "proteinStart": 155,
+      "proteinEnd": 155,
+      "type": "single residue",
+      "tumorCount": 5
+    },
+    {
+      "residue": "Y178",
+      "proteinStart": 178,
+      "proteinEnd": 178,
+      "type": "single residue",
+      "tumorCount": 5
+    },
+    {
+      "residue": "Y16",
+      "proteinStart": 16,
+      "proteinEnd": 16,
+      "type": "single residue",
+      "tumorCount": 5
+    },
+    {
+      "residue": "Y177",
+      "proteinStart": 177,
+      "proteinEnd": 177,
+      "type": "single residue",
+      "tumorCount": 5
+    },
+    {
+      "residue": "X267",
+      "proteinStart": 267,
+      "proteinEnd": 267,
+      "type": "splice site",
+      "tumorCount": 5
+    },
+    {
+      "residue": "L320",
+      "proteinStart": 320,
+      "proteinEnd": 320,
+      "type": "single residue",
+      "tumorCount": 4
+    },
+    {
+      "residue": "I67",
+      "proteinStart": 67,
+      "proteinEnd": 67,
+      "type": "single residue",
+      "tumorCount": 4
+    },
+    {
+      "residue": "Y174",
+      "proteinStart": 174,
+      "proteinEnd": 174,
+      "type": "single residue",
+      "tumorCount": 4
+    },
+    {
+      "residue": "I101",
+      "proteinStart": 101,
+      "proteinEnd": 101,
+      "type": "single residue",
+      "tumorCount": 4
+    }
+  ],
+  "HRAS": [
+    {
+      "residue": "Q61",
+      "proteinStart": 61,
+      "proteinEnd": 61,
+      "type": "single residue",
+      "tumorCount": 102
+    },
+    {
+      "residue": "G13",
+      "proteinStart": 13,
+      "proteinEnd": 13,
+      "type": "single residue",
+      "tumorCount": 50
+    },
+    {
+      "residue": "G12",
+      "proteinStart": 12,
+      "proteinEnd": 12,
+      "type": "single residue",
+      "tumorCount": 38
+    },
+    {
+      "residue": "K117",
+      "proteinStart": 117,
+      "proteinEnd": 117,
+      "type": "single residue",
+      "tumorCount": 9
+    }
+  ],
+  "FBXW7": [
+    {
+      "residue": "R465",
+      "proteinStart": 465,
+      "proteinEnd": 465,
+      "type": "single residue",
+      "tumorCount": 128
+    },
+    {
+      "residue": "R505",
+      "proteinStart": 505,
+      "proteinEnd": 505,
+      "type": "single residue",
+      "tumorCount": 83
+    },
+    {
+      "residue": "R479",
+      "proteinStart": 479,
+      "proteinEnd": 479,
+      "type": "single residue",
+      "tumorCount": 57
+    },
+    {
+      "residue": "R658",
+      "proteinStart": 658,
+      "proteinEnd": 658,
+      "type": "single residue",
+      "tumorCount": 20
+    },
+    {
+      "residue": "R689",
+      "proteinStart": 689,
+      "proteinEnd": 689,
+      "type": "single residue",
+      "tumorCount": 19
+    },
+    {
+      "residue": "S582",
+      "proteinStart": 582,
+      "proteinEnd": 582,
+      "type": "single residue",
+      "tumorCount": 12
+    },
+    {
+      "residue": "D520",
+      "proteinStart": 520,
+      "proteinEnd": 520,
+      "type": "single residue",
+      "tumorCount": 11
+    },
+    {
+      "residue": "G423",
+      "proteinStart": 423,
+      "proteinEnd": 423,
+      "type": "single residue",
+      "tumorCount": 10
+    },
+    {
+      "residue": "R224",
+      "proteinStart": 224,
+      "proteinEnd": 224,
+      "type": "single residue",
+      "tumorCount": 10
+    },
+    {
+      "residue": "R14",
+      "proteinStart": 14,
+      "proteinEnd": 14,
+      "type": "single residue",
+      "tumorCount": 9
+    },
+    {
+      "residue": "S546",
+      "proteinStart": 546,
+      "proteinEnd": 546,
+      "type": "single residue",
+      "tumorCount": 9
+    },
+    {
+      "residue": "A503",
+      "proteinStart": 503,
+      "proteinEnd": 503,
+      "type": "single residue",
+      "tumorCount": 8
+    },
+    {
+      "residue": "Y545",
+      "proteinStart": 545,
+      "proteinEnd": 545,
+      "type": "single residue",
+      "tumorCount": 7
+    },
+    {
+      "residue": "E287",
+      "proteinStart": 287,
+      "proteinEnd": 287,
+      "type": "single residue",
+      "tumorCount": 7
+    },
+    {
+      "residue": "R441",
+      "proteinStart": 441,
+      "proteinEnd": 441,
+      "type": "single residue",
+      "tumorCount": 7
+    },
+    {
+      "residue": "R393",
+      "proteinStart": 393,
+      "proteinEnd": 393,
+      "type": "single residue",
+      "tumorCount": 7
+    },
+    {
+      "residue": "D600",
+      "proteinStart": 600,
+      "proteinEnd": 600,
+      "type": "single residue",
+      "tumorCount": 7
+    },
+    {
+      "residue": "G437",
+      "proteinStart": 437,
+      "proteinEnd": 437,
+      "type": "single residue",
+      "tumorCount": 6
+    },
+    {
+      "residue": "X195",
+      "proteinStart": 195,
+      "proteinEnd": 195,
+      "type": "splice site",
+      "tumorCount": 5
+    },
+    {
+      "residue": "T385",
+      "proteinStart": 385,
+      "proteinEnd": 385,
+      "type": "single residue",
+      "tumorCount": 4
+    },
+    {
+      "residue": "T532",
+      "proteinStart": 532,
+      "proteinEnd": 532,
+      "type": "single residue",
+      "tumorCount": 3
+    }
+  ],
+  "ERBB2": [
+    {
+      "residue": "S310",
+      "proteinStart": 310,
+      "proteinEnd": 310,
+      "type": "single residue",
+      "tumorCount": 113
+    },
+    {
+      "residue": "L755",
+      "proteinStart": 755,
+      "proteinEnd": 755,
+      "type": "single residue",
+      "tumorCount": 44
+    },
+    {
+      "residue": "772-775",
+      "proteinStart": 772,
+      "proteinEnd": 775,
+      "type": "in-frame indel",
+      "tumorCount": 34
+    },
+    {
+      "residue": "R678",
+      "proteinStart": 678,
+      "proteinEnd": 678,
+      "type": "single residue",
+      "tumorCount": 32
+    },
+    {
+      "residue": "V842",
+      "proteinStart": 842,
+      "proteinEnd": 842,
+      "type": "single residue",
+      "tumorCount": 26
+    },
+    {
+      "residue": "V777",
+      "proteinStart": 777,
+      "proteinEnd": 777,
+      "type": "single residue",
+      "tumorCount": 20
+    },
+    {
+      "residue": "D769",
+      "proteinStart": 769,
+      "proteinEnd": 769,
+      "type": "single residue",
+      "tumorCount": 18
+    },
+    {
+      "residue": "778-780",
+      "proteinStart": 778,
+      "proteinEnd": 780,
+      "type": "in-frame indel",
+      "tumorCount": 12
+    },
+    {
+      "residue": "I767",
+      "proteinStart": 767,
+      "proteinEnd": 767,
+      "type": "single residue",
+      "tumorCount": 9
+    },
+    {
+      "residue": "D277",
+      "proteinStart": 277,
+      "proteinEnd": 277,
+      "type": "single residue",
+      "tumorCount": 8
+    },
+    {
+      "residue": "G776",
+      "proteinStart": 776,
+      "proteinEnd": 776,
+      "type": "single residue",
+      "tumorCount": 6
+    },
+    {
+      "residue": "R103",
+      "proteinStart": 103,
+      "proteinEnd": 103,
+      "type": "single residue",
+      "tumorCount": 6
+    },
+    {
+      "residue": "A293",
+      "proteinStart": 293,
+      "proteinEnd": 293,
+      "type": "single residue",
+      "tumorCount": 6
+    },
+    {
+      "residue": "V659",
+      "proteinStart": 659,
+      "proteinEnd": 659,
+      "type": "single residue",
+      "tumorCount": 5
+    },
+    {
+      "residue": "G660",
+      "proteinStart": 660,
+      "proteinEnd": 660,
+      "type": "single residue",
+      "tumorCount": 5
+    },
+    {
+      "residue": "L869",
+      "proteinStart": 869,
+      "proteinEnd": 869,
+      "type": "single residue",
+      "tumorCount": 4
+    },
+    {
+      "residue": "T862",
+      "proteinStart": 862,
+      "proteinEnd": 862,
+      "type": "single residue",
+      "tumorCount": 4
+    },
+    {
+      "residue": "T733",
+      "proteinStart": 733,
+      "proteinEnd": 733,
+      "type": "single residue",
+      "tumorCount": 4
+    },
+    {
+      "residue": "V697",
+      "proteinStart": 697,
+      "proteinEnd": 697,
+      "type": "single residue",
+      "tumorCount": 4
+    },
+    {
+      "residue": "R138",
+      "proteinStart": 138,
+      "proteinEnd": 138,
+      "type": "single residue",
+      "tumorCount": 3
+    }
+  ],
+  "GNA11": [
+    {
+      "residue": "Q209",
+      "proteinStart": 209,
+      "proteinEnd": 209,
+      "type": "single residue",
+      "tumorCount": 59
+    },
+    {
+      "residue": "R183",
+      "proteinStart": 183,
+      "proteinEnd": 183,
+      "type": "single residue",
+      "tumorCount": 7
+    }
+  ],
+  "GNAQ": [
+    {
+      "residue": "Q209",
+      "proteinStart": 209,
+      "proteinEnd": 209,
+      "type": "single residue",
+      "tumorCount": 65
+    },
+    {
+      "residue": "R183",
+      "proteinStart": 183,
+      "proteinEnd": 183,
+      "type": "single residue",
+      "tumorCount": 10
+    },
+    {
+      "residue": "T96",
+      "proteinStart": 96,
+      "proteinEnd": 96,
+      "type": "single residue",
+      "tumorCount": 9
+    },
+    {
+      "residue": "G48",
+      "proteinStart": 48,
+      "proteinEnd": 48,
+      "type": "single residue",
+      "tumorCount": 3
+    }
+  ],
+  "GTF2I": [
+    {
+      "residue": "L424",
+      "proteinStart": 424,
+      "proteinEnd": 424,
+      "type": "single residue",
+      "tumorCount": 68
+    },
+    {
+      "residue": "N440",
+      "proteinStart": 440,
+      "proteinEnd": 440,
+      "type": "single residue",
+      "tumorCount": 19
+    },
+    {
+      "residue": "F641",
+      "proteinStart": 641,
+      "proteinEnd": 641,
+      "type": "single residue",
+      "tumorCount": 4
+    }
+  ],
+  "CTNNB1": [
+    {
+      "residue": "S37",
+      "proteinStart": 37,
+      "proteinEnd": 37,
+      "type": "single residue",
+      "tumorCount": 103
+    },
+    {
+      "residue": "S33",
+      "proteinStart": 33,
+      "proteinEnd": 33,
+      "type": "single residue",
+      "tumorCount": 96
+    },
+    {
+      "residue": "D32",
+      "proteinStart": 32,
+      "proteinEnd": 32,
+      "type": "single residue",
+      "tumorCount": 81
+    },
+    {
+      "residue": "S45",
+      "proteinStart": 45,
+      "proteinEnd": 45,
+      "type": "single residue",
+      "tumorCount": 71
+    },
+    {
+      "residue": "T41",
+      "proteinStart": 41,
+      "proteinEnd": 41,
+      "type": "single residue",
+      "tumorCount": 66
+    },
+    {
+      "residue": "G34",
+      "proteinStart": 34,
+      "proteinEnd": 34,
+      "type": "single residue",
+      "tumorCount": 53
+    },
+    {
+      "residue": "23-71",
+      "proteinStart": 23,
+      "proteinEnd": 71,
+      "type": "in-frame indel",
+      "tumorCount": 27
+    },
+    {
+      "residue": "K335",
+      "proteinStart": 335,
+      "proteinEnd": 335,
+      "type": "single residue",
+      "tumorCount": 19
+    },
+    {
+      "residue": "N387",
+      "proteinStart": 387,
+      "proteinEnd": 387,
+      "type": "single residue",
+      "tumorCount": 11
+    },
+    {
+      "residue": "H36",
+      "proteinStart": 36,
+      "proteinEnd": 36,
+      "type": "single residue",
+      "tumorCount": 8
+    },
+    {
+      "residue": "I35",
+      "proteinStart": 35,
+      "proteinEnd": 35,
+      "type": "single residue",
+      "tumorCount": 8
+    },
+    {
+      "residue": "R535",
+      "proteinStart": 535,
+      "proteinEnd": 535,
+      "type": "single residue",
+      "tumorCount": 7
+    },
+    {
+      "residue": "W383",
+      "proteinStart": 383,
+      "proteinEnd": 383,
+      "type": "single residue",
+      "tumorCount": 6
+    },
+    {
+      "residue": "K292",
+      "proteinStart": 292,
+      "proteinEnd": 292,
+      "type": "single residue",
+      "tumorCount": 4
+    }
+  ],
+  "SMAD4": [
+    {
+      "residue": "R361",
+      "proteinStart": 361,
+      "proteinEnd": 361,
+      "type": "single residue",
+      "tumorCount": 124
+    },
+    {
+      "residue": "D537",
+      "proteinStart": 537,
+      "proteinEnd": 537,
+      "type": "single residue",
+      "tumorCount": 30
+    },
+    {
+      "residue": "G386",
+      "proteinStart": 386,
+      "proteinEnd": 386,
+      "type": "single residue",
+      "tumorCount": 22
+    },
+    {
+      "residue": "D351",
+      "proteinStart": 351,
+      "proteinEnd": 351,
+      "type": "single residue",
+      "tumorCount": 20
+    },
+    {
+      "residue": "A406",
+      "proteinStart": 406,
+      "proteinEnd": 406,
+      "type": "single residue",
+      "tumorCount": 18
+    },
+    {
+      "residue": "R496",
+      "proteinStart": 496,
+      "proteinEnd": 496,
+      "type": "single residue",
+      "tumorCount": 17
+    },
+    {
+      "residue": "P356",
+      "proteinStart": 356,
+      "proteinEnd": 356,
+      "type": "single residue",
+      "tumorCount": 16
+    },
+    {
+      "residue": "G352",
+      "proteinStart": 352,
+      "proteinEnd": 352,
+      "type": "single residue",
+      "tumorCount": 11
+    },
+    {
+      "residue": "E330",
+      "proteinStart": 330,
+      "proteinEnd": 330,
+      "type": "single residue",
+      "tumorCount": 11
+    },
+    {
+      "residue": "E526",
+      "proteinStart": 526,
+      "proteinEnd": 526,
+      "type": "single residue",
+      "tumorCount": 11
+    },
+    {
+      "residue": "A118",
+      "proteinStart": 118,
+      "proteinEnd": 118,
+      "type": "single residue",
+      "tumorCount": 11
+    },
+    {
+      "residue": "I383",
+      "proteinStart": 383,
+      "proteinEnd": 383,
+      "type": "single residue",
+      "tumorCount": 11
+    },
+    {
+      "residue": "G365",
+      "proteinStart": 365,
+      "proteinEnd": 365,
+      "type": "single residue",
+      "tumorCount": 11
+    },
+    {
+      "residue": "W524",
+      "proteinStart": 524,
+      "proteinEnd": 524,
+      "type": "single residue",
+      "tumorCount": 9
+    },
+    {
+      "residue": "L533",
+      "proteinStart": 533,
+      "proteinEnd": 533,
+      "type": "single residue",
+      "tumorCount": 9
+    },
+    {
+      "residue": "G508",
+      "proteinStart": 508,
+      "proteinEnd": 508,
+      "type": "single residue",
+      "tumorCount": 9
+    },
+    {
+      "residue": "K428",
+      "proteinStart": 428,
+      "proteinEnd": 428,
+      "type": "single residue",
+      "tumorCount": 9
+    },
+    {
+      "residue": "G419",
+      "proteinStart": 419,
+      "proteinEnd": 419,
+      "type": "single residue",
+      "tumorCount": 8
+    },
+    {
+      "residue": "357-377",
+      "proteinStart": 357,
+      "proteinEnd": 377,
+      "type": "in-frame indel",
+      "tumorCount": 8
+    },
+    {
+      "residue": "D355",
+      "proteinStart": 355,
+      "proteinEnd": 355,
+      "type": "single residue",
+      "tumorCount": 7
+    },
+    {
+      "residue": "D493",
+      "proteinStart": 493,
+      "proteinEnd": 493,
+      "type": "single residue",
+      "tumorCount": 7
+    },
+    {
+      "residue": "C363",
+      "proteinStart": 363,
+      "proteinEnd": 363,
+      "type": "single residue",
+      "tumorCount": 6
+    },
+    {
+      "residue": "G510",
+      "proteinStart": 510,
+      "proteinEnd": 510,
+      "type": "single residue",
+      "tumorCount": 6
+    },
+    {
+      "residue": "C115",
+      "proteinStart": 115,
+      "proteinEnd": 115,
+      "type": "single residue",
+      "tumorCount": 6
+    },
+    {
+      "residue": "536-546",
+      "proteinStart": 536,
+      "proteinEnd": 546,
+      "type": "in-frame indel",
+      "tumorCount": 5
+    },
+    {
+      "residue": "L536",
+      "proteinStart": 536,
+      "proteinEnd": 536,
+      "type": "single residue",
+      "tumorCount": 4
+    },
+    {
+      "residue": "Y353",
+      "proteinStart": 353,
+      "proteinEnd": 353,
+      "type": "single residue",
+      "tumorCount": 4
+    },
+    {
+      "residue": "Y95",
+      "proteinStart": 95,
+      "proteinEnd": 95,
+      "type": "single residue",
+      "tumorCount": 4
+    }
+  ],
+  "SF3B1": [
+    {
+      "residue": "K700",
+      "proteinStart": 700,
+      "proteinEnd": 700,
+      "type": "single residue",
+      "tumorCount": 59
+    },
+    {
+      "residue": "R625",
+      "proteinStart": 625,
+      "proteinEnd": 625,
+      "type": "single residue",
+      "tumorCount": 59
+    },
+    {
+      "residue": "E902",
+      "proteinStart": 902,
+      "proteinEnd": 902,
+      "type": "single residue",
+      "tumorCount": 17
+    },
+    {
+      "residue": "K666",
+      "proteinStart": 666,
+      "proteinEnd": 666,
+      "type": "single residue",
+      "tumorCount": 13
+    },
+    {
+      "residue": "K741",
+      "proteinStart": 741,
+      "proteinEnd": 741,
+      "type": "single residue",
+      "tumorCount": 10
+    },
+    {
+      "residue": "G740",
+      "proteinStart": 740,
+      "proteinEnd": 740,
+      "type": "single residue",
+      "tumorCount": 9
+    },
+    {
+      "residue": "N626",
+      "proteinStart": 626,
+      "proteinEnd": 626,
+      "type": "single residue",
+      "tumorCount": 8
+    },
+    {
+      "residue": "G742",
+      "proteinStart": 742,
+      "proteinEnd": 742,
+      "type": "single residue",
+      "tumorCount": 8
+    },
+    {
+      "residue": "D894",
+      "proteinStart": 894,
+      "proteinEnd": 894,
+      "type": "single residue",
+      "tumorCount": 6
+    },
+    {
+      "residue": "Y623",
+      "proteinStart": 623,
+      "proteinEnd": 623,
+      "type": "single residue",
+      "tumorCount": 4
+    },
+    {
+      "residue": "V701",
+      "proteinStart": 701,
+      "proteinEnd": 701,
+      "type": "single residue",
+      "tumorCount": 4
+    }
+  ],
+  "ESR1": [
+    {
+      "residue": "Y537",
+      "proteinStart": 537,
+      "proteinEnd": 537,
+      "type": "single residue",
+      "tumorCount": 47
+    },
+    {
+      "residue": "D538",
+      "proteinStart": 538,
+      "proteinEnd": 538,
+      "type": "single residue",
+      "tumorCount": 46
+    },
+    {
+      "residue": "L536",
+      "proteinStart": 536,
+      "proteinEnd": 536,
+      "type": "single residue",
+      "tumorCount": 14
+    },
+    {
+      "residue": "E380",
+      "proteinStart": 380,
+      "proteinEnd": 380,
+      "type": "single residue",
+      "tumorCount": 14
+    },
+    {
+      "residue": "S463",
+      "proteinStart": 463,
+      "proteinEnd": 463,
+      "type": "single residue",
+      "tumorCount": 8
+    },
+    {
+      "residue": "422",
+      "proteinStart": 422,
+      "proteinEnd": 422,
+      "type": "in-frame indel",
+      "tumorCount": 3
+    }
+  ],
+  "IDH2": [
+    {
+      "residue": "R172",
+      "proteinStart": 172,
+      "proteinEnd": 172,
+      "type": "single residue",
+      "tumorCount": 63
+    },
+    {
+      "residue": "R140",
+      "proteinStart": 140,
+      "proteinEnd": 140,
+      "type": "single residue",
+      "tumorCount": 23
+    }
+  ],
+  "U2AF1": [
+    {
+      "residue": "S34",
+      "proteinStart": 34,
+      "proteinEnd": 34,
+      "type": "single residue",
+      "tumorCount": 85
+    },
+    {
+      "residue": "R156",
+      "proteinStart": 156,
+      "proteinEnd": 156,
+      "type": "single residue",
+      "tumorCount": 13
+    },
+    {
+      "residue": "I24",
+      "proteinStart": 24,
+      "proteinEnd": 24,
+      "type": "single residue",
+      "tumorCount": 5
+    },
+    {
+      "residue": "Q157",
+      "proteinStart": 157,
+      "proteinEnd": 157,
+      "type": "single residue",
+      "tumorCount": 4
+    },
+    {
+      "residue": "222-223",
+      "proteinStart": 222,
+      "proteinEnd": 223,
+      "type": "in-frame indel",
+      "tumorCount": 3
+    }
+  ],
+  "ERBB3": [
+    {
+      "residue": "V104",
+      "proteinStart": 104,
+      "proteinEnd": 104,
+      "type": "single residue",
+      "tumorCount": 61
+    },
+    {
+      "residue": "D297",
+      "proteinStart": 297,
+      "proteinEnd": 297,
+      "type": "single residue",
+      "tumorCount": 22
+    },
+    {
+      "residue": "E928",
+      "proteinStart": 928,
+      "proteinEnd": 928,
+      "type": "single residue",
+      "tumorCount": 17
+    },
+    {
+      "residue": "A232",
+      "proteinStart": 232,
+      "proteinEnd": 232,
+      "type": "single residue",
+      "tumorCount": 15
+    },
+    {
+      "residue": "E332",
+      "proteinStart": 332,
+      "proteinEnd": 332,
+      "type": "single residue",
+      "tumorCount": 14
+    },
+    {
+      "residue": "G284",
+      "proteinStart": 284,
+      "proteinEnd": 284,
+      "type": "single residue",
+      "tumorCount": 13
+    },
+    {
+      "residue": "K329",
+      "proteinStart": 329,
+      "proteinEnd": 329,
+      "type": "single residue",
+      "tumorCount": 12
+    },
+    {
+      "residue": "M91",
+      "proteinStart": 91,
+      "proteinEnd": 91,
+      "type": "single residue",
+      "tumorCount": 12
+    },
+    {
+      "residue": "S846",
+      "proteinStart": 846,
+      "proteinEnd": 846,
+      "type": "single residue",
+      "tumorCount": 10
+    },
+    {
+      "residue": "P262",
+      "proteinStart": 262,
+      "proteinEnd": 262,
+      "type": "single residue",
+      "tumorCount": 10
+    },
+    {
+      "residue": "H228",
+      "proteinStart": 228,
+      "proteinEnd": 228,
+      "type": "single residue",
+      "tumorCount": 8
+    },
+    {
+      "residue": "R475",
+      "proteinStart": 475,
+      "proteinEnd": 475,
+      "type": "single residue",
+      "tumorCount": 8
+    },
+    {
+      "residue": "G337",
+      "proteinStart": 337,
+      "proteinEnd": 337,
+      "type": "single residue",
+      "tumorCount": 8
+    },
+    {
+      "residue": "T355",
+      "proteinStart": 355,
+      "proteinEnd": 355,
+      "type": "single residue",
+      "tumorCount": 6
+    },
+    {
+      "residue": "T389",
+      "proteinStart": 389,
+      "proteinEnd": 389,
+      "type": "single residue",
+      "tumorCount": 6
+    },
+    {
+      "residue": "G325",
+      "proteinStart": 325,
+      "proteinEnd": 325,
+      "type": "single residue",
+      "tumorCount": 6
+    },
+    {
+      "residue": "F219",
+      "proteinStart": 219,
+      "proteinEnd": 219,
+      "type": "single residue",
+      "tumorCount": 5
+    },
+    {
+      "residue": "R103",
+      "proteinStart": 103,
+      "proteinEnd": 103,
+      "type": "single residue",
+      "tumorCount": 5
+    },
+    {
+      "residue": "M60",
+      "proteinStart": 60,
+      "proteinEnd": 60,
+      "type": "single residue",
+      "tumorCount": 4
+    },
+    {
+      "residue": "N126",
+      "proteinStart": 126,
+      "proteinEnd": 126,
+      "type": "single residue",
+      "tumorCount": 4
+    }
+  ],
+  "H3F3A": [
+    {
+      "residue": "K28",
+      "proteinStart": 28,
+      "proteinEnd": 28,
+      "type": "single residue",
+      "tumorCount": 33
+    },
+    {
+      "residue": "G35",
+      "proteinStart": 35,
+      "proteinEnd": 35,
+      "type": "single residue",
+      "tumorCount": 12
+    }
+  ],
+  "CDKN2A": [
+    {
+      "residue": "H83",
+      "proteinStart": 83,
+      "proteinEnd": 83,
+      "type": "single residue",
+      "tumorCount": 62
+    },
+    {
+      "residue": "P114",
+      "proteinStart": 114,
+      "proteinEnd": 114,
+      "type": "single residue",
+      "tumorCount": 31
+    },
+    {
+      "residue": "D108",
+      "proteinStart": 108,
+      "proteinEnd": 108,
+      "type": "single residue",
+      "tumorCount": 29
+    },
+    {
+      "residue": "E88",
+      "proteinStart": 88,
+      "proteinEnd": 88,
+      "type": "single residue",
+      "tumorCount": 27
+    },
+    {
+      "residue": "D84",
+      "proteinStart": 84,
+      "proteinEnd": 84,
+      "type": "single residue",
+      "tumorCount": 26
+    },
+    {
+      "residue": "P81",
+      "proteinStart": 81,
+      "proteinEnd": 81,
+      "type": "single residue",
+      "tumorCount": 24
+    },
+    {
+      "residue": "Q50",
+      "proteinStart": 50,
+      "proteinEnd": 50,
+      "type": "single residue",
+      "tumorCount": 23
+    },
+    {
+      "residue": "R112",
+      "proteinStart": 112,
+      "proteinEnd": 112,
+      "type": "single residue",
+      "tumorCount": 22
+    },
+    {
+      "residue": "X51",
+      "proteinStart": 51,
+      "proteinEnd": 51,
+      "type": "splice site",
+      "tumorCount": 20
+    },
+    {
+      "residue": "X153",
+      "proteinStart": 153,
+      "proteinEnd": 153,
+      "type": "splice site",
+      "tumorCount": 16
+    },
+    {
+      "residue": "P48",
+      "proteinStart": 48,
+      "proteinEnd": 48,
+      "type": "single residue",
+      "tumorCount": 12
+    },
+    {
+      "residue": "S12",
+      "proteinStart": 12,
+      "proteinEnd": 12,
+      "type": "single residue",
+      "tumorCount": 12
+    },
+    {
+      "residue": "27-42",
+      "proteinStart": 27,
+      "proteinEnd": 42,
+      "type": "in-frame indel",
+      "tumorCount": 12
+    },
+    {
+      "residue": "Y129",
+      "proteinStart": 129,
+      "proteinEnd": 129,
+      "type": "single residue",
+      "tumorCount": 9
+    },
+    {
+      "residue": "L130",
+      "proteinStart": 130,
+      "proteinEnd": 130,
+      "type": "single residue",
+      "tumorCount": 8
+    },
+    {
+      "residue": "D74",
+      "proteinStart": 74,
+      "proteinEnd": 74,
+      "type": "single residue",
+      "tumorCount": 8
+    },
+    {
+      "residue": "N42",
+      "proteinStart": 42,
+      "proteinEnd": 42,
+      "type": "single residue",
+      "tumorCount": 5
+    }
+  ],
+  "EZH2": [
+    {
+      "residue": "Y646",
+      "proteinStart": 646,
+      "proteinEnd": 646,
+      "type": "single residue",
+      "tumorCount": 38
+    },
+    {
+      "residue": "K515",
+      "proteinStart": 515,
+      "proteinEnd": 515,
+      "type": "single residue",
+      "tumorCount": 8
+    },
+    {
+      "residue": "K665",
+      "proteinStart": 665,
+      "proteinEnd": 665,
+      "type": "single residue",
+      "tumorCount": 2
+    }
+  ],
+  "DNMT3A": [
+    {
+      "residue": "R882",
+      "proteinStart": 882,
+      "proteinEnd": 882,
+      "type": "single residue",
+      "tumorCount": 39
+    },
+    {
+      "residue": "R736",
+      "proteinStart": 736,
+      "proteinEnd": 736,
+      "type": "single residue",
+      "tumorCount": 16
+    }
+  ],
+  "BCOR": [
+    {
+      "residue": "N1459",
+      "proteinStart": 1459,
+      "proteinEnd": 1459,
+      "type": "single residue",
+      "tumorCount": 36
+    }
+  ],
+  "PPP2R1A": [
+    {
+      "residue": "R183",
+      "proteinStart": 183,
+      "proteinEnd": 183,
+      "type": "single residue",
+      "tumorCount": 51
+    },
+    {
+      "residue": "P179",
+      "proteinStart": 179,
+      "proteinEnd": 179,
+      "type": "single residue",
+      "tumorCount": 30
+    },
+    {
+      "residue": "W257",
+      "proteinStart": 257,
+      "proteinEnd": 257,
+      "type": "single residue",
+      "tumorCount": 22
+    },
+    {
+      "residue": "S256",
+      "proteinStart": 256,
+      "proteinEnd": 256,
+      "type": "single residue",
+      "tumorCount": 14
+    },
+    {
+      "residue": "S219",
+      "proteinStart": 219,
+      "proteinEnd": 219,
+      "type": "single residue",
+      "tumorCount": 13
+    },
+    {
+      "residue": "R182",
+      "proteinStart": 182,
+      "proteinEnd": 182,
+      "type": "single residue",
+      "tumorCount": 7
+    }
+  ],
+  "RAC1": [
+    {
+      "residue": "P29",
+      "proteinStart": 29,
+      "proteinEnd": 29,
+      "type": "single residue",
+      "tumorCount": 53
+    },
+    {
+      "residue": "A178",
+      "proteinStart": 178,
+      "proteinEnd": 178,
+      "type": "single residue",
+      "tumorCount": 12
+    },
+    {
+      "residue": "G12",
+      "proteinStart": 12,
+      "proteinEnd": 12,
+      "type": "single residue",
+      "tumorCount": 6
+    },
+    {
+      "residue": "N111",
+      "proteinStart": 111,
+      "proteinEnd": 111,
+      "type": "single residue",
+      "tumorCount": 5
+    },
+    {
+      "residue": "P34",
+      "proteinStart": 34,
+      "proteinEnd": 34,
+      "type": "single residue",
+      "tumorCount": 5
+    },
+    {
+      "residue": "Q61",
+      "proteinStart": 61,
+      "proteinEnd": 61,
+      "type": "single residue",
+      "tumorCount": 4
+    },
+    {
+      "residue": "C18",
+      "proteinStart": 18,
+      "proteinEnd": 18,
+      "type": "single residue",
+      "tumorCount": 4
+    },
+    {
+      "residue": "K135",
+      "proteinStart": 135,
+      "proteinEnd": 135,
+      "type": "single residue",
+      "tumorCount": 2
+    }
+  ],
+  "MYD88": [
+    {
+      "residue": "L265",
+      "proteinStart": 265,
+      "proteinEnd": 265,
+      "type": "single residue",
+      "tumorCount": 37
+    },
+    {
+      "residue": "S243",
+      "proteinStart": 243,
+      "proteinEnd": 243,
+      "type": "single residue",
+      "tumorCount": 7
+    },
+    {
+      "residue": "P166",
+      "proteinStart": 166,
+      "proteinEnd": 166,
+      "type": "single residue",
+      "tumorCount": 4
+    },
+    {
+      "residue": "M232",
+      "proteinStart": 232,
+      "proteinEnd": 232,
+      "type": "single residue",
+      "tumorCount": 3
+    }
+  ],
+  "B2M": [
+    {
+      "residue": "M1",
+      "proteinStart": 1,
+      "proteinEnd": 1,
+      "type": "single residue",
+      "tumorCount": 41
+    },
+    {
+      "residue": "X23",
+      "proteinStart": 23,
+      "proteinEnd": 23,
+      "type": "splice site",
+      "tumorCount": 17
+    },
+    {
+      "residue": "L12",
+      "proteinStart": 12,
+      "proteinEnd": 12,
+      "type": "single residue",
+      "tumorCount": 7
+    },
+    {
+      "residue": "L7",
+      "proteinStart": 7,
+      "proteinEnd": 7,
+      "type": "single residue",
+      "tumorCount": 5
+    }
+  ],
+  "SPOP": [
+    {
+      "residue": "F133",
+      "proteinStart": 133,
+      "proteinEnd": 133,
+      "type": "single residue",
+      "tumorCount": 67
+    },
+    {
+      "residue": "F102",
+      "proteinStart": 102,
+      "proteinEnd": 102,
+      "type": "single residue",
+      "tumorCount": 24
+    },
+    {
+      "residue": "W131",
+      "proteinStart": 131,
+      "proteinEnd": 131,
+      "type": "single residue",
+      "tumorCount": 23
+    },
+    {
+      "residue": "E50",
+      "proteinStart": 50,
+      "proteinEnd": 50,
+      "type": "single residue",
+      "tumorCount": 17
+    },
+    {
+      "residue": "D130",
+      "proteinStart": 130,
+      "proteinEnd": 130,
+      "type": "single residue",
+      "tumorCount": 16
+    },
+    {
+      "residue": "E47",
+      "proteinStart": 47,
+      "proteinEnd": 47,
+      "type": "single residue",
+      "tumorCount": 15
+    },
+    {
+      "residue": "Y87",
+      "proteinStart": 87,
+      "proteinEnd": 87,
+      "type": "single residue",
+      "tumorCount": 14
+    },
+    {
+      "residue": "F104",
+      "proteinStart": 104,
+      "proteinEnd": 104,
+      "type": "single residue",
+      "tumorCount": 8
+    },
+    {
+      "residue": "M117",
+      "proteinStart": 117,
+      "proteinEnd": 117,
+      "type": "single residue",
+      "tumorCount": 7
+    },
+    {
+      "residue": "S80",
+      "proteinStart": 80,
+      "proteinEnd": 80,
+      "type": "single residue",
+      "tumorCount": 7
+    },
+    {
+      "residue": "F125",
+      "proteinStart": 125,
+      "proteinEnd": 125,
+      "type": "single residue",
+      "tumorCount": 6
+    },
+    {
+      "residue": "K129",
+      "proteinStart": 129,
+      "proteinEnd": 129,
+      "type": "single residue",
+      "tumorCount": 3
+    }
+  ],
+  "FGFR2": [
+    {
+      "residue": "N549",
+      "proteinStart": 549,
+      "proteinEnd": 549,
+      "type": "single residue",
+      "tumorCount": 26
+    },
+    {
+      "residue": "S252",
+      "proteinStart": 252,
+      "proteinEnd": 252,
+      "type": "single residue",
+      "tumorCount": 22
+    },
+    {
+      "residue": "K659",
+      "proteinStart": 659,
+      "proteinEnd": 659,
+      "type": "single residue",
+      "tumorCount": 21
+    },
+    {
+      "residue": "C382",
+      "proteinStart": 382,
+      "proteinEnd": 382,
+      "type": "single residue",
+      "tumorCount": 15
+    },
+    {
+      "residue": "R203",
+      "proteinStart": 203,
+      "proteinEnd": 203,
+      "type": "single residue",
+      "tumorCount": 6
+    },
+    {
+      "residue": "P253",
+      "proteinStart": 253,
+      "proteinEnd": 253,
+      "type": "single residue",
+      "tumorCount": 6
+    },
+    {
+      "residue": "Y375",
+      "proteinStart": 375,
+      "proteinEnd": 375,
+      "type": "single residue",
+      "tumorCount": 5
+    },
+    {
+      "residue": "F276",
+      "proteinStart": 276,
+      "proteinEnd": 276,
+      "type": "single residue",
+      "tumorCount": 3
+    },
+    {
+      "residue": "W290",
+      "proteinStart": 290,
+      "proteinEnd": 290,
+      "type": "single residue",
+      "tumorCount": 3
+    }
+  ],
+  "RXRA": [
+    {
+      "residue": "S427",
+      "proteinStart": 427,
+      "proteinEnd": 427,
+      "type": "single residue",
+      "tumorCount": 26
+    }
+  ],
+  "NFE2L2": [
+    {
+      "residue": "R34",
+      "proteinStart": 34,
+      "proteinEnd": 34,
+      "type": "single residue",
+      "tumorCount": 34
+    },
+    {
+      "residue": "E79",
+      "proteinStart": 79,
+      "proteinEnd": 79,
+      "type": "single residue",
+      "tumorCount": 34
+    },
+    {
+      "residue": "D29",
+      "proteinStart": 29,
+      "proteinEnd": 29,
+      "type": "single residue",
+      "tumorCount": 30
+    },
+    {
+      "residue": "E82",
+      "proteinStart": 82,
+      "proteinEnd": 82,
+      "type": "single residue",
+      "tumorCount": 21
+    },
+    {
+      "residue": "G31",
+      "proteinStart": 31,
+      "proteinEnd": 31,
+      "type": "single residue",
+      "tumorCount": 21
+    },
+    {
+      "residue": "G81",
+      "proteinStart": 81,
+      "proteinEnd": 81,
+      "type": "single residue",
+      "tumorCount": 19
+    },
+    {
+      "residue": "T80",
+      "proteinStart": 80,
+      "proteinEnd": 80,
+      "type": "single residue",
+      "tumorCount": 15
+    },
+    {
+      "residue": "L30",
+      "proteinStart": 30,
+      "proteinEnd": 30,
+      "type": "single residue",
+      "tumorCount": 12
+    },
+    {
+      "residue": "21-42",
+      "proteinStart": 21,
+      "proteinEnd": 42,
+      "type": "in-frame indel",
+      "tumorCount": 12
+    },
+    {
+      "residue": "W24",
+      "proteinStart": 24,
+      "proteinEnd": 24,
+      "type": "single residue",
+      "tumorCount": 11
+    },
+    {
+      "residue": "Q26",
+      "proteinStart": 26,
+      "proteinEnd": 26,
+      "type": "single residue",
+      "tumorCount": 9
+    },
+    {
+      "residue": "D77",
+      "proteinStart": 77,
+      "proteinEnd": 77,
+      "type": "single residue",
+      "tumorCount": 7
+    },
+    {
+      "residue": "73-87",
+      "proteinStart": 73,
+      "proteinEnd": 87,
+      "type": "in-frame indel",
+      "tumorCount": 4
+    },
+    {
+      "residue": "I28",
+      "proteinStart": 28,
+      "proteinEnd": 28,
+      "type": "single residue",
+      "tumorCount": 3
+    }
+  ],
+  "MAP2K1": [
+    {
+      "residue": "K57",
+      "proteinStart": 57,
+      "proteinEnd": 57,
+      "type": "single residue",
+      "tumorCount": 29
+    },
+    {
+      "residue": "P124",
+      "proteinStart": 124,
+      "proteinEnd": 124,
+      "type": "single residue",
+      "tumorCount": 25
+    },
+    {
+      "residue": "F53",
+      "proteinStart": 53,
+      "proteinEnd": 53,
+      "type": "single residue",
+      "tumorCount": 17
+    },
+    {
+      "residue": "E203",
+      "proteinStart": 203,
+      "proteinEnd": 203,
+      "type": "single residue",
+      "tumorCount": 16
+    },
+    {
+      "residue": "D67",
+      "proteinStart": 67,
+      "proteinEnd": 67,
+      "type": "single residue",
+      "tumorCount": 16
+    },
+    {
+      "residue": "G128",
+      "proteinStart": 128,
+      "proteinEnd": 128,
+      "type": "single residue",
+      "tumorCount": 10
+    },
+    {
+      "residue": "99-107",
+      "proteinStart": 99,
+      "proteinEnd": 107,
+      "type": "in-frame indel",
+      "tumorCount": 8
+    },
+    {
+      "residue": "C121",
+      "proteinStart": 121,
+      "proteinEnd": 121,
+      "type": "single residue",
+      "tumorCount": 6
+    },
+    {
+      "residue": "Y130",
+      "proteinStart": 130,
+      "proteinEnd": 130,
+      "type": "single residue",
+      "tumorCount": 5
+    },
+    {
+      "residue": "Q56",
+      "proteinStart": 56,
+      "proteinEnd": 56,
+      "type": "single residue",
+      "tumorCount": 5
+    },
+    {
+      "residue": "T386",
+      "proteinStart": 386,
+      "proteinEnd": 386,
+      "type": "single residue",
+      "tumorCount": 3
+    },
+    {
+      "residue": "N122",
+      "proteinStart": 122,
+      "proteinEnd": 122,
+      "type": "single residue",
+      "tumorCount": 3
+    }
+  ],
+  "AR": [
+    {
+      "residue": "L702",
+      "proteinStart": 702,
+      "proteinEnd": 702,
+      "type": "single residue",
+      "tumorCount": 19
+    },
+    {
+      "residue": "H875",
+      "proteinStart": 875,
+      "proteinEnd": 875,
+      "type": "single residue",
+      "tumorCount": 16
+    },
+    {
+      "residue": "T878",
+      "proteinStart": 878,
+      "proteinEnd": 878,
+      "type": "single residue",
+      "tumorCount": 15
+    },
+    {
+      "residue": "W742",
+      "proteinStart": 742,
+      "proteinEnd": 742,
+      "type": "single residue",
+      "tumorCount": 7
+    }
+  ],
+  "FLT3": [
+    {
+      "residue": "578-613",
+      "proteinStart": 578,
+      "proteinEnd": 613,
+      "type": "in-frame indel",
+      "tumorCount": 27
+    },
+    {
+      "residue": "D835",
+      "proteinStart": 835,
+      "proteinEnd": 835,
+      "type": "single residue",
+      "tumorCount": 17
+    }
+  ],
+  "ATM": [
+    {
+      "residue": "R337",
+      "proteinStart": 337,
+      "proteinEnd": 337,
+      "type": "single residue",
+      "tumorCount": 40
+    },
+    {
+      "residue": "R3008",
+      "proteinStart": 3008,
+      "proteinEnd": 3008,
+      "type": "single residue",
+      "tumorCount": 15
+    },
+    {
+      "residue": "E2039",
+      "proteinStart": 2039,
+      "proteinEnd": 2039,
+      "type": "single residue",
+      "tumorCount": 13
+    },
+    {
+      "residue": "R2526",
+      "proteinStart": 2526,
+      "proteinEnd": 2526,
+      "type": "single residue",
+      "tumorCount": 10
+    },
+    {
+      "residue": "R1466",
+      "proteinStart": 1466,
+      "proteinEnd": 1466,
+      "type": "single residue",
+      "tumorCount": 9
+    },
+    {
+      "residue": "Y2019",
+      "proteinStart": 2019,
+      "proteinEnd": 2019,
+      "type": "single residue",
+      "tumorCount": 9
+    },
+    {
+      "residue": "N2875",
+      "proteinStart": 2875,
+      "proteinEnd": 2875,
+      "type": "single residue",
+      "tumorCount": 8
+    },
+    {
+      "residue": "R2832",
+      "proteinStart": 2832,
+      "proteinEnd": 2832,
+      "type": "single residue",
+      "tumorCount": 7
+    },
+    {
+      "residue": "L2890",
+      "proteinStart": 2890,
+      "proteinEnd": 2890,
+      "type": "single residue",
+      "tumorCount": 5
+    },
+    {
+      "residue": "I2888",
+      "proteinStart": 2888,
+      "proteinEnd": 2888,
+      "type": "single residue",
+      "tumorCount": 4
+    }
+  ],
+  "CIC": [
+    {
+      "residue": "R215",
+      "proteinStart": 215,
+      "proteinEnd": 215,
+      "type": "single residue",
+      "tumorCount": 25
+    },
+    {
+      "residue": "R202",
+      "proteinStart": 202,
+      "proteinEnd": 202,
+      "type": "single residue",
+      "tumorCount": 13
+    },
+    {
+      "residue": "R1512",
+      "proteinStart": 1512,
+      "proteinEnd": 1512,
+      "type": "single residue",
+      "tumorCount": 11
+    },
+    {
+      "residue": "R1515",
+      "proteinStart": 1515,
+      "proteinEnd": 1515,
+      "type": "single residue",
+      "tumorCount": 10
+    },
+    {
+      "residue": "R201",
+      "proteinStart": 201,
+      "proteinEnd": 201,
+      "type": "single residue",
+      "tumorCount": 7
+    },
+    {
+      "residue": "X151",
+      "proteinStart": 151,
+      "proteinEnd": 151,
+      "type": "splice site",
+      "tumorCount": 6
+    },
+    {
+      "residue": "S231",
+      "proteinStart": 231,
+      "proteinEnd": 231,
+      "type": "single residue",
+      "tumorCount": 4
+    },
+    {
+      "residue": "P203",
+      "proteinStart": 203,
+      "proteinEnd": 203,
+      "type": "single residue",
+      "tumorCount": 4
+    },
+    {
+      "residue": "N205",
+      "proteinStart": 205,
+      "proteinEnd": 205,
+      "type": "single residue",
+      "tumorCount": 3
+    }
+  ],
+  "MET": [
+    {
+      "residue": "X1010",
+      "proteinStart": 1010,
+      "proteinEnd": 1010,
+      "type": "splice site",
+      "tumorCount": 19
+    },
+    {
+      "residue": "D1010",
+      "proteinStart": 1010,
+      "proteinEnd": 1010,
+      "type": "single residue",
+      "tumorCount": 14
+    },
+    {
+      "residue": "D1228",
+      "proteinStart": 1228,
+      "proteinEnd": 1228,
+      "type": "single residue",
+      "tumorCount": 10
+    },
+    {
+      "residue": "T222",
+      "proteinStart": 222,
+      "proteinEnd": 222,
+      "type": "single residue",
+      "tumorCount": 7
+    },
+    {
+      "residue": "M1250",
+      "proteinStart": 1250,
+      "proteinEnd": 1250,
+      "type": "single residue",
+      "tumorCount": 6
+    },
+    {
+      "residue": "V1070",
+      "proteinStart": 1070,
+      "proteinEnd": 1070,
+      "type": "single residue",
+      "tumorCount": 5
+    },
+    {
+      "residue": "F1200",
+      "proteinStart": 1200,
+      "proteinEnd": 1200,
+      "type": "single residue",
+      "tumorCount": 4
+    },
+    {
+      "residue": "Y1230",
+      "proteinStart": 1230,
+      "proteinEnd": 1230,
+      "type": "single residue",
+      "tumorCount": 4
+    },
+    {
+      "residue": "H1094",
+      "proteinStart": 1094,
+      "proteinEnd": 1094,
+      "type": "single residue",
+      "tumorCount": 4
+    },
+    {
+      "residue": "Y1003",
+      "proteinStart": 1003,
+      "proteinEnd": 1003,
+      "type": "single residue",
+      "tumorCount": 3
+    }
+  ],
+  "KIT": [
+    {
+      "residue": "550-580",
+      "proteinStart": 550,
+      "proteinEnd": 580,
+      "type": "in-frame indel",
+      "tumorCount": 49
+    },
+    {
+      "residue": "D816",
+      "proteinStart": 816,
+      "proteinEnd": 816,
+      "type": "single residue",
+      "tumorCount": 22
+    },
+    {
+      "residue": "N822",
+      "proteinStart": 822,
+      "proteinEnd": 822,
+      "type": "single residue",
+      "tumorCount": 21
+    },
+    {
+      "residue": "K642",
+      "proteinStart": 642,
+      "proteinEnd": 642,
+      "type": "single residue",
+      "tumorCount": 14
+    },
+    {
+      "residue": "V559",
+      "proteinStart": 559,
+      "proteinEnd": 559,
+      "type": "single residue",
+      "tumorCount": 14
+    },
+    {
+      "residue": "L576",
+      "proteinStart": 576,
+      "proteinEnd": 576,
+      "type": "single residue",
+      "tumorCount": 14
+    },
+    {
+      "residue": "W557",
+      "proteinStart": 557,
+      "proteinEnd": 557,
+      "type": "single residue",
+      "tumorCount": 12
+    },
+    {
+      "residue": "D820",
+      "proteinStart": 820,
+      "proteinEnd": 820,
+      "type": "single residue",
+      "tumorCount": 11
+    },
+    {
+      "residue": "V654",
+      "proteinStart": 654,
+      "proteinEnd": 654,
+      "type": "single residue",
+      "tumorCount": 8
+    },
+    {
+      "residue": "502-503",
+      "proteinStart": 502,
+      "proteinEnd": 503,
+      "type": "in-frame indel",
+      "tumorCount": 8
+    },
+    {
+      "residue": "V560",
+      "proteinStart": 560,
+      "proteinEnd": 560,
+      "type": "single residue",
+      "tumorCount": 7
+    },
+    {
+      "residue": "R888",
+      "proteinStart": 888,
+      "proteinEnd": 888,
+      "type": "single residue",
+      "tumorCount": 7
+    },
+    {
+      "residue": "Y823",
+      "proteinStart": 823,
+      "proteinEnd": 823,
+      "type": "single residue",
+      "tumorCount": 6
+    }
+  ],
+  "RHOA": [
+    {
+      "residue": "G17",
+      "proteinStart": 17,
+      "proteinEnd": 17,
+      "type": "single residue",
+      "tumorCount": 36
+    },
+    {
+      "residue": "Y42",
+      "proteinStart": 42,
+      "proteinEnd": 42,
+      "type": "single residue",
+      "tumorCount": 19
+    },
+    {
+      "residue": "R5",
+      "proteinStart": 5,
+      "proteinEnd": 5,
+      "type": "single residue",
+      "tumorCount": 17
+    },
+    {
+      "residue": "E40",
+      "proteinStart": 40,
+      "proteinEnd": 40,
+      "type": "single residue",
+      "tumorCount": 14
+    },
+    {
+      "residue": "E47",
+      "proteinStart": 47,
+      "proteinEnd": 47,
+      "type": "single residue",
+      "tumorCount": 11
+    },
+    {
+      "residue": "A161",
+      "proteinStart": 161,
+      "proteinEnd": 161,
+      "type": "single residue",
+      "tumorCount": 7
+    },
+    {
+      "residue": "G62",
+      "proteinStart": 62,
+      "proteinEnd": 62,
+      "type": "single residue",
+      "tumorCount": 7
+    },
+    {
+      "residue": "Y34",
+      "proteinStart": 34,
+      "proteinEnd": 34,
+      "type": "single residue",
+      "tumorCount": 6
+    },
+    {
+      "residue": "L57",
+      "proteinStart": 57,
+      "proteinEnd": 57,
+      "type": "single residue",
+      "tumorCount": 6
+    },
+    {
+      "residue": "T37",
+      "proteinStart": 37,
+      "proteinEnd": 37,
+      "type": "single residue",
+      "tumorCount": 6
+    },
+    {
+      "residue": "L22",
+      "proteinStart": 22,
+      "proteinEnd": 22,
+      "type": "single residue",
+      "tumorCount": 5
+    },
+    {
+      "residue": "L69",
+      "proteinStart": 69,
+      "proteinEnd": 69,
+      "type": "single residue",
+      "tumorCount": 5
+    }
+  ],
+  "CDK4": [
+    {
+      "residue": "R24",
+      "proteinStart": 24,
+      "proteinEnd": 24,
+      "type": "single residue",
+      "tumorCount": 23
+    },
+    {
+      "residue": "K22",
+      "proteinStart": 22,
+      "proteinEnd": 22,
+      "type": "single residue",
+      "tumorCount": 7
+    }
+  ],
+  "POLE": [
+    {
+      "residue": "P286",
+      "proteinStart": 286,
+      "proteinEnd": 286,
+      "type": "single residue",
+      "tumorCount": 27
+    },
+    {
+      "residue": "V411",
+      "proteinStart": 411,
+      "proteinEnd": 411,
+      "type": "single residue",
+      "tumorCount": 18
+    },
+    {
+      "residue": "E18",
+      "proteinStart": 18,
+      "proteinEnd": 18,
+      "type": "single residue",
+      "tumorCount": 7
+    }
+  ],
+  "CREBBP": [
+    {
+      "residue": "R1446",
+      "proteinStart": 1446,
+      "proteinEnd": 1446,
+      "type": "single residue",
+      "tumorCount": 33
+    },
+    {
+      "residue": "1680",
+      "proteinStart": 1680,
+      "proteinEnd": 1680,
+      "type": "in-frame indel",
+      "tumorCount": 16
+    },
+    {
+      "residue": "Y1503",
+      "proteinStart": 1503,
+      "proteinEnd": 1503,
+      "type": "single residue",
+      "tumorCount": 9
+    },
+    {
+      "residue": "D1435",
+      "proteinStart": 1435,
+      "proteinEnd": 1435,
+      "type": "single residue",
+      "tumorCount": 9
+    },
+    {
+      "residue": "W1502",
+      "proteinStart": 1502,
+      "proteinEnd": 1502,
+      "type": "single residue",
+      "tumorCount": 6
+    },
+    {
+      "residue": "W1472",
+      "proteinStart": 1472,
+      "proteinEnd": 1472,
+      "type": "single residue",
+      "tumorCount": 6
+    },
+    {
+      "residue": "Y1450",
+      "proteinStart": 1450,
+      "proteinEnd": 1450,
+      "type": "single residue",
+      "tumorCount": 5
+    },
+    {
+      "residue": "L1499",
+      "proteinStart": 1499,
+      "proteinEnd": 1499,
+      "type": "single residue",
+      "tumorCount": 4
+    },
+    {
+      "residue": "Y1482",
+      "proteinStart": 1482,
+      "proteinEnd": 1482,
+      "type": "single residue",
+      "tumorCount": 4
+    },
+    {
+      "residue": "I1431",
+      "proteinStart": 1431,
+      "proteinEnd": 1431,
+      "type": "single residue",
+      "tumorCount": 4
+    }
+  ],
+  "CD79B": [
+    {
+      "residue": "Y197",
+      "proteinStart": 197,
+      "proteinEnd": 197,
+      "type": "single residue",
+      "tumorCount": 16
+    },
+    {
+      "residue": "X185",
+      "proteinStart": 185,
+      "proteinEnd": 185,
+      "type": "splice site",
+      "tumorCount": 3
+    }
+  ],
+  "MED12": [
+    {
+      "residue": "G44",
+      "proteinStart": 44,
+      "proteinEnd": 44,
+      "type": "single residue",
+      "tumorCount": 25
+    },
+    {
+      "residue": "L1224",
+      "proteinStart": 1224,
+      "proteinEnd": 1224,
+      "type": "single residue",
+      "tumorCount": 18
+    },
+    {
+      "residue": "D23",
+      "proteinStart": 23,
+      "proteinEnd": 23,
+      "type": "single residue",
+      "tumorCount": 18
+    },
+    {
+      "residue": "R521",
+      "proteinStart": 521,
+      "proteinEnd": 521,
+      "type": "single residue",
+      "tumorCount": 13
+    },
+    {
+      "residue": "41-55",
+      "proteinStart": 41,
+      "proteinEnd": 55,
+      "type": "in-frame indel",
+      "tumorCount": 5
+    },
+    {
+      "residue": "V1223",
+      "proteinStart": 1223,
+      "proteinEnd": 1223,
+      "type": "single residue",
+      "tumorCount": 3
+    }
+  ],
+  "ERBB4": [
+    {
+      "residue": "S1289",
+      "proteinStart": 1289,
+      "proteinEnd": 1289,
+      "type": "single residue",
+      "tumorCount": 12
+    },
+    {
+      "residue": "Q707",
+      "proteinStart": 707,
+      "proteinEnd": 707,
+      "type": "single residue",
+      "tumorCount": 11
+    },
+    {
+      "residue": "L798",
+      "proteinStart": 798,
+      "proteinEnd": 798,
+      "type": "single residue",
+      "tumorCount": 11
+    },
+    {
+      "residue": "K1002",
+      "proteinStart": 1002,
+      "proteinEnd": 1002,
+      "type": "single residue",
+      "tumorCount": 6
+    },
+    {
+      "residue": "K1223",
+      "proteinStart": 1223,
+      "proteinEnd": 1223,
+      "type": "single residue",
+      "tumorCount": 6
+    },
+    {
+      "residue": "F1102",
+      "proteinStart": 1102,
+      "proteinEnd": 1102,
+      "type": "single residue",
+      "tumorCount": 5
+    },
+    {
+      "residue": "S774",
+      "proteinStart": 774,
+      "proteinEnd": 774,
+      "type": "single residue",
+      "tumorCount": 4
+    }
+  ],
+  "ERCC2": [
+    {
+      "residue": "N238",
+      "proteinStart": 238,
+      "proteinEnd": 238,
+      "type": "single residue",
+      "tumorCount": 16
+    },
+    {
+      "residue": "S44",
+      "proteinStart": 44,
+      "proteinEnd": 44,
+      "type": "single residue",
+      "tumorCount": 11
+    },
+    {
+      "residue": "T484",
+      "proteinStart": 484,
+      "proteinEnd": 484,
+      "type": "single residue",
+      "tumorCount": 8
+    },
+    {
+      "residue": "S246",
+      "proteinStart": 246,
+      "proteinEnd": 246,
+      "type": "single residue",
+      "tumorCount": 7
+    },
+    {
+      "residue": "P463",
+      "proteinStart": 463,
+      "proteinEnd": 463,
+      "type": "single residue",
+      "tumorCount": 6
+    },
+    {
+      "residue": "E606",
+      "proteinStart": 606,
+      "proteinEnd": 606,
+      "type": "single residue",
+      "tumorCount": 6
+    },
+    {
+      "residue": "S74",
+      "proteinStart": 74,
+      "proteinEnd": 74,
+      "type": "single residue",
+      "tumorCount": 6
+    },
+    {
+      "residue": "Y24",
+      "proteinStart": 24,
+      "proteinEnd": 24,
+      "type": "single residue",
+      "tumorCount": 5
+    },
+    {
+      "residue": "Y72",
+      "proteinStart": 72,
+      "proteinEnd": 72,
+      "type": "single residue",
+      "tumorCount": 4
+    },
+    {
+      "residue": "Y14",
+      "proteinStart": 14,
+      "proteinEnd": 14,
+      "type": "single residue",
+      "tumorCount": 3
+    },
+    {
+      "residue": "D609",
+      "proteinStart": 609,
+      "proteinEnd": 609,
+      "type": "single residue",
+      "tumorCount": 3
+    }
+  ],
+  "FOXL2": [
+    {
+      "residue": "C134",
+      "proteinStart": 134,
+      "proteinEnd": 134,
+      "type": "single residue",
+      "tumorCount": 12
+    },
+    {
+      "residue": "E118",
+      "proteinStart": 118,
+      "proteinEnd": 118,
+      "type": "single residue",
+      "tumorCount": 7
+    }
+  ],
+  "STK19": [
+    {
+      "residue": "D89",
+      "proteinStart": 89,
+      "proteinEnd": 89,
+      "type": "single residue",
+      "tumorCount": 18
+    }
+  ],
+  "MAPK1": [
+    {
+      "residue": "E322",
+      "proteinStart": 322,
+      "proteinEnd": 322,
+      "type": "single residue",
+      "tumorCount": 26
+    }
+  ],
+  "XPO1": [
+    {
+      "residue": "E571",
+      "proteinStart": 571,
+      "proteinEnd": 571,
+      "type": "single residue",
+      "tumorCount": 27
+    },
+    {
+      "residue": "R749",
+      "proteinStart": 749,
+      "proteinEnd": 749,
+      "type": "single residue",
+      "tumorCount": 11
+    }
+  ],
+  "ALK": [
+    {
+      "residue": "R1275",
+      "proteinStart": 1275,
+      "proteinEnd": 1275,
+      "type": "single residue",
+      "tumorCount": 18
+    },
+    {
+      "residue": "F1174",
+      "proteinStart": 1174,
+      "proteinEnd": 1174,
+      "type": "single residue",
+      "tumorCount": 14
+    },
+    {
+      "residue": "R395",
+      "proteinStart": 395,
+      "proteinEnd": 395,
+      "type": "single residue",
+      "tumorCount": 7
+    },
+    {
+      "residue": "F1245",
+      "proteinStart": 1245,
+      "proteinEnd": 1245,
+      "type": "single residue",
+      "tumorCount": 3
+    }
+  ],
+  "SMARCA4": [
+    {
+      "residue": "T910",
+      "proteinStart": 910,
+      "proteinEnd": 910,
+      "type": "single residue",
+      "tumorCount": 29
+    },
+    {
+      "residue": "G1232",
+      "proteinStart": 1232,
+      "proteinEnd": 1232,
+      "type": "single residue",
+      "tumorCount": 17
+    },
+    {
+      "residue": "R1192",
+      "proteinStart": 1192,
+      "proteinEnd": 1192,
+      "type": "single residue",
+      "tumorCount": 17
+    },
+    {
+      "residue": "E920",
+      "proteinStart": 920,
+      "proteinEnd": 920,
+      "type": "single residue",
+      "tumorCount": 14
+    },
+    {
+      "residue": "R1189",
+      "proteinStart": 1189,
+      "proteinEnd": 1189,
+      "type": "single residue",
+      "tumorCount": 12
+    },
+    {
+      "residue": "R1243",
+      "proteinStart": 1243,
+      "proteinEnd": 1243,
+      "type": "single residue",
+      "tumorCount": 12
+    },
+    {
+      "residue": "R973",
+      "proteinStart": 973,
+      "proteinEnd": 973,
+      "type": "single residue",
+      "tumorCount": 10
+    },
+    {
+      "residue": "E780",
+      "proteinStart": 780,
+      "proteinEnd": 780,
+      "type": "single residue",
+      "tumorCount": 10
+    },
+    {
+      "residue": "M781",
+      "proteinStart": 781,
+      "proteinEnd": 781,
+      "type": "single residue",
+      "tumorCount": 9
+    },
+    {
+      "residue": "R1135",
+      "proteinStart": 1135,
+      "proteinEnd": 1135,
+      "type": "single residue",
+      "tumorCount": 9
+    },
+    {
+      "residue": "F1102",
+      "proteinStart": 1102,
+      "proteinEnd": 1102,
+      "type": "single residue",
+      "tumorCount": 9
+    },
+    {
+      "residue": "E821",
+      "proteinStart": 821,
+      "proteinEnd": 821,
+      "type": "single residue",
+      "tumorCount": 8
+    },
+    {
+      "residue": "R1157",
+      "proteinStart": 1157,
+      "proteinEnd": 1157,
+      "type": "single residue",
+      "tumorCount": 7
+    },
+    {
+      "residue": "546",
+      "proteinStart": 546,
+      "proteinEnd": 546,
+      "type": "in-frame indel",
+      "tumorCount": 5
+    }
+  ],
+  "HIST1H3B": [
+    {
+      "residue": "E106",
+      "proteinStart": 106,
+      "proteinEnd": 106,
+      "type": "single residue",
+      "tumorCount": 14
+    },
+    {
+      "residue": "K28",
+      "proteinStart": 28,
+      "proteinEnd": 28,
+      "type": "single residue",
+      "tumorCount": 12
+    },
+    {
+      "residue": "E51",
+      "proteinStart": 51,
+      "proteinEnd": 51,
+      "type": "single residue",
+      "tumorCount": 12
+    }
+  ],
+  "FGFR1": [
+    {
+      "residue": "N577",
+      "proteinStart": 577,
+      "proteinEnd": 577,
+      "type": "single residue",
+      "tumorCount": 19
+    },
+    {
+      "residue": "K687",
+      "proteinStart": 687,
+      "proteinEnd": 687,
+      "type": "single residue",
+      "tumorCount": 11
+    }
+  ],
+  "RAF1": [
+    {
+      "residue": "S257",
+      "proteinStart": 257,
+      "proteinEnd": 257,
+      "type": "single residue",
+      "tumorCount": 25
+    },
+    {
+      "residue": "S259",
+      "proteinStart": 259,
+      "proteinEnd": 259,
+      "type": "single residue",
+      "tumorCount": 12
+    },
+    {
+      "residue": "P261",
+      "proteinStart": 261,
+      "proteinEnd": 261,
+      "type": "single residue",
+      "tumorCount": 10
+    }
+  ],
+  "PIK3R1": [
+    {
+      "residue": "439-470",
+      "proteinStart": 439,
+      "proteinEnd": 470,
+      "type": "in-frame indel",
+      "tumorCount": 88
+    },
+    {
+      "residue": "558-582",
+      "proteinStart": 558,
+      "proteinEnd": 582,
+      "type": "in-frame indel",
+      "tumorCount": 49
+    },
+    {
+      "residue": "G376",
+      "proteinStart": 376,
+      "proteinEnd": 376,
+      "type": "single residue",
+      "tumorCount": 18
+    },
+    {
+      "residue": "N564",
+      "proteinStart": 564,
+      "proteinEnd": 564,
+      "type": "single residue",
+      "tumorCount": 17
+    },
+    {
+      "residue": "X582",
+      "proteinStart": 582,
+      "proteinEnd": 582,
+      "type": "splice site",
+      "tumorCount": 14
+    },
+    {
+      "residue": "K567",
+      "proteinStart": 567,
+      "proteinEnd": 567,
+      "type": "single residue",
+      "tumorCount": 12
+    },
+    {
+      "residue": "397-420",
+      "proteinStart": 397,
+      "proteinEnd": 420,
+      "type": "in-frame indel",
+      "tumorCount": 10
+    },
+    {
+      "residue": "D560",
+      "proteinStart": 560,
+      "proteinEnd": 560,
+      "type": "single residue",
+      "tumorCount": 8
+    },
+    {
+      "residue": "X475",
+      "proteinStart": 475,
+      "proteinEnd": 475,
+      "type": "splice site",
+      "tumorCount": 5
+    },
+    {
+      "residue": "X434",
+      "proteinStart": 434,
+      "proteinEnd": 434,
+      "type": "splice site",
+      "tumorCount": 5
+    },
+    {
+      "residue": "378-380",
+      "proteinStart": 378,
+      "proteinEnd": 380,
+      "type": "in-frame indel",
+      "tumorCount": 5
+    },
+    {
+      "residue": "K379",
+      "proteinStart": 379,
+      "proteinEnd": 379,
+      "type": "single residue",
+      "tumorCount": 4
+    },
+    {
+      "residue": "Y452",
+      "proteinStart": 452,
+      "proteinEnd": 452,
+      "type": "single residue",
+      "tumorCount": 4
+    }
+  ],
+  "TCEB1": [
+    {
+      "residue": "Y79",
+      "proteinStart": 79,
+      "proteinEnd": 79,
+      "type": "single residue",
+      "tumorCount": 10
+    }
+  ],
+  "EP300": [
+    {
+      "residue": "D1399",
+      "proteinStart": 1399,
+      "proteinEnd": 1399,
+      "type": "single residue",
+      "tumorCount": 23
+    },
+    {
+      "residue": "W1466",
+      "proteinStart": 1466,
+      "proteinEnd": 1466,
+      "type": "single residue",
+      "tumorCount": 8
+    },
+    {
+      "residue": "Y1467",
+      "proteinStart": 1467,
+      "proteinEnd": 1467,
+      "type": "single residue",
+      "tumorCount": 8
+    },
+    {
+      "residue": "Y1414",
+      "proteinStart": 1414,
+      "proteinEnd": 1414,
+      "type": "single residue",
+      "tumorCount": 7
+    },
+    {
+      "residue": "X1429",
+      "proteinStart": 1429,
+      "proteinEnd": 1429,
+      "type": "splice site",
+      "tumorCount": 6
+    },
+    {
+      "residue": "C1164",
+      "proteinStart": 1164,
+      "proteinEnd": 1164,
+      "type": "single residue",
+      "tumorCount": 6
+    },
+    {
+      "residue": "Q1455",
+      "proteinStart": 1455,
+      "proteinEnd": 1455,
+      "type": "single residue",
+      "tumorCount": 6
+    },
+    {
+      "residue": "H1451",
+      "proteinStart": 1451,
+      "proteinEnd": 1451,
+      "type": "single residue",
+      "tumorCount": 5
+    },
+    {
+      "residue": "X1539",
+      "proteinStart": 1539,
+      "proteinEnd": 1539,
+      "type": "splice site",
+      "tumorCount": 5
+    },
+    {
+      "residue": "L415",
+      "proteinStart": 415,
+      "proteinEnd": 415,
+      "type": "single residue",
+      "tumorCount": 3
+    }
+  ],
+  "EIF1AX": [
+    {
+      "residue": "R13",
+      "proteinStart": 13,
+      "proteinEnd": 13,
+      "type": "single residue",
+      "tumorCount": 12
+    },
+    {
+      "residue": "X113",
+      "proteinStart": 113,
+      "proteinEnd": 113,
+      "type": "splice site",
+      "tumorCount": 11
+    },
+    {
+      "residue": "G9",
+      "proteinStart": 9,
+      "proteinEnd": 9,
+      "type": "single residue",
+      "tumorCount": 11
+    },
+    {
+      "residue": "G15",
+      "proteinStart": 15,
+      "proteinEnd": 15,
+      "type": "single residue",
+      "tumorCount": 7
+    },
+    {
+      "residue": "G6",
+      "proteinStart": 6,
+      "proteinEnd": 6,
+      "type": "single residue",
+      "tumorCount": 7
+    },
+    {
+      "residue": "P2",
+      "proteinStart": 2,
+      "proteinEnd": 2,
+      "type": "single residue",
+      "tumorCount": 7
+    },
+    {
+      "residue": "G8",
+      "proteinStart": 8,
+      "proteinEnd": 8,
+      "type": "single residue",
+      "tumorCount": 6
+    },
+    {
+      "residue": "X6",
+      "proteinStart": 6,
+      "proteinEnd": 6,
+      "type": "splice site",
+      "tumorCount": 5
+    },
+    {
+      "residue": "K10",
+      "proteinStart": 10,
+      "proteinEnd": 10,
+      "type": "single residue",
+      "tumorCount": 4
+    },
+    {
+      "residue": "N4",
+      "proteinStart": 4,
+      "proteinEnd": 4,
+      "type": "single residue",
+      "tumorCount": 4
+    }
+  ],
+  "PTPN11": [
+    {
+      "residue": "A72",
+      "proteinStart": 72,
+      "proteinEnd": 72,
+      "type": "single residue",
+      "tumorCount": 18
+    },
+    {
+      "residue": "S502",
+      "proteinStart": 502,
+      "proteinEnd": 502,
+      "type": "single residue",
+      "tumorCount": 15
+    },
+    {
+      "residue": "E76",
+      "proteinStart": 76,
+      "proteinEnd": 76,
+      "type": "single residue",
+      "tumorCount": 13
+    },
+    {
+      "residue": "E69",
+      "proteinStart": 69,
+      "proteinEnd": 69,
+      "type": "single residue",
+      "tumorCount": 11
+    },
+    {
+      "residue": "Q510",
+      "proteinStart": 510,
+      "proteinEnd": 510,
+      "type": "single residue",
+      "tumorCount": 9
+    },
+    {
+      "residue": "G503",
+      "proteinStart": 503,
+      "proteinEnd": 503,
+      "type": "single residue",
+      "tumorCount": 9
+    },
+    {
+      "residue": "T468",
+      "proteinStart": 468,
+      "proteinEnd": 468,
+      "type": "single residue",
+      "tumorCount": 7
+    },
+    {
+      "residue": "A461",
+      "proteinStart": 461,
+      "proteinEnd": 461,
+      "type": "single residue",
+      "tumorCount": 5
+    },
+    {
+      "residue": "F285",
+      "proteinStart": 285,
+      "proteinEnd": 285,
+      "type": "single residue",
+      "tumorCount": 4
+    },
+    {
+      "residue": "D61",
+      "proteinStart": 61,
+      "proteinEnd": 61,
+      "type": "single residue",
+      "tumorCount": 4
+    },
+    {
+      "residue": "N308",
+      "proteinStart": 308,
+      "proteinEnd": 308,
+      "type": "single residue",
+      "tumorCount": 3
+    },
+    {
+      "residue": "T507",
+      "proteinStart": 507,
+      "proteinEnd": 507,
+      "type": "single residue",
+      "tumorCount": 3
+    }
+  ],
+  "MYCN": [
+    {
+      "residue": "P44",
+      "proteinStart": 44,
+      "proteinEnd": 44,
+      "type": "single residue",
+      "tumorCount": 20
+    }
+  ],
+  "SDHAF2": [
+    {
+      "residue": "X87",
+      "proteinStart": 87,
+      "proteinEnd": 87,
+      "type": "splice site",
+      "tumorCount": 9
+    },
+    {
+      "residue": "S10",
+      "proteinStart": 10,
+      "proteinEnd": 10,
+      "type": "single residue",
+      "tumorCount": 5
+    }
+  ],
+  "PDGFRA": [
+    {
+      "residue": "D842",
+      "proteinStart": 842,
+      "proteinEnd": 842,
+      "type": "single residue",
+      "tumorCount": 12
+    },
+    {
+      "residue": "E229",
+      "proteinStart": 229,
+      "proteinEnd": 229,
+      "type": "single residue",
+      "tumorCount": 7
+    },
+    {
+      "residue": "N659",
+      "proteinStart": 659,
+      "proteinEnd": 659,
+      "type": "single residue",
+      "tumorCount": 6
+    },
+    {
+      "residue": "C235",
+      "proteinStart": 235,
+      "proteinEnd": 235,
+      "type": "single residue",
+      "tumorCount": 4
+    }
+  ],
+  "PPP6C": [
+    {
+      "residue": "R264",
+      "proteinStart": 264,
+      "proteinEnd": 264,
+      "type": "single residue",
+      "tumorCount": 19
+    },
+    {
+      "residue": "S270",
+      "proteinStart": 270,
+      "proteinEnd": 270,
+      "type": "single residue",
+      "tumorCount": 7
+    }
+  ],
+  "MAX": [
+    {
+      "residue": "R60",
+      "proteinStart": 60,
+      "proteinEnd": 60,
+      "type": "single residue",
+      "tumorCount": 23
+    },
+    {
+      "residue": "H28",
+      "proteinStart": 28,
+      "proteinEnd": 28,
+      "type": "single residue",
+      "tumorCount": 6
+    },
+    {
+      "residue": "R36",
+      "proteinStart": 36,
+      "proteinEnd": 36,
+      "type": "single residue",
+      "tumorCount": 2
+    }
+  ],
+  "MTOR": [
+    {
+      "residue": "S2215",
+      "proteinStart": 2215,
+      "proteinEnd": 2215,
+      "type": "single residue",
+      "tumorCount": 22
+    },
+    {
+      "residue": "T1977",
+      "proteinStart": 1977,
+      "proteinEnd": 1977,
+      "type": "single residue",
+      "tumorCount": 14
+    },
+    {
+      "residue": "E1799",
+      "proteinStart": 1799,
+      "proteinEnd": 1799,
+      "type": "single residue",
+      "tumorCount": 12
+    },
+    {
+      "residue": "I2500",
+      "proteinStart": 2500,
+      "proteinEnd": 2500,
+      "type": "single residue",
+      "tumorCount": 10
+    },
+    {
+      "residue": "E2419",
+      "proteinStart": 2419,
+      "proteinEnd": 2419,
+      "type": "single residue",
+      "tumorCount": 9
+    },
+    {
+      "residue": "F1888",
+      "proteinStart": 1888,
+      "proteinEnd": 1888,
+      "type": "single residue",
+      "tumorCount": 8
+    },
+    {
+      "residue": "L2427",
+      "proteinStart": 2427,
+      "proteinEnd": 2427,
+      "type": "single residue",
+      "tumorCount": 7
+    },
+    {
+      "residue": "C1483",
+      "proteinStart": 1483,
+      "proteinEnd": 1483,
+      "type": "single residue",
+      "tumorCount": 7
+    },
+    {
+      "residue": "V2006",
+      "proteinStart": 2006,
+      "proteinEnd": 2006,
+      "type": "single residue",
+      "tumorCount": 7
+    },
+    {
+      "residue": "Y1450",
+      "proteinStart": 1450,
+      "proteinEnd": 1450,
+      "type": "single residue",
+      "tumorCount": 7
+    },
+    {
+      "residue": "I1973",
+      "proteinStart": 1973,
+      "proteinEnd": 1973,
+      "type": "single residue",
+      "tumorCount": 7
+    },
+    {
+      "residue": "M2327",
+      "proteinStart": 2327,
+      "proteinEnd": 2327,
+      "type": "single residue",
+      "tumorCount": 6
+    },
+    {
+      "residue": "A1971",
+      "proteinStart": 1971,
+      "proteinEnd": 1971,
+      "type": "single residue",
+      "tumorCount": 6
+    },
+    {
+      "residue": "A1459",
+      "proteinStart": 1459,
+      "proteinEnd": 1459,
+      "type": "single residue",
+      "tumorCount": 6
+    },
+    {
+      "residue": "1450-1468",
+      "proteinStart": 1450,
+      "proteinEnd": 1468,
+      "type": "in-frame indel",
+      "tumorCount": 5
+    },
+    {
+      "residue": "L1460",
+      "proteinStart": 1460,
+      "proteinEnd": 1460,
+      "type": "single residue",
+      "tumorCount": 4
+    }
+  ],
+  "TGFBR2": [
+    {
+      "residue": "R553",
+      "proteinStart": 553,
+      "proteinEnd": 553,
+      "type": "single residue",
+      "tumorCount": 23
+    },
+    {
+      "residue": "D549",
+      "proteinStart": 549,
+      "proteinEnd": 549,
+      "type": "single residue",
+      "tumorCount": 13
+    },
+    {
+      "residue": "D471",
+      "proteinStart": 471,
+      "proteinEnd": 471,
+      "type": "single residue",
+      "tumorCount": 12
+    },
+    {
+      "residue": "E544",
+      "proteinStart": 544,
+      "proteinEnd": 544,
+      "type": "single residue",
+      "tumorCount": 5
+    }
+  ],
+  "RHEB": [
+    {
+      "residue": "Y35",
+      "proteinStart": 35,
+      "proteinEnd": 35,
+      "type": "single residue",
+      "tumorCount": 12
+    }
+  ],
+  "RRAS2": [
+    {
+      "residue": "G23",
+      "proteinStart": 23,
+      "proteinEnd": 23,
+      "type": "single residue",
+      "tumorCount": 35
+    },
+    {
+      "residue": "G24",
+      "proteinStart": 24,
+      "proteinEnd": 24,
+      "type": "single residue",
+      "tumorCount": 19
+    },
+    {
+      "residue": "Q72",
+      "proteinStart": 72,
+      "proteinEnd": 72,
+      "type": "single residue",
+      "tumorCount": 9
+    }
+  ],
+  "GATA3": [
+    {
+      "residue": "M293",
+      "proteinStart": 293,
+      "proteinEnd": 293,
+      "type": "single residue",
+      "tumorCount": 9
+    },
+    {
+      "residue": "R364",
+      "proteinStart": 364,
+      "proteinEnd": 364,
+      "type": "single residue",
+      "tumorCount": 5
+    }
+  ],
+  "RET": [
+    {
+      "residue": "M918",
+      "proteinStart": 918,
+      "proteinEnd": 918,
+      "type": "single residue",
+      "tumorCount": 11
+    },
+    {
+      "residue": "C634",
+      "proteinStart": 634,
+      "proteinEnd": 634,
+      "type": "single residue",
+      "tumorCount": 3
+    }
+  ],
+  "FOXA1": [
+    {
+      "residue": "249-409",
+      "proteinStart": 249,
+      "proteinEnd": 409,
+      "type": "in-frame indel",
+      "tumorCount": 40
+    },
+    {
+      "residue": "F266",
+      "proteinStart": 266,
+      "proteinEnd": 266,
+      "type": "single residue",
+      "tumorCount": 11
+    },
+    {
+      "residue": "I176",
+      "proteinStart": 176,
+      "proteinEnd": 176,
+      "type": "single residue",
+      "tumorCount": 11
+    },
+    {
+      "residue": "H247",
+      "proteinStart": 247,
+      "proteinEnd": 247,
+      "type": "single residue",
+      "tumorCount": 10
+    },
+    {
+      "residue": "R261",
+      "proteinStart": 261,
+      "proteinEnd": 261,
+      "type": "single residue",
+      "tumorCount": 9
+    },
+    {
+      "residue": "D226",
+      "proteinStart": 226,
+      "proteinEnd": 226,
+      "type": "single residue",
+      "tumorCount": 9
+    },
+    {
+      "residue": "R219",
+      "proteinStart": 219,
+      "proteinEnd": 219,
+      "type": "single residue",
+      "tumorCount": 8
+    },
+    {
+      "residue": "M253",
+      "proteinStart": 253,
+      "proteinEnd": 253,
+      "type": "single residue",
+      "tumorCount": 7
+    },
+    {
+      "residue": "D249",
+      "proteinStart": 249,
+      "proteinEnd": 249,
+      "type": "single residue",
+      "tumorCount": 7
+    },
+    {
+      "residue": "S250",
+      "proteinStart": 250,
+      "proteinEnd": 250,
+      "type": "single residue",
+      "tumorCount": 6
+    },
+    {
+      "residue": "Y259",
+      "proteinStart": 259,
+      "proteinEnd": 259,
+      "type": "single residue",
+      "tumorCount": 5
+    },
+    {
+      "residue": "S242",
+      "proteinStart": 242,
+      "proteinEnd": 242,
+      "type": "single residue",
+      "tumorCount": 5
+    }
+  ],
+  "RB1": [
+    {
+      "residue": "X405",
+      "proteinStart": 405,
+      "proteinEnd": 405,
+      "type": "splice site",
+      "tumorCount": 19
+    },
+    {
+      "residue": "R661",
+      "proteinStart": 661,
+      "proteinEnd": 661,
+      "type": "single residue",
+      "tumorCount": 16
+    },
+    {
+      "residue": "X830",
+      "proteinStart": 830,
+      "proteinEnd": 830,
+      "type": "splice site",
+      "tumorCount": 11
+    },
+    {
+      "residue": "X500",
+      "proteinStart": 500,
+      "proteinEnd": 500,
+      "type": "splice site",
+      "tumorCount": 10
+    },
+    {
+      "residue": "X474",
+      "proteinStart": 474,
+      "proteinEnd": 474,
+      "type": "splice site",
+      "tumorCount": 9
+    },
+    {
+      "residue": "X203",
+      "proteinStart": 203,
+      "proteinEnd": 203,
+      "type": "splice site",
+      "tumorCount": 9
+    },
+    {
+      "residue": "X406",
+      "proteinStart": 406,
+      "proteinEnd": 406,
+      "type": "splice site",
+      "tumorCount": 9
+    },
+    {
+      "residue": "Q444",
+      "proteinStart": 444,
+      "proteinEnd": 444,
+      "type": "single residue",
+      "tumorCount": 9
+    },
+    {
+      "residue": "X654",
+      "proteinStart": 654,
+      "proteinEnd": 654,
+      "type": "splice site",
+      "tumorCount": 8
+    },
+    {
+      "residue": "X89",
+      "proteinStart": 89,
+      "proteinEnd": 89,
+      "type": "splice site",
+      "tumorCount": 8
+    },
+    {
+      "residue": "X445",
+      "proteinStart": 445,
+      "proteinEnd": 445,
+      "type": "splice site",
+      "tumorCount": 7
+    },
+    {
+      "residue": "X127",
+      "proteinStart": 127,
+      "proteinEnd": 127,
+      "type": "splice site",
+      "tumorCount": 7
+    },
+    {
+      "residue": "X46",
+      "proteinStart": 46,
+      "proteinEnd": 46,
+      "type": "splice site",
+      "tumorCount": 7
+    },
+    {
+      "residue": "X605",
+      "proteinStart": 605,
+      "proteinEnd": 605,
+      "type": "splice site",
+      "tumorCount": 7
+    },
+    {
+      "residue": "X702",
+      "proteinStart": 702,
+      "proteinEnd": 702,
+      "type": "splice site",
+      "tumorCount": 6
+    },
+    {
+      "residue": "X776",
+      "proteinStart": 776,
+      "proteinEnd": 776,
+      "type": "splice site",
+      "tumorCount": 6
+    },
+    {
+      "residue": "X463",
+      "proteinStart": 463,
+      "proteinEnd": 463,
+      "type": "splice site",
+      "tumorCount": 5
+    },
+    {
+      "residue": "Y606",
+      "proteinStart": 606,
+      "proteinEnd": 606,
+      "type": "single residue",
+      "tumorCount": 4
+    }
+  ],
+  "SMARCB1": [
+    {
+      "residue": "R377",
+      "proteinStart": 377,
+      "proteinEnd": 377,
+      "type": "single residue",
+      "tumorCount": 17
+    },
+    {
+      "residue": "R374",
+      "proteinStart": 374,
+      "proteinEnd": 374,
+      "type": "single residue",
+      "tumorCount": 8
+    },
+    {
+      "residue": "364",
+      "proteinStart": 364,
+      "proteinEnd": 364,
+      "type": "in-frame indel",
+      "tumorCount": 5
+    }
+  ],
+  "PIK3CB": [
+    {
+      "residue": "E470",
+      "proteinStart": 470,
+      "proteinEnd": 470,
+      "type": "single residue",
+      "tumorCount": 14
+    },
+    {
+      "residue": "D1067",
+      "proteinStart": 1067,
+      "proteinEnd": 1067,
+      "type": "single residue",
+      "tumorCount": 13
+    },
+    {
+      "residue": "E1051",
+      "proteinStart": 1051,
+      "proteinEnd": 1051,
+      "type": "single residue",
+      "tumorCount": 11
+    },
+    {
+      "residue": "R321",
+      "proteinStart": 321,
+      "proteinEnd": 321,
+      "type": "single residue",
+      "tumorCount": 9
+    }
+  ],
+  "VHL": [
+    {
+      "residue": "S65",
+      "proteinStart": 65,
+      "proteinEnd": 65,
+      "type": "single residue",
+      "tumorCount": 17
+    },
+    {
+      "residue": "X114",
+      "proteinStart": 114,
+      "proteinEnd": 114,
+      "type": "splice site",
+      "tumorCount": 16
+    },
+    {
+      "residue": "L89",
+      "proteinStart": 89,
+      "proteinEnd": 89,
+      "type": "single residue",
+      "tumorCount": 15
+    },
+    {
+      "residue": "X155",
+      "proteinStart": 155,
+      "proteinEnd": 155,
+      "type": "splice site",
+      "tumorCount": 14
+    },
+    {
+      "residue": "S80",
+      "proteinStart": 80,
+      "proteinEnd": 80,
+      "type": "single residue",
+      "tumorCount": 11
+    },
+    {
+      "residue": "R167",
+      "proteinStart": 167,
+      "proteinEnd": 167,
+      "type": "single residue",
+      "tumorCount": 11
+    },
+    {
+      "residue": "S111",
+      "proteinStart": 111,
+      "proteinEnd": 111,
+      "type": "single residue",
+      "tumorCount": 10
+    },
+    {
+      "residue": "R161",
+      "proteinStart": 161,
+      "proteinEnd": 161,
+      "type": "single residue",
+      "tumorCount": 10
+    },
+    {
+      "residue": "N78",
+      "proteinStart": 78,
+      "proteinEnd": 78,
+      "type": "single residue",
+      "tumorCount": 9
+    },
+    {
+      "residue": "D121",
+      "proteinStart": 121,
+      "proteinEnd": 121,
+      "type": "single residue",
+      "tumorCount": 9
+    },
+    {
+      "residue": "W88",
+      "proteinStart": 88,
+      "proteinEnd": 88,
+      "type": "single residue",
+      "tumorCount": 9
+    },
+    {
+      "residue": "L158",
+      "proteinStart": 158,
+      "proteinEnd": 158,
+      "type": "single residue",
+      "tumorCount": 9
+    },
+    {
+      "residue": "P86",
+      "proteinStart": 86,
+      "proteinEnd": 86,
+      "type": "single residue",
+      "tumorCount": 9
+    },
+    {
+      "residue": "C162",
+      "proteinStart": 162,
+      "proteinEnd": 162,
+      "type": "single residue",
+      "tumorCount": 8
+    },
+    {
+      "residue": "L188",
+      "proteinStart": 188,
+      "proteinEnd": 188,
+      "type": "single residue",
+      "tumorCount": 8
+    },
+    {
+      "residue": "V74",
+      "proteinStart": 74,
+      "proteinEnd": 74,
+      "type": "single residue",
+      "tumorCount": 7
+    },
+    {
+      "residue": "G114",
+      "proteinStart": 114,
+      "proteinEnd": 114,
+      "type": "single residue",
+      "tumorCount": 7
+    },
+    {
+      "residue": "H115",
+      "proteinStart": 115,
+      "proteinEnd": 115,
+      "type": "single residue",
+      "tumorCount": 7
+    },
+    {
+      "residue": "70-80",
+      "proteinStart": 70,
+      "proteinEnd": 80,
+      "type": "in-frame indel",
+      "tumorCount": 7
+    },
+    {
+      "residue": "I151",
+      "proteinStart": 151,
+      "proteinEnd": 151,
+      "type": "single residue",
+      "tumorCount": 6
+    },
+    {
+      "residue": "W117",
+      "proteinStart": 117,
+      "proteinEnd": 117,
+      "type": "single residue",
+      "tumorCount": 6
+    },
+    {
+      "residue": "L169",
+      "proteinStart": 169,
+      "proteinEnd": 169,
+      "type": "single residue",
+      "tumorCount": 5
+    },
+    {
+      "residue": "Y112",
+      "proteinStart": 112,
+      "proteinEnd": 112,
+      "type": "single residue",
+      "tumorCount": 5
+    },
+    {
+      "residue": "L135",
+      "proteinStart": 135,
+      "proteinEnd": 135,
+      "type": "single residue",
+      "tumorCount": 4
+    }
+  ],
+  "ARID2": [
+    {
+      "residue": "S297",
+      "proteinStart": 297,
+      "proteinEnd": 297,
+      "type": "single residue",
+      "tumorCount": 20
+    },
+    {
+      "residue": "R314",
+      "proteinStart": 314,
+      "proteinEnd": 314,
+      "type": "single residue",
+      "tumorCount": 9
+    }
+  ],
+  "HIST1H1C": [
+    {
+      "residue": "A180",
+      "proteinStart": 180,
+      "proteinEnd": 180,
+      "type": "single residue",
+      "tumorCount": 22
+    },
+    {
+      "residue": "E115",
+      "proteinStart": 115,
+      "proteinEnd": 115,
+      "type": "single residue",
+      "tumorCount": 4
+    },
+    {
+      "residue": "23",
+      "proteinStart": 23,
+      "proteinEnd": 23,
+      "type": "in-frame indel",
+      "tumorCount": 4
+    }
+  ],
+  "SOX17": [
+    {
+      "residue": "S403",
+      "proteinStart": 403,
+      "proteinEnd": 403,
+      "type": "single residue",
+      "tumorCount": 8
+    },
+    {
+      "residue": "A96",
+      "proteinStart": 96,
+      "proteinEnd": 96,
+      "type": "single residue",
+      "tumorCount": 4
+    }
+  ],
+  "NUP93": [
+    {
+      "residue": "E14",
+      "proteinStart": 14,
+      "proteinEnd": 14,
+      "type": "single residue",
+      "tumorCount": 16
+    },
+    {
+      "residue": "A733",
+      "proteinStart": 733,
+      "proteinEnd": 733,
+      "type": "single residue",
+      "tumorCount": 2
+    }
+  ],
+  "STK11": [
+    {
+      "residue": "D237",
+      "proteinStart": 237,
+      "proteinEnd": 237,
+      "type": "single residue",
+      "tumorCount": 15
+    },
+    {
+      "residue": "X155",
+      "proteinStart": 155,
+      "proteinEnd": 155,
+      "type": "splice site",
+      "tumorCount": 14
+    },
+    {
+      "residue": "D194",
+      "proteinStart": 194,
+      "proteinEnd": 194,
+      "type": "single residue",
+      "tumorCount": 14
+    },
+    {
+      "residue": "X245",
+      "proteinStart": 245,
+      "proteinEnd": 245,
+      "type": "splice site",
+      "tumorCount": 13
+    },
+    {
+      "residue": "S216",
+      "proteinStart": 216,
+      "proteinEnd": 216,
+      "type": "single residue",
+      "tumorCount": 12
+    },
+    {
+      "residue": "R304",
+      "proteinStart": 304,
+      "proteinEnd": 304,
+      "type": "single residue",
+      "tumorCount": 12
+    },
+    {
+      "residue": "G242",
+      "proteinStart": 242,
+      "proteinEnd": 242,
+      "type": "single residue",
+      "tumorCount": 9
+    },
+    {
+      "residue": "E165",
+      "proteinStart": 165,
+      "proteinEnd": 165,
+      "type": "single residue",
+      "tumorCount": 9
+    },
+    {
+      "residue": "R297",
+      "proteinStart": 297,
+      "proteinEnd": 297,
+      "type": "single residue",
+      "tumorCount": 9
+    },
+    {
+      "residue": "X307",
+      "proteinStart": 307,
+      "proteinEnd": 307,
+      "type": "splice site",
+      "tumorCount": 8
+    },
+    {
+      "residue": "X288",
+      "proteinStart": 288,
+      "proteinEnd": 288,
+      "type": "splice site",
+      "tumorCount": 8
+    },
+    {
+      "residue": "X97",
+      "proteinStart": 97,
+      "proteinEnd": 97,
+      "type": "splice site",
+      "tumorCount": 8
+    },
+    {
+      "residue": "P221",
+      "proteinStart": 221,
+      "proteinEnd": 221,
+      "type": "single residue",
+      "tumorCount": 8
+    },
+    {
+      "residue": "P179",
+      "proteinStart": 179,
+      "proteinEnd": 179,
+      "type": "single residue",
+      "tumorCount": 7
+    },
+    {
+      "residue": "H174",
+      "proteinStart": 174,
+      "proteinEnd": 174,
+      "type": "single residue",
+      "tumorCount": 6
+    },
+    {
+      "residue": "G251",
+      "proteinStart": 251,
+      "proteinEnd": 251,
+      "type": "single residue",
+      "tumorCount": 6
+    },
+    {
+      "residue": "W308",
+      "proteinStart": 308,
+      "proteinEnd": 308,
+      "type": "single residue",
+      "tumorCount": 6
+    },
+    {
+      "residue": "G196",
+      "proteinStart": 196,
+      "proteinEnd": 196,
+      "type": "single residue",
+      "tumorCount": 6
+    },
+    {
+      "residue": "W239",
+      "proteinStart": 239,
+      "proteinEnd": 239,
+      "type": "single residue",
+      "tumorCount": 5
+    },
+    {
+      "residue": "X125",
+      "proteinStart": 125,
+      "proteinEnd": 125,
+      "type": "splice site",
+      "tumorCount": 5
+    },
+    {
+      "residue": "X200",
+      "proteinStart": 200,
+      "proteinEnd": 200,
+      "type": "splice site",
+      "tumorCount": 5
+    },
+    {
+      "residue": "N181",
+      "proteinStart": 181,
+      "proteinEnd": 181,
+      "type": "single residue",
+      "tumorCount": 4
+    }
+  ],
+  "CCND1": [
+    {
+      "residue": "P287",
+      "proteinStart": 287,
+      "proteinEnd": 287,
+      "type": "single residue",
+      "tumorCount": 12
+    },
+    {
+      "residue": "T286",
+      "proteinStart": 286,
+      "proteinEnd": 286,
+      "type": "single residue",
+      "tumorCount": 9
+    },
+    {
+      "residue": "Y44",
+      "proteinStart": 44,
+      "proteinEnd": 44,
+      "type": "single residue",
+      "tumorCount": 8
+    },
+    {
+      "residue": "E9",
+      "proteinStart": 9,
+      "proteinEnd": 9,
+      "type": "single residue",
+      "tumorCount": 5
+    },
+    {
+      "residue": "C47",
+      "proteinStart": 47,
+      "proteinEnd": 47,
+      "type": "single residue",
+      "tumorCount": 4
+    }
+  ],
+  "INPPL1": [
+    {
+      "residue": "A1185",
+      "proteinStart": 1185,
+      "proteinEnd": 1185,
+      "type": "single residue",
+      "tumorCount": 11
+    },
+    {
+      "residue": "R70",
+      "proteinStart": 70,
+      "proteinEnd": 70,
+      "type": "single residue",
+      "tumorCount": 4
+    }
+  ],
+  "DICER1": [
+    {
+      "residue": "E1705",
+      "proteinStart": 1705,
+      "proteinEnd": 1705,
+      "type": "single residue",
+      "tumorCount": 17
+    },
+    {
+      "residue": "G1809",
+      "proteinStart": 1809,
+      "proteinEnd": 1809,
+      "type": "single residue",
+      "tumorCount": 12
+    },
+    {
+      "residue": "E1813",
+      "proteinStart": 1813,
+      "proteinEnd": 1813,
+      "type": "single residue",
+      "tumorCount": 11
+    },
+    {
+      "residue": "D1709",
+      "proteinStart": 1709,
+      "proteinEnd": 1709,
+      "type": "single residue",
+      "tumorCount": 10
+    },
+    {
+      "residue": "D1810",
+      "proteinStart": 1810,
+      "proteinEnd": 1810,
+      "type": "single residue",
+      "tumorCount": 9
+    },
+    {
+      "residue": "S1344",
+      "proteinStart": 1344,
+      "proteinEnd": 1344,
+      "type": "single residue",
+      "tumorCount": 7
+    }
+  ],
+  "KNSTRN": [
+    {
+      "residue": "S24",
+      "proteinStart": 24,
+      "proteinEnd": 24,
+      "type": "single residue",
+      "tumorCount": 13
+    },
+    {
+      "residue": "V12",
+      "proteinStart": 12,
+      "proteinEnd": 12,
+      "type": "single residue",
+      "tumorCount": 5
+    },
+    {
+      "residue": "P28",
+      "proteinStart": 28,
+      "proteinEnd": 28,
+      "type": "single residue",
+      "tumorCount": 5
+    },
+    {
+      "residue": "C22",
+      "proteinStart": 22,
+      "proteinEnd": 22,
+      "type": "single residue",
+      "tumorCount": 4
+    }
+  ],
+  "ACVR1": [
+    {
+      "residue": "R206",
+      "proteinStart": 206,
+      "proteinEnd": 206,
+      "type": "single residue",
+      "tumorCount": 8
+    },
+    {
+      "residue": "G328",
+      "proteinStart": 328,
+      "proteinEnd": 328,
+      "type": "single residue",
+      "tumorCount": 7
+    },
+    {
+      "residue": "R258",
+      "proteinStart": 258,
+      "proteinEnd": 258,
+      "type": "single residue",
+      "tumorCount": 6
+    }
+  ],
+  "NOTCH2": [
+    {
+      "residue": "T235",
+      "proteinStart": 235,
+      "proteinEnd": 235,
+      "type": "single residue",
+      "tumorCount": 10
+    }
+  ],
+  "MYOD1": [
+    {
+      "residue": "L122",
+      "proteinStart": 122,
+      "proteinEnd": 122,
+      "type": "single residue",
+      "tumorCount": 7
+    }
+  ],
+  "ERG": [
+    {
+      "residue": "R354",
+      "proteinStart": 354,
+      "proteinEnd": 354,
+      "type": "single residue",
+      "tumorCount": 6
+    }
+  ],
+  "PARP1": [
+    {
+      "residue": "G500",
+      "proteinStart": 500,
+      "proteinEnd": 500,
+      "type": "single residue",
+      "tumorCount": 6
+    }
+  ],
+  "TET1": [
+    {
+      "residue": "P1752",
+      "proteinStart": 1752,
+      "proteinEnd": 1752,
+      "type": "single residue",
+      "tumorCount": 10
+    }
+  ],
+  "FGFR4": [
+    {
+      "residue": "V550",
+      "proteinStart": 550,
+      "proteinEnd": 550,
+      "type": "single residue",
+      "tumorCount": 11
+    },
+    {
+      "residue": "N535",
+      "proteinStart": 535,
+      "proteinEnd": 535,
+      "type": "single residue",
+      "tumorCount": 3
+    }
+  ],
+  "DIS3": [
+    {
+      "residue": "D488",
+      "proteinStart": 488,
+      "proteinEnd": 488,
+      "type": "single residue",
+      "tumorCount": 11
+    },
+    {
+      "residue": "R689",
+      "proteinStart": 689,
+      "proteinEnd": 689,
+      "type": "single residue",
+      "tumorCount": 9
+    },
+    {
+      "residue": "R382",
+      "proteinStart": 382,
+      "proteinEnd": 382,
+      "type": "single residue",
+      "tumorCount": 9
+    },
+    {
+      "residue": "R780",
+      "proteinStart": 780,
+      "proteinEnd": 780,
+      "type": "single residue",
+      "tumorCount": 6
+    },
+    {
+      "residue": "D479",
+      "proteinStart": 479,
+      "proteinEnd": 479,
+      "type": "single residue",
+      "tumorCount": 5
+    },
+    {
+      "residue": "L767",
+      "proteinStart": 767,
+      "proteinEnd": 767,
+      "type": "single residue",
+      "tumorCount": 4
+    }
+  ],
+  "CDH1": [
+    {
+      "residue": "R732",
+      "proteinStart": 732,
+      "proteinEnd": 732,
+      "type": "single residue",
+      "tumorCount": 12
+    },
+    {
+      "residue": "D254",
+      "proteinStart": 254,
+      "proteinEnd": 254,
+      "type": "single residue",
+      "tumorCount": 11
+    },
+    {
+      "residue": "D257",
+      "proteinStart": 257,
+      "proteinEnd": 257,
+      "type": "single residue",
+      "tumorCount": 9
+    },
+    {
+      "residue": "R63",
+      "proteinStart": 63,
+      "proteinEnd": 63,
+      "type": "single residue",
+      "tumorCount": 8
+    },
+    {
+      "residue": "X440",
+      "proteinStart": 440,
+      "proteinEnd": 440,
+      "type": "splice site",
+      "tumorCount": 7
+    },
+    {
+      "residue": "X278",
+      "proteinStart": 278,
+      "proteinEnd": 278,
+      "type": "splice site",
+      "tumorCount": 6
+    },
+    {
+      "residue": "X177",
+      "proteinStart": 177,
+      "proteinEnd": 177,
+      "type": "splice site",
+      "tumorCount": 6
+    },
+    {
+      "residue": "W156",
+      "proteinStart": 156,
+      "proteinEnd": 156,
+      "type": "single residue",
+      "tumorCount": 6
+    },
+    {
+      "residue": "D288",
+      "proteinStart": 288,
+      "proteinEnd": 288,
+      "type": "single residue",
+      "tumorCount": 5
+    },
+    {
+      "residue": "X722",
+      "proteinStart": 722,
+      "proteinEnd": 722,
+      "type": "splice site",
+      "tumorCount": 4
+    },
+    {
+      "residue": "Y190",
+      "proteinStart": 190,
+      "proteinEnd": 190,
+      "type": "single residue",
+      "tumorCount": 3
+    }
+  ],
+  "SETD2": [
+    {
+      "residue": "R1625",
+      "proteinStart": 1625,
+      "proteinEnd": 1625,
+      "type": "single residue",
+      "tumorCount": 13
+    },
+    {
+      "residue": "R1592",
+      "proteinStart": 1592,
+      "proteinEnd": 1592,
+      "type": "single residue",
+      "tumorCount": 9
+    },
+    {
+      "residue": "Y1666",
+      "proteinStart": 1666,
+      "proteinEnd": 1666,
+      "type": "single residue",
+      "tumorCount": 6
+    },
+    {
+      "residue": "X1572",
+      "proteinStart": 1572,
+      "proteinEnd": 1572,
+      "type": "splice site",
+      "tumorCount": 6
+    },
+    {
+      "residue": "H1603",
+      "proteinStart": 1603,
+      "proteinEnd": 1603,
+      "type": "single residue",
+      "tumorCount": 5
+    }
+  ],
+  "SDHA": [
+    {
+      "residue": "S445",
+      "proteinStart": 445,
+      "proteinEnd": 445,
+      "type": "single residue",
+      "tumorCount": 10
+    },
+    {
+      "residue": "L639",
+      "proteinStart": 639,
+      "proteinEnd": 639,
+      "type": "single residue",
+      "tumorCount": 7
+    },
+    {
+      "residue": "V644",
+      "proteinStart": 644,
+      "proteinEnd": 644,
+      "type": "single residue",
+      "tumorCount": 7
+    }
+  ],
+  "SOS1": [
+    {
+      "residue": "M269",
+      "proteinStart": 269,
+      "proteinEnd": 269,
+      "type": "single residue",
+      "tumorCount": 12
+    },
+    {
+      "residue": "N233",
+      "proteinStart": 233,
+      "proteinEnd": 233,
+      "type": "single residue",
+      "tumorCount": 7
+    },
+    {
+      "residue": "A90",
+      "proteinStart": 90,
+      "proteinEnd": 90,
+      "type": "single residue",
+      "tumorCount": 5
+    }
+  ],
+  "TCF7L2": [
+    {
+      "residue": "R448",
+      "proteinStart": 448,
+      "proteinEnd": 448,
+      "type": "single residue",
+      "tumorCount": 22
+    },
+    {
+      "residue": "R471",
+      "proteinStart": 471,
+      "proteinEnd": 471,
+      "type": "single residue",
+      "tumorCount": 14
+    },
+    {
+      "residue": "R420",
+      "proteinStart": 420,
+      "proteinEnd": 420,
+      "type": "single residue",
+      "tumorCount": 14
+    },
+    {
+      "residue": "G452",
+      "proteinStart": 452,
+      "proteinEnd": 452,
+      "type": "single residue",
+      "tumorCount": 13
+    },
+    {
+      "residue": "C469",
+      "proteinStart": 469,
+      "proteinEnd": 469,
+      "type": "single residue",
+      "tumorCount": 7
+    },
+    {
+      "residue": "W459",
+      "proteinStart": 459,
+      "proteinEnd": 459,
+      "type": "single residue",
+      "tumorCount": 6
+    }
+  ],
+  "TP63": [
+    {
+      "residue": "R379",
+      "proteinStart": 379,
+      "proteinEnd": 379,
+      "type": "single residue",
+      "tumorCount": 17
+    },
+    {
+      "residue": "S365",
+      "proteinStart": 365,
+      "proteinEnd": 365,
+      "type": "single residue",
+      "tumorCount": 12
+    },
+    {
+      "residue": "E609",
+      "proteinStart": 609,
+      "proteinEnd": 609,
+      "type": "single residue",
+      "tumorCount": 11
+    },
+    {
+      "residue": "X194",
+      "proteinStart": 194,
+      "proteinEnd": 194,
+      "type": "splice site",
+      "tumorCount": 5
+    }
+  ],
+  "ARAF": [
+    {
+      "residue": "S214",
+      "proteinStart": 214,
+      "proteinEnd": 214,
+      "type": "single residue",
+      "tumorCount": 12
+    },
+    {
+      "residue": "P216",
+      "proteinStart": 216,
+      "proteinEnd": 216,
+      "type": "single residue",
+      "tumorCount": 4
+    }
+  ],
+  "MYC": [
+    {
+      "residue": "A59",
+      "proteinStart": 59,
+      "proteinEnd": 59,
+      "type": "single residue",
+      "tumorCount": 14
+    },
+    {
+      "residue": "P74",
+      "proteinStart": 74,
+      "proteinEnd": 74,
+      "type": "single residue",
+      "tumorCount": 12
+    },
+    {
+      "residue": "S161",
+      "proteinStart": 161,
+      "proteinEnd": 161,
+      "type": "single residue",
+      "tumorCount": 11
+    },
+    {
+      "residue": "T73",
+      "proteinStart": 73,
+      "proteinEnd": 73,
+      "type": "single residue",
+      "tumorCount": 6
+    },
+    {
+      "residue": "V7",
+      "proteinStart": 7,
+      "proteinEnd": 7,
+      "type": "single residue",
+      "tumorCount": 4
+    },
+    {
+      "residue": "298",
+      "proteinStart": 298,
+      "proteinEnd": 298,
+      "type": "in-frame indel",
+      "tumorCount": 3
+    }
+  ],
+  "ETV6": [
+    {
+      "residue": "R369",
+      "proteinStart": 369,
+      "proteinEnd": 369,
+      "type": "single residue",
+      "tumorCount": 9
+    },
+    {
+      "residue": "S284",
+      "proteinStart": 284,
+      "proteinEnd": 284,
+      "type": "single residue",
+      "tumorCount": 6
+    },
+    {
+      "residue": "X11",
+      "proteinStart": 11,
+      "proteinEnd": 11,
+      "type": "splice site",
+      "tumorCount": 5
+    }
+  ],
+  "CTCF": [
+    {
+      "residue": "R377",
+      "proteinStart": 377,
+      "proteinEnd": 377,
+      "type": "single residue",
+      "tumorCount": 12
+    },
+    {
+      "residue": "S354",
+      "proteinStart": 354,
+      "proteinEnd": 354,
+      "type": "single residue",
+      "tumorCount": 10
+    },
+    {
+      "residue": "H284",
+      "proteinStart": 284,
+      "proteinEnd": 284,
+      "type": "single residue",
+      "tumorCount": 6
+    },
+    {
+      "residue": "Y226",
+      "proteinStart": 226,
+      "proteinEnd": 226,
+      "type": "single residue",
+      "tumorCount": 4
+    },
+    {
+      "residue": "M1",
+      "proteinStart": 1,
+      "proteinEnd": 1,
+      "type": "single residue",
+      "tumorCount": 4
+    },
+    {
+      "residue": "H288",
+      "proteinStart": 288,
+      "proteinEnd": 288,
+      "type": "single residue",
+      "tumorCount": 3
+    }
+  ],
+  "CDK6": [
+    {
+      "residue": "L65",
+      "proteinStart": 65,
+      "proteinEnd": 65,
+      "type": "single residue",
+      "tumorCount": 9
+    }
+  ],
+  "TGFBR1": [
+    {
+      "residue": "S241",
+      "proteinStart": 241,
+      "proteinEnd": 241,
+      "type": "single residue",
+      "tumorCount": 15
+    },
+    {
+      "residue": "R487",
+      "proteinStart": 487,
+      "proteinEnd": 487,
+      "type": "single residue",
+      "tumorCount": 8
+    },
+    {
+      "residue": "T375",
+      "proteinStart": 375,
+      "proteinEnd": 375,
+      "type": "single residue",
+      "tumorCount": 3
+    },
+    {
+      "residue": "I259",
+      "proteinStart": 259,
+      "proteinEnd": 259,
+      "type": "single residue",
+      "tumorCount": 3
+    }
+  ],
+  "PAX5": [
+    {
+      "residue": "V26",
+      "proteinStart": 26,
+      "proteinEnd": 26,
+      "type": "single residue",
+      "tumorCount": 9
+    }
+  ],
+  "STAT3": [
+    {
+      "residue": "H410",
+      "proteinStart": 410,
+      "proteinEnd": 410,
+      "type": "single residue",
+      "tumorCount": 6
+    },
+    {
+      "residue": "616",
+      "proteinStart": 616,
+      "proteinEnd": 616,
+      "type": "in-frame indel",
+      "tumorCount": 6
+    },
+    {
+      "residue": "S614",
+      "proteinStart": 614,
+      "proteinEnd": 614,
+      "type": "single residue",
+      "tumorCount": 5
+    },
+    {
+      "residue": "D661",
+      "proteinStart": 661,
+      "proteinEnd": 661,
+      "type": "single residue",
+      "tumorCount": 5
+    },
+    {
+      "residue": "F384",
+      "proteinStart": 384,
+      "proteinEnd": 384,
+      "type": "single residue",
+      "tumorCount": 4
+    }
+  ],
+  "BCL6": [
+    {
+      "residue": "R594",
+      "proteinStart": 594,
+      "proteinEnd": 594,
+      "type": "single residue",
+      "tumorCount": 12
+    },
+    {
+      "residue": "R618",
+      "proteinStart": 618,
+      "proteinEnd": 618,
+      "type": "single residue",
+      "tumorCount": 7
+    }
+  ],
+  "FUBP1": [
+    {
+      "residue": "R430",
+      "proteinStart": 430,
+      "proteinEnd": 430,
+      "type": "single residue",
+      "tumorCount": 12
+    }
+  ],
+  "EPAS1": [
+    {
+      "residue": "P531",
+      "proteinStart": 531,
+      "proteinEnd": 531,
+      "type": "single residue",
+      "tumorCount": 4
+    },
+    {
+      "residue": "Y532",
+      "proteinStart": 532,
+      "proteinEnd": 532,
+      "type": "single residue",
+      "tumorCount": 2
+    }
+  ],
+  "IL7R": [
+    {
+      "residue": "K395",
+      "proteinStart": 395,
+      "proteinEnd": 395,
+      "type": "single residue",
+      "tumorCount": 12
+    },
+    {
+      "residue": "I241",
+      "proteinStart": 241,
+      "proteinEnd": 241,
+      "type": "single residue",
+      "tumorCount": 5
+    }
+  ],
+  "ARID1A": [
+    {
+      "residue": "G2087",
+      "proteinStart": 2087,
+      "proteinEnd": 2087,
+      "type": "single residue",
+      "tumorCount": 13
+    },
+    {
+      "residue": "X911",
+      "proteinStart": 911,
+      "proteinEnd": 911,
+      "type": "splice site",
+      "tumorCount": 5
+    }
+  ],
+  "CASP8": [
+    {
+      "residue": "R292",
+      "proteinStart": 292,
+      "proteinEnd": 292,
+      "type": "single residue",
+      "tumorCount": 13
+    },
+    {
+      "residue": "R127",
+      "proteinStart": 127,
+      "proteinEnd": 127,
+      "type": "single residue",
+      "tumorCount": 13
+    },
+    {
+      "residue": "X243",
+      "proteinStart": 243,
+      "proteinEnd": 243,
+      "type": "splice site",
+      "tumorCount": 7
+    }
+  ],
+  "KMT2D": [
+    {
+      "residue": "R5179",
+      "proteinStart": 5179,
+      "proteinEnd": 5179,
+      "type": "single residue",
+      "tumorCount": 10
+    },
+    {
+      "residue": "R5432",
+      "proteinStart": 5432,
+      "proteinEnd": 5432,
+      "type": "single residue",
+      "tumorCount": 8
+    },
+    {
+      "residue": "L1375",
+      "proteinStart": 1375,
+      "proteinEnd": 1375,
+      "type": "single residue",
+      "tumorCount": 3
+    }
+  ],
+  "PIK3CD": [
+    {
+      "residue": "E1021",
+      "proteinStart": 1021,
+      "proteinEnd": 1021,
+      "type": "single residue",
+      "tumorCount": 8
+    },
+    {
+      "residue": "R894",
+      "proteinStart": 894,
+      "proteinEnd": 894,
+      "type": "single residue",
+      "tumorCount": 5
+    },
+    {
+      "residue": "C416",
+      "proteinStart": 416,
+      "proteinEnd": 416,
+      "type": "single residue",
+      "tumorCount": 2
+    }
+  ],
+  "CCND3": [
+    {
+      "residue": "I290",
+      "proteinStart": 290,
+      "proteinEnd": 290,
+      "type": "single residue",
+      "tumorCount": 4
+    }
+  ],
+  "SMO": [
+    {
+      "residue": "L412",
+      "proteinStart": 412,
+      "proteinEnd": 412,
+      "type": "single residue",
+      "tumorCount": 6
+    },
+    {
+      "residue": "W535",
+      "proteinStart": 535,
+      "proteinEnd": 535,
+      "type": "single residue",
+      "tumorCount": 3
+    },
+    {
+      "residue": "V414",
+      "proteinStart": 414,
+      "proteinEnd": 414,
+      "type": "single residue",
+      "tumorCount": 3
+    }
+  ],
+  "PRKCI": [
+    {
+      "residue": "R480",
+      "proteinStart": 480,
+      "proteinEnd": 480,
+      "type": "single residue",
+      "tumorCount": 10
+    }
+  ],
+  "PIK3R2": [
+    {
+      "residue": "G373",
+      "proteinStart": 373,
+      "proteinEnd": 373,
+      "type": "single residue",
+      "tumorCount": 9
+    },
+    {
+      "residue": "D557",
+      "proteinStart": 557,
+      "proteinEnd": 557,
+      "type": "single residue",
+      "tumorCount": 9
+    },
+    {
+      "residue": "N561",
+      "proteinStart": 561,
+      "proteinEnd": 561,
+      "type": "single residue",
+      "tumorCount": 7
+    }
+  ],
+  "PTPRT": [
+    {
+      "residue": "R721",
+      "proteinStart": 721,
+      "proteinEnd": 721,
+      "type": "single residue",
+      "tumorCount": 17
+    },
+    {
+      "residue": "R1220",
+      "proteinStart": 1220,
+      "proteinEnd": 1220,
+      "type": "single residue",
+      "tumorCount": 14
+    },
+    {
+      "residue": "E548",
+      "proteinStart": 548,
+      "proteinEnd": 548,
+      "type": "single residue",
+      "tumorCount": 12
+    },
+    {
+      "residue": "R364",
+      "proteinStart": 364,
+      "proteinEnd": 364,
+      "type": "single residue",
+      "tumorCount": 12
+    },
+    {
+      "residue": "L695",
+      "proteinStart": 695,
+      "proteinEnd": 695,
+      "type": "single residue",
+      "tumorCount": 9
+    },
+    {
+      "residue": "L668",
+      "proteinStart": 668,
+      "proteinEnd": 668,
+      "type": "single residue",
+      "tumorCount": 5
+    }
+  ],
+  "PREX2": [
+    {
+      "residue": "L50",
+      "proteinStart": 50,
+      "proteinEnd": 50,
+      "type": "single residue",
+      "tumorCount": 9
+    }
+  ],
+  "HIST1H3C": [
+    {
+      "residue": "K37",
+      "proteinStart": 37,
+      "proteinEnd": 37,
+      "type": "single residue",
+      "tumorCount": 6
+    }
+  ],
+  "RUNX1": [
+    {
+      "residue": "R204",
+      "proteinStart": 204,
+      "proteinEnd": 204,
+      "type": "single residue",
+      "tumorCount": 18
+    },
+    {
+      "residue": "R201",
+      "proteinStart": 201,
+      "proteinEnd": 201,
+      "type": "single residue",
+      "tumorCount": 7
+    },
+    {
+      "residue": "R162",
+      "proteinStart": 162,
+      "proteinEnd": 162,
+      "type": "single residue",
+      "tumorCount": 4
+    }
+  ],
+  "ASXL2": [
+    {
+      "residue": "E330",
+      "proteinStart": 330,
+      "proteinEnd": 330,
+      "type": "single residue",
+      "tumorCount": 10
+    },
+    {
+      "residue": "M1",
+      "proteinStart": 1,
+      "proteinEnd": 1,
+      "type": "single residue",
+      "tumorCount": 6
+    }
+  ],
+  "PAK7": [
+    {
+      "residue": "M173",
+      "proteinStart": 173,
+      "proteinEnd": 173,
+      "type": "single residue",
+      "tumorCount": 12
+    }
+  ],
+  "MAP2K2": [
+    {
+      "residue": "F57",
+      "proteinStart": 57,
+      "proteinEnd": 57,
+      "type": "single residue",
+      "tumorCount": 6
+    }
+  ],
+  "IRF4": [
+    {
+      "residue": "C99",
+      "proteinStart": 99,
+      "proteinEnd": 99,
+      "type": "single residue",
+      "tumorCount": 7
+    },
+    {
+      "residue": "K123",
+      "proteinStart": 123,
+      "proteinEnd": 123,
+      "type": "single residue",
+      "tumorCount": 3
+    }
+  ],
+  "PIM1": [
+    {
+      "residue": "S97",
+      "proteinStart": 97,
+      "proteinEnd": 97,
+      "type": "single residue",
+      "tumorCount": 10
+    },
+    {
+      "residue": "G28",
+      "proteinStart": 28,
+      "proteinEnd": 28,
+      "type": "single residue",
+      "tumorCount": 8
+    },
+    {
+      "residue": "K24",
+      "proteinStart": 24,
+      "proteinEnd": 24,
+      "type": "single residue",
+      "tumorCount": 7
+    },
+    {
+      "residue": "L2",
+      "proteinStart": 2,
+      "proteinEnd": 2,
+      "type": "single residue",
+      "tumorCount": 6
+    },
+    {
+      "residue": "E79",
+      "proteinStart": 79,
+      "proteinEnd": 79,
+      "type": "single residue",
+      "tumorCount": 6
+    },
+    {
+      "residue": "Q37",
+      "proteinStart": 37,
+      "proteinEnd": 37,
+      "type": "single residue",
+      "tumorCount": 5
+    },
+    {
+      "residue": "N7",
+      "proteinStart": 7,
+      "proteinEnd": 7,
+      "type": "single residue",
+      "tumorCount": 4
+    }
+  ],
+  "KEAP1": [
+    {
+      "residue": "R362",
+      "proteinStart": 362,
+      "proteinEnd": 362,
+      "type": "single residue",
+      "tumorCount": 20
+    },
+    {
+      "residue": "V271",
+      "proteinStart": 271,
+      "proteinEnd": 271,
+      "type": "single residue",
+      "tumorCount": 17
+    },
+    {
+      "residue": "R413",
+      "proteinStart": 413,
+      "proteinEnd": 413,
+      "type": "single residue",
+      "tumorCount": 16
+    },
+    {
+      "residue": "D422",
+      "proteinStart": 422,
+      "proteinEnd": 422,
+      "type": "single residue",
+      "tumorCount": 15
+    },
+    {
+      "residue": "G332",
+      "proteinStart": 332,
+      "proteinEnd": 332,
+      "type": "single residue",
+      "tumorCount": 14
+    },
+    {
+      "residue": "P278",
+      "proteinStart": 278,
+      "proteinEnd": 278,
+      "type": "single residue",
+      "tumorCount": 14
+    },
+    {
+      "residue": "G186",
+      "proteinStart": 186,
+      "proteinEnd": 186,
+      "type": "single residue",
+      "tumorCount": 14
+    },
+    {
+      "residue": "D236",
+      "proteinStart": 236,
+      "proteinEnd": 236,
+      "type": "single residue",
+      "tumorCount": 13
+    },
+    {
+      "residue": "R234",
+      "proteinStart": 234,
+      "proteinEnd": 234,
+      "type": "single residue",
+      "tumorCount": 12
+    },
+    {
+      "residue": "G509",
+      "proteinStart": 509,
+      "proteinEnd": 509,
+      "type": "single residue",
+      "tumorCount": 11
+    },
+    {
+      "residue": "R260",
+      "proteinStart": 260,
+      "proteinEnd": 260,
+      "type": "single residue",
+      "tumorCount": 10
+    },
+    {
+      "residue": "R470",
+      "proteinStart": 470,
+      "proteinEnd": 470,
+      "type": "single residue",
+      "tumorCount": 10
+    },
+    {
+      "residue": "H311",
+      "proteinStart": 311,
+      "proteinEnd": 311,
+      "type": "single residue",
+      "tumorCount": 10
+    },
+    {
+      "residue": "E488",
+      "proteinStart": 488,
+      "proteinEnd": 488,
+      "type": "single residue",
+      "tumorCount": 10
+    },
+    {
+      "residue": "G480",
+      "proteinStart": 480,
+      "proteinEnd": 480,
+      "type": "single residue",
+      "tumorCount": 9
+    },
+    {
+      "residue": "H274",
+      "proteinStart": 274,
+      "proteinEnd": 274,
+      "type": "single residue",
+      "tumorCount": 9
+    },
+    {
+      "residue": "G603",
+      "proteinStart": 603,
+      "proteinEnd": 603,
+      "type": "single residue",
+      "tumorCount": 9
+    },
+    {
+      "residue": "R71",
+      "proteinStart": 71,
+      "proteinEnd": 71,
+      "type": "single residue",
+      "tumorCount": 9
+    },
+    {
+      "residue": "R272",
+      "proteinStart": 272,
+      "proteinEnd": 272,
+      "type": "single residue",
+      "tumorCount": 8
+    },
+    {
+      "residue": "R320",
+      "proteinStart": 320,
+      "proteinEnd": 320,
+      "type": "single residue",
+      "tumorCount": 8
+    },
+    {
+      "residue": "G364",
+      "proteinStart": 364,
+      "proteinEnd": 364,
+      "type": "single residue",
+      "tumorCount": 8
+    },
+    {
+      "residue": "M161",
+      "proteinStart": 161,
+      "proteinEnd": 161,
+      "type": "single residue",
+      "tumorCount": 8
+    },
+    {
+      "residue": "G333",
+      "proteinStart": 333,
+      "proteinEnd": 333,
+      "type": "single residue",
+      "tumorCount": 7
+    },
+    {
+      "residue": "G417",
+      "proteinStart": 417,
+      "proteinEnd": 417,
+      "type": "single residue",
+      "tumorCount": 7
+    },
+    {
+      "residue": "M110",
+      "proteinStart": 110,
+      "proteinEnd": 110,
+      "type": "single residue",
+      "tumorCount": 6
+    },
+    {
+      "residue": "R601",
+      "proteinStart": 601,
+      "proteinEnd": 601,
+      "type": "single residue",
+      "tumorCount": 6
+    },
+    {
+      "residue": "V155",
+      "proteinStart": 155,
+      "proteinEnd": 155,
+      "type": "single residue",
+      "tumorCount": 5
+    }
+  ],
+  "NOTCH1": [
+    {
+      "residue": "356-359",
+      "proteinStart": 356,
+      "proteinEnd": 359,
+      "type": "in-frame indel",
+      "tumorCount": 21
+    },
+    {
+      "residue": "A465",
+      "proteinStart": 465,
+      "proteinEnd": 465,
+      "type": "single residue",
+      "tumorCount": 17
+    },
+    {
+      "residue": "R365",
+      "proteinStart": 365,
+      "proteinEnd": 365,
+      "type": "single residue",
+      "tumorCount": 8
+    },
+    {
+      "residue": "G310",
+      "proteinStart": 310,
+      "proteinEnd": 310,
+      "type": "single residue",
+      "tumorCount": 7
+    },
+    {
+      "residue": "E455",
+      "proteinStart": 455,
+      "proteinEnd": 455,
+      "type": "single residue",
+      "tumorCount": 7
+    },
+    {
+      "residue": "G394",
+      "proteinStart": 394,
+      "proteinEnd": 394,
+      "type": "single residue",
+      "tumorCount": 7
+    },
+    {
+      "residue": "C440",
+      "proteinStart": 440,
+      "proteinEnd": 440,
+      "type": "single residue",
+      "tumorCount": 5
+    },
+    {
+      "residue": "F853",
+      "proteinStart": 853,
+      "proteinEnd": 853,
+      "type": "single residue",
+      "tumorCount": 4
+    },
+    {
+      "residue": "I471",
+      "proteinStart": 471,
+      "proteinEnd": 471,
+      "type": "single residue",
+      "tumorCount": 4
+    },
+    {
+      "residue": "338",
+      "proteinStart": 338,
+      "proteinEnd": 338,
+      "type": "in-frame indel",
+      "tumorCount": 4
+    }
+  ],
+  "KDM6A": [
+    {
+      "residue": "X1336",
+      "proteinStart": 1336,
+      "proteinEnd": 1336,
+      "type": "splice site",
+      "tumorCount": 6
+    },
+    {
+      "residue": "X1293",
+      "proteinStart": 1293,
+      "proteinEnd": 1293,
+      "type": "splice site",
+      "tumorCount": 5
+    },
+    {
+      "residue": "X129",
+      "proteinStart": 129,
+      "proteinEnd": 129,
+      "type": "splice site",
+      "tumorCount": 5
+    },
+    {
+      "residue": "G526",
+      "proteinStart": 526,
+      "proteinEnd": 526,
+      "type": "single residue",
+      "tumorCount": 4
+    },
+    {
+      "residue": "X1246",
+      "proteinStart": 1246,
+      "proteinEnd": 1246,
+      "type": "splice site",
+      "tumorCount": 4
+    },
+    {
+      "residue": "X76",
+      "proteinStart": 76,
+      "proteinEnd": 76,
+      "type": "splice site",
+      "tumorCount": 3
+    }
+  ],
+  "FOXO1": [
+    {
+      "residue": "S22",
+      "proteinStart": 22,
+      "proteinEnd": 22,
+      "type": "single residue",
+      "tumorCount": 7
+    },
+    {
+      "residue": "S205",
+      "proteinStart": 205,
+      "proteinEnd": 205,
+      "type": "single residue",
+      "tumorCount": 5
+    },
+    {
+      "residue": "T24",
+      "proteinStart": 24,
+      "proteinEnd": 24,
+      "type": "single residue",
+      "tumorCount": 3
+    }
+  ],
+  "PTPRD": [
+    {
+      "residue": "S431",
+      "proteinStart": 431,
+      "proteinEnd": 431,
+      "type": "single residue",
+      "tumorCount": 17
+    }
+  ],
+  "RNF43": [
+    {
+      "residue": "H86",
+      "proteinStart": 86,
+      "proteinEnd": 86,
+      "type": "single residue",
+      "tumorCount": 4
+    }
+  ],
+  "BCL2": [
+    {
+      "residue": "A131",
+      "proteinStart": 131,
+      "proteinEnd": 131,
+      "type": "single residue",
+      "tumorCount": 10
+    },
+    {
+      "residue": "K22",
+      "proteinStart": 22,
+      "proteinEnd": 22,
+      "type": "single residue",
+      "tumorCount": 10
+    },
+    {
+      "residue": "G33",
+      "proteinStart": 33,
+      "proteinEnd": 33,
+      "type": "single residue",
+      "tumorCount": 6
+    },
+    {
+      "residue": "N172",
+      "proteinStart": 172,
+      "proteinEnd": 172,
+      "type": "single residue",
+      "tumorCount": 6
+    }
+  ],
+  "GATA2": [
+    {
+      "residue": "C352",
+      "proteinStart": 352,
+      "proteinEnd": 352,
+      "type": "single residue",
+      "tumorCount": 4
+    }
+  ],
+  "DNMT1": [
+    {
+      "residue": "E432",
+      "proteinStart": 432,
+      "proteinEnd": 432,
+      "type": "single residue",
+      "tumorCount": 7
+    },
+    {
+      "residue": "E51",
+      "proteinStart": 51,
+      "proteinEnd": 51,
+      "type": "single residue",
+      "tumorCount": 5
+    }
+  ],
+  "MST1": [
+    {
+      "residue": "G673",
+      "proteinStart": 673,
+      "proteinEnd": 673,
+      "type": "single residue",
+      "tumorCount": 6
+    }
+  ],
+  "MAP3K1": [
+    {
+      "residue": "S1330",
+      "proteinStart": 1330,
+      "proteinEnd": 1330,
+      "type": "single residue",
+      "tumorCount": 10
+    },
+    {
+      "residue": "L380",
+      "proteinStart": 380,
+      "proteinEnd": 380,
+      "type": "single residue",
+      "tumorCount": 3
+    }
+  ],
+  "GSK3B": [
+    {
+      "residue": "X239",
+      "proteinStart": 239,
+      "proteinEnd": 239,
+      "type": "splice site",
+      "tumorCount": 3
+    }
+  ],
+  "FAT1": [
+    {
+      "residue": "R1627",
+      "proteinStart": 1627,
+      "proteinEnd": 1627,
+      "type": "single residue",
+      "tumorCount": 12
+    }
+  ],
+  "SOCS1": [
+    {
+      "residue": "A3",
+      "proteinStart": 3,
+      "proteinEnd": 3,
+      "type": "single residue",
+      "tumorCount": 6
+    }
+  ],
+  "HNF1A": [
+    {
+      "residue": "R114",
+      "proteinStart": 114,
+      "proteinEnd": 114,
+      "type": "single residue",
+      "tumorCount": 5
+    },
+    {
+      "residue": "I27",
+      "proteinStart": 27,
+      "proteinEnd": 27,
+      "type": "single residue",
+      "tumorCount": 4
+    },
+    {
+      "residue": "G338",
+      "proteinStart": 338,
+      "proteinEnd": 338,
+      "type": "single residue",
+      "tumorCount": 4
+    },
+    {
+      "residue": "G288",
+      "proteinStart": 288,
+      "proteinEnd": 288,
+      "type": "single residue",
+      "tumorCount": 3
+    },
+    {
+      "residue": "S591",
+      "proteinStart": 591,
+      "proteinEnd": 591,
+      "type": "single residue",
+      "tumorCount": 3
+    }
+  ],
+  "CUL3": [
+    {
+      "residue": "M299",
+      "proteinStart": 299,
+      "proteinEnd": 299,
+      "type": "single residue",
+      "tumorCount": 5
+    },
+    {
+      "residue": "A20",
+      "proteinStart": 20,
+      "proteinEnd": 20,
+      "type": "single residue",
+      "tumorCount": 5
+    }
+  ],
+  "CHEK2": [
+    {
+      "residue": "R346",
+      "proteinStart": 346,
+      "proteinEnd": 346,
+      "type": "single residue",
+      "tumorCount": 8
+    }
+  ],
+  "SRSF2": [
+    {
+      "residue": "P95",
+      "proteinStart": 95,
+      "proteinEnd": 95,
+      "type": "single residue",
+      "tumorCount": 6
+    },
+    {
+      "residue": "92-117",
+      "proteinStart": 92,
+      "proteinEnd": 117,
+      "type": "in-frame indel",
+      "tumorCount": 5
+    }
+  ],
+  "CARD11": [
+    {
+      "residue": "E626",
+      "proteinStart": 626,
+      "proteinEnd": 626,
+      "type": "single residue",
+      "tumorCount": 6
+    },
+    {
+      "residue": "R423",
+      "proteinStart": 423,
+      "proteinEnd": 423,
+      "type": "single residue",
+      "tumorCount": 6
+    },
+    {
+      "residue": "K215",
+      "proteinStart": 215,
+      "proteinEnd": 215,
+      "type": "single residue",
+      "tumorCount": 5
+    },
+    {
+      "residue": "R337",
+      "proteinStart": 337,
+      "proteinEnd": 337,
+      "type": "single residue",
+      "tumorCount": 5
+    },
+    {
+      "residue": "D357",
+      "proteinStart": 357,
+      "proteinEnd": 357,
+      "type": "single residue",
+      "tumorCount": 4
+    },
+    {
+      "residue": "E93",
+      "proteinStart": 93,
+      "proteinEnd": 93,
+      "type": "single residue",
+      "tumorCount": 4
+    },
+    {
+      "residue": "L251",
+      "proteinStart": 251,
+      "proteinEnd": 251,
+      "type": "single residue",
+      "tumorCount": 3
+    },
+    {
+      "residue": "D401",
+      "proteinStart": 401,
+      "proteinEnd": 401,
+      "type": "single residue",
+      "tumorCount": 3
+    }
+  ],
+  "PDPK1": [
+    {
+      "residue": "P499",
+      "proteinStart": 499,
+      "proteinEnd": 499,
+      "type": "single residue",
+      "tumorCount": 5
+    }
+  ],
+  "DNMT3B": [
+    {
+      "residue": "V229",
+      "proteinStart": 229,
+      "proteinEnd": 229,
+      "type": "single residue",
+      "tumorCount": 7
+    }
+  ],
+  "FOXP1": [
+    {
+      "residue": "X511",
+      "proteinStart": 511,
+      "proteinEnd": 511,
+      "type": "splice site",
+      "tumorCount": 11
+    },
+    {
+      "residue": "S448",
+      "proteinStart": 448,
+      "proteinEnd": 448,
+      "type": "single residue",
+      "tumorCount": 10
+    },
+    {
+      "residue": "R514",
+      "proteinStart": 514,
+      "proteinEnd": 514,
+      "type": "single residue",
+      "tumorCount": 9
+    }
+  ],
+  "RICTOR": [
+    {
+      "residue": "S1101",
+      "proteinStart": 1101,
+      "proteinEnd": 1101,
+      "type": "single residue",
+      "tumorCount": 10
+    }
+  ],
+  "DNAJB1": [
+    {
+      "residue": "L190",
+      "proteinStart": 190,
+      "proteinEnd": 190,
+      "type": "single residue",
+      "tumorCount": 4
+    }
+  ],
+  "RAD50": [
+    {
+      "residue": "D69",
+      "proteinStart": 69,
+      "proteinEnd": 69,
+      "type": "single residue",
+      "tumorCount": 6
+    }
+  ],
+  "CYSLTR2": [
+    {
+      "residue": "L129",
+      "proteinStart": 129,
+      "proteinEnd": 129,
+      "type": "single residue",
+      "tumorCount": 3
+    }
+  ],
+  "JUN": [
+    {
+      "residue": "E112",
+      "proteinStart": 112,
+      "proteinEnd": 112,
+      "type": "single residue",
+      "tumorCount": 7
+    }
+  ],
+  "KLF4": [
+    {
+      "residue": "K409",
+      "proteinStart": 409,
+      "proteinEnd": 409,
+      "type": "single residue",
+      "tumorCount": 7
+    }
+  ],
+  "AKT3": [
+    {
+      "residue": "E17",
+      "proteinStart": 17,
+      "proteinEnd": 17,
+      "type": "single residue",
+      "tumorCount": 10
+    }
+  ],
+  "SESN2": [
+    {
+      "residue": "I425",
+      "proteinStart": 425,
+      "proteinEnd": 425,
+      "type": "single residue",
+      "tumorCount": 2
+    }
+  ],
+  "MAP2K4": [
+    {
+      "residue": "R134",
+      "proteinStart": 134,
+      "proteinEnd": 134,
+      "type": "single residue",
+      "tumorCount": 11
+    },
+    {
+      "residue": "S184",
+      "proteinStart": 184,
+      "proteinEnd": 184,
+      "type": "single residue",
+      "tumorCount": 9
+    },
+    {
+      "residue": "R110",
+      "proteinStart": 110,
+      "proteinEnd": 110,
+      "type": "single residue",
+      "tumorCount": 8
+    },
+    {
+      "residue": "X297",
+      "proteinStart": 297,
+      "proteinEnd": 297,
+      "type": "splice site",
+      "tumorCount": 6
+    },
+    {
+      "residue": "X347",
+      "proteinStart": 347,
+      "proteinEnd": 347,
+      "type": "splice site",
+      "tumorCount": 5
+    }
+  ],
+  "NCOA3": [
+    {
+      "residue": "R80",
+      "proteinStart": 80,
+      "proteinEnd": 80,
+      "type": "single residue",
+      "tumorCount": 3
+    }
+  ],
+  "AXL": [
+    {
+      "residue": "A273",
+      "proteinStart": 273,
+      "proteinEnd": 273,
+      "type": "single residue",
+      "tumorCount": 4
+    },
+    {
+      "residue": "T443",
+      "proteinStart": 443,
+      "proteinEnd": 443,
+      "type": "single residue",
+      "tumorCount": 2
+    }
+  ],
+  "KDR": [
+    {
+      "residue": "R1032",
+      "proteinStart": 1032,
+      "proteinEnd": 1032,
+      "type": "single residue",
+      "tumorCount": 12
+    },
+    {
+      "residue": "S1037",
+      "proteinStart": 1037,
+      "proteinEnd": 1037,
+      "type": "single residue",
+      "tumorCount": 11
+    },
+    {
+      "residue": "T771",
+      "proteinStart": 771,
+      "proteinEnd": 771,
+      "type": "single residue",
+      "tumorCount": 9
+    },
+    {
+      "residue": "C482",
+      "proteinStart": 482,
+      "proteinEnd": 482,
+      "type": "single residue",
+      "tumorCount": 3
+    }
+  ],
+  "GLI1": [
+    {
+      "residue": "R380",
+      "proteinStart": 380,
+      "proteinEnd": 380,
+      "type": "single residue",
+      "tumorCount": 8
+    }
+  ],
+  "JAK1": [
+    {
+      "residue": "L910",
+      "proteinStart": 910,
+      "proteinEnd": 910,
+      "type": "single residue",
+      "tumorCount": 3
+    }
+  ],
+  "EPHB1": [
+    {
+      "residue": "R743",
+      "proteinStart": 743,
+      "proteinEnd": 743,
+      "type": "single residue",
+      "tumorCount": 9
+    }
+  ],
+  "RIT1": [
+    {
+      "residue": "M90",
+      "proteinStart": 90,
+      "proteinEnd": 90,
+      "type": "single residue",
+      "tumorCount": 11
+    },
+    {
+      "residue": "A77",
+      "proteinStart": 77,
+      "proteinEnd": 77,
+      "type": "single residue",
+      "tumorCount": 5
+    },
+    {
+      "residue": "F82",
+      "proteinStart": 82,
+      "proteinEnd": 82,
+      "type": "single residue",
+      "tumorCount": 4
+    }
+  ],
+  "HLA-B": [
+    {
+      "residue": "E69",
+      "proteinStart": 69,
+      "proteinEnd": 69,
+      "type": "single residue",
+      "tumorCount": 5
+    }
+  ],
+  "TNFRSF14": [
+    {
+      "residue": "M1",
+      "proteinStart": 1,
+      "proteinEnd": 1,
+      "type": "single residue",
+      "tumorCount": 4
+    },
+    {
+      "residue": "C111",
+      "proteinStart": 111,
+      "proteinEnd": 111,
+      "type": "single residue",
+      "tumorCount": 3
+    }
+  ],
+  "HLA-A": [
+    {
+      "residue": "L180",
+      "proteinStart": 180,
+      "proteinEnd": 180,
+      "type": "single residue",
+      "tumorCount": 7
+    }
+  ],
+  "PRDM14": [
+    {
+      "residue": "F204",
+      "proteinStart": 204,
+      "proteinEnd": 204,
+      "type": "single residue",
+      "tumorCount": 6
+    },
+    {
+      "residue": "R505",
+      "proteinStart": 505,
+      "proteinEnd": 505,
+      "type": "single residue",
+      "tumorCount": 6
+    }
+  ],
+  "IGF1R": [
+    {
+      "residue": "G129",
+      "proteinStart": 129,
+      "proteinEnd": 129,
+      "type": "single residue",
+      "tumorCount": 3
+    }
+  ],
+  "GPS2": [
+    {
+      "residue": "X242",
+      "proteinStart": 242,
+      "proteinEnd": 242,
+      "type": "splice site",
+      "tumorCount": 2
+    }
+  ],
+  "NSD1": [
+    {
+      "residue": "F392",
+      "proteinStart": 392,
+      "proteinEnd": 392,
+      "type": "single residue",
+      "tumorCount": 7
+    },
+    {
+      "residue": "C1710",
+      "proteinStart": 1710,
+      "proteinEnd": 1710,
+      "type": "single residue",
+      "tumorCount": 3
+    }
+  ],
+  "RARA": [
+    {
+      "residue": "F286",
+      "proteinStart": 286,
+      "proteinEnd": 286,
+      "type": "single residue",
+      "tumorCount": 4
+    }
+  ],
+  "CRLF2": [
+    {
+      "residue": "S128",
+      "proteinStart": 128,
+      "proteinEnd": 128,
+      "type": "single residue",
+      "tumorCount": 7
+    }
+  ],
+  "ATRX": [
+    {
+      "residue": "X199",
+      "proteinStart": 199,
+      "proteinEnd": 199,
+      "type": "splice site",
+      "tumorCount": 4
+    }
+  ],
+  "TRAF7": [
+    {
+      "residue": "N520",
+      "proteinStart": 520,
+      "proteinEnd": 520,
+      "type": "single residue",
+      "tumorCount": 4
+    },
+    {
+      "residue": "R189",
+      "proteinStart": 189,
+      "proteinEnd": 189,
+      "type": "single residue",
+      "tumorCount": 4
+    }
+  ],
+  "FAM58A": [
+    {
+      "residue": "X141",
+      "proteinStart": 141,
+      "proteinEnd": 141,
+      "type": "splice site",
+      "tumorCount": 4
+    }
+  ],
+  "ANKRD11": [
+    {
+      "residue": "K369",
+      "proteinStart": 369,
+      "proteinEnd": 369,
+      "type": "single residue",
+      "tumorCount": 5
+    },
+    {
+      "residue": "1461",
+      "proteinStart": 1461,
+      "proteinEnd": 1461,
+      "type": "in-frame indel",
+      "tumorCount": 4
+    },
+    {
+      "residue": "1008-1015",
+      "proteinStart": 1008,
+      "proteinEnd": 1015,
+      "type": "in-frame indel",
+      "tumorCount": 3
+    }
+  ],
+  "ERRFI1": [
+    {
+      "residue": "K409",
+      "proteinStart": 409,
+      "proteinEnd": 409,
+      "type": "single residue",
+      "tumorCount": 3
+    }
+  ],
+  "ARID1B": [
+    {
+      "residue": "T1652",
+      "proteinStart": 1652,
+      "proteinEnd": 1652,
+      "type": "single residue",
+      "tumorCount": 5
+    },
+    {
+      "residue": "G966",
+      "proteinStart": 966,
+      "proteinEnd": 966,
+      "type": "single residue",
+      "tumorCount": 4
+    }
+  ],
+  "CBFB": [
+    {
+      "residue": "Q67",
+      "proteinStart": 67,
+      "proteinEnd": 67,
+      "type": "single residue",
+      "tumorCount": 7
+    },
+    {
+      "residue": "M1",
+      "proteinStart": 1,
+      "proteinEnd": 1,
+      "type": "single residue",
+      "tumorCount": 4
+    }
+  ],
+  "CDK12": [
+    {
+      "residue": "R882",
+      "proteinStart": 882,
+      "proteinEnd": 882,
+      "type": "single residue",
+      "tumorCount": 14
+    },
+    {
+      "residue": "R890",
+      "proteinStart": 890,
+      "proteinEnd": 890,
+      "type": "single residue",
+      "tumorCount": 5
+    }
+  ],
+  "CTLA4": [
+    {
+      "residue": "T17",
+      "proteinStart": 17,
+      "proteinEnd": 17,
+      "type": "single residue",
+      "tumorCount": 5
+    }
+  ],
+  "BCL10": [
+    {
+      "residue": "E178",
+      "proteinStart": 178,
+      "proteinEnd": 178,
+      "type": "single residue",
+      "tumorCount": 3
+    },
+    {
+      "residue": "N173",
+      "proteinStart": 173,
+      "proteinEnd": 173,
+      "type": "single residue",
+      "tumorCount": 2
+    }
+  ],
+  "LYN": [
+    {
+      "residue": "I364",
+      "proteinStart": 364,
+      "proteinEnd": 364,
+      "type": "single residue",
+      "tumorCount": 2
+    }
+  ],
+  "PBRM1": [
+    {
+      "residue": "X856",
+      "proteinStart": 856,
+      "proteinEnd": 856,
+      "type": "splice site",
+      "tumorCount": 4
+    }
+  ],
+  "SMARCD1": [
+    {
+      "residue": "R183",
+      "proteinStart": 183,
+      "proteinEnd": 183,
+      "type": "single residue",
+      "tumorCount": 7
+    }
+  ],
+  "AXIN1": [
+    {
+      "residue": "X652",
+      "proteinStart": 652,
+      "proteinEnd": 652,
+      "type": "splice site",
+      "tumorCount": 3
+    }
+  ],
+  "RBM10": [
+    {
+      "residue": "X91",
+      "proteinStart": 91,
+      "proteinEnd": 91,
+      "type": "splice site",
+      "tumorCount": 5
+    }
+  ],
+  "SMAD3": [
+    {
+      "residue": "R268",
+      "proteinStart": 268,
+      "proteinEnd": 268,
+      "type": "single residue",
+      "tumorCount": 11
+    },
+    {
+      "residue": "S423",
+      "proteinStart": 423,
+      "proteinEnd": 423,
+      "type": "single residue",
+      "tumorCount": 9
+    },
+    {
+      "residue": "R287",
+      "proteinStart": 287,
+      "proteinEnd": 287,
+      "type": "single residue",
+      "tumorCount": 8
+    }
+  ],
+  "CDKN1B": [
+    {
+      "residue": "X159",
+      "proteinStart": 159,
+      "proteinEnd": 159,
+      "type": "splice site",
+      "tumorCount": 8
+    },
+    {
+      "residue": "G72",
+      "proteinStart": 72,
+      "proteinEnd": 72,
+      "type": "single residue",
+      "tumorCount": 6
+    }
+  ],
+  "RPTOR": [
+    {
+      "residue": "R139",
+      "proteinStart": 139,
+      "proteinEnd": 139,
+      "type": "single residue",
+      "tumorCount": 8
+    }
+  ],
+  "BRCA2": [
+    {
+      "residue": "S2303",
+      "proteinStart": 2303,
+      "proteinEnd": 2303,
+      "type": "single residue",
+      "tumorCount": 5
+    }
+  ],
+  "TCF3": [
+    {
+      "residue": "N551",
+      "proteinStart": 551,
+      "proteinEnd": 551,
+      "type": "single residue",
+      "tumorCount": 2
+    }
+  ],
+  "RPS6KA4": [
+    {
+      "residue": "R629",
+      "proteinStart": 629,
+      "proteinEnd": 629,
+      "type": "single residue",
+      "tumorCount": 7
+    },
+    {
+      "residue": "S236",
+      "proteinStart": 236,
+      "proteinEnd": 236,
+      "type": "single residue",
+      "tumorCount": 6
+    }
+  ],
+  "FH": [
+    {
+      "residue": "M336",
+      "proteinStart": 336,
+      "proteinEnd": 336,
+      "type": "single residue",
+      "tumorCount": 2
+    }
+  ],
+  "RECQL4": [
+    {
+      "residue": "X766",
+      "proteinStart": 766,
+      "proteinEnd": 766,
+      "type": "splice site",
+      "tumorCount": 6
+    }
+  ],
+  "RAD52": [
+    {
+      "residue": "R396",
+      "proteinStart": 396,
+      "proteinEnd": 396,
+      "type": "single residue",
+      "tumorCount": 2
+    }
+  ],
+  "HGF": [
+    {
+      "residue": "G229",
+      "proteinStart": 229,
+      "proteinEnd": 229,
+      "type": "single residue",
+      "tumorCount": 3
+    }
+  ],
+  "CDKN1A": [
+    {
+      "residue": "M1",
+      "proteinStart": 1,
+      "proteinEnd": 1,
+      "type": "single residue",
+      "tumorCount": 4
+    }
+  ],
+  "TSC1": [
+    {
+      "residue": "X797",
+      "proteinStart": 797,
+      "proteinEnd": 797,
+      "type": "splice site",
+      "tumorCount": 4
+    }
+  ],
+  "PLK2": [
+    {
+      "residue": "L208",
+      "proteinStart": 208,
+      "proteinEnd": 208,
+      "type": "single residue",
+      "tumorCount": 3
+    }
+  ],
+  "NF1": [
+    {
+      "residue": "R1870",
+      "proteinStart": 1870,
+      "proteinEnd": 1870,
+      "type": "single residue",
+      "tumorCount": 8
+    }
+  ],
+  "EPHA7": [
+    {
+      "residue": "G656",
+      "proteinStart": 656,
+      "proteinEnd": 656,
+      "type": "single residue",
+      "tumorCount": 11
+    }
+  ],
+  "PTPRS": [
+    {
+      "residue": "R1492",
+      "proteinStart": 1492,
+      "proteinEnd": 1492,
+      "type": "single residue",
+      "tumorCount": 8
+    },
+    {
+      "residue": "Y398",
+      "proteinStart": 398,
+      "proteinEnd": 398,
+      "type": "single residue",
+      "tumorCount": 4
+    }
+  ],
+  "HIST1H3H": [
+    {
+      "residue": "K37",
+      "proteinStart": 37,
+      "proteinEnd": 37,
+      "type": "single residue",
+      "tumorCount": 4
+    }
+  ],
+  "RAD51C": [
+    {
+      "residue": "P21",
+      "proteinStart": 21,
+      "proteinEnd": 21,
+      "type": "single residue",
+      "tumorCount": 4
+    },
+    {
+      "residue": "Y224",
+      "proteinStart": 224,
+      "proteinEnd": 224,
+      "type": "single residue",
+      "tumorCount": 2
+    }
+  ],
+  "BCL2L11": [
+    {
+      "residue": "G156",
+      "proteinStart": 156,
+      "proteinEnd": 156,
+      "type": "single residue",
+      "tumorCount": 6
+    }
+  ],
+  "SPRED1": [
+    {
+      "residue": "R349",
+      "proteinStart": 349,
+      "proteinEnd": 349,
+      "type": "single residue",
+      "tumorCount": 2
+    }
+  ],
+  "KMT2C": [
+    {
+      "residue": "R56",
+      "proteinStart": 56,
+      "proteinEnd": 56,
+      "type": "single residue",
+      "tumorCount": 10
+    },
+    {
+      "residue": "R4549",
+      "proteinStart": 4549,
+      "proteinEnd": 4549,
+      "type": "single residue",
+      "tumorCount": 9
+    }
+  ],
+  "MEF2B": [
+    {
+      "residue": "K4",
+      "proteinStart": 4,
+      "proteinEnd": 4,
+      "type": "single residue",
+      "tumorCount": 4
+    }
+  ],
+  "PPP4R2": [
+    {
+      "residue": "*418",
+      "proteinStart": 418,
+      "proteinEnd": 418,
+      "type": "single residue",
+      "tumorCount": 2
+    }
+  ],
+  "BRD4": [
+    {
+      "residue": "P1065",
+      "proteinStart": 1065,
+      "proteinEnd": 1065,
+      "type": "single residue",
+      "tumorCount": 4
+    }
+  ],
+  "PGR": [
+    {
+      "residue": "R836",
+      "proteinStart": 836,
+      "proteinEnd": 836,
+      "type": "single residue",
+      "tumorCount": 9
+    }
+  ],
+  "CBL": [
+    {
+      "residue": "C384",
+      "proteinStart": 384,
+      "proteinEnd": 384,
+      "type": "single residue",
+      "tumorCount": 4
+    }
+  ],
+  "MAP3K13": [
+    {
+      "residue": "X502",
+      "proteinStart": 502,
+      "proteinEnd": 502,
+      "type": "splice site",
+      "tumorCount": 4
+    }
+  ],
+  "ERCC3": [
+    {
+      "residue": "L713",
+      "proteinStart": 713,
+      "proteinEnd": 713,
+      "type": "single residue",
+      "tumorCount": 2
+    }
+  ],
+  "IRS2": [
+    {
+      "residue": "G1057",
+      "proteinStart": 1057,
+      "proteinEnd": 1057,
+      "type": "single residue",
+      "tumorCount": 3
+    }
+  ],
+  "SMAD2": [
+    {
+      "residue": "R321",
+      "proteinStart": 321,
+      "proteinEnd": 321,
+      "type": "single residue",
+      "tumorCount": 9
+    },
+    {
+      "residue": "D450",
+      "proteinStart": 450,
+      "proteinEnd": 450,
+      "type": "single residue",
+      "tumorCount": 8
+    },
+    {
+      "residue": "S465",
+      "proteinStart": 465,
+      "proteinEnd": 465,
+      "type": "single residue",
+      "tumorCount": 7
+    },
+    {
+      "residue": "C312",
+      "proteinStart": 312,
+      "proteinEnd": 312,
+      "type": "single residue",
+      "tumorCount": 6
+    },
+    {
+      "residue": "P305",
+      "proteinStart": 305,
+      "proteinEnd": 305,
+      "type": "single residue",
+      "tumorCount": 4
+    },
+    {
+      "residue": "T303",
+      "proteinStart": 303,
+      "proteinEnd": 303,
+      "type": "single residue",
+      "tumorCount": 3
+    }
+  ],
+  "IKZF1": [
+    {
+      "residue": "E304",
+      "proteinStart": 304,
+      "proteinEnd": 304,
+      "type": "single residue",
+      "tumorCount": 8
+    }
+  ],
+  "PMS2": [
+    {
+      "residue": "K651",
+      "proteinStart": 651,
+      "proteinEnd": 651,
+      "type": "single residue",
+      "tumorCount": 4
+    }
+  ],
+  "EIF4A2": [
+    {
+      "residue": "M1",
+      "proteinStart": 1,
+      "proteinEnd": 1,
+      "type": "single residue",
+      "tumorCount": 4
+    }
+  ],
+  "WHSC1": [
+    {
+      "residue": "T1150",
+      "proteinStart": 1150,
+      "proteinEnd": 1150,
+      "type": "single residue",
+      "tumorCount": 3
+    }
+  ],
+  "BAP1": [
+    {
+      "residue": "F170",
+      "proteinStart": 170,
+      "proteinEnd": 170,
+      "type": "single residue",
+      "tumorCount": 11
+    },
+    {
+      "residue": "C91",
+      "proteinStart": 91,
+      "proteinEnd": 91,
+      "type": "single residue",
+      "tumorCount": 7
+    },
+    {
+      "residue": "25-34",
+      "proteinStart": 25,
+      "proteinEnd": 34,
+      "type": "in-frame indel",
+      "tumorCount": 5
+    }
+  ],
+  "CEBPA": [
+    {
+      "residue": "307-311",
+      "proteinStart": 307,
+      "proteinEnd": 311,
+      "type": "in-frame indel",
+      "tumorCount": 4
+    }
+  ],
+  "MDC1": [
+    {
+      "residue": "1020-1028",
+      "proteinStart": 1020,
+      "proteinEnd": 1028,
+      "type": "in-frame indel",
+      "tumorCount": 3
+    }
+  ],
+  "SOX9": [
+    {
+      "residue": "152-167",
+      "proteinStart": 152,
+      "proteinEnd": 167,
+      "type": "in-frame indel",
+      "tumorCount": 5
+    }
+  ],
+  "LATS2": [
+    {
+      "residue": "479-480",
+      "proteinStart": 479,
+      "proteinEnd": 480,
+      "type": "in-frame indel",
+      "tumorCount": 13
+    }
+  ],
+  "AKT2": [
+    {
+      "residue": "60-84",
+      "proteinStart": 60,
+      "proteinEnd": 84,
+      "type": "in-frame indel",
+      "tumorCount": 4
+    }
+  ],
+  "DAXX": [
+    {
+      "residue": "457",
+      "proteinStart": 457,
+      "proteinEnd": 457,
+      "type": "in-frame indel",
+      "tumorCount": 5
+    }
+  ],
+  "PDGFRB": [
+    {
+      "residue": "N666",
+      "proteinStart": 666,
+      "proteinEnd": 666,
+      "type": "single residue",
+      "tumorCount": 7
+    }
+  ]
+}

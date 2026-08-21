@@ -8,23 +8,37 @@ import {
   REFERENCE_GENOME,
   TABLE_COLUMN_KEY,
 } from 'app/config/constants';
-import { AlterationPageLink } from 'app/shared/utils/UrlUtils';
+import {
+  AlterationPageLink,
+  getHotspotPageLink,
+} from 'app/shared/utils/UrlUtils';
 import { Citations } from 'app/shared/api/generated/OncoKbAPI';
 import { DescriptionTooltip } from 'app/pages/annotationPage/DescriptionTooltip';
 import SummaryWithRefs from 'app/oncokb-frontend-commons/src/components/SummaryWithRefs';
 import React, { FunctionComponent } from 'react';
 import { GenePageTable } from 'app/pages/genePage/GenePageTable';
+import { getHotspotResidue } from 'app/pages/genePage/hotspot/HotspotUtils';
+import {
+  CancerHotspotIcon,
+  CancerHotspotLink,
+} from 'app/components/cancerHotspot/CancerHotspot';
+import { SearchColumn } from 'app/components/oncokbTable/OncoKBTable';
+import { FilterTypes } from 'app/components/oncokbTable/filters/types';
+
+const HOTSPOT_ICON_SIZE = 18;
 
 const getColumns = (
   germline: boolean,
   hugoSymbol: string,
   useMutationEffectForGermline: boolean
-) => {
+): SearchColumn<BiologicalVariant>[] => {
   const altColumn = {
     ...getDefaultColumnDefinition(TABLE_COLUMN_KEY.ALTERATION),
     accessor: 'variant',
     onFilter: (data: BiologicalVariant, keyword: string) =>
       filterByKeyword(data.variant.name, keyword),
+    filterType: FilterTypes.STRING as const,
+    getColumnFilterValue: (data: BiologicalVariant) => data.variant.name,
     Cell(props: { original: BiologicalVariant }) {
       return (
         <>
@@ -73,18 +87,53 @@ const getColumns = (
       );
     },
   };
+  const hotspotColumn = {
+    Header: <span>Hotspot</span>,
+    accessor: 'variant',
+    id: 'hotspot',
+    minWidth: 120,
+    width: 120,
+    sortable: false,
+    filterType: FilterTypes.STRING as const,
+    getColumnFilterValue: (data: BiologicalVariant) =>
+      data.hotspot?.isHotspot ? 'Yes' : 'No',
+    Cell(props: { original: BiologicalVariant }) {
+      if (!props.original.hotspot?.isHotspot) {
+        return <></>;
+      }
+      const residue = getHotspotResidue(hugoSymbol, props.original);
+      return (
+        <div style={{ display: 'flex', justifyContent: 'flex-start' }}>
+          {residue ? (
+            <CancerHotspotLink
+              link={getHotspotPageLink({ hugoSymbol, residue })}
+              ariaLabel={`${hugoSymbol} ${residue} hotspot`}
+              size={HOTSPOT_ICON_SIZE}
+            />
+          ) : (
+            <CancerHotspotIcon size={HOTSPOT_ICON_SIZE} />
+          )}
+        </div>
+      );
+    },
+  };
   const somaticColumns = [
     altColumn,
     {
       ...getDefaultColumnDefinition(TABLE_COLUMN_KEY.ONCOGENICITY),
       onFilter: (data: BiologicalVariant, keyword: string) =>
         filterByKeyword(data.oncogenic, keyword),
+      filterType: FilterTypes.STRING as const,
+      getColumnFilterValue: (data: BiologicalVariant) => data.oncogenic,
     },
     {
       ...getDefaultColumnDefinition(TABLE_COLUMN_KEY.MUTATION_EFFECT),
       onFilter: (data: BiologicalVariant, keyword: string) =>
         filterByKeyword(data.mutationEffect, keyword),
+      filterType: FilterTypes.STRING as const,
+      getColumnFilterValue: (data: BiologicalVariant) => data.mutationEffect,
     },
+    hotspotColumn,
     descriptionColumn,
   ];
   const germlineColumns = [
@@ -100,18 +149,25 @@ const getColumns = (
           ...getDefaultColumnDefinition(TABLE_COLUMN_KEY.MUTATION_EFFECT),
           onFilter: (data: BiologicalVariant, keyword: string) =>
             filterByKeyword(data.mutationEffect, keyword),
+          filterType: FilterTypes.STRING as const,
+          getColumnFilterValue: (data: BiologicalVariant) =>
+            data.mutationEffect,
         }
       : {
           Header: <span>Pathogenicity</span>,
           accessor: 'pathogenic',
           onFilter: (data: BiologicalVariant, keyword: string) =>
             filterByKeyword(data.pathogenic, keyword),
+          filterType: FilterTypes.STRING as const,
+          getColumnFilterValue: (data: BiologicalVariant) => data.pathogenic,
         },
     {
       Header: <span>Penetrance</span>,
       accessor: 'penetrance',
       onFilter: (data: BiologicalVariant, keyword: string) =>
         filterByKeyword(data.penetrance, keyword),
+      filterType: FilterTypes.STRING as const,
+      getColumnFilterValue: (data: BiologicalVariant) => data.penetrance,
     },
     // Hiding because not in use now, but will be in the future
     // {

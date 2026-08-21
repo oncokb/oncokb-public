@@ -131,6 +131,35 @@ export const GenePageLink: React.FunctionComponent<{
   );
 };
 
+export const getHotspotPageLink = (props: {
+  hugoSymbol: string;
+  residue: string;
+  withProtocolHostPrefix?: boolean;
+}): string => {
+  const pageLink = `${PAGE_ROUTE.GENE_HEADER}/${props.hugoSymbol}/somatic/hotspot/${props.residue}`;
+  return props.withProtocolHostPrefix
+    ? `${getHostLinkWithProtocol()}${pageLink}`
+    : pageLink;
+};
+
+export const HotspotPageLink: React.FunctionComponent<{
+  hugoSymbol: string;
+  residue: string;
+  className?: string;
+  ariaLabel?: string;
+}> = props => (
+  <Link
+    to={getHotspotPageLink({
+      hugoSymbol: props.hugoSymbol,
+      residue: props.residue,
+    })}
+    className={props.className}
+    aria-label={props.ariaLabel}
+  >
+    {props.children ? props.children : props.residue}
+  </Link>
+);
+
 export const getAlterationPageLink = (props: {
   hugoSymbol: string;
   alteration: IAlteration | string;
