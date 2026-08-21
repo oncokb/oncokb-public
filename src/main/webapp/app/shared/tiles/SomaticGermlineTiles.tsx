@@ -5,13 +5,13 @@ import { Linkout } from 'app/shared/links/Linkout';
 
 type AlterationItemProps =
   | {
-      title: string;
+      title: React.ReactNode;
       show?: boolean;
       value: JSX.Element | string;
       link?: undefined;
     }
   | {
-      title: string;
+      title: React.ReactNode;
       show?: boolean;
       value: string;
       link: string;
@@ -50,11 +50,15 @@ function AlterationItem({
 export type AlterationTileProps = {
   title?: string;
   items: AlterationItemProps[][];
+  className?: string;
+  containerClassName?: string;
 };
 
 export function SomaticGermlineTile({
   title,
   items,
+  className,
+  containerClassName,
 }: AlterationTileProps): JSX.Element {
   const slimClass = title === undefined ? styles.slim : undefined;
   const showTile =
@@ -64,13 +68,16 @@ export function SomaticGermlineTile({
     return <></>;
   }
   return (
-    <div className={classNames(styles.alterationTileContainer)}>
+    <div
+      className={classNames(styles.alterationTileContainer, containerClassName)}
+    >
       <div
         className={classNames(
           'd-flex',
           'flex-column',
           styles.alterationTile,
-          slimClass
+          slimClass,
+          className
         )}
       >
         {title && (

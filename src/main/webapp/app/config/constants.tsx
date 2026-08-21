@@ -509,6 +509,7 @@ export const DEFAULT_QUERY: Query = {
   alterationType: 'MUTATION',
   consequence: '',
   entrezGeneId: -1,
+  germline: false,
   hgvs: '',
   hgvsInfo: '',
   hugoSymbol: '',
@@ -726,6 +727,10 @@ export enum PAGE_ROUTE {
   GERMLINE_ALTERATION = '/gene/:hugoSymbol/germline/:alteration',
   SOMATIC_TUMOR_TYPE = '/gene/:hugoSymbol/somatic/:alteration/:tumorType',
   GERMLINE_TUMOR_TYPE = '/gene/:hugoSymbol/germline/:alteration/:tumorType',
+  SOMATIC_HOTSPOT = '/gene/:hugoSymbol/somatic/hotspot/:residue',
+  // TEMPORARY: an alteration on a hotspot range has no range name to route
+  // with, so its icon links to a placeholder page until the range pages exist.
+  SOMATIC_HOTSPOT_RANGE = '/gene/:hugoSymbol/somatic/hotspot-range',
   SOMATIC_TAG = '/gene/:hugoSymbol/somatic/tag/:tag',
   SOMATIC_TAG_TUMOR_TYPE = '/gene/:hugoSymbol/somatic/tag/:tag/:tumorType',
   HGVSG = '/hgvsg',
@@ -1200,6 +1205,8 @@ export const FDA_SUBMISSION_URL_SUFFIX = {
 };
 
 export const MAX_SERVICE_ACCOUNT_TOKENS = 10;
+
+export const CANCER_HOTSPOTS_LINK = 'https://www.cancerhotspots.org/';
 
 export const CLINVAR_VARIANT_BASE_URL =
   'https://www.ncbi.nlm.nih.gov/clinvar/variation';

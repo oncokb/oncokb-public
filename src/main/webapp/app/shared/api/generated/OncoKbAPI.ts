@@ -36,6 +36,8 @@ export type Query = {
 
         'entrezGeneId': number
 
+        'germline': boolean
+
         'hgvs': string
 
         'hgvsInfo': string
@@ -277,6 +279,8 @@ export type AnnotateMutationByHGVScQuery = {
         'hgvsc': string
 
         'id': string
+
+        'inheritanceMechanisms': Array < "AUTOSOMAL_DOMINANT" | "AUTOSOMAL_RECESSIVE" | "X_LINKED_RECESSIVE" | "CARRIER" >
 
         'referenceGenome': "GRCh37" | "GRCh38"
 
@@ -1357,6 +1361,7 @@ export default class OncoKbAPI {
         'hgvsc': string,
         'referenceGenome' ? : string,
         'tumorType' ? : string,
+        'inheritanceMechanisms' ? : "AUTOSOMAL_DOMINANT" | "AUTOSOMAL_RECESSIVE" | "X_LINKED_RECESSIVE" | "CARRIER",
         $queryParameters ? : any
     }): string {
         let queryParameters: any = {};
@@ -1371,6 +1376,10 @@ export default class OncoKbAPI {
 
         if (parameters['tumorType'] !== undefined) {
             queryParameters['tumorType'] = parameters['tumorType'];
+        }
+
+        if (parameters['inheritanceMechanisms'] !== undefined) {
+            queryParameters['inheritanceMechanisms'] = parameters['inheritanceMechanisms'];
         }
 
         if (parameters.$queryParameters) {
@@ -1390,11 +1399,13 @@ export default class OncoKbAPI {
      * @param {string} hgvsc - HGVS cDNA format following HGVS nomenclature. Example: EGFR:c.2369C>T
      * @param {string} referenceGenome - Reference genome, either GRCh37 or GRCh38. The default is GRCh37
      * @param {string} tumorType - OncoTree(http://oncotree.info) tumor type name. The field supports OncoTree Code, OncoTree Name and OncoTree Main type. Example: Melanoma
+     * @param {array} inheritanceMechanisms - List of inheritance mechanisms used to filter the returned genomic indicators. The special value CARRIER is matched against the genomic indicator name rather than the inheritance mechanism. Example: AUTOSOMAL_DOMINANT,CARRIER
      */
     annotateMutationsByHGVScGetUsingGET_1WithHttpInfo(parameters: {
         'hgvsc': string,
         'referenceGenome' ? : string,
         'tumorType' ? : string,
+        'inheritanceMechanisms' ? : "AUTOSOMAL_DOMINANT" | "AUTOSOMAL_RECESSIVE" | "X_LINKED_RECESSIVE" | "CARRIER",
         $queryParameters ? : any,
         $domain ? : string
     }): Promise < request.Response > {
@@ -1427,6 +1438,10 @@ export default class OncoKbAPI {
                 queryParameters['tumorType'] = parameters['tumorType'];
             }
 
+            if (parameters['inheritanceMechanisms'] !== undefined) {
+                queryParameters['inheritanceMechanisms'] = parameters['inheritanceMechanisms'];
+            }
+
             if (parameters.$queryParameters) {
                 Object.keys(parameters.$queryParameters).forEach(function(parameterName) {
                     var parameter = parameters.$queryParameters[parameterName];
@@ -1446,11 +1461,13 @@ export default class OncoKbAPI {
      * @param {string} hgvsc - HGVS cDNA format following HGVS nomenclature. Example: EGFR:c.2369C>T
      * @param {string} referenceGenome - Reference genome, either GRCh37 or GRCh38. The default is GRCh37
      * @param {string} tumorType - OncoTree(http://oncotree.info) tumor type name. The field supports OncoTree Code, OncoTree Name and OncoTree Main type. Example: Melanoma
+     * @param {array} inheritanceMechanisms - List of inheritance mechanisms used to filter the returned genomic indicators. The special value CARRIER is matched against the genomic indicator name rather than the inheritance mechanism. Example: AUTOSOMAL_DOMINANT,CARRIER
      */
     annotateMutationsByHGVScGetUsingGET_1(parameters: {
         'hgvsc': string,
         'referenceGenome' ? : string,
         'tumorType' ? : string,
+        'inheritanceMechanisms' ? : "AUTOSOMAL_DOMINANT" | "AUTOSOMAL_RECESSIVE" | "X_LINKED_RECESSIVE" | "CARRIER",
         $queryParameters ? : any,
         $domain ? : string
     }): Promise < GermlineIndicatorQueryResp > {

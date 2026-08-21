@@ -46,6 +46,8 @@ export type Query = {
 
         'entrezGeneId': number
 
+        'germline': boolean
+
         'hgvs': string
 
         'hgvsInfo': string
@@ -251,6 +253,14 @@ export type MatchVariantResult = {
         'result': Array < MatchVariant >
 
 };
+export type GenomicIndicatorQuery = {
+    'hugoSymbol': string
+
+        'inheritanceMechanisms': Array < "AUTOSOMAL_DOMINANT" | "AUTOSOMAL_RECESSIVE" | "X_LINKED_RECESSIVE" | "CARRIER" >
+
+        'variant': string
+
+};
 export type MatchVariantRequest = {
     'oncokbVariants': Array < MatchVariant >
 
@@ -293,6 +303,8 @@ export type AlternativeOncoKbVariant = {
 };
 export type BiologicalVariant = {
     'cancerRisk': string
+
+        'hotspot': VariantHotspot
 
         'mutationEffect': string
 
@@ -345,6 +357,12 @@ export type TumorTypeEntity = {
         'tumorForm': "SOLID" | "LIQUID" | "MIXED"
 
 };
+export type VariantHotspot = {
+    'isHotspot': boolean
+
+        'type': string
+
+};
 export type Article = {
     'abstract': string
 
@@ -393,7 +411,6 @@ export type Alteration = {
         'variantResidues': string
 
 };
-
 export type DownloadAvailability = {
     'hasAllActionableVariants': boolean
 
@@ -408,68 +425,6 @@ export type DownloadAvailability = {
         'hasSqlDump': boolean
 
         'version': string
-
-};
-export type VariantAnnotation = {
-    'alleleExist': boolean
-
-        'alteration': Alteration
-
-        'background': string
-
-        'dataVersion': string
-
-        'diagnosticImplications': Array < Implication >
-
-        'diagnosticSummary': string
-
-        'geneExist': boolean
-
-        'geneSummary': string
-
-        'highestDiagnosticImplicationLevel': "LEVEL_1" | "LEVEL_2" | "LEVEL_3A" | "LEVEL_3B" | "LEVEL_4" | "LEVEL_R1" | "LEVEL_R2" | "LEVEL_Px1" | "LEVEL_Px2" | "LEVEL_Px3" | "LEVEL_Dx1" | "LEVEL_Dx2" | "LEVEL_Dx3" | "LEVEL_Fda1" | "LEVEL_Fda2" | "LEVEL_Fda3" | "NO"
-
-        'highestFdaLevel': "LEVEL_1" | "LEVEL_2" | "LEVEL_3A" | "LEVEL_3B" | "LEVEL_4" | "LEVEL_R1" | "LEVEL_R2" | "LEVEL_Px1" | "LEVEL_Px2" | "LEVEL_Px3" | "LEVEL_Dx1" | "LEVEL_Dx2" | "LEVEL_Dx3" | "LEVEL_Fda1" | "LEVEL_Fda2" | "LEVEL_Fda3" | "NO"
-
-        'highestPrognosticImplicationLevel': "LEVEL_1" | "LEVEL_2" | "LEVEL_3A" | "LEVEL_3B" | "LEVEL_4" | "LEVEL_R1" | "LEVEL_R2" | "LEVEL_Px1" | "LEVEL_Px2" | "LEVEL_Px3" | "LEVEL_Dx1" | "LEVEL_Dx2" | "LEVEL_Dx3" | "LEVEL_Fda1" | "LEVEL_Fda2" | "LEVEL_Fda3" | "NO"
-
-        'highestResistanceLevel': "LEVEL_1" | "LEVEL_2" | "LEVEL_3A" | "LEVEL_3B" | "LEVEL_4" | "LEVEL_R1" | "LEVEL_R2" | "LEVEL_Px1" | "LEVEL_Px2" | "LEVEL_Px3" | "LEVEL_Dx1" | "LEVEL_Dx2" | "LEVEL_Dx3" | "LEVEL_Fda1" | "LEVEL_Fda2" | "LEVEL_Fda3" | "NO"
-
-        'highestSensitiveLevel': "LEVEL_1" | "LEVEL_2" | "LEVEL_3A" | "LEVEL_3B" | "LEVEL_4" | "LEVEL_R1" | "LEVEL_R2" | "LEVEL_Px1" | "LEVEL_Px2" | "LEVEL_Px3" | "LEVEL_Dx1" | "LEVEL_Dx2" | "LEVEL_Dx3" | "LEVEL_Fda1" | "LEVEL_Fda2" | "LEVEL_Fda3" | "NO"
-
-        'hotspot': boolean
-
-        'lastUpdate': string
-
-        'mutationEffect': MutationEffectResp
-
-        'oncogenic': string
-
-        'otherSignificantResistanceLevels': Array < "LEVEL_1" | "LEVEL_2" | "LEVEL_3A" | "LEVEL_3B" | "LEVEL_4" | "LEVEL_R1" | "LEVEL_R2" | "LEVEL_Px1" | "LEVEL_Px2" | "LEVEL_Px3" | "LEVEL_Dx1" | "LEVEL_Dx2" | "LEVEL_Dx3" | "LEVEL_Fda1" | "LEVEL_Fda2" | "LEVEL_Fda3" | "NO" >
-
-        'otherSignificantSensitiveLevels': Array < "LEVEL_1" | "LEVEL_2" | "LEVEL_3A" | "LEVEL_3B" | "LEVEL_4" | "LEVEL_R1" | "LEVEL_R2" | "LEVEL_Px1" | "LEVEL_Px2" | "LEVEL_Px3" | "LEVEL_Dx1" | "LEVEL_Dx2" | "LEVEL_Dx3" | "LEVEL_Fda1" | "LEVEL_Fda2" | "LEVEL_Fda3" | "NO" >
-
-        'prognosticImplications': Array < Implication >
-
-        'prognosticSummary': string
-
-        'query': Query
-
-        'treatments': Array < IndicatorQueryTreatment >
-
-        'tumorTypeSummary': string
-
-        'tumorTypes': Array < VariantAnnotationTumorType >
-
-        'variantExist': boolean
-
-        'variantSummary': string
-
-        'alternativeOncoKbVariant': AlternativeOncoKbVariant | null
-
-        'vue': boolean
-
-        'vus': boolean
 
 };
 export type AnnotatedVariant = {
@@ -814,6 +769,12 @@ export type AnnotateMutationByHGVSgQuery = {
         'tumorType': string
 
 };
+export type GenomicIndicatorQueryResp = {
+    'genomicIndicators': Array < GenomicIndicator >
+
+        'query': GenomicIndicatorQuery
+
+};
 export type Tag = {
     'description': string
 
@@ -852,6 +813,8 @@ export type SomaticVariantAnnotation = {
     'alleleExist': boolean
 
         'alteration': Alteration
+
+        'alternativeOncoKbVariant': AlternativeOncoKbVariant
 
         'background': string
 
@@ -904,8 +867,6 @@ export type SomaticVariantAnnotation = {
         'variantExist': boolean
 
         'variantSummary': string
-
-        'alternativeOncoKbVariant': AlternativeOncoKbVariant | null
 
         'vue': boolean
 
@@ -2604,6 +2565,83 @@ export default class OncoKbPrivateAPI {
         }): Promise < Array < string >
         > {
             return this.utilFilterHgvsgBasedOnCoveragePostUsingPOSTWithHttpInfo(parameters).then(function(response: request.Response) {
+                return response.body;
+            });
+        };
+    utilsGenomicIndicatorsPostUsingPOSTURL(parameters: {
+        'body': Array < GenomicIndicatorQuery > ,
+        $queryParameters ? : any
+    }): string {
+        let queryParameters: any = {};
+        let path = '/utils/genomicIndicators';
+
+        if (parameters.$queryParameters) {
+            Object.keys(parameters.$queryParameters).forEach(function(parameterName) {
+                var parameter = parameters.$queryParameters[parameterName];
+                queryParameters[parameterName] = parameter;
+            });
+        }
+        let keys = Object.keys(queryParameters);
+        return this.domain + path + (keys.length > 0 ? '?' + (keys.map(key => key + '=' + encodeURIComponent(queryParameters[key])).join('&')) : '');
+    };
+
+    /**
+     * Get the germline genomic indicators for a list of genes and variants.
+     * @method
+     * @name OncoKbPrivateAPI#utilsGenomicIndicatorsPostUsingPOST
+     * @param {} body - List of queries. Each query specifies a hugoSymbol, variant, and optional inheritanceMechanisms filter.
+     */
+    utilsGenomicIndicatorsPostUsingPOSTWithHttpInfo(parameters: {
+        'body': Array < GenomicIndicatorQuery > ,
+        $queryParameters ? : any,
+        $domain ? : string
+    }): Promise < request.Response > {
+        const domain = parameters.$domain ? parameters.$domain : this.domain;
+        const errorHandlers = this.errorHandlers;
+        const request = this.request;
+        let path = '/utils/genomicIndicators';
+        let body: any;
+        let queryParameters: any = {};
+        let headers: any = {};
+        let form: any = {};
+        return new Promise(function(resolve, reject) {
+            headers['Accept'] = 'application/json';
+            headers['Content-Type'] = 'application/json';
+
+            if (parameters['body'] !== undefined) {
+                body = parameters['body'];
+            }
+
+            if (parameters['body'] === undefined) {
+                reject(new Error('Missing required  parameter: body'));
+                return;
+            }
+
+            if (parameters.$queryParameters) {
+                Object.keys(parameters.$queryParameters).forEach(function(parameterName) {
+                    var parameter = parameters.$queryParameters[parameterName];
+                    queryParameters[parameterName] = parameter;
+                });
+            }
+
+            request('POST', domain + path, body, headers, queryParameters, form, reject, resolve, errorHandlers);
+
+        });
+    };
+
+    /**
+     * Get the germline genomic indicators for a list of genes and variants.
+     * @method
+     * @name OncoKbPrivateAPI#utilsGenomicIndicatorsPostUsingPOST
+     * @param {} body - List of queries. Each query specifies a hugoSymbol, variant, and optional inheritanceMechanisms filter.
+     */
+    utilsGenomicIndicatorsPostUsingPOST(parameters: {
+            'body': Array < GenomicIndicatorQuery > ,
+            $queryParameters ? : any,
+            $domain ? : string
+        }): Promise < Array < GenomicIndicatorQueryResp >
+        > {
+            return this.utilsGenomicIndicatorsPostUsingPOSTWithHttpInfo(parameters).then(function(response: request.Response) {
                 return response.body;
             });
         };

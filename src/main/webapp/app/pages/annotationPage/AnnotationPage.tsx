@@ -45,6 +45,14 @@ import {
   getUniqueFdaImplications,
   SummaryKey,
 } from 'app/pages/annotationPage/Utils';
+import {
+  getHotspotMutationEffectDescription,
+  getHotspotSummary,
+} from 'app/components/cancerHotspot/HotspotText';
+import {
+  getHotspot,
+  HOTSPOT_TYPE,
+} from 'app/pages/genePage/hotspot/HotspotUtils';
 import ShowHideText from 'app/shared/texts/ShowHideText';
 import { CancerTypeView } from 'app/pages/annotationPage/CancerTypeView';
 import AuthenticationStore from 'app/store/AuthenticationStore';
@@ -405,13 +413,72 @@ export default class AnnotationPage extends React.Component<
   @computed
   get alterationSummaries() {
     const orderedSummaries = [SummaryKey.GENE_SUMMARY];
-    if (!this.isCategoricalAlteration) {
+    // On an uncurated hotspot the generic hotspot copy takes the place of the
+    // auto-generated alteration summary, so the two do not compete.
+    if (!this.isCategoricalAlteration && !this.showGenericHotspotAnnotation) {
       orderedSummaries.push(SummaryKey.ALTERATION_SUMMARY);
     }
-    return getSummaries(
+    const summaries = getSummaries(
       this.props.store.somaticAnnotationData.result,
       orderedSummaries
     );
+    if (this.showGenericHotspotAnnotation) {
+      summaries.push({
+        key: SummaryKey.ALTERATION_SUMMARY,
+        title: 'Alteration Summary',
+        content: getHotspotSummary(
+          this.props.store.hugoSymbol,
+          this.props.store.alterationName,
+          this.hotspotType
+        ),
+      });
+    }
+    return summaries;
+  }
+
+  /**
+   * TEMPORARY: which kind of hotspot the alteration sits on decides how the
+   * generic hotspot copy refers to its mutations. Until the annotation carries
+   * the hotspot, it is looked up in the bundled data by position name and
+   * defaults to a single residue, the most common case. See
+   * app/pages/genePage/hotspot/HotspotUtils.ts
+   */
+  @computed
+  get hotspotType() {
+    return (
+      getHotspot(this.props.store.hugoSymbol, this.props.store.alterationName)
+        ?.type ?? HOTSPOT_TYPE.SINGLE_RESIDUE
+    );
+  }
+
+  /**
+   * The generic hotspot copy stands in on a hotspot page that OncoKB has not
+   * curated — single residue (BRAF G469), splice site and any other alteration
+   * matching a hotspot. variantExist is the curation signal: when OncoKB curates the
+   * alteration its own text wins and no placeholder is shown.
+   */
+  @computed
+  get showGenericHotspotAnnotation() {
+    const annotation = this.props.store.somaticAnnotationData.result;
+    return !!annotation.hotspot && !annotation.variantExist;
+  }
+
+  // Same fallback as the alteration summary, for the mutation effect
+  // description shown under the header.
+  @computed
+  get mutationEffectDescription() {
+    const description = this.props.store.somaticAnnotationData.result
+      .mutationEffect.description;
+    if (description) {
+      return description;
+    }
+    return this.showGenericHotspotAnnotation
+      ? getHotspotMutationEffectDescription(
+          this.props.store.hugoSymbol,
+          this.props.store.alterationName,
+          this.hotspotType
+        )
+      : undefined;
   }
 
   @computed get isCategoricalAlteration() {
@@ -608,7 +675,8 @@ export default class AnnotationPage extends React.Component<
                     alterationSummaries={this.alterationSummaries}
                     hugoSymbol={this.props.store.hugoSymbol}
                     alteration={
-                      this.props.store.somaticAnnotationData.result.query.alteration
+                      this.props.store.somaticAnnotationData.result.query
+                        .alteration
                     }
                     geneType={this.props.store.gene.result.geneType}
                   />
@@ -639,8 +707,7 @@ export default class AnnotationPage extends React.Component<
               </Col>
             )}
           </Row>
-          {this.props.store.somaticAnnotationData.result.mutationEffect
-            .description && (
+          {this.mutationEffectDescription && (
             <Row>
               <Col>
                 <ShowHideText
@@ -649,10 +716,7 @@ export default class AnnotationPage extends React.Component<
                   content={
                     <MutationEffectDescription
                       hugoSymbol={this.props.store.hugoSymbol}
-                      description={
-                        this.props.store.somaticAnnotationData.result.mutationEffect
-                          .description
-                      }
+                      description={this.mutationEffectDescription}
                     />
                   }
                   onClick={() =>
@@ -666,7 +730,9 @@ export default class AnnotationPage extends React.Component<
             <Col>
               <SomaticGermlineAlterationTiles
                 includeTitle
-                variantAnnotation={this.props.store.somaticAnnotationData.result}
+                variantAnnotation={
+                  this.props.store.somaticAnnotationData.result
+                }
                 isGermline={this.props.store.germline}
                 grch37Isoform={this.props.store.gene.result.grch37Isoform}
               />

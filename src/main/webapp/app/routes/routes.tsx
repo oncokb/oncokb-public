@@ -44,6 +44,8 @@ import WindowStore from 'app/store/WindowStore';
 import PageContainer from 'app/components/PageContainer';
 import GenomicReport from 'app/pages/patientReport/GenomicReport';
 import SomaticTagPage from 'app/pages/somaticGermlineAlterationPage/SomaticTagPage';
+import SomaticHotspotPage from 'app/pages/somaticGermlineAlterationPage/SomaticHotspotPage';
+import SomaticHotspotRangePage from 'app/pages/somaticGermlineAlterationPage/SomaticHotspotRangePage';
 import SomaticTagCancerTypePage from 'app/pages/annotationPage/SomaticTagCancerTypePage';
 
 const REGISTRATION_HOVER_GENE_PAGE_LIMIT = 5;
@@ -138,6 +140,28 @@ const AppRoutes = (props: {
       />
       <Redirect exact from={PAGE_ROUTE.PO_TX} to={PAGE_ROUTE.ONCOLOGY_TX} />
       <Switch>
+        <RecaptchaBoundaryRoute
+          exact
+          isUserAuthenticated={props.authenticationStore.isUserAuthenticated}
+          appStore={props.appStore}
+          path={PAGE_ROUTE.SOMATIC_HOTSPOT}
+          component={SomaticHotspotPage}
+          windowStore={props.windowStore}
+          pageContainer={({ children }) => children}
+          authenticationStore={props.authenticationStore}
+          registrationHoverLimit={REGISTRATION_HOVER_GENE_PAGE_LIMIT}
+        />
+        <RecaptchaBoundaryRoute
+          exact
+          isUserAuthenticated={props.authenticationStore.isUserAuthenticated}
+          appStore={props.appStore}
+          path={PAGE_ROUTE.SOMATIC_HOTSPOT_RANGE}
+          component={SomaticHotspotRangePage}
+          windowStore={props.windowStore}
+          pageContainer={({ children }) => children}
+          authenticationStore={props.authenticationStore}
+          registrationHoverLimit={REGISTRATION_HOVER_GENE_PAGE_LIMIT}
+        />
         <RecaptchaBoundaryRoute
           exact
           isUserAuthenticated={props.authenticationStore.isUserAuthenticated}

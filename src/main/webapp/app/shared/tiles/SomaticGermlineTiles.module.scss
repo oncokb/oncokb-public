@@ -20,6 +20,19 @@
   font-family: $font-family-sans-serif !important;
 }
 
+// A linked sub title reads as a sub title until it is hovered or focused, so
+// the tile headers stay visually consistent.
+.itemHeader a {
+  color: inherit;
+  text-decoration: none;
+
+  &:hover,
+  &:focus {
+    color: $blue;
+    text-decoration: underline;
+  }
+}
+
 .stringValue {
   font-family: $font-family-sans-serif-bold !important;
   font-size: 1.5rem !important;
@@ -31,6 +44,15 @@
 
 .alterationTileContainer {
   flex-grow: 1;
+}
+
+// The hotspot tile holds a single item, so it does not need an equal share of
+// the row. flex-grow only splits leftover space, so a smaller grow factor
+// barely moves it — instead the tile does not grow at all and is capped at a
+// fifth of the row, leaving the rest to the other tiles.
+.hotspotTileContainer {
+  flex-grow: 0;
+  max-width: 20%;
 }
 
 @media (min-width: 600px) {
@@ -46,6 +68,10 @@
   gap: 8px;
   box-shadow: $default-box-shadow;
   border-radius: 8px;
+}
+
+.hotspotTile {
+  border-left: 3px solid $cancer-hotspot-orange;
 }
 
 .alterationTileColumnMerge {
