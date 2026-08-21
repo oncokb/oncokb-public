@@ -14,7 +14,7 @@ import SomaticGermlineBreadcrumbs from 'app/shared/nav/SomaticGermlineBreadcrumb
 import { StickyMiniNavBarContextProvider } from 'app/shared/nav/StickyMiniNavBar';
 import MiniNavBarHeader from 'app/shared/nav/MiniNavBarHeader';
 import GeneAdditionalInfoSection from 'app/shared/sections/GeneAdditionalInfoSection';
-import { SomaticGermlineTile } from 'app/shared/tiles/SomaticGermlineTiles';
+import SomaticGermlineTiles from 'app/shared/tiles/SomaticGermlineTiles';
 import tileStyles from 'app/shared/tiles/SomaticGermlineTiles.module.scss';
 import AppStore from 'app/store/AppStore';
 import { inject } from 'mobx-react';
@@ -263,32 +263,39 @@ const SomaticHotspotPage = inject(
               <Container>
                 <Row className="justify-content-center">
                   <Col md={11}>
-                    <SomaticGermlineTile
-                      title={'Cancer Hotspot'}
-                      className={tileStyles.hotspotTile}
-                      items={[
-                        [
-                          {
-                            title: (
-                              <Linkout link={CANCER_HOTSPOTS_LINK}>
-                                cancerhotspots.org
-                              </Linkout>
-                            ),
-                            value: (
-                              <span className="h5">
-                                <CancerHotspotIcon />
-                              </span>
-                            ),
-                          },
-                          {
-                            title: 'Type',
-                            value: hotspotTypeLabel,
-                          },
-                          {
-                            title: 'Tumor Samples',
-                            value: `${hotspot.tumorCount}`,
-                          },
-                        ],
+                    {/* Rendered through the tile row so it keeps the same
+                        spacing from the description as the tiles on the
+                        alteration page. */}
+                    <SomaticGermlineTiles
+                      tiles={[
+                        {
+                          title: 'Cancer Hotspot',
+                          className: tileStyles.hotspotTile,
+                          items: [
+                            [
+                              {
+                                title: (
+                                  <Linkout link={CANCER_HOTSPOTS_LINK}>
+                                    cancerhotspots.org
+                                  </Linkout>
+                                ),
+                                value: (
+                                  <span className="h5">
+                                    <CancerHotspotIcon />
+                                  </span>
+                                ),
+                              },
+                              {
+                                title: 'Type',
+                                value: hotspotTypeLabel,
+                              },
+                              {
+                                title: 'Tumor Samples',
+                                value: `${hotspot.tumorCount}`,
+                              },
+                            ],
+                          ],
+                        },
                       ]}
                     />
                   </Col>

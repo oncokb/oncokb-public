@@ -66,8 +66,20 @@
   visibility: visible;
 }
 
+// A fixed square keeps the hover background even on every side. The glyph is
+// centered by the wrapper rather than by line-height, which font-awesome sets
+// on the icon itself through its `font` shorthand.
 .filter-icon {
-  padding: 2px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 1.35rem;
+  height: 1.35rem;
+
+  .fa {
+    line-height: 1;
+  }
+
   &:hover {
     border-radius: 3px;
     background-color: #e0e1e2;

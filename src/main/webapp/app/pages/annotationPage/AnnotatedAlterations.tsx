@@ -35,6 +35,8 @@ const getColumns = (
     accessor: 'variant',
     onFilter: (data: BiologicalVariant, keyword: string) =>
       filterByKeyword(data.variant.name, keyword),
+    filterType: FilterTypes.STRING as const,
+    getColumnFilterValue: (data: BiologicalVariant) => data.variant.name,
     Cell(props: { original: BiologicalVariant }) {
       return (
         <>

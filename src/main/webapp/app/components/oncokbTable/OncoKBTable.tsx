@@ -15,16 +15,21 @@ export type BaseColumn<T> = Column<T> & {
 export type StringFilterColumn<T> = BaseColumn<T> & {
   filterType: FilterTypes.STRING;
   getColumnFilterValue: (data: T) => string | undefined;
+  // Overrides the natural sort of the values listed in the filter menu, for
+  // columns whose values have a meaningful order of their own.
+  sortColumnFilterValues?: (a: string, b: string) => number;
 };
 
 export type NumberFilterColumn<T> = BaseColumn<T> & {
   filterType: FilterTypes.NUMBER;
   getColumnFilterValue: (data: T) => number | undefined;
+  sortColumnFilterValues?: (a: number, b: number) => number;
 };
 
 export type UnfilteredColumn<T> = BaseColumn<T> & {
   filterType?: undefined;
   getColumnFilterValue?: undefined;
+  sortColumnFilterValues?: undefined;
 };
 
 export type SearchColumn<T> =
@@ -46,6 +51,28 @@ interface ITableWithSearchBox<T> extends Partial<TableProps<T>> {
   serverSideSearch?: boolean;
   searchKeyword?: string;
   onSearchChange?: (keyword: string) => void;
+}
+
+// Strings sort naturally so that embedded numbers read in order, eg V600E
+// before V1000E. Numbers sort ascending.
+function defaultFilterValueComparator(
+  a: string | number,
+  b: string | number
+): number {
+  if (typeof a === 'number' && typeof b === 'number') {
+    return a - b;
+  }
+  return String(a).localeCompare(String(b), undefined, { numeric: true });
+}
+
+function sortColumnFilterValues(
+  values: Set<string | number>,
+  comparator?: (a: never, b: never) => number
+): Set<string | number> {
+  const sort =
+    (comparator as (a: string | number, b: string | number) => number) ??
+    defaultFilterValueComparator;
+  return new Set(Array.from(values).sort(sort));
 }
 
 // A column can only be filtered when it can be identified in the filter state.
@@ -95,13 +122,11 @@ export default class OncoKBTable<T> extends React.Component<
   }
 
   @computed
-  get allUniqColumnData(): {
-    [columnId: string]: Set<string> | Set<number>;
-  } {
-    const allColumnData = {};
+  get allUniqColumnData(): { [columnId: string]: Set<string | number> } {
+    const allColumnData: { [columnId: string]: Set<string | number> } = {};
 
     this.filterableColumns.forEach(column => {
-      allColumnData[getColumnId(column)!] = new Set();
+      allColumnData[getColumnId(column)!] = new Set<string | number>();
     });
 
     this.props.data.forEach(item => {
@@ -111,6 +136,16 @@ export default class OncoKBTable<T> extends React.Component<
           allColumnData[getColumnId(column)!].add(filterValue);
         }
       });
+    });
+
+    // Insertion order is the order the rows happen to arrive in, so the menu is
+    // sorted to give the same list every time regardless of the data or sorting.
+    this.filterableColumns.forEach(column => {
+      const columnId = getColumnId(column)!;
+      allColumnData[columnId] = sortColumnFilterValues(
+        allColumnData[columnId],
+        column.sortColumnFilterValues
+      );
     });
 
     return allColumnData;
@@ -240,41 +275,47 @@ export default class OncoKBTable<T> extends React.Component<
               ) : (
                 <this.props.filters />
               )}
-              {this.hasActiveFilters && (
-                <Button
-                  color="primary"
-                  outline
-                  size="sm"
-                  onClick={() => (this.selectedFilters = {})}
-                >
-                  Reset all filters
-                </Button>
-              )}
             </div>
             <div className="col-sm">
-              {this.props.disableSearch ? (
+              {this.props.disableSearch && !this.hasActiveFilters ? (
                 <></>
               ) : (
                 <div className="d-flex">
-                  <div className="ml-auto">
-                    <input
-                      onChange={(event: any) => {
-                        const newKeyword = event.target.value.toLowerCase();
-                        if (this.props.onSearchChange) {
-                          this.props.onSearchChange(newKeyword);
-                        } else {
-                          this.searchKeyword = newKeyword;
+                  {/* Kept on the right, next to the search box, so it stays
+                      clear of whatever the caller renders above the table. */}
+                  <div className="ml-auto d-flex align-items-center">
+                    {this.hasActiveFilters && (
+                      <Button
+                        color="primary"
+                        outline
+                        size="sm"
+                        className="mr-2"
+                        style={{ whiteSpace: 'nowrap' }}
+                        onClick={() => (this.selectedFilters = {})}
+                      >
+                        Reset all filters
+                      </Button>
+                    )}
+                    {!this.props.disableSearch && (
+                      <input
+                        onChange={(event: any) => {
+                          const newKeyword = event.target.value.toLowerCase();
+                          if (this.props.onSearchChange) {
+                            this.props.onSearchChange(newKeyword);
+                          } else {
+                            this.searchKeyword = newKeyword;
+                          }
+                        }}
+                        value={
+                          this.props.onSearchChange
+                            ? this.props.searchKeyword || ''
+                            : this.searchKeyword
                         }
-                      }}
-                      value={
-                        this.props.onSearchChange
-                          ? this.props.searchKeyword || ''
-                          : this.searchKeyword
-                      }
-                      className="form-control input-sm"
-                      type="text"
-                      placeholder="Search ..."
-                    />
+                        className="form-control input-sm"
+                        type="text"
+                        placeholder="Search ..."
+                      />
+                    )}
                   </div>
                 </div>
               )}
