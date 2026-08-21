@@ -253,6 +253,12 @@ export type MatchVariantResult = {
         'result': Array < MatchVariant >
 
 };
+export type ValidationError = {
+    'message': string
+
+        'type': "REFERENCE_ALLELE_MISMATCH" | "POSITION_OUT_OF_RANGE" | "REVERSED_POSITION_RANGE" | "MALFORMED_ALTERATION"
+
+};
 export type ProteinChangeValidation = {
     'message': string
 
@@ -261,6 +267,14 @@ export type ProteinChangeValidation = {
         'normalizedProteinChange': string
 
         'status': "NORMALIZED" | "INVALID" | "UNCHECKED"
+
+};
+export type GenomicIndicatorQuery = {
+    'hugoSymbol': string
+
+        'inheritanceMechanisms': Array < "AUTOSOMAL_DOMINANT" | "AUTOSOMAL_RECESSIVE" | "X_LINKED_RECESSIVE" | "CARRIER" >
+
+        'variant': string
 
 };
 export type MatchVariantRequest = {
@@ -306,6 +320,8 @@ export type AlternativeOncoKbVariant = {
 export type BiologicalVariant = {
     'cancerRisk': string
 
+        'hotspot': VariantHotspot
+
         'mutationEffect': string
 
         'mutationEffectAbstracts': Array < ArticleAbstract >
@@ -329,12 +345,6 @@ export type BiologicalVariant = {
         'penetrance': string
 
         'variant': Alteration
-
-};
-export type AlterationValidationError = {
-    'message': string
-
-        'type': "REFERENCE_ALLELE_MISMATCH" | "POSITION_OUT_OF_RANGE" | "REVERSED_POSITION_RANGE" | "MALFORMED_ALTERATION"
 
 };
 export type GenomicIndicator = {
@@ -361,6 +371,38 @@ export type TumorTypeEntity = {
         'tissue': string
 
         'tumorForm': "SOLID" | "LIQUID" | "MIXED"
+
+};
+export type VariantHotspot = {
+    'isHotspot': boolean
+
+        'name': string
+
+        'residue': string
+
+        'type': string
+
+};
+export type CancerHotspot = {
+    'curatedVariants': Array < BiologicalVariant >
+
+        'curatedVariantsDescription': string
+
+        'hugoSymbol': string
+
+        'name': string
+
+        'pmids': Array < string >
+
+        'proteinEnd': number
+
+        'proteinStart': number
+
+        'residue': string
+
+        'tumorCount': number
+
+        'type': string
 
 };
 export type Article = {
@@ -769,6 +811,12 @@ export type AnnotateMutationByHGVSgQuery = {
         'tumorType': string
 
 };
+export type GenomicIndicatorQueryResp = {
+    'genomicIndicators': Array < GenomicIndicator >
+
+        'query': GenomicIndicatorQuery
+
+};
 export type Tag = {
     'description': string
 
@@ -808,17 +856,19 @@ export type SomaticVariantAnnotation = {
 
         'alteration': Alteration
 
-        'alterationValidationError': AlterationValidationError | null
-
-        'alternativeOncoKbVariant': AlternativeOncoKbVariant | null
+        'alternativeOncoKbVariant': AlternativeOncoKbVariant
 
         'background': string
+
+        'cancerHotspot': CancerHotspot
 
         'dataVersion': string
 
         'diagnosticImplications': Array < Implication >
 
         'diagnosticSummary': string
+
+        'errors': Array < ValidationError >
 
         'exon': string
 
@@ -2566,6 +2616,209 @@ export default class OncoKbPrivateAPI {
                 return response.body;
             });
         };
+    utilsGenomicIndicatorsPostUsingPOSTURL(parameters: {
+        'body': Array < GenomicIndicatorQuery > ,
+        $queryParameters ? : any
+    }): string {
+        let queryParameters: any = {};
+        let path = '/utils/genomicIndicators';
+
+        if (parameters.$queryParameters) {
+            Object.keys(parameters.$queryParameters).forEach(function(parameterName) {
+                var parameter = parameters.$queryParameters[parameterName];
+                queryParameters[parameterName] = parameter;
+            });
+        }
+        let keys = Object.keys(queryParameters);
+        return this.domain + path + (keys.length > 0 ? '?' + (keys.map(key => key + '=' + encodeURIComponent(queryParameters[key])).join('&')) : '');
+    };
+
+    /**
+     * Get the germline genomic indicators for a list of genes and variants.
+     * @method
+     * @name OncoKbPrivateAPI#utilsGenomicIndicatorsPostUsingPOST
+     * @param {} body - List of queries. Each query specifies a hugoSymbol, variant, and optional inheritanceMechanisms filter.
+     */
+    utilsGenomicIndicatorsPostUsingPOSTWithHttpInfo(parameters: {
+        'body': Array < GenomicIndicatorQuery > ,
+        $queryParameters ? : any,
+        $domain ? : string
+    }): Promise < request.Response > {
+        const domain = parameters.$domain ? parameters.$domain : this.domain;
+        const errorHandlers = this.errorHandlers;
+        const request = this.request;
+        let path = '/utils/genomicIndicators';
+        let body: any;
+        let queryParameters: any = {};
+        let headers: any = {};
+        let form: any = {};
+        return new Promise(function(resolve, reject) {
+            headers['Accept'] = 'application/json';
+            headers['Content-Type'] = 'application/json';
+
+            if (parameters['body'] !== undefined) {
+                body = parameters['body'];
+            }
+
+            if (parameters['body'] === undefined) {
+                reject(new Error('Missing required  parameter: body'));
+                return;
+            }
+
+            if (parameters.$queryParameters) {
+                Object.keys(parameters.$queryParameters).forEach(function(parameterName) {
+                    var parameter = parameters.$queryParameters[parameterName];
+                    queryParameters[parameterName] = parameter;
+                });
+            }
+
+            request('POST', domain + path, body, headers, queryParameters, form, reject, resolve, errorHandlers);
+
+        });
+    };
+
+    /**
+     * Get the germline genomic indicators for a list of genes and variants.
+     * @method
+     * @name OncoKbPrivateAPI#utilsGenomicIndicatorsPostUsingPOST
+     * @param {} body - List of queries. Each query specifies a hugoSymbol, variant, and optional inheritanceMechanisms filter.
+     */
+    utilsGenomicIndicatorsPostUsingPOST(parameters: {
+            'body': Array < GenomicIndicatorQuery > ,
+            $queryParameters ? : any,
+            $domain ? : string
+        }): Promise < Array < GenomicIndicatorQueryResp >
+        > {
+            return this.utilsGenomicIndicatorsPostUsingPOSTWithHttpInfo(parameters).then(function(response: request.Response) {
+                return response.body;
+            });
+        };
+    utilHotspotAnnotationGetUsingGETURL(parameters: {
+        'hugoSymbol' ? : string,
+        'entrezGeneId' ? : number,
+        'residue' ? : string,
+        'alteration' ? : string,
+        'referenceGenome' ? : string,
+        $queryParameters ? : any
+    }): string {
+        let queryParameters: any = {};
+        let path = '/utils/hotspotAnnotation';
+        if (parameters['hugoSymbol'] !== undefined) {
+            queryParameters['hugoSymbol'] = parameters['hugoSymbol'];
+        }
+
+        if (parameters['entrezGeneId'] !== undefined) {
+            queryParameters['entrezGeneId'] = parameters['entrezGeneId'];
+        }
+
+        if (parameters['residue'] !== undefined) {
+            queryParameters['residue'] = parameters['residue'];
+        }
+
+        if (parameters['alteration'] !== undefined) {
+            queryParameters['alteration'] = parameters['alteration'];
+        }
+
+        if (parameters['referenceGenome'] !== undefined) {
+            queryParameters['referenceGenome'] = parameters['referenceGenome'];
+        }
+
+        if (parameters.$queryParameters) {
+            Object.keys(parameters.$queryParameters).forEach(function(parameterName) {
+                var parameter = parameters.$queryParameters[parameterName];
+                queryParameters[parameterName] = parameter;
+            });
+        }
+        let keys = Object.keys(queryParameters);
+        return this.domain + path + (keys.length > 0 ? '?' + (keys.map(key => key + '=' + encodeURIComponent(queryParameters[key])).join('&')) : '');
+    };
+
+    /**
+     * Get the annotation of a cancer hotspot, either by its residue or by an alteration on it. The residue is a single residue (e.g. V600), a splice site position (e.g. X307) or an in-frame indel range (e.g. 27-42).
+     * @method
+     * @name OncoKbPrivateAPI#utilHotspotAnnotationGetUsingGET
+     * @param {string} hugoSymbol - hugoSymbol
+     * @param {integer} entrezGeneId - entrezGeneId
+     * @param {string} residue - Hotspot residue. Example: V600, X307 or 27-42
+     * @param {string} alteration - An alteration on the hotspot, used when residue is not given. Example: V600E, K459del or X307_splice
+     * @param {string} referenceGenome - Reference genome, either GRCh37 or GRCh38. The default is GRCh37
+     */
+    utilHotspotAnnotationGetUsingGETWithHttpInfo(parameters: {
+        'hugoSymbol' ? : string,
+        'entrezGeneId' ? : number,
+        'residue' ? : string,
+        'alteration' ? : string,
+        'referenceGenome' ? : string,
+        $queryParameters ? : any,
+            $domain ? : string
+    }): Promise < request.Response > {
+        const domain = parameters.$domain ? parameters.$domain : this.domain;
+        const errorHandlers = this.errorHandlers;
+        const request = this.request;
+        let path = '/utils/hotspotAnnotation';
+        let body: any;
+        let queryParameters: any = {};
+        let headers: any = {};
+        let form: any = {};
+        return new Promise(function(resolve, reject) {
+            headers['Accept'] = 'application/json';
+            headers['Content-Type'] = 'application/json';
+
+            if (parameters['hugoSymbol'] !== undefined) {
+                queryParameters['hugoSymbol'] = parameters['hugoSymbol'];
+            }
+
+            if (parameters['entrezGeneId'] !== undefined) {
+                queryParameters['entrezGeneId'] = parameters['entrezGeneId'];
+            }
+
+            if (parameters['residue'] !== undefined) {
+                queryParameters['residue'] = parameters['residue'];
+            }
+
+            if (parameters['alteration'] !== undefined) {
+                queryParameters['alteration'] = parameters['alteration'];
+            }
+
+            if (parameters['referenceGenome'] !== undefined) {
+                queryParameters['referenceGenome'] = parameters['referenceGenome'];
+            }
+
+            if (parameters.$queryParameters) {
+                Object.keys(parameters.$queryParameters).forEach(function(parameterName) {
+                    var parameter = parameters.$queryParameters[parameterName];
+                    queryParameters[parameterName] = parameter;
+                });
+            }
+
+            request('GET', domain + path, body, headers, queryParameters, form, reject, resolve, errorHandlers);
+
+        });
+    };
+
+    /**
+     * Get the annotation of a cancer hotspot, either by its residue or by an alteration on it. The residue is a single residue (e.g. V600), a splice site position (e.g. X307) or an in-frame indel range (e.g. 27-42).
+     * @method
+     * @name OncoKbPrivateAPI#utilHotspotAnnotationGetUsingGET
+     * @param {string} hugoSymbol - hugoSymbol
+     * @param {integer} entrezGeneId - entrezGeneId
+     * @param {string} residue - Hotspot residue. Example: V600, X307 or 27-42
+     * @param {string} alteration - An alteration on the hotspot, used when residue is not given. Example: V600E, K459del or X307_splice
+     * @param {string} referenceGenome - Reference genome, either GRCh37 or GRCh38. The default is GRCh37
+     */
+    utilHotspotAnnotationGetUsingGET(parameters: {
+        'hugoSymbol' ? : string,
+        'entrezGeneId' ? : number,
+        'residue' ? : string,
+        'alteration' ? : string,
+        'referenceGenome' ? : string,
+        $queryParameters ? : any,
+            $domain ? : string
+    }): Promise < SomaticVariantAnnotation > {
+        return this.utilHotspotAnnotationGetUsingGETWithHttpInfo(parameters).then(function(response: request.Response) {
+            return response.body;
+        });
+    };
     utilsHotspotMutationGetUsingGETURL(parameters: {
         'hugoSymbol' ? : string,
         'variant' ? : string,

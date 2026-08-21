@@ -14,11 +14,13 @@ export const GenePageTable: React.FunctionComponent<{
   columns: SearchColumn<any>[];
   isPending: boolean;
   defaultSorted?: SortingRule[];
+  description?: React.ReactNode;
 }> = props => {
   return (
     <OncoKBTable
       data={props.data}
       columns={props.columns}
+      description={props.description}
       loading={props.isPending}
       pageSize={props.data.length === 0 ? 1 : props.data.length}
       style={
