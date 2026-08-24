@@ -129,6 +129,7 @@ enum SimpleConfirmModalType {
   NA,
   DELETE_ACCOUNT,
   INITIATE_TRIAL,
+  REVOKE_TRIAL,
   DELETE_ACTIVATION_KEY,
   DELETE_RESET_KEY,
   GENERATE_RESET_KEY,
@@ -506,10 +507,35 @@ export default class UserPage extends React.Component<IUserPage> {
   }
 
   @autobind
+  @action
+  revokeTrialAccess() {
+    this.getUserStatus = PromiseStatus.pending;
+    client
+      .revokeTrialAccessUsingPOST({
+        login: this.user.login,
+      })
+      .then(
+        updatedUser => {
+          this.user = updatedUser;
+          notifySuccess('Revoked trial access');
+          this.getUserTokens();
+          this.getUserStatus = PromiseStatus.complete;
+        },
+        (error: Error) => {
+          this.getUserStatus = PromiseStatus.error;
+          notifyError(error);
+        }
+      );
+  }
+
+  @autobind
   onConfirmSimpleConfirmModal() {
     switch (this.simpleConfirmModalType) {
       case SimpleConfirmModalType.INITIATE_TRIAL:
         this.onConfirmInitiateTrialAccountButton();
+        break;
+      case SimpleConfirmModalType.REVOKE_TRIAL:
+        this.revokeTrialAccess();
         break;
       case SimpleConfirmModalType.DELETE_ACCOUNT:
         this.onConfirmDeleteAccountButton();
@@ -684,6 +710,16 @@ export default class UserPage extends React.Component<IUserPage> {
                                   Extend Trial Access
                                 </QuickToolButton>
                               </DefaultTooltip>
+                            )}
+                            {this.user.additionalInfo?.trialAccount && (
+                              <QuickToolButton
+                                onClick={() => {
+                                  this.simpleConfirmModalType =
+                                    SimpleConfirmModalType.REVOKE_TRIAL;
+                                }}
+                              >
+                                Revoke Trial Access
+                              </QuickToolButton>
                             )}
                             <QuickToolButton
                               onClick={() =>

@@ -252,6 +252,22 @@ public class UserResource {
                 .map(user -> userMapper.userToUserDTO(user)));
     }
 
+    @PostMapping("/users/{login:" + Constants.LOGIN_REGEX + "}/trial/revoke")
+    @PreAuthorize("hasAuthority(\"" + AuthoritiesConstants.ADMIN + "\")")
+    public ResponseEntity<UserDTO> revokeTrialAccess(@PathVariable String login) {
+        Optional<User> userOptional = userService.getUserWithAuthoritiesByLogin(login);
+        if (!userOptional.isPresent()) {
+            return ResponseEntity.notFound().build();
+        }
+
+        UserDTO userDTO = userMapper.userToUserDTO(userOptional.get());
+        userService.revokeTrialAccess(userDTO);
+
+        Optional<UserDTO> updatedUserDTO = userService.getUserWithAuthoritiesByLogin(login)
+            .map(user -> userMapper.userToUserDTO(user));
+        return ResponseUtil.wrapOrNotFound(updatedUserDTO);
+    }
+
     /**
      * {@code DELETE /users/:login} : delete the "login" User.
      *

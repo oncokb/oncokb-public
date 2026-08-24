@@ -657,6 +657,23 @@ public class UserResourceIT {
 
     @Test
     @Transactional
+    public void revokeTrialAccess() throws Exception {
+        user.setActivated(true);
+        userRepository.saveAndFlush(user);
+
+        restUserMockMvc.perform(post("/api/users/{login}/trial/revoke", user.getLogin())
+            .contentType(MediaType.APPLICATION_JSON))
+            .andExpect(status().isOk())
+            .andExpect(jsonPath("$.login").value(user.getLogin()))
+            .andExpect(jsonPath("$.activated").value(false));
+
+        Optional<User> updatedUser = userRepository.findOneWithAuthoritiesByLogin(user.getLogin());
+        assertThat(updatedUser).isPresent();
+        assertThat(updatedUser.get().getActivated()).isFalse();
+    }
+
+    @Test
+    @Transactional
     public void getAllAuthorities() throws Exception {
         restUserMockMvc.perform(get("/api/users/authorities")
             .accept(MediaType.APPLICATION_JSON)

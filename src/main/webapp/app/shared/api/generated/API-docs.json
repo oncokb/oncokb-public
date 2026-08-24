@@ -4120,6 +4120,51 @@
         },
         "deprecated": false
       }
+    },
+    "/api/users/{login}/trial/revoke": {
+      "post": {
+        "tags": [
+          "user-resource"
+        ],
+        "summary": "revokeTrialAccess",
+        "operationId": "revokeTrialAccessUsingPOST",
+        "consumes": [
+          "application/json"
+        ],
+        "produces": [
+          "*/*"
+        ],
+        "parameters": [
+          {
+            "name": "login",
+            "in": "path",
+            "description": "login",
+            "required": true,
+            "type": "string"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "schema": {
+              "$ref": "#/definitions/UserDTO"
+            }
+          },
+          "201": {
+            "description": "Created"
+          },
+          "401": {
+            "description": "Unauthorized"
+          },
+          "403": {
+            "description": "Forbidden"
+          },
+          "404": {
+            "description": "Not Found"
+          }
+        },
+        "deprecated": false
+      }
     }
   },
   "definitions": {
