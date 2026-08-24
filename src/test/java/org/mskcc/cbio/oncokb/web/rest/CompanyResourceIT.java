@@ -4,11 +4,15 @@ import com.google.gson.Gson;
 import org.mskcc.cbio.oncokb.RedisTestContainerExtension;
 import org.mskcc.cbio.oncokb.OncokbPublicApp;
 import org.mskcc.cbio.oncokb.domain.Company;
+import org.mskcc.cbio.oncokb.domain.User;
 import org.mskcc.cbio.oncokb.repository.CompanyRepository;
 import org.mskcc.cbio.oncokb.service.CompanyService;
+import org.mskcc.cbio.oncokb.service.UserService;
 import org.mskcc.cbio.oncokb.service.dto.CompanyDTO;
+import org.mskcc.cbio.oncokb.service.dto.UserDTO;
 import org.mskcc.cbio.oncokb.service.dto.companyadditionalinfo.CompanyAdditionalInfoDTO;
 import org.mskcc.cbio.oncokb.service.mapper.CompanyMapper;
+import org.mskcc.cbio.oncokb.service.mapper.UserMapper;
 import org.mskcc.cbio.oncokb.web.rest.vm.CompanyVM;
 import org.mskcc.cbio.oncokb.security.AuthoritiesConstants;
 
@@ -30,6 +34,7 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.HashSet;
 import java.util.List;
+import java.util.Optional;
 import java.util.Set;
 
 import static org.assertj.core.api.Assertions.assertThat;
@@ -97,10 +102,19 @@ public class CompanyResourceIT {
     private CompanyService companyServiceMock;
 
     @Autowired
+    private CompanyService companyService;
+
+    @Autowired
     private EntityManager em;
 
     @Autowired
     private MockMvc restCompanyMockMvc;
+
+    @Autowired
+    private UserService userService;
+
+    @Autowired
+    private UserMapper userMapper;
 
     private Company company;
 
@@ -497,5 +511,48 @@ public class CompanyResourceIT {
         // Validate the Company in the database
         List<Company> companyList = companyRepository.findAll();
         assertThat(companyList).hasSize(databaseSizeBeforeUpdate);
+    }
+
+    @Test
+    @Transactional
+    public void revokeTrialAccessForCompany() throws Exception {
+        Company trialCompany = companyRepository.saveAndFlush(company);
+
+        UserDTO trialUserDTO = new UserDTO();
+        trialUserDTO.setLogin("companytrialuser");
+        trialUserDTO.setEmail("companytrialuser@localhost");
+        trialUserDTO.setFirstName("Trial");
+        trialUserDTO.setLastName("User");
+        trialUserDTO.setActivated(false);
+        trialUserDTO.setLicenseType(DEFAULT_LICENSE_TYPE);
+
+        User trialUser = userService.createUser(
+            trialUserDTO,
+            false,
+            Optional.empty(),
+            Optional.empty()
+        );
+        userService.initiateTrialAccountActivation(trialUser.getLogin());
+        UserDTO initiatedTrialUser = userMapper.userToUserDTO(userService.getUserByLogin(trialUser.getLogin()).get());
+        userService.finishTrialAccountActivation(initiatedTrialUser.getAdditionalInfo().getTrialAccount().getActivation().getKey());
+
+        CompanyVM companyVM = new CompanyVM();
+        companyVM.setId(trialCompany.getId());
+        companyVM.setName(trialCompany.getName());
+        companyVM.setDescription(trialCompany.getDescription());
+        companyVM.setCompanyType(trialCompany.getCompanyType());
+        companyVM.setLicenseType(trialCompany.getLicenseType());
+        companyVM.setLicenseModel(trialCompany.getLicenseModel());
+        companyVM.setLicenseStatus(trialCompany.getLicenseStatus());
+        companyVM.setBusinessContact(trialCompany.getBusinessContact());
+        companyVM.setLegalContact(trialCompany.getLegalContact());
+        companyVM.setCompanyDomains(DEFAULT_COMPANY_DOMAINS);
+        companyVM.setCompanyUserEmails(Arrays.asList(trialUser.getEmail()));
+        companyService.updateCompany(companyVM);
+
+        restCompanyMockMvc.perform(post("/api/companies/{id}/trial/revoke", trialCompany.getId())
+            .contentType(MediaType.APPLICATION_JSON))
+            .andExpect(status().isOk())
+            .andExpect(content().string("1"));
     }
 }

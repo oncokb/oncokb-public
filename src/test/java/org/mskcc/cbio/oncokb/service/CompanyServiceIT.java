@@ -495,6 +495,44 @@ public class CompanyServiceIT {
 
     @Test
     @Transactional
+    public void assertThatRevokeTrialAccessForCompanyRevokesOnlyTrialUsers() {
+        User trialUser = userService.createUser(userDTO, false, Optional.empty(), Optional.empty());
+        userService.initiateTrialAccountActivation(trialUser.getLogin());
+        UserDTO trialUserDTO = userMapper.userToUserDTO(userService.getUserByLogin(trialUser.getLogin()).get());
+        userService.finishTrialAccountActivation(trialUserDTO.getAdditionalInfo().getTrialAccount().getActivation().getKey());
+
+        UserDTO regularUserDTO = new UserDTO();
+        regularUserDTO.setLogin("janedoe");
+        regularUserDTO.setEmail("janedoe@localhost");
+        regularUserDTO.setFirstName("jane");
+        regularUserDTO.setLastName("doe");
+        regularUserDTO.setActivated(false);
+        regularUserDTO.setLicenseType(DEFAULT_LICENSE_TYPE);
+        User regularUser = userService.createUser(regularUserDTO, false, Optional.of(DEFAULT_TOKEN_EXPIRATION_IN_DAYS), Optional.of(Boolean.TRUE));
+
+        companyDTO.setLicenseStatus(LicenseStatus.TRIAL);
+        CompanyDTO existingCompany = companyService.createCompany(companyDTO);
+        CompanyVM companyVM = createCompanyVM(existingCompany);
+        companyVM.setCompanyUserEmails(Arrays.asList(trialUser.getEmail(), regularUser.getEmail()));
+        companyService.updateCompany(companyVM);
+
+        int revokedUsers = companyService.revokeTrialAccessForCompany(existingCompany.getId());
+        assertThat(revokedUsers).isEqualTo(1);
+
+        UserDTO latestTrialUserDTO = userMapper.userToUserDTO(userService.getUserByLogin(trialUser.getLogin()).get());
+        assertThat(latestTrialUserDTO.isActivated()).isFalse();
+        if (latestTrialUserDTO.getAdditionalInfo() != null) {
+            assertThat(latestTrialUserDTO.getAdditionalInfo().getTrialAccount()).isNull();
+        }
+        List<Token> trialTokens = tokenService.findByUser(userMapper.userDTOToUser(latestTrialUserDTO));
+        assertThat(trialTokens).allMatch(token -> token.getExpiration().isBefore(Instant.now().plusSeconds(1)));
+
+        UserDTO latestRegularUserDTO = userMapper.userToUserDTO(userService.getUserByLogin(regularUser.getLogin()).get());
+        assertThat(latestRegularUserDTO.isActivated()).isTrue();
+    }
+
+    @Test
+    @Transactional
     public void assertThatCreatingNewServiceAccountTokenAlsoCreatesServiceAccount() {
         CompanyDTO company = companyService.createCompany(companyDTO);
         assertThat(!companyService.getServiceUserForCompany(company.getId()).isPresent());

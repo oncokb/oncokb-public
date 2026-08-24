@@ -2800,6 +2800,81 @@ export default class API {
                 return response.body;
             });
         };
+    revokeTrialAccessForCompanyUsingPOSTURL(parameters: {
+        'id': number,
+        $queryParameters ? : any
+    }): string {
+        let queryParameters: any = {};
+        let path = '/api/companies/{id}/trial/revoke';
+
+        path = path.replace('{id}', parameters['id'] + '');
+
+        if (parameters.$queryParameters) {
+            Object.keys(parameters.$queryParameters).forEach(function(parameterName) {
+                var parameter = parameters.$queryParameters[parameterName];
+                queryParameters[parameterName] = parameter;
+            });
+        }
+        let keys = Object.keys(queryParameters);
+        return this.domain + path + (keys.length > 0 ? '?' + (keys.map(key => key + '=' + encodeURIComponent(queryParameters[key])).join('&')) : '');
+    };
+
+    /**
+     * revokeTrialAccessForCompany
+     * @method
+     * @name API#revokeTrialAccessForCompanyUsingPOST
+     * @param {integer} id - id
+     */
+    revokeTrialAccessForCompanyUsingPOSTWithHttpInfo(parameters: {
+        'id': number,
+        $queryParameters ? : any,
+        $domain ? : string
+    }): Promise < request.Response > {
+        const domain = parameters.$domain ? parameters.$domain : this.domain;
+        const errorHandlers = this.errorHandlers;
+        const request = this.request;
+        let path = '/api/companies/{id}/trial/revoke';
+        let body: any;
+        let queryParameters: any = {};
+        let headers: any = {};
+        let form: any = {};
+        return new Promise(function(resolve, reject) {
+            headers['Accept'] = '*/*';
+
+            path = path.replace('{id}', parameters['id'] + '');
+
+            if (parameters['id'] === undefined) {
+                reject(new Error('Missing required  parameter: id'));
+                return;
+            }
+
+            if (parameters.$queryParameters) {
+                Object.keys(parameters.$queryParameters).forEach(function(parameterName) {
+                    var parameter = parameters.$queryParameters[parameterName];
+                    queryParameters[parameterName] = parameter;
+                });
+            }
+
+            request('POST', domain + path, body, headers, queryParameters, form, reject, resolve, errorHandlers);
+
+        });
+    };
+
+    /**
+     * revokeTrialAccessForCompany
+     * @method
+     * @name API#revokeTrialAccessForCompanyUsingPOST
+     * @param {integer} id - id
+     */
+    revokeTrialAccessForCompanyUsingPOST(parameters: {
+        'id': number,
+        $queryParameters ? : any,
+        $domain ? : string
+    }): Promise < number > {
+        return this.revokeTrialAccessForCompanyUsingPOSTWithHttpInfo(parameters).then(function(response: request.Response) {
+            return response.body;
+        });
+    };
     getCompanyUsersUsingGETURL(parameters: {
         'id': number,
         $queryParameters ? : any

@@ -872,11 +872,13 @@ public class UserService {
      * @param userDTO
      */
     private void clearTrialAccountInformation(UserDTO userDTO) {
+            if (userDTO.getAdditionalInfo() == null || userDTO.getAdditionalInfo().getTrialAccount() == null) {
+                return;
+            }
             userDTO.getAdditionalInfo().setTrialAccount(null);
             Optional<UserDetails> userDetails = userDetailsRepository.findOneByUser(userMapper.userDTOToUser(userDTO));
             if (userDetails.isPresent()) {
                 UserDetails ud = userDetails.get();
-                userDTO.getAdditionalInfo().setTrialAccount(null);
                 ud.setAdditionalInfo(new Gson().toJson(userDTO.getAdditionalInfo()));
                 userDetailsRepository.save(ud);
             }
@@ -971,6 +973,12 @@ public class UserService {
 
     public List<String> getNonCompanyUserEmails() {
         return userDetailsRepository.findUserEmailsByCompanyIdIsNull();
+    }
+
+    public void revokeTrialAccess(UserDTO userDTO) {
+        userDTO.setActivated(false);
+        updateUserAndTokens(userDTO);
+        clearTrialAccountInformation(userDTO);
     }
 
     private void clearUserCaches(User user) {

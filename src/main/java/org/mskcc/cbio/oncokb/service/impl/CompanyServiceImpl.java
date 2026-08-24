@@ -354,6 +354,25 @@ public class CompanyServiceImpl implements CompanyService {
         return Optional.empty();
     }
 
+    @Override
+    public int revokeTrialAccessForCompany(Long companyId) {
+        List<UserDTO> companyUsers = userService.getCompanyUsers(companyId);
+        int revokedCount = 0;
+        for (UserDTO userDTO : companyUsers) {
+            boolean hasTrialData = Optional.ofNullable(userDTO.getAdditionalInfo())
+                .map(additionalInfo -> additionalInfo.getTrialAccount())
+                .map(trialAccount -> trialAccount.getActivation())
+                .isPresent();
+
+            if (hasTrialData) {
+                userService.revokeTrialAccess(userDTO);
+                revokedCount++;
+            }
+        }
+        return revokedCount;
+    }
+
+    @Override
     public Optional<UserDTO> getServiceUserForCompany(Long companyId) {
         List<UserDTO> companyUsers = userService.getCompanyUsers(companyId);
         for (UserDTO user : companyUsers) {

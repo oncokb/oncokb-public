@@ -143,6 +143,7 @@ export default class CompanyPage extends React.Component<ICompanyPage> {
   @observable company: CompanyDTO;
   @observable companyUsers: UserDTO[] = [];
   @observable companyUserTokens: Token[] = [];
+  @observable revokingCompanyTrialAccess = false;
   @observable dropDownUsers: SelectOptionType[] = [];
   @observable selectedUsersOptions: SelectOptionType[] = [];
 
@@ -232,21 +233,25 @@ export default class CompanyPage extends React.Component<ICompanyPage> {
     });
   }
   @action
-  getCompanyUserInfo() {
-    client
-      .getCompanyUsersUsingGET({
+  async getCompanyUserInfo() {
+    this.getCompanyUsersStatus = PromiseStatus.pending;
+    try {
+      const users = await client.getCompanyUsersUsingGET({
         id: this.company.id,
-      })
-      .then((users: UserDTO[]) => {
-        this.companyUsers = users;
-        this.getCompanyUserTokens()
-          .then((tokens: Token[]) => {
-            this.companyUserTokens = tokens;
-            this.getCompanyUsersStatus = PromiseStatus.complete;
-          })
-          .catch(() => (this.getCompanyUsersStatus = PromiseStatus.error));
-      })
-      .catch(() => (this.getCompanyUsersStatus = PromiseStatus.error));
+      });
+      this.companyUsers = users;
+    } catch (e) {
+      this.getCompanyUsersStatus = PromiseStatus.error;
+      return;
+    }
+
+    try {
+      const tokens = await this.getCompanyUserTokens();
+      this.companyUserTokens = tokens;
+      this.getCompanyUsersStatus = PromiseStatus.complete;
+    } catch (e) {
+      this.getCompanyUsersStatus = PromiseStatus.error;
+    }
   }
 
   @action
@@ -669,6 +674,26 @@ export default class CompanyPage extends React.Component<ICompanyPage> {
     return this.trialTokens.length > 0;
   }
 
+  @action.bound
+  async revokeCompanyTrialAccess() {
+    if (this.revokingCompanyTrialAccess) {
+      return;
+    }
+
+    this.revokingCompanyTrialAccess = true;
+    try {
+      const revokedUsers = await client.revokeTrialAccessForCompanyUsingPOST({
+        id: this.company.id,
+      });
+      await this.getCompanyUserInfo();
+      notifySuccess(`Revoked trial access for ${revokedUsers} users.`);
+    } catch (error) {
+      notifyError(error as Error);
+    } finally {
+      this.revokingCompanyTrialAccess = false;
+    }
+  }
+
   render() {
     return (
       <If condition={this.getCompanyStatus === PromiseStatus.pending}>
@@ -714,6 +739,14 @@ export default class CompanyPage extends React.Component<ICompanyPage> {
                                 Extend Trial Access
                               </QuickToolButton>
                             </DefaultTooltip>
+                          )}
+                          {this.companyHasTrialUsers && (
+                            <QuickToolButton
+                              onClick={this.revokeCompanyTrialAccess}
+                              disabled={this.revokingCompanyTrialAccess}
+                            >
+                              Revoke Trial Access
+                            </QuickToolButton>
                           )}
                         </div>
 

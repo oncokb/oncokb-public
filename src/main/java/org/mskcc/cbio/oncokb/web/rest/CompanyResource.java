@@ -36,6 +36,7 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -188,6 +189,16 @@ public class CompanyResource {
     public List<UserDTO> getCompanyUsers(@PathVariable Long id) {
         log.debug("REST request to all users associated to Company : {}", id);
         return userService.getCompanyUsers(id);
+    }
+
+    @PostMapping("/companies/{id}/trial/revoke")
+    @PreAuthorize("hasAuthority(\"" + AuthoritiesConstants.ADMIN + "\")")
+    public ResponseEntity<Integer> revokeTrialAccessForCompany(@PathVariable Long id) {
+        if (!companyService.findOne(id).isPresent()) {
+            return ResponseEntity.notFound().build();
+        }
+        int revokedUsers = companyService.revokeTrialAccessForCompany(id);
+        return ResponseEntity.ok(revokedUsers);
     }
 
     /**

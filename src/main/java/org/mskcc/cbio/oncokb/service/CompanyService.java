@@ -74,6 +74,8 @@ public interface CompanyService {
 
     Optional<UserDTO> getServiceUserForCompany(Long companyId);
 
+    int revokeTrialAccessForCompany(Long companyId);
+
 
     List<CompanyDTO> findCompaniesByIds(List<Long> ids);
 }
