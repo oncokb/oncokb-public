@@ -2,10 +2,21 @@
 
 $oncokb-font-font-size: 15px;
 $oncokb-blue: #0968c3;
-/* Overwrite the bootstrap defaults */
-$font-family-sans-serif: 'Gotham Book', serif;
 
-$font-family-sans-serif-bold: 'Gotham Bold', serif;
+$font-name-base: 'Roboto';
+$font-name-icon: 'FontAwesome';
+$font-family-base: $font-name-base, sans-serif;
+
+$font-family-body: $font-family-base;
+$font-family-heading: $font-family-base;
+$font-family-emphasis: $font-family-base;
+$font-family-strong: $font-family-base;
+$font-family-icon: $font-name-icon;
+
+/* Overwrite the bootstrap defaults */
+$font-family-sans-serif: $font-family-body;
+
+$font-family-sans-serif-bold: $font-family-strong;
 // color overwrite
 $blue: $oncokb-blue;
 $grey: #808080; // grey

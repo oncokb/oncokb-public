@@ -1,4 +1,3 @@
-@import '~@mskcc/core/utils/font-utilities';
 @import 'variables';
 html {
   font-size: $oncokb-font-font-size;
@@ -18,7 +17,8 @@ h1,
 h2,
 .h1,
 .h2 {
-  @include font-gotham('bold');
+  font-family: $font-family-strong;
+  font-weight: 700;
 }
 
 h3,
@@ -29,15 +29,18 @@ h6,
 .h4,
 .h5,
 .h6 {
-  @include font-gotham('medium');
+  font-family: $font-family-emphasis;
+  font-weight: 500;
 }
 
 b {
-  @include font-gotham('medium');
+  font-family: $font-family-emphasis;
+  font-weight: 500;
 }
 
 strong {
-  @include font-gotham('bold');
+  font-family: $font-family-strong;
+  font-weight: 700;
 }
 
 .Main {
@@ -51,7 +54,7 @@ strong {
 
 .nav-tabs > a,
 .RRT__tab {
-  font-family: 'Gotham Medium';
+  font-family: $font-family-emphasis;
 }
 
 .user-messager-container-button {
@@ -211,7 +214,7 @@ strong {
     }
 
     li:before {
-      font-family: 'FontAwesome';
+      font-family: $font-family-icon;
       content: '\f0a4';
       margin: 0 0.5rem 0 -1.5rem;
     }
@@ -293,7 +296,7 @@ input[type='radio']:checked {
   + label:before {
     width: 21px;
     letter-spacing: 10px;
-    font-family: FontAwesome;
+    font-family: $font-family-icon;
     display: inline-block;
   }
 }
@@ -370,7 +373,7 @@ input[type='radio']:checked {
     box-shadow: none !important;
 
     &:before {
-      font-family: FontAwesome;
+      font-family: $font-family-icon;
       content: '\f0dd';
       float: right;
     }
@@ -380,7 +383,7 @@ input[type='radio']:checked {
     box-shadow: none !important;
 
     &:before {
-      font-family: FontAwesome;
+      font-family: $font-family-icon;
       content: '\f0de';
       float: right;
     }
