@@ -57,12 +57,15 @@ export default class LoginPage extends React.Component<ILoginProps> {
   @observable keycloakErrorMessage: string | undefined;
 
   @observable resendingVerification = false;
-  @observable resendVerificationMessage: string;
+  @observable verificationEmailSent = false;
+  @observable resendVerificationError: string | undefined;
 
   recaptcha = new ReCAPTCHA();
 
   resendEmail = async () => {
     this.resendingVerification = true;
+    this.resendVerificationError = undefined;
+
     const token: string = await this.recaptcha.getToken();
     setRecaptchaToken(token);
     client
@@ -71,10 +74,10 @@ export default class LoginPage extends React.Component<ILoginProps> {
       })
       .then(
         () => {
-          this.resendVerificationMessage = 'Email sent';
+          this.verificationEmailSent = true;
         },
         error => {
-          this.resendVerificationMessage = `There is an error: ${error.message}`;
+          this.resendVerificationError = `There is an error: ${error.message}`;
         }
       )
       .finally(() => {
@@ -248,12 +251,12 @@ export default class LoginPage extends React.Component<ILoginProps> {
         <p>
           For your security, your account has been locked due to inactivity.
         </p>
-
         <p>
-          We’ve sent an activation email from{' '}
+          Please click <b>Send email</b> below to receive an activation email
+          from{' '}
           <a href="mailto:registration@oncokb.org">registration@oncokb.org</a>{' '}
-          to your inbox with a link to unlock your account. Please check your
-          email and follow the instructions to regain access.
+          with a link to unlock your account. Follow the instructions in the
+          email to regain access.
         </p>
       </div>
     );
@@ -282,21 +285,33 @@ export default class LoginPage extends React.Component<ILoginProps> {
     if (!this.showResendInfo) {
       return null;
     }
+
     return (
       <>
-        <Alert variant={'info'}>
-          Did not receive the verification email?{' '}
+        <Alert variant="info">
+          {this.verificationEmailSent
+            ? 'Did not receive the activation email?'
+            : 'Ready to activate your account?'}{' '}
           <LoadingButton
             variant="primary"
-            size={'sm'}
+            size="sm"
             onClick={this.resendEmail}
             loading={this.resendingVerification}
           >
-            <span>Resend email</span>
+            <span>
+              {this.verificationEmailSent ? 'Resend email' : 'Send email'}
+            </span>
           </LoadingButton>
         </Alert>
-        {this.resendVerificationMessage && (
-          <Alert variant={'info'}>{this.resendVerificationMessage}</Alert>
+
+        {this.verificationEmailSent &&
+          !this.resendVerificationError &&
+          !this.resendingVerification && (
+            <Alert variant="info">Email sent</Alert>
+          )}
+
+        {this.resendVerificationError && !this.resendingVerification && (
+          <Alert variant="danger">{this.resendVerificationError}</Alert>
         )}
       </>
     );
