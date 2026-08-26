@@ -19,8 +19,21 @@ export default function NewsContent082026() {
           page
         </li>
         <li>
-          Incorporation of{' '}
-          <a href="https://www.cancerhotspots.org/#/home">Cancer Hotspots v3</a>
+          Addition of 164 statistically recurrent single-residue and in-frame
+          indel mutation hotspots reported by{' '}
+          <a href="https://pubmed.ncbi.nlm.nih.gov/41895280/">
+            Bandlamudi et al., 2026
+          </a>
+          , extending the set of 1,165 hotspots reported in{' '}
+          <a href="https://pubmed.ncbi.nlm.nih.gov/29247016/">
+            Chang et al., 2017
+          </a>{' '}
+          and{' '}
+          <a href="https://pubmed.ncbi.nlm.nih.gov/26619011/">
+            Chang et al., 2016 to
+          </a>{' '}
+          1,329. These hotspots are also catalogued in{' '}
+          <a href="http://cancerhotspots.org">cancerhotspots.org</a>.
         </li>
       </ul>
       <p>

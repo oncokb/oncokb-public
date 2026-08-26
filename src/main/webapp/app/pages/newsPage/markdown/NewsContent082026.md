@@ -1,5 +1,5 @@
 - Update to our [FDA-Approved Oncology Therapies](https://www.oncokb.org/oncology-therapies) page
-- Incorporation of [Cancer Hotspots v3](https://www.cancerhotspots.org/#/home)
+- Addition of 164 statistically recurrent single-residue and in-frame indel mutation hotspots reported by [Bandlamudi et al., 2026](https://pubmed.ncbi.nlm.nih.gov/41895280/), extending the set of 1,165 hotspots reported in [Chang et al., 2017](https://pubmed.ncbi.nlm.nih.gov/29247016/) and [Chang et al., 2016 to](https://pubmed.ncbi.nlm.nih.gov/26619011/) 1,329. These hotspots are also catalogued in [cancerhotspots.org](http://cancerhotspots.org).
 
 **Germline Content Updates**
 
