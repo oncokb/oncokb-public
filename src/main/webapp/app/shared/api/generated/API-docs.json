@@ -33,6 +33,10 @@
       "description": "Mails Controller"
     },
     {
+      "name": "o-auth-token-controller",
+      "description": "O Auth Token Controller"
+    },
+    {
       "name": "token-resource",
       "description": "Token Resource"
     },
@@ -321,6 +325,87 @@
         "responses": {
           "200": {
             "description": "OK"
+          },
+          "201": {
+            "description": "Created"
+          },
+          "401": {
+            "description": "Unauthorized"
+          },
+          "403": {
+            "description": "Forbidden"
+          },
+          "404": {
+            "description": "Not Found"
+          }
+        },
+        "deprecated": false
+      }
+    },
+    "/api/account/email-subscriptions": {
+      "get": {
+        "tags": [
+          "account-resource"
+        ],
+        "summary": "getEmailSubscriptions",
+        "operationId": "getEmailSubscriptionsUsingGET",
+        "produces": [
+          "*/*"
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "schema": {
+              "type": "array",
+              "items": {
+                "$ref": "#/definitions/EmailSubscriptionDTO"
+              }
+            }
+          },
+          "401": {
+            "description": "Unauthorized"
+          },
+          "403": {
+            "description": "Forbidden"
+          },
+          "404": {
+            "description": "Not Found"
+          }
+        },
+        "deprecated": false
+      },
+      "post": {
+        "tags": [
+          "account-resource"
+        ],
+        "summary": "updateEmailSubscription",
+        "operationId": "updateEmailSubscriptionUsingPOST",
+        "consumes": [
+          "application/json"
+        ],
+        "produces": [
+          "*/*"
+        ],
+        "parameters": [
+          {
+            "in": "body",
+            "name": "emailSubscriptionUpdateRequest",
+            "description": "emailSubscriptionUpdateRequest",
+            "required": true,
+            "schema": {
+              "$ref": "#/definitions/EmailSubscriptionUpdateRequest"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "schema": {
+              "type": "array",
+              "items": {
+                "$ref": "#/definitions/EmailSubscriptionDTO"
+              }
+            }
           },
           "201": {
             "description": "Created"
@@ -776,7 +861,7 @@
           "user-uuid-controller"
         ],
         "summary": "authorize",
-        "operationId": "authorizeUsingPOST",
+        "operationId": "authorizeUsingPOST_1",
         "consumes": [
           "application/json"
         ],
@@ -2000,6 +2085,231 @@
         "deprecated": false
       }
     },
+    "/api/mails/send-emails-page": {
+      "get": {
+        "tags": [
+          "mails-controller"
+        ],
+        "summary": "getSendEmailsPageData",
+        "operationId": "getSendEmailsPageDataUsingGET",
+        "produces": [
+          "*/*"
+        ],
+        "parameters": [
+          {
+            "name": "offset",
+            "in": "query",
+            "required": false,
+            "type": "integer",
+            "format": "int64"
+          },
+          {
+            "name": "page",
+            "in": "query",
+            "description": "Page number of the requested page",
+            "required": false,
+            "type": "integer",
+            "format": "int32"
+          },
+          {
+            "name": "pageNumber",
+            "in": "query",
+            "required": false,
+            "type": "integer",
+            "format": "int32"
+          },
+          {
+            "name": "pageSize",
+            "in": "query",
+            "required": false,
+            "type": "integer",
+            "format": "int32"
+          },
+          {
+            "name": "paged",
+            "in": "query",
+            "required": false,
+            "type": "boolean"
+          },
+          {
+            "name": "q",
+            "in": "query",
+            "description": "q",
+            "required": false,
+            "type": "string"
+          },
+          {
+            "name": "size",
+            "in": "query",
+            "description": "Size of a page",
+            "required": false,
+            "type": "integer",
+            "format": "int32"
+          },
+          {
+            "name": "sort",
+            "in": "query",
+            "description": "Sorting criteria in the format: property(,asc|desc). Default sort order is ascending. Multiple sort criteria are supported.",
+            "required": false,
+            "type": "array",
+            "items": {
+              "type": "string"
+            },
+            "collectionFormat": "multi"
+          },
+          {
+            "name": "sort.sorted",
+            "in": "query",
+            "required": false,
+            "type": "boolean"
+          },
+          {
+            "name": "sort.unsorted",
+            "in": "query",
+            "required": false,
+            "type": "boolean"
+          },
+          {
+            "name": "unpaged",
+            "in": "query",
+            "required": false,
+            "type": "boolean"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "schema": {
+              "$ref": "#/definitions/SendEmailPageResponseDTO"
+            }
+          },
+          "401": {
+            "description": "Unauthorized"
+          },
+          "403": {
+            "description": "Forbidden"
+          },
+          "404": {
+            "description": "Not Found"
+          }
+        },
+        "deprecated": false
+      }
+    },
+    "/api/mails/sent-history": {
+      "get": {
+        "tags": [
+          "mails-controller"
+        ],
+        "summary": "getSentHistory",
+        "operationId": "getSentHistoryUsingGET",
+        "produces": [
+          "*/*"
+        ],
+        "parameters": [
+          {
+            "name": "offset",
+            "in": "query",
+            "required": false,
+            "type": "integer",
+            "format": "int64"
+          },
+          {
+            "name": "page",
+            "in": "query",
+            "description": "Page number of the requested page",
+            "required": false,
+            "type": "integer",
+            "format": "int32"
+          },
+          {
+            "name": "pageNumber",
+            "in": "query",
+            "required": false,
+            "type": "integer",
+            "format": "int32"
+          },
+          {
+            "name": "pageSize",
+            "in": "query",
+            "required": false,
+            "type": "integer",
+            "format": "int32"
+          },
+          {
+            "name": "paged",
+            "in": "query",
+            "required": false,
+            "type": "boolean"
+          },
+          {
+            "name": "q",
+            "in": "query",
+            "description": "q",
+            "required": false,
+            "type": "string"
+          },
+          {
+            "name": "size",
+            "in": "query",
+            "description": "Size of a page",
+            "required": false,
+            "type": "integer",
+            "format": "int32"
+          },
+          {
+            "name": "sort",
+            "in": "query",
+            "description": "Sorting criteria in the format: property(,asc|desc). Default sort order is ascending. Multiple sort criteria are supported.",
+            "required": false,
+            "type": "array",
+            "items": {
+              "type": "string"
+            },
+            "collectionFormat": "multi"
+          },
+          {
+            "name": "sort.sorted",
+            "in": "query",
+            "required": false,
+            "type": "boolean"
+          },
+          {
+            "name": "sort.unsorted",
+            "in": "query",
+            "required": false,
+            "type": "boolean"
+          },
+          {
+            "name": "unpaged",
+            "in": "query",
+            "required": false,
+            "type": "boolean"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "schema": {
+              "type": "array",
+              "items": {
+                "$ref": "#/definitions/UserMailsDTO"
+              }
+            }
+          },
+          "401": {
+            "description": "Unauthorized"
+          },
+          "403": {
+            "description": "Forbidden"
+          },
+          "404": {
+            "description": "Not Found"
+          }
+        },
+        "deprecated": false
+      }
+    },
     "/api/mails/termination-warning/{companyId}": {
       "get": {
         "tags": [
@@ -2146,6 +2456,10 @@
               "SEARCHING_RESPONSE_STRUCTURE_HAS_CHANGED",
               "LIST_OF_UNAPPROVED_USERS",
               "TERMINATION_NOTIFICATION_EMAIL",
+              "BULK_CUSTOM",
+              "BULK_ALL_USERS",
+              "BULK_DEVELOPERS",
+              "BULK_SCIENTIFIC_NEWS",
               "TEST"
             ]
           },
@@ -2155,6 +2469,53 @@
             "description": "to",
             "required": true,
             "type": "string"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "schema": {
+              "type": "string"
+            }
+          },
+          "201": {
+            "description": "Created"
+          },
+          "401": {
+            "description": "Unauthorized"
+          },
+          "403": {
+            "description": "Forbidden"
+          },
+          "404": {
+            "description": "Not Found"
+          }
+        },
+        "deprecated": false
+      }
+    },
+    "/api/mails/users/bulk": {
+      "post": {
+        "tags": [
+          "mails-controller"
+        ],
+        "summary": "sendBulkUserMails",
+        "operationId": "sendBulkUserMailsUsingPOST",
+        "consumes": [
+          "application/json"
+        ],
+        "produces": [
+          "*/*"
+        ],
+        "parameters": [
+          {
+            "in": "body",
+            "name": "request",
+            "description": "request",
+            "required": true,
+            "schema": {
+              "$ref": "#/definitions/BulkUserMailRequestVM"
+            }
           }
         ],
         "responses": {
@@ -4073,6 +4434,75 @@
         },
         "deprecated": false
       }
+    },
+    "/oauth2/oncokb-token": {
+      "post": {
+        "tags": [
+          "o-auth-token-controller"
+        ],
+        "summary": "authorize",
+        "operationId": "authorizeUsingPOST",
+        "consumes": [
+          "application/json"
+        ],
+        "produces": [
+          "*/*"
+        ],
+        "parameters": [
+          {
+            "name": "authenticated",
+            "in": "query",
+            "required": false,
+            "type": "boolean"
+          },
+          {
+            "name": "authorities[0].authority",
+            "in": "query",
+            "required": false,
+            "type": "string"
+          },
+          {
+            "name": "credentials",
+            "in": "query",
+            "required": false,
+            "type": "object"
+          },
+          {
+            "name": "details",
+            "in": "query",
+            "required": false,
+            "type": "object"
+          },
+          {
+            "name": "principal",
+            "in": "query",
+            "required": false,
+            "type": "object"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "schema": {
+              "type": "string",
+              "format": "uuid"
+            }
+          },
+          "201": {
+            "description": "Created"
+          },
+          "401": {
+            "description": "Unauthorized"
+          },
+          "403": {
+            "description": "Forbidden"
+          },
+          "404": {
+            "description": "Not Found"
+          }
+        },
+        "deprecated": false
+      }
     }
   },
   "definitions": {
@@ -4134,6 +4564,42 @@
         }
       },
       "title": "ApiAccessRequest"
+    },
+    "BulkUserMailRequestVM": {
+      "type": "object",
+      "required": [
+        "audience"
+      ],
+      "properties": {
+        "audience": {
+          "type": "string",
+          "enum": [
+            "CUSTOM",
+            "ALL_USERS",
+            "DEVELOPERS",
+            "SCIENTIFIC_NEWS"
+          ]
+        },
+        "by": {
+          "type": "string"
+        },
+        "cc": {
+          "type": "string"
+        },
+        "dynamicContent": {
+          "type": "object"
+        },
+        "from": {
+          "type": "string"
+        },
+        "recipients": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
+        }
+      },
+      "title": "BulkUserMailRequestVM"
     },
     "CompanyAdditionalInfoDTO": {
       "type": "object",
@@ -4483,6 +4949,10 @@
             "SEARCHING_RESPONSE_STRUCTURE_HAS_CHANGED",
             "LIST_OF_UNAPPROVED_USERS",
             "TERMINATION_NOTIFICATION_EMAIL",
+            "BULK_CUSTOM",
+            "BULK_ALL_USERS",
+            "BULK_DEVELOPERS",
+            "BULK_SCIENTIFIC_NEWS",
             "TEST"
           ]
         }
@@ -4688,6 +5158,51 @@
       },
       "title": "ResourceUsageAnalysisRow"
     },
+    "SendEmailPageResponseDTO": {
+      "type": "object",
+      "properties": {
+        "mailTypes": {
+          "type": "array",
+          "items": {
+            "$ref": "#/definitions/MailTypeInfo"
+          }
+        },
+        "users": {
+          "type": "array",
+          "items": {
+            "$ref": "#/definitions/SendEmailUserOptionDTO"
+          }
+        }
+      },
+      "title": "SendEmailPageResponseDTO"
+    },
+    "SendEmailUserOptionDTO": {
+      "type": "object",
+      "properties": {
+        "activated": {
+          "type": "boolean"
+        },
+        "admin": {
+          "type": "boolean"
+        },
+        "email": {
+          "type": "string"
+        },
+        "firstName": {
+          "type": "string"
+        },
+        "lastName": {
+          "type": "string"
+        },
+        "licenseType": {
+          "type": "string"
+        },
+        "login": {
+          "type": "string"
+        }
+      },
+      "title": "SendEmailUserOptionDTO"
+    },
     "TerminationEmailDTO": {
       "type": "object",
       "properties": {
@@ -4877,6 +5392,12 @@
         "resetDate": {
           "type": "string",
           "format": "date-time"
+        },
+        "userMails": {
+          "type": "array",
+          "items": {
+            "$ref": "#/definitions/UserMails"
+          }
         }
       },
       "title": "User"
@@ -5134,6 +5655,75 @@
       },
       "title": "UserDetailsDTO"
     },
+    "UserMails": {
+      "type": "object",
+      "required": [
+        "sentBy",
+        "sentDate",
+        "sentFrom"
+      ],
+      "properties": {
+        "id": {
+          "type": "integer",
+          "format": "int64"
+        },
+        "mailType": {
+          "type": "string",
+          "enum": [
+            "ACTIVATION",
+            "CREATION",
+            "APPROVAL",
+            "API_ACCESS_APPROVAL",
+            "APPROVAL_ALIGN_LICENSE_WITH_COMPANY",
+            "REJECTION",
+            "REJECTION_US_SANCTION",
+            "REJECT_ALUMNI_ADDRESS",
+            "PASSWORD_RESET",
+            "LICENSE_REVIEW_COMMERCIAL",
+            "LICENSE_REVIEW_RESEARCH_COMMERCIAL",
+            "LICENSE_REVIEW_HOSPITAL",
+            "CLARIFY_ACADEMIC_FOR_PROFIT",
+            "CLARIFY_ACADEMIC_NON_INSTITUTE_EMAIL",
+            "CLARIFY_USE_CASE",
+            "CLARIFY_DUPLICATE_USER",
+            "CLARIFY_REGISTRATION_INFO",
+            "CLARIFY_HOSPITAL_USE",
+            "HOSPITAL_APPROVAL_HIGH_VOLUME",
+            "CLARIFY_COMMERCIAL_USE",
+            "LICENSE_OPTIONS",
+            "VERIFY_EMAIL_BEFORE_ACCOUNT_EXPIRES",
+            "ACTIVATE_FREE_TRIAL",
+            "TRIAL_ACCOUNT_IS_ABOUT_TO_EXPIRE",
+            "TRIAL_ACCOUNT_IS_ACTIVATED",
+            "DATA_USAGE_EXCEEDS_THRESHOLD",
+            "TOKEN_HAS_BEEN_EXPOSED",
+            "TOKEN_HAS_BEEN_EXPOSED_USER",
+            "SEARCHING_RESPONSE_STRUCTURE_HAS_CHANGED",
+            "LIST_OF_UNAPPROVED_USERS",
+            "TERMINATION_NOTIFICATION_EMAIL",
+            "BULK_CUSTOM",
+            "BULK_ALL_USERS",
+            "BULK_DEVELOPERS",
+            "BULK_SCIENTIFIC_NEWS",
+            "TEST"
+          ]
+        },
+        "sentBy": {
+          "type": "string"
+        },
+        "sentDate": {
+          "type": "string",
+          "format": "date-time"
+        },
+        "sentFrom": {
+          "type": "string"
+        },
+        "user": {
+          "$ref": "#/definitions/User"
+        }
+      },
+      "title": "UserMails"
+    },
     "UserMailsDTO": {
       "type": "object",
       "required": [
@@ -5180,6 +5770,10 @@
             "SEARCHING_RESPONSE_STRUCTURE_HAS_CHANGED",
             "LIST_OF_UNAPPROVED_USERS",
             "TERMINATION_NOTIFICATION_EMAIL",
+            "BULK_CUSTOM",
+            "BULK_ALL_USERS",
+            "BULK_DEVELOPERS",
+            "BULK_SCIENTIFIC_NEWS",
             "TEST"
           ]
         },
@@ -5218,6 +5812,39 @@
         }
       },
       "title": "UserRegistrationSummary"
+    },
+    "EmailSubscriptionDTO": {
+      "type": "object",
+      "properties": {
+        "audience": {
+          "type": "string"
+        },
+        "groupId": {
+          "type": "integer",
+          "format": "int64"
+        },
+        "subscribed": {
+          "type": "boolean"
+        }
+      },
+      "title": "EmailSubscriptionDTO"
+    },
+    "EmailSubscriptionUpdateRequest": {
+      "type": "object",
+      "required": [
+        "groupId",
+        "subscribed"
+      ],
+      "properties": {
+        "groupId": {
+          "type": "integer",
+          "format": "int64"
+        },
+        "subscribed": {
+          "type": "boolean"
+        }
+      },
+      "title": "EmailSubscriptionUpdateRequest"
     },
     "VerifyCompanyNameVM": {
       "type": "object",

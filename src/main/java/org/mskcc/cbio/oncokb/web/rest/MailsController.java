@@ -1,5 +1,6 @@
 package org.mskcc.cbio.oncokb.web.rest;
 
+import io.github.jhipster.web.util.PaginationUtil;
 import java.net.URISyntaxException;
 import java.time.Instant;
 import java.time.LocalDate;
@@ -10,6 +11,8 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
+import java.util.Map;
+import java.util.Locale;
 
 import javax.mail.MessagingException;
 import javax.validation.Valid;
@@ -19,23 +22,33 @@ import org.mskcc.cbio.oncokb.config.application.ApplicationProperties;
 import org.mskcc.cbio.oncokb.config.application.EmailAddresses;
 import org.mskcc.cbio.oncokb.domain.MailTypeInfo;
 import org.mskcc.cbio.oncokb.domain.User;
+import org.mskcc.cbio.oncokb.domain.enumeration.BulkEmailAudience;
 import org.mskcc.cbio.oncokb.domain.enumeration.MailType;
 import org.mskcc.cbio.oncokb.service.CompanyService;
 import org.mskcc.cbio.oncokb.service.MailService;
+import org.mskcc.cbio.oncokb.service.UserMailsService;
 import org.mskcc.cbio.oncokb.service.UserService;
+import org.mskcc.cbio.oncokb.service.dto.SendEmailPageResponseDTO;
+import org.mskcc.cbio.oncokb.service.dto.SendEmailUserOptionDTO;
 import org.mskcc.cbio.oncokb.service.dto.CompanyDTO;
 import org.mskcc.cbio.oncokb.service.dto.TerminationEmailDTO;
 import org.mskcc.cbio.oncokb.service.dto.UserDTO;
+import org.mskcc.cbio.oncokb.service.dto.UserMailsDTO;
 import org.mskcc.cbio.oncokb.service.dto.companyadditionalinfo.CompanyAdditionalInfoDTO;
 import org.mskcc.cbio.oncokb.service.dto.companyadditionalinfo.CompanyLicense;
 import org.mskcc.cbio.oncokb.service.dto.companyadditionalinfo.CompanyTermination;
 import org.mskcc.cbio.oncokb.service.mapper.UserMapper;
 import org.mskcc.cbio.oncokb.web.rest.errors.BadRequestAlertException;
 import org.mskcc.cbio.oncokb.web.rest.vm.CompanyVM;
+import org.mskcc.cbio.oncokb.web.rest.vm.BulkUserMailRequestVM;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.HttpHeaders;
 import org.springframework.http.ResponseEntity;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -61,15 +74,25 @@ public class MailsController {
 
     private final UserService userService;
 
+    private final UserMailsService userMailsService;
+
     private final UserMapper userMapper;
 
     private final CompanyService companyService;
 
     private final ApplicationProperties applicationProperties;
 
-    public MailsController(MailService mailService, UserService userService, UserMapper userMapper, CompanyService companyService, ApplicationProperties applicationProperties) {
+    public MailsController(
+        MailService mailService,
+        UserService userService,
+        UserMailsService userMailsService,
+        UserMapper userMapper,
+        CompanyService companyService,
+        ApplicationProperties applicationProperties
+    ) {
         this.mailService = mailService;
         this.userService = userService;
+        this.userMailsService = userMailsService;
         this.userMapper = userMapper;
         this.companyService = companyService;
         this.applicationProperties = applicationProperties;
@@ -100,6 +123,63 @@ public class MailsController {
         } else {
             throw new BadRequestAlertException("The user does not exist.");
         }
+    }
+
+    @PostMapping("/mails/users/bulk")
+    public ResponseEntity<String> sendBulkUserMails(
+        @Valid @RequestBody BulkUserMailRequestVM request
+    ) {
+        BulkEmailAudience audience = request.getAudience() == null ? BulkEmailAudience.CUSTOM : request.getAudience();
+        String from = request.getFrom();
+        String cc = request.getCc();
+        String by = request.getBy();
+        List<String> missingRecipients = new ArrayList<>();
+        List<UserDTO> usersToSend;
+
+        if (BulkEmailAudience.CUSTOM.equals(audience)) {
+            List<String> recipients = request.getRecipients();
+            if (recipients == null || recipients.isEmpty()) {
+                throw new BadRequestAlertException("No recipients were provided.");
+            }
+
+            Map<String, UserDTO> recipientsMap = userService.getSendRecipientsByLoginsOrEmails(recipients);
+            usersToSend = new ArrayList<>(recipientsMap.values());
+
+            for (String recipient : recipients) {
+                if (StringUtils.isBlank(recipient)) {
+                    continue;
+                }
+                String normalized = StringUtils.lowerCase(recipient.trim(), Locale.ENGLISH);
+                if (!recipientsMap.containsKey(normalized)) {
+                    missingRecipients.add(recipient);
+                }
+            }
+        } else {
+            if (request.getRecipients() != null && !request.getRecipients().isEmpty()) {
+                throw new BadRequestAlertException("Recipients should not be provided for non-CUSTOM audiences.");
+            }
+            usersToSend = userService.getBulkEmailAudienceUsers(audience);
+            if (usersToSend.isEmpty()) {
+                throw new BadRequestAlertException("No valid recipients were found.");
+            }
+        }
+
+        String sendMessage = mailService.sendBulkEmailWithLicenseContext(
+            usersToSend,
+            from,
+            cc,
+            by,
+            audience,
+            request.getDynamicContent()
+        );
+
+        if (missingRecipients.isEmpty()) {
+            return ResponseEntity.ok(sendMessage);
+        }
+
+        return ResponseEntity.ok(
+            sendMessage + " Could not find users for: " + String.join(", ", missingRecipients)
+        );
     }
 
     @PostMapping("/mails/feedback")
@@ -145,6 +225,51 @@ public class MailsController {
             mailTypeInfos.add(new MailTypeInfo(mailType));
         }
         return mailTypeInfos;
+    }
+
+    @GetMapping("/mails/send-emails-page")
+    public ResponseEntity<SendEmailPageResponseDTO> getSendEmailsPageData(
+        @RequestParam(required = false) String q,
+        Pageable pageable
+    ) {
+        Page<SendEmailUserOptionDTO> usersPage = userService.getSendEmailUserOptions(
+            q,
+            withDefaultSort(pageable, Sort.by(Sort.Order.asc("login")))
+        );
+
+        SendEmailPageResponseDTO response = new SendEmailPageResponseDTO();
+        response.setUsers(usersPage.getContent());
+
+        List<MailTypeInfo> mailTypeInfos = new ArrayList<>();
+        for (MailType mailType : MailType.values()) {
+            if (MailType.TEST.equals(mailType)) {
+                continue;
+            }
+            mailTypeInfos.add(new MailTypeInfo(mailType));
+        }
+        response.setMailTypes(mailTypeInfos);
+
+        HttpHeaders headers = PaginationUtil.generatePaginationHttpHeaders(
+            ServletUriComponentsBuilder.fromCurrentRequest(),
+            usersPage
+        );
+        return new ResponseEntity<>(response, headers, HttpStatus.OK);
+    }
+
+    @GetMapping("/mails/sent-history")
+    public ResponseEntity<List<UserMailsDTO>> getSentHistory(
+        @RequestParam(required = false) String q,
+        Pageable pageable
+    ) {
+        Page<UserMailsDTO> historyPage = userMailsService.findAllForSendEmailPage(
+            q,
+            withDefaultSort(pageable, Sort.by(Sort.Order.desc("sentDate")))
+        );
+        HttpHeaders headers = PaginationUtil.generatePaginationHttpHeaders(
+            ServletUriComponentsBuilder.fromCurrentRequest(),
+            historyPage
+        );
+        return new ResponseEntity<>(historyPage.getContent(), headers, HttpStatus.OK);
     }
 
     @GetMapping("mails/termination-warning/{companyId}")
@@ -238,5 +363,12 @@ public class MailsController {
             companyService.updateCompany(companyVM);
         }
 
+    }
+
+    private Pageable withDefaultSort(Pageable pageable, Sort defaultSort) {
+        int pageNumber = pageable == null ? 0 : pageable.getPageNumber();
+        int pageSize = pageable == null || pageable.getPageSize() <= 0 ? 20 : pageable.getPageSize();
+        Sort sort = pageable == null || pageable.getSort().isUnsorted() ? defaultSort : pageable.getSort();
+        return org.springframework.data.domain.PageRequest.of(pageNumber, pageSize, sort);
     }
 }

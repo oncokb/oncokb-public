@@ -14,6 +14,7 @@ import org.mskcc.cbio.oncokb.security.SecurityUtils;
 import org.mskcc.cbio.oncokb.security.uuid.TokenProvider;
 import org.mskcc.cbio.oncokb.service.*;
 import org.mskcc.cbio.oncokb.service.dto.PasswordChangeDTO;
+import org.mskcc.cbio.oncokb.service.dto.sendgrid.SendGridSuppression;
 import org.mskcc.cbio.oncokb.service.dto.UserDTO;
 import org.mskcc.cbio.oncokb.service.dto.UserDetailsDTO;
 import org.mskcc.cbio.oncokb.service.dto.useradditionalinfo.AdditionalInfoDTO;
@@ -62,8 +63,6 @@ public class AccountResource {
 
     private final SlackService slackService;
 
-    private final EmailService emailService;
-
     private final TokenService tokenService;
 
     private final PasswordEncoder passwordEncoder;
@@ -80,13 +79,16 @@ public class AccountResource {
 
     private final TokenProvider tokenProvider;
 
+    private final SendGridService sendGridService;
+
     public AccountResource(UserRepository userRepository, UserService userService,
                            MailService mailService, TokenProvider tokenProvider,
-                           SlackService slackService, EmailService emailService,
+                           SlackService slackService,
                            AuthenticationManagerBuilder authenticationManagerBuilder,
-                           PasswordEncoder passwordEncoder, UserDetailsService userDetailsService,
-                           TokenService tokenService, ApplicationProperties applicationProperties,
-                           GracePeriodBlackListService gracePeriodBlackListService
+                            PasswordEncoder passwordEncoder, UserDetailsService userDetailsService,
+                            TokenService tokenService, ApplicationProperties applicationProperties,
+                            GracePeriodBlackListService gracePeriodBlackListService,
+                            SendGridService sendGridService
     ) {
 
         this.userRepository = userRepository;
@@ -95,11 +97,11 @@ public class AccountResource {
         this.mailService = mailService;
         this.tokenProvider = tokenProvider;
         this.slackService = slackService;
-        this.emailService = emailService;
         this.passwordEncoder = passwordEncoder;
         this.tokenService = tokenService;
         this.applicationProperties = applicationProperties;
         this.gracePeriodBlackListService = gracePeriodBlackListService;
+        this.sendGridService = sendGridService;
         this.createAssess = new CreateAssessment(applicationProperties);
     }
 
@@ -260,6 +262,58 @@ public class AccountResource {
         return userService.getUserWithAuthorities()
             .map(user -> userMapper.userToUserDTO(user))
             .orElseThrow(() -> new CustomMessageRuntimeException("User could not be found"));
+    }
+
+    @GetMapping("/account/email-subscriptions")
+    public List<EmailSubscriptionDTO> getEmailSubscriptions() {
+        User user = getCurrentUser();
+        String email = StringUtils.trimToNull(user.getEmail());
+        if (email == null) {
+            throw new BadRequestAlertException("Current user does not have an email address.");
+        }
+
+        return toEmailSubscriptionDTOs(getSendGridSuppressions(email));
+    }
+
+    @PostMapping("/account/email-subscriptions")
+    public List<EmailSubscriptionDTO> updateEmailSubscription(
+        @RequestBody EmailSubscriptionUpdateRequest request
+    ) {
+        if (request == null || request.getSubscribed() == null) {
+            throw new BadRequestAlertException("Subscription value is required.");
+        }
+        if (request.getGroupId() == null) {
+            throw new BadRequestAlertException("Subscription groupId is required.");
+        }
+
+        User user = getCurrentUser();
+        String email = StringUtils.trimToNull(user.getEmail());
+        if (email == null) {
+            throw new BadRequestAlertException("Current user does not have an email address.");
+        }
+
+        List<SendGridSuppression> groups = getSendGridSuppressions(email);
+        SendGridSuppression targetGroup = groups.stream()
+            .filter(group -> group.getGroupId().equals(request.getGroupId()))
+            .findFirst()
+            .orElseThrow(() -> new BadRequestAlertException("Subscription groupId is not available in SendGrid: " + request.getGroupId() + "."));
+
+        if (Boolean.TRUE.equals(request.getSubscribed())) {
+            removeSuppression(targetGroup.getGroupId(), email);
+        } else {
+            addSuppression(targetGroup.getGroupId(), email);
+        }
+
+        return getEmailSubscriptions();
+    }
+
+    private List<EmailSubscriptionDTO> toEmailSubscriptionDTOs(List<SendGridSuppression> groups) {
+        List<EmailSubscriptionDTO> subscriptions = new ArrayList<>();
+        for (SendGridSuppression group : groups) {
+            String audience = StringUtils.defaultIfBlank(group.getGroupName(), String.valueOf(group.getGroupId()));
+            subscriptions.add(new EmailSubscriptionDTO(group.getGroupId(), audience, !group.isSuppressed()));
+        }
+        return subscriptions;
     }
 
     /**
@@ -531,5 +585,106 @@ public class AccountResource {
 
     private static boolean checkPasswordLength(String password) {
         return !StringUtils.isEmpty(password) && password.length() >= ManagedUserVM.PASSWORD_MIN_LENGTH && password.length() <= ManagedUserVM.PASSWORD_MAX_LENGTH;
+    }
+
+    private User getCurrentUser() {
+        String userLogin = SecurityUtils.getCurrentUserLogin()
+            .orElseThrow(() -> new CustomMessageRuntimeException("Current user login not found"));
+        return userService.getUserWithAuthoritiesByLogin(userLogin)
+            .orElseThrow(() -> new CustomMessageRuntimeException("User could not be found"));
+    }
+
+    private List<SendGridSuppression> getSendGridSuppressions(String email) {
+        if (!isSendGridConfigured()) {
+            throw new BadRequestAlertException("SendGrid email subscriptions are not configured.");
+        }
+
+        try {
+            return sendGridService.getSuppressionsForEmail(email);
+        } catch (SendGridIntegrationException e) {
+            throw new CustomMessageRuntimeException("Failed to load SendGrid subscription status.");
+        }
+    }
+
+    private void addSuppression(Long groupId, String email) {
+        if (!isSendGridConfigured()) {
+            throw new BadRequestAlertException("SendGrid email subscriptions are not configured.");
+        }
+
+        try {
+            sendGridService.addGroupSuppression(groupId, email);
+        } catch (SendGridIntegrationException e) {
+            throw new CustomMessageRuntimeException("Failed to update SendGrid subscription status.");
+        }
+    }
+
+    private void removeSuppression(Long groupId, String email) {
+        if (!isSendGridConfigured()) {
+            throw new BadRequestAlertException("SendGrid email subscriptions are not configured.");
+        }
+
+        try {
+            sendGridService.removeGroupSuppression(groupId, email);
+        } catch (SendGridIntegrationException e) {
+            if (Integer.valueOf(HttpStatus.NOT_FOUND.value()).equals(e.getStatusCode())) {
+                return;
+            }
+            throw new CustomMessageRuntimeException("Failed to update SendGrid subscription status.");
+        }
+    }
+
+    private boolean isSendGridConfigured() {
+        return sendGridService != null && sendGridService.isConfigured();
+    }
+
+    public static class EmailSubscriptionDTO {
+        private Long groupId;
+        private String audience;
+        private Boolean subscribed;
+
+        public EmailSubscriptionDTO() {
+        }
+
+        public EmailSubscriptionDTO(Long groupId, String audience, Boolean subscribed) {
+            this.groupId = groupId;
+            this.audience = audience;
+            this.subscribed = subscribed;
+        }
+
+        public Long getGroupId() {
+            return groupId;
+        }
+
+        public String getAudience() {
+            return audience;
+        }
+
+        public Boolean getSubscribed() {
+            return subscribed;
+        }
+    }
+
+    public static class EmailSubscriptionUpdateRequest {
+        private Long groupId;
+        private Boolean subscribed;
+
+        public EmailSubscriptionUpdateRequest() {
+        }
+
+        public Long getGroupId() {
+            return groupId;
+        }
+
+        public void setGroupId(Long groupId) {
+            this.groupId = groupId;
+        }
+
+        public Boolean getSubscribed() {
+            return subscribed;
+        }
+
+        public void setSubscribed(Boolean subscribed) {
+            this.subscribed = subscribed;
+        }
     }
 }

@@ -5,10 +5,14 @@ import org.mskcc.cbio.oncokb.config.Constants;
 import org.mskcc.cbio.oncokb.domain.Token;
 import org.mskcc.cbio.oncokb.domain.User;
 import org.mskcc.cbio.oncokb.domain.UserDetails;
+import org.mskcc.cbio.oncokb.domain.Authority;
 import org.mskcc.cbio.oncokb.domain.enumeration.AccountRequestStatus;
+import org.mskcc.cbio.oncokb.domain.enumeration.BulkEmailAudience;
 import org.mskcc.cbio.oncokb.domain.enumeration.LicenseType;
+import org.mskcc.cbio.oncokb.repository.AuthorityRepository;
 import org.mskcc.cbio.oncokb.repository.UserDetailsRepository;
 import org.mskcc.cbio.oncokb.repository.UserRepository;
+import org.mskcc.cbio.oncokb.security.AuthoritiesConstants;
 import org.mskcc.cbio.oncokb.service.dto.UserDTO;
 import org.mskcc.cbio.oncokb.service.dto.useradditionalinfo.AdditionalInfoDTO;
 import org.mskcc.cbio.oncokb.service.dto.useradditionalinfo.TrialAccount;
@@ -35,8 +39,12 @@ import java.time.temporal.ChronoUnit;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Collections;
+import java.util.LinkedHashSet;
 import java.util.List;
+import java.util.Map;
 import java.util.Optional;
+import java.util.Set;
 import java.util.UUID;
 
 import static org.assertj.core.api.Assertions.assertThat;
@@ -68,6 +76,9 @@ public class UserServiceIT {
 
     @Autowired
     private UserRepository userRepository;
+
+    @Autowired
+    private AuthorityRepository authorityRepository;
 
     @Autowired
     private UserDetailsRepository userDetailsRepository;
@@ -637,5 +648,120 @@ public class UserServiceIT {
         assertThat(reloadedUser.get().getEmail()).isEqualTo("trial-test@example.com");
         assertThat(reloadedUser.get().getFirstName()).isEqualTo("Test");
         assertThat(reloadedUser.get().getLastName()).isEqualTo("User");
+    }
+
+    @Test
+    @Transactional
+    public void assertThatGetBulkEmailAudienceUsersForDevelopersReturnsOnlyApiUsersWithEmail() {
+        User apiUser = saveUserWithAuthorities("bulk-api-" + UUID.randomUUID().toString().substring(0, 8), true, AuthoritiesConstants.API);
+        User apiUserNoEmail = saveUserWithAuthorities("bulk-api-no-email-" + UUID.randomUUID().toString().substring(0, 8), false, AuthoritiesConstants.API);
+        User apiLocalhostUser = saveUserWithEmailAndAuthorities(
+            "bulk-api-localhost-" + UUID.randomUUID().toString().substring(0, 8),
+            "bulk-api-localhost@localhost",
+            AuthoritiesConstants.API
+        );
+        User regularUser = saveUserWithAuthorities("bulk-regular-" + UUID.randomUUID().toString().substring(0, 8), true);
+
+        List<UserDTO> users = userService.getBulkEmailAudienceUsers(BulkEmailAudience.DEVELOPERS);
+        Set<String> logins = new LinkedHashSet<>();
+        for (UserDTO dto : users) {
+            logins.add(dto.getLogin());
+        }
+
+        assertThat(logins).contains(apiUser.getLogin());
+        assertThat(logins).doesNotContain(apiUserNoEmail.getLogin());
+        assertThat(logins).doesNotContain(apiLocalhostUser.getLogin());
+        assertThat(logins).doesNotContain(regularUser.getLogin());
+    }
+
+    @Test
+    @Transactional
+    public void assertThatGetBulkEmailAudienceUsersForAllUsersExcludesServiceAccountsAndBlankEmails() {
+        User regularUser = saveUserWithAuthorities("bulk-all-regular-" + UUID.randomUUID().toString().substring(0, 8), true);
+        User localhostUser = saveUserWithEmailAndAuthorities(
+            "bulk-all-localhost-" + UUID.randomUUID().toString().substring(0, 8),
+            "bulk-all-localhost@localhost"
+        );
+        User serviceAccount = saveUserWithAuthorities(
+            "bulk-all-service-" + UUID.randomUUID().toString().substring(0, 8),
+            true,
+            AuthoritiesConstants.ROLE_SERVICE_ACCOUNT
+        );
+        User noEmailUser = saveUserWithAuthorities("bulk-all-no-email-" + UUID.randomUUID().toString().substring(0, 8), false);
+
+        List<UserDTO> users = userService.getBulkEmailAudienceUsers(BulkEmailAudience.ALL_USERS);
+        Set<String> logins = new LinkedHashSet<>();
+        for (UserDTO dto : users) {
+            logins.add(dto.getLogin());
+        }
+
+        assertThat(logins).contains(regularUser.getLogin());
+        assertThat(logins).doesNotContain(localhostUser.getLogin());
+        assertThat(logins).doesNotContain(serviceAccount.getLogin());
+        assertThat(logins).doesNotContain(noEmailUser.getLogin());
+    }
+
+    @Test
+    @Transactional
+    public void assertThatGetSendRecipientsByLoginsOrEmailsResolvesInInputOrderAndNormalizesKeys() {
+        User recipient = saveUserWithAuthorities("recipient-login-" + UUID.randomUUID().toString().substring(0, 8), true);
+
+        List<String> requestedRecipients = Arrays.asList(
+            "  " + recipient.getLogin() + "  ",
+            recipient.getEmail().toUpperCase(),
+            "missing@example.org",
+            recipient.getLogin()
+        );
+
+        Map<String, UserDTO> resolved = userService.getSendRecipientsByLoginsOrEmails(requestedRecipients);
+
+        assertThat(new ArrayList<>(resolved.keySet())).containsExactly(
+            recipient.getLogin().toLowerCase(),
+            recipient.getEmail().toLowerCase()
+        );
+        assertThat(resolved.get(recipient.getLogin().toLowerCase()).getId()).isEqualTo(recipient.getId());
+        assertThat(resolved.get(recipient.getEmail().toLowerCase()).getId()).isEqualTo(recipient.getId());
+    }
+
+    @Test
+    @Transactional
+    public void assertThatGetSendRecipientsByLoginsOrEmailsReturnsEmptyForEmptyInput() {
+        assertThat(userService.getSendRecipientsByLoginsOrEmails(null)).isEmpty();
+        assertThat(userService.getSendRecipientsByLoginsOrEmails(Collections.emptyList())).isEmpty();
+        assertThat(userService.getSendRecipientsByLoginsOrEmails(Arrays.asList("  ", null, "\t"))).isEmpty();
+    }
+
+    private User saveUserWithAuthorities(String login, boolean withEmail, String... authorityNames) {
+        return saveUserWithEmailAndAuthorities(login, withEmail ? login + "@example.org" : null, authorityNames);
+    }
+
+    private User saveUserWithEmailAndAuthorities(String login, String email, String... authorityNames) {
+        User testUser = new User();
+        testUser.setLogin(login);
+        testUser.setPassword(RandomStringUtils.random(60));
+        testUser.setActivated(true);
+        testUser.setEmail(email);
+        testUser.setFirstName("Test");
+        testUser.setLastName("User");
+        testUser.setImageUrl(DEFAULT_IMAGEURL);
+        testUser.setLangKey(DEFAULT_LANGKEY);
+
+        Set<Authority> authorities = new LinkedHashSet<>();
+        for (String authorityName : authorityNames) {
+            authorities.add(getOrCreateAuthority(authorityName));
+        }
+        testUser.setAuthorities(authorities);
+
+        return userRepository.saveAndFlush(testUser);
+    }
+
+    private Authority getOrCreateAuthority(String authorityName) {
+        Optional<Authority> existing = authorityRepository.findById(authorityName);
+        if (existing.isPresent()) {
+            return existing.get();
+        }
+        Authority authority = new Authority();
+        authority.setName(authorityName);
+        return authorityRepository.saveAndFlush(authority);
     }
 }

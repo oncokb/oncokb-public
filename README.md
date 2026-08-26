@@ -33,6 +33,81 @@ The following steps is one way to set up the redis. As long as you have redis se
 - Install redis `helm install oncokb-public-redis bitnami/redis --set auth.password=oncokb-public-redis-password --set replica.replicaCount=1`
 - Follow the instructions after installing redis. Then you need to proxy the redis out, command looks like `kubectl port-forward --namespace default svc/oncokb-public-redis-master 6379:6379`
 
+### SendGrid mock server (local)
+
+You can run a local mock SendGrid-compatible HTTP endpoint for bulk email testing.
+
+Files:
+
+- `src/main/docker/sendgrid-mock/main.go` (single-file Go server, no external dependencies)
+- `src/main/docker/sendgrid-mock/Dockerfile`
+- `src/main/docker/sendgrid-mock.yml`
+
+Run it:
+
+```bash
+docker compose -f src/main/docker/sendgrid-mock.yml up --build
+```
+
+It listens on `http://localhost:8086` and logs request method, path, headers, query, and payload to container logs.
+It returns endpoint-specific responses:
+
+- `POST /v3/mail/send` -> `202 Accepted`
+- `GET /v3/asm/suppressions/{email}` -> `200 OK`
+- `POST /v3/asm/groups/{groupId}/suppressions` -> `201 Created`
+- `DELETE /v3/asm/groups/{groupId}/suppressions/{email}` -> `204 No Content`
+- unsupported/invalid requests -> `400` or `404` with a JSON error payload
+
+To point this app to the mock endpoint, configure SendGrid host via environment variables (example):
+
+```bash
+export APPLICATION_SENDGRID_ENABLED=true
+export APPLICATION_SENDGRID_API_KEY=dummy-key
+export APPLICATION_SENDGRID_BASE_URL=http://localhost:8086
+```
+
+### SendGrid configuration (production)
+
+Configure SendGrid via environment variables (recommended for production):
+
+```bash
+export APPLICATION_SENDGRID_ENABLED=true
+export APPLICATION_SENDGRID_API_KEY=<your-sendgrid-api-key>
+export APPLICATION_SENDGRID_BASE_URL=https://api.sendgrid.com
+
+# Dynamic template IDs used for bulk/news emails
+export APPLICATION_SENDGRID_NEWS_TEMPLATE=<dynamic-template-id>
+export APPLICATION_SENDGRID_NEWS_TEMPLATE_NO_UNSUBSCRIBE=<dynamic-template-id>
+
+# ASM (unsubscribe group) IDs by audience
+export APPLICATION_SENDGRID_BULK_EMAIL_TYPES_CUSTOM_ASM_GROUP_ID=<id>
+export APPLICATION_SENDGRID_BULK_EMAIL_TYPES_ALL_USERS_ASM_GROUP_ID=<id>
+export APPLICATION_SENDGRID_BULK_EMAIL_TYPES_DEVELOPERS_ASM_GROUP_ID=<id>
+export APPLICATION_SENDGRID_BULK_EMAIL_TYPES_SCIENTIFIC_NEWS_ASM_GROUP_ID=<id>
+```
+
+Notes:
+
+- Keep `APPLICATION_SENDGRID_API_KEY` in a secret manager; do not commit it to git.
+- `APPLICATION_SENDGRID_BASE_URL` should remain `https://api.sendgrid.com` in production.
+- If an ASM group ID is omitted for an audience, unsubscribe-group behavior for that audience is disabled.
+
+### Required SendGrid API key permissions
+
+This app calls the following SendGrid endpoints:
+
+- `POST /v3/mail/send`
+- `GET /v3/asm/suppressions/{email}`
+- `POST /v3/asm/groups/{groupId}/suppressions`
+- `DELETE /v3/asm/groups/{groupId}/suppressions/{email}`
+
+Your SendGrid API key therefore needs:
+
+- **Mail Send**: permission to send mail.
+- **Suppressions / ASM**: read and write permissions for unsubscribe groups and suppressions.
+
+If these permissions are missing, bulk send and email subscription preference updates will fail.
+
 ### Modify config
 
 `/src/main/resources/config/application-dev.yml`

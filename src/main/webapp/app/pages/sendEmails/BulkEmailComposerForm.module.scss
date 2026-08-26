@@ -1,0 +1,130 @@
+.fieldGroup {
+  border: 0;
+  padding: 0;
+  margin-bottom: 14px;
+  min-inline-size: 0;
+}
+
+.subLabel {
+  display: block;
+  font-weight: 600;
+  font-size: 0.9rem;
+  margin-bottom: 6px;
+}
+
+.textInput {
+  width: 100%;
+  border: 1px solid #c8d3df;
+  border-radius: 6px;
+  padding: 8px 10px;
+  margin-bottom: 10px;
+}
+
+.textInput:focus {
+  outline: none;
+  border-color: #7ca1c7;
+  box-shadow: 0 0 0 2px rgba(124, 161, 199, 0.2);
+}
+
+.grid2 {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  grid-column-gap: 10px;
+}
+
+.storyHeader {
+  display: grid;
+  grid-template-columns: max-content 1fr max-content;
+  button {
+    grid-column: 3;
+  }
+  align-items: center;
+  margin: 8px 0;
+}
+
+.storyCard {
+  list-style: none;
+  border: 1px solid #d7e1eb;
+  border-radius: 6px;
+  background: #fff;
+  padding: 10px;
+  margin-bottom: 10px;
+}
+
+.storyCardHeader {
+  display: flex;
+  justify-content: flex-end;
+  margin-bottom: 8px;
+}
+
+.inlineHeader {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin: 8px 0;
+}
+
+.linkGrid {
+  list-style: none;
+  grid-column-gap: 8px;
+  align-items: center;
+  margin-bottom: 8px;
+  .linkActions {
+    display: flex;
+    justify-content: flex-end;
+  }
+}
+
+.formCard ol,
+.formCard ul {
+  padding-left: 0;
+  margin-bottom: 0;
+}
+
+.fieldLabel {
+  font-size: 1rem;
+  display: block;
+  font-weight: 600;
+  margin-bottom: 6px;
+}
+
+.actions {
+  display: flex;
+  justify-content: flex-end;
+}
+
+.textArea {
+  width: 100%;
+  min-height: 200px;
+  border: 1px solid #c8d3df;
+  border-radius: 6px;
+  padding: 10px 12px;
+  font-family: inherit;
+  font-size: 0.9rem;
+  background-color: #fbfdff;
+  /* https://developer.mozilla.org/en-US/docs/Web/CSS/Reference/Properties/field-sizing */
+  field-sizing: content;
+  resize: none;
+}
+
+.textArea:focus {
+  outline: none;
+  border-color: #7ca1c7;
+  box-shadow: 0 0 0 2px rgba(124, 161, 199, 0.2);
+}
+
+.errorText {
+  margin-top: 6px;
+  color: #b42318;
+  font-size: 0.85rem;
+}
+
+@media (max-width: 991px) {
+  .grid2 {
+    grid-template-columns: 1fr;
+  }
+
+  .linkGrid {
+    grid-template-columns: 1fr;
+  }
+}

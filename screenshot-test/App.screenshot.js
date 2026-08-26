@@ -84,6 +84,53 @@ const gracePeriodBlacklist = fs
   .readFileSync(`${DATA_DIR}api-register-grace-period-blacklist.json`)
   .toString();
 
+const accountEmailSubscriptions = JSON.stringify([
+  { groupId: 2001, audience: 'DEVELOPERS', subscribed: true },
+  { groupId: 2002, audience: 'SCIENTIFIC_NEWS', subscribed: true },
+]);
+
+const sendEmailsPageResponse = JSON.stringify({
+  users: [
+    {
+      login: 'admin',
+      email: 'admin@example.org',
+      firstName: 'Admin',
+      lastName: 'User',
+      activated: true,
+      licenseType: 'ACADEMIC',
+      admin: true,
+    },
+    {
+      login: 'user',
+      email: 'user@example.org',
+      firstName: 'Regular',
+      lastName: 'User',
+      activated: true,
+      licenseType: 'COMMERCIAL',
+      admin: false,
+    },
+  ],
+  mailTypes: [
+    { mailType: 'ACTIVATION', description: 'Activation' },
+    { mailType: 'APPROVAL', description: 'Approval' },
+    { mailType: 'BULK_CUSTOM', description: 'Bulk email - custom audience' },
+    {
+      mailType: 'BULK_DEVELOPERS',
+      description: 'Bulk email - developers audience',
+    },
+  ],
+});
+
+const sentHistoryResponse = JSON.stringify([
+  {
+    id: 1,
+    mailType: 'ACTIVATION',
+    sentDate: '2026-07-20T12:00:00Z',
+    sentFrom: 'registration@oncokb.org',
+    sentBy: 'admin',
+  },
+]);
+
 // # Fix the time to expiration date.
 function updateTokenExpirationDate(current) {
   let today = new Date();
@@ -134,6 +181,28 @@ if (!fs.existsSync(LATEST_SNAPSHOTS_DIR)) {
 }
 
 function getMockResponse(url) {
+  if (url.startsWith(`${SERVER_URL}api/mails/send-emails-page`)) {
+    return {
+      status: 200,
+      contentType: 'application/json',
+      body: sendEmailsPageResponse,
+      headers: {
+        'x-total-count': '2',
+      },
+    };
+  }
+
+  if (url.startsWith(`${SERVER_URL}api/mails/sent-history`)) {
+    return {
+      status: 200,
+      contentType: 'application/json',
+      body: sentHistoryResponse,
+      headers: {
+        'x-total-count': '1',
+      },
+    };
+  }
+
   if (url.startsWith(`${SERVER_URL}api/usage/summary/users`)) {
     return {
       status: 200,
@@ -204,6 +273,13 @@ function getMockResponse(url) {
         status: 200,
         contentType: 'application/json',
         body: apiAccountToken,
+      };
+      break;
+    case `${SERVER_URL}api/account/email-subscriptions`:
+      res = {
+        status: 200,
+        contentType: 'application/json',
+        body: accountEmailSubscriptions,
       };
       break;
     case `${SERVER_URL}api/v1/info`:
@@ -368,6 +444,13 @@ function getMockResponse(url) {
         body: '[]',
       };
       break;
+    case `${SERVER_URL}api/mails/users/bulk`:
+      res = {
+        status: 200,
+        contentType: 'text/plain',
+        body: 'Queued 2 emails.',
+      };
+      break;
     case `${SERVER_URL}api/private/utils/fdaAlterations?hugoSymbol=`:
       res = {
         status: 200,
@@ -398,6 +481,13 @@ function getMockResponseNoRoleApiAndRequested(url) {
         body: apiV1Info,
       };
       break;
+    case `${SERVER_URL}api/account/email-subscriptions`:
+      res = {
+        status: 200,
+        contentType: 'application/json',
+        body: accountEmailSubscriptions,
+      };
+      break;
     default:
       res = undefined;
   }
@@ -419,6 +509,13 @@ function getMockResponseNoRoleApiAndNotRequested(url) {
         status: 200,
         contentType: 'application/json',
         body: apiV1Info,
+      };
+      break;
+    case `${SERVER_URL}api/account/email-subscriptions`:
+      res = {
+        status: 200,
+        contentType: 'application/json',
+        body: accountEmailSubscriptions,
       };
       break;
     default:

@@ -393,7 +393,6 @@ export type Alteration = {
         'variantResidues': string
 
 };
-
 export type DownloadAvailability = {
     'hasAllActionableVariants': boolean
 
@@ -408,68 +407,6 @@ export type DownloadAvailability = {
         'hasSqlDump': boolean
 
         'version': string
-
-};
-export type VariantAnnotation = {
-    'alleleExist': boolean
-
-        'alteration': Alteration
-
-        'background': string
-
-        'dataVersion': string
-
-        'diagnosticImplications': Array < Implication >
-
-        'diagnosticSummary': string
-
-        'geneExist': boolean
-
-        'geneSummary': string
-
-        'highestDiagnosticImplicationLevel': "LEVEL_1" | "LEVEL_2" | "LEVEL_3A" | "LEVEL_3B" | "LEVEL_4" | "LEVEL_R1" | "LEVEL_R2" | "LEVEL_Px1" | "LEVEL_Px2" | "LEVEL_Px3" | "LEVEL_Dx1" | "LEVEL_Dx2" | "LEVEL_Dx3" | "LEVEL_Fda1" | "LEVEL_Fda2" | "LEVEL_Fda3" | "NO"
-
-        'highestFdaLevel': "LEVEL_1" | "LEVEL_2" | "LEVEL_3A" | "LEVEL_3B" | "LEVEL_4" | "LEVEL_R1" | "LEVEL_R2" | "LEVEL_Px1" | "LEVEL_Px2" | "LEVEL_Px3" | "LEVEL_Dx1" | "LEVEL_Dx2" | "LEVEL_Dx3" | "LEVEL_Fda1" | "LEVEL_Fda2" | "LEVEL_Fda3" | "NO"
-
-        'highestPrognosticImplicationLevel': "LEVEL_1" | "LEVEL_2" | "LEVEL_3A" | "LEVEL_3B" | "LEVEL_4" | "LEVEL_R1" | "LEVEL_R2" | "LEVEL_Px1" | "LEVEL_Px2" | "LEVEL_Px3" | "LEVEL_Dx1" | "LEVEL_Dx2" | "LEVEL_Dx3" | "LEVEL_Fda1" | "LEVEL_Fda2" | "LEVEL_Fda3" | "NO"
-
-        'highestResistanceLevel': "LEVEL_1" | "LEVEL_2" | "LEVEL_3A" | "LEVEL_3B" | "LEVEL_4" | "LEVEL_R1" | "LEVEL_R2" | "LEVEL_Px1" | "LEVEL_Px2" | "LEVEL_Px3" | "LEVEL_Dx1" | "LEVEL_Dx2" | "LEVEL_Dx3" | "LEVEL_Fda1" | "LEVEL_Fda2" | "LEVEL_Fda3" | "NO"
-
-        'highestSensitiveLevel': "LEVEL_1" | "LEVEL_2" | "LEVEL_3A" | "LEVEL_3B" | "LEVEL_4" | "LEVEL_R1" | "LEVEL_R2" | "LEVEL_Px1" | "LEVEL_Px2" | "LEVEL_Px3" | "LEVEL_Dx1" | "LEVEL_Dx2" | "LEVEL_Dx3" | "LEVEL_Fda1" | "LEVEL_Fda2" | "LEVEL_Fda3" | "NO"
-
-        'hotspot': boolean
-
-        'lastUpdate': string
-
-        'mutationEffect': MutationEffectResp
-
-        'oncogenic': string
-
-        'otherSignificantResistanceLevels': Array < "LEVEL_1" | "LEVEL_2" | "LEVEL_3A" | "LEVEL_3B" | "LEVEL_4" | "LEVEL_R1" | "LEVEL_R2" | "LEVEL_Px1" | "LEVEL_Px2" | "LEVEL_Px3" | "LEVEL_Dx1" | "LEVEL_Dx2" | "LEVEL_Dx3" | "LEVEL_Fda1" | "LEVEL_Fda2" | "LEVEL_Fda3" | "NO" >
-
-        'otherSignificantSensitiveLevels': Array < "LEVEL_1" | "LEVEL_2" | "LEVEL_3A" | "LEVEL_3B" | "LEVEL_4" | "LEVEL_R1" | "LEVEL_R2" | "LEVEL_Px1" | "LEVEL_Px2" | "LEVEL_Px3" | "LEVEL_Dx1" | "LEVEL_Dx2" | "LEVEL_Dx3" | "LEVEL_Fda1" | "LEVEL_Fda2" | "LEVEL_Fda3" | "NO" >
-
-        'prognosticImplications': Array < Implication >
-
-        'prognosticSummary': string
-
-        'query': Query
-
-        'treatments': Array < IndicatorQueryTreatment >
-
-        'tumorTypeSummary': string
-
-        'tumorTypes': Array < VariantAnnotationTumorType >
-
-        'variantExist': boolean
-
-        'variantSummary': string
-
-        'alternativeOncoKbVariant': AlternativeOncoKbVariant | null
-
-        'vue': boolean
-
-        'vus': boolean
 
 };
 export type AnnotatedVariant = {
@@ -853,6 +790,8 @@ export type SomaticVariantAnnotation = {
 
         'alteration': Alteration
 
+        'alternativeOncoKbVariant': AlternativeOncoKbVariant
+
         'background': string
 
         'dataVersion': string
@@ -904,8 +843,6 @@ export type SomaticVariantAnnotation = {
         'variantExist': boolean
 
         'variantSummary': string
-
-        'alternativeOncoKbVariant': AlternativeOncoKbVariant | null
 
         'vue': boolean
 
