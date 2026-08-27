@@ -8,6 +8,8 @@ import {
 import { NewlyAddedGenesListItem } from 'app/pages/newsPage/NewlyAddedGenesListItem';
 import { TableOfContents } from 'app/pages/privacyNotice/TableOfContents';
 import { convertGeneInputToLinks } from 'app/pages/newsPage/Util';
+import OptimizedImage from 'app/shared/image/OptimizedImage';
+import CbioportalGermlineAnnotationImg from 'content/images/cbioportal-germline-annotation.png';
 
 export default function NewsContent082026() {
   return (
@@ -54,10 +56,21 @@ export default function NewsContent082026() {
           <Link to="/gene/CHEK2/germline/c.1427C%3ET">c.1427C&gt;T</Link>
         </li>
         <li>
-          Incorporation of germline annotation into{' '}
-          <a href="https://www.cbioportal.org/">
-            cBioPortal for Cancer Genomics
+          Germline annotation is now incorporated into{' '}
+          <a href="https://www.cbioportal.org/">cBioPortal</a>! Take a look at,
+          for example,{' '}
+          <a href="https://www.cbioportal.org/results/mutations?cancer_study_list=ov_tcga_pub&amp;cancer_study_id=ov_tcga_pub&amp;genetic_profile_ids_PROFILE_MUTATION_EXTENDED=ov_tcga_pub_mutations&amp;Z_SCORE_THRESHOLD=2.0&amp;case_set_id=ov_tcga_pub_3way_complete&amp;gene_list=BRCA1%20BRCA2&amp;gene_set_choice=user-defined-list">
+            BRCA1 and BRCA2 mutations in ovarian cancer
           </a>
+          .<br />
+          <OptimizedImage
+            src={CbioportalGermlineAnnotationImg}
+            alt="Germline annotation in cBioPortal"
+            style={{ maxWidth: '100%', width: '600px', cursor: 'zoom-in' }}
+            onClick={() =>
+              window.open(CbioportalGermlineAnnotationImg, '_blank', 'noopener')
+            }
+          />
         </li>
       </ul>
       <p>

@@ -5,7 +5,8 @@
 
 - Addition of 237 germline variants seen in patients at MSK between December 2025 and June 2026
 - Addition of a new genomic indicator “Reduced-penetrance CHEK2-associated cancer risk” associated with germline [CHEK2](https://www.oncokb.org/gene/CHEK2/germline) variants [c.1283C\>T](https://www.oncokb.org/gene/CHEK2/germline/c.1283C%3ET), [c.470T\>C](https://www.oncokb.org/gene/CHEK2/germline/c.470T%3EC), and [c.1427C\>T](https://www.oncokb.org/gene/CHEK2/germline/c.1427C%3ET)
-- Incorporation of germline annotation into [cBioPortal for Cancer Genomics](https://www.cbioportal.org/)
+- Germline annotation is now incorporated into [cBioPortal](https://www.cbioportal.org/)! Take a look at, for example, [BRCA1 and BRCA2 mutations in ovarian cancer](https://www.cbioportal.org/results/mutations?cancer_study_list=ov_tcga_pub&cancer_study_id=ov_tcga_pub&genetic_profile_ids_PROFILE_MUTATION_EXTENDED=ov_tcga_pub_mutations&Z_SCORE_THRESHOLD=2.0&case_set_id=ov_tcga_pub_3way_complete&gene_list=BRCA1%20BRCA2&gene_set_choice=user-defined-list).\
+  ![Germline annotation in cBioPortal](../../../../content/images/cbioportal-germline-annotation.png)
 
 **Updated Therapeutic Implications: Sensitivity**
 

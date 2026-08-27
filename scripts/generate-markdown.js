@@ -479,6 +479,73 @@ function shouldAddCancerTypeLinksForFile(fileName) {
 
 let enableCancerTypeLinks = false;
 
+// Images referenced by the markdown file currently being processed. Reset per
+// file so each generated component only imports the images it actually uses.
+let collectedImages = [];
+
+const DEFAULT_IMAGE_WIDTH = '600px';
+
+/**
+ * Converts a markdown image src into a path webpack/tsconfig can resolve.
+ *
+ * Markdown files reference images with a relative path so they preview
+ * correctly in an editor, but the generated component lives in a different
+ * folder and must use the `content/*` or `app/*` alias instead.
+ *
+ * @param {string} src - The src as written in the markdown file.
+ * @returns {string} - An alias-based import path.
+ *
+ * @example
+ * toImageImportPath('../../../../content/images/example.png'); // 'content/images/example.png'
+ */
+function toImageImportPath(src) {
+  const normalized = src.replace(/\\/g, '/');
+  for (const alias of ['content/', 'app/']) {
+    const aliasIdx = normalized.indexOf(alias);
+    if (aliasIdx >= 0) {
+      return normalized.slice(aliasIdx);
+    }
+  }
+  return `content/images/${path.basename(normalized)}`;
+}
+
+/**
+ * Registers an image import for the file being processed and returns the
+ * variable name the generated JSX should use. Repeated references to the same
+ * image reuse a single import.
+ *
+ * @param {string} src - The src as written in the markdown file.
+ * @returns {string} - The variable name bound to the image import.
+ */
+function registerImage(src) {
+  const importPath = toImageImportPath(src);
+  const existing = collectedImages.find(image => image.importPath === importPath);
+  if (existing) {
+    return existing.variableName;
+  }
+
+  const baseName = path.basename(importPath, path.extname(importPath));
+  const pascalCaseName = baseName
+    .split(/[^a-zA-Z0-9]+/)
+    .filter(Boolean)
+    .map(word => word.charAt(0).toUpperCase() + word.slice(1))
+    .join('');
+  let variableName = `${pascalCaseName || 'News'}Img`;
+  if (/^[0-9]/.test(variableName)) {
+    variableName = `Img${variableName}`;
+  }
+  // Two different folders can hold images with the same file name
+  let suffix = 2;
+  const baseVariableName = variableName;
+  while (collectedImages.some(image => image.variableName === variableName)) {
+    variableName = `${baseVariableName}${suffix++}`;
+  }
+
+  collectedImages.push({ importPath, variableName });
+  return variableName;
+}
+
+
 function createCancerTypeLink(
   md,
   currentGene,
@@ -667,6 +734,23 @@ const md = new MarkdownIt({
 }).use(md => {
   // https://markdown-it.github.io/markdown-it
   // https://github.com/markdown-it/markdown-it/blob/master/docs/examples/renderer_rules.md
+  // markdown-it emits an unclosed <br> by default, which is not valid JSX
+  md.renderer.rules.hardbreak = function () {
+    return '<br />\n';
+  };
+
+  // Markdown images become <OptimizedImage> so webpack bundles the file and
+  // the src resolves at runtime. The image renders as a thumbnail and opens
+  // full size in a new tab on click. An optional markdown title sets the
+  // thumbnail width, e.g. ![alt](../../../../content/images/example.png "400px")
+  md.renderer.rules.image = function (tokens, idx) {
+    const token = tokens[idx];
+    const variableName = registerImage(token.attrGet('src'));
+    const alt = md.utils.escapeHtml(token.content || '');
+    const width = token.attrGet('title') || DEFAULT_IMAGE_WIDTH;
+    return `<OptimizedImage src={${variableName}} alt="${alt}" style={{ maxWidth: '100%', width: '${width}', cursor: 'zoom-in' }} onClick={() => window.open(${variableName}, '_blank', 'noopener')} />`;
+  };
+
   md.renderer.rules.table_open = function () {
     return '<div className="table-responsive" style={{ marginBottom: "1.5rem" }}>\n<table className="table">';
   };
@@ -744,18 +828,29 @@ files.forEach(file => {
   const filePath = path.join(inputFolder, file);
   const content = fs.readFileSync(filePath, 'utf-8');
   enableCancerTypeLinks = shouldAddCancerTypeLinksForFile(file);
+  collectedImages = [];
   const htmlContent = fixHtmlString(md.render(content));
 
   const componentName = path
     .basename(file, '.md')
     .replace(/[^a-zA-Z0-9]/g, '_');
+  // Only files that actually reference an image import the image machinery,
+  // otherwise every generated component would carry an unused import.
+  const imageImports = collectedImages.length
+    ? [
+        "import OptimizedImage from 'app/shared/image/OptimizedImage';",
+        ...collectedImages.map(
+          image => `import ${image.variableName} from '${image.importPath}';`
+        ),
+      ].join('\n') + '\n'
+    : '';
   const tsxContent = `import React from 'react';
 import { Link } from 'react-router-dom';
 import { AlterationPageLink, getAlternativeGenePageLinks, GenePageLink } from 'app/shared/utils/UrlUtils';
 import { NewlyAddedGenesListItem } from 'app/pages/newsPage/NewlyAddedGenesListItem';
 import { TableOfContents } from 'app/pages/privacyNotice/TableOfContents';
 import { convertGeneInputToLinks } from 'app/pages/newsPage/Util';
-
+${imageImports}
 export default function ${componentName}() {
   return (
     <>
