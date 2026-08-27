@@ -30,7 +30,7 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 @RequestMapping("/api/news")
 public class NewsResource {
     
-    private static final String ONCOKB_DATA_BRANCH = "master"; // TODO: change to master when done
+    private static final String ONCOKB_DATA_BRANCH = "master";
     private static final String ONCOKB_DATA_RELEASE_FOLDER = "https://api.github.com/repos/knowledgesystems/oncokb-data/contents/RELEASE";
 
     private final ObjectMapper objectMapper;
