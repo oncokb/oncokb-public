@@ -1,9 +1,9 @@
 - Update to our [FDA-Approved Oncology Therapies](https://www.oncokb.org/oncology-therapies) page
-- Addition of 164 statistically recurrent single-residue and in-frame indel mutation hotspots reported by [Bandlamudi et al., 2026](https://pubmed.ncbi.nlm.nih.gov/41895280/), extending the set of 1,165 hotspots reported in [Chang et al., 2017](https://pubmed.ncbi.nlm.nih.gov/29247016/) and [Chang et al., 2016 to](https://pubmed.ncbi.nlm.nih.gov/26619011/) 1,329. These hotspots are also catalogued in [cancerhotspots.org](http://cancerhotspots.org).
+- Addition of 164 statistically recurrent single-residue and in-frame indel mutation [cancer hotspots](https://www.cancerhotspots.org/#/home) as reported by [Bandlamudi et al., 2026](https://pubmed.ncbi.nlm.nih.gov/41895280/). This is in addition to the previous set of 1,165 hotspots reported in [Chang et al., 2017](https://pubmed.ncbi.nlm.nih.gov/29247016/) and [Chang et al., 2016](https://pubmed.ncbi.nlm.nih.gov/26619011/)
 
 **Germline Content Updates**
 
-- Addition of 237 new germline variants seen in patients at MSK between December 2025 and June 2026
+- Addition of 237 germline variants seen in patients at MSK between December 2025 and June 2026
 - Addition of a new genomic indicator “Reduced-penetrance CHEK2-associated cancer risk” associated with germline [CHEK2](https://www.oncokb.org/gene/CHEK2/germline) variants [c.1283C\>T](https://www.oncokb.org/gene/CHEK2/germline/c.1283C%3ET), [c.470T\>C](https://www.oncokb.org/gene/CHEK2/germline/c.470T%3EC), and [c.1427C\>T](https://www.oncokb.org/gene/CHEK2/germline/c.1427C%3ET)
 - Incorporation of germline annotation into [cBioPortal for Cancer Genomics](https://www.cbioportal.org/)
 

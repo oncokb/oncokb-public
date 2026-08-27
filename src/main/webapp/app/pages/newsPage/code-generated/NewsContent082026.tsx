@@ -20,20 +20,21 @@ export default function NewsContent082026() {
         </li>
         <li>
           Addition of 164 statistically recurrent single-residue and in-frame
-          indel mutation hotspots reported by{' '}
+          indel mutation{' '}
+          <a href="https://www.cancerhotspots.org/#/home">cancer hotspots</a> as
+          reported by{' '}
           <a href="https://pubmed.ncbi.nlm.nih.gov/41895280/">
             Bandlamudi et al., 2026
           </a>
-          , extending the set of 1,165 hotspots reported in{' '}
+          . This is in addition to the previous set of 1,165 hotspots reported
+          in{' '}
           <a href="https://pubmed.ncbi.nlm.nih.gov/29247016/">
             Chang et al., 2017
           </a>{' '}
           and{' '}
           <a href="https://pubmed.ncbi.nlm.nih.gov/26619011/">
-            Chang et al., 2016 to
-          </a>{' '}
-          1,329. These hotspots are also catalogued in{' '}
-          <a href="http://cancerhotspots.org">cancerhotspots.org</a>.
+            Chang et al., 2016
+          </a>
         </li>
       </ul>
       <p>
@@ -41,7 +42,7 @@ export default function NewsContent082026() {
       </p>
       <ul>
         <li>
-          Addition of 237 new germline variants seen in patients at MSK between
+          Addition of 237 germline variants seen in patients at MSK between
           December 2025 and June 2026
         </li>
         <li>
