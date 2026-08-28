@@ -34,7 +34,13 @@ where `MMYYYY` is derived from the release date.
    - Stop and wait.
 6. When source file exists, move/rename it to the target path.
    - Final filename must be exactly `NewsContentMMYYYY.md`.
-7. Verify and report:
+7. Clean up Google Docs export artifacts in the markdown.
+   - Remove a leading month/year heading line (e.g. `**August 2026**`) and the
+     blank line after it. The title is rendered from the date key by
+     `getNewsTitle` in `NewsList.tsx`, so a heading in the markdown duplicates it.
+     No other `NewsContentMMYYYY.md` file has one.
+   - Fix flattened trademark superscripts: `OncoKBTM` should be `OncoKB™`.
+8. Verify and report:
    - Confirm the final file path exists.
    - Confirm the source file is no longer at the old path.
 
@@ -43,14 +49,22 @@ where `MMYYYY` is derived from the release date.
 - Do not manually create or edit generated TSX files.
 - Do not manually edit TSX for markdown content changes.
 - Keep HTML formatting like `<br/>` in the markdown source when needed for line breaks.
+- Do not add a title/heading to the markdown; the News page generates it from the date.
 - If target file already exists, do not overwrite silently. Ask the user how to proceed.
 
 ## After intake (optional follow-up)
 
 If user asks to continue with full News update, follow project README steps:
 
+Ask the user for the release day and the version number first — both are needed
+and neither can be inferred reliably from the markdown.
+
 1. `yarn run buildNewsPages`
    - There is a `.nvmrc` file you can use to set the Node version for this command.
-2. Add release to `DATA_RELEASES`
-3. Add `NewsList` entry in `NewsPage.tsx`
-4. Add `NEWS_BY_DATE` mapping in `NewsPageContent.tsx`
+   - Re-run this after any later edit to the markdown.
+2. Add release to `DATA_RELEASES` in `constants.tsx`, newest first:
+   `{ date: 'MMDDYYYY', version: 'vX.X' }`
+3. Add `NewsList` entry in `NewsPage.tsx`, newest first: `<NewsList date={'MMDDYYYY'} />`
+4. Add `NEWS_BY_DATE` mapping in `NewsPageContent.tsx`, newest first, plus the
+   matching `import NewsContentMMYYYY from './code-generated/NewsContentMMYYYY';`
+5. Run `npx tsc --noEmit -p tsconfig.json` to confirm the wiring compiles.
