@@ -25,10 +25,26 @@ export type AdditionalInfoDTO = {
         'userCompany': UserCompany
 
 };
+export type AlterationUpdates = {
+    'alteration': string
+
+        'cancerTypeUpdates': Array < CancerTypeUpdates >
+
+        'updates': Array < Update >
+
+};
 export type ApiAccessRequest = {
     'justification': string
 
         'requested': boolean
+
+};
+export type CancerTypeUpdates = {
+    'cancerType': string
+
+        'treatmentUpdates': Array < TreatmentUpdates >
+
+        'updates': Array < Update >
 
 };
 export type BulkUserMailRequestVM = {
@@ -133,8 +149,28 @@ export type Contact = {
         'phone': string
 
 };
+export type ContentNews = {
+    'dataVersion': string
+
+        'germlineHistory': History
+
+        'history': History
+
+};
+export type GeneUpdates = {
+    'alterationUpdates': Array < AlterationUpdates >
+
+        'hugoSymbol': string
+
+        'updates': Array < Update >
+
+};
 export type GracePeriodBlacklistVM = {
     'domains': Array < string >
+
+};
+export type History = {
+    'geneUpdates': Array < GeneUpdates >
 
 };
 export type KeyAndPasswordVM = {
@@ -321,10 +357,28 @@ export type Token = {
         'user': User
 
 };
+export type TreatmentUpdates = {
+    'treatment': string
+
+        'updates': Array < Update >
+
+};
 export type TrialAccount = {
     'activation': Activation
 
         'licenseAgreement': LicenseAgreement
+
+};
+export type Update = {
+    'field': string
+
+        'new': string
+
+        'old': string
+
+        'operation': string
+
+        'timestamp': number
 
 };
 export type UpdateAllTokensResponse = {
@@ -5036,6 +5090,68 @@ export default class API {
             return response.body;
         });
     };
+    getContentNewsUsingGETURL(parameters: {
+        $queryParameters ? : any
+    }): string {
+        let queryParameters: any = {};
+        let path = '/api/news/content-news';
+
+        if (parameters.$queryParameters) {
+            Object.keys(parameters.$queryParameters).forEach(function(parameterName) {
+                var parameter = parameters.$queryParameters[parameterName];
+                queryParameters[parameterName] = parameter;
+            });
+        }
+        let keys = Object.keys(queryParameters);
+        return this.domain + path + (keys.length > 0 ? '?' + (keys.map(key => key + '=' + encodeURIComponent(queryParameters[key])).join('&')) : '');
+    };
+
+    /**
+     * getContentNews
+     * @method
+     * @name API#getContentNewsUsingGET
+     */
+    getContentNewsUsingGETWithHttpInfo(parameters: {
+        $queryParameters ? : any,
+            $domain ? : string
+    }): Promise < request.Response > {
+        const domain = parameters.$domain ? parameters.$domain : this.domain;
+        const errorHandlers = this.errorHandlers;
+        const request = this.request;
+        let path = '/api/news/content-news';
+        let body: any;
+        let queryParameters: any = {};
+        let headers: any = {};
+        let form: any = {};
+        return new Promise(function(resolve, reject) {
+            headers['Accept'] = '*/*';
+
+            if (parameters.$queryParameters) {
+                Object.keys(parameters.$queryParameters).forEach(function(parameterName) {
+                    var parameter = parameters.$queryParameters[parameterName];
+                    queryParameters[parameterName] = parameter;
+                });
+            }
+
+            request('GET', domain + path, body, headers, queryParameters, form, reject, resolve, errorHandlers);
+
+        });
+    };
+
+    /**
+     * getContentNews
+     * @method
+     * @name API#getContentNewsUsingGET
+     */
+    getContentNewsUsingGET(parameters: {
+            $queryParameters ? : any,
+                $domain ? : string
+        }): Promise < Array < ContentNews >
+        > {
+            return this.getContentNewsUsingGETWithHttpInfo(parameters).then(function(response: request.Response) {
+                return response.body;
+            });
+        };
     sendBulkUserMailsUsingPOSTURL(parameters: {
         'request': BulkUserMailRequestVM,
         $queryParameters ? : any
