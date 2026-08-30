@@ -95,6 +95,46 @@ export const GenePageLink: React.FunctionComponent<{
   );
 };
 
+// A hotspot page describes a hotspot position rather than one alteration, so it
+// gets its own sub-route: /gene/BRAF/somatic/hotspot/V600 for a single residue,
+// /gene/CDKN2A/somatic/hotspot/27-42 for an in-frame indel range.
+export const getHotspotPageLink = (props: {
+  hugoSymbol: string;
+  residue: string;
+  withProtocolHostPrefix?: boolean;
+}): string => {
+  const pageLink = `${PAGE_ROUTE.GENE_HEADER}/${props.hugoSymbol}/somatic/hotspot/${props.residue}`;
+  return props.withProtocolHostPrefix
+    ? `${getHostLinkWithProtocol()}${pageLink}`
+    : pageLink;
+};
+
+// TEMPORARY: placeholder route for the in-frame indel hotspot ranges, which do
+// not have a page yet. It takes no range name because an alteration's hotspot
+// flag does not say which range it sits on.
+export const getHotspotRangePageLink = (props: {
+  hugoSymbol: string;
+}): string =>
+  `${PAGE_ROUTE.GENE_HEADER}/${props.hugoSymbol}/somatic/hotspot-range`;
+
+export const HotspotPageLink: React.FunctionComponent<{
+  hugoSymbol: string;
+  residue: string;
+  className?: string;
+  ariaLabel?: string;
+}> = props => (
+  <Link
+    to={getHotspotPageLink({
+      hugoSymbol: props.hugoSymbol,
+      residue: props.residue,
+    })}
+    className={props.className}
+    aria-label={props.ariaLabel}
+  >
+    {props.children ? props.children : props.residue}
+  </Link>
+);
+
 export const getAlterationPageLink = (props: {
   hugoSymbol: string;
   alteration: IAlteration | string;

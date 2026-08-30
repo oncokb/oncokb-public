@@ -11,7 +11,9 @@ import classnames from 'classnames';
 import SomaticGermlineTiles, {
   AlterationTileProps,
 } from './SomaticGermlineTiles';
+import tileStyles from './SomaticGermlineTiles.module.scss';
 import config, {
+  CANCER_HOTSPOTS_LINK,
   ONCOGENICITY,
   MUTATION_EFFECT,
   ONCOKB_TM,
@@ -30,6 +32,8 @@ import {
   COLOR_ICON_WITH_INFO,
   COLOR_ICON_WITHOUT_INFO,
 } from 'app/config/theme';
+import { CancerHotspotIcon } from 'app/components/cancerHotspot/CancerHotspot';
+import { Linkout } from 'app/shared/links/Linkout';
 import {
   MutationEffect,
   Oncogenicity,
@@ -48,7 +52,10 @@ function OncogenicInfo({
   className?: string;
 }) {
   return (
-    <span style={{ margin: '0px' }} className="h5">
+    <span
+      style={{ margin: '0px' }}
+      className={classnames('h5', 'd-inline-flex', 'align-items-center')}
+    >
       <span>
         {isUnknownOncogenicity
           ? `${ONCOGENICITY.UNKNOWN} Oncogenic Effect`
@@ -57,7 +64,7 @@ function OncogenicInfo({
       <OncoKBOncogenicityIcon
         oncogenicity={oncogenicity}
         isVus={isVus}
-        classNameParent={classnames('d-inline-block my-auto')}
+        classNameParent={classnames('d-inline-block')}
       />
     </span>
   );
@@ -212,6 +219,30 @@ function createMutationEffectTileProps(
             (mutationEffect.knownEffect !== MUTATION_EFFECT.UNKNOWN ||
               isPositionalAlt),
           value: <MutationEffectIcon mutationEffect={mutationEffect} />,
+        },
+      ],
+    ],
+  };
+}
+
+function createCancerHotspotTileProps(
+  includeTitle: boolean
+): AlterationTileProps {
+  return {
+    title: includeTitle ? 'Cancer Hotspot' : undefined,
+    className: tileStyles.hotspotTile,
+    containerClassName: tileStyles.hotspotTileContainer,
+    items: [
+      [
+        {
+          title: (
+            <Linkout link={CANCER_HOTSPOTS_LINK}>cancerhotspots.org</Linkout>
+          ),
+          value: (
+            <span className="h5">
+              <CancerHotspotIcon />
+            </span>
+          ),
         },
       ],
     ],
@@ -384,6 +415,11 @@ export function SomaticGermlineAlterationTiles({
         includeTitle
       )
     );
+    // cancerhotspots.org is a somatic tumor cohort, so the hotspot annotation is
+    // only shown on somatic pages.
+    if ((rest.variantAnnotation as SomaticVariantAnnotation).hotspot) {
+      tiles.push(createCancerHotspotTileProps(includeTitle));
+    }
   }
 
   return <SomaticGermlineTiles tiles={tiles} />;

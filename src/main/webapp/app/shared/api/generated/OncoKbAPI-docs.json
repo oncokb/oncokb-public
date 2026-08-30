@@ -2,7 +2,7 @@
   "swagger": "2.0",
   "info": {
     "description": "These endpoints are for private use only.",
-    "version": "v1.6.0",
+    "version": "v1.7.0",
     "title": "OncoKB Private APIs",
     "contact": {
       "name": "OncoKB",
@@ -327,6 +327,29 @@
             "description": "OncoTree(http://oncotree.info) tumor type name. The field supports OncoTree Code, OncoTree Name and OncoTree Main type. Example: Melanoma",
             "required": false,
             "type": "string"
+          },
+          {
+            "name": "inheritanceMechanisms",
+            "in": "query",
+            "description": "List of inheritance mechanisms used to filter the returned genomic indicators. The special value CARRIER is matched against the genomic indicator name rather than the inheritance mechanism. Example: AUTOSOMAL_DOMINANT,CARRIER",
+            "required": false,
+            "type": "array",
+            "items": {
+              "type": "string",
+              "enum": [
+                "AUTOSOMAL_DOMINANT",
+                "AUTOSOMAL_RECESSIVE",
+                "X_LINKED_RECESSIVE",
+                "CARRIER"
+              ]
+            },
+            "collectionFormat": "multi",
+            "enum": [
+              "AUTOSOMAL_DOMINANT",
+              "AUTOSOMAL_RECESSIVE",
+              "X_LINKED_RECESSIVE",
+              "CARRIER"
+            ]
           }
         ],
         "responses": {
@@ -2799,6 +2822,9 @@
           "format": "int32",
           "description": "(Nullable) Unique gene identifiers from NCBI. May be null if omitted from original query, otherwise filled in by OncoKB"
         },
+        "germline": {
+          "type": "boolean"
+        },
         "hgvs": {
           "type": "string",
           "description": "(Nullable) The hgvsg or genomic location from original query"
@@ -3519,6 +3545,18 @@
         },
         "id": {
           "type": "string"
+        },
+        "inheritanceMechanisms": {
+          "type": "array",
+          "items": {
+            "type": "string",
+            "enum": [
+              "AUTOSOMAL_DOMINANT",
+              "AUTOSOMAL_RECESSIVE",
+              "X_LINKED_RECESSIVE",
+              "CARRIER"
+            ]
+          }
         },
         "referenceGenome": {
           "type": "string",

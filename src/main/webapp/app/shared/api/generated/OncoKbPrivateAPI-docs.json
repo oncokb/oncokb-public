@@ -2,7 +2,7 @@
   "swagger": "2.0",
   "info": {
     "description": "OncoKB, a comprehensive and curated precision oncology knowledge base, offers oncologists detailed, evidence-based information about individual somatic mutations and structural alterations present in patient tumors with the goal of supporting optimal treatment decisions.",
-    "version": "v1.6.0",
+    "version": "v1.7.0",
     "title": "OncoKB APIs",
     "contact": {
       "name": "OncoKB",
@@ -1023,6 +1023,65 @@
               "type": "array",
               "items": {
                 "type": "string"
+              }
+            }
+          },
+          "201": {
+            "description": "Created"
+          },
+          "400": {
+            "description": "Error, error message will be given.",
+            "schema": {
+              "$ref": "#/definitions/ApiHttpError"
+            }
+          },
+          "401": {
+            "description": "Unauthorized"
+          },
+          "403": {
+            "description": "Forbidden"
+          },
+          "404": {
+            "description": "Not Found"
+          }
+        }
+      }
+    },
+    "/utils/genomicIndicators": {
+      "post": {
+        "tags": [
+          "Utils"
+        ],
+        "summary": "utilsGenomicIndicatorsPost",
+        "description": "Get the germline genomic indicators for a list of genes and variants.",
+        "operationId": "utilsGenomicIndicatorsPostUsingPOST",
+        "consumes": [
+          "application/json"
+        ],
+        "produces": [
+          "application/json"
+        ],
+        "parameters": [
+          {
+            "in": "body",
+            "name": "body",
+            "description": "List of queries. Each query specifies a hugoSymbol, variant, and optional inheritanceMechanisms filter.",
+            "required": true,
+            "schema": {
+              "type": "array",
+              "items": {
+                "$ref": "#/definitions/GenomicIndicatorQuery"
+              }
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "schema": {
+              "type": "array",
+              "items": {
+                "$ref": "#/definitions/GenomicIndicatorQueryResp"
               }
             }
           },
@@ -2212,6 +2271,9 @@
           "format": "int32",
           "description": "(Nullable) Unique gene identifiers from NCBI. May be null if omitted from original query, otherwise filled in by OncoKB"
         },
+        "germline": {
+          "type": "boolean"
+        },
         "hgvs": {
           "type": "string",
           "description": "(Nullable) The hgvsg or genomic location from original query"
@@ -2831,6 +2893,33 @@
         }
       }
     },
+    "GenomicIndicatorQuery": {
+      "type": "object",
+      "properties": {
+        "hugoSymbol": {
+          "type": "string",
+          "description": "The gene symbol used in Human Genome Organisation."
+        },
+        "inheritanceMechanisms": {
+          "type": "array",
+          "description": "List of inheritance mechanisms used to filter the returned genomic indicators. The special value CARRIER is matched against the genomic indicator name rather than the inheritance mechanism. Example: AUTOSOMAL_DOMINANT,CARRIER",
+          "items": {
+            "type": "string",
+            "enum": [
+              "AUTOSOMAL_DOMINANT",
+              "AUTOSOMAL_RECESSIVE",
+              "X_LINKED_RECESSIVE",
+              "CARRIER"
+            ]
+          }
+        },
+        "variant": {
+          "type": "string",
+          "description": "Variant name"
+        }
+      },
+      "description": "Query for retrieving the germline genomic indicators associated with a specific gene and variant"
+    },
     "MatchVariantRequest": {
       "type": "object",
       "properties": {
@@ -2923,6 +3012,9 @@
       "properties": {
         "cancerRisk": {
           "type": "string"
+        },
+        "hotspot": {
+          "$ref": "#/definitions/VariantHotspot"
         },
         "mutationEffect": {
           "type": "string"
@@ -3040,6 +3132,17 @@
         }
       },
       "description": "OncoTree Detailed Cancer Type"
+    },
+    "VariantHotspot": {
+      "type": "object",
+      "properties": {
+        "isHotspot": {
+          "type": "boolean"
+        },
+        "type": {
+          "type": "string"
+        }
+      }
     },
     "Article": {
       "type": "object",
@@ -4062,6 +4165,23 @@
           "type": "string"
         }
       }
+    },
+    "GenomicIndicatorQueryResp": {
+      "type": "object",
+      "properties": {
+        "genomicIndicators": {
+          "type": "array",
+          "description": "The germline genomic indicators associated with the query",
+          "items": {
+            "$ref": "#/definitions/GenomicIndicator"
+          }
+        },
+        "query": {
+          "description": "The query the genomic indicators were retrieved for",
+          "$ref": "#/definitions/GenomicIndicatorQuery"
+        }
+      },
+      "description": "The genomic indicators associated with a queried gene and variant"
     },
     "Tag": {
       "type": "object",

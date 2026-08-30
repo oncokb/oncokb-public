@@ -1,0 +1,92 @@
+// The tooltip is only a positioning shell for the filter menu, so the
+// rc-tooltip chrome is stripped and the menu draws its own surface.
+.rc-tooltip.filter-tooltip {
+  opacity: 1;
+
+  .rc-tooltip-inner {
+    background-color: transparent;
+    box-shadow: none;
+    border: 0;
+    padding: 0;
+    min-height: 0;
+  }
+
+  .rc-tooltip-arrow {
+    display: none;
+  }
+}
+
+.filter-overlay {
+  position: absolute;
+  top: 15px;
+  left: -200px;
+  background-color: #fff;
+  border: 1px solid #ddd;
+  border-radius: 4px;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.15);
+  padding: 10px;
+  min-width: 200px;
+  max-width: 400px;
+  width: max-content;
+}
+
+.filter-overlay input[placeholder='Search'] {
+  height: 28px;
+  line-height: 1.2;
+  padding: 4px 8px;
+  font-size: 1rem;
+}
+
+.checkbox-list {
+  display: flex;
+  flex-direction: column;
+  margin-top: 10px;
+  max-height: 300px;
+  overflow-y: auto;
+}
+
+.checkbox-list input[type='checkbox'] {
+  margin-top: 5px;
+}
+
+.checkbox-list label {
+  padding-left: 5px;
+  font-size: 1rem;
+  margin-bottom: 0;
+}
+
+// The icon is kept in the layout so the header does not shift when it appears.
+.filter-component {
+  margin-left: 0.5rem;
+  visibility: hidden;
+}
+
+.rt-th:hover .filter-component,
+.filter-component.filter-component-visible {
+  visibility: visible;
+}
+
+// A fixed square keeps the hover background even on every side. The glyph is
+// centered by the wrapper rather than by line-height, which font-awesome sets
+// on the icon itself through its `font` shorthand.
+.filter-icon {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 1.35rem;
+  height: 1.35rem;
+
+  .fa {
+    line-height: 1;
+  }
+
+  &:hover {
+    border-radius: 3px;
+    background-color: #e0e1e2;
+    cursor: pointer;
+  }
+}
+
+.filter-icon-active {
+  color: $warning;
+}

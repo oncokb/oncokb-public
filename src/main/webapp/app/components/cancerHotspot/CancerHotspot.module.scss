@@ -1,0 +1,37 @@
+// Mirrors shared/icons/external-link-icon.module.scss so the hotspot link
+// animates like every other external link in the app. The link goes to an
+// internal route though, so it cannot reuse that component.
+.hotspotLink {
+  display: inline-flex;
+  align-items: center;
+  // The icons are the only content, so the line box must not add height of its
+  // own or they no longer sit on the same centre line.
+  line-height: 1;
+}
+
+.hotspotLink:hover {
+  text-decoration: none;
+}
+
+.icon {
+  display: inline-flex;
+  align-items: center;
+  line-height: 1;
+  opacity: 0;
+  max-width: 0;
+  // Font Awesome draws its glyphs on the baseline, so the ink of a glyph sits
+  // above the centre of its line box — measured at 0.075em for this font
+  // (ascent 86, descent 15 per em). Centring the box therefore leaves the icon
+  // looking high next to the flame, which fills its box; this puts the ink of
+  // the two on the same centre line.
+  transform: translateY(0.075em);
+  transition: max-width 0.3s ease-in-out, opacity 0.3s linear,
+    margin-left 0.3s ease-in-out;
+}
+
+.hotspotLink:hover .icon,
+.hotspotLink:focus .icon {
+  opacity: 1;
+  max-width: 15px;
+  margin-left: 0.25rem;
+}
