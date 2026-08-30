@@ -27,6 +27,9 @@ import {
   LicenseModel,
   LICENSE_MODEL_TITLES,
   LICENSE_MODEL_DESCRIPTIONS,
+  CompanyApiAccessStatus,
+  COMPANY_API_ACCESS_STATUS_TITLES,
+  COMPANY_API_ACCESS_STATUS_DESCRIPTIONS,
 } from 'app/config/constants';
 import client from 'app/shared/api/clientInstance';
 import { notifyError } from 'app/shared/utils/NotificationUtils';
@@ -69,6 +72,14 @@ export const COMPANY_FORM_OPTIONS = {
       label: LICENSE_STATUS_TITLES[LicenseStatus[type]],
     };
   }),
+  apiAccessStatus: Object.keys(CompanyApiAccessStatus).map(type => {
+    return {
+      value: CompanyApiAccessStatus[type],
+      label: COMPANY_API_ACCESS_STATUS_TITLES[CompanyApiAccessStatus[type]],
+      description:
+        COMPANY_API_ACCESS_STATUS_DESCRIPTIONS[CompanyApiAccessStatus[type]],
+    };
+  }),
 };
 
 @observer
@@ -81,6 +92,9 @@ export class NewCompanyForm extends React.Component<INewCompanyFormProps> {
   @observable selectedLicenseModel: LicenseModel = LicenseModel.FULL;
   @observable selectedLicenseType: LicenseType = LicenseType.COMMERCIAL;
   @observable selectedLicenseStatus: LicenseStatus = LicenseStatus.REGULAR;
+  @observable
+  selectedApiAccessStatus: CompanyApiAccessStatus =
+    CompanyApiAccessStatus.USER_SPECIFIC;
   @observable conflictingDomains: string[] = [];
 
   @action.bound
@@ -123,6 +137,7 @@ export class NewCompanyForm extends React.Component<INewCompanyFormProps> {
       licenseStatus: this.selectedLicenseStatus,
       licenseModel: this.selectedLicenseModel,
       licenseType: this.selectedLicenseType,
+      apiAccessStatus: this.selectedApiAccessStatus,
       name: values.companyName,
       companyDomains: this.companyDomains,
       additionalInfo:
@@ -256,6 +271,23 @@ export class NewCompanyForm extends React.Component<INewCompanyFormProps> {
                 (this.selectedLicenseStatus = selectedOption.value)
               }
             />
+            <div className="form-group">
+              <div className={`mb-2`}>Company API Access</div>
+              <AdditionalInfoSelect
+                name={'apiAccessStatus'}
+                defaultValue={{
+                  value: this.selectedApiAccessStatus,
+                  label:
+                    COMPANY_API_ACCESS_STATUS_TITLES[
+                      this.selectedApiAccessStatus
+                    ],
+                }}
+                options={COMPANY_FORM_OPTIONS.apiAccessStatus}
+                onSelection={(selectedOption: any) => {
+                  this.selectedApiAccessStatus = selectedOption.value;
+                }}
+              />
+            </div>
           </Col>
         </Row>
         {this.selectedLicenseStatus !== 'TRIAL' && (
