@@ -2799,6 +2799,9 @@
           "format": "int32",
           "description": "(Nullable) Unique gene identifiers from NCBI. May be null if omitted from original query, otherwise filled in by OncoKB"
         },
+        "germline": {
+          "type": "boolean"
+        },
         "hgvs": {
           "type": "string",
           "description": "(Nullable) The hgvsg or genomic location from original query"
@@ -3723,6 +3726,26 @@
         }
       }
     },
+    "AlterationValidationError": {
+      "type": "object",
+      "properties": {
+        "message": {
+          "type": "string",
+          "example": "BRAF A600E: The reference amino acid at position 600 is V instead of A on the OncoKB canonical transcript.",
+          "description": "The same reason in words, naming the queried alteration and what the OncoKB canonical sequence has instead."
+        },
+        "type": {
+          "type": "string",
+          "description": "The reason the alteration was rejected.",
+          "enum": [
+            "REFERENCE_ALLELE_MISMATCH",
+            "POSITION_OUT_OF_RANGE",
+            "REVERSED_POSITION_RANGE",
+            "MALFORMED_ALTERATION"
+          ]
+        }
+      }
+    },
     "AllGenomicIndicator": {
       "type": "object",
       "properties": {
@@ -3958,6 +3981,10 @@
           "type": "boolean",
           "example": false,
           "description": "Indicates whether the alternate allele has been curated. See SOP Protocol 9.1"
+        },
+        "alterationValidationError": {
+          "description": "(Nullable) Why the queried alteration was rejected as impossible against the OncoKB canonical sequence, leaving the query annotated at the gene level only. Carries both the reason to branch on and the same reason in words. Null whenever the variant itself was annotated. See docs/alteration-validation-errors.md",
+          "$ref": "#/definitions/AlterationValidationError"
         },
         "dataVersion": {
           "type": "string",

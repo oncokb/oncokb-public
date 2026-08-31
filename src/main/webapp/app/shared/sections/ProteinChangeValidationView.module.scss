@@ -1,0 +1,8 @@
+@import '../../variables';
+
+// Colors, padding, margin, border come from the Bootstrap
+// <Alert> component; the message is left-aligned by default.
+.message {
+  max-width: 42rem;
+  margin-bottom: 0;
+}

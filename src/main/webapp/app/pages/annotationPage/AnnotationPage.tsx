@@ -608,7 +608,8 @@ export default class AnnotationPage extends React.Component<
                     alterationSummaries={this.alterationSummaries}
                     hugoSymbol={this.props.store.hugoSymbol}
                     alteration={
-                      this.props.store.somaticAnnotationData.result.query.alteration
+                      this.props.store.somaticAnnotationData.result.query
+                        .alteration
                     }
                     geneType={this.props.store.gene.result.geneType}
                   />
@@ -650,8 +651,8 @@ export default class AnnotationPage extends React.Component<
                     <MutationEffectDescription
                       hugoSymbol={this.props.store.hugoSymbol}
                       description={
-                        this.props.store.somaticAnnotationData.result.mutationEffect
-                          .description
+                        this.props.store.somaticAnnotationData.result
+                          .mutationEffect.description
                       }
                     />
                   }
@@ -666,7 +667,9 @@ export default class AnnotationPage extends React.Component<
             <Col>
               <SomaticGermlineAlterationTiles
                 includeTitle
-                variantAnnotation={this.props.store.somaticAnnotationData.result}
+                variantAnnotation={
+                  this.props.store.somaticAnnotationData.result
+                }
                 isGermline={this.props.store.germline}
                 grch37Isoform={this.props.store.gene.result.grch37Isoform}
               />

@@ -46,6 +46,8 @@ export type Query = {
 
         'entrezGeneId': number
 
+        'germline': boolean
+
         'hgvs': string
 
         'hgvsInfo': string
@@ -251,6 +253,16 @@ export type MatchVariantResult = {
         'result': Array < MatchVariant >
 
 };
+export type ProteinChangeValidation = {
+    'message': string
+
+        'messageType': "INVALID_PROTEIN_CHANGE" | "NORMALIZED_DELETED_SEQUENCE" | "NO_PROTEIN_SEQUENCE" | "TRANSCRIPT_SERVICE_DISABLED" | "TRANSCRIPT_SERVICE_UNAVAILABLE"
+
+        'normalizedProteinChange': string
+
+        'status': "NORMALIZED" | "INVALID" | "UNCHECKED"
+
+};
 export type MatchVariantRequest = {
     'oncokbVariants': Array < MatchVariant >
 
@@ -317,6 +329,12 @@ export type BiologicalVariant = {
         'penetrance': string
 
         'variant': Alteration
+
+};
+export type AlterationValidationError = {
+    'message': string
+
+        'type': "REFERENCE_ALLELE_MISMATCH" | "POSITION_OUT_OF_RANGE" | "REVERSED_POSITION_RANGE" | "MALFORMED_ALTERATION"
 
 };
 export type GenomicIndicator = {
@@ -790,7 +808,9 @@ export type SomaticVariantAnnotation = {
 
         'alteration': Alteration
 
-        'alternativeOncoKbVariant': AlternativeOncoKbVariant
+        'alterationValidationError': AlterationValidationError | null
+
+        'alternativeOncoKbVariant': AlternativeOncoKbVariant | null
 
         'background': string
 
@@ -831,6 +851,8 @@ export type SomaticVariantAnnotation = {
         'prognosticImplications': Array < Implication >
 
         'prognosticSummary': string
+
+        'proteinChangeValidation': ProteinChangeValidation
 
         'query': Query
 

@@ -36,6 +36,8 @@ export type Query = {
 
         'entrezGeneId': number
 
+        'germline': boolean
+
         'hgvs': string
 
         'hgvsInfo': string
@@ -355,6 +357,12 @@ export type AnnotateCopyNumberAlterationQuery = {
         'tumorType': string
 
 };
+export type AlterationValidationError = {
+    'message': string
+
+        'type': "REFERENCE_ALLELE_MISMATCH" | "POSITION_OUT_OF_RANGE" | "REVERSED_POSITION_RANGE" | "MALFORMED_ALTERATION"
+
+};
 export type AllGenomicIndicator = {
     'associatedVariants': string
 
@@ -481,6 +489,8 @@ export type AnnotatedVariant = {
 };
 export type SomaticIndicatorQueryResp = {
     'alleleExist': boolean
+
+        'alterationValidationError': AlterationValidationError
 
         'dataVersion': string
 

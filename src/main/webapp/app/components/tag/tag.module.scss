@@ -49,6 +49,13 @@
   background: #fcf4d6;
 }
 
+.invalidTag {
+  @extend .tag;
+  color: #684e00;
+  border: var(--radius-2, 2px) solid #fddc69;
+  background: #fcf4d6;
+}
+
 .comingSoonTagSmall {
   @extend .tag;
   color: $primary;
