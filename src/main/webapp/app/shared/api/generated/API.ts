@@ -25,10 +25,40 @@ export type AdditionalInfoDTO = {
         'userCompany': UserCompany
 
 };
+export type AlterationUpdates = {
+    'alteration': string
+
+        'cancerTypeUpdates': Array < CancerTypeUpdates >
+
+        'updates': Array < Update >
+
+};
 export type ApiAccessRequest = {
     'justification': string
 
         'requested': boolean
+
+};
+export type CancerTypeUpdates = {
+    'cancerType': string
+
+        'treatmentUpdates': Array < TreatmentUpdates >
+
+        'updates': Array < Update >
+
+};
+export type BulkUserMailRequestVM = {
+    'audience': "CUSTOM" | "ALL_USERS" | "DEVELOPERS" | "SCIENTIFIC_NEWS"
+
+        'by': string
+
+        'cc': string
+
+        'dynamicContent': {}
+
+        'from': string
+
+        'recipients': Array < string >
 
 };
 export type CompanyAdditionalInfoDTO = {
@@ -119,8 +149,28 @@ export type Contact = {
         'phone': string
 
 };
+export type ContentNews = {
+    'dataVersion': string
+
+        'germlineHistory': History
+
+        'history': History
+
+};
+export type GeneUpdates = {
+    'alterationUpdates': Array < AlterationUpdates >
+
+        'hugoSymbol': string
+
+        'updates': Array < Update >
+
+};
 export type GracePeriodBlacklistVM = {
     'domains': Array < string >
+
+};
+export type History = {
+    'geneUpdates': Array < GeneUpdates >
 
 };
 export type KeyAndPasswordVM = {
@@ -154,7 +204,8 @@ export type LoginVM = {
 export type MailTypeInfo = {
     'description': string
 
-        'mailType': "ACTIVATION" | "CREATION" | "APPROVAL" | "API_ACCESS_APPROVAL" | "APPROVAL_ALIGN_LICENSE_WITH_COMPANY" | "REJECTION" | "REJECTION_US_SANCTION" | "REJECT_ALUMNI_ADDRESS" | "PASSWORD_RESET" | "LICENSE_REVIEW_COMMERCIAL" | "LICENSE_REVIEW_RESEARCH_COMMERCIAL" | "LICENSE_REVIEW_HOSPITAL" | "CLARIFY_ACADEMIC_FOR_PROFIT" | "CLARIFY_ACADEMIC_NON_INSTITUTE_EMAIL" | "CLARIFY_USE_CASE" | "CLARIFY_DUPLICATE_USER" | "CLARIFY_REGISTRATION_INFO" | "CLARIFY_HOSPITAL_USE" | "CLARIFY_COMMERCIAL_USE" | "HOSPITAL_APPROVAL_HIGH_VOLUME" | "LICENSE_OPTIONS" | "VERIFY_EMAIL_BEFORE_ACCOUNT_EXPIRES" | "ACTIVATE_FREE_TRIAL" | "TRIAL_ACCOUNT_IS_ABOUT_TO_EXPIRE" | "TRIAL_ACCOUNT_IS_ACTIVATED" | "DATA_USAGE_EXCEEDS_THRESHOLD" | "TOKEN_HAS_BEEN_EXPOSED" | "TOKEN_HAS_BEEN_EXPOSED_USER" | "SEARCHING_RESPONSE_STRUCTURE_HAS_CHANGED" | "LIST_OF_UNAPPROVED_USERS" | "TERMINATION_NOTIFICATION_EMAIL" | "TEST"
+        'mailType': "ACTIVATION" | "CREATION" | "APPROVAL" | "API_ACCESS_APPROVAL" | "APPROVAL_ALIGN_LICENSE_WITH_COMPANY" | "REJECTION" | "REJECTION_US_SANCTION" | "REJECT_ALUMNI_ADDRESS" | "PASSWORD_RESET" | "LICENSE_REVIEW_COMMERCIAL" | "LICENSE_REVIEW_RESEARCH_COMMERCIAL" | "LICENSE_REVIEW_HOSPITAL" | "CLARIFY_ACADEMIC_FOR_PROFIT" | "CLARIFY_ACADEMIC_NON_INSTITUTE_EMAIL" | "CLARIFY_USE_CASE" | "CLARIFY_DUPLICATE_USER" | "CLARIFY_REGISTRATION_INFO" | "CLARIFY_HOSPITAL_USE" | "HOSPITAL_APPROVAL_HIGH_VOLUME" | "CLARIFY_COMMERCIAL_USE" | "LICENSE_OPTIONS" | "VERIFY_EMAIL_BEFORE_ACCOUNT_EXPIRES" | "ACTIVATE_FREE_TRIAL" | "TRIAL_ACCOUNT_IS_ABOUT_TO_EXPIRE" | "TRIAL_ACCOUNT_IS_ACTIVATED" | "DATA_USAGE_EXCEEDS_THRESHOLD" | "TOKEN_HAS_BEEN_EXPOSED" | "TOKEN_HAS_BEEN_EXPOSED_USER" | "SEARCHING_RESPONSE_STRUCTURE_HAS_CHANGED" | "LIST_OF_UNAPPROVED_USERS" | "TERMINATION_NOTIFICATION_EMAIL" | "BULK_CUSTOM" | "BULK_ALL_USERS" | "BULK_DEVELOPERS" | "BULK_SCIENTIFIC_NEWS" | "TEST"
+
 };
 export type ManagedUserVM = {
     'accountRequestStatus': "UNKNOWN" | "PENDING" | "PENDING_NO_GRACE_PERIOD" | "APPROVED" | "REJECTED"
@@ -250,6 +301,28 @@ export type ResourceUsageAnalysisRow = {
         'userLastName': string
 
 };
+export type SendEmailPageResponseDTO = {
+    'mailTypes': Array < MailTypeInfo >
+
+        'users': Array < SendEmailUserOptionDTO >
+
+};
+export type SendEmailUserOptionDTO = {
+    'activated': boolean
+
+        'admin': boolean
+
+        'email': string
+
+        'firstName': string
+
+        'lastName': string
+
+        'licenseType': string
+
+        'login': string
+
+};
 export type TerminationEmailDTO = {
     'bcc': string
 
@@ -284,10 +357,28 @@ export type Token = {
         'user': User
 
 };
+export type TreatmentUpdates = {
+    'treatment': string
+
+        'updates': Array < Update >
+
+};
 export type TrialAccount = {
     'activation': Activation
 
         'licenseAgreement': LicenseAgreement
+
+};
+export type Update = {
+    'field': string
+
+        'new': string
+
+        'old': string
+
+        'operation': string
+
+        'timestamp': number
 
 };
 export type UpdateAllTokensResponse = {
@@ -336,6 +427,8 @@ export type User = {
         'login': string
 
         'resetDate': string
+
+        'userMails': Array < UserMails >
 
 };
 export type UserBannerMessageDTO = {
@@ -446,11 +539,25 @@ export type UserDetailsDTO = {
         'userId': number
 
 };
+export type UserMails = {
+    'id': number
+
+        'mailType': "ACTIVATION" | "CREATION" | "APPROVAL" | "API_ACCESS_APPROVAL" | "APPROVAL_ALIGN_LICENSE_WITH_COMPANY" | "REJECTION" | "REJECTION_US_SANCTION" | "REJECT_ALUMNI_ADDRESS" | "PASSWORD_RESET" | "LICENSE_REVIEW_COMMERCIAL" | "LICENSE_REVIEW_RESEARCH_COMMERCIAL" | "LICENSE_REVIEW_HOSPITAL" | "CLARIFY_ACADEMIC_FOR_PROFIT" | "CLARIFY_ACADEMIC_NON_INSTITUTE_EMAIL" | "CLARIFY_USE_CASE" | "CLARIFY_DUPLICATE_USER" | "CLARIFY_REGISTRATION_INFO" | "CLARIFY_HOSPITAL_USE" | "HOSPITAL_APPROVAL_HIGH_VOLUME" | "CLARIFY_COMMERCIAL_USE" | "LICENSE_OPTIONS" | "VERIFY_EMAIL_BEFORE_ACCOUNT_EXPIRES" | "ACTIVATE_FREE_TRIAL" | "TRIAL_ACCOUNT_IS_ABOUT_TO_EXPIRE" | "TRIAL_ACCOUNT_IS_ACTIVATED" | "DATA_USAGE_EXCEEDS_THRESHOLD" | "TOKEN_HAS_BEEN_EXPOSED" | "TOKEN_HAS_BEEN_EXPOSED_USER" | "SEARCHING_RESPONSE_STRUCTURE_HAS_CHANGED" | "LIST_OF_UNAPPROVED_USERS" | "TERMINATION_NOTIFICATION_EMAIL" | "BULK_CUSTOM" | "BULK_ALL_USERS" | "BULK_DEVELOPERS" | "BULK_SCIENTIFIC_NEWS" | "TEST"
+
+        'sentBy': string
+
+        'sentDate': string
+
+        'sentFrom': string
+
+        'user': User
+
+};
 export type UserMailsDTO = {
     'id': number
 
-        'mailType': "ACTIVATION" | "CREATION" | "APPROVAL" | "API_ACCESS_APPROVAL" | "APPROVAL_ALIGN_LICENSE_WITH_COMPANY" | "REJECTION" | "REJECTION_US_SANCTION" | "REJECT_ALUMNI_ADDRESS" | "PASSWORD_RESET" | "LICENSE_REVIEW_COMMERCIAL" | "LICENSE_REVIEW_RESEARCH_COMMERCIAL" | "LICENSE_REVIEW_HOSPITAL" | "CLARIFY_ACADEMIC_FOR_PROFIT" | "CLARIFY_ACADEMIC_NON_INSTITUTE_EMAIL" | "CLARIFY_USE_CASE" | "CLARIFY_DUPLICATE_USER" | "CLARIFY_REGISTRATION_INFO" | "CLARIFY_HOSPITAL_USE" | "CLARIFY_COMMERCIAL_USE" | "HOSPITAL_APPROVAL_HIGH_VOLUME" | "LICENSE_OPTIONS" | "VERIFY_EMAIL_BEFORE_ACCOUNT_EXPIRES" | "ACTIVATE_FREE_TRIAL" | "TRIAL_ACCOUNT_IS_ABOUT_TO_EXPIRE" | "TRIAL_ACCOUNT_IS_ACTIVATED" | "DATA_USAGE_EXCEEDS_THRESHOLD" | "TOKEN_HAS_BEEN_EXPOSED" | "TOKEN_HAS_BEEN_EXPOSED_USER" | "SEARCHING_RESPONSE_STRUCTURE_HAS_CHANGED" | "LIST_OF_UNAPPROVED_USERS" | "TERMINATION_NOTIFICATION_EMAIL" | "TEST"
-        
+        'mailType': "ACTIVATION" | "CREATION" | "APPROVAL" | "API_ACCESS_APPROVAL" | "APPROVAL_ALIGN_LICENSE_WITH_COMPANY" | "REJECTION" | "REJECTION_US_SANCTION" | "REJECT_ALUMNI_ADDRESS" | "PASSWORD_RESET" | "LICENSE_REVIEW_COMMERCIAL" | "LICENSE_REVIEW_RESEARCH_COMMERCIAL" | "LICENSE_REVIEW_HOSPITAL" | "CLARIFY_ACADEMIC_FOR_PROFIT" | "CLARIFY_ACADEMIC_NON_INSTITUTE_EMAIL" | "CLARIFY_USE_CASE" | "CLARIFY_DUPLICATE_USER" | "CLARIFY_REGISTRATION_INFO" | "CLARIFY_HOSPITAL_USE" | "HOSPITAL_APPROVAL_HIGH_VOLUME" | "CLARIFY_COMMERCIAL_USE" | "LICENSE_OPTIONS" | "VERIFY_EMAIL_BEFORE_ACCOUNT_EXPIRES" | "ACTIVATE_FREE_TRIAL" | "TRIAL_ACCOUNT_IS_ABOUT_TO_EXPIRE" | "TRIAL_ACCOUNT_IS_ACTIVATED" | "DATA_USAGE_EXCEEDS_THRESHOLD" | "TOKEN_HAS_BEEN_EXPOSED" | "TOKEN_HAS_BEEN_EXPOSED_USER" | "SEARCHING_RESPONSE_STRUCTURE_HAS_CHANGED" | "LIST_OF_UNAPPROVED_USERS" | "TERMINATION_NOTIFICATION_EMAIL" | "BULK_CUSTOM" | "BULK_ALL_USERS" | "BULK_DEVELOPERS" | "BULK_SCIENTIFIC_NEWS" | "TEST"
+
         'sentBy': string
 
         'sentDate': string
@@ -470,28 +577,18 @@ export type UserRegistrationSummary = {
         'total': number
 
 };
-export type UserStats = {
-    'maxUsageProportion': number
+export type EmailSubscriptionDTO = {
+    'audience': string
 
-        'mostUsedEndpoint': string
+        'groupId': number
 
-        'mostUsedPublicEndpoint': string
-
-        'publicMaxUsageProportion': number
-
-        'totalPublicUsage': number
-
-        'totalUsage': number
+        'subscribed': boolean
 
 };
-export type UserUsage = {
-    'company': string
+export type EmailSubscriptionUpdateRequest = {
+    'groupId': number
 
-        'jobTitle': string
-
-        'licenseType': string
-
-        'total': number
+        'subscribed': boolean
 
 };
 export type VerifyCompanyNameVM = {
@@ -1059,6 +1156,145 @@ export default class API {
             return response.body;
         });
     };
+    getEmailSubscriptionsUsingGETURL(parameters: {
+        $queryParameters ? : any
+    }): string {
+        let queryParameters: any = {};
+        let path = '/api/account/email-subscriptions';
+
+        if (parameters.$queryParameters) {
+            Object.keys(parameters.$queryParameters).forEach(function(parameterName) {
+                var parameter = parameters.$queryParameters[parameterName];
+                queryParameters[parameterName] = parameter;
+            });
+        }
+        let keys = Object.keys(queryParameters);
+        return this.domain + path + (keys.length > 0 ? '?' + (keys.map(key => key + '=' + encodeURIComponent(queryParameters[key])).join('&')) : '');
+    };
+
+    /**
+     * getEmailSubscriptions
+     * @method
+     * @name API#getEmailSubscriptionsUsingGET
+     */
+    getEmailSubscriptionsUsingGETWithHttpInfo(parameters: {
+        $queryParameters ? : any,
+            $domain ? : string
+    }): Promise < request.Response > {
+        const domain = parameters.$domain ? parameters.$domain : this.domain;
+        const errorHandlers = this.errorHandlers;
+        const request = this.request;
+        let path = '/api/account/email-subscriptions';
+        let body: any;
+        let queryParameters: any = {};
+        let headers: any = {};
+        let form: any = {};
+        return new Promise(function(resolve, reject) {
+            headers['Accept'] = '*/*';
+
+            if (parameters.$queryParameters) {
+                Object.keys(parameters.$queryParameters).forEach(function(parameterName) {
+                    var parameter = parameters.$queryParameters[parameterName];
+                    queryParameters[parameterName] = parameter;
+                });
+            }
+
+            request('GET', domain + path, body, headers, queryParameters, form, reject, resolve, errorHandlers);
+
+        });
+    };
+
+    /**
+     * getEmailSubscriptions
+     * @method
+     * @name API#getEmailSubscriptionsUsingGET
+     */
+    getEmailSubscriptionsUsingGET(parameters: {
+            $queryParameters ? : any,
+                $domain ? : string
+        }): Promise < Array < EmailSubscriptionDTO >
+        > {
+            return this.getEmailSubscriptionsUsingGETWithHttpInfo(parameters).then(function(response: request.Response) {
+                return response.body;
+            });
+        };
+    updateEmailSubscriptionUsingPOSTURL(parameters: {
+        'emailSubscriptionUpdateRequest': EmailSubscriptionUpdateRequest,
+        $queryParameters ? : any
+    }): string {
+        let queryParameters: any = {};
+        let path = '/api/account/email-subscriptions';
+
+        if (parameters.$queryParameters) {
+            Object.keys(parameters.$queryParameters).forEach(function(parameterName) {
+                var parameter = parameters.$queryParameters[parameterName];
+                queryParameters[parameterName] = parameter;
+            });
+        }
+        let keys = Object.keys(queryParameters);
+        return this.domain + path + (keys.length > 0 ? '?' + (keys.map(key => key + '=' + encodeURIComponent(queryParameters[key])).join('&')) : '');
+    };
+
+    /**
+     * updateEmailSubscription
+     * @method
+     * @name API#updateEmailSubscriptionUsingPOST
+     * @param {} emailSubscriptionUpdateRequest - emailSubscriptionUpdateRequest
+     */
+    updateEmailSubscriptionUsingPOSTWithHttpInfo(parameters: {
+        'emailSubscriptionUpdateRequest': EmailSubscriptionUpdateRequest,
+        $queryParameters ? : any,
+        $domain ? : string
+    }): Promise < request.Response > {
+        const domain = parameters.$domain ? parameters.$domain : this.domain;
+        const errorHandlers = this.errorHandlers;
+        const request = this.request;
+        let path = '/api/account/email-subscriptions';
+        let body: any;
+        let queryParameters: any = {};
+        let headers: any = {};
+        let form: any = {};
+        return new Promise(function(resolve, reject) {
+            headers['Accept'] = '*/*';
+            headers['Content-Type'] = 'application/json';
+
+            if (parameters['emailSubscriptionUpdateRequest'] !== undefined) {
+                body = parameters['emailSubscriptionUpdateRequest'];
+            }
+
+            if (parameters['emailSubscriptionUpdateRequest'] === undefined) {
+                reject(new Error('Missing required  parameter: emailSubscriptionUpdateRequest'));
+                return;
+            }
+
+            if (parameters.$queryParameters) {
+                Object.keys(parameters.$queryParameters).forEach(function(parameterName) {
+                    var parameter = parameters.$queryParameters[parameterName];
+                    queryParameters[parameterName] = parameter;
+                });
+            }
+
+            request('POST', domain + path, body, headers, queryParameters, form, reject, resolve, errorHandlers);
+
+        });
+    };
+
+    /**
+     * updateEmailSubscription
+     * @method
+     * @name API#updateEmailSubscriptionUsingPOST
+     * @param {} emailSubscriptionUpdateRequest - emailSubscriptionUpdateRequest
+     */
+    updateEmailSubscriptionUsingPOST(parameters: {
+            'emailSubscriptionUpdateRequest': EmailSubscriptionUpdateRequest,
+            $queryParameters ? : any,
+            $domain ? : string
+        }): Promise < Array < EmailSubscriptionDTO >
+        > {
+            return this.updateEmailSubscriptionUsingPOSTWithHttpInfo(parameters).then(function(response: request.Response) {
+                return response.body;
+            });
+        };
     generateResetKeyUsingPOSTURL(parameters: {
         'login': string,
         $queryParameters ? : any
@@ -1855,7 +2091,7 @@ export default class API {
             return response.body;
         });
     };
-    authorizeUsingPOSTURL(parameters: {
+    authorizeUsingPOST_1URL(parameters: {
         'loginVm': LoginVM,
         $queryParameters ? : any
     }): string {
@@ -1875,10 +2111,10 @@ export default class API {
     /**
      * authorize
      * @method
-     * @name API#authorizeUsingPOST
+     * @name API#authorizeUsingPOST_1
      * @param {} loginVm - loginVM
      */
-    authorizeUsingPOSTWithHttpInfo(parameters: {
+    authorizeUsingPOST_1WithHttpInfo(parameters: {
         'loginVm': LoginVM,
         $queryParameters ? : any,
         $domain ? : string
@@ -1919,15 +2155,15 @@ export default class API {
     /**
      * authorize
      * @method
-     * @name API#authorizeUsingPOST
+     * @name API#authorizeUsingPOST_1
      * @param {} loginVm - loginVM
      */
-    authorizeUsingPOST(parameters: {
+    authorizeUsingPOST_1(parameters: {
         'loginVm': LoginVM,
         $queryParameters ? : any,
         $domain ? : string
     }): Promise < string > {
-        return this.authorizeUsingPOSTWithHttpInfo(parameters).then(function(response: request.Response) {
+        return this.authorizeUsingPOST_1WithHttpInfo(parameters).then(function(response: request.Response) {
             return response.body;
         });
     };
@@ -4164,6 +4400,413 @@ export default class API {
                 return response.body;
             });
         };
+    getSendEmailsPageDataUsingGETURL(parameters: {
+        'offset' ? : number,
+        'page' ? : number,
+        'pageNumber' ? : number,
+        'pageSize' ? : number,
+        'paged' ? : boolean,
+        'q' ? : string,
+        'size' ? : number,
+        'sort' ? : Array < string > ,
+            'sortSorted' ? : boolean,
+            'sortUnsorted' ? : boolean,
+            'unpaged' ? : boolean,
+            $queryParameters ? : any
+    }): string {
+        let queryParameters: any = {};
+        let path = '/api/mails/send-emails-page';
+        if (parameters['offset'] !== undefined) {
+            queryParameters['offset'] = parameters['offset'];
+        }
+
+        if (parameters['page'] !== undefined) {
+            queryParameters['page'] = parameters['page'];
+        }
+
+        if (parameters['pageNumber'] !== undefined) {
+            queryParameters['pageNumber'] = parameters['pageNumber'];
+        }
+
+        if (parameters['pageSize'] !== undefined) {
+            queryParameters['pageSize'] = parameters['pageSize'];
+        }
+
+        if (parameters['paged'] !== undefined) {
+            queryParameters['paged'] = parameters['paged'];
+        }
+
+        if (parameters['q'] !== undefined) {
+            queryParameters['q'] = parameters['q'];
+        }
+
+        if (parameters['size'] !== undefined) {
+            queryParameters['size'] = parameters['size'];
+        }
+
+        if (parameters['sort'] !== undefined) {
+            queryParameters['sort'] = parameters['sort'];
+        }
+
+        if (parameters['sortSorted'] !== undefined) {
+            queryParameters['sort.sorted'] = parameters['sortSorted'];
+        }
+
+        if (parameters['sortUnsorted'] !== undefined) {
+            queryParameters['sort.unsorted'] = parameters['sortUnsorted'];
+        }
+
+        if (parameters['unpaged'] !== undefined) {
+            queryParameters['unpaged'] = parameters['unpaged'];
+        }
+
+        if (parameters.$queryParameters) {
+            Object.keys(parameters.$queryParameters).forEach(function(parameterName) {
+                var parameter = parameters.$queryParameters[parameterName];
+                queryParameters[parameterName] = parameter;
+            });
+        }
+        let keys = Object.keys(queryParameters);
+        return this.domain + path + (keys.length > 0 ? '?' + (keys.map(key => key + '=' + encodeURIComponent(queryParameters[key])).join('&')) : '');
+    };
+
+    /**
+     * getSendEmailsPageData
+     * @method
+     * @name API#getSendEmailsPageDataUsingGET
+     * @param {integer} offset - OncoKB™ is a precision oncology knowledge base developed at Memorial Sloan Kettering Cancer Center that contains biological and clinical information about genomic alterations in cancer.
+     * @param {integer} page - Page number of the requested page
+     * @param {integer} pageNumber - OncoKB™ is a precision oncology knowledge base developed at Memorial Sloan Kettering Cancer Center that contains biological and clinical information about genomic alterations in cancer.
+     * @param {integer} pageSize - OncoKB™ is a precision oncology knowledge base developed at Memorial Sloan Kettering Cancer Center that contains biological and clinical information about genomic alterations in cancer.
+     * @param {boolean} paged - OncoKB™ is a precision oncology knowledge base developed at Memorial Sloan Kettering Cancer Center that contains biological and clinical information about genomic alterations in cancer.
+     * @param {string} q - q
+     * @param {integer} size - Size of a page
+     * @param {array} sort - Sorting criteria in the format: property(,asc|desc). Default sort order is ascending. Multiple sort criteria are supported.
+     * @param {boolean} sortSorted - OncoKB™ is a precision oncology knowledge base developed at Memorial Sloan Kettering Cancer Center that contains biological and clinical information about genomic alterations in cancer.
+     * @param {boolean} sortUnsorted - OncoKB™ is a precision oncology knowledge base developed at Memorial Sloan Kettering Cancer Center that contains biological and clinical information about genomic alterations in cancer.
+     * @param {boolean} unpaged - OncoKB™ is a precision oncology knowledge base developed at Memorial Sloan Kettering Cancer Center that contains biological and clinical information about genomic alterations in cancer.
+     */
+    getSendEmailsPageDataUsingGETWithHttpInfo(parameters: {
+        'offset' ? : number,
+        'page' ? : number,
+        'pageNumber' ? : number,
+        'pageSize' ? : number,
+        'paged' ? : boolean,
+        'q' ? : string,
+        'size' ? : number,
+        'sort' ? : Array < string > ,
+            'sortSorted' ? : boolean,
+            'sortUnsorted' ? : boolean,
+            'unpaged' ? : boolean,
+            $queryParameters ? : any,
+            $domain ? : string
+    }): Promise < request.Response > {
+        const domain = parameters.$domain ? parameters.$domain : this.domain;
+        const errorHandlers = this.errorHandlers;
+        const request = this.request;
+        let path = '/api/mails/send-emails-page';
+        let body: any;
+        let queryParameters: any = {};
+        let headers: any = {};
+        let form: any = {};
+        return new Promise(function(resolve, reject) {
+            headers['Accept'] = '*/*';
+
+            if (parameters['offset'] !== undefined) {
+                queryParameters['offset'] = parameters['offset'];
+            }
+
+            if (parameters['page'] !== undefined) {
+                queryParameters['page'] = parameters['page'];
+            }
+
+            if (parameters['pageNumber'] !== undefined) {
+                queryParameters['pageNumber'] = parameters['pageNumber'];
+            }
+
+            if (parameters['pageSize'] !== undefined) {
+                queryParameters['pageSize'] = parameters['pageSize'];
+            }
+
+            if (parameters['paged'] !== undefined) {
+                queryParameters['paged'] = parameters['paged'];
+            }
+
+            if (parameters['q'] !== undefined) {
+                queryParameters['q'] = parameters['q'];
+            }
+
+            if (parameters['size'] !== undefined) {
+                queryParameters['size'] = parameters['size'];
+            }
+
+            if (parameters['sort'] !== undefined) {
+                queryParameters['sort'] = parameters['sort'];
+            }
+
+            if (parameters['sortSorted'] !== undefined) {
+                queryParameters['sort.sorted'] = parameters['sortSorted'];
+            }
+
+            if (parameters['sortUnsorted'] !== undefined) {
+                queryParameters['sort.unsorted'] = parameters['sortUnsorted'];
+            }
+
+            if (parameters['unpaged'] !== undefined) {
+                queryParameters['unpaged'] = parameters['unpaged'];
+            }
+
+            if (parameters.$queryParameters) {
+                Object.keys(parameters.$queryParameters).forEach(function(parameterName) {
+                    var parameter = parameters.$queryParameters[parameterName];
+                    queryParameters[parameterName] = parameter;
+                });
+            }
+
+            request('GET', domain + path, body, headers, queryParameters, form, reject, resolve, errorHandlers);
+
+        });
+    };
+
+    /**
+     * getSendEmailsPageData
+     * @method
+     * @name API#getSendEmailsPageDataUsingGET
+     * @param {integer} offset - OncoKB™ is a precision oncology knowledge base developed at Memorial Sloan Kettering Cancer Center that contains biological and clinical information about genomic alterations in cancer.
+     * @param {integer} page - Page number of the requested page
+     * @param {integer} pageNumber - OncoKB™ is a precision oncology knowledge base developed at Memorial Sloan Kettering Cancer Center that contains biological and clinical information about genomic alterations in cancer.
+     * @param {integer} pageSize - OncoKB™ is a precision oncology knowledge base developed at Memorial Sloan Kettering Cancer Center that contains biological and clinical information about genomic alterations in cancer.
+     * @param {boolean} paged - OncoKB™ is a precision oncology knowledge base developed at Memorial Sloan Kettering Cancer Center that contains biological and clinical information about genomic alterations in cancer.
+     * @param {string} q - q
+     * @param {integer} size - Size of a page
+     * @param {array} sort - Sorting criteria in the format: property(,asc|desc). Default sort order is ascending. Multiple sort criteria are supported.
+     * @param {boolean} sortSorted - OncoKB™ is a precision oncology knowledge base developed at Memorial Sloan Kettering Cancer Center that contains biological and clinical information about genomic alterations in cancer.
+     * @param {boolean} sortUnsorted - OncoKB™ is a precision oncology knowledge base developed at Memorial Sloan Kettering Cancer Center that contains biological and clinical information about genomic alterations in cancer.
+     * @param {boolean} unpaged - OncoKB™ is a precision oncology knowledge base developed at Memorial Sloan Kettering Cancer Center that contains biological and clinical information about genomic alterations in cancer.
+     */
+    getSendEmailsPageDataUsingGET(parameters: {
+        'offset' ? : number,
+        'page' ? : number,
+        'pageNumber' ? : number,
+        'pageSize' ? : number,
+        'paged' ? : boolean,
+        'q' ? : string,
+        'size' ? : number,
+        'sort' ? : Array < string > ,
+            'sortSorted' ? : boolean,
+            'sortUnsorted' ? : boolean,
+            'unpaged' ? : boolean,
+            $queryParameters ? : any,
+            $domain ? : string
+    }): Promise < SendEmailPageResponseDTO > {
+        return this.getSendEmailsPageDataUsingGETWithHttpInfo(parameters).then(function(response: request.Response) {
+            return response.body;
+        });
+    };
+    getSentHistoryUsingGETURL(parameters: {
+        'offset' ? : number,
+        'page' ? : number,
+        'pageNumber' ? : number,
+        'pageSize' ? : number,
+        'paged' ? : boolean,
+        'q' ? : string,
+        'size' ? : number,
+        'sort' ? : Array < string > ,
+            'sortSorted' ? : boolean,
+            'sortUnsorted' ? : boolean,
+            'unpaged' ? : boolean,
+            $queryParameters ? : any
+    }): string {
+        let queryParameters: any = {};
+        let path = '/api/mails/sent-history';
+        if (parameters['offset'] !== undefined) {
+            queryParameters['offset'] = parameters['offset'];
+        }
+
+        if (parameters['page'] !== undefined) {
+            queryParameters['page'] = parameters['page'];
+        }
+
+        if (parameters['pageNumber'] !== undefined) {
+            queryParameters['pageNumber'] = parameters['pageNumber'];
+        }
+
+        if (parameters['pageSize'] !== undefined) {
+            queryParameters['pageSize'] = parameters['pageSize'];
+        }
+
+        if (parameters['paged'] !== undefined) {
+            queryParameters['paged'] = parameters['paged'];
+        }
+
+        if (parameters['q'] !== undefined) {
+            queryParameters['q'] = parameters['q'];
+        }
+
+        if (parameters['size'] !== undefined) {
+            queryParameters['size'] = parameters['size'];
+        }
+
+        if (parameters['sort'] !== undefined) {
+            queryParameters['sort'] = parameters['sort'];
+        }
+
+        if (parameters['sortSorted'] !== undefined) {
+            queryParameters['sort.sorted'] = parameters['sortSorted'];
+        }
+
+        if (parameters['sortUnsorted'] !== undefined) {
+            queryParameters['sort.unsorted'] = parameters['sortUnsorted'];
+        }
+
+        if (parameters['unpaged'] !== undefined) {
+            queryParameters['unpaged'] = parameters['unpaged'];
+        }
+
+        if (parameters.$queryParameters) {
+            Object.keys(parameters.$queryParameters).forEach(function(parameterName) {
+                var parameter = parameters.$queryParameters[parameterName];
+                queryParameters[parameterName] = parameter;
+            });
+        }
+        let keys = Object.keys(queryParameters);
+        return this.domain + path + (keys.length > 0 ? '?' + (keys.map(key => key + '=' + encodeURIComponent(queryParameters[key])).join('&')) : '');
+    };
+
+    /**
+     * getSentHistory
+     * @method
+     * @name API#getSentHistoryUsingGET
+     * @param {integer} offset - OncoKB™ is a precision oncology knowledge base developed at Memorial Sloan Kettering Cancer Center that contains biological and clinical information about genomic alterations in cancer.
+     * @param {integer} page - Page number of the requested page
+     * @param {integer} pageNumber - OncoKB™ is a precision oncology knowledge base developed at Memorial Sloan Kettering Cancer Center that contains biological and clinical information about genomic alterations in cancer.
+     * @param {integer} pageSize - OncoKB™ is a precision oncology knowledge base developed at Memorial Sloan Kettering Cancer Center that contains biological and clinical information about genomic alterations in cancer.
+     * @param {boolean} paged - OncoKB™ is a precision oncology knowledge base developed at Memorial Sloan Kettering Cancer Center that contains biological and clinical information about genomic alterations in cancer.
+     * @param {string} q - q
+     * @param {integer} size - Size of a page
+     * @param {array} sort - Sorting criteria in the format: property(,asc|desc). Default sort order is ascending. Multiple sort criteria are supported.
+     * @param {boolean} sortSorted - OncoKB™ is a precision oncology knowledge base developed at Memorial Sloan Kettering Cancer Center that contains biological and clinical information about genomic alterations in cancer.
+     * @param {boolean} sortUnsorted - OncoKB™ is a precision oncology knowledge base developed at Memorial Sloan Kettering Cancer Center that contains biological and clinical information about genomic alterations in cancer.
+     * @param {boolean} unpaged - OncoKB™ is a precision oncology knowledge base developed at Memorial Sloan Kettering Cancer Center that contains biological and clinical information about genomic alterations in cancer.
+     */
+    getSentHistoryUsingGETWithHttpInfo(parameters: {
+        'offset' ? : number,
+        'page' ? : number,
+        'pageNumber' ? : number,
+        'pageSize' ? : number,
+        'paged' ? : boolean,
+        'q' ? : string,
+        'size' ? : number,
+        'sort' ? : Array < string > ,
+            'sortSorted' ? : boolean,
+            'sortUnsorted' ? : boolean,
+            'unpaged' ? : boolean,
+            $queryParameters ? : any,
+            $domain ? : string
+    }): Promise < request.Response > {
+        const domain = parameters.$domain ? parameters.$domain : this.domain;
+        const errorHandlers = this.errorHandlers;
+        const request = this.request;
+        let path = '/api/mails/sent-history';
+        let body: any;
+        let queryParameters: any = {};
+        let headers: any = {};
+        let form: any = {};
+        return new Promise(function(resolve, reject) {
+            headers['Accept'] = '*/*';
+
+            if (parameters['offset'] !== undefined) {
+                queryParameters['offset'] = parameters['offset'];
+            }
+
+            if (parameters['page'] !== undefined) {
+                queryParameters['page'] = parameters['page'];
+            }
+
+            if (parameters['pageNumber'] !== undefined) {
+                queryParameters['pageNumber'] = parameters['pageNumber'];
+            }
+
+            if (parameters['pageSize'] !== undefined) {
+                queryParameters['pageSize'] = parameters['pageSize'];
+            }
+
+            if (parameters['paged'] !== undefined) {
+                queryParameters['paged'] = parameters['paged'];
+            }
+
+            if (parameters['q'] !== undefined) {
+                queryParameters['q'] = parameters['q'];
+            }
+
+            if (parameters['size'] !== undefined) {
+                queryParameters['size'] = parameters['size'];
+            }
+
+            if (parameters['sort'] !== undefined) {
+                queryParameters['sort'] = parameters['sort'];
+            }
+
+            if (parameters['sortSorted'] !== undefined) {
+                queryParameters['sort.sorted'] = parameters['sortSorted'];
+            }
+
+            if (parameters['sortUnsorted'] !== undefined) {
+                queryParameters['sort.unsorted'] = parameters['sortUnsorted'];
+            }
+
+            if (parameters['unpaged'] !== undefined) {
+                queryParameters['unpaged'] = parameters['unpaged'];
+            }
+
+            if (parameters.$queryParameters) {
+                Object.keys(parameters.$queryParameters).forEach(function(parameterName) {
+                    var parameter = parameters.$queryParameters[parameterName];
+                    queryParameters[parameterName] = parameter;
+                });
+            }
+
+            request('GET', domain + path, body, headers, queryParameters, form, reject, resolve, errorHandlers);
+
+        });
+    };
+
+    /**
+     * getSentHistory
+     * @method
+     * @name API#getSentHistoryUsingGET
+     * @param {integer} offset - OncoKB™ is a precision oncology knowledge base developed at Memorial Sloan Kettering Cancer Center that contains biological and clinical information about genomic alterations in cancer.
+     * @param {integer} page - Page number of the requested page
+     * @param {integer} pageNumber - OncoKB™ is a precision oncology knowledge base developed at Memorial Sloan Kettering Cancer Center that contains biological and clinical information about genomic alterations in cancer.
+     * @param {integer} pageSize - OncoKB™ is a precision oncology knowledge base developed at Memorial Sloan Kettering Cancer Center that contains biological and clinical information about genomic alterations in cancer.
+     * @param {boolean} paged - OncoKB™ is a precision oncology knowledge base developed at Memorial Sloan Kettering Cancer Center that contains biological and clinical information about genomic alterations in cancer.
+     * @param {string} q - q
+     * @param {integer} size - Size of a page
+     * @param {array} sort - Sorting criteria in the format: property(,asc|desc). Default sort order is ascending. Multiple sort criteria are supported.
+     * @param {boolean} sortSorted - OncoKB™ is a precision oncology knowledge base developed at Memorial Sloan Kettering Cancer Center that contains biological and clinical information about genomic alterations in cancer.
+     * @param {boolean} sortUnsorted - OncoKB™ is a precision oncology knowledge base developed at Memorial Sloan Kettering Cancer Center that contains biological and clinical information about genomic alterations in cancer.
+     * @param {boolean} unpaged - OncoKB™ is a precision oncology knowledge base developed at Memorial Sloan Kettering Cancer Center that contains biological and clinical information about genomic alterations in cancer.
+     */
+    getSentHistoryUsingGET(parameters: {
+            'offset' ? : number,
+            'page' ? : number,
+            'pageNumber' ? : number,
+            'pageSize' ? : number,
+            'paged' ? : boolean,
+            'q' ? : string,
+            'size' ? : number,
+            'sort' ? : Array < string > ,
+                'sortSorted' ? : boolean,
+                'sortUnsorted' ? : boolean,
+                'unpaged' ? : boolean,
+                $queryParameters ? : any,
+                $domain ? : string
+        }): Promise < Array < UserMailsDTO >
+        > {
+            return this.getSentHistoryUsingGETWithHttpInfo(parameters).then(function(response: request.Response) {
+                return response.body;
+            });
+        };
     getTerminationWarningEmailUsingGETURL(parameters: {
         'companyId': number,
         $queryParameters ? : any
@@ -4305,7 +4948,7 @@ export default class API {
         'by': string,
         'cc' ? : string,
         'from': string,
-        'mailType': "ACTIVATION" | "CREATION" | "APPROVAL" | "API_ACCESS_APPROVAL" | "APPROVAL_ALIGN_LICENSE_WITH_COMPANY" | "REJECTION" | "REJECTION_US_SANCTION" | "REJECT_ALUMNI_ADDRESS" | "PASSWORD_RESET" | "LICENSE_REVIEW_COMMERCIAL" | "LICENSE_REVIEW_RESEARCH_COMMERCIAL" | "LICENSE_REVIEW_HOSPITAL" | "CLARIFY_ACADEMIC_FOR_PROFIT" | "CLARIFY_ACADEMIC_NON_INSTITUTE_EMAIL" | "CLARIFY_USE_CASE" | "CLARIFY_DUPLICATE_USER" | "CLARIFY_REGISTRATION_INFO" | "CLARIFY_HOSPITAL_USE" | "CLARIFY_COMMERCIAL_USE" | "HOSPITAL_APPROVAL_HIGH_VOLUME" | "LICENSE_OPTIONS" | "VERIFY_EMAIL_BEFORE_ACCOUNT_EXPIRES" | "ACTIVATE_FREE_TRIAL" | "TRIAL_ACCOUNT_IS_ABOUT_TO_EXPIRE" | "TRIAL_ACCOUNT_IS_ACTIVATED" | "DATA_USAGE_EXCEEDS_THRESHOLD" | "TOKEN_HAS_BEEN_EXPOSED" | "TOKEN_HAS_BEEN_EXPOSED_USER" | "SEARCHING_RESPONSE_STRUCTURE_HAS_CHANGED" | "LIST_OF_UNAPPROVED_USERS" | "TERMINATION_NOTIFICATION_EMAIL" | "TEST"
+        'mailType': "ACTIVATION" | "CREATION" | "APPROVAL" | "API_ACCESS_APPROVAL" | "APPROVAL_ALIGN_LICENSE_WITH_COMPANY" | "REJECTION" | "REJECTION_US_SANCTION" | "REJECT_ALUMNI_ADDRESS" | "PASSWORD_RESET" | "LICENSE_REVIEW_COMMERCIAL" | "LICENSE_REVIEW_RESEARCH_COMMERCIAL" | "LICENSE_REVIEW_HOSPITAL" | "CLARIFY_ACADEMIC_FOR_PROFIT" | "CLARIFY_ACADEMIC_NON_INSTITUTE_EMAIL" | "CLARIFY_USE_CASE" | "CLARIFY_DUPLICATE_USER" | "CLARIFY_REGISTRATION_INFO" | "CLARIFY_HOSPITAL_USE" | "HOSPITAL_APPROVAL_HIGH_VOLUME" | "CLARIFY_COMMERCIAL_USE" | "LICENSE_OPTIONS" | "VERIFY_EMAIL_BEFORE_ACCOUNT_EXPIRES" | "ACTIVATE_FREE_TRIAL" | "TRIAL_ACCOUNT_IS_ABOUT_TO_EXPIRE" | "TRIAL_ACCOUNT_IS_ACTIVATED" | "DATA_USAGE_EXCEEDS_THRESHOLD" | "TOKEN_HAS_BEEN_EXPOSED" | "TOKEN_HAS_BEEN_EXPOSED_USER" | "SEARCHING_RESPONSE_STRUCTURE_HAS_CHANGED" | "LIST_OF_UNAPPROVED_USERS" | "TERMINATION_NOTIFICATION_EMAIL" | "BULK_CUSTOM" | "BULK_ALL_USERS" | "BULK_DEVELOPERS" | "BULK_SCIENTIFIC_NEWS" | "TEST",
         'to': string,
         $queryParameters ? : any
     }): string {
@@ -4355,7 +4998,7 @@ export default class API {
         'by': string,
         'cc' ? : string,
         'from': string,
-        'mailType': "ACTIVATION" | "CREATION" | "APPROVAL" | "API_ACCESS_APPROVAL" | "APPROVAL_ALIGN_LICENSE_WITH_COMPANY" | "REJECTION" | "REJECTION_US_SANCTION" | "REJECT_ALUMNI_ADDRESS" | "PASSWORD_RESET" | "LICENSE_REVIEW_COMMERCIAL" | "LICENSE_REVIEW_RESEARCH_COMMERCIAL" | "LICENSE_REVIEW_HOSPITAL" | "CLARIFY_ACADEMIC_FOR_PROFIT" | "CLARIFY_ACADEMIC_NON_INSTITUTE_EMAIL" | "CLARIFY_USE_CASE" | "CLARIFY_DUPLICATE_USER" | "CLARIFY_REGISTRATION_INFO" | "CLARIFY_HOSPITAL_USE" | "CLARIFY_COMMERCIAL_USE" | "HOSPITAL_APPROVAL_HIGH_VOLUME" | "LICENSE_OPTIONS" | "VERIFY_EMAIL_BEFORE_ACCOUNT_EXPIRES" | "ACTIVATE_FREE_TRIAL" | "TRIAL_ACCOUNT_IS_ABOUT_TO_EXPIRE" | "TRIAL_ACCOUNT_IS_ACTIVATED" | "DATA_USAGE_EXCEEDS_THRESHOLD" | "TOKEN_HAS_BEEN_EXPOSED" | "TOKEN_HAS_BEEN_EXPOSED_USER" | "SEARCHING_RESPONSE_STRUCTURE_HAS_CHANGED" | "LIST_OF_UNAPPROVED_USERS" | "TERMINATION_NOTIFICATION_EMAIL" | "TEST",
+        'mailType': "ACTIVATION" | "CREATION" | "APPROVAL" | "API_ACCESS_APPROVAL" | "APPROVAL_ALIGN_LICENSE_WITH_COMPANY" | "REJECTION" | "REJECTION_US_SANCTION" | "REJECT_ALUMNI_ADDRESS" | "PASSWORD_RESET" | "LICENSE_REVIEW_COMMERCIAL" | "LICENSE_REVIEW_RESEARCH_COMMERCIAL" | "LICENSE_REVIEW_HOSPITAL" | "CLARIFY_ACADEMIC_FOR_PROFIT" | "CLARIFY_ACADEMIC_NON_INSTITUTE_EMAIL" | "CLARIFY_USE_CASE" | "CLARIFY_DUPLICATE_USER" | "CLARIFY_REGISTRATION_INFO" | "CLARIFY_HOSPITAL_USE" | "HOSPITAL_APPROVAL_HIGH_VOLUME" | "CLARIFY_COMMERCIAL_USE" | "LICENSE_OPTIONS" | "VERIFY_EMAIL_BEFORE_ACCOUNT_EXPIRES" | "ACTIVATE_FREE_TRIAL" | "TRIAL_ACCOUNT_IS_ABOUT_TO_EXPIRE" | "TRIAL_ACCOUNT_IS_ACTIVATED" | "DATA_USAGE_EXCEEDS_THRESHOLD" | "TOKEN_HAS_BEEN_EXPOSED" | "TOKEN_HAS_BEEN_EXPOSED_USER" | "SEARCHING_RESPONSE_STRUCTURE_HAS_CHANGED" | "LIST_OF_UNAPPROVED_USERS" | "TERMINATION_NOTIFICATION_EMAIL" | "BULK_CUSTOM" | "BULK_ALL_USERS" | "BULK_DEVELOPERS" | "BULK_SCIENTIFIC_NEWS" | "TEST",
         'to': string,
         $queryParameters ? : any,
         $domain ? : string
@@ -4438,12 +5081,150 @@ export default class API {
         'by': string,
         'cc' ? : string,
         'from': string,
-        'mailType': "ACTIVATION" | "CREATION" | "APPROVAL" | "API_ACCESS_APPROVAL" | "APPROVAL_ALIGN_LICENSE_WITH_COMPANY" | "REJECTION" | "REJECTION_US_SANCTION" | "REJECT_ALUMNI_ADDRESS" | "PASSWORD_RESET" | "LICENSE_REVIEW_COMMERCIAL" | "LICENSE_REVIEW_RESEARCH_COMMERCIAL" | "LICENSE_REVIEW_HOSPITAL" | "CLARIFY_ACADEMIC_FOR_PROFIT" | "CLARIFY_ACADEMIC_NON_INSTITUTE_EMAIL" | "CLARIFY_USE_CASE" | "CLARIFY_DUPLICATE_USER" | "CLARIFY_REGISTRATION_INFO" | "CLARIFY_HOSPITAL_USE" | "CLARIFY_COMMERCIAL_USE" | "HOSPITAL_APPROVAL_HIGH_VOLUME" | "LICENSE_OPTIONS" | "VERIFY_EMAIL_BEFORE_ACCOUNT_EXPIRES" | "ACTIVATE_FREE_TRIAL" | "TRIAL_ACCOUNT_IS_ABOUT_TO_EXPIRE" | "TRIAL_ACCOUNT_IS_ACTIVATED" | "DATA_USAGE_EXCEEDS_THRESHOLD" | "TOKEN_HAS_BEEN_EXPOSED" | "TOKEN_HAS_BEEN_EXPOSED_USER" | "SEARCHING_RESPONSE_STRUCTURE_HAS_CHANGED" | "LIST_OF_UNAPPROVED_USERS" | "TERMINATION_NOTIFICATION_EMAIL" | "TEST",
+        'mailType': "ACTIVATION" | "CREATION" | "APPROVAL" | "API_ACCESS_APPROVAL" | "APPROVAL_ALIGN_LICENSE_WITH_COMPANY" | "REJECTION" | "REJECTION_US_SANCTION" | "REJECT_ALUMNI_ADDRESS" | "PASSWORD_RESET" | "LICENSE_REVIEW_COMMERCIAL" | "LICENSE_REVIEW_RESEARCH_COMMERCIAL" | "LICENSE_REVIEW_HOSPITAL" | "CLARIFY_ACADEMIC_FOR_PROFIT" | "CLARIFY_ACADEMIC_NON_INSTITUTE_EMAIL" | "CLARIFY_USE_CASE" | "CLARIFY_DUPLICATE_USER" | "CLARIFY_REGISTRATION_INFO" | "CLARIFY_HOSPITAL_USE" | "HOSPITAL_APPROVAL_HIGH_VOLUME" | "CLARIFY_COMMERCIAL_USE" | "LICENSE_OPTIONS" | "VERIFY_EMAIL_BEFORE_ACCOUNT_EXPIRES" | "ACTIVATE_FREE_TRIAL" | "TRIAL_ACCOUNT_IS_ABOUT_TO_EXPIRE" | "TRIAL_ACCOUNT_IS_ACTIVATED" | "DATA_USAGE_EXCEEDS_THRESHOLD" | "TOKEN_HAS_BEEN_EXPOSED" | "TOKEN_HAS_BEEN_EXPOSED_USER" | "SEARCHING_RESPONSE_STRUCTURE_HAS_CHANGED" | "LIST_OF_UNAPPROVED_USERS" | "TERMINATION_NOTIFICATION_EMAIL" | "BULK_CUSTOM" | "BULK_ALL_USERS" | "BULK_DEVELOPERS" | "BULK_SCIENTIFIC_NEWS" | "TEST",
         'to': string,
         $queryParameters ? : any,
         $domain ? : string
     }): Promise < string > {
         return this.sendUserMailsUsingPOSTWithHttpInfo(parameters).then(function(response: request.Response) {
+            return response.body;
+        });
+    };
+    getContentNewsUsingGETURL(parameters: {
+        $queryParameters ? : any
+    }): string {
+        let queryParameters: any = {};
+        let path = '/api/news/content-news';
+
+        if (parameters.$queryParameters) {
+            Object.keys(parameters.$queryParameters).forEach(function(parameterName) {
+                var parameter = parameters.$queryParameters[parameterName];
+                queryParameters[parameterName] = parameter;
+            });
+        }
+        let keys = Object.keys(queryParameters);
+        return this.domain + path + (keys.length > 0 ? '?' + (keys.map(key => key + '=' + encodeURIComponent(queryParameters[key])).join('&')) : '');
+    };
+
+    /**
+     * getContentNews
+     * @method
+     * @name API#getContentNewsUsingGET
+     */
+    getContentNewsUsingGETWithHttpInfo(parameters: {
+        $queryParameters ? : any,
+            $domain ? : string
+    }): Promise < request.Response > {
+        const domain = parameters.$domain ? parameters.$domain : this.domain;
+        const errorHandlers = this.errorHandlers;
+        const request = this.request;
+        let path = '/api/news/content-news';
+        let body: any;
+        let queryParameters: any = {};
+        let headers: any = {};
+        let form: any = {};
+        return new Promise(function(resolve, reject) {
+            headers['Accept'] = '*/*';
+
+            if (parameters.$queryParameters) {
+                Object.keys(parameters.$queryParameters).forEach(function(parameterName) {
+                    var parameter = parameters.$queryParameters[parameterName];
+                    queryParameters[parameterName] = parameter;
+                });
+            }
+
+            request('GET', domain + path, body, headers, queryParameters, form, reject, resolve, errorHandlers);
+
+        });
+    };
+
+    /**
+     * getContentNews
+     * @method
+     * @name API#getContentNewsUsingGET
+     */
+    getContentNewsUsingGET(parameters: {
+            $queryParameters ? : any,
+                $domain ? : string
+        }): Promise < Array < ContentNews >
+        > {
+            return this.getContentNewsUsingGETWithHttpInfo(parameters).then(function(response: request.Response) {
+                return response.body;
+            });
+        };
+    sendBulkUserMailsUsingPOSTURL(parameters: {
+        'request': BulkUserMailRequestVM,
+        $queryParameters ? : any
+    }): string {
+        let queryParameters: any = {};
+        let path = '/api/mails/users/bulk';
+
+        if (parameters.$queryParameters) {
+            Object.keys(parameters.$queryParameters).forEach(function(parameterName) {
+                var parameter = parameters.$queryParameters[parameterName];
+                queryParameters[parameterName] = parameter;
+            });
+        }
+        let keys = Object.keys(queryParameters);
+        return this.domain + path + (keys.length > 0 ? '?' + (keys.map(key => key + '=' + encodeURIComponent(queryParameters[key])).join('&')) : '');
+    };
+
+    /**
+     * sendBulkUserMails
+     * @method
+     * @name API#sendBulkUserMailsUsingPOST
+     * @param {} request - request
+     */
+    sendBulkUserMailsUsingPOSTWithHttpInfo(parameters: {
+        'request': BulkUserMailRequestVM,
+        $queryParameters ? : any,
+        $domain ? : string
+    }): Promise < request.Response > {
+        const domain = parameters.$domain ? parameters.$domain : this.domain;
+        const errorHandlers = this.errorHandlers;
+        const request = this.request;
+        let path = '/api/mails/users/bulk';
+        let body: any;
+        let queryParameters: any = {};
+        let headers: any = {};
+        let form: any = {};
+        return new Promise(function(resolve, reject) {
+            headers['Accept'] = '*/*';
+            headers['Content-Type'] = 'application/json';
+
+            if (parameters['request'] !== undefined) {
+                body = parameters['request'];
+            }
+
+            if (parameters['request'] === undefined) {
+                reject(new Error('Missing required  parameter: request'));
+                return;
+            }
+
+            if (parameters.$queryParameters) {
+                Object.keys(parameters.$queryParameters).forEach(function(parameterName) {
+                    var parameter = parameters.$queryParameters[parameterName];
+                    queryParameters[parameterName] = parameter;
+                });
+            }
+
+            request('POST', domain + path, body, headers, queryParameters, form, reject, resolve, errorHandlers);
+
+        });
+    };
+
+    /**
+     * sendBulkUserMails
+     * @method
+     * @name API#sendBulkUserMailsUsingPOST
+     * @param {} request - request
+     */
+    sendBulkUserMailsUsingPOST(parameters: {
+        'request': BulkUserMailRequestVM,
+        $queryParameters ? : any,
+        $domain ? : string
+    }): Promise < string > {
+        return this.sendBulkUserMailsUsingPOSTWithHttpInfo(parameters).then(function(response: request.Response) {
             return response.body;
         });
     };
@@ -7865,4 +8646,130 @@ export default class API {
                 return response.body;
             });
         };
+    authorizeUsingPOSTURL(parameters: {
+        'authenticated' ? : boolean,
+        'authorities0Authority' ? : string,
+        'credentials' ? : {},
+        'details' ? : {},
+        'principal' ? : {},
+        $queryParameters ? : any
+    }): string {
+        let queryParameters: any = {};
+        let path = '/oauth2/oncokb-token';
+        if (parameters['authenticated'] !== undefined) {
+            queryParameters['authenticated'] = parameters['authenticated'];
+        }
+
+        if (parameters['authorities0Authority'] !== undefined) {
+            queryParameters['authorities[0].authority'] = parameters['authorities0Authority'];
+        }
+
+        if (parameters['credentials'] !== undefined) {
+            queryParameters['credentials'] = parameters['credentials'];
+        }
+
+        if (parameters['details'] !== undefined) {
+            queryParameters['details'] = parameters['details'];
+        }
+
+        if (parameters['principal'] !== undefined) {
+            queryParameters['principal'] = parameters['principal'];
+        }
+
+        if (parameters.$queryParameters) {
+            Object.keys(parameters.$queryParameters).forEach(function(parameterName) {
+                var parameter = parameters.$queryParameters[parameterName];
+                queryParameters[parameterName] = parameter;
+            });
+        }
+        let keys = Object.keys(queryParameters);
+        return this.domain + path + (keys.length > 0 ? '?' + (keys.map(key => key + '=' + encodeURIComponent(queryParameters[key])).join('&')) : '');
+    };
+
+    /**
+     * authorize
+     * @method
+     * @name API#authorizeUsingPOST
+     * @param {boolean} authenticated - OncoKB™ is a precision oncology knowledge base developed at Memorial Sloan Kettering Cancer Center that contains biological and clinical information about genomic alterations in cancer.
+     * @param {string} authorities0Authority - OncoKB™ is a precision oncology knowledge base developed at Memorial Sloan Kettering Cancer Center that contains biological and clinical information about genomic alterations in cancer.
+     * @param {object} credentials - OncoKB™ is a precision oncology knowledge base developed at Memorial Sloan Kettering Cancer Center that contains biological and clinical information about genomic alterations in cancer.
+     * @param {object} details - OncoKB™ is a precision oncology knowledge base developed at Memorial Sloan Kettering Cancer Center that contains biological and clinical information about genomic alterations in cancer.
+     * @param {object} principal - OncoKB™ is a precision oncology knowledge base developed at Memorial Sloan Kettering Cancer Center that contains biological and clinical information about genomic alterations in cancer.
+     */
+    authorizeUsingPOSTWithHttpInfo(parameters: {
+        'authenticated' ? : boolean,
+        'authorities0Authority' ? : string,
+        'credentials' ? : {},
+        'details' ? : {},
+        'principal' ? : {},
+        $queryParameters ? : any,
+            $domain ? : string
+    }): Promise < request.Response > {
+        const domain = parameters.$domain ? parameters.$domain : this.domain;
+        const errorHandlers = this.errorHandlers;
+        const request = this.request;
+        let path = '/oauth2/oncokb-token';
+        let body: any;
+        let queryParameters: any = {};
+        let headers: any = {};
+        let form: any = {};
+        return new Promise(function(resolve, reject) {
+            headers['Accept'] = '*/*';
+            headers['Content-Type'] = 'application/json';
+
+            if (parameters['authenticated'] !== undefined) {
+                queryParameters['authenticated'] = parameters['authenticated'];
+            }
+
+            if (parameters['authorities0Authority'] !== undefined) {
+                queryParameters['authorities[0].authority'] = parameters['authorities0Authority'];
+            }
+
+            if (parameters['credentials'] !== undefined) {
+                queryParameters['credentials'] = parameters['credentials'];
+            }
+
+            if (parameters['details'] !== undefined) {
+                queryParameters['details'] = parameters['details'];
+            }
+
+            if (parameters['principal'] !== undefined) {
+                queryParameters['principal'] = parameters['principal'];
+            }
+
+            if (parameters.$queryParameters) {
+                Object.keys(parameters.$queryParameters).forEach(function(parameterName) {
+                    var parameter = parameters.$queryParameters[parameterName];
+                    queryParameters[parameterName] = parameter;
+                });
+            }
+
+            request('POST', domain + path, body, headers, queryParameters, form, reject, resolve, errorHandlers);
+
+        });
+    };
+
+    /**
+     * authorize
+     * @method
+     * @name API#authorizeUsingPOST
+     * @param {boolean} authenticated - OncoKB™ is a precision oncology knowledge base developed at Memorial Sloan Kettering Cancer Center that contains biological and clinical information about genomic alterations in cancer.
+     * @param {string} authorities0Authority - OncoKB™ is a precision oncology knowledge base developed at Memorial Sloan Kettering Cancer Center that contains biological and clinical information about genomic alterations in cancer.
+     * @param {object} credentials - OncoKB™ is a precision oncology knowledge base developed at Memorial Sloan Kettering Cancer Center that contains biological and clinical information about genomic alterations in cancer.
+     * @param {object} details - OncoKB™ is a precision oncology knowledge base developed at Memorial Sloan Kettering Cancer Center that contains biological and clinical information about genomic alterations in cancer.
+     * @param {object} principal - OncoKB™ is a precision oncology knowledge base developed at Memorial Sloan Kettering Cancer Center that contains biological and clinical information about genomic alterations in cancer.
+     */
+    authorizeUsingPOST(parameters: {
+        'authenticated' ? : boolean,
+        'authorities0Authority' ? : string,
+        'credentials' ? : {},
+        'details' ? : {},
+        'principal' ? : {},
+        $queryParameters ? : any,
+            $domain ? : string
+    }): Promise < string > {
+        return this.authorizeUsingPOSTWithHttpInfo(parameters).then(function(response: request.Response) {
+            return response.body;
+        });
+    };
 }

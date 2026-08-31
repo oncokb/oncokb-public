@@ -55,7 +55,7 @@ export const APP_TIMESTAMP_FORMAT = 'MM/DD/YY HH:mm:ss';
 export const APP_LOCAL_DATE_FORMAT = 'MM/DD/YYYY';
 export const APP_LOCAL_DATETIME_FORMAT = 'YYYY-MM-DDTHH:mm:ss';
 export const APP_LOCAL_DATETIME_FORMAT_Z = 'YYYY-MM-DDTHH:mm:ssZ';
-export const APP_LOCAL_DATETIME_FORMAT_Z_FORCE = 'YYYY-MM-DDTHH:MM:SS[Z]';
+export const APP_LOCAL_DATETIME_FORMAT_Z_FORCE = 'YYYY-MM-DDTHH:mm:ss[Z]';
 export const APP_WHOLE_NUMBER_FORMAT = '0,0';
 export const APP_TWO_DIGITS_AFTER_POINT_NUMBER_FORMAT = '0,0.[00]';
 export const NEWS_DATE_FORMAT = 'MMDDYYYY';
@@ -1048,6 +1048,7 @@ export type DataRelease = {
 };
 
 export const DATA_RELEASES: DataRelease[] = [
+  { date: '08282026', version: 'v7.5' },
   { date: '07312026', version: 'v7.4' },
   { date: '06252026', version: 'v7.3' },
   { date: '05292026', version: 'v7.2' },

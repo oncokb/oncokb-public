@@ -9,8 +9,13 @@ import { YearEndSummaryPage } from 'app/pages/yearEndSummaryPage/YearEndSummaryP
 import { LocationDescriptorObject } from 'history';
 import classnames from 'classnames';
 import NewsPage from 'app/pages/newsPage/NewsPage';
+import AuthenticationStore from 'app/store/AuthenticationStore';
 
-type NewsPageNavTabProps = { appStore: AppStore; routing: RouterStore };
+type NewsPageNavTabProps = {
+  appStore: AppStore;
+  routing: RouterStore;
+  authenticationStore: AuthenticationStore;
+};
 
 export enum TabKey {
   NEWS = PAGE_ROUTE.NEWS,
@@ -20,7 +25,7 @@ export enum TabKey {
 export const YEAR_END_SUMMARY_RANGE = ['2025', '2024', '2023', '2022'] as const;
 const HASH_KEY_DIVIDER = '+';
 
-@inject('appStore', 'routing')
+@inject('appStore', 'authenticationStore', 'routing')
 @observer
 export class NewsPageNavTab extends React.Component<NewsPageNavTabProps> {
   readonly reactions: IReactionDisposer[] = [];
@@ -157,7 +162,13 @@ export class NewsPageNavTab extends React.Component<NewsPageNavTabProps> {
             <Col sm={10}>
               <Tab.Content>
                 <Tab.Pane eventKey={TabKey.NEWS}>
-                  <NewsPage routing={this.props.routing} />
+                  <NewsPage
+                    routing={this.props.routing}
+                    showContentNews={
+                      this.props.authenticationStore
+                        .isAuthenticatedAndApprovedUser
+                    }
+                  />
                 </Tab.Pane>
                 <Tab.Pane
                   eventKey={TabKey.YEAR_END_SUMMARY}

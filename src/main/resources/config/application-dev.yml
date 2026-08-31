@@ -194,3 +194,15 @@ application:
     enabled: true
     change-log: classpath:config/liquibase-usage/master.xml
     schema: oncokb_metrics
+  sendgrid:
+    enabled: false
+    base-url: http://localhost:8086
+    api-key: dummy-key
+    news-template: d-news-template
+    news-template-no-unsubscribe: d-news-template-no-unsubscribe
+    bulk-email-types:
+      custom: {}
+      all-users: {}
+      developers: {}
+      scientific-news: {}
+  oncokb-data-token: ## GitHub token granting read access to knowledgesystems/oncokb-data repo

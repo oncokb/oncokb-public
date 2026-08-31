@@ -234,7 +234,7 @@ class AuthenticationStore {
   public login(username: string, password: string) {
     this.loading = true;
     client
-      .authorizeUsingPOST({
+      .authorizeUsingPOST_1({
         loginVm: {
           username,
           password,

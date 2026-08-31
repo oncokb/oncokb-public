@@ -11,6 +11,10 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import org.springframework.cache.CacheManager;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -79,6 +83,19 @@ public class UserMailsService {
         return userMailsRepository.findAll().stream()
             .map(userMailsMapper::toDto)
             .collect(Collectors.toCollection(LinkedList::new));
+    }
+
+    @Transactional(readOnly = true)
+    public Page<UserMailsDTO> findAllForSendEmailPage(String query, Pageable pageable) {
+        int pageNumber = pageable == null ? 0 : pageable.getPageNumber();
+        int pageSize = pageable == null || pageable.getPageSize() <= 0 ? 20 : pageable.getPageSize();
+        Sort sort = pageable == null || pageable.getSort().isUnsorted()
+            ? Sort.by(Sort.Order.desc("sentDate"))
+            : pageable.getSort();
+        PageRequest effectivePage = PageRequest.of(pageNumber, pageSize, sort);
+
+        return userMailsRepository.findAllForSendEmailPage(query, effectivePage)
+            .map(userMailsMapper::toDto);
     }
 
 

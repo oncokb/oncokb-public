@@ -18,9 +18,13 @@ import {
   getSectionClassName,
 } from 'app/pages/account/AccountUtils';
 import client from 'app/shared/api/clientInstance';
-import { Token } from 'app/shared/api/generated/API';
+import {
+  EmailSubscriptionDTO,
+  EmailSubscriptionUpdateRequest,
+  Token,
+} from 'app/shared/api/generated/API';
 import ButtonWithTooltip from 'app/shared/button/ButtonWithTooltip';
-import { LoadingButton } from 'app/shared/button/LoadingButton';
+import styles from './AccountPage.module.scss';
 import InfoIcon from 'app/shared/icons/InfoIcon';
 import { ContactLink } from 'app/shared/links/ContactLink';
 import { Linkout } from 'app/shared/links/Linkout';
@@ -72,10 +76,14 @@ export class AccountPage extends React.Component<IRegisterProps> {
   @observable showCreateServiceAccountTokenModal = false;
   @observable isCreatingServiceAccountToken = false;
   @observable serviceAccountTokens: Token[] = [];
+  @observable emailSubscriptions: EmailSubscriptionDTO[] = [];
+  @observable isLoadingEmailSubscriptions = false;
+  @observable isUpdatingEmailSubscription = observable.map<boolean>();
 
   constructor(props: Readonly<IRegisterProps>) {
     super(props);
     this.getServiceAccountTokens();
+    this.getEmailSubscriptions();
   }
 
   @computed
@@ -143,6 +151,66 @@ export class AccountPage extends React.Component<IRegisterProps> {
         this.isCreatingServiceAccountToken = false;
       }, 100);
     }
+  }
+
+  @action.bound
+  async getEmailSubscriptions() {
+    this.isLoadingEmailSubscriptions = true;
+    try {
+      const subscriptions = await client.getEmailSubscriptionsUsingGET({});
+      this.emailSubscriptions = subscriptions || [];
+    } catch (error) {
+      notifyError(error);
+    } finally {
+      this.isLoadingEmailSubscriptions = false;
+    }
+  }
+
+  @action.bound
+  async updateEmailSubscription(groupId: number, subscribed: boolean) {
+    const groupKey = String(groupId);
+    if (this.isUpdatingEmailSubscription.get(groupKey)) {
+      return;
+    }
+
+    const currentSubscription = (this.emailSubscriptions || []).find(
+      subscription => subscription.groupId === groupId
+    );
+    if (!currentSubscription || currentSubscription.subscribed === subscribed) {
+      return;
+    }
+
+    this.isUpdatingEmailSubscription.set(groupKey, true);
+    try {
+      const emailSubscriptionUpdateRequest: EmailSubscriptionUpdateRequest = {
+        groupId,
+        subscribed,
+      };
+      const subscriptions = await client.updateEmailSubscriptionUsingPOST({
+        emailSubscriptionUpdateRequest,
+      });
+      this.emailSubscriptions = subscriptions || [];
+      notifySuccess('Email preference updated.');
+    } catch (error) {
+      notifyError(error);
+    } finally {
+      this.isUpdatingEmailSubscription.delete(groupKey);
+    }
+  }
+
+  @computed
+  get sortedEmailSubscriptions() {
+    return [...(this.emailSubscriptions || [])].sort((a, b) =>
+      (a.audience || '').localeCompare(b.audience || '')
+    );
+  }
+
+  formatSubscriptionLabel(audience: string) {
+    if (!audience) {
+      return '';
+    }
+
+    return audience.replace(/Oncokb/gi, 'OncoKB™');
   }
 
   @action.bound
@@ -343,6 +411,64 @@ export class AccountPage extends React.Component<IRegisterProps> {
               : this.apiAccessRequested
               ? awaitingApiAccess
               : noApiAccess}
+          </Col>
+        </Row>
+        <Row className={getSectionClassName()}>
+          <Col>
+            <h5>Email Preferences</h5>
+            {this.isLoadingEmailSubscriptions ? (
+              <div className="text-muted">Loading preferences...</div>
+            ) : this.sortedEmailSubscriptions.length === 0 ? (
+              <div className="text-muted">
+                No configurable email subscriptions found.
+              </div>
+            ) : (
+              this.sortedEmailSubscriptions.map(subscription => {
+                const audience = subscription.audience;
+                const groupId = subscription.groupId;
+                const checked = !!subscription.subscribed;
+                const disabled = !!this.isUpdatingEmailSubscription.get(
+                  String(groupId)
+                );
+                return (
+                  <InfoRow
+                    key={groupId}
+                    title={this.formatSubscriptionLabel(audience)}
+                  >
+                    <div
+                      className={classnames(
+                        'custom-control',
+                        'custom-switch',
+                        styles.customSwitch
+                      )}
+                    >
+                      <input
+                        type="checkbox"
+                        className="custom-control-input"
+                        id={`customSwitch${groupId}`}
+                        checked={checked}
+                        disabled={disabled}
+                        onChange={event =>
+                          this.updateEmailSubscription(
+                            groupId,
+                            event.target.checked
+                          )
+                        }
+                      />
+                      <label
+                        className="custom-control-label"
+                        htmlFor={`customSwitch${groupId}`}
+                      >
+                        {checked ? 'Subscribed' : 'Unsubscribed'}
+                        {disabled && (
+                          <span className="ml-2 text-muted">Updating...</span>
+                        )}
+                      </label>
+                    </div>
+                  </InfoRow>
+                );
+              })
+            )}
           </Col>
         </Row>
         {this.account.authorities.includes(

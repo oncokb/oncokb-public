@@ -24,15 +24,15 @@ enum ExtensionType {
 
 export const DateSelector: React.FunctionComponent<DateSelectorProps> = props => {
   const [extensionType, setExtensionType] = useState(ExtensionType.FROM_TODAY);
+  const [selectedDay, setSelectedDay] = useState<Date>();
   const baseDate = props.currentDate || new Date(Date.now()).toISOString();
 
-  let selectedDay: Date;
-
-  function handleDayChange(day: any) {
-    selectedDay = day;
+  function handleDayChange(day: Date) {
+    setSelectedDay(day);
   }
 
   function handleSelectedDay() {
+    if (!selectedDay) return;
     props.afterChangeDate(
       moment(selectedDay).format(APP_LOCAL_DATETIME_FORMAT_Z_FORCE)
     );
@@ -149,6 +149,7 @@ export const DateSelector: React.FunctionComponent<DateSelectorProps> = props =>
         <Button
           size={'sm'}
           style={{ margin: '0 auto', zIndex: 0 }}
+          disabled={!selectedDay}
           onClick={handleSelectedDay}
         >
           Set
