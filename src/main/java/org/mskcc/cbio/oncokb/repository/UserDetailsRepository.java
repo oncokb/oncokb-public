@@ -22,9 +22,6 @@ public interface UserDetailsRepository extends JpaRepository<UserDetails, Long> 
 
     List<UserDetails> findByUserIdIn(List<Long> userIds);
 
-    @Query("select ud from UserDetails ud where ud.additionalInfo like %?1%")
-    Optional<UserDetails> findOneByTrialActivationKey(String key);
-
     List<UserDetails> findByCompanyId(Long companyId);
 
     List<UserDetails> findByCompanyIdIsNull();

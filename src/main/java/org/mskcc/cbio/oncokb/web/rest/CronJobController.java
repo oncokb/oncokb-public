@@ -4,6 +4,7 @@ import org.apache.commons.lang3.StringUtils;
 import org.mskcc.cbio.oncokb.config.application.ApplicationProperties;
 import org.mskcc.cbio.oncokb.domain.*;
 import org.mskcc.cbio.oncokb.domain.enumeration.FileExtension;
+import org.mskcc.cbio.oncokb.domain.enumeration.TrialStatus;
 import org.mskcc.cbio.oncokb.querydomain.UserTokenUsage;
 import org.mskcc.cbio.oncokb.security.AuthoritiesConstants;
 import org.mskcc.cbio.oncokb.security.uuid.TokenProvider;
@@ -188,8 +189,11 @@ public class CronJobController {
             .findAllExpiresBeforeDate(Instant.now().plusSeconds(DAY_IN_SECONDS * DAYS_TO_CHECK))
             .stream()
             .filter(token ->
-                // Do not include users that have atleast one renewable token because they are regular users
-                token.getExpiration().isAfter(Instant.now()) && !tokenService.findByUser(token.getUser()).stream().filter(t -> t.isRenewable()).findAny().isPresent()
+                token.getExpiration().isAfter(Instant.now())
+                    && userService.getUserWithAuthoritiesByLogin(token.getUser().getLogin())
+                    .map(userMapper::userToUserDTO)
+                    .map(userDto -> TrialStatus.TRIAL.equals(userDto.getTrialStatus()))
+                    .orElse(false)
             )
             .filter(token -> {
                 // Do not include users that have been notified in the
