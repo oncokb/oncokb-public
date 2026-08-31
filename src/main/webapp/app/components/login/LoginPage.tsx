@@ -22,7 +22,7 @@ import { LoadingButton } from 'app/shared/button/LoadingButton';
 import {
   UNAUTHORIZED_EXPIRED,
   UNAUTHORIZED_LICENSE_AGREEMENT_NOT_ACCEPTED,
-  UNAUTHORIZED_NOT_ACTIVATED_ENDS_WITH,
+  UNAUTHORIZED_EMAIL_NOT_VERIFIED_ENDS_WITH,
 } from 'app/shared/api/errorMessages';
 import { getErrorMessage } from 'app/shared/alert/ErrorAlertUtils';
 import client from 'app/shared/api/clientInstance';
@@ -91,7 +91,7 @@ export default class LoginPage extends React.Component<ILoginProps> {
         this.props.authenticationStore.loginError
       );
       return [
-        UNAUTHORIZED_NOT_ACTIVATED_ENDS_WITH,
+        UNAUTHORIZED_EMAIL_NOT_VERIFIED_ENDS_WITH,
         UNAUTHORIZED_EXPIRED,
       ].some(str => errorMessage.endsWith(str));
     } else {

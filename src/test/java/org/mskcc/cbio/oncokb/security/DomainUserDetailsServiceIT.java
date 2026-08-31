@@ -251,13 +251,13 @@ public class DomainUserDetailsServiceIT {
 
     @Test
     public void assertThatApprovedButNotActivatedUserGetsNotActivatedError() {
-        assertThatExceptionOfType(UserNotActivatedException.class)
+        assertThatExceptionOfType(UserHasActivationKeyException.class)
             .isThrownBy(() -> domainUserDetailsService.loadUserByUsername(USER_FOUR_EMAIL));
     }
 
     @Test
     public void assertThatUserWithActivationKeyPastGracePeriodThrowsUserNotActivated() {
-        assertThatExceptionOfType(UserNotActivatedException.class)
+        assertThatExceptionOfType(DeactivatedUserException.class)
             .isThrownBy(() -> domainUserDetailsService.loadUserByUsername(USER_FIVE_LOGIN));
     }
 

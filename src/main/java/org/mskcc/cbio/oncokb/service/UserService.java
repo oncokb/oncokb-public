@@ -32,6 +32,7 @@ import org.mskcc.cbio.oncokb.service.mapper.UserMailsMapper;
 import org.mskcc.cbio.oncokb.service.mapper.UserMapper;
 import org.mskcc.cbio.oncokb.service.mapper.CompanyMapper;
 import org.mskcc.cbio.oncokb.util.StringUtil;
+import org.mskcc.cbio.oncokb.util.TokenUtil;
 import org.mskcc.cbio.oncokb.web.rest.errors.LoginAlreadyUsedException;
 
 import io.github.jhipster.security.RandomUtil;
@@ -1173,11 +1174,9 @@ public class UserService {
      * @return true if user has no renewable token, otherwise false
      */
     public boolean isUserOnTrial(UserDTO userDTO) {
-        return !tokenService.findByUser(userMapper.userDTOToUser(userDTO))
-            .stream()
-            .filter(token -> token.isRenewable())
-            .findAny()
-            .isPresent();
+        // Keep trial-account semantics in sync with UserAuthenticationTokenService
+        // and UserPage.awaitingTrialAgreementAccepted via TokenUtil.
+        return TokenUtil.isUserOnTrial(tokenService.findByUser(userMapper.userDTOToUser(userDTO)));
     }
 
     /**
