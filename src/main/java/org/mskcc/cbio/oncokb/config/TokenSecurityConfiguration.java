@@ -143,6 +143,7 @@ public class TokenSecurityConfiguration extends WebSecurityConfigurerAdapter {
             .antMatchers("/api/v1/utils/allVariantsOfUnknownSignificance.txt").hasAnyAuthority(AuthoritiesConstants.PREMIUM_USER, AuthoritiesConstants.ADMIN)
             .antMatchers("/api/v1/utils/allGenomicIndicators").hasAnyAuthority(AuthoritiesConstants.PREMIUM_USER, AuthoritiesConstants.ADMIN)
             .antMatchers("/api/v1/utils/allGenomicIndicators.txt").hasAnyAuthority(AuthoritiesConstants.PREMIUM_USER, AuthoritiesConstants.ADMIN, AuthoritiesConstants.DATA_DOWNLOAD)
+            .antMatchers("/api/v1/utils/genomicIndicators").hasAnyAuthority(AuthoritiesConstants.PREMIUM_USER, AuthoritiesConstants.ADMIN)
 
             .antMatchers("/api/v1/**").hasAnyAuthority(AuthoritiesConstants.ADMIN)
 
