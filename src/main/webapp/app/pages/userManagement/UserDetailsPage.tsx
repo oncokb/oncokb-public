@@ -604,7 +604,14 @@ export default class UserDetailsPage extends React.Component<{
   render() {
     const tableFilters: React.FunctionComponent = () => (
       <div style={{ minWidth: '300px' }}>
+        {/* sr-only keeps the label available to screen readers while visually hiding it. */}
+        {/* This gives react-select an explicit accessible name beyond placeholder text. */}
+        <label htmlFor="user-role-filter" className="sr-only">
+          Filter users by roles
+        </label>
         <Select
+          inputId="user-role-filter"
+          aria-label="Filter users by roles"
           isMulti
           isClearable
           placeholder={'Filter by roles'}

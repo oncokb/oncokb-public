@@ -683,9 +683,21 @@ public class UserService {
             .filter(userDetails -> userDetails.getUser() != null)
             .collect(Collectors.toMap(userDetails -> userDetails.getUser().getId(), userDetails -> userDetails, (left, right) -> left));
 
+        // Hydration query order is not guaranteed to match the paged id query order.
+        // Index by id and then iterate over userIds so Page content order remains stable
+        // across requests and matches the deterministic ORDER BY from the id query.
+        Map<Long, User> usersById = userRepository.findAllWithAuthoritiesAndUserMailsByIdIn(userIds)
+            .stream()
+            .collect(Collectors.toMap(User::getId, user -> user, (left, right) -> left));
+
         List<UserDTO> userDTOs = new ArrayList<>(userIds.size());
-        for (User user : userRepository.findAllWithAuthoritiesAndUserMailsByIdIn(userIds)) {
-            UserDTO dto = userMapper.userToUserDTO(user, userDetailsByUserId.get(user.getId()));
+        for (Long userId : userIds) {
+            User user = usersById.get(userId);
+            if (user == null) {
+                continue;
+            }
+
+            UserDTO dto = userMapper.userToUserDTO(user, userDetailsByUserId.get(userId));
             dto.setUserMails(userMailsMapper.toDto(user.getUserMails()));
             userDTOs.add(dto);
         }

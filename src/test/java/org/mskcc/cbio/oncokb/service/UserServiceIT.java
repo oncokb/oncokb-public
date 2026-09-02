@@ -46,6 +46,7 @@ import java.util.Map;
 import java.util.Optional;
 import java.util.Set;
 import java.util.UUID;
+import java.util.stream.Collectors;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.within;
@@ -731,8 +732,258 @@ public class UserServiceIT {
         assertThat(userService.getSendRecipientsByLoginsOrEmails(Arrays.asList("  ", null, "\t"))).isEmpty();
     }
 
+    @Test
+    @Transactional
+    public void assertThatGetManagedUsersForUserDetailsPagePreservesPagedIdOrderDuringHydration() {
+        LocalDateTime fixedDateTime = LocalDateTime.of(2024, 1, 10, 10, 0, 0);
+        when(dateTimeProvider.getNow()).thenReturn(Optional.of(fixedDateTime));
+
+        User first = createManagedUserForUserDetailsPage(
+            "managed-order-first-" + UUID.randomUUID().toString().substring(0, 8),
+            true,
+            null,
+            LicenseType.ACADEMIC,
+            "Acme",
+            "SameLastName",
+            AuthoritiesConstants.USER
+        );
+        User second = createManagedUserForUserDetailsPage(
+            "managed-order-second-" + UUID.randomUUID().toString().substring(0, 8),
+            true,
+            null,
+            LicenseType.ACADEMIC,
+            "Acme",
+            "SameLastName",
+            AuthoritiesConstants.USER
+        );
+        User third = createManagedUserForUserDetailsPage(
+            "managed-order-third-" + UUID.randomUUID().toString().substring(0, 8),
+            true,
+            null,
+            LicenseType.ACADEMIC,
+            "Acme",
+            "SameLastName",
+            AuthoritiesConstants.USER
+        );
+
+        PageRequest pageable = PageRequest.of(0, 3);
+        List<Long> expectedOrderedIds = userRepository.findManagedUserIdsForUserDetailsPage(
+            null,
+            null,
+            Collections.singletonList("__NO_LICENSE_TYPE_FILTER__"),
+            true,
+            Collections.singletonList("__NO_ROLE_FILTER__"),
+            true,
+            Constants.ANONYMOUS_USER,
+            AuthoritiesConstants.ROLE_SERVICE_ACCOUNT,
+            pageable
+        ).getContent().stream().map(Number::longValue).collect(Collectors.toList());
+
+        assertThat(expectedOrderedIds).contains(first.getId(), second.getId(), third.getId());
+
+        List<Long> actualOrderedIds = userService
+            .getManagedUsersForUserDetailsPage(null, null, Collections.emptyList(), Collections.emptyList(), pageable)
+            .getContent()
+            .stream()
+            .map(UserDTO::getId)
+            .collect(Collectors.toList());
+
+        assertThat(actualOrderedIds).containsExactlyElementsOf(expectedOrderedIds);
+    }
+
+    @Test
+    @Transactional
+    public void assertThatGetManagedUsersForUserDetailsPageAppliesRoleFilter() {
+        User adminUser = createManagedUserForUserDetailsPage(
+            "managed-role-admin-" + UUID.randomUUID().toString().substring(0, 8),
+            true,
+            null,
+            LicenseType.ACADEMIC,
+            "RoleCo",
+            "RoleLast",
+            AuthoritiesConstants.USER,
+            AuthoritiesConstants.ADMIN
+        );
+        User userOnly = createManagedUserForUserDetailsPage(
+            "managed-role-user-" + UUID.randomUUID().toString().substring(0, 8),
+            true,
+            null,
+            LicenseType.ACADEMIC,
+            "RoleCo",
+            "RoleLast",
+            AuthoritiesConstants.USER
+        );
+
+        Page<UserDTO> result = userService.getManagedUsersForUserDetailsPage(
+            null,
+            null,
+            Collections.emptyList(),
+            Collections.singletonList(AuthoritiesConstants.ADMIN),
+            PageRequest.of(0, 20)
+        );
+
+        List<Long> ids = result.getContent().stream().map(UserDTO::getId).collect(Collectors.toList());
+        assertThat(ids).contains(adminUser.getId());
+        assertThat(ids).doesNotContain(userOnly.getId());
+    }
+
+    @Test
+    @Transactional
+    public void assertThatGetManagedUsersForUserDetailsPageAppliesCombinedFilters() {
+        User matchingUser = createManagedUserForUserDetailsPage(
+            "managed-combined-match-" + UUID.randomUUID().toString().substring(0, 8),
+            true,
+            null,
+            LicenseType.COMMERCIAL,
+            "CombinedCo",
+            "FilterLast",
+            AuthoritiesConstants.USER,
+            AuthoritiesConstants.ADMIN
+        );
+        createManagedUserForUserDetailsPage(
+            "managed-combined-miss-license-" + UUID.randomUUID().toString().substring(0, 8),
+            true,
+            null,
+            LicenseType.ACADEMIC,
+            "CombinedCo",
+            "FilterLast",
+            AuthoritiesConstants.USER,
+            AuthoritiesConstants.ADMIN
+        );
+        createManagedUserForUserDetailsPage(
+            "managed-combined-miss-role-" + UUID.randomUUID().toString().substring(0, 8),
+            true,
+            null,
+            LicenseType.COMMERCIAL,
+            "CombinedCo",
+            "FilterLast",
+            AuthoritiesConstants.USER
+        );
+        createManagedUserForUserDetailsPage(
+            "managed-combined-miss-verified-" + UUID.randomUUID().toString().substring(0, 8),
+            false,
+            RandomUtil.generateActivationKey(),
+            LicenseType.COMMERCIAL,
+            "CombinedCo",
+            "FilterLast",
+            AuthoritiesConstants.USER,
+            AuthoritiesConstants.ADMIN
+        );
+
+        Page<UserDTO> result = userService.getManagedUsersForUserDetailsPage(
+            "combined-match",
+            true,
+            Collections.singletonList(LicenseType.COMMERCIAL),
+            Collections.singletonList(AuthoritiesConstants.ADMIN),
+            PageRequest.of(0, 20)
+        );
+
+        List<Long> ids = result.getContent().stream().map(UserDTO::getId).collect(Collectors.toList());
+        assertThat(ids).contains(matchingUser.getId());
+        assertThat(ids).hasSize(1);
+    }
+
+    @Test
+    @Transactional
+    public void assertThatGetManagedUsersForUserDetailsPageHandlesEmptyFiltersWithoutErrors() {
+        User expected = createManagedUserForUserDetailsPage(
+            "managed-empty-filters-" + UUID.randomUUID().toString().substring(0, 8),
+            true,
+            null,
+            LicenseType.HOSPITAL,
+            "NoFilterCo",
+            "NoFilterLast",
+            AuthoritiesConstants.USER
+        );
+
+        Page<UserDTO> result = userService.getManagedUsersForUserDetailsPage(
+            null,
+            null,
+            Collections.emptyList(),
+            Collections.emptyList(),
+            PageRequest.of(0, 20)
+        );
+
+        assertThat(result.getContent().stream().map(UserDTO::getId)).contains(expected.getId());
+    }
+
+    @Test
+    @Transactional
+    public void assertThatGetManagedUsersForUserDetailsPagePaginationIsStableAcrossPagesWithTies() {
+        LocalDateTime fixedDateTime = LocalDateTime.of(2024, 1, 12, 9, 0, 0);
+        when(dateTimeProvider.getNow()).thenReturn(Optional.of(fixedDateTime));
+
+        for (int i = 0; i < 6; i++) {
+            createManagedUserForUserDetailsPage(
+                "managed-stable-" + i + "-" + UUID.randomUUID().toString().substring(0, 6),
+                true,
+                null,
+                LicenseType.ACADEMIC,
+                "StableCo",
+                "StableLast",
+                AuthoritiesConstants.USER
+            );
+        }
+
+        Page<UserDTO> page0First = userService.getManagedUsersForUserDetailsPage(
+            null,
+            null,
+            Collections.emptyList(),
+            Collections.emptyList(),
+            PageRequest.of(0, 3)
+        );
+        Page<UserDTO> page0Second = userService.getManagedUsersForUserDetailsPage(
+            null,
+            null,
+            Collections.emptyList(),
+            Collections.emptyList(),
+            PageRequest.of(0, 3)
+        );
+        Page<UserDTO> page1 = userService.getManagedUsersForUserDetailsPage(
+            null,
+            null,
+            Collections.emptyList(),
+            Collections.emptyList(),
+            PageRequest.of(1, 3)
+        );
+
+        List<Long> firstCallIds = page0First.getContent().stream().map(UserDTO::getId).collect(Collectors.toList());
+        List<Long> secondCallIds = page0Second.getContent().stream().map(UserDTO::getId).collect(Collectors.toList());
+        List<Long> secondPageIds = page1.getContent().stream().map(UserDTO::getId).collect(Collectors.toList());
+
+        assertThat(firstCallIds).containsExactlyElementsOf(secondCallIds);
+        assertThat(secondPageIds).doesNotContainAnyElementsOf(firstCallIds);
+    }
+
     private User saveUserWithAuthorities(String login, boolean withEmail, String... authorityNames) {
         return saveUserWithEmailAndAuthorities(login, withEmail ? login + "@example.org" : null, authorityNames);
+    }
+
+    private User createManagedUserForUserDetailsPage(
+        String login,
+        boolean activated,
+        String activationKey,
+        LicenseType licenseType,
+        String companyName,
+        String lastName,
+        String... authorityNames
+    ) {
+        User managedUser = saveUserWithEmailAndAuthorities(login, login + "@example.org", authorityNames);
+        managedUser.setActivated(activated);
+        managedUser.setActivationKey(activationKey);
+        managedUser.setLastName(lastName);
+        managedUser.setFirstName("Managed");
+        managedUser = userRepository.saveAndFlush(managedUser);
+
+        UserDetails userDetails = new UserDetails();
+        userDetails.setUser(managedUser);
+        userDetails.setAccountRequestStatus(AccountRequestStatus.APPROVED);
+        userDetails.setLicenseType(licenseType);
+        userDetails.setCompanyName(companyName);
+        userDetails.setCity("New York");
+        userDetails.setCountry("USA");
+        userDetailsRepository.saveAndFlush(userDetails);
+        return managedUser;
     }
 
     private User saveUserWithEmailAndAuthorities(String login, String email, String... authorityNames) {
