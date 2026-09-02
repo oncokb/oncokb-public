@@ -738,8 +738,10 @@ public class UserServiceIT {
         LocalDateTime fixedDateTime = LocalDateTime.of(2024, 1, 10, 10, 0, 0);
         when(dateTimeProvider.getNow()).thenReturn(Optional.of(fixedDateTime));
 
+        String uniqueGroup = "managed-order-group-" + UUID.randomUUID().toString().substring(0, 8);
+
         User first = createManagedUserForUserDetailsPage(
-            "managed-order-first-" + UUID.randomUUID().toString().substring(0, 8),
+            uniqueGroup + "-first",
             true,
             null,
             LicenseType.ACADEMIC,
@@ -748,7 +750,7 @@ public class UserServiceIT {
             AuthoritiesConstants.USER
         );
         User second = createManagedUserForUserDetailsPage(
-            "managed-order-second-" + UUID.randomUUID().toString().substring(0, 8),
+            uniqueGroup + "-second",
             true,
             null,
             LicenseType.ACADEMIC,
@@ -757,7 +759,7 @@ public class UserServiceIT {
             AuthoritiesConstants.USER
         );
         User third = createManagedUserForUserDetailsPage(
-            "managed-order-third-" + UUID.randomUUID().toString().substring(0, 8),
+            uniqueGroup + "-third",
             true,
             null,
             LicenseType.ACADEMIC,
@@ -768,7 +770,7 @@ public class UserServiceIT {
 
         PageRequest pageable = PageRequest.of(0, 3);
         List<Long> expectedOrderedIds = userRepository.findManagedUserIdsForUserDetailsPage(
-            null,
+            uniqueGroup,
             null,
             Collections.singletonList("__NO_LICENSE_TYPE_FILTER__"),
             true,
@@ -782,7 +784,7 @@ public class UserServiceIT {
         assertThat(expectedOrderedIds).contains(first.getId(), second.getId(), third.getId());
 
         List<Long> actualOrderedIds = userService
-            .getManagedUsersForUserDetailsPage(null, null, Collections.emptyList(), Collections.emptyList(), pageable)
+            .getManagedUsersForUserDetailsPage(uniqueGroup, null, Collections.emptyList(), Collections.emptyList(), pageable)
             .getContent()
             .stream()
             .map(UserDTO::getId)
