@@ -253,14 +253,28 @@ export type MatchVariantResult = {
         'result': Array < MatchVariant >
 
 };
+export type ValidationError = {
+    'message': string
+
+        'type': "REFERENCE_ALLELE_MISMATCH" | "POSITION_OUT_OF_RANGE" | "REVERSED_POSITION_RANGE" | "MALFORMED_ALTERATION" | "AMBIGUOUS_FUSION_SEPARATOR"
+
+};
 export type ProteinChangeValidation = {
     'message': string
 
-        'messageType': "INVALID_PROTEIN_CHANGE" | "NORMALIZED_DELETED_SEQUENCE" | "NO_PROTEIN_SEQUENCE" | "TRANSCRIPT_SERVICE_DISABLED" | "TRANSCRIPT_SERVICE_UNAVAILABLE"
+        'messageType': "INVALID_PROTEIN_CHANGE" | "NORMALIZED_DELETED_SEQUENCE" | "NO_PROTEIN_SEQUENCE" | "TRANSCRIPT_SERVICE_DISABLED" | "TRANSCRIPT_SERVICE_UNAVAILABLE" | "AMBIGUOUS_FUSION_SEPARATOR"
 
         'normalizedProteinChange': string
 
         'status': "NORMALIZED" | "INVALID" | "UNCHECKED"
+
+};
+export type GenomicIndicatorQuery = {
+    'hugoSymbol': string
+
+        'inheritanceMechanisms': Array < "AUTOSOMAL_DOMINANT" | "AUTOSOMAL_RECESSIVE" | "X_LINKED_RECESSIVE" | "CARRIER" >
+
+        'variant': string
 
 };
 export type MatchVariantRequest = {
@@ -329,12 +343,6 @@ export type BiologicalVariant = {
         'penetrance': string
 
         'variant': Alteration
-
-};
-export type AlterationValidationError = {
-    'message': string
-
-        'type': "REFERENCE_ALLELE_MISMATCH" | "POSITION_OUT_OF_RANGE" | "REVERSED_POSITION_RANGE" | "MALFORMED_ALTERATION"
 
 };
 export type GenomicIndicator = {
@@ -769,6 +777,12 @@ export type AnnotateMutationByHGVSgQuery = {
         'tumorType': string
 
 };
+export type GenomicIndicatorQueryResp = {
+    'genomicIndicators': Array < GenomicIndicator >
+
+        'query': GenomicIndicatorQuery
+
+};
 export type Tag = {
     'description': string
 
@@ -808,9 +822,7 @@ export type SomaticVariantAnnotation = {
 
         'alteration': Alteration
 
-        'alterationValidationError': AlterationValidationError | null
-
-        'alternativeOncoKbVariant': AlternativeOncoKbVariant | null
+        'alternativeOncoKbVariant': AlternativeOncoKbVariant
 
         'background': string
 
@@ -819,6 +831,8 @@ export type SomaticVariantAnnotation = {
         'diagnosticImplications': Array < Implication >
 
         'diagnosticSummary': string
+
+        'errors': Array < ValidationError >
 
         'exon': string
 
@@ -2563,6 +2577,83 @@ export default class OncoKbPrivateAPI {
         }): Promise < Array < string >
         > {
             return this.utilFilterHgvsgBasedOnCoveragePostUsingPOSTWithHttpInfo(parameters).then(function(response: request.Response) {
+                return response.body;
+            });
+        };
+    utilsGenomicIndicatorsPostUsingPOSTURL(parameters: {
+        'body': Array < GenomicIndicatorQuery > ,
+        $queryParameters ? : any
+    }): string {
+        let queryParameters: any = {};
+        let path = '/utils/genomicIndicators';
+
+        if (parameters.$queryParameters) {
+            Object.keys(parameters.$queryParameters).forEach(function(parameterName) {
+                var parameter = parameters.$queryParameters[parameterName];
+                queryParameters[parameterName] = parameter;
+            });
+        }
+        let keys = Object.keys(queryParameters);
+        return this.domain + path + (keys.length > 0 ? '?' + (keys.map(key => key + '=' + encodeURIComponent(queryParameters[key])).join('&')) : '');
+    };
+
+    /**
+     * Get the germline genomic indicators for a list of genes and variants.
+     * @method
+     * @name OncoKbPrivateAPI#utilsGenomicIndicatorsPostUsingPOST
+     * @param {} body - List of queries. Each query specifies a hugoSymbol, variant, and optional inheritanceMechanisms filter.
+     */
+    utilsGenomicIndicatorsPostUsingPOSTWithHttpInfo(parameters: {
+        'body': Array < GenomicIndicatorQuery > ,
+        $queryParameters ? : any,
+        $domain ? : string
+    }): Promise < request.Response > {
+        const domain = parameters.$domain ? parameters.$domain : this.domain;
+        const errorHandlers = this.errorHandlers;
+        const request = this.request;
+        let path = '/utils/genomicIndicators';
+        let body: any;
+        let queryParameters: any = {};
+        let headers: any = {};
+        let form: any = {};
+        return new Promise(function(resolve, reject) {
+            headers['Accept'] = 'application/json';
+            headers['Content-Type'] = 'application/json';
+
+            if (parameters['body'] !== undefined) {
+                body = parameters['body'];
+            }
+
+            if (parameters['body'] === undefined) {
+                reject(new Error('Missing required  parameter: body'));
+                return;
+            }
+
+            if (parameters.$queryParameters) {
+                Object.keys(parameters.$queryParameters).forEach(function(parameterName) {
+                    var parameter = parameters.$queryParameters[parameterName];
+                    queryParameters[parameterName] = parameter;
+                });
+            }
+
+            request('POST', domain + path, body, headers, queryParameters, form, reject, resolve, errorHandlers);
+
+        });
+    };
+
+    /**
+     * Get the germline genomic indicators for a list of genes and variants.
+     * @method
+     * @name OncoKbPrivateAPI#utilsGenomicIndicatorsPostUsingPOST
+     * @param {} body - List of queries. Each query specifies a hugoSymbol, variant, and optional inheritanceMechanisms filter.
+     */
+    utilsGenomicIndicatorsPostUsingPOST(parameters: {
+            'body': Array < GenomicIndicatorQuery > ,
+            $queryParameters ? : any,
+            $domain ? : string
+        }): Promise < Array < GenomicIndicatorQueryResp >
+        > {
+            return this.utilsGenomicIndicatorsPostUsingPOSTWithHttpInfo(parameters).then(function(response: request.Response) {
                 return response.body;
             });
         };
