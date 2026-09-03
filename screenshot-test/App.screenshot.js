@@ -47,8 +47,14 @@ const evidenceLevelsGermline = fs
 const tumorTypes = fs
   .readFileSync(`${DATA_DIR}private-utils-tumorTypes.json`)
   .toString();
-const userSize = fs.readFileSync(`${DATA_DIR}api-users-size.json`).toString();
-const userSizeCount = String(JSON.parse(userSize).length);
+const registeredUsers = JSON.parse(
+  fs.readFileSync(`${DATA_DIR}api-users-size.json`).toString()
+);
+const registeredUsersResponse = JSON.stringify({
+  totalCount: registeredUsers.length,
+  users: registeredUsers,
+});
+const userSize = JSON.stringify(registeredUsers);
 const userDetails = fs
   .readFileSync(`${DATA_DIR}api-users-details.json`)
   .toString();
@@ -190,10 +196,7 @@ function getMockResponse(url) {
     return {
       status: 200,
       contentType: 'application/json',
-      body: userSize,
-      headers: {
-        'x-total-count': userSizeCount,
-      },
+      body: registeredUsersResponse,
     };
   }
 
