@@ -41,10 +41,6 @@
       "description": "O Auth Token Controller"
     },
     {
-      "name": "o-auth-token-controller",
-      "description": "O Auth Token Controller"
-    },
-    {
       "name": "token-resource",
       "description": "Token Resource"
     },
@@ -397,8 +393,8 @@
         "parameters": [
           {
             "in": "body",
-            "name": "emailSubscriptionUpdateRequest",
-            "description": "emailSubscriptionUpdateRequest",
+            "name": "request",
+            "description": "request",
             "required": true,
             "schema": {
               "$ref": "#/definitions/EmailSubscriptionUpdateRequest"
@@ -2502,39 +2498,6 @@
         "deprecated": false
       }
     },
-    "/api/news/content-news": {
-      "get": {
-        "tags": [
-          "news-resource"
-        ],
-        "summary": "getContentNews",
-        "operationId": "getContentNewsUsingGET",
-        "produces": [
-          "*/*"
-        ],
-        "responses": {
-          "200": {
-            "description": "OK",
-            "schema": {
-              "type": "array",
-              "items": {
-                "$ref": "#/definitions/ContentNews"
-              }
-            }
-          },
-          "401": {
-            "description": "Unauthorized"
-          },
-          "403": {
-            "description": "Forbidden"
-          },
-          "404": {
-            "description": "Not Found"
-          }
-        },
-        "deprecated": false
-      }
-    },
     "/api/mails/users/bulk": {
       "post": {
         "tags": [
@@ -2568,6 +2531,39 @@
           },
           "201": {
             "description": "Created"
+          },
+          "401": {
+            "description": "Unauthorized"
+          },
+          "403": {
+            "description": "Forbidden"
+          },
+          "404": {
+            "description": "Not Found"
+          }
+        },
+        "deprecated": false
+      }
+    },
+    "/api/news/content-news": {
+      "get": {
+        "tags": [
+          "news-resource"
+        ],
+        "summary": "getContentNews",
+        "operationId": "getContentNewsUsingGET",
+        "produces": [
+          "*/*"
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "schema": {
+              "type": "array",
+              "items": {
+                "$ref": "#/definitions/ContentNews"
+              }
+            }
           },
           "401": {
             "description": "Unauthorized"
@@ -4202,12 +4198,15 @@
       }
     },
     "/api/users/registered": {
-      "get": {
+      "post": {
         "tags": [
           "user-resource"
         ],
         "summary": "getAllRegisteredUsers",
-        "operationId": "getAllRegisteredUsersUsingGET",
+        "operationId": "getAllRegisteredUsersUsingPOST",
+        "consumes": [
+          "application/json"
+        ],
         "produces": [
           "*/*"
         ],
@@ -4246,6 +4245,15 @@
             "in": "query",
             "required": false,
             "type": "boolean"
+          },
+          {
+            "in": "body",
+            "name": "request",
+            "description": "request",
+            "required": false,
+            "schema": {
+              "$ref": "#/definitions/RegisteredUsersRequestVM"
+            }
           },
           {
             "name": "size",
@@ -4289,11 +4297,11 @@
           "200": {
             "description": "OK",
             "schema": {
-              "type": "array",
-              "items": {
-                "$ref": "#/definitions/UserDTO"
-              }
+              "$ref": "#/definitions/RegisteredUsersResponseVM"
             }
+          },
+          "201": {
+            "description": "Created"
           },
           "401": {
             "description": "Unauthorized"
@@ -4627,27 +4635,6 @@
       },
       "title": "ApiAccessRequest"
     },
-    "CancerTypeUpdates": {
-      "type": "object",
-      "properties": {
-        "cancerType": {
-          "type": "string"
-        },
-        "treatmentUpdates": {
-          "type": "array",
-          "items": {
-            "$ref": "#/definitions/TreatmentUpdates"
-          }
-        },
-        "updates": {
-          "type": "array",
-          "items": {
-            "$ref": "#/definitions/Update"
-          }
-        }
-      },
-      "title": "CancerTypeUpdates"
-    },
     "BulkUserMailRequestVM": {
       "type": "object",
       "required": [
@@ -4683,6 +4670,27 @@
         }
       },
       "title": "BulkUserMailRequestVM"
+    },
+    "CancerTypeUpdates": {
+      "type": "object",
+      "properties": {
+        "cancerType": {
+          "type": "string"
+        },
+        "treatmentUpdates": {
+          "type": "array",
+          "items": {
+            "$ref": "#/definitions/TreatmentUpdates"
+          }
+        },
+        "updates": {
+          "type": "array",
+          "items": {
+            "$ref": "#/definitions/Update"
+          }
+        }
+      },
+      "title": "CancerTypeUpdates"
     },
     "CompanyAdditionalInfoDTO": {
       "type": "object",
@@ -4931,6 +4939,35 @@
         }
       },
       "title": "ContentNews"
+    },
+    "EmailSubscriptionDTO": {
+      "type": "object",
+      "properties": {
+        "audience": {
+          "type": "string"
+        },
+        "groupId": {
+          "type": "integer",
+          "format": "int64"
+        },
+        "subscribed": {
+          "type": "boolean"
+        }
+      },
+      "title": "EmailSubscriptionDTO"
+    },
+    "EmailSubscriptionUpdateRequest": {
+      "type": "object",
+      "properties": {
+        "groupId": {
+          "type": "integer",
+          "format": "int64"
+        },
+        "subscribed": {
+          "type": "boolean"
+        }
+      },
+      "title": "EmailSubscriptionUpdateRequest"
     },
     "GeneUpdates": {
       "type": "object",
@@ -5246,6 +5283,52 @@
         }
       },
       "title": "PasswordChangeDTO"
+    },
+    "RegisteredUsersRequestVM": {
+      "type": "object",
+      "properties": {
+        "emailVerified": {
+          "type": "boolean"
+        },
+        "licenseTypes": {
+          "type": "array",
+          "items": {
+            "type": "string",
+            "enum": [
+              "ACADEMIC",
+              "COMMERCIAL",
+              "RESEARCH_IN_COMMERCIAL",
+              "HOSPITAL"
+            ]
+          }
+        },
+        "query": {
+          "type": "string"
+        },
+        "roles": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
+        }
+      },
+      "title": "RegisteredUsersRequestVM"
+    },
+    "RegisteredUsersResponseVM": {
+      "type": "object",
+      "properties": {
+        "totalCount": {
+          "type": "integer",
+          "format": "int64"
+        },
+        "users": {
+          "type": "array",
+          "items": {
+            "$ref": "#/definitions/UserDTO"
+          }
+        }
+      },
+      "title": "RegisteredUsersResponseVM"
     },
     "ResourceUsageAnalysisRow": {
       "type": "object",
@@ -5980,39 +6063,6 @@
         }
       },
       "title": "UserRegistrationSummary"
-    },
-    "EmailSubscriptionDTO": {
-      "type": "object",
-      "properties": {
-        "audience": {
-          "type": "string"
-        },
-        "groupId": {
-          "type": "integer",
-          "format": "int64"
-        },
-        "subscribed": {
-          "type": "boolean"
-        }
-      },
-      "title": "EmailSubscriptionDTO"
-    },
-    "EmailSubscriptionUpdateRequest": {
-      "type": "object",
-      "required": [
-        "groupId",
-        "subscribed"
-      ],
-      "properties": {
-        "groupId": {
-          "type": "integer",
-          "format": "int64"
-        },
-        "subscribed": {
-          "type": "boolean"
-        }
-      },
-      "title": "EmailSubscriptionUpdateRequest"
     },
     "VerifyCompanyNameVM": {
       "type": "object",

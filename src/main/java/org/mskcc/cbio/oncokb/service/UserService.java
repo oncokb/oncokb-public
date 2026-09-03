@@ -620,6 +620,92 @@ public class UserService {
     }
 
     @Transactional(readOnly = true)
+    public Page<UserDTO> getManagedUsersForUserDetailsPage(
+        String query,
+        Boolean emailVerified,
+        List<LicenseType> licenseTypes,
+        List<String> roles,
+        Pageable pageable
+    ) {
+        List<String> licenseTypeValues = licenseTypes == null
+            ? Collections.emptyList()
+            : licenseTypes.stream().filter(Objects::nonNull).map(Enum::name).collect(Collectors.toList());
+        boolean licenseTypesEmpty = licenseTypeValues.isEmpty();
+        if (licenseTypesEmpty) {
+            // Keep a non-empty list for the native IN (:licenseTypes) binding.
+            // Without this placeholder we would need a second query variant that omits
+            // the IN clause entirely when no license filter is provided.
+            licenseTypeValues = Collections.singletonList("__NO_LICENSE_TYPE_FILTER__");
+        }
+
+        List<String> roleValues = roles == null
+            ? Collections.emptyList()
+            : roles.stream().filter(StringUtils::isNotBlank).collect(Collectors.toList());
+        boolean rolesEmpty = roleValues.isEmpty();
+        if (rolesEmpty) {
+            // Same pattern as licenseTypes: provide a non-empty list for IN (:roles)
+            // so one query can handle both filtered and unfiltered requests.
+            // Otherwise we'd need a separate query path without the role IN clause.
+            roleValues = Collections.singletonList("__NO_ROLE_FILTER__");
+        }
+
+        // A single consolidated query could be more efficient than this 3-step hydration
+        // (ids -> user details -> users with authorities/mails), but that would require
+        // larger repository refactors and more complex mapping logic.
+        // For now, paging by ids first gives a meaningful performance improvement while
+        // keeping repository changes scoped.
+        Page<Number> userIdPage = userRepository.findManagedUserIdsForUserDetailsPage(
+            query,
+            emailVerified,
+            licenseTypeValues,
+            licenseTypesEmpty,
+            roleValues,
+            rolesEmpty,
+            Constants.ANONYMOUS_USER,
+            AuthoritiesConstants.ROLE_SERVICE_ACCOUNT,
+            pageable
+        );
+
+        // Native queries do not reliably materialize numeric columns as Long across DB drivers;
+        // ids may come back as BigInteger/BigDecimal/Integer depending on dialect.
+        // We fetch as Number and normalize with longValue() to avoid binding/type-cast errors.
+        List<Long> userIds = userIdPage.getContent()
+            .stream()
+            .filter(Objects::nonNull)
+            .map(Number::longValue)
+            .collect(Collectors.toList());
+        if (userIds.isEmpty()) {
+            return new PageImpl<>(Collections.emptyList(), pageable, userIdPage.getTotalElements());
+        }
+
+        Map<Long, UserDetails> userDetailsByUserId = userDetailsRepository.findByUserIdIn(userIds)
+            .stream()
+            .filter(userDetails -> userDetails.getUser() != null)
+            .collect(Collectors.toMap(userDetails -> userDetails.getUser().getId(), userDetails -> userDetails, (left, right) -> left));
+
+        // Hydration query order is not guaranteed to match the paged id query order.
+        // Index by id and then iterate over userIds so Page content order remains stable
+        // across requests and matches the deterministic ORDER BY from the id query.
+        Map<Long, User> usersById = userRepository.findAllWithAuthoritiesAndUserMailsByIdIn(userIds)
+            .stream()
+            .collect(Collectors.toMap(User::getId, user -> user, (left, right) -> left));
+
+        List<UserDTO> userDTOs = new ArrayList<>(userIds.size());
+        for (Long userId : userIds) {
+            User user = usersById.get(userId);
+            if (user == null) {
+                continue;
+            }
+
+            UserDTO dto = userMapper.userToUserDTO(user, userDetailsByUserId.get(userId));
+            dto.setUserMails(userMailsMapper.toDto(user.getUserMails()));
+            userDTOs.add(dto);
+        }
+
+        return new PageImpl<>(userDTOs, pageable, userIdPage.getTotalElements());
+    }
+
+    @Transactional(readOnly = true)
     @Cacheable(cacheResolver = "userCacheResolver", key = "#root.methodName")
     public List<UserDTO> getAllManagedUsers() {
         final PageRequest pageable = PageRequest.of(0, (int) userRepository.count());

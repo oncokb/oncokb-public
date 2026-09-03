@@ -1,12 +1,11 @@
 package org.mskcc.cbio.oncokb.web.rest;
 
-import io.github.jhipster.web.util.PaginationUtil;
 import io.github.jhipster.web.util.ResponseUtil;
 
+import org.apache.commons.lang3.StringUtils;
 import org.mskcc.cbio.oncokb.config.Constants;
 import org.mskcc.cbio.oncokb.domain.Token;
 import org.mskcc.cbio.oncokb.domain.User;
-import org.mskcc.cbio.oncokb.domain.enumeration.LicenseType;
 import org.mskcc.cbio.oncokb.repository.UserRepository;
 import org.mskcc.cbio.oncokb.security.AuthoritiesConstants;
 import org.mskcc.cbio.oncokb.service.MailService;
@@ -22,18 +21,18 @@ import org.mskcc.cbio.oncokb.web.rest.errors.BadRequestAlertException;
 import org.mskcc.cbio.oncokb.web.rest.errors.EmailAlreadyUsedException;
 import org.mskcc.cbio.oncokb.web.rest.errors.LoginAlreadyUsedException;
 import org.mskcc.cbio.oncokb.web.rest.vm.ManagedUserVM;
+import org.mskcc.cbio.oncokb.web.rest.vm.RegisteredUsersRequestVM;
+import org.mskcc.cbio.oncokb.web.rest.vm.RegisteredUsersResponseVM;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
-import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
-import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 
 import javax.mail.MessagingException;
 import javax.validation.Valid;
@@ -199,17 +198,45 @@ public class UserResource {
     }
 
     /**
-     * {@code GET /users/registered} : get all registered user deatils.
+     * {@code POST /users/registered} : get all registered user deatils.
      *
      * @param pageable the pagination information.
      * @return the {@link ResponseEntity} with status {@code 200 (OK)} and with body all users.
      */
-    @GetMapping("/users/registered")
+    @PostMapping("/users/registered")
     @PreAuthorize("hasAuthority(\"" + AuthoritiesConstants.ADMIN + "\")")
-    public ResponseEntity<List<UserDTO>> getAllRegisteredUsers(Pageable pageable) {
-        final Page<UserDTO> page = userService.getAllRegisteredUsers(pageable);
-        HttpHeaders headers = PaginationUtil.generatePaginationHttpHeaders(ServletUriComponentsBuilder.fromCurrentRequest(), page);
-        return new ResponseEntity<>(page.getContent(), headers, HttpStatus.OK);
+    public ResponseEntity<RegisteredUsersResponseVM> getAllRegisteredUsers(
+        @RequestBody(required = false) RegisteredUsersRequestVM request,
+        Pageable pageable
+    ) {
+        String query = request == null ? null : request.getQuery();
+        Boolean emailVerified = request == null ? null : request.getEmailVerified();
+        List<String> roles = parseRoles(request == null ? null : request.getRoles());
+        final Page<UserDTO> page = userService.getManagedUsersForUserDetailsPage(
+            query,
+            emailVerified,
+            request == null ? null : request.getLicenseTypes(),
+            roles,
+            pageable
+        );
+        RegisteredUsersResponseVM response = new RegisteredUsersResponseVM(page.getTotalElements(), page.getContent());
+        return new ResponseEntity<>(response, HttpStatus.OK);
+    }
+
+    private List<String> parseRoles(List<String> roles) {
+        if (roles == null || roles.isEmpty()) {
+            return null;
+        }
+
+        List<String> parsedRoles = new ArrayList<>();
+        for (String role : roles) {
+            String parsedRole = StringUtils.trimToNull(role);
+            if (parsedRole != null) {
+                parsedRoles.add(parsedRole);
+            }
+        }
+
+        return parsedRoles.isEmpty() ? null : parsedRoles;
     }
 
 
