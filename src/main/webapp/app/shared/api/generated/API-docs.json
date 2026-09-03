@@ -4297,10 +4297,7 @@
           "200": {
             "description": "OK",
             "schema": {
-              "type": "array",
-              "items": {
-                "$ref": "#/definitions/UserDTO"
-              }
+              "$ref": "#/definitions/RegisteredUsersResponseVM"
             }
           },
           "201": {
@@ -5305,11 +5302,33 @@
             ]
           }
         },
-        "q": {
+        "query": {
           "type": "string"
+        },
+        "roles": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
         }
       },
       "title": "RegisteredUsersRequestVM"
+    },
+    "RegisteredUsersResponseVM": {
+      "type": "object",
+      "properties": {
+        "totalCount": {
+          "type": "integer",
+          "format": "int64"
+        },
+        "users": {
+          "type": "array",
+          "items": {
+            "$ref": "#/definitions/UserDTO"
+          }
+        }
+      },
+      "title": "RegisteredUsersResponseVM"
     },
     "ResourceUsageAnalysisRow": {
       "type": "object",

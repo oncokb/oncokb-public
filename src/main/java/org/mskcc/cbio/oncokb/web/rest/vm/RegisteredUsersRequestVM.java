@@ -5,17 +5,17 @@ import org.mskcc.cbio.oncokb.domain.enumeration.LicenseType;
 import java.util.List;
 
 public class RegisteredUsersRequestVM {
-    private String q;
+    private String query;
     private Boolean emailVerified;
     private List<LicenseType> licenseTypes;
     private List<String> roles;
 
-    public String getQ() {
-        return q;
+    public String getQuery() {
+        return query;
     }
 
-    public void setQ(String q) {
-        this.q = q;
+    public void setQuery(String query) {
+        this.query = query;
     }
 
     public Boolean getEmailVerified() {

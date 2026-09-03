@@ -291,6 +291,22 @@ export type PasswordChangeDTO = {
         'newPassword': string
 
 };
+export type RegisteredUsersRequestVM = {
+    'emailVerified': boolean
+
+        'licenseTypes': Array < "ACADEMIC" | "COMMERCIAL" | "RESEARCH_IN_COMMERCIAL" | "HOSPITAL" >
+
+        'query': string
+
+        'roles': Array < string >
+
+};
+export type RegisteredUsersResponseVM = {
+    'totalCount': number
+
+        'users': Array < UserDTO >
+
+};
 export type ResourceUsageAnalysisRow = {
     'company': string
 
@@ -8152,17 +8168,15 @@ export default class API {
                 return response.body;
             });
         };
-    getAllRegisteredUsersUsingGETURL(parameters: {
-        'emailVerified' ? : boolean,
-        'licenseTypes' ? : Array < string > ,
-            'offset' ? : number,
-            'page' ? : number,
-            'pageNumber' ? : number,
-            'pageSize' ? : number,
-            'paged' ? : boolean,
-            'q' ? : string,
-            'size' ? : number,
-            'sort' ? : Array < string > ,
+    getAllRegisteredUsersUsingPOSTURL(parameters: {
+        'offset' ? : number,
+        'page' ? : number,
+        'pageNumber' ? : number,
+        'pageSize' ? : number,
+        'paged' ? : boolean,
+        'request' ? : RegisteredUsersRequestVM,
+        'size' ? : number,
+        'sort' ? : Array < string > ,
             'sortSorted' ? : boolean,
             'sortUnsorted' ? : boolean,
             'unpaged' ? : boolean,
@@ -8170,14 +8184,6 @@ export default class API {
     }): string {
         let queryParameters: any = {};
         let path = '/api/users/registered';
-        if (parameters['emailVerified'] !== undefined) {
-            queryParameters['emailVerified'] = parameters['emailVerified'];
-        }
-
-        if (parameters['licenseTypes'] !== undefined) {
-            queryParameters['licenseTypes'] = parameters['licenseTypes'];
-        }
-
         if (parameters['offset'] !== undefined) {
             queryParameters['offset'] = parameters['offset'];
         }
@@ -8196,10 +8202,6 @@ export default class API {
 
         if (parameters['paged'] !== undefined) {
             queryParameters['paged'] = parameters['paged'];
-        }
-
-        if (parameters['q'] !== undefined) {
-            queryParameters['q'] = parameters['q'];
         }
 
         if (parameters['size'] !== undefined) {
@@ -8235,32 +8237,28 @@ export default class API {
     /**
      * getAllRegisteredUsers
      * @method
-     * @name API#getAllRegisteredUsersUsingGET
-     * @param {boolean} emailVerified - emailVerified
-     * @param {array} licenseTypes - licenseTypes
+     * @name API#getAllRegisteredUsersUsingPOST
      * @param {integer} offset - OncoKB™ is a precision oncology knowledge base developed at Memorial Sloan Kettering Cancer Center that contains biological and clinical information about genomic alterations in cancer.
      * @param {integer} page - Page number of the requested page
      * @param {integer} pageNumber - OncoKB™ is a precision oncology knowledge base developed at Memorial Sloan Kettering Cancer Center that contains biological and clinical information about genomic alterations in cancer.
      * @param {integer} pageSize - OncoKB™ is a precision oncology knowledge base developed at Memorial Sloan Kettering Cancer Center that contains biological and clinical information about genomic alterations in cancer.
      * @param {boolean} paged - OncoKB™ is a precision oncology knowledge base developed at Memorial Sloan Kettering Cancer Center that contains biological and clinical information about genomic alterations in cancer.
-     * @param {string} q - q
+     * @param {} request - request
      * @param {integer} size - Size of a page
      * @param {array} sort - Sorting criteria in the format: property(,asc|desc). Default sort order is ascending. Multiple sort criteria are supported.
      * @param {boolean} sortSorted - OncoKB™ is a precision oncology knowledge base developed at Memorial Sloan Kettering Cancer Center that contains biological and clinical information about genomic alterations in cancer.
      * @param {boolean} sortUnsorted - OncoKB™ is a precision oncology knowledge base developed at Memorial Sloan Kettering Cancer Center that contains biological and clinical information about genomic alterations in cancer.
      * @param {boolean} unpaged - OncoKB™ is a precision oncology knowledge base developed at Memorial Sloan Kettering Cancer Center that contains biological and clinical information about genomic alterations in cancer.
      */
-    getAllRegisteredUsersUsingGETWithHttpInfo(parameters: {
-        'emailVerified' ? : boolean,
-        'licenseTypes' ? : Array < string > ,
-            'offset' ? : number,
-            'page' ? : number,
-            'pageNumber' ? : number,
-            'pageSize' ? : number,
-            'paged' ? : boolean,
-            'q' ? : string,
-            'size' ? : number,
-            'sort' ? : Array < string > ,
+    getAllRegisteredUsersUsingPOSTWithHttpInfo(parameters: {
+        'offset' ? : number,
+        'page' ? : number,
+        'pageNumber' ? : number,
+        'pageSize' ? : number,
+        'paged' ? : boolean,
+        'request' ? : RegisteredUsersRequestVM,
+        'size' ? : number,
+        'sort' ? : Array < string > ,
             'sortSorted' ? : boolean,
             'sortUnsorted' ? : boolean,
             'unpaged' ? : boolean,
@@ -8277,14 +8275,7 @@ export default class API {
         let form: any = {};
         return new Promise(function(resolve, reject) {
             headers['Accept'] = '*/*';
-
-            if (parameters['emailVerified'] !== undefined) {
-                queryParameters['emailVerified'] = parameters['emailVerified'];
-            }
-
-            if (parameters['licenseTypes'] !== undefined) {
-                queryParameters['licenseTypes'] = parameters['licenseTypes'];
-            }
+            headers['Content-Type'] = 'application/json';
 
             if (parameters['offset'] !== undefined) {
                 queryParameters['offset'] = parameters['offset'];
@@ -8306,8 +8297,8 @@ export default class API {
                 queryParameters['paged'] = parameters['paged'];
             }
 
-            if (parameters['q'] !== undefined) {
-                queryParameters['q'] = parameters['q'];
+            if (parameters['request'] !== undefined) {
+                body = parameters['request'];
             }
 
             if (parameters['size'] !== undefined) {
@@ -8337,7 +8328,7 @@ export default class API {
                 });
             }
 
-            request('GET', domain + path, body, headers, queryParameters, form, reject, resolve, errorHandlers);
+            request('POST', domain + path, body, headers, queryParameters, form, reject, resolve, errorHandlers);
 
         });
     };
@@ -8345,43 +8336,38 @@ export default class API {
     /**
      * getAllRegisteredUsers
      * @method
-     * @name API#getAllRegisteredUsersUsingGET
-     * @param {boolean} emailVerified - emailVerified
-     * @param {array} licenseTypes - licenseTypes
+     * @name API#getAllRegisteredUsersUsingPOST
      * @param {integer} offset - OncoKB™ is a precision oncology knowledge base developed at Memorial Sloan Kettering Cancer Center that contains biological and clinical information about genomic alterations in cancer.
      * @param {integer} page - Page number of the requested page
      * @param {integer} pageNumber - OncoKB™ is a precision oncology knowledge base developed at Memorial Sloan Kettering Cancer Center that contains biological and clinical information about genomic alterations in cancer.
      * @param {integer} pageSize - OncoKB™ is a precision oncology knowledge base developed at Memorial Sloan Kettering Cancer Center that contains biological and clinical information about genomic alterations in cancer.
      * @param {boolean} paged - OncoKB™ is a precision oncology knowledge base developed at Memorial Sloan Kettering Cancer Center that contains biological and clinical information about genomic alterations in cancer.
-     * @param {string} q - q
+     * @param {} request - request
      * @param {integer} size - Size of a page
      * @param {array} sort - Sorting criteria in the format: property(,asc|desc). Default sort order is ascending. Multiple sort criteria are supported.
      * @param {boolean} sortSorted - OncoKB™ is a precision oncology knowledge base developed at Memorial Sloan Kettering Cancer Center that contains biological and clinical information about genomic alterations in cancer.
      * @param {boolean} sortUnsorted - OncoKB™ is a precision oncology knowledge base developed at Memorial Sloan Kettering Cancer Center that contains biological and clinical information about genomic alterations in cancer.
      * @param {boolean} unpaged - OncoKB™ is a precision oncology knowledge base developed at Memorial Sloan Kettering Cancer Center that contains biological and clinical information about genomic alterations in cancer.
      */
-    getAllRegisteredUsersUsingGET(parameters: {
-            'emailVerified' ? : boolean,
-            'licenseTypes' ? : Array < string > ,
-                'offset' ? : number,
-                'page' ? : number,
-                'pageNumber' ? : number,
-                'pageSize' ? : number,
-                'paged' ? : boolean,
-                'q' ? : string,
-                'size' ? : number,
-                'sort' ? : Array < string > ,
-                'sortSorted' ? : boolean,
-                'sortUnsorted' ? : boolean,
-                'unpaged' ? : boolean,
-                $queryParameters ? : any,
-                $domain ? : string
-        }): Promise < Array < UserDTO >
-        > {
-            return this.getAllRegisteredUsersUsingGETWithHttpInfo(parameters).then(function(response: request.Response) {
-                return response.body;
-            });
-        };
+    getAllRegisteredUsersUsingPOST(parameters: {
+        'offset' ? : number,
+        'page' ? : number,
+        'pageNumber' ? : number,
+        'pageSize' ? : number,
+        'paged' ? : boolean,
+        'request' ? : RegisteredUsersRequestVM,
+        'size' ? : number,
+        'sort' ? : Array < string > ,
+            'sortSorted' ? : boolean,
+            'sortUnsorted' ? : boolean,
+            'unpaged' ? : boolean,
+            $queryParameters ? : any,
+            $domain ? : string
+    }): Promise < RegisteredUsersResponseVM > {
+        return this.getAllRegisteredUsersUsingPOSTWithHttpInfo(parameters).then(function(response: request.Response) {
+            return response.body;
+        });
+    };
     getUsersTokensUsingPOSTURL(parameters: {
         'logins': Array < string > ,
         $queryParameters ? : any

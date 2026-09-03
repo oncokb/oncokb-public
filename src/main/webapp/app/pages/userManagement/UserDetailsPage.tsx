@@ -5,7 +5,7 @@ import { action, computed, observable } from 'mobx';
 import { inject, observer } from 'mobx-react';
 import { defaultSortMethod } from 'app/shared/utils/ReactTableUtils';
 import client from 'app/shared/api/clientInstance';
-import { UserDTO } from 'app/shared/api/generated/API';
+import API, { UserDTO } from 'app/shared/api/generated/API';
 import { match } from 'react-router';
 import { Button, Col, Row } from 'react-bootstrap';
 import { RouterStore } from 'mobx-react-router';
@@ -102,29 +102,27 @@ export default class UserDetailsPage extends React.Component<{
   async getUsers() {
     this.isLoadingUsers = true;
     try {
-      const response = await request
-        .post(getClientInstanceURL('api/users/registered'))
-        .query({
-          page: this.userPage,
-          size: this.userPageSize,
-        })
-        .send({
-          q: this.searchKeyword || undefined,
-          emailVerified: this.currentSelectedFilter.emailVerified,
+      const response = await client.getAllRegisteredUsersUsingPOST({
+        request: {
+          query: this.searchKeyword,
+          emailVerified: this.currentSelectedFilter.emailVerified!,
           licenseTypes:
             this.currentSelectedFilter.licenseTypes &&
             this.currentSelectedFilter.licenseTypes.length > 0
               ? this.currentSelectedFilter.licenseTypes
-              : undefined,
+              : undefined!,
           roles:
             this.currentSelectedFilter.roles &&
             this.currentSelectedFilter.roles.length > 0
               ? this.currentSelectedFilter.roles
-              : undefined,
-        });
+              : undefined!,
+        },
+        page: this.userPage,
+        size: this.userPageSize,
+      });
 
-      this.users = response.body || [];
-      const totalCount = Number(response.header['x-total-count'] || 0);
+      this.users = response?.users || [];
+      const totalCount = Number(response?.totalCount || 0);
       this.userTotalCount = Number.isFinite(totalCount) ? totalCount : 0;
       this.userPages = Math.max(
         1,
