@@ -2,7 +2,7 @@
   "swagger": "2.0",
   "info": {
     "description": "OncoKB, a comprehensive and curated precision oncology knowledge base, offers oncologists detailed, evidence-based information about individual somatic mutations and structural alterations present in patient tumors with the goal of supporting optimal treatment decisions.",
-    "version": "v1.6.0",
+    "version": "v1.7.0",
     "title": "OncoKB APIs",
     "contact": {
       "name": "OncoKB",
@@ -1023,6 +1023,65 @@
               "type": "array",
               "items": {
                 "type": "string"
+              }
+            }
+          },
+          "201": {
+            "description": "Created"
+          },
+          "400": {
+            "description": "Error, error message will be given.",
+            "schema": {
+              "$ref": "#/definitions/ApiHttpError"
+            }
+          },
+          "401": {
+            "description": "Unauthorized"
+          },
+          "403": {
+            "description": "Forbidden"
+          },
+          "404": {
+            "description": "Not Found"
+          }
+        }
+      }
+    },
+    "/utils/genomicIndicators": {
+      "post": {
+        "tags": [
+          "Utils"
+        ],
+        "summary": "utilsGenomicIndicatorsPost",
+        "description": "Get the germline genomic indicators for a list of genes and variants.",
+        "operationId": "utilsGenomicIndicatorsPostUsingPOST",
+        "consumes": [
+          "application/json"
+        ],
+        "produces": [
+          "application/json"
+        ],
+        "parameters": [
+          {
+            "in": "body",
+            "name": "body",
+            "description": "List of queries. Each query specifies a hugoSymbol, variant, and optional inheritanceMechanisms filter.",
+            "required": true,
+            "schema": {
+              "type": "array",
+              "items": {
+                "$ref": "#/definitions/GenomicIndicatorQuery"
+              }
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "schema": {
+              "type": "array",
+              "items": {
+                "$ref": "#/definitions/GenomicIndicatorQueryResp"
               }
             }
           },
@@ -2834,6 +2893,27 @@
         }
       }
     },
+    "ValidationError": {
+      "type": "object",
+      "properties": {
+        "message": {
+          "type": "string",
+          "example": "BRAF A600E: The reference amino acid at position 600 is V instead of A on the OncoKB canonical transcript.",
+          "description": "The same reason in words, naming what was queried and what OncoKB has instead."
+        },
+        "type": {
+          "type": "string",
+          "description": "What is wrong with the query.",
+          "enum": [
+            "REFERENCE_ALLELE_MISMATCH",
+            "POSITION_OUT_OF_RANGE",
+            "REVERSED_POSITION_RANGE",
+            "MALFORMED_ALTERATION",
+            "AMBIGUOUS_FUSION_SEPARATOR"
+          ]
+        }
+      }
+    },
     "ProteinChangeValidation": {
       "type": "object",
       "properties": {
@@ -2847,7 +2927,8 @@
             "NORMALIZED_DELETED_SEQUENCE",
             "NO_PROTEIN_SEQUENCE",
             "TRANSCRIPT_SERVICE_DISABLED",
-            "TRANSCRIPT_SERVICE_UNAVAILABLE"
+            "TRANSCRIPT_SERVICE_UNAVAILABLE",
+            "AMBIGUOUS_FUSION_SEPARATOR"
           ]
         },
         "normalizedProteinChange": {
@@ -2862,6 +2943,33 @@
           ]
         }
       }
+    },
+    "GenomicIndicatorQuery": {
+      "type": "object",
+      "properties": {
+        "hugoSymbol": {
+          "type": "string",
+          "description": "The gene symbol used in Human Genome Organisation."
+        },
+        "inheritanceMechanisms": {
+          "type": "array",
+          "description": "List of inheritance mechanisms used to filter the returned genomic indicators. The special value CARRIER is matched against the genomic indicator name rather than the inheritance mechanism. Example: AUTOSOMAL_DOMINANT,CARRIER",
+          "items": {
+            "type": "string",
+            "enum": [
+              "AUTOSOMAL_DOMINANT",
+              "AUTOSOMAL_RECESSIVE",
+              "X_LINKED_RECESSIVE",
+              "CARRIER"
+            ]
+          }
+        },
+        "variant": {
+          "type": "string",
+          "description": "Variant name"
+        }
+      },
+      "description": "Query for retrieving the germline genomic indicators associated with a specific gene and variant"
     },
     "MatchVariantRequest": {
       "type": "object",
@@ -3009,26 +3117,6 @@
         },
         "variant": {
           "$ref": "#/definitions/Alteration"
-        }
-      }
-    },
-    "AlterationValidationError": {
-      "type": "object",
-      "properties": {
-        "message": {
-          "type": "string",
-          "example": "BRAF A600E: The reference amino acid at position 600 is V instead of A on the OncoKB canonical transcript.",
-          "description": "The same reason in words, naming the queried alteration and what the OncoKB canonical sequence has instead."
-        },
-        "type": {
-          "type": "string",
-          "description": "The reason the alteration was rejected.",
-          "enum": [
-            "REFERENCE_ALLELE_MISMATCH",
-            "POSITION_OUT_OF_RANGE",
-            "REVERSED_POSITION_RANGE",
-            "MALFORMED_ALTERATION"
-          ]
         }
       }
     },
@@ -4115,6 +4203,23 @@
         }
       }
     },
+    "GenomicIndicatorQueryResp": {
+      "type": "object",
+      "properties": {
+        "genomicIndicators": {
+          "type": "array",
+          "description": "The germline genomic indicators associated with the query",
+          "items": {
+            "$ref": "#/definitions/GenomicIndicator"
+          }
+        },
+        "query": {
+          "description": "The query the genomic indicators were retrieved for",
+          "$ref": "#/definitions/GenomicIndicatorQuery"
+        }
+      },
+      "description": "The genomic indicators associated with a queried gene and variant"
+    },
     "Tag": {
       "type": "object",
       "properties": {
@@ -4206,10 +4311,6 @@
         "alteration": {
           "$ref": "#/definitions/Alteration"
         },
-        "alterationValidationError": {
-          "description": "(Nullable) Why the queried alteration was rejected as impossible against the OncoKB canonical sequence, leaving the query annotated at the gene level only. Carries both the reason to branch on and the same reason in words. Null whenever the variant itself was annotated. See docs/alteration-validation-errors.md",
-          "$ref": "#/definitions/AlterationValidationError"
-        },
         "alternativeOncoKbVariant": {
           "$ref": "#/definitions/AlternativeOncoKbVariant"
         },
@@ -4231,6 +4332,13 @@
         "diagnosticSummary": {
           "type": "string",
           "description": "Diagnostic summary. Defaulted to \"\""
+        },
+        "errors": {
+          "type": "array",
+          "description": "Everything OncoKB found wrong with the query, each carrying both a reason to branch on and the same reason in words. Empty whenever there is nothing wrong, and never null. An error may mean the variant was left unannotated - a queried alteration that cannot exist against the OncoKB canonical sequence is annotated at the gene level only. See docs/validation-errors.md",
+          "items": {
+            "$ref": "#/definitions/ValidationError"
+          }
         },
         "exon": {
           "type": "string",
