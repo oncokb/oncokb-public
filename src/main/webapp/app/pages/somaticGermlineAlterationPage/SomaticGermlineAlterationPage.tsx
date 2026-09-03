@@ -20,6 +20,7 @@ import {
   isPositionalAlteration,
   getCategoricalAlterationDescription,
   getImplicationsFromTags,
+  getCanonicalFusionAlteration,
 } from 'app/shared/utils/Utils';
 import {
   getAlterationPageLink,
@@ -150,6 +151,39 @@ export class SomaticGermlineAlterationPage extends React.Component<
       },
       true
     );
+
+    reaction(
+      () => this.canonicalFusionAlteration,
+      this.redirectToCanonicalPage
+    );
+  }
+
+  @computed
+  get canonicalFusionAlteration() {
+    if (!this.annotationData.isComplete) {
+      return undefined;
+    }
+    return getCanonicalFusionAlteration(
+      this.store.alterationQuery,
+      this.annotationData.result.query.alteration
+    );
+  }
+
+  @action.bound
+  redirectToCanonicalPage(canonicalAlteration?: string) {
+    if (!canonicalAlteration) {
+      return;
+    }
+    this.props.routing.history.replace({
+      pathname: getAlterationPageLink({
+        hugoSymbol: this.store.hugoSymbol,
+        alteration: canonicalAlteration,
+        cancerType: this.store.cancerTypeName,
+        germline: this.store.germline,
+      }),
+      search: this.props.location.search,
+      hash: this.props.location.hash,
+    });
   }
 
   @action.bound
