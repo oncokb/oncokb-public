@@ -26,7 +26,13 @@ import {
   parseAlterationPagePath,
   AlterationPageLink,
 } from 'app/shared/utils/UrlUtils';
-import { computed, reaction, action, observable } from 'mobx';
+import {
+  computed,
+  reaction,
+  action,
+  observable,
+  IReactionDisposer,
+} from 'mobx';
 import { GENETIC_TYPE } from 'app/components/geneticTypeTabs/GeneticTypeTabs';
 import { observer, inject } from 'mobx-react';
 import classnames from 'classnames';
@@ -112,79 +118,85 @@ export class SomaticGermlineCancerTypePage extends React.Component<
   // open it by default without overriding an explicit choice afterwards.
   @observable additionalGeneInfoToggledTo?: boolean;
 
+  readonly reactions: IReactionDisposer[] = [];
+
   constructor(props: SomaticGermlineCancerTypePageProps) {
     super(props);
     const alterationQuery = decodeSlash(props.match.params.alteration);
-
-    reaction(
-      () => [this.props.routing.location.pathname],
-      () => {
-        if (!this.store) {
-          return;
-        }
-        this.store.hugoSymbolQuery = this.props.match.params.hugoSymbol;
-        this.store.alterationQuery =
-          decodeSlash(this.props.match.params.alteration) ?? '';
-        this.store.tumorTypeQuery =
-          decodeSlash(this.props.match.params.tumorType) ?? '';
-      }
-    );
-    reaction(
-      () => [this.props.routing.location.search],
-      ([search]) => {
-        if (!this.store) {
-          return;
-        }
-        this.store.referenceGenomeQuery =
-          getReferenceGenomeFromSearch(search) || REFERENCE_GENOME.GRCh37;
-      },
-      { fireImmediately: true }
-    );
-    reaction(
-      () => [this.geneticType],
-      ([geneticType]) => {
-        const referenceGenome =
-          getReferenceGenomeFromSearch(this.props.location.search) ||
-          REFERENCE_GENOME.GRCh37;
-        if (props.match.params) {
-          this.store = new AnnotationStore({
-            type: alterationQuery
-              ? AnnotationType.PROTEIN_CHANGE
-              : AnnotationType.GENE,
-            hugoSymbolQuery: props.match.params.hugoSymbol,
-            alterationQuery,
-            germline: geneticType === GENETIC_TYPE.GERMLINE,
-            tumorTypeQuery: props.match.params.tumorType
-              ? decodeSlash(props.match.params.tumorType)
-              : props.match.params.tumorType,
-            referenceGenomeQuery: referenceGenome,
-          });
-          if (this.store.cancerTypeName) {
-            this.showMutationEffect = false;
+    this.reactions.push(
+      reaction(
+        () => [this.props.routing.location.pathname],
+        () => {
+          if (!this.store) {
+            return;
           }
+          this.store.hugoSymbolQuery = this.props.match.params.hugoSymbol;
+          this.store.alterationQuery =
+            decodeSlash(this.props.match.params.alteration) ?? '';
+          this.store.tumorTypeQuery =
+            decodeSlash(this.props.match.params.tumorType) ?? '';
         }
-      },
-      true
-    );
-    reaction(
-      () => [props.location.hash],
-      ([hash]) => {
-        const queryStrings = QueryString.parse(
-          hash
-        ) as AlterationPageHashQueries;
-        if (queryStrings.tab) {
-          if (queryStrings.tab === ANNOTATION_PAGE_TAB_KEYS.FDA) {
-            this.props.appStore.inFdaRecognizedContent = true;
+      ),
+      reaction(
+        () => [this.props.routing.location.search],
+        ([search]) => {
+          if (!this.store) {
+            return;
           }
-        }
-      },
-      true
+          this.store.referenceGenomeQuery =
+            getReferenceGenomeFromSearch(search) || REFERENCE_GENOME.GRCh37;
+        },
+        { fireImmediately: true }
+      ),
+      reaction(
+        () => [this.geneticType],
+        ([geneticType]) => {
+          const referenceGenome =
+            getReferenceGenomeFromSearch(this.props.location.search) ||
+            REFERENCE_GENOME.GRCh37;
+          if (props.match.params) {
+            this.store = new AnnotationStore({
+              type: alterationQuery
+                ? AnnotationType.PROTEIN_CHANGE
+                : AnnotationType.GENE,
+              hugoSymbolQuery: props.match.params.hugoSymbol,
+              alterationQuery,
+              germline: geneticType === GENETIC_TYPE.GERMLINE,
+              tumorTypeQuery: props.match.params.tumorType
+                ? decodeSlash(props.match.params.tumorType)
+                : props.match.params.tumorType,
+              referenceGenomeQuery: referenceGenome,
+            });
+            if (this.store.cancerTypeName) {
+              this.showMutationEffect = false;
+            }
+          }
+        },
+        true
+      ),
+      reaction(
+        () => [props.location.hash],
+        ([hash]) => {
+          const queryStrings = QueryString.parse(
+            hash
+          ) as AlterationPageHashQueries;
+          if (queryStrings.tab) {
+            if (queryStrings.tab === ANNOTATION_PAGE_TAB_KEYS.FDA) {
+              this.props.appStore.inFdaRecognizedContent = true;
+            }
+          }
+        },
+        true
+      ),
+      reaction(
+        () => this.canonicalFusionAlteration,
+        this.redirectToCanonicalPage
+      )
     );
+  }
 
-    reaction(
-      () => this.canonicalFusionAlteration,
-      this.redirectToCanonicalPage
-    );
+  componentWillUnmount() {
+    this.reactions.forEach(componentReaction => componentReaction());
   }
 
   @computed
