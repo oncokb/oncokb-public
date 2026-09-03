@@ -27,7 +27,13 @@ import {
   parseAlterationPagePath,
   AlterationPageLink,
 } from 'app/shared/utils/UrlUtils';
-import { computed, reaction, action, observable } from 'mobx';
+import {
+  computed,
+  reaction,
+  action,
+  observable,
+  IReactionDisposer,
+} from 'mobx';
 import { GENETIC_TYPE } from 'app/components/geneticTypeTabs/GeneticTypeTabs';
 import { observer, inject } from 'mobx-react';
 import styles from './SomaticGermlineAlterationPage.module.scss';
@@ -117,6 +123,8 @@ export class SomaticGermlineAlterationPage extends React.Component<
   // open it by default without overriding an explicit choice afterwards.
   @observable additionalGeneInfoToggledTo?: boolean;
 
+  readonly reactions: IReactionDisposer[] = [];
+
   constructor(props: SomaticGermlineAlterationPageProps) {
     super(props);
     const alterationQuery = decodeSlash(props.match.params.alteration);
@@ -136,26 +144,31 @@ export class SomaticGermlineAlterationPage extends React.Component<
       this.showMutationEffect = false;
     }
 
-    reaction(
-      () => [props.location.hash],
-      ([hash]) => {
-        const queryStrings = QueryString.parse(
-          hash
-        ) as AlterationPageHashQueries;
-        if (queryStrings.tab) {
-          this.selectedTab = queryStrings.tab;
-          if (queryStrings.tab === ANNOTATION_PAGE_TAB_KEYS.FDA) {
-            this.props.appStore.inFdaRecognizedContent = true;
+    this.reactions.push(
+      reaction(
+        () => [props.location.hash],
+        ([hash]) => {
+          const queryStrings = QueryString.parse(
+            hash
+          ) as AlterationPageHashQueries;
+          if (queryStrings.tab) {
+            this.selectedTab = queryStrings.tab;
+            if (queryStrings.tab === ANNOTATION_PAGE_TAB_KEYS.FDA) {
+              this.props.appStore.inFdaRecognizedContent = true;
+            }
           }
-        }
-      },
-      true
+        },
+        true
+      ),
+      reaction(
+        () => this.canonicalFusionAlteration,
+        this.redirectToCanonicalPage
+      )
     );
+  }
 
-    reaction(
-      () => this.canonicalFusionAlteration,
-      this.redirectToCanonicalPage
-    );
+  componentWillUnmount() {
+    this.reactions.forEach(componentReaction => componentReaction());
   }
 
   @computed
