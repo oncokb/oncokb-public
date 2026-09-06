@@ -11,7 +11,7 @@ import javax.validation.Valid;
 import org.mskcc.cbio.oncokb.domain.Company;
 import org.mskcc.cbio.oncokb.domain.Token;
 import org.mskcc.cbio.oncokb.domain.User;
-import org.mskcc.cbio.oncokb.domain.enumeration.LicenseType;
+import org.mskcc.cbio.oncokb.domain.enumeration.CompanyApiAccessStatus;
 import org.mskcc.cbio.oncokb.repository.CompanyRepository;
 import org.mskcc.cbio.oncokb.security.AuthoritiesConstants;
 import org.mskcc.cbio.oncokb.security.SecurityUtils;
@@ -145,19 +145,41 @@ public class CompanyResource {
 
         CompanyDTO result = companyService.updateCompany(companyVM);
 
-        if (!result.getLicenseType().equals(LicenseType.ACADEMIC)) {
-            List<UserDTO> usersInCompany = userService.getCompanyUsers(result.getId());
-            for (UserDTO user : usersInCompany) {
-                Set<String> userAuthorities = user.getAuthorities();
-                if (!userAuthorities.contains(AuthoritiesConstants.API)) {
-                    userAuthorities.add(AuthoritiesConstants.API);
-                    userService.updateUserAndTokens(user);
-                }
-            }
-        }
+        enforceCompanyApiAccess(result);
 
         return ResponseEntity.ok()
             .body(result);
+    }
+
+    /**
+     * Enforce the company's API access status ({@link AuthoritiesConstants#API}) on all of its users.
+     * <ul>
+     *     <li>{@code ENABLED} - grant ROLE_API to every company user that is missing it.</li>
+     *     <li>{@code DISABLED} - remove ROLE_API from every company user that has it.</li>
+     *     <li>{@code USER_SPECIFIC} - do not enforce; API access is managed per user by an admin.</li>
+     * </ul>
+     *
+     * @param company the company whose users should be reconciled.
+     */
+    private void enforceCompanyApiAccess(CompanyDTO company) {
+        CompanyApiAccessStatus apiAccessStatus = company.getApiAccessStatus();
+        if (apiAccessStatus == null || apiAccessStatus == CompanyApiAccessStatus.USER_SPECIFIC) {
+            return;
+        }
+
+        boolean grantApiAccess = apiAccessStatus == CompanyApiAccessStatus.ENABLED;
+        List<UserDTO> usersInCompany = userService.getCompanyUsers(company.getId());
+        for (UserDTO user : usersInCompany) {
+            Set<String> userAuthorities = user.getAuthorities();
+            boolean hasApiAccess = userAuthorities.contains(AuthoritiesConstants.API);
+            if (grantApiAccess && !hasApiAccess) {
+                userAuthorities.add(AuthoritiesConstants.API);
+                userService.updateUserAndTokens(user);
+            } else if (!grantApiAccess && hasApiAccess) {
+                userAuthorities.remove(AuthoritiesConstants.API);
+                userService.updateUserAndTokens(user);
+            }
+        }
     }
 
     /**

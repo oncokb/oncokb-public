@@ -16,6 +16,8 @@ import org.mskcc.cbio.oncokb.domain.enumeration.LicenseModel;
 
 import org.mskcc.cbio.oncokb.domain.enumeration.LicenseStatus;
 
+import org.mskcc.cbio.oncokb.domain.enumeration.CompanyApiAccessStatus;
+
 /**
  * A Company.
  */
@@ -57,6 +59,11 @@ public class Company implements Serializable {
     @Enumerated(EnumType.STRING)
     @Column(name = "license_status", nullable = false)
     private LicenseStatus licenseStatus;
+
+    @NotNull
+    @Enumerated(EnumType.STRING)
+    @Column(name = "api_access_status", nullable = false)
+    private CompanyApiAccessStatus apiAccessStatus;
 
     @Size(max = 255)
     @Column(name = "business_contact", length = 255)
@@ -163,6 +170,19 @@ public class Company implements Serializable {
         this.licenseStatus = licenseStatus;
     }
 
+    public CompanyApiAccessStatus getApiAccessStatus() {
+        return apiAccessStatus;
+    }
+
+    public Company apiAccessStatus(CompanyApiAccessStatus apiAccessStatus) {
+        this.apiAccessStatus = apiAccessStatus;
+        return this;
+    }
+
+    public void setApiAccessStatus(CompanyApiAccessStatus apiAccessStatus) {
+        this.apiAccessStatus = apiAccessStatus;
+    }
+
     public String getBusinessContact() {
         return businessContact;
     }
@@ -255,6 +275,7 @@ public class Company implements Serializable {
             ", licenseType='" + getLicenseType() + "'" +
             ", licenseModel='" + getLicenseModel() + "'" +
             ", licenseStatus='" + getLicenseStatus() + "'" +
+            ", apiAccessStatus='" + getApiAccessStatus() + "'" +
             ", businessContact='" + getBusinessContact() + "'" +
             ", legalContact='" + getLegalContact() + "'" +
             ", additionalInfo='" + getAdditionalInfo() + "'" +
