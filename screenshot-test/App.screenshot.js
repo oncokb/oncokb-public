@@ -47,7 +47,14 @@ const evidenceLevelsGermline = fs
 const tumorTypes = fs
   .readFileSync(`${DATA_DIR}private-utils-tumorTypes.json`)
   .toString();
-const userSize = fs.readFileSync(`${DATA_DIR}api-users-size.json`).toString();
+const registeredUsers = JSON.parse(
+  fs.readFileSync(`${DATA_DIR}api-users-size.json`).toString()
+);
+const registeredUsersResponse = JSON.stringify({
+  totalCount: registeredUsers.length,
+  users: registeredUsers,
+});
+const userSize = JSON.stringify(registeredUsers);
 const userDetails = fs
   .readFileSync(`${DATA_DIR}api-users-details.json`)
   .toString();
@@ -181,6 +188,18 @@ if (!fs.existsSync(LATEST_SNAPSHOTS_DIR)) {
 }
 
 function getMockResponse(url) {
+  if (
+    url.startsWith(`${SERVER_URL}api/users/registered`) ||
+    url.startsWith(`${CLIENT_URL}api/users/registered`) ||
+    url.includes('/api/users/registered')
+  ) {
+    return {
+      status: 200,
+      contentType: 'application/json',
+      body: registeredUsersResponse,
+    };
+  }
+
   if (url.startsWith(`${SERVER_URL}api/mails/send-emails-page`)) {
     return {
       status: 200,

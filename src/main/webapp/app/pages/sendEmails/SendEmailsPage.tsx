@@ -10,7 +10,6 @@ import { inject, observer } from 'mobx-react';
 import client from 'app/shared/api/clientInstance';
 import {
   MailTypeInfo,
-  SendEmailPageResponseDTO,
   SendEmailUserOptionDTO,
   UserMailsDTO,
 } from 'app/shared/api/generated/API';
@@ -225,14 +224,12 @@ export default class UserManagementPage extends React.Component<{
       this.isLoadingPageData = true;
     }
     try {
-      const response = await client.getSendEmailsPageDataUsingGETWithHttpInfo({
+      const payload = await client.getSendEmailsPageDataUsingGET({
         q: query,
         page: 0,
         size: USER_OPTIONS_PAGE_SIZE,
       });
       const fromResponse = await client.getMailsFromUsingGET({});
-
-      const payload = response.body as SendEmailPageResponseDTO;
       this.userOptions = payload.users || [];
       this.mailTypes = payload.mailTypes || [];
 
@@ -370,10 +367,11 @@ export default class UserManagementPage extends React.Component<{
   get selectedBulkRecipientOptions() {
     return this.selectedUserLogins.map(login => {
       const user = this.userOptions.find(option => option.login === login);
-      const hasEmail = user?.email && user.email !== user.login;
+      const email = user ? user.email : undefined;
+      const hasEmail = !!email && email !== login;
       return {
         value: login,
-        label: hasEmail ? `${login} (${user!.email})` : login,
+        label: hasEmail ? `${login} (${email})` : login,
       };
     });
   }

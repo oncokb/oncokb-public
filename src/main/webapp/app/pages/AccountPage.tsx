@@ -187,7 +187,7 @@ export class AccountPage extends React.Component<IRegisterProps> {
         subscribed,
       };
       const subscriptions = await client.updateEmailSubscriptionUsingPOST({
-        emailSubscriptionUpdateRequest,
+        request: emailSubscriptionUpdateRequest,
       });
       this.emailSubscriptions = subscriptions || [];
       notifySuccess('Email preference updated.');

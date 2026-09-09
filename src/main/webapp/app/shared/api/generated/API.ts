@@ -39,14 +39,6 @@ export type ApiAccessRequest = {
         'requested': boolean
 
 };
-export type CancerTypeUpdates = {
-    'cancerType': string
-
-        'treatmentUpdates': Array < TreatmentUpdates >
-
-        'updates': Array < Update >
-
-};
 export type BulkUserMailRequestVM = {
     'audience': "CUSTOM" | "ALL_USERS" | "DEVELOPERS" | "SCIENTIFIC_NEWS"
 
@@ -59,6 +51,14 @@ export type BulkUserMailRequestVM = {
         'from': string
 
         'recipients': Array < string >
+
+};
+export type CancerTypeUpdates = {
+    'cancerType': string
+
+        'treatmentUpdates': Array < TreatmentUpdates >
+
+        'updates': Array < Update >
 
 };
 export type CompanyAdditionalInfoDTO = {
@@ -155,6 +155,20 @@ export type ContentNews = {
         'germlineHistory': History
 
         'history': History
+
+};
+export type EmailSubscriptionDTO = {
+    'audience': string
+
+        'groupId': number
+
+        'subscribed': boolean
+
+};
+export type EmailSubscriptionUpdateRequest = {
+    'groupId': number
+
+        'subscribed': boolean
 
 };
 export type GeneUpdates = {
@@ -275,6 +289,22 @@ export type PasswordChangeDTO = {
     'currentPassword': string
 
         'newPassword': string
+
+};
+export type RegisteredUsersRequestVM = {
+    'emailVerified': boolean
+
+        'licenseTypes': Array < "ACADEMIC" | "COMMERCIAL" | "RESEARCH_IN_COMMERCIAL" | "HOSPITAL" >
+
+        'query': string
+
+        'roles': Array < string >
+
+};
+export type RegisteredUsersResponseVM = {
+    'totalCount': number
+
+        'users': Array < UserDTO >
 
 };
 export type ResourceUsageAnalysisRow = {
@@ -575,20 +605,6 @@ export type UserRegistrationSummary = {
         'licenseType': string
 
         'total': number
-
-};
-export type EmailSubscriptionDTO = {
-    'audience': string
-
-        'groupId': number
-
-        'subscribed': boolean
-
-};
-export type EmailSubscriptionUpdateRequest = {
-    'groupId': number
-
-        'subscribed': boolean
 
 };
 export type VerifyCompanyNameVM = {
@@ -1219,7 +1235,7 @@ export default class API {
             });
         };
     updateEmailSubscriptionUsingPOSTURL(parameters: {
-        'emailSubscriptionUpdateRequest': EmailSubscriptionUpdateRequest,
+        'request': EmailSubscriptionUpdateRequest,
         $queryParameters ? : any
     }): string {
         let queryParameters: any = {};
@@ -1239,10 +1255,10 @@ export default class API {
      * updateEmailSubscription
      * @method
      * @name API#updateEmailSubscriptionUsingPOST
-     * @param {} emailSubscriptionUpdateRequest - emailSubscriptionUpdateRequest
+     * @param {} request - request
      */
     updateEmailSubscriptionUsingPOSTWithHttpInfo(parameters: {
-        'emailSubscriptionUpdateRequest': EmailSubscriptionUpdateRequest,
+        'request': EmailSubscriptionUpdateRequest,
         $queryParameters ? : any,
         $domain ? : string
     }): Promise < request.Response > {
@@ -1258,12 +1274,12 @@ export default class API {
             headers['Accept'] = '*/*';
             headers['Content-Type'] = 'application/json';
 
-            if (parameters['emailSubscriptionUpdateRequest'] !== undefined) {
-                body = parameters['emailSubscriptionUpdateRequest'];
+            if (parameters['request'] !== undefined) {
+                body = parameters['request'];
             }
 
-            if (parameters['emailSubscriptionUpdateRequest'] === undefined) {
-                reject(new Error('Missing required  parameter: emailSubscriptionUpdateRequest'));
+            if (parameters['request'] === undefined) {
+                reject(new Error('Missing required  parameter: request'));
                 return;
             }
 
@@ -1283,10 +1299,10 @@ export default class API {
      * updateEmailSubscription
      * @method
      * @name API#updateEmailSubscriptionUsingPOST
-     * @param {} emailSubscriptionUpdateRequest - emailSubscriptionUpdateRequest
+     * @param {} request - request
      */
     updateEmailSubscriptionUsingPOST(parameters: {
-            'emailSubscriptionUpdateRequest': EmailSubscriptionUpdateRequest,
+            'request': EmailSubscriptionUpdateRequest,
             $queryParameters ? : any,
             $domain ? : string
         }): Promise < Array < EmailSubscriptionDTO >
@@ -5090,68 +5106,6 @@ export default class API {
             return response.body;
         });
     };
-    getContentNewsUsingGETURL(parameters: {
-        $queryParameters ? : any
-    }): string {
-        let queryParameters: any = {};
-        let path = '/api/news/content-news';
-
-        if (parameters.$queryParameters) {
-            Object.keys(parameters.$queryParameters).forEach(function(parameterName) {
-                var parameter = parameters.$queryParameters[parameterName];
-                queryParameters[parameterName] = parameter;
-            });
-        }
-        let keys = Object.keys(queryParameters);
-        return this.domain + path + (keys.length > 0 ? '?' + (keys.map(key => key + '=' + encodeURIComponent(queryParameters[key])).join('&')) : '');
-    };
-
-    /**
-     * getContentNews
-     * @method
-     * @name API#getContentNewsUsingGET
-     */
-    getContentNewsUsingGETWithHttpInfo(parameters: {
-        $queryParameters ? : any,
-            $domain ? : string
-    }): Promise < request.Response > {
-        const domain = parameters.$domain ? parameters.$domain : this.domain;
-        const errorHandlers = this.errorHandlers;
-        const request = this.request;
-        let path = '/api/news/content-news';
-        let body: any;
-        let queryParameters: any = {};
-        let headers: any = {};
-        let form: any = {};
-        return new Promise(function(resolve, reject) {
-            headers['Accept'] = '*/*';
-
-            if (parameters.$queryParameters) {
-                Object.keys(parameters.$queryParameters).forEach(function(parameterName) {
-                    var parameter = parameters.$queryParameters[parameterName];
-                    queryParameters[parameterName] = parameter;
-                });
-            }
-
-            request('GET', domain + path, body, headers, queryParameters, form, reject, resolve, errorHandlers);
-
-        });
-    };
-
-    /**
-     * getContentNews
-     * @method
-     * @name API#getContentNewsUsingGET
-     */
-    getContentNewsUsingGET(parameters: {
-            $queryParameters ? : any,
-                $domain ? : string
-        }): Promise < Array < ContentNews >
-        > {
-            return this.getContentNewsUsingGETWithHttpInfo(parameters).then(function(response: request.Response) {
-                return response.body;
-            });
-        };
     sendBulkUserMailsUsingPOSTURL(parameters: {
         'request': BulkUserMailRequestVM,
         $queryParameters ? : any
@@ -5228,6 +5182,68 @@ export default class API {
             return response.body;
         });
     };
+    getContentNewsUsingGETURL(parameters: {
+        $queryParameters ? : any
+    }): string {
+        let queryParameters: any = {};
+        let path = '/api/news/content-news';
+
+        if (parameters.$queryParameters) {
+            Object.keys(parameters.$queryParameters).forEach(function(parameterName) {
+                var parameter = parameters.$queryParameters[parameterName];
+                queryParameters[parameterName] = parameter;
+            });
+        }
+        let keys = Object.keys(queryParameters);
+        return this.domain + path + (keys.length > 0 ? '?' + (keys.map(key => key + '=' + encodeURIComponent(queryParameters[key])).join('&')) : '');
+    };
+
+    /**
+     * getContentNews
+     * @method
+     * @name API#getContentNewsUsingGET
+     */
+    getContentNewsUsingGETWithHttpInfo(parameters: {
+        $queryParameters ? : any,
+            $domain ? : string
+    }): Promise < request.Response > {
+        const domain = parameters.$domain ? parameters.$domain : this.domain;
+        const errorHandlers = this.errorHandlers;
+        const request = this.request;
+        let path = '/api/news/content-news';
+        let body: any;
+        let queryParameters: any = {};
+        let headers: any = {};
+        let form: any = {};
+        return new Promise(function(resolve, reject) {
+            headers['Accept'] = '*/*';
+
+            if (parameters.$queryParameters) {
+                Object.keys(parameters.$queryParameters).forEach(function(parameterName) {
+                    var parameter = parameters.$queryParameters[parameterName];
+                    queryParameters[parameterName] = parameter;
+                });
+            }
+
+            request('GET', domain + path, body, headers, queryParameters, form, reject, resolve, errorHandlers);
+
+        });
+    };
+
+    /**
+     * getContentNews
+     * @method
+     * @name API#getContentNewsUsingGET
+     */
+    getContentNewsUsingGET(parameters: {
+            $queryParameters ? : any,
+                $domain ? : string
+        }): Promise < Array < ContentNews >
+        > {
+            return this.getContentNewsUsingGETWithHttpInfo(parameters).then(function(response: request.Response) {
+                return response.body;
+            });
+        };
     registerAccountUsingPOSTURL(parameters: {
         'managedUserVm': ManagedUserVM,
         $queryParameters ? : any
@@ -8152,12 +8168,13 @@ export default class API {
                 return response.body;
             });
         };
-    getAllRegisteredUsersUsingGETURL(parameters: {
+    getAllRegisteredUsersUsingPOSTURL(parameters: {
         'offset' ? : number,
         'page' ? : number,
         'pageNumber' ? : number,
         'pageSize' ? : number,
         'paged' ? : boolean,
+        'request' ? : RegisteredUsersRequestVM,
         'size' ? : number,
         'sort' ? : Array < string > ,
             'sortSorted' ? : boolean,
@@ -8220,24 +8237,26 @@ export default class API {
     /**
      * getAllRegisteredUsers
      * @method
-     * @name API#getAllRegisteredUsersUsingGET
+     * @name API#getAllRegisteredUsersUsingPOST
      * @param {integer} offset - OncoKB™ is a precision oncology knowledge base developed at Memorial Sloan Kettering Cancer Center that contains biological and clinical information about genomic alterations in cancer.
      * @param {integer} page - Page number of the requested page
      * @param {integer} pageNumber - OncoKB™ is a precision oncology knowledge base developed at Memorial Sloan Kettering Cancer Center that contains biological and clinical information about genomic alterations in cancer.
      * @param {integer} pageSize - OncoKB™ is a precision oncology knowledge base developed at Memorial Sloan Kettering Cancer Center that contains biological and clinical information about genomic alterations in cancer.
      * @param {boolean} paged - OncoKB™ is a precision oncology knowledge base developed at Memorial Sloan Kettering Cancer Center that contains biological and clinical information about genomic alterations in cancer.
+     * @param {} request - request
      * @param {integer} size - Size of a page
      * @param {array} sort - Sorting criteria in the format: property(,asc|desc). Default sort order is ascending. Multiple sort criteria are supported.
      * @param {boolean} sortSorted - OncoKB™ is a precision oncology knowledge base developed at Memorial Sloan Kettering Cancer Center that contains biological and clinical information about genomic alterations in cancer.
      * @param {boolean} sortUnsorted - OncoKB™ is a precision oncology knowledge base developed at Memorial Sloan Kettering Cancer Center that contains biological and clinical information about genomic alterations in cancer.
      * @param {boolean} unpaged - OncoKB™ is a precision oncology knowledge base developed at Memorial Sloan Kettering Cancer Center that contains biological and clinical information about genomic alterations in cancer.
      */
-    getAllRegisteredUsersUsingGETWithHttpInfo(parameters: {
+    getAllRegisteredUsersUsingPOSTWithHttpInfo(parameters: {
         'offset' ? : number,
         'page' ? : number,
         'pageNumber' ? : number,
         'pageSize' ? : number,
         'paged' ? : boolean,
+        'request' ? : RegisteredUsersRequestVM,
         'size' ? : number,
         'sort' ? : Array < string > ,
             'sortSorted' ? : boolean,
@@ -8256,6 +8275,7 @@ export default class API {
         let form: any = {};
         return new Promise(function(resolve, reject) {
             headers['Accept'] = '*/*';
+            headers['Content-Type'] = 'application/json';
 
             if (parameters['offset'] !== undefined) {
                 queryParameters['offset'] = parameters['offset'];
@@ -8275,6 +8295,10 @@ export default class API {
 
             if (parameters['paged'] !== undefined) {
                 queryParameters['paged'] = parameters['paged'];
+            }
+
+            if (parameters['request'] !== undefined) {
+                body = parameters['request'];
             }
 
             if (parameters['size'] !== undefined) {
@@ -8304,7 +8328,7 @@ export default class API {
                 });
             }
 
-            request('GET', domain + path, body, headers, queryParameters, form, reject, resolve, errorHandlers);
+            request('POST', domain + path, body, headers, queryParameters, form, reject, resolve, errorHandlers);
 
         });
     };
@@ -8312,37 +8336,38 @@ export default class API {
     /**
      * getAllRegisteredUsers
      * @method
-     * @name API#getAllRegisteredUsersUsingGET
+     * @name API#getAllRegisteredUsersUsingPOST
      * @param {integer} offset - OncoKB™ is a precision oncology knowledge base developed at Memorial Sloan Kettering Cancer Center that contains biological and clinical information about genomic alterations in cancer.
      * @param {integer} page - Page number of the requested page
      * @param {integer} pageNumber - OncoKB™ is a precision oncology knowledge base developed at Memorial Sloan Kettering Cancer Center that contains biological and clinical information about genomic alterations in cancer.
      * @param {integer} pageSize - OncoKB™ is a precision oncology knowledge base developed at Memorial Sloan Kettering Cancer Center that contains biological and clinical information about genomic alterations in cancer.
      * @param {boolean} paged - OncoKB™ is a precision oncology knowledge base developed at Memorial Sloan Kettering Cancer Center that contains biological and clinical information about genomic alterations in cancer.
+     * @param {} request - request
      * @param {integer} size - Size of a page
      * @param {array} sort - Sorting criteria in the format: property(,asc|desc). Default sort order is ascending. Multiple sort criteria are supported.
      * @param {boolean} sortSorted - OncoKB™ is a precision oncology knowledge base developed at Memorial Sloan Kettering Cancer Center that contains biological and clinical information about genomic alterations in cancer.
      * @param {boolean} sortUnsorted - OncoKB™ is a precision oncology knowledge base developed at Memorial Sloan Kettering Cancer Center that contains biological and clinical information about genomic alterations in cancer.
      * @param {boolean} unpaged - OncoKB™ is a precision oncology knowledge base developed at Memorial Sloan Kettering Cancer Center that contains biological and clinical information about genomic alterations in cancer.
      */
-    getAllRegisteredUsersUsingGET(parameters: {
-            'offset' ? : number,
-            'page' ? : number,
-            'pageNumber' ? : number,
-            'pageSize' ? : number,
-            'paged' ? : boolean,
-            'size' ? : number,
-            'sort' ? : Array < string > ,
-                'sortSorted' ? : boolean,
-                'sortUnsorted' ? : boolean,
-                'unpaged' ? : boolean,
-                $queryParameters ? : any,
-                $domain ? : string
-        }): Promise < Array < UserDTO >
-        > {
-            return this.getAllRegisteredUsersUsingGETWithHttpInfo(parameters).then(function(response: request.Response) {
-                return response.body;
-            });
-        };
+    getAllRegisteredUsersUsingPOST(parameters: {
+        'offset' ? : number,
+        'page' ? : number,
+        'pageNumber' ? : number,
+        'pageSize' ? : number,
+        'paged' ? : boolean,
+        'request' ? : RegisteredUsersRequestVM,
+        'size' ? : number,
+        'sort' ? : Array < string > ,
+            'sortSorted' ? : boolean,
+            'sortUnsorted' ? : boolean,
+            'unpaged' ? : boolean,
+            $queryParameters ? : any,
+            $domain ? : string
+    }): Promise < RegisteredUsersResponseVM > {
+        return this.getAllRegisteredUsersUsingPOSTWithHttpInfo(parameters).then(function(response: request.Response) {
+            return response.body;
+        });
+    };
     getUsersTokensUsingPOSTURL(parameters: {
         'logins': Array < string > ,
         $queryParameters ? : any

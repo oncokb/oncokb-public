@@ -1,9 +1,11 @@
 import React from 'react';
+import request from 'superagent';
+import Select from 'react-select';
 import { action, computed, observable } from 'mobx';
 import { inject, observer } from 'mobx-react';
 import { defaultSortMethod } from 'app/shared/utils/ReactTableUtils';
 import client from 'app/shared/api/clientInstance';
-import { UserDTO } from 'app/shared/api/generated/API';
+import API, { UserDTO } from 'app/shared/api/generated/API';
 import { match } from 'react-router';
 import { Button, Col, Row } from 'react-bootstrap';
 import { RouterStore } from 'mobx-react-router';
@@ -21,6 +23,7 @@ import {
   AUTHORITIES,
   LicenseType,
   MailCategory,
+  USER_AUTHORITIES,
   USER_AUTHORITY,
   USER_MAIL_TAGS,
 } from 'app/config/constants';
@@ -35,7 +38,13 @@ import {
   getGracePeriodDaysRemaining,
   hasGracePeriodAccess,
 } from 'app/shared/utils/GracePeriodUtils';
+import { getClientInstanceURL } from 'app/shared/utils/DevUtils';
 import { UserQuickViewModal } from './UserQuickViewModal';
+
+type UserAuthorityOption = {
+  value: USER_AUTHORITY;
+  label: string;
+};
 
 enum USER_BUTTON_TYPE {
   COMMERCIAL = 'Commercial Users',
@@ -51,6 +60,13 @@ export default class UserDetailsPage extends React.Component<{
 }> {
   @observable users: UserDTO[] = [];
   @observable loadedUsers = false;
+  @observable isLoadingUsers = false;
+  @observable userPage = 0;
+  @observable userPageSize = 20;
+  @observable userPages = 1;
+  @observable userTotalCount = 0;
+  @observable searchInput = '';
+  @observable searchKeyword = '';
   @observable showUpdateStatusModal = false;
   @observable showQuickViewModal = false;
   @observable currentSelected: {
@@ -63,35 +79,64 @@ export default class UserDetailsPage extends React.Component<{
   @observable currentSelectedButton = USER_BUTTON_TYPE.VERIFIED;
   @observable currentSelectedFilter: {
     emailVerified: boolean | undefined;
-    licenseTypes: string[] | undefined;
+    licenseTypes: LicenseType[] | undefined;
+    roles: USER_AUTHORITY[] | undefined;
   } = {
     emailVerified: undefined,
     licenseTypes: undefined,
+    roles: undefined,
   };
   userButtons = [
     USER_BUTTON_TYPE.COMMERCIAL,
     USER_BUTTON_TYPE.VERIFIED,
     USER_BUTTON_TYPE.ALL,
   ];
+  private searchDebounceTimeout?: ReturnType<typeof setTimeout>;
 
   constructor(props: Readonly<{ routing: RouterStore; match: match }>) {
     super(props);
-    this.getUsers();
+    this.toggleFilter(USER_BUTTON_TYPE.VERIFIED);
   }
 
-  @action
+  @action.bound
   async getUsers() {
+    this.isLoadingUsers = true;
     try {
-      this.users = await client.getAllUsersUsingGET({});
-      // Display all commercial users by default
-      this.toggleFilter(USER_BUTTON_TYPE.VERIFIED);
+      const response = await client.getAllRegisteredUsersUsingPOST({
+        request: {
+          query: this.searchKeyword,
+          emailVerified: this.currentSelectedFilter.emailVerified!,
+          licenseTypes:
+            this.currentSelectedFilter.licenseTypes &&
+            this.currentSelectedFilter.licenseTypes.length > 0
+              ? this.currentSelectedFilter.licenseTypes
+              : undefined!,
+          roles:
+            this.currentSelectedFilter.roles &&
+            this.currentSelectedFilter.roles.length > 0
+              ? this.currentSelectedFilter.roles
+              : undefined!,
+        },
+        page: this.userPage,
+        size: this.userPageSize,
+      });
+
+      this.users = response?.users || [];
+      const totalCount = Number(response?.totalCount || 0);
+      this.userTotalCount = Number.isFinite(totalCount) ? totalCount : 0;
+      this.userPages = Math.max(
+        1,
+        Math.ceil(this.userTotalCount / this.userPageSize)
+      );
       this.loadedUsers = true;
     } catch (e) {
       notifyError(e, 'Error fetching users');
+    } finally {
+      this.isLoadingUsers = false;
     }
   }
 
-  @action
+  @action.bound
   toggleFilter(button: USER_BUTTON_TYPE) {
     this.currentSelectedButton = button;
     if (this.currentSelectedButton === USER_BUTTON_TYPE.COMMERCIAL) {
@@ -102,18 +147,37 @@ export default class UserDetailsPage extends React.Component<{
           LicenseType.RESEARCH_IN_COMMERCIAL,
           LicenseType.COMMERCIAL,
         ],
+        roles: undefined,
       };
     } else if (this.currentSelectedButton === USER_BUTTON_TYPE.VERIFIED) {
       this.currentSelectedFilter = {
         emailVerified: true,
         licenseTypes: undefined,
+        roles: undefined,
       };
     } else {
       this.currentSelectedFilter = {
         emailVerified: undefined,
         licenseTypes: undefined,
+        roles: undefined,
       };
     }
+
+    this.userPage = 0;
+    this.getUsers();
+  }
+
+  @action.bound
+  updateRoleFilter(selectedOptions: UserAuthorityOption[] | null) {
+    this.currentSelectedFilter = {
+      ...this.currentSelectedFilter,
+      roles:
+        selectedOptions && selectedOptions.length > 0
+          ? selectedOptions.map(option => option.value)
+          : undefined,
+    };
+    this.userPage = 0;
+    this.getUsers();
   }
 
   @action
@@ -174,17 +238,10 @@ export default class UserDetailsPage extends React.Component<{
   @action.bound
   async verifyUserEmail(user: UserDTO) {
     try {
-      const result = await client.activateAccountUsingGET({
+      await client.activateAccountUsingGET({
         key: user.activationKey,
       });
-      const updatedUser = {
-        ...user,
-        activated: result.activated,
-        activationKey: '',
-        emailVerified: true,
-      };
-      const oldUserIndex = this.users.findIndex(u => u.id === user.id);
-      this.users.splice(oldUserIndex, 1, updatedUser);
+      this.getUsers();
       notifySuccess('User email verified');
     } catch (error) {
       return notifyError(error);
@@ -218,31 +275,42 @@ export default class UserDetailsPage extends React.Component<{
   }
 
   @computed
-  get filteredUser() {
-    if (
-      this.currentSelectedFilter === undefined ||
-      Object.keys(this.currentSelectedFilter).length === 0
-    ) {
-      return this.users;
-    } else {
-      return this.users.filter((user: UserDTO) => {
-        let userMatched = true;
-        if (this.currentSelectedFilter.emailVerified) {
-          if (!user.emailVerified) {
-            userMatched = false;
-          }
-        }
-        if (userMatched) {
-          if (
-            this.currentSelectedFilter.licenseTypes !== undefined &&
-            !this.currentSelectedFilter.licenseTypes.includes(user.licenseType)
-          ) {
-            userMatched = false;
-          }
-        }
-        return userMatched;
-      });
+  get userFromIndex() {
+    if (this.userTotalCount === 0 || this.users.length === 0) {
+      return 0;
     }
+    return this.userPage * this.userPageSize + 1;
+  }
+
+  @computed
+  get userToIndex() {
+    if (this.userTotalCount === 0 || this.users.length === 0) {
+      return 0;
+    }
+    return Math.min(
+      this.userTotalCount,
+      this.userPage * this.userPageSize + this.users.length
+    );
+  }
+
+  @action.bound
+  handleUsersFetchData(tableState: { page: number; pageSize: number }) {
+    this.userPage = tableState.page;
+    this.userPageSize = tableState.pageSize;
+    this.getUsers();
+  }
+
+  @action.bound
+  handleUserSearchChange(keyword: string) {
+    this.searchInput = keyword;
+    if (this.searchDebounceTimeout) {
+      clearTimeout(this.searchDebounceTimeout);
+    }
+    this.searchDebounceTimeout = setTimeout(() => {
+      this.searchKeyword = this.searchInput;
+      this.userPage = 0;
+      this.getUsers();
+    }, 300);
   }
 
   private getStatus(activated: boolean) {
@@ -532,6 +600,33 @@ export default class UserDetailsPage extends React.Component<{
   ];
 
   render() {
+    const tableFilters: React.FunctionComponent = () => (
+      <div style={{ minWidth: '300px' }}>
+        {/* sr-only keeps the label available to screen readers while visually hiding it. */}
+        {/* This gives react-select an explicit accessible name beyond placeholder text. */}
+        <label htmlFor="user-role-filter" className="sr-only">
+          Filter users by roles
+        </label>
+        <Select
+          inputId="user-role-filter"
+          aria-label="Filter users by roles"
+          isMulti
+          isClearable
+          placeholder={'Filter by roles'}
+          options={USER_AUTHORITIES.filter(
+            role => role !== USER_AUTHORITY.ROLE_SERVICE_ACCOUNT
+          ).map(role => ({ value: role, label: formatEnumLabel(role) }))}
+          value={(this.currentSelectedFilter.roles || []).map(role => ({
+            value: role,
+            label: formatEnumLabel(role),
+          }))}
+          onChange={(selectedOptions: UserAuthorityOption[] | null) =>
+            this.updateRoleFilter(selectedOptions)
+          }
+        />
+      </div>
+    );
+
     return (
       <>
         {this.loadedUsers ? (
@@ -550,18 +645,28 @@ export default class UserDetailsPage extends React.Component<{
               ))}
             </Row>
             <Row className={getSectionClassName()}>
+              <Col className={'d-flex justify-content-end align-items-center'}>
+                {`Showing ${this.userFromIndex}-${this.userToIndex} of ${this.userTotalCount}`}
+              </Col>
+            </Row>
+            <Row className={getSectionClassName()}>
               <Col>
                 <OncoKBTable
-                  data={this.filteredUser}
+                  data={this.users}
                   columns={this.columns}
+                  loading={this.isLoadingUsers}
                   showPagination={true}
+                  sortable={false}
+                  manual
+                  page={this.userPage}
+                  pageSize={this.userPageSize}
+                  pages={this.userPages}
+                  onFetchData={this.handleUsersFetchData}
+                  serverSideSearch
+                  searchKeyword={this.searchInput}
+                  onSearchChange={this.handleUserSearchChange}
+                  filters={tableFilters}
                   minRows={1}
-                  defaultSorted={[
-                    {
-                      id: 'createdDate',
-                      desc: true,
-                    },
-                  ]}
                 />
               </Col>
             </Row>
