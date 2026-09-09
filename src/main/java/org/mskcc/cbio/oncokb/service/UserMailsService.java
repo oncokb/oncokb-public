@@ -20,9 +20,12 @@ import org.springframework.transaction.annotation.Transactional;
 
 import java.util.Objects;
 import java.time.Instant;
+import java.util.Collections;
+import java.util.HashSet;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Optional;
+import java.util.Set;
 import java.util.stream.Collectors;
 
 import static org.mskcc.cbio.oncokb.config.cache.UserCacheResolver.ALL_USERS_CACHE;
@@ -131,6 +134,15 @@ public class UserMailsService {
         return userMailsRepository.findUserMailByUserAndMailTypeIn(user, mailTypes).stream()
             .map(userMailsMapper::toDto)
             .collect(Collectors.toCollection(LinkedList::new));
+    }
+
+    @Transactional(readOnly = true)
+    public Set<Long> findUserIdsWithMailTypeIn(List<Long> userIds, List<MailType> mailTypes) {
+        if (userIds == null || userIds.isEmpty() || mailTypes == null || mailTypes.isEmpty()) {
+            return Collections.emptySet();
+        }
+        List<String> mailTypeNames = mailTypes.stream().map(MailType::name).collect(Collectors.toList());
+        return new HashSet<>(userMailsRepository.findUserIdsWithMailTypeIn(userIds, mailTypeNames));
     }
 
     /**

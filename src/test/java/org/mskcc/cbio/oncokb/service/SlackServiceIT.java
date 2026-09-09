@@ -21,6 +21,7 @@ import org.mskcc.cbio.oncokb.domain.User;
 import org.mskcc.cbio.oncokb.domain.Company;
 import org.mskcc.cbio.oncokb.domain.enumeration.LicenseStatus;
 import org.mskcc.cbio.oncokb.domain.enumeration.LicenseType;
+import org.mskcc.cbio.oncokb.service.dto.PotentialDuplicateUserSummary;
 import org.mskcc.cbio.oncokb.service.dto.UserDTO;
 import org.mskcc.cbio.oncokb.service.dto.useradditionalinfo.AdditionalInfoDTO;
 import org.mskcc.cbio.oncokb.service.dto.useradditionalinfo.ApiAccessRequest;
@@ -86,7 +87,7 @@ class SlackServiceIT {
         applicationProperties.setSlack(new SlackProperties());
         applicationProperties.getSlack().setUserRegistrationWebhook(USER_REGISTRATION_WEBHOOK);
 
-        doReturn(new ArrayList<UserDTO>()).when(userService).getPotentialDuplicateAccountsByUser(any(UserDTO.class));
+        doReturn(new ArrayList<PotentialDuplicateUserSummary>()).when(userService).getPotentialDuplicateAccountsByUser(any(UserDTO.class));
         doReturn(new ArrayList<>()).when(userMailsService).findUserMailsByUserAndMailTypeIn(any(User.class), anyList());
         slackService = new SlackService(applicationProperties, mailService, userService, userMailsService, userMapper, slack);
     }
@@ -255,9 +256,9 @@ class SlackServiceIT {
         user.setCountry("country");
         user.setLicenseType(LicenseType.COMMERCIAL);
 
-        List<UserDTO> duplicateUsers = new ArrayList<>();
+        List<PotentialDuplicateUserSummary> duplicateUsers = new ArrayList<>();
         for (int i = 0; i < 40; i++) {
-            UserDTO duplicateUser = new UserDTO();
+            PotentialDuplicateUserSummary duplicateUser = new PotentialDuplicateUserSummary();
             duplicateUser.setFirstName("VeryLongFirstName" + i);
             duplicateUser.setLastName("VeryLongLastName" + i);
             duplicateUser.setEmail("very.long.duplicate.user." + i + "@example.com");

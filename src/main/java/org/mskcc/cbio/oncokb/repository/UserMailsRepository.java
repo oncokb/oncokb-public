@@ -41,5 +41,11 @@ public interface UserMailsRepository extends JpaRepository<UserMails, Long> {
 
     List<UserMails> findUserMailByUserAndMailTypeIn(User user, List<MailType> mailTypes);
 
+    @Query(
+        value = "select distinct um.user_id from user_mails um where um.user_id in (:userIds) and um.mail_type in (:mailTypes)",
+        nativeQuery = true
+    )
+    List<Long> findUserIdsWithMailTypeIn(@Param("userIds") List<Long> userIds, @Param("mailTypes") List<String> mailTypes);
+
     void deleteAllByUser(User user);
 }
