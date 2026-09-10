@@ -187,6 +187,10 @@ public class UserResource {
             updatedUser = userService.updateUserFromUserDTO(userDTO);
         }
 
+        // Apply trial lifecycle transitions only after base user/details persistence so
+        // transition side effects (trial-init email, token policy changes, activation)
+        // run from the latest saved state. Precedence is:
+        // TRIAL_PENDING_TERMS_ACCEPTANCE -> TRIAL -> REGULAR.
         if (updatedUser.isPresent() && requestedTrialStatus != currentTrialStatus) {
             if (requestedTrialStatus == TrialStatus.TRIAL_PENDING_TERMS_ACCEPTANCE) {
                 Optional<User> initiatedTrialUser = userService.initiateTrialAccountActivation(updatedUser.get().getLogin());
