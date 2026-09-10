@@ -5263,11 +5263,22 @@
           "type": "integer",
           "format": "int32"
         },
+        "trialStatus": {
+          "type": "string",
+          "enum": [
+            "REGULAR",
+            "TRIAL_PENDING_TERMS_ACCEPTANCE",
+            "TRIAL"
+          ]
+        },
         "userMails": {
           "type": "array",
           "items": {
             "$ref": "#/definitions/UserMailsDTO"
           }
+        },
+        "userTrial": {
+          "$ref": "#/definitions/UserTrialDTO"
         }
       },
       "title": "ManagedUserVM"
@@ -5842,11 +5853,22 @@
         "resetKey": {
           "type": "string"
         },
+        "trialStatus": {
+          "type": "string",
+          "enum": [
+            "REGULAR",
+            "TRIAL_PENDING_TERMS_ACCEPTANCE",
+            "TRIAL"
+          ]
+        },
         "userMails": {
           "type": "array",
           "items": {
             "$ref": "#/definitions/UserMailsDTO"
           }
+        },
+        "userTrial": {
+          "$ref": "#/definitions/UserTrialDTO"
         }
       },
       "title": "UserDTO"
@@ -5899,9 +5921,20 @@
             "HOSPITAL"
           ]
         },
+        "trialStatus": {
+          "type": "string",
+          "enum": [
+            "REGULAR",
+            "TRIAL_PENDING_TERMS_ACCEPTANCE",
+            "TRIAL"
+          ]
+        },
         "userId": {
           "type": "integer",
           "format": "int64"
+        },
+        "userTrial": {
+          "$ref": "#/definitions/UserTrialDTO"
         }
       },
       "title": "UserDetailsDTO"
@@ -6063,6 +6096,44 @@
         }
       },
       "title": "UserRegistrationSummary"
+    },
+    "UserTrialDTO": {
+      "type": "object",
+      "properties": {
+        "activationDate": {
+          "type": "string",
+          "format": "date-time"
+        },
+        "activationKey": {
+          "type": "string"
+        },
+        "id": {
+          "type": "integer",
+          "format": "int64"
+        },
+        "initiatedBy": {
+          "type": "string"
+        },
+        "initiationDate": {
+          "type": "string",
+          "format": "date-time"
+        },
+        "licenseAgreementAcceptanceDate": {
+          "type": "string",
+          "format": "date-time"
+        },
+        "licenseAgreementName": {
+          "type": "string"
+        },
+        "licenseAgreementVersion": {
+          "type": "string"
+        },
+        "userId": {
+          "type": "integer",
+          "format": "int64"
+        }
+      },
+      "title": "UserTrialDTO"
     },
     "VerifyCompanyNameVM": {
       "type": "object",

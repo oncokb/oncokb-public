@@ -3,10 +3,13 @@ package org.mskcc.cbio.oncokb.security;
 import org.mskcc.cbio.oncokb.RedisTestContainerExtension;
 import org.mskcc.cbio.oncokb.OncokbPublicApp;
 import org.mskcc.cbio.oncokb.domain.User;
+import org.mskcc.cbio.oncokb.domain.UserTrial;
 import org.mskcc.cbio.oncokb.domain.enumeration.AccountRequestStatus;
 import org.mskcc.cbio.oncokb.domain.enumeration.LicenseType;
+import org.mskcc.cbio.oncokb.domain.enumeration.TrialStatus;
 import org.mskcc.cbio.oncokb.repository.UserDetailsRepository;
 import org.mskcc.cbio.oncokb.repository.UserRepository;
+import org.mskcc.cbio.oncokb.repository.UserTrialRepository;
 
 import org.apache.commons.lang3.RandomStringUtils;
 import org.junit.jupiter.api.BeforeEach;
@@ -52,12 +55,21 @@ public class DomainUserDetailsServiceIT {
     private static final String USER_EIGHT_EMAIL = "test-user-eight@localhost";
     private static final String USER_NINE_LOGIN = "test-user-nine";
     private static final String USER_NINE_EMAIL = "test-user-nine@localhost";
+    private static final String USER_TEN_LOGIN = "test-user-ten";
+    private static final String USER_TEN_EMAIL = "test-user-ten@localhost";
+    private static final String USER_ELEVEN_LOGIN = "test-user-eleven";
+    private static final String USER_ELEVEN_EMAIL = "test-user-eleven@localhost";
+    private static final String USER_TWELVE_LOGIN = "test-user-twelve";
+    private static final String USER_TWELVE_EMAIL = "test-user-twelve@localhost";
 
     @Autowired
     private UserRepository userRepository;
 
     @Autowired
     private UserDetailsRepository userDetailsRepository;
+
+    @Autowired
+    private UserTrialRepository userTrialRepository;
 
     @Autowired
     private UserDetailsService domainUserDetailsService;
@@ -77,6 +89,7 @@ public class DomainUserDetailsServiceIT {
         org.mskcc.cbio.oncokb.domain.UserDetails userOneDetails = new org.mskcc.cbio.oncokb.domain.UserDetails();
         userOneDetails.setUser(userOne);
         userOneDetails.setAccountRequestStatus(AccountRequestStatus.APPROVED);
+        userOneDetails.setTrialStatus(TrialStatus.REGULAR);
         userDetailsRepository.save(userOneDetails);
 
         User userTwo = new User();
@@ -92,6 +105,7 @@ public class DomainUserDetailsServiceIT {
         org.mskcc.cbio.oncokb.domain.UserDetails userTwoDetails = new org.mskcc.cbio.oncokb.domain.UserDetails();
         userTwoDetails.setUser(userTwo);
         userTwoDetails.setAccountRequestStatus(AccountRequestStatus.APPROVED);
+        userTwoDetails.setTrialStatus(TrialStatus.REGULAR);
         userDetailsRepository.save(userTwoDetails);
 
         User userThree = new User();
@@ -112,6 +126,7 @@ public class DomainUserDetailsServiceIT {
         org.mskcc.cbio.oncokb.domain.UserDetails userThreeDetails = new org.mskcc.cbio.oncokb.domain.UserDetails();
         userThreeDetails.setUser(userThree);
         userThreeDetails.setAccountRequestStatus(AccountRequestStatus.PENDING);
+        userThreeDetails.setTrialStatus(TrialStatus.REGULAR);
         userDetailsRepository.save(userThreeDetails);
 
         User userFour = new User();
@@ -129,6 +144,7 @@ public class DomainUserDetailsServiceIT {
         org.mskcc.cbio.oncokb.domain.UserDetails userFourDetails = new org.mskcc.cbio.oncokb.domain.UserDetails();
         userFourDetails.setUser(userFour);
         userFourDetails.setAccountRequestStatus(AccountRequestStatus.APPROVED);
+        userFourDetails.setTrialStatus(TrialStatus.REGULAR);
         userDetailsRepository.save(userFourDetails);
 
         User userFive = new User();
@@ -147,6 +163,7 @@ public class DomainUserDetailsServiceIT {
         org.mskcc.cbio.oncokb.domain.UserDetails userFiveDetails = new org.mskcc.cbio.oncokb.domain.UserDetails();
         userFiveDetails.setUser(userFive);
         userFiveDetails.setAccountRequestStatus(AccountRequestStatus.PENDING);
+        userFiveDetails.setTrialStatus(TrialStatus.REGULAR);
         userDetailsRepository.save(userFiveDetails);
 
         User userSix = new User();
@@ -161,6 +178,7 @@ public class DomainUserDetailsServiceIT {
         org.mskcc.cbio.oncokb.domain.UserDetails userSixDetails = new org.mskcc.cbio.oncokb.domain.UserDetails();
         userSixDetails.setUser(userSix);
         userSixDetails.setAccountRequestStatus(AccountRequestStatus.REJECTED);
+        userSixDetails.setTrialStatus(TrialStatus.REGULAR);
         userDetailsRepository.save(userSixDetails);
 
         User userSeven = new User();
@@ -188,6 +206,7 @@ public class DomainUserDetailsServiceIT {
         userEightDetails.setUser(userEight);
         userEightDetails.setAccountRequestStatus(AccountRequestStatus.PENDING);
         userEightDetails.setLicenseType(LicenseType.COMMERCIAL);
+        userEightDetails.setTrialStatus(TrialStatus.REGULAR);
         userDetailsRepository.save(userEightDetails);
 
         User userNine = new User();
@@ -204,7 +223,69 @@ public class DomainUserDetailsServiceIT {
         org.mskcc.cbio.oncokb.domain.UserDetails userNineDetails = new org.mskcc.cbio.oncokb.domain.UserDetails();
         userNineDetails.setUser(userNine);
         userNineDetails.setAccountRequestStatus(AccountRequestStatus.PENDING_NO_GRACE_PERIOD);
+        userNineDetails.setTrialStatus(TrialStatus.REGULAR);
         userDetailsRepository.save(userNineDetails);
+
+        User userTen = new User();
+        userTen.setLogin(USER_TEN_LOGIN);
+        userTen.setPassword(RandomStringUtils.random(60));
+        userTen.setActivated(true);
+        userTen.setEmail(USER_TEN_EMAIL);
+        userTen.setFirstName("userTen");
+        userTen.setLastName("doe");
+        userTen.setLangKey("en");
+        userRepository.save(userTen);
+        org.mskcc.cbio.oncokb.domain.UserDetails userTenDetails = new org.mskcc.cbio.oncokb.domain.UserDetails();
+        userTenDetails.setUser(userTen);
+        userTenDetails.setAccountRequestStatus(AccountRequestStatus.APPROVED);
+        userTenDetails.setTrialStatus(TrialStatus.TRIAL_PENDING_TERMS_ACCEPTANCE);
+        userDetailsRepository.save(userTenDetails);
+        UserTrial userTrial = new UserTrial();
+        userTrial.setUser(userTen);
+        userTrial.setActivationKey("trial-activation-key");
+        userTrialRepository.save(userTrial);
+
+        User userEleven = new User();
+        userEleven.setLogin(USER_ELEVEN_LOGIN);
+        userEleven.setPassword(RandomStringUtils.random(60));
+        userEleven.setActivated(true);
+        userEleven.setEmail(USER_ELEVEN_EMAIL);
+        userEleven.setFirstName("userEleven");
+        userEleven.setLastName("doe");
+        userEleven.setLangKey("en");
+        userRepository.save(userEleven);
+        org.mskcc.cbio.oncokb.domain.UserDetails userElevenDetails = new org.mskcc.cbio.oncokb.domain.UserDetails();
+        userElevenDetails.setUser(userEleven);
+        userElevenDetails.setAccountRequestStatus(AccountRequestStatus.APPROVED);
+        userElevenDetails.setTrialStatus(TrialStatus.TRIAL);
+        userDetailsRepository.save(userElevenDetails);
+        UserTrial userElevenTrial = new UserTrial();
+        userElevenTrial.setUser(userEleven);
+        userElevenTrial.setInitiationDate(Instant.now().minus(Duration.ofDays(2)));
+        userElevenTrial.setActivationDate(Instant.now().minus(Duration.ofDays(1)));
+        userElevenTrial.setLicenseAgreementAcceptanceDate(null);
+        userTrialRepository.save(userElevenTrial);
+
+        User userTwelve = new User();
+        userTwelve.setLogin(USER_TWELVE_LOGIN);
+        userTwelve.setPassword(RandomStringUtils.random(60));
+        userTwelve.setActivated(true);
+        userTwelve.setEmail(USER_TWELVE_EMAIL);
+        userTwelve.setFirstName("userTwelve");
+        userTwelve.setLastName("doe");
+        userTwelve.setLangKey("en");
+        userRepository.save(userTwelve);
+        org.mskcc.cbio.oncokb.domain.UserDetails userTwelveDetails = new org.mskcc.cbio.oncokb.domain.UserDetails();
+        userTwelveDetails.setUser(userTwelve);
+        userTwelveDetails.setAccountRequestStatus(AccountRequestStatus.APPROVED);
+        userTwelveDetails.setTrialStatus(TrialStatus.TRIAL);
+        userDetailsRepository.save(userTwelveDetails);
+        UserTrial userTwelveTrial = new UserTrial();
+        userTwelveTrial.setUser(userTwelve);
+        userTwelveTrial.setInitiationDate(Instant.now().minus(Duration.ofDays(2)));
+        userTwelveTrial.setActivationDate(Instant.now().minus(Duration.ofDays(1)));
+        userTwelveTrial.setLicenseAgreementAcceptanceDate(Instant.now().minus(Duration.ofHours(2)));
+        userTrialRepository.save(userTwelveTrial);
     }
 
     @Test
@@ -269,7 +350,7 @@ public class DomainUserDetailsServiceIT {
 
     @Test
     public void assertThatUnknownAccountStatusThrowsUserNotApproved() {
-        assertThatExceptionOfType(UserNotApprovedException.class)
+        assertThatExceptionOfType(ResponseStatusException.class)
             .isThrownBy(() -> domainUserDetailsService.loadUserByUsername(USER_SEVEN_LOGIN));
     }
 
@@ -282,8 +363,27 @@ public class DomainUserDetailsServiceIT {
 
     @Test
     public void assertThatPendingNoGracePeriodUserCannotLogin() {
-        assertThatExceptionOfType(UserNotApprovedException.class)
+        assertThatExceptionOfType(ResponseStatusException.class)
             .isThrownBy(() -> domainUserDetailsService.loadUserByUsername(USER_NINE_LOGIN));
+    }
+
+    @Test
+    public void assertThatPendingTrialTermsUserCannotLogin() {
+        assertThatExceptionOfType(ResponseStatusException.class)
+            .isThrownBy(() -> domainUserDetailsService.loadUserByUsername(USER_TEN_LOGIN));
+    }
+
+    @Test
+    public void assertThatTrialUserWithoutAcceptedTermsCannotLogin() {
+        assertThatExceptionOfType(ResponseStatusException.class)
+            .isThrownBy(() -> domainUserDetailsService.loadUserByUsername(USER_ELEVEN_LOGIN));
+    }
+
+    @Test
+    public void assertThatTrialUserWithAcceptedTermsCanLogin() {
+        UserDetails userDetails = domainUserDetailsService.loadUserByUsername(USER_TWELVE_LOGIN);
+        assertThat(userDetails).isNotNull();
+        assertThat(userDetails.getUsername()).isEqualTo(USER_TWELVE_LOGIN);
     }
 
     @Test

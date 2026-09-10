@@ -13,6 +13,7 @@ import org.mskcc.cbio.oncokb.domain.User;
 import org.mskcc.cbio.oncokb.domain.UserDetails;
 import org.mskcc.cbio.oncokb.domain.UserMessagePair;
 import org.mskcc.cbio.oncokb.domain.enumeration.AccountRequestStatus;
+import org.mskcc.cbio.oncokb.domain.enumeration.TrialStatus;
 import org.mskcc.cbio.oncokb.domain.enumeration.BulkEmailAudience;
 import org.mskcc.cbio.oncokb.domain.enumeration.MailType;
 import org.mskcc.cbio.oncokb.repository.UserDetailsRepository;
@@ -218,6 +219,7 @@ public class MailService {
             UserDetails userDetails = new UserDetails();
             userDetails.setUser(user);
             userDetails.setAccountRequestStatus(AccountRequestStatus.REJECTED);
+            userDetails.setTrialStatus(TrialStatus.REGULAR);
             userDetailsRepository.save(userDetails);
             user.setActivated(false);
             userRepository.save(user);

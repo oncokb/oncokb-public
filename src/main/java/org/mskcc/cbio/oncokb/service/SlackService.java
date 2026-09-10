@@ -34,6 +34,7 @@ import org.mskcc.cbio.oncokb.service.dto.UserDTO;
 import org.mskcc.cbio.oncokb.service.dto.UserMailsDTO;
 import org.mskcc.cbio.oncokb.service.dto.useradditionalinfo.AdditionalInfoDTO;
 import org.mskcc.cbio.oncokb.service.dto.useradditionalinfo.ApiAccessRequest;
+import org.mskcc.cbio.oncokb.domain.enumeration.TrialStatus;
 import org.mskcc.cbio.oncokb.service.mapper.UserMapper;
 import org.mskcc.cbio.oncokb.util.ObjectUtil;
 import org.mskcc.cbio.oncokb.util.StringUtil;
@@ -474,14 +475,29 @@ public class SlackService {
 
     private LayoutBlock buildAccountStatusBlock(UserDTO userDTO, boolean isTrialAccountInitiated, boolean trialAccountActivated) {
         List<TextObject> userInfo = new ArrayList<>();
+        TrialStatus trialStatus = userDTO.getTrialStatus() == null ? TrialStatus.REGULAR : userDTO.getTrialStatus();
 
         // Add account information
-        userInfo.add(getTextObject("Account Status", userDTO.isActivated() ? "Activated" : (StringUtils.isNotEmpty(userDTO.getActivationKey()) ? "Email not validated" : "Not Activated")));
-        userInfo.add(getTextObject("Account Type", isTrialAccountInitiated && !(userDTO.isActivated() && !trialAccountActivated) ? "TRIAL" : "REGULAR"));
-        if (isTrialAccountInitiated && !(userDTO.isActivated() && !trialAccountActivated)) {
-            // There is a period of time when the user has been approved but did not activate their trial yet.
-            // In this case, the activationDate is null, so we need to omit this text.
-            Instant activationDate = userDTO.getAdditionalInfo().getTrialAccount().getActivation().getActivationDate();
+        userInfo.add(
+            getTextObject(
+                "Account Status",
+                userDTO.isActivated()
+                    ? "Activated"
+                    : StringUtils.isNotEmpty(userDTO.getActivationKey())
+                    ? "Email not validated"
+                    : "Not Activated"
+            )
+        );
+        userInfo.add(getTextObject(
+            "Account Type",
+            TrialStatus.TRIAL.equals(trialStatus)
+                ? "TRIAL"
+                : TrialStatus.TRIAL_PENDING_TERMS_ACCEPTANCE.equals(trialStatus)
+                ? "PENDING TRIAL TERMS ACCEPTANCE"
+                : "REGULAR"
+        ));
+        if (TrialStatus.TRIAL.equals(trialStatus) && userDTO.getUserTrial() != null) {
+            Instant activationDate = userDTO.getUserTrial().getActivationDate();
             if (activationDate != null) {
                 userInfo.add(getTextObject("Trial Expires On", toNYZoneTime(activationDate.plusSeconds(DAY_IN_SECONDS * 90))));
             }
@@ -508,18 +524,11 @@ public class SlackService {
     }
 
     public boolean withNote(DropdownEmailOption mailOption, UserDTO userDTO, ActionId actionId) {
-        AdditionalInfoDTO additionalInfoDTO = userDTO.getAdditionalInfo();
         switch (mailOption) {
             case GIVE_TRIAL_ACCESS:
-                if (
-                        additionalInfoDTO == null
-                        || (additionalInfoDTO.getTrialAccount() == null && additionalInfoDTO.getUserCompany() == null && additionalInfoDTO.getApiAccessRequest() == null)
-                        || additionalInfoDTO.getTrialAccount() == null
-                        || additionalInfoDTO.getTrialAccount().getActivation() == null
-                ) {
-                    return false;
-                }
-                return StringUtils.isNotEmpty(userDTO.getAdditionalInfo().getTrialAccount().getActivation().getKey()) || userDTO.getAdditionalInfo().getTrialAccount().getActivation().getActivationDate() != null
+                return TrialStatus.TRIAL.equals(userDTO.getTrialStatus())
+                    || TrialStatus.TRIAL_PENDING_TERMS_ACCEPTANCE.equals(userDTO.getTrialStatus())
+                    || userDTO.getUserTrial() != null
                     || actionId == GIVE_TRIAL_ACCESS;
             case CLARIFY_ACADEMIC_NON_INSTITUTE_EMAIL:
                 boolean withAcademicClarificationNote = false;

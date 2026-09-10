@@ -6,6 +6,7 @@ import org.apache.commons.lang3.StringUtils;
 import org.mskcc.cbio.oncokb.config.Constants;
 import org.mskcc.cbio.oncokb.domain.Token;
 import org.mskcc.cbio.oncokb.domain.User;
+import org.mskcc.cbio.oncokb.domain.enumeration.TrialStatus;
 import org.mskcc.cbio.oncokb.repository.UserRepository;
 import org.mskcc.cbio.oncokb.security.AuthoritiesConstants;
 import org.mskcc.cbio.oncokb.service.MailService;
@@ -131,11 +132,12 @@ public class UserResource {
                 managedUserVM.setAuthorities(Collections.unmodifiableSet(authorities));
             }
             User newUser = userService.createUser(managedUserVM, false, Optional.ofNullable(managedUserVM.getTokenValidDays()), Optional.ofNullable(managedUserVM.getTokenIsRenewable()));
-            UserDTO newUserDTO = userMapper.userToUserDTO(newUser);
             if (managedUserVM.getNotifyUserOnTrialCreation()) {
                 userService.initiateTrialAccountActivation(newUser.getLogin());
+                UserDTO newUserDTO = userMapper.userToUserDTO(newUser);
                 mailService.sendActiveTrialMail(newUserDTO, true);
             } else {
+                UserDTO newUserDTO = userMapper.userToUserDTO(newUser);
                 mailService.sendCreationEmail(newUserDTO);
             }
             return ResponseEntity.created(new URI("/api/users/" + newUser.getLogin()))
@@ -174,10 +176,37 @@ public class UserResource {
         }
 
         Optional<UserDTO> updatedUser;
+        TrialStatus requestedTrialStatus = userDTO.getTrialStatus() == null ? TrialStatus.REGULAR : userDTO.getTrialStatus();
+        TrialStatus currentTrialStatus = existingUser
+            .map(userMapper::userToUserDTO)
+            .map(UserDTO::getTrialStatus)
+            .orElse(TrialStatus.REGULAR);
         if (existingUser.isPresent() && !existingUser.get().getActivated() && userDTO.isActivated()) {
             updatedUser = userService.updateUserAndTokens(userDTO);
         } else {
             updatedUser = userService.updateUserFromUserDTO(userDTO);
+        }
+
+        // Apply trial lifecycle transitions only after base user/details persistence so
+        // transition side effects (trial-init email, token policy changes, activation)
+        // run from the latest saved state. Precedence is:
+        // TRIAL_PENDING_TERMS_ACCEPTANCE -> TRIAL -> REGULAR.
+        if (updatedUser.isPresent() && requestedTrialStatus != currentTrialStatus) {
+            if (requestedTrialStatus == TrialStatus.TRIAL_PENDING_TERMS_ACCEPTANCE) {
+                Optional<User> initiatedTrialUser = userService.initiateTrialAccountActivation(updatedUser.get().getLogin());
+                if (initiatedTrialUser.isPresent()) {
+                    UserDTO initiatedUserDTO = userMapper.userToUserDTO(initiatedTrialUser.get());
+                    mailService.sendActiveTrialMail(initiatedUserDTO, false);
+                    updatedUser = Optional.of(initiatedUserDTO);
+                }
+            } else if (requestedTrialStatus == TrialStatus.TRIAL) {
+                updatedUser = userService.approveUser(updatedUser.get(), true);
+            } else {
+                userService.convertUserToRegular(updatedUser.get());
+                updatedUser = userService
+                    .getUserWithAuthoritiesByLogin(updatedUser.get().getLogin())
+                    .map(userMapper::userToUserDTO);
+            }
         }
 
         if(updatedUser.isPresent() && sendEmail && updatedUser.get().isActivated()) {

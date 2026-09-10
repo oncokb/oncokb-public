@@ -3,6 +3,7 @@ package org.mskcc.cbio.oncokb.service.mapper;
 
 import com.google.gson.Gson;
 import org.mskcc.cbio.oncokb.domain.*;
+import org.mskcc.cbio.oncokb.domain.enumeration.TrialStatus;
 import org.mskcc.cbio.oncokb.service.dto.UserDetailsDTO;
 import org.mskcc.cbio.oncokb.service.dto.useradditionalinfo.AdditionalInfoDTO;
 
@@ -21,6 +22,13 @@ public interface UserDetailsMapper extends EntityMapper<UserDetailsDTO, UserDeta
     @Mapping(source = "userId", target = "user")
     @Mapping(source = "companyId", target = "company")
     UserDetails toEntity(UserDetailsDTO userDetailsDTO);
+
+    @AfterMapping
+    default void applyDefaults(@MappingTarget UserDetails userDetails) {
+        if (userDetails.getTrialStatus() == null) {
+            userDetails.setTrialStatus(TrialStatus.REGULAR);
+        }
+    }
 
     default UserDetails fromId(Long id) {
         if (id == null) {

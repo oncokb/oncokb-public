@@ -10,6 +10,7 @@ import org.mskcc.cbio.oncokb.domain.*;
 import org.mskcc.cbio.oncokb.domain.enumeration.LicenseModel;
 import org.mskcc.cbio.oncokb.domain.enumeration.LicenseStatus;
 import org.mskcc.cbio.oncokb.domain.enumeration.LicenseType;
+import org.mskcc.cbio.oncokb.domain.enumeration.TrialStatus;
 import org.mskcc.cbio.oncokb.domain.enumeration.AccountRequestStatus;
 import org.mskcc.cbio.oncokb.domain.enumeration.BulkEmailAudience;
 import org.mskcc.cbio.oncokb.repository.AuthorityRepository;
@@ -19,6 +20,7 @@ import org.mskcc.cbio.oncokb.repository.projection.SendEmailUserOptionProjection
 import org.mskcc.cbio.oncokb.repository.UserDetailsRepository;
 import org.mskcc.cbio.oncokb.repository.UserRepository;
 import org.mskcc.cbio.oncokb.repository.projection.PotentialDuplicateUserProjection;
+import org.mskcc.cbio.oncokb.repository.UserTrialRepository;
 import org.mskcc.cbio.oncokb.repository.projection.UserWithDetailsProjection;
 import org.mskcc.cbio.oncokb.security.AuthoritiesConstants;
 import org.mskcc.cbio.oncokb.security.SecurityUtils;
@@ -78,6 +80,8 @@ public class UserService {
 
     private final UserDetailsRepository userDetailsRepository;
 
+    private final UserTrialRepository userTrialRepository;
+
     private final PasswordEncoder passwordEncoder;
 
     private final AuthorityRepository authorityRepository;
@@ -121,6 +125,7 @@ public class UserService {
     public UserService(
         UserRepository userRepository,
         UserDetailsRepository userDetailsRepository,
+        UserTrialRepository userTrialRepository,
         PasswordEncoder passwordEncoder,
         AuthorityRepository authorityRepository,
         JHipsterProperties jHipsterProperties,
@@ -139,6 +144,7 @@ public class UserService {
         GracePeriodBlackListService gracePeriodBlackListService) {
         this.userRepository = userRepository;
         this.userDetailsRepository = userDetailsRepository;
+        this.userTrialRepository = userTrialRepository;
         this.passwordEncoder = passwordEncoder;
         this.authorityRepository = authorityRepository;
         this.jHipsterProperties = jHipsterProperties;
@@ -213,6 +219,8 @@ public class UserService {
     public Optional<User> initiateTrialAccountActivation(String login) {
         Optional<User> userOptional = userRepository.findOneWithAuthoritiesByLogin(login);
         if (userOptional.isPresent()) {
+            Instant now = Instant.now();
+            User user = userOptional.get();
             Optional<UserDetails> userDetails = userDetailsRepository.findOneByUser(userOptional.get());
             UserDetails ud = null;
             if (userDetails.isPresent()) {
@@ -221,21 +229,21 @@ public class UserService {
                 ud = new UserDetails();
                 ud.setUser(userOptional.get());
             }
-
-            AdditionalInfoDTO additionalInfoDTO = null;
-            if (userDetails.isPresent()) {
-                additionalInfoDTO = new Gson().fromJson(ud.getAdditionalInfo(), AdditionalInfoDTO.class);
-            }
-            if (additionalInfoDTO == null) {
-                additionalInfoDTO = new AdditionalInfoDTO();
-            }
-            if (additionalInfoDTO.getTrialAccount() == null) {
-                additionalInfoDTO.setTrialAccount(initiateTrialAccountInfo());
-            }
-            ud.setAdditionalInfo(new Gson().toJson(additionalInfoDTO));
             ud.setAccountRequestStatus(AccountRequestStatus.APPROVED);
-
+            ud.setTrialStatus(TrialStatus.TRIAL_PENDING_TERMS_ACCEPTANCE);
             userDetailsRepository.save(ud);
+
+            UserTrial userTrial = userTrialRepository.findOneByUser(user).orElse(new UserTrial());
+            userTrial.setUser(user);
+            userTrial.setInitiationDate(now);
+            userTrial.setInitiatedBy(SecurityUtils.getCurrentUserLogin().orElse(""));
+            userTrial.setActivationKey(RandomUtil.generateResetKey());
+            userTrial.setActivationDate(null);
+            userTrial.setLicenseAgreementName("Trial License Agreement");
+            userTrial.setLicenseAgreementVersion("v1");
+            userTrial.setLicenseAgreementAcceptanceDate(null);
+            userTrialRepository.save(userTrial);
+
             return userOptional;
         } else {
             return Optional.empty();
@@ -243,47 +251,28 @@ public class UserService {
     }
 
     public Optional<UserDTO> finishTrialAccountActivation(String key) {
-        Optional<UserDetails> userDetailsOptional = userDetailsRepository.findOneByTrialActivationKey(key);
-        User user = userDetailsOptional.get().getUser();
-        UserDTO userDTO = userMapper.userToUserDTO(userDetailsOptional.get().getUser());
-
-        if (userHasValidTrialActivation(userDTO)) {
-            String userKey = userDTO.getAdditionalInfo().getTrialAccount().getActivation().getKey();
-            if (StringUtils.isNotEmpty(userKey) && userKey.equals(key)) {
-                // Update user account to trial account
-                approveUser(userDTO, true);
-
-                // Reset the trial account info
-                Optional<UserDetails> userDetails = userDetailsRepository.findOneByUser(user);
-                TrialAccount trialAccount = userDTO.getAdditionalInfo().getTrialAccount();
-                trialAccount.getActivation().setActivationDate(Instant.now());
-                trialAccount.getActivation().setKey(null);
-                trialAccount.getLicenseAgreement().setAcceptanceDate(Instant.now());
-                userDTO.getAdditionalInfo().setTrialAccount(trialAccount);
-
-                userDetails.get().setAdditionalInfo(new Gson().toJson(userDTO.getAdditionalInfo()));
-                userDetailsRepository.save(userDetails.get());
-
-                slackService.sendConfirmationOnUserAcceptsTrialAgreement(userDTO, Instant.now().plusSeconds(TRIAL_PERIOD_IN_DAYS * DAY_IN_SECONDS));
-                return Optional.of(userDTO);
-            }
+        Optional<UserTrial> userTrialOptional = userTrialRepository.findOneByActivationKey(key);
+        if (!userTrialOptional.isPresent()) {
+            return Optional.empty();
         }
-        return Optional.empty();
-    }
+        UserTrial userTrial = userTrialOptional.get();
+        User user = userTrial.getUser();
+        UserDTO userDTO = userMapper.userToUserDTO(user);
 
-    private TrialAccount initiateTrialAccountInfo() {
-        TrialAccount trialAccount = new TrialAccount();
-        Activation activation = new Activation();
-        activation.setInitiationDate(Instant.now());
-        activation.setInitiatedBy(SecurityUtils.getCurrentUserLogin().orElse(""));
-        activation.setKey(RandomUtil.generateResetKey());
-        trialAccount.setActivation(activation);
+        if (!StringUtils.equals(userTrial.getActivationKey(), key)) {
+            return Optional.empty();
+        }
 
-        LicenseAgreement licenseAgreement = new LicenseAgreement();
-        licenseAgreement.setName("Trial License Agreement");
-        licenseAgreement.setVersion("v1");
-        trialAccount.setLicenseAgreement(licenseAgreement);
-        return trialAccount;
+        approveUser(userDTO, true);
+
+        Instant now = Instant.now();
+        userTrial.setActivationDate(now);
+        userTrial.setActivationKey(null);
+        userTrial.setLicenseAgreementAcceptanceDate(now);
+        userTrialRepository.save(userTrial);
+
+        slackService.sendConfirmationOnUserAcceptsTrialAgreement(userDTO, Instant.now().plusSeconds(TRIAL_PERIOD_IN_DAYS * DAY_IN_SECONDS));
+        return Optional.of(userMapper.userToUserDTO(user));
     }
 
     public User registerUser(UserDTO userDTO, String password) {
@@ -333,6 +322,7 @@ public class UserService {
         if (userDTO.getAdditionalInfo() != null) {
             userDetails.setAdditionalInfo(new Gson().toJson(userDTO.getAdditionalInfo()));
         }
+        userDetails.setTrialStatus(TrialStatus.REGULAR);
         userDetailsRepository.save(userDetails);
 
         this.clearUserCaches(newUser);
@@ -381,6 +371,7 @@ public class UserService {
         }
         userDetails.setCompany(companyMapper.toEntity(userDTO.getCompany()));
         userDetails.setAccountRequestStatus(AccountRequestStatus.APPROVED);
+        userDetails.setTrialStatus(Optional.ofNullable(userDTO.getTrialStatus()).orElse(TrialStatus.REGULAR));
         userDetailsRepository.save(userDetails);
 
         if (isServiceUser) {
@@ -460,13 +451,14 @@ public class UserService {
                 new Gson().toJson(userDTO.getAdditionalInfo()),
                 userDTO.getCity(),
                 userDTO.getCountry(),
-                userDTO.getAccountRequestStatus()
+                userDTO.getAccountRequestStatus(),
+                userDTO.getTrialStatus()
             );
             if (activatingAccount) {
                 updatedUserDetails.setAccountRequestStatus(AccountRequestStatus.APPROVED);
                 userDetailsRepository.save(updatedUserDetails);
             }
-            UserDTO newUserDTO =  new UserDTO(user, updatedUserDetails);
+            UserDTO newUserDTO = userMapper.userToUserDTO(user, updatedUserDetails);
             newUserDTO.setCompany(userDTO.getCompany());
             return newUserDTO;
         });
@@ -511,7 +503,8 @@ public class UserService {
         String additionalInfo,
         String city,
         String country,
-        AccountRequestStatus accountRequestStatus
+        AccountRequestStatus accountRequestStatus,
+        TrialStatus trialStatus
     ) {
         Optional<UserDetails> userDetails = userDetailsRepository.findOneByUser(user);
         LicenseType alignedLicenseType = companyDTO != null ? companyDTO.getLicenseType() : licenseType;
@@ -527,6 +520,9 @@ public class UserService {
             userDetails.get().setCountry(country);
             if (accountRequestStatus != null) {
                 userDetails.get().setAccountRequestStatus(accountRequestStatus);
+            }
+            if (trialStatus != null) {
+                userDetails.get().setTrialStatus(trialStatus);
             }
             userDetailsRepository.save(userDetails.get());
             return userDetails.get();
@@ -544,6 +540,7 @@ public class UserService {
             newUserDetails.setAccountRequestStatus(
                 accountRequestStatus == null ? AccountRequestStatus.UNKNOWN : accountRequestStatus
             );
+            newUserDetails.setTrialStatus(trialStatus == null ? TrialStatus.REGULAR : trialStatus);
             userDetailsRepository.save(newUserDetails);
             return newUserDetails;
         }
@@ -560,6 +557,9 @@ public class UserService {
 
             // Delete user details
             userDetailsService.deleteByUser(user);
+
+            // Delete user trial info
+            userTrialRepository.deleteByUser(user);
 
             // Delete user mails
             userMailsService.deleteAllByUser(user);
@@ -598,17 +598,26 @@ public class UserService {
     @Transactional(readOnly = true)
     public List<UserDTO> findAllUsersWithUserDetailsByUsersIn(List<User> users) {
         List<UserWithDetailsProjection> usersWithDetails = userRepository.findAllUsersWithUserDetailsByUsersIn(users);
+        Map<Long, UserTrial> userTrialsByUserId = getUserTrialsByUserId(
+            usersWithDetails.stream()
+                .map(UserWithDetailsProjection::getUser)
+                .filter(Objects::nonNull)
+                .map(User::getId)
+                .filter(Objects::nonNull)
+                .collect(Collectors.toList())
+        );
         return usersWithDetails
             .stream()
-            .map(this::toUserDTOWithMails)
+            .map(userWithDetails -> toUserDTOWithMails(userWithDetails, userTrialsByUserId))
             .collect(Collectors.toList());
     }
 
-    private UserDTO toUserDTOWithMails(UserWithDetailsProjection userWithDetails) {
+    private UserDTO toUserDTOWithMails(UserWithDetailsProjection userWithDetails, Map<Long, UserTrial> userTrialsByUserId) {
         User user = userWithDetails.getUser();
         UserDetails userDetails = userWithDetails.getUserDetails();
 
-        UserDTO dto = userMapper.userToUserDTO(user, userDetails);
+        UserTrial userTrial = user == null ? null : userTrialsByUserId.get(user.getId());
+        UserDTO dto = userMapper.userToUserDTO(user, userDetails, userTrial);
         dto.setUserMails(userMailsMapper.toDto(user.getUserMails()));
         return dto;
     }
@@ -684,6 +693,7 @@ public class UserService {
             .stream()
             .filter(userDetails -> userDetails.getUser() != null)
             .collect(Collectors.toMap(userDetails -> userDetails.getUser().getId(), userDetails -> userDetails, (left, right) -> left));
+        Map<Long, UserTrial> userTrialsByUserId = getUserTrialsByUserId(userIds);
 
         // Hydration query order is not guaranteed to match the paged id query order.
         // Index by id and then iterate over userIds so Page content order remains stable
@@ -699,7 +709,7 @@ public class UserService {
                 continue;
             }
 
-            UserDTO dto = userMapper.userToUserDTO(user, userDetailsByUserId.get(userId));
+            UserDTO dto = userMapper.userToUserDTO(user, userDetailsByUserId.get(userId), userTrialsByUserId.get(userId));
             dto.setUserMails(userMailsMapper.toDto(user.getUserMails()));
             userDTOs.add(dto);
         }
@@ -783,6 +793,14 @@ public class UserService {
         }
 
         List<UserWithDetailsProjection> rows = userRepository.findUsersWithDetailsByLoginOrEmailIn(normalizedCandidates);
+        Map<Long, UserTrial> userTrialsByUserId = getUserTrialsByUserId(
+            rows.stream()
+                .map(UserWithDetailsProjection::getUser)
+                .filter(Objects::nonNull)
+                .map(User::getId)
+                .filter(Objects::nonNull)
+                .collect(Collectors.toList())
+        );
         Map<String, UserDTO> byLogin = new HashMap<>();
         Map<String, UserDTO> byEmail = new HashMap<>();
 
@@ -792,7 +810,7 @@ public class UserService {
             if (user == null) {
                 continue;
             }
-            UserDTO dto = userMapper.userToUserDTO(user, userDetails);
+            UserDTO dto = userMapper.userToUserDTO(user, userDetails, userTrialsByUserId.get(user.getId()));
 
             if (StringUtils.isNotBlank(user.getLogin())) {
                 byLogin.put(StringUtils.lowerCase(user.getLogin(), Locale.ENGLISH), dto);
@@ -818,6 +836,16 @@ public class UserService {
         }
 
         return resolved;
+    }
+
+    private Map<Long, UserTrial> getUserTrialsByUserId(List<Long> userIds) {
+        if (userIds == null || userIds.isEmpty()) {
+            return Collections.emptyMap();
+        }
+        return userTrialRepository.findByUserIdIn(userIds)
+            .stream()
+            .filter(userTrial -> userTrial.getUser() != null && userTrial.getUser().getId() != null)
+            .collect(Collectors.toMap(userTrial -> userTrial.getUser().getId(), userTrial -> userTrial, (left, right) -> left));
     }
 
     @Transactional(readOnly = true)
@@ -876,12 +904,14 @@ public class UserService {
         if (userDetailsOptional.isPresent()) {
             UserDetails userDetails = userDetailsOptional.get();
             userDetails.setAccountRequestStatus(AccountRequestStatus.APPROVED);
+            userDetails.setTrialStatus(isTrial ? TrialStatus.TRIAL : TrialStatus.REGULAR);
             userDetailsRepository.save(userDetails);
         } else {
             log.warn("UserDetails missing for user {} during activation. Creating with APPROVED status.", user.getLogin());
             UserDetails userDetails = new UserDetails();
             userDetails.setUser(user);
             userDetails.setAccountRequestStatus(AccountRequestStatus.APPROVED);
+            userDetails.setTrialStatus(isTrial ? TrialStatus.TRIAL : TrialStatus.REGULAR);
             userDetailsRepository.save(userDetails);
         }
 
@@ -905,6 +935,17 @@ public class UserService {
                     token.setRenewable(false);
                     token.setExpiration(expirationDate);
                     tokenService.save(token);
+                });
+                userDetailsRepository.findOneByUser(user).ifPresent(userDetails -> {
+                    userDetails.setTrialStatus(TrialStatus.TRIAL);
+                    userDetailsRepository.save(userDetails);
+                });
+            } else {
+                userDetailsRepository.findOneByUser(user).ifPresent(userDetails -> {
+                    if (userDetails.getTrialStatus() == null) {
+                        userDetails.setTrialStatus(TrialStatus.REGULAR);
+                        userDetailsRepository.save(userDetails);
+                    }
                 });
             }
         }
@@ -934,6 +975,11 @@ public class UserService {
         if (userHasUnactivatedTrial(userDTO)) {
             clearTrialAccountInformation(userDTO);
         }
+
+        userDetailsRepository.findOneByUser(user).ifPresent(userDetails -> {
+            userDetails.setTrialStatus(TrialStatus.REGULAR);
+            userDetailsRepository.save(userDetails);
+        });
 
         // Update the user's tokens to renewable
         List<Token> tokens = tokenService.findByUser(user);
@@ -1057,7 +1103,8 @@ public class UserService {
                     return updatedUserDTO;
                 }
                 if (userHasValidTrialActivation(userDTO)
-                    && userDTO.getAdditionalInfo().getTrialAccount().getActivation().getActivationDate() != null){
+                    && userDTO.getUserTrial() != null
+                    && userDTO.getUserTrial().getActivationDate() != null){
                     // When a user has an active or expired trial, we just need to approve and update their tokens.
                     updatedUserDTO = approveUser(userDTO, true);
                 } else {
@@ -1107,14 +1154,14 @@ public class UserService {
      * @param userDTO
      */
     private void clearTrialAccountInformation(UserDTO userDTO) {
-            userDTO.getAdditionalInfo().setTrialAccount(null);
             Optional<UserDetails> userDetails = userDetailsRepository.findOneByUser(userMapper.userDTOToUser(userDTO));
             if (userDetails.isPresent()) {
                 UserDetails ud = userDetails.get();
-                userDTO.getAdditionalInfo().setTrialAccount(null);
-                ud.setAdditionalInfo(new Gson().toJson(userDTO.getAdditionalInfo()));
+                ud.setTrialStatus(TrialStatus.REGULAR);
                 userDetailsRepository.save(ud);
             }
+            userTrialRepository.findOneByUser(userMapper.userDTOToUser(userDTO))
+                .ifPresent(userTrial -> userTrialRepository.delete(userTrial));
     }
 
     /**
@@ -1160,10 +1207,9 @@ public class UserService {
      */
     private boolean userHasValidTrialActivation(UserDTO userDTO){
         return Optional.ofNullable(userDTO)
-            .map(UserDTO::getAdditionalInfo)
-            .map(AdditionalInfoDTO::getTrialAccount)
-            .map(TrialAccount::getActivation)
-            .isPresent();
+            .map(UserDTO::getUserTrial)
+            .map(userTrial -> userTrial.getInitiationDate() != null)
+            .orElse(false);
     }
 
     /**
@@ -1173,11 +1219,9 @@ public class UserService {
      * @return true if user has no renewable token, otherwise false
      */
     public boolean isUserOnTrial(UserDTO userDTO) {
-        return !tokenService.findByUser(userMapper.userDTOToUser(userDTO))
-            .stream()
-            .filter(token -> token.isRenewable())
-            .findAny()
-            .isPresent();
+        return Optional.ofNullable(userDTO)
+            .map(this::hasNonRenewableToken)
+            .orElse(false);
     }
 
     /**
@@ -1187,12 +1231,20 @@ public class UserService {
      */
     public boolean userHasUnactivatedTrial(UserDTO userDTO) {
         return Optional.ofNullable(userDTO)
-            .map(UserDTO::getAdditionalInfo)
-            .map(AdditionalInfoDTO::getTrialAccount)
-            .map(TrialAccount::getActivation)
-            .map(activation -> {
-                return StringUtils.isNotEmpty(activation.getKey()) && activation.getActivationDate() == null;
-            }).orElse(false);
+            .map(dto -> Optional.ofNullable(dto.getAdditionalInfo())
+                .map(AdditionalInfoDTO::getTrialAccount)
+                .map(TrialAccount::getActivation)
+                .map(activation -> StringUtils.isNotEmpty(activation.getKey()) && activation.getActivationDate() == null)
+                .orElse(TrialStatus.TRIAL_PENDING_TERMS_ACCEPTANCE.equals(dto.getTrialStatus())))
+            .orElse(false);
+    }
+
+    private boolean hasNonRenewableToken(UserDTO userDTO) {
+        return !tokenService.findByUser(userMapper.userDTOToUser(userDTO))
+            .stream()
+            .filter(Token::isRenewable)
+            .findAny()
+            .isPresent();
     }
 
     public List<UserDTO> getCompanyUsers(Long companyId){

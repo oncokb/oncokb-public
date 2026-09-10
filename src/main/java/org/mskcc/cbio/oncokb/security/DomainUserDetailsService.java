@@ -6,8 +6,10 @@ import org.apache.commons.lang3.StringUtils;
 import org.hibernate.validator.internal.constraintvalidators.hv.EmailValidator;
 import org.mskcc.cbio.oncokb.domain.User;
 import org.mskcc.cbio.oncokb.domain.enumeration.AccountRequestStatus;
+import org.mskcc.cbio.oncokb.domain.enumeration.TrialStatus;
 import org.mskcc.cbio.oncokb.repository.UserDetailsRepository;
 import org.mskcc.cbio.oncokb.repository.UserRepository;
+import org.mskcc.cbio.oncokb.repository.UserTrialRepository;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.security.core.GrantedAuthority;
@@ -30,10 +32,16 @@ public class DomainUserDetailsService implements UserDetailsService {
 
     private final UserRepository userRepository;
     private final UserDetailsRepository userDetailsRepository;
+    private final UserTrialRepository userTrialRepository;
 
-    public DomainUserDetailsService(UserRepository userRepository, UserDetailsRepository userDetailsRepository) {
+    public DomainUserDetailsService(
+        UserRepository userRepository,
+        UserDetailsRepository userDetailsRepository,
+        UserTrialRepository userTrialRepository
+    ) {
         this.userRepository = userRepository;
         this.userDetailsRepository = userDetailsRepository;
+        this.userTrialRepository = userTrialRepository;
     }
 
     @Override
@@ -58,14 +66,34 @@ public class DomainUserDetailsService implements UserDetailsService {
         Optional<org.mskcc.cbio.oncokb.domain.UserDetails> userDetailsOptional = userDetailsRepository.findOneByUser(user);
         if (!userDetailsOptional.isPresent() || userDetailsOptional.get().getAccountRequestStatus().equals(AccountRequestStatus.UNKNOWN)) {
             log.warn("Account request status missing for user '{}'. Denying login.", user.getLogin());
-            throw new UserNotApprovedException(lowercaseLogin);
+            throw new ResponseStatusException(HttpStatus.FORBIDDEN, "Account setup is incomplete. Please contact support.");
         }
-        
+
         org.mskcc.cbio.oncokb.domain.UserDetails userDetails = userDetailsOptional.get();
         AccountRequestStatus accountRequestStatus = userDetails.getAccountRequestStatus();
+        TrialStatus trialStatus = userDetails.getTrialStatus() == null ? TrialStatus.REGULAR : userDetails.getTrialStatus();
 
         if (AccountRequestStatus.REJECTED.equals(accountRequestStatus)) {
-            throw new ResponseStatusException(HttpStatus.FORBIDDEN, "User account request has been rejected.");
+            throw new ResponseStatusException(HttpStatus.FORBIDDEN, "Your account request was rejected. Please contact contact@oncokb.org.");
+        }
+
+        if (TrialStatus.TRIAL_PENDING_TERMS_ACCEPTANCE.equals(trialStatus)) {
+            throw new ResponseStatusException(
+                HttpStatus.FORBIDDEN,
+                "Your trial is approved but not active yet. Please accept the trial terms from your activation email."
+            );
+        }
+
+        if (TrialStatus.TRIAL.equals(trialStatus)) {
+            boolean hasAcceptedTerms = userTrialRepository.findOneByUser(user)
+                .map(userTrial -> userTrial.getLicenseAgreementAcceptanceDate() != null)
+                .orElse(false);
+            if (!hasAcceptedTerms) {
+                throw new ResponseStatusException(
+                    HttpStatus.FORBIDDEN,
+                    "Trial activation is incomplete. Please use your activation link again or contact support."
+                );
+            }
         }
 
         if (!user.getActivated()) {
@@ -78,15 +106,21 @@ public class DomainUserDetailsService implements UserDetailsService {
             }
 
             if (AccountRequestStatus.PENDING_NO_GRACE_PERIOD.equals(accountRequestStatus)) {
-                throw new UserNotApprovedException(lowercaseLogin);
+                throw new ResponseStatusException(
+                    HttpStatus.FORBIDDEN,
+                    "Your account is pending manual review. Grace period is not available for this account."
+                );
             }
 
             if (!SecurityUtils.isWithinActivationGracePeriod(user, userDetails.getLicenseType())) {
-                throw new ExpiredGracePeriodException(lowercaseLogin);
+                throw new ResponseStatusException(
+                    HttpStatus.FORBIDDEN,
+                    "Your temporary access expired while your request is still pending review."
+                );
             }
 
             if (!AccountRequestStatus.PENDING.equals(accountRequestStatus)) {
-                throw new UserNotApprovedException(lowercaseLogin);
+                throw new ResponseStatusException(HttpStatus.FORBIDDEN, "Your account is not approved yet.");
             }
         }
         List<GrantedAuthority> grantedAuthorities = user.getAuthorities().stream()
