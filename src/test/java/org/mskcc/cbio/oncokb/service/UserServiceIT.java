@@ -10,12 +10,15 @@ import org.mskcc.cbio.oncokb.domain.enumeration.AccountRequestStatus;
 import org.mskcc.cbio.oncokb.domain.enumeration.BulkEmailAudience;
 import org.mskcc.cbio.oncokb.domain.enumeration.LicenseType;
 import org.mskcc.cbio.oncokb.repository.AuthorityRepository;
+import org.mskcc.cbio.oncokb.repository.projection.PotentialDuplicateUserProjection;
 import org.mskcc.cbio.oncokb.repository.UserDetailsRepository;
 import org.mskcc.cbio.oncokb.repository.UserRepository;
 import org.mskcc.cbio.oncokb.security.AuthoritiesConstants;
+import org.mskcc.cbio.oncokb.service.dto.PotentialDuplicateUserSummary;
 import org.mskcc.cbio.oncokb.service.dto.UserDTO;
 import org.mskcc.cbio.oncokb.service.dto.useradditionalinfo.AdditionalInfoDTO;
 import org.mskcc.cbio.oncokb.service.dto.useradditionalinfo.TrialAccount;
+import org.mskcc.cbio.oncokb.service.projection.PotentialDuplicateUserProjectionImpl;
 import org.mskcc.cbio.oncokb.service.mapper.UserMapper;
 
 import io.github.jhipster.security.RandomUtil;
@@ -49,6 +52,7 @@ import java.util.UUID;
 import java.util.stream.Collectors;
 
 import static org.assertj.core.api.Assertions.assertThat;
+import static org.assertj.core.api.Assertions.tuple;
 import static org.assertj.core.api.Assertions.within;
 import static org.mockito.Mockito.when;
 
@@ -466,7 +470,7 @@ public class UserServiceIT {
         user.setLastName(originalName.right);
         user.setId(id);
 
-        List<UserDTO> allUsers = new ArrayList<>();
+        List<PotentialDuplicateUserProjection> allUsers = new ArrayList<>();
 
         List<UserDTO> similarUsers = new ArrayList<>();
         for (Pair<String, String> similarName : similarNames) {
@@ -476,7 +480,15 @@ public class UserServiceIT {
             newUser.setId(++id);
             similarUsers.add(newUser);
 
-            allUsers.add(newUser);
+            allUsers.add(new PotentialDuplicateUserProjectionImpl(
+                newUser.getId(),
+                newUser.getFirstName(),
+                newUser.getLastName(),
+                null,
+                null,
+                null,
+                null
+            ));
         }
 
         for (Pair<String, String> dissimilarName : dissimilarNames) {
@@ -485,17 +497,40 @@ public class UserServiceIT {
             newUser.setLastName(dissimilarName.right);
             newUser.setId(++id);
 
-            allUsers.add(newUser);
+            allUsers.add(new PotentialDuplicateUserProjectionImpl(
+                newUser.getId(),
+                newUser.getFirstName(),
+                newUser.getLastName(),
+                null,
+                null,
+                null,
+                null
+            ));
         }
 
         UserDTO testSameIdUser = new UserDTO(); //need this to ensure comparison of IDs is done correctly, Longs are compared by reference
         testSameIdUser.setFirstName(user.getFirstName());
         testSameIdUser.setLastName(user.getLastName());
         testSameIdUser.setId(new Long(user.getId()));
-        allUsers.add(testSameIdUser);
+        allUsers.add(new PotentialDuplicateUserProjectionImpl(
+            testSameIdUser.getId(),
+            testSameIdUser.getFirstName(),
+            testSameIdUser.getLastName(),
+            null,
+            null,
+            null,
+            null
+        ));
 
-        List<UserDTO> duplicateUsers = userService.searchAccountsForPotentialDuplicateUser(user, allUsers);
-        assertThat(duplicateUsers).containsExactlyInAnyOrder(similarUsers.toArray(new UserDTO[similarUsers.size()]));
+        List<PotentialDuplicateUserSummary> duplicateUsers = userService.searchAccountsForPotentialDuplicateUserCandidates(user, allUsers);
+        assertThat(duplicateUsers)
+            .extracting(PotentialDuplicateUserSummary::getId, PotentialDuplicateUserSummary::getFirstName, PotentialDuplicateUserSummary::getLastName)
+            .containsExactlyInAnyOrderElementsOf(
+                similarUsers
+                    .stream()
+                    .map(similarUser -> tuple(similarUser.getId(), similarUser.getFirstName(), similarUser.getLastName()))
+                    .collect(Collectors.toList())
+            );
     }
 
     @Test

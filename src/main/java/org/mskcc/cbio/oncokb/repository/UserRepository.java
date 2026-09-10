@@ -2,6 +2,7 @@ package org.mskcc.cbio.oncokb.repository;
 
 import org.mskcc.cbio.oncokb.domain.User;
 import org.mskcc.cbio.oncokb.repository.projection.SendEmailUserOptionProjection;
+import org.mskcc.cbio.oncokb.repository.projection.PotentialDuplicateUserProjection;
 import org.mskcc.cbio.oncokb.repository.projection.UserWithDetailsProjection;
 
 import org.springframework.cache.annotation.Cacheable;
@@ -135,6 +136,30 @@ public interface UserRepository extends JpaRepository<User, Long> {
             "where lower(user.login) in :candidates or lower(user.email) in :candidates"
     )
     List<UserWithDetailsProjection> findUsersWithDetailsByLoginOrEmailIn(@Param("candidates") java.util.List<String> candidates);
+
+    @Query(
+        value = "SELECT u.id AS id, " +
+            "u.first_name AS firstName, " +
+            "u.last_name AS lastName, " +
+            "u.email AS email, " +
+            "ud.company_name AS companyName, " +
+            "ud.city AS city, " +
+            "ud.country AS country " +
+            "FROM jhi_user u " +
+            "LEFT JOIN user_details ud ON ud.user_id = u.id " +
+            "WHERE u.id <> :userId " +
+            "AND u.login <> :anonymousLogin " +
+            "AND NOT EXISTS (" +
+            "  SELECT 1 FROM jhi_user_authority ua " +
+            "  WHERE ua.user_id = u.id AND ua.authority_name = :excludedAuthority" +
+            ")",
+        nativeQuery = true
+    )
+    List<PotentialDuplicateUserProjection> findPotentialDuplicateCandidates(
+        @Param("userId") Long userId,
+        @Param("anonymousLogin") String anonymousLogin,
+        @Param("excludedAuthority") String excludedAuthority
+    );
 
     @Query(
         value = "SELECT u.login AS login, u.email AS email, u.first_name AS firstName, u.last_name AS lastName, " +

@@ -29,6 +29,7 @@ import org.mskcc.cbio.oncokb.domain.Company;
 import org.mskcc.cbio.oncokb.domain.UserIdMessagePair;
 import org.mskcc.cbio.oncokb.domain.enumeration.*;
 import org.mskcc.cbio.oncokb.domain.enumeration.slack.*;
+import org.mskcc.cbio.oncokb.service.dto.PotentialDuplicateUserSummary;
 import org.mskcc.cbio.oncokb.service.dto.UserDTO;
 import org.mskcc.cbio.oncokb.service.dto.UserMailsDTO;
 import org.mskcc.cbio.oncokb.service.dto.useradditionalinfo.AdditionalInfoDTO;
@@ -664,20 +665,24 @@ public class SlackService {
             layoutBlocks.add(buildMarkdownBlock(":nerd_alert: *This user may be from Iran. OncoKB cannot be licensed to users in Iran.*", COUNTRY_WARNING));
         }
 
-        List<UserDTO> potentialDuplicateUsers = userService.getPotentialDuplicateAccountsByUser(userDTO);
+        List<PotentialDuplicateUserSummary> potentialDuplicateUsers = userService.getPotentialDuplicateAccountsByUser(userDTO);
         if (!potentialDuplicateUsers.isEmpty()) {
             StringBuilder sb = new StringBuilder(":warning: *This user may have already registered. A list of previously registered users:*");
-            for (UserDTO user : potentialDuplicateUsers) {
-                List<MailType> rejectionMailTypes = new ArrayList<>(Arrays.asList(MailType.REJECTION_US_SANCTION, MailType.REJECT_ALUMNI_ADDRESS, MailType.REJECTION));
-                List<UserMailsDTO> rejectionUserMails = userMailsService.findUserMailsByUserAndMailTypeIn(userMapper.userDTOToUser(user), rejectionMailTypes);
-
+            List<MailType> rejectionMailTypes = Arrays.asList(MailType.REJECTION_US_SANCTION, MailType.REJECT_ALUMNI_ADDRESS, MailType.REJECTION);
+            List<Long> potentialDuplicateUserIds = potentialDuplicateUsers
+                .stream()
+                .map(PotentialDuplicateUserSummary::getId)
+                .filter(Objects::nonNull)
+                .collect(Collectors.toList());
+            Set<Long> rejectedUserIds = userMailsService.findUserIdsWithMailTypeIn(potentialDuplicateUserIds, rejectionMailTypes);
+            for (PotentialDuplicateUserSummary user : potentialDuplicateUsers) {
                 sb.append("\n\u2022 ");
                 sb.append(StringUtil.getFullName(user.getFirstName(), user.getLastName()));
                 sb.append(", " + getEmailMarkdownWithUserPageLinkout(user.getEmail()));
                 sb.append(", " + user.getCompanyName());
                 sb.append(", " + user.getCity());
                 sb.append(", " + user.getCountry());
-                if (!rejectionUserMails.isEmpty()) {
+                if (rejectedUserIds.contains(user.getId())) {
                     sb.append(", *REJECTED*");
                 }
             }

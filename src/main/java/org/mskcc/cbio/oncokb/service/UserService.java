@@ -18,12 +18,14 @@ import org.mskcc.cbio.oncokb.repository.CompanyRepository;
 import org.mskcc.cbio.oncokb.repository.projection.SendEmailUserOptionProjection;
 import org.mskcc.cbio.oncokb.repository.UserDetailsRepository;
 import org.mskcc.cbio.oncokb.repository.UserRepository;
+import org.mskcc.cbio.oncokb.repository.projection.PotentialDuplicateUserProjection;
 import org.mskcc.cbio.oncokb.repository.projection.UserWithDetailsProjection;
 import org.mskcc.cbio.oncokb.security.AuthoritiesConstants;
 import org.mskcc.cbio.oncokb.security.SecurityUtils;
 import org.mskcc.cbio.oncokb.security.uuid.TokenProvider;
 import org.mskcc.cbio.oncokb.service.dto.useradditionalinfo.*;
 import org.mskcc.cbio.oncokb.service.dto.CompanyDTO;
+import org.mskcc.cbio.oncokb.service.dto.PotentialDuplicateUserSummary;
 import org.mskcc.cbio.oncokb.service.dto.SendEmailUserOptionDTO;
 import org.mskcc.cbio.oncokb.service.dto.UserDTO;
 import org.mskcc.cbio.oncokb.service.mapper.UserMailsMapper;
@@ -985,21 +987,34 @@ public class UserService {
         return user.getAuthorities().stream().filter(userAuth -> userAuth.getName().equalsIgnoreCase(authority)).count() > 0;
     }
 
-    public List<UserDTO> getPotentialDuplicateAccountsByUser(UserDTO user) {
-        return searchAccountsForPotentialDuplicateUser(user, getAllManagedUsers());
+    public List<PotentialDuplicateUserSummary> getPotentialDuplicateAccountsByUser(UserDTO user) {
+        List<PotentialDuplicateUserProjection> candidates = userRepository.findPotentialDuplicateCandidates(
+            user.getId(),
+            Constants.ANONYMOUS_USER,
+            AuthoritiesConstants.ROLE_SERVICE_ACCOUNT
+        );
+        return searchAccountsForPotentialDuplicateUserCandidates(user, candidates);
     }
 
-    public List<UserDTO> searchAccountsForPotentialDuplicateUser(UserDTO user, List<UserDTO> allUsers) {
+    public List<PotentialDuplicateUserSummary> searchAccountsForPotentialDuplicateUserCandidates(UserDTO user, List<PotentialDuplicateUserProjection> candidates) {
         JaroWinklerSimilarity jw = new JaroWinklerSimilarity();
-        List<UserDTO> potentialDuplicateUsers = new ArrayList<>();
-        for (UserDTO potentialDuplicate : allUsers) {
-            if (user.getId().equals(potentialDuplicate.getId())) {
+        List<PotentialDuplicateUserSummary> potentialDuplicateUsers = new ArrayList<>();
+        for (PotentialDuplicateUserProjection potentialDuplicate : candidates) {
+            if (user.getId() != null && user.getId().equals(potentialDuplicate.getId())) {
                 continue;
             }
-
-            Double similarity = jw.apply(user.getFirstName(), potentialDuplicate.getFirstName()) * .3 + jw.apply(user.getLastName(), potentialDuplicate.getLastName()) * .7;
+            Double similarity = jw.apply(user.getFirstName(), potentialDuplicate.getFirstName()) * .3
+                + jw.apply(user.getLastName(), potentialDuplicate.getLastName()) * .7;
             if (similarity > .87) {
-                potentialDuplicateUsers.add(potentialDuplicate);
+                PotentialDuplicateUserSummary summary = new PotentialDuplicateUserSummary();
+                summary.setId(potentialDuplicate.getId());
+                summary.setFirstName(potentialDuplicate.getFirstName());
+                summary.setLastName(potentialDuplicate.getLastName());
+                summary.setEmail(potentialDuplicate.getEmail());
+                summary.setCompanyName(potentialDuplicate.getCompanyName());
+                summary.setCity(potentialDuplicate.getCity());
+                summary.setCountry(potentialDuplicate.getCountry());
+                potentialDuplicateUsers.add(summary);
             }
         }
         return potentialDuplicateUsers;
