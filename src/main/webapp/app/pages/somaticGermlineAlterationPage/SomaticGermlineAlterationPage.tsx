@@ -20,13 +20,20 @@ import {
   isPositionalAlteration,
   getCategoricalAlterationDescription,
   getImplicationsFromTags,
+  getCanonicalFusionAlteration,
 } from 'app/shared/utils/Utils';
 import {
   getAlterationPageLink,
   parseAlterationPagePath,
   AlterationPageLink,
 } from 'app/shared/utils/UrlUtils';
-import { computed, reaction, action, observable } from 'mobx';
+import {
+  computed,
+  reaction,
+  action,
+  observable,
+  IReactionDisposer,
+} from 'mobx';
 import { GENETIC_TYPE } from 'app/components/geneticTypeTabs/GeneticTypeTabs';
 import { observer, inject } from 'mobx-react';
 import styles from './SomaticGermlineAlterationPage.module.scss';
@@ -116,6 +123,8 @@ export class SomaticGermlineAlterationPage extends React.Component<
   // open it by default without overriding an explicit choice afterwards.
   @observable additionalGeneInfoToggledTo?: boolean;
 
+  readonly reactions: IReactionDisposer[] = [];
+
   constructor(props: SomaticGermlineAlterationPageProps) {
     super(props);
     const alterationQuery = decodeSlash(props.match.params.alteration);
@@ -135,21 +144,59 @@ export class SomaticGermlineAlterationPage extends React.Component<
       this.showMutationEffect = false;
     }
 
-    reaction(
-      () => [props.location.hash],
-      ([hash]) => {
-        const queryStrings = QueryString.parse(
-          hash
-        ) as AlterationPageHashQueries;
-        if (queryStrings.tab) {
-          this.selectedTab = queryStrings.tab;
-          if (queryStrings.tab === ANNOTATION_PAGE_TAB_KEYS.FDA) {
-            this.props.appStore.inFdaRecognizedContent = true;
+    this.reactions.push(
+      reaction(
+        () => [props.location.hash],
+        ([hash]) => {
+          const queryStrings = QueryString.parse(
+            hash
+          ) as AlterationPageHashQueries;
+          if (queryStrings.tab) {
+            this.selectedTab = queryStrings.tab;
+            if (queryStrings.tab === ANNOTATION_PAGE_TAB_KEYS.FDA) {
+              this.props.appStore.inFdaRecognizedContent = true;
+            }
           }
-        }
-      },
-      true
+        },
+        true
+      ),
+      reaction(
+        () => this.canonicalFusionAlteration,
+        this.redirectToCanonicalPage
+      )
     );
+  }
+
+  componentWillUnmount() {
+    this.reactions.forEach(componentReaction => componentReaction());
+  }
+
+  @computed
+  get canonicalFusionAlteration() {
+    if (!this.annotationData.isComplete) {
+      return undefined;
+    }
+    return getCanonicalFusionAlteration(
+      this.store.alterationQuery,
+      this.annotationData.result.query.alteration
+    );
+  }
+
+  @action.bound
+  redirectToCanonicalPage(canonicalAlteration?: string) {
+    if (!canonicalAlteration) {
+      return;
+    }
+    this.props.routing.history.replace({
+      pathname: getAlterationPageLink({
+        hugoSymbol: this.store.hugoSymbol,
+        alteration: canonicalAlteration,
+        cancerType: this.store.cancerTypeName,
+        germline: this.store.germline,
+      }),
+      search: this.props.location.search,
+      hash: this.props.location.hash,
+    });
   }
 
   @action.bound

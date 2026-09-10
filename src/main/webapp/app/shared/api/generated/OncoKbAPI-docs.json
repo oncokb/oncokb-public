@@ -2,7 +2,7 @@
   "swagger": "2.0",
   "info": {
     "description": "These endpoints are for private use only.",
-    "version": "v1.6.0",
+    "version": "v1.7.0",
     "title": "OncoKB Private APIs",
     "contact": {
       "name": "OncoKB",
@@ -327,6 +327,29 @@
             "description": "OncoTree(http://oncotree.info) tumor type name. The field supports OncoTree Code, OncoTree Name and OncoTree Main type. Example: Melanoma",
             "required": false,
             "type": "string"
+          },
+          {
+            "name": "inheritanceMechanisms",
+            "in": "query",
+            "description": "List of inheritance mechanisms used to filter the returned genomic indicators. The special value CARRIER is matched against the genomic indicator name rather than the inheritance mechanism. Example: AUTOSOMAL_DOMINANT,CARRIER",
+            "required": false,
+            "type": "array",
+            "items": {
+              "type": "string",
+              "enum": [
+                "AUTOSOMAL_DOMINANT",
+                "AUTOSOMAL_RECESSIVE",
+                "X_LINKED_RECESSIVE",
+                "CARRIER"
+              ]
+            },
+            "collectionFormat": "multi",
+            "enum": [
+              "AUTOSOMAL_DOMINANT",
+              "AUTOSOMAL_RECESSIVE",
+              "X_LINKED_RECESSIVE",
+              "CARRIER"
+            ]
           }
         ],
         "responses": {
@@ -3379,6 +3402,27 @@
         }
       }
     },
+    "ValidationError": {
+      "type": "object",
+      "properties": {
+        "message": {
+          "type": "string",
+          "example": "BRAF A600E: The reference amino acid at position 600 is V instead of A on the OncoKB canonical transcript.",
+          "description": "The same reason in words, naming what was queried and what OncoKB has instead."
+        },
+        "type": {
+          "type": "string",
+          "description": "What is wrong with the query.",
+          "enum": [
+            "REFERENCE_ALLELE_MISMATCH",
+            "POSITION_OUT_OF_RANGE",
+            "REVERSED_POSITION_RANGE",
+            "MALFORMED_ALTERATION",
+            "AMBIGUOUS_FUSION_SEPARATOR"
+          ]
+        }
+      }
+    },
     "ActionableGene": {
       "type": "object",
       "properties": {
@@ -3522,6 +3566,18 @@
         },
         "id": {
           "type": "string"
+        },
+        "inheritanceMechanisms": {
+          "type": "array",
+          "items": {
+            "type": "string",
+            "enum": [
+              "AUTOSOMAL_DOMINANT",
+              "AUTOSOMAL_RECESSIVE",
+              "X_LINKED_RECESSIVE",
+              "CARRIER"
+            ]
+          }
         },
         "referenceGenome": {
           "type": "string",
@@ -3723,26 +3779,6 @@
         },
         "tumorType": {
           "type": "string"
-        }
-      }
-    },
-    "AlterationValidationError": {
-      "type": "object",
-      "properties": {
-        "message": {
-          "type": "string",
-          "example": "BRAF A600E: The reference amino acid at position 600 is V instead of A on the OncoKB canonical transcript.",
-          "description": "The same reason in words, naming the queried alteration and what the OncoKB canonical sequence has instead."
-        },
-        "type": {
-          "type": "string",
-          "description": "The reason the alteration was rejected.",
-          "enum": [
-            "REFERENCE_ALLELE_MISMATCH",
-            "POSITION_OUT_OF_RANGE",
-            "REVERSED_POSITION_RANGE",
-            "MALFORMED_ALTERATION"
-          ]
         }
       }
     },
@@ -3982,10 +4018,6 @@
           "example": false,
           "description": "Indicates whether the alternate allele has been curated. See SOP Protocol 9.1"
         },
-        "alterationValidationError": {
-          "description": "(Nullable) Why the queried alteration was rejected as impossible against the OncoKB canonical sequence, leaving the query annotated at the gene level only. Carries both the reason to branch on and the same reason in words. Null whenever the variant itself was annotated. See docs/alteration-validation-errors.md",
-          "$ref": "#/definitions/AlterationValidationError"
-        },
         "dataVersion": {
           "type": "string",
           "example": "v4.25",
@@ -4001,6 +4033,13 @@
         "diagnosticSummary": {
           "type": "string",
           "description": "Diagnostic summary. Defaulted to \"\""
+        },
+        "errors": {
+          "type": "array",
+          "description": "Everything OncoKB found wrong with the query, each carrying both a reason to branch on and the same reason in words. Empty whenever there is nothing wrong, and never null. An error may mean the variant was left unannotated - a queried alteration that cannot exist against the OncoKB canonical sequence is annotated at the gene level only. See docs/validation-errors.md",
+          "items": {
+            "$ref": "#/definitions/ValidationError"
+          }
         },
         "exon": {
           "type": "string",
