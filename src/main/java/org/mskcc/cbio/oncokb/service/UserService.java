@@ -244,9 +244,6 @@ public class UserService {
             userTrial.setLicenseAgreementAcceptanceDate(null);
             userTrialRepository.save(userTrial);
 
-            user.setActivated(true);
-            userRepository.saveAndFlush(user);
-
             return userOptional;
         } else {
             return Optional.empty();
@@ -1195,8 +1192,7 @@ public class UserService {
      */
     public boolean isUserOnTrial(UserDTO userDTO) {
         return Optional.ofNullable(userDTO)
-            .map(UserDTO::getTrialStatus)
-            .map(trialStatus -> trialStatus.equals(TrialStatus.TRIAL))
+            .map(this::hasNonRenewableToken)
             .orElse(false);
     }
 
@@ -1207,9 +1203,20 @@ public class UserService {
      */
     public boolean userHasUnactivatedTrial(UserDTO userDTO) {
         return Optional.ofNullable(userDTO)
-            .map(UserDTO::getTrialStatus)
-            .map(trialStatus -> trialStatus.equals(TrialStatus.TRIAL_PENDING_TERMS_ACCEPTANCE))
+            .map(dto -> Optional.ofNullable(dto.getAdditionalInfo())
+                .map(AdditionalInfoDTO::getTrialAccount)
+                .map(TrialAccount::getActivation)
+                .map(activation -> StringUtils.isNotEmpty(activation.getKey()) && activation.getActivationDate() == null)
+                .orElse(TrialStatus.TRIAL_PENDING_TERMS_ACCEPTANCE.equals(dto.getTrialStatus())))
             .orElse(false);
+    }
+
+    private boolean hasNonRenewableToken(UserDTO userDTO) {
+        return !tokenService.findByUser(userMapper.userDTOToUser(userDTO))
+            .stream()
+            .filter(Token::isRenewable)
+            .findAny()
+            .isPresent();
     }
 
     public List<UserDTO> getCompanyUsers(Long companyId){

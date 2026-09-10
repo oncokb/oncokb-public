@@ -528,6 +528,7 @@ public class SlackService {
             case GIVE_TRIAL_ACCESS:
                 return TrialStatus.TRIAL.equals(userDTO.getTrialStatus())
                     || TrialStatus.TRIAL_PENDING_TERMS_ACCEPTANCE.equals(userDTO.getTrialStatus())
+                    || userDTO.getUserTrial() != null
                     || actionId == GIVE_TRIAL_ACCESS;
             case CLARIFY_ACADEMIC_NON_INSTITUTE_EMAIL:
                 boolean withAcademicClarificationNote = false;
