@@ -9,6 +9,7 @@ import org.mskcc.cbio.oncokb.domain.Authority;
 import org.mskcc.cbio.oncokb.domain.enumeration.AccountRequestStatus;
 import org.mskcc.cbio.oncokb.domain.enumeration.BulkEmailAudience;
 import org.mskcc.cbio.oncokb.domain.enumeration.LicenseType;
+import org.mskcc.cbio.oncokb.domain.enumeration.TrialStatus;
 import org.mskcc.cbio.oncokb.repository.AuthorityRepository;
 import org.mskcc.cbio.oncokb.repository.projection.PotentialDuplicateUserProjection;
 import org.mskcc.cbio.oncokb.repository.UserDetailsRepository;
@@ -338,6 +339,11 @@ public class UserServiceIT {
     @Test
     public void assertThatUserWithAtLeastOneRenewableTokenIsRegular() {
         User savedUser = userRepository.saveAndFlush(user);
+        UserDetails userDetails = new UserDetails();
+        userDetails.setUser(savedUser);
+        userDetails.setAccountRequestStatus(AccountRequestStatus.APPROVED);
+        userDetails.setTrialStatus(TrialStatus.REGULAR);
+        userDetailsRepository.saveAndFlush(userDetails);
 
         Token renewableToken = new Token();
         renewableToken.setToken(UUID.randomUUID());
@@ -365,6 +371,11 @@ public class UserServiceIT {
     @Test
     public void assertThatUserWithOnlyNonRenewableTokensIsOnTrial() {
         User savedUser = userRepository.saveAndFlush(user);
+        UserDetails userDetails = new UserDetails();
+        userDetails.setUser(savedUser);
+        userDetails.setAccountRequestStatus(AccountRequestStatus.APPROVED);
+        userDetails.setTrialStatus(TrialStatus.TRIAL);
+        userDetailsRepository.saveAndFlush(userDetails);
 
         Token nonRenewableToken = new Token();
         nonRenewableToken.setToken(UUID.randomUUID());

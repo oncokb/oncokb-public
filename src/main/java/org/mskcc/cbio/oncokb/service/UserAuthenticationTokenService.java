@@ -1,13 +1,11 @@
 package org.mskcc.cbio.oncokb.service;
 
 import org.mskcc.cbio.oncokb.domain.Token;
+import org.mskcc.cbio.oncokb.domain.enumeration.TrialStatus;
 import org.mskcc.cbio.oncokb.security.SecurityUtils;
 import org.mskcc.cbio.oncokb.security.uuid.TokenProvider;
 import org.mskcc.cbio.oncokb.service.dto.UserDetailsDTO;
-import org.mskcc.cbio.oncokb.service.dto.useradditionalinfo.Activation;
-import org.mskcc.cbio.oncokb.service.dto.useradditionalinfo.AdditionalInfoDTO;
-import org.mskcc.cbio.oncokb.service.dto.useradditionalinfo.LicenseAgreement;
-import org.mskcc.cbio.oncokb.service.dto.useradditionalinfo.TrialAccount;
+import org.mskcc.cbio.oncokb.domain.enumeration.TrialStatus;
 import org.mskcc.cbio.oncokb.web.rest.errors.LicenseAgreementNotAcceptedException;
 import org.mskcc.cbio.oncokb.web.rest.errors.TokenExpiredException;
 import org.mskcc.cbio.oncokb.web.rest.errors.TrialAccountExpiredException;
@@ -16,9 +14,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 import java.time.Instant;
 import java.util.Comparator;
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 import java.util.Optional;
 import java.util.UUID;
 import java.util.stream.Collectors;
@@ -56,7 +52,7 @@ public class UserAuthenticationTokenService {
                 uuid = validTokens.iterator().next().getToken();
             } else if (canRefreshExpiredTokenForCurrentGracePeriodUser(userDetails)) {
                 uuid = refreshExpiredTokens(tokenList);
-            } else if (tokenList.stream().noneMatch(Token::isRenewable)) {
+            } else if (isCurrentUserOnTrial(userDetails)) {
                 throw new TrialAccountExpiredException();
             } else {
                 throw new TokenExpiredException();
@@ -117,23 +113,19 @@ public class UserAuthenticationTokenService {
     private void validateTrialLicenseAgreement(Optional<UserDetailsDTO> userDetails) {
         if (userDetails.isPresent()) {
             UserDetailsDTO ud = userDetails.get();
-            boolean userHasTrialKey = Optional.of(ud)
-                .map(UserDetailsDTO::getAdditionalInfo)
-                .map(AdditionalInfoDTO::getTrialAccount)
-                .map(TrialAccount::getActivation)
-                .map(Activation::getKey)
-                .isPresent();
-            boolean trialLicenseNOTAccepted = userHasTrialKey && !Optional.of(ud)
-                .map(UserDetailsDTO::getAdditionalInfo)
-                .map(AdditionalInfoDTO::getTrialAccount)
-                .map(TrialAccount::getLicenseAgreement)
-                .map(LicenseAgreement::getAcceptanceDate)
-                .isPresent();
-            if (trialLicenseNOTAccepted) {
-                Map<String, Object> parameters = new HashMap<>();
-                parameters.put("trialActivationKey", ud.getAdditionalInfo().getTrialAccount().getActivation().getKey());
-                throw new LicenseAgreementNotAcceptedException(parameters);
+            if (TrialStatus.TRIAL_PENDING_TERMS_ACCEPTANCE.equals(ud.getTrialStatus())) {
+                if (ud.getUserTrial() != null && ud.getUserTrial().getActivationKey() != null) {
+                    throw new LicenseAgreementNotAcceptedException(java.util.Collections.singletonMap("trialActivationKey", ud.getUserTrial().getActivationKey()));
+                }
+                throw new LicenseAgreementNotAcceptedException(java.util.Collections.emptyMap());
             }
         }
+    }
+
+    private boolean isCurrentUserOnTrial(Optional<UserDetailsDTO> userDetails) {
+        return userDetails
+            .map(UserDetailsDTO::getTrialStatus)
+            .map(trialStatus -> trialStatus == TrialStatus.TRIAL)
+            .orElse(false);
     }
 }

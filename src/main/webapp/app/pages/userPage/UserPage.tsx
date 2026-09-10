@@ -24,10 +24,7 @@ import {
   THRESHOLD_TRIAL_TOKEN_VALID_DEFAULT,
   USER_AUTHORITIES,
 } from 'app/config/constants';
-import {
-  ACCOUNT_TYPE_DEFAULT,
-  AccountType,
-} from 'app/components/newAccountForm/NewAccountForm';
+import { ACCOUNT_TYPE_DEFAULT } from 'app/components/newAccountForm/NewAccountForm';
 import { Alert, Button, Col, Row } from 'react-bootstrap';
 import WindowStore from 'app/store/WindowStore';
 import {
@@ -99,6 +96,12 @@ export enum AccountStatus {
   INACTIVATED = 'Inactivated',
 }
 
+export enum TrialAccountStatus {
+  REGULAR = 'regular',
+  TRIAL = 'trial',
+  PENDING_TERMS = 'pending trial terms acceptance',
+}
+
 export enum EmailVerifiedStatus {
   VERIFIED = 'Verified',
   UNVERIFIED = 'Unverified',
@@ -138,7 +141,7 @@ enum SimpleConfirmModalType {
 @observer
 export default class UserPage extends React.Component<IUserPage> {
   @observable selectedLicense: LicenseType | undefined;
-  @observable selectedAccountType: AccountType | undefined;
+  @observable selectedAccountType: TrialAccountStatus | undefined;
   @observable selectedEmailVerifiedStatus: EmailVerifiedStatus | undefined;
   @observable userTokens: Token[] = [];
   @observable user: UserDTO;
@@ -231,7 +234,15 @@ export default class UserPage extends React.Component<IUserPage> {
 
   @computed
   get defaultSelectedAccountType() {
-    return this.isTrialAccount ? AccountType.TRIAL : AccountType.REGULAR;
+    switch (this.user.trialStatus) {
+      case 'TRIAL':
+        return TrialAccountStatus.TRIAL;
+      case 'TRIAL_PENDING_TERMS_ACCEPTANCE':
+        return TrialAccountStatus.PENDING_TERMS;
+      case 'REGULAR':
+      default:
+        return TrialAccountStatus.REGULAR;
+    }
   }
 
   @computed
@@ -322,7 +333,7 @@ export default class UserPage extends React.Component<IUserPage> {
       .then(
         (updatedUserDTO: UserDTO) => {
           const tokenIsRenewable =
-            this.selectedAccountType !== AccountType.TRIAL;
+            this.selectedAccountType !== TrialAccountStatus.TRIAL;
           let updatedTokenValidDays: number | undefined;
           if (tokenValidDays) {
             updatedTokenValidDays = Number(tokenValidDays);
@@ -418,6 +429,13 @@ export default class UserPage extends React.Component<IUserPage> {
         }
       }
 
+      const selectedTrialStatus =
+        values.accountType === TrialAccountStatus.TRIAL
+          ? 'TRIAL'
+          : values.accountType === TrialAccountStatus.PENDING_TERMS
+          ? 'TRIAL_PENDING_TERMS_ACCEPTANCE'
+          : 'REGULAR';
+
       const updatedUser: UserDTO = {
         ...this.user,
         firstName: values.firstName,
@@ -435,6 +453,7 @@ export default class UserPage extends React.Component<IUserPage> {
         additionalInfo: updatedAdditionalInfo,
         city: values.city,
         country: values.country,
+        trialStatus: selectedTrialStatus,
       };
       this.getUserStatus = PromiseStatus.pending;
       this.updateUserUsingPUT(updatedUser, values.tokenValidDays);
@@ -585,22 +604,19 @@ export default class UserPage extends React.Component<IUserPage> {
 
   @computed
   get isTrialAccount() {
-    return (
-      this.userTokens.length > 0 &&
-      this.userTokens.filter(token => token.renewable).length < 1
-    );
+    return this.user.trialStatus === 'TRIAL';
   }
 
   @computed
   get trialInitiated() {
-    return !!this.user.additionalInfo?.trialAccount?.activation?.initiationDate;
+    return !!this.user.userTrial?.initiationDate;
   }
 
   @computed
   get awaitingTrialAgreementAccepted() {
     return (
       this.trialInitiated &&
-      !this.user.additionalInfo?.trialAccount?.licenseAgreement?.acceptanceDate
+      !this.user.userTrial?.licenseAgreementAcceptanceDate
     );
   }
 
@@ -696,12 +712,10 @@ export default class UserPage extends React.Component<IUserPage> {
                             >
                               Send Email
                             </QuickToolButton>
-                            {this.user.additionalInfo?.trialAccount ? (
+                            {this.user.userTrial ? (
                               <TrialAccountModal
                                 baseUrl={this.props.windowStore.baseUrl}
-                                trialAccount={
-                                  this.user.additionalInfo?.trialAccount
-                                }
+                                userTrial={this.user.userTrial}
                                 show={this.showTrialAccountModal}
                                 onClose={() =>
                                   (this.showTrialAccountModal = false)
@@ -1022,22 +1036,26 @@ export default class UserPage extends React.Component<IUserPage> {
                               if (value) {
                                 this.selectedAccountType = value;
                               } else {
-                                this.selectedAccountType = ACCOUNT_TYPE_DEFAULT;
+                                this.selectedAccountType =
+                                  TrialAccountStatus.REGULAR;
                               }
                             }}
                           >
                             <AvRadio
-                              label={AccountType.REGULAR}
-                              value={AccountType.REGULAR}
-                              disabled={this.awaitingTrialAgreementAccepted}
+                              label={TrialAccountStatus.REGULAR}
+                              value={TrialAccountStatus.REGULAR}
                             />
                             <AvRadio
-                              label={AccountType.TRIAL}
-                              value={AccountType.TRIAL}
-                              disabled={this.awaitingTrialAgreementAccepted}
+                              label={TrialAccountStatus.TRIAL}
+                              value={TrialAccountStatus.TRIAL}
+                            />
+                            <AvRadio
+                              label={TrialAccountStatus.PENDING_TERMS}
+                              value={TrialAccountStatus.PENDING_TERMS}
                             />
                           </AvRadioGroup>
-                          {this.selectedAccountType === AccountType.TRIAL ? (
+                          {this.selectedAccountType ===
+                          TrialAccountStatus.TRIAL ? (
                             <div className={'mt-2'}>
                               <AvField
                                 name="tokenValidDays"

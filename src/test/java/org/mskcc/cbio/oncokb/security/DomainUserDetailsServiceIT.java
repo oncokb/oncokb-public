@@ -3,10 +3,13 @@ package org.mskcc.cbio.oncokb.security;
 import org.mskcc.cbio.oncokb.RedisTestContainerExtension;
 import org.mskcc.cbio.oncokb.OncokbPublicApp;
 import org.mskcc.cbio.oncokb.domain.User;
+import org.mskcc.cbio.oncokb.domain.UserTrial;
 import org.mskcc.cbio.oncokb.domain.enumeration.AccountRequestStatus;
 import org.mskcc.cbio.oncokb.domain.enumeration.LicenseType;
+import org.mskcc.cbio.oncokb.domain.enumeration.TrialStatus;
 import org.mskcc.cbio.oncokb.repository.UserDetailsRepository;
 import org.mskcc.cbio.oncokb.repository.UserRepository;
+import org.mskcc.cbio.oncokb.repository.UserTrialRepository;
 
 import org.apache.commons.lang3.RandomStringUtils;
 import org.junit.jupiter.api.BeforeEach;
@@ -52,12 +55,17 @@ public class DomainUserDetailsServiceIT {
     private static final String USER_EIGHT_EMAIL = "test-user-eight@localhost";
     private static final String USER_NINE_LOGIN = "test-user-nine";
     private static final String USER_NINE_EMAIL = "test-user-nine@localhost";
+    private static final String USER_TEN_LOGIN = "test-user-ten";
+    private static final String USER_TEN_EMAIL = "test-user-ten@localhost";
 
     @Autowired
     private UserRepository userRepository;
 
     @Autowired
     private UserDetailsRepository userDetailsRepository;
+
+    @Autowired
+    private UserTrialRepository userTrialRepository;
 
     @Autowired
     private UserDetailsService domainUserDetailsService;
@@ -77,6 +85,7 @@ public class DomainUserDetailsServiceIT {
         org.mskcc.cbio.oncokb.domain.UserDetails userOneDetails = new org.mskcc.cbio.oncokb.domain.UserDetails();
         userOneDetails.setUser(userOne);
         userOneDetails.setAccountRequestStatus(AccountRequestStatus.APPROVED);
+        userOneDetails.setTrialStatus(TrialStatus.REGULAR);
         userDetailsRepository.save(userOneDetails);
 
         User userTwo = new User();
@@ -92,6 +101,7 @@ public class DomainUserDetailsServiceIT {
         org.mskcc.cbio.oncokb.domain.UserDetails userTwoDetails = new org.mskcc.cbio.oncokb.domain.UserDetails();
         userTwoDetails.setUser(userTwo);
         userTwoDetails.setAccountRequestStatus(AccountRequestStatus.APPROVED);
+        userTwoDetails.setTrialStatus(TrialStatus.REGULAR);
         userDetailsRepository.save(userTwoDetails);
 
         User userThree = new User();
@@ -112,6 +122,7 @@ public class DomainUserDetailsServiceIT {
         org.mskcc.cbio.oncokb.domain.UserDetails userThreeDetails = new org.mskcc.cbio.oncokb.domain.UserDetails();
         userThreeDetails.setUser(userThree);
         userThreeDetails.setAccountRequestStatus(AccountRequestStatus.PENDING);
+        userThreeDetails.setTrialStatus(TrialStatus.REGULAR);
         userDetailsRepository.save(userThreeDetails);
 
         User userFour = new User();
@@ -129,6 +140,7 @@ public class DomainUserDetailsServiceIT {
         org.mskcc.cbio.oncokb.domain.UserDetails userFourDetails = new org.mskcc.cbio.oncokb.domain.UserDetails();
         userFourDetails.setUser(userFour);
         userFourDetails.setAccountRequestStatus(AccountRequestStatus.APPROVED);
+        userFourDetails.setTrialStatus(TrialStatus.REGULAR);
         userDetailsRepository.save(userFourDetails);
 
         User userFive = new User();
@@ -147,6 +159,7 @@ public class DomainUserDetailsServiceIT {
         org.mskcc.cbio.oncokb.domain.UserDetails userFiveDetails = new org.mskcc.cbio.oncokb.domain.UserDetails();
         userFiveDetails.setUser(userFive);
         userFiveDetails.setAccountRequestStatus(AccountRequestStatus.PENDING);
+        userFiveDetails.setTrialStatus(TrialStatus.REGULAR);
         userDetailsRepository.save(userFiveDetails);
 
         User userSix = new User();
@@ -161,6 +174,7 @@ public class DomainUserDetailsServiceIT {
         org.mskcc.cbio.oncokb.domain.UserDetails userSixDetails = new org.mskcc.cbio.oncokb.domain.UserDetails();
         userSixDetails.setUser(userSix);
         userSixDetails.setAccountRequestStatus(AccountRequestStatus.REJECTED);
+        userSixDetails.setTrialStatus(TrialStatus.REGULAR);
         userDetailsRepository.save(userSixDetails);
 
         User userSeven = new User();
@@ -188,6 +202,7 @@ public class DomainUserDetailsServiceIT {
         userEightDetails.setUser(userEight);
         userEightDetails.setAccountRequestStatus(AccountRequestStatus.PENDING);
         userEightDetails.setLicenseType(LicenseType.COMMERCIAL);
+        userEightDetails.setTrialStatus(TrialStatus.REGULAR);
         userDetailsRepository.save(userEightDetails);
 
         User userNine = new User();
@@ -204,7 +219,27 @@ public class DomainUserDetailsServiceIT {
         org.mskcc.cbio.oncokb.domain.UserDetails userNineDetails = new org.mskcc.cbio.oncokb.domain.UserDetails();
         userNineDetails.setUser(userNine);
         userNineDetails.setAccountRequestStatus(AccountRequestStatus.PENDING_NO_GRACE_PERIOD);
+        userNineDetails.setTrialStatus(TrialStatus.REGULAR);
         userDetailsRepository.save(userNineDetails);
+
+        User userTen = new User();
+        userTen.setLogin(USER_TEN_LOGIN);
+        userTen.setPassword(RandomStringUtils.random(60));
+        userTen.setActivated(true);
+        userTen.setEmail(USER_TEN_EMAIL);
+        userTen.setFirstName("userTen");
+        userTen.setLastName("doe");
+        userTen.setLangKey("en");
+        userRepository.save(userTen);
+        org.mskcc.cbio.oncokb.domain.UserDetails userTenDetails = new org.mskcc.cbio.oncokb.domain.UserDetails();
+        userTenDetails.setUser(userTen);
+        userTenDetails.setAccountRequestStatus(AccountRequestStatus.APPROVED);
+        userTenDetails.setTrialStatus(TrialStatus.TRIAL_PENDING_TERMS_ACCEPTANCE);
+        userDetailsRepository.save(userTenDetails);
+        UserTrial userTrial = new UserTrial();
+        userTrial.setUser(userTen);
+        userTrial.setActivationKey("trial-activation-key");
+        userTrialRepository.save(userTrial);
     }
 
     @Test
@@ -269,7 +304,7 @@ public class DomainUserDetailsServiceIT {
 
     @Test
     public void assertThatUnknownAccountStatusThrowsUserNotApproved() {
-        assertThatExceptionOfType(UserNotApprovedException.class)
+        assertThatExceptionOfType(ResponseStatusException.class)
             .isThrownBy(() -> domainUserDetailsService.loadUserByUsername(USER_SEVEN_LOGIN));
     }
 
@@ -282,8 +317,14 @@ public class DomainUserDetailsServiceIT {
 
     @Test
     public void assertThatPendingNoGracePeriodUserCannotLogin() {
-        assertThatExceptionOfType(UserNotApprovedException.class)
+        assertThatExceptionOfType(ResponseStatusException.class)
             .isThrownBy(() -> domainUserDetailsService.loadUserByUsername(USER_NINE_LOGIN));
+    }
+
+    @Test
+    public void assertThatPendingTrialTermsUserCannotLogin() {
+        assertThatExceptionOfType(ResponseStatusException.class)
+            .isThrownBy(() -> domainUserDetailsService.loadUserByUsername(USER_TEN_LOGIN));
     }
 
     @Test
