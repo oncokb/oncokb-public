@@ -4,13 +4,18 @@ import org.mskcc.cbio.oncokb.OncokbPublicApp;
 import org.mskcc.cbio.oncokb.config.cache.CacheNameResolver;
 import org.mskcc.cbio.oncokb.config.cache.UserCacheResolver;
 import org.mskcc.cbio.oncokb.domain.Authority;
+import org.mskcc.cbio.oncokb.domain.Token;
 import org.mskcc.cbio.oncokb.domain.User;
 import org.mskcc.cbio.oncokb.domain.UserDetails;
+import org.mskcc.cbio.oncokb.domain.UserTrial;
 import org.mskcc.cbio.oncokb.domain.enumeration.LicenseType;
 import org.mskcc.cbio.oncokb.domain.enumeration.AccountRequestStatus;
+import org.mskcc.cbio.oncokb.domain.enumeration.TrialStatus;
 import org.mskcc.cbio.oncokb.repository.UserDetailsRepository;
 import org.mskcc.cbio.oncokb.repository.UserRepository;
+import org.mskcc.cbio.oncokb.repository.UserTrialRepository;
 import org.mskcc.cbio.oncokb.security.AuthoritiesConstants;
+import org.mskcc.cbio.oncokb.service.TokenService;
 import org.mskcc.cbio.oncokb.service.dto.UserDTO;
 import org.mskcc.cbio.oncokb.service.mapper.UserMapper;
 import org.mskcc.cbio.oncokb.web.rest.vm.ManagedUserVM;
@@ -87,6 +92,12 @@ public class UserResourceIT {
 
     @Autowired
     private UserMapper userMapper;
+
+    @Autowired
+    private UserTrialRepository userTrialRepository;
+
+    @Autowired
+    private TokenService tokenService;
 
     @Autowired
     private EntityManager em;
@@ -501,6 +512,151 @@ public class UserResourceIT {
         Optional<UserDetails> updatedUserDetails = userDetailsRepository.findOneByUser(updatedUser);
         assertThat(updatedUserDetails).isPresent();
         assertThat(updatedUserDetails.get().getAccountRequestStatus()).isEqualTo(AccountRequestStatus.APPROVED);
+    }
+
+    @Test
+    @Transactional
+    public void updateUserToPendingTrialInitiatesTrialActivation() throws Exception {
+        userRepository.saveAndFlush(user);
+        UserDetails userDetails = new UserDetails();
+        userDetails.setUser(user);
+        userDetails.setAccountRequestStatus(AccountRequestStatus.APPROVED);
+        userDetails.setTrialStatus(TrialStatus.REGULAR);
+        userDetailsRepository.saveAndFlush(userDetails);
+
+        User updatedUser = userRepository.findById(user.getId()).orElseThrow(NoSuchElementException::new);
+        ManagedUserVM managedUserVM = new ManagedUserVM();
+        managedUserVM.setId(updatedUser.getId());
+        managedUserVM.setLogin(updatedUser.getLogin());
+        managedUserVM.setPassword(UPDATED_PASSWORD);
+        managedUserVM.setFirstName(UPDATED_FIRSTNAME);
+        managedUserVM.setLastName(UPDATED_LASTNAME);
+        managedUserVM.setEmail(UPDATED_EMAIL);
+        managedUserVM.setActivated(updatedUser.getActivated());
+        managedUserVM.setImageUrl(UPDATED_IMAGEURL);
+        managedUserVM.setLangKey(UPDATED_LANGKEY);
+        managedUserVM.setTrialStatus(TrialStatus.TRIAL_PENDING_TERMS_ACCEPTANCE);
+        managedUserVM.setAuthorities(Collections.singleton(AuthoritiesConstants.USER));
+
+        LinkedMultiValueMap<String, String> requestParams = new LinkedMultiValueMap<>();
+        requestParams.add("sendEmail", "false");
+        requestParams.add("unlinkUser", "false");
+
+        restUserMockMvc.perform(put("/api/users")
+            .contentType(MediaType.APPLICATION_JSON)
+            .content(TestUtil.convertObjectToJsonBytes(managedUserVM))
+            .params(requestParams))
+            .andExpect(status().isOk());
+
+        Optional<User> reloadedUser = userRepository.findOneWithAuthoritiesByLogin(updatedUser.getLogin());
+        assertThat(reloadedUser).isPresent();
+        Optional<UserDetails> reloadedUserDetails = userDetailsRepository.findOneByUser(reloadedUser.get());
+        assertThat(reloadedUserDetails).isPresent();
+        assertThat(reloadedUserDetails.get().getTrialStatus()).isEqualTo(TrialStatus.TRIAL_PENDING_TERMS_ACCEPTANCE);
+
+        Optional<UserTrial> trial = userTrialRepository.findOneByUser(reloadedUser.get());
+        assertThat(trial).isPresent();
+        assertThat(trial.get().getActivationKey()).isNotBlank();
+        assertThat(trial.get().getActivationDate()).isNull();
+        assertThat(trial.get().getLicenseAgreementAcceptanceDate()).isNull();
+    }
+
+    @Test
+    @Transactional
+    public void updateUserToTrialApprovesTrialUser() throws Exception {
+        userRepository.saveAndFlush(user);
+
+        UserDetails userDetails = new UserDetails();
+        userDetails.setUser(user);
+        userDetails.setAccountRequestStatus(AccountRequestStatus.APPROVED);
+        userDetails.setTrialStatus(TrialStatus.TRIAL_PENDING_TERMS_ACCEPTANCE);
+        userDetailsRepository.saveAndFlush(userDetails);
+
+        UserTrial userTrial = new UserTrial();
+        userTrial.setUser(user);
+        userTrial.setInitiationDate(Instant.now().minusSeconds(3600));
+        userTrial.setActivationKey("activation-key-" + UUID.randomUUID());
+        userTrialRepository.saveAndFlush(userTrial);
+
+        User updatedUser = userRepository.findById(user.getId()).orElseThrow(NoSuchElementException::new);
+        ManagedUserVM managedUserVM = new ManagedUserVM();
+        managedUserVM.setId(updatedUser.getId());
+        managedUserVM.setLogin(updatedUser.getLogin());
+        managedUserVM.setPassword(UPDATED_PASSWORD);
+        managedUserVM.setFirstName(UPDATED_FIRSTNAME);
+        managedUserVM.setLastName(UPDATED_LASTNAME);
+        managedUserVM.setEmail(UPDATED_EMAIL);
+        managedUserVM.setActivated(updatedUser.getActivated());
+        managedUserVM.setImageUrl(UPDATED_IMAGEURL);
+        managedUserVM.setLangKey(UPDATED_LANGKEY);
+        managedUserVM.setTrialStatus(TrialStatus.TRIAL);
+        managedUserVM.setAuthorities(Collections.singleton(AuthoritiesConstants.USER));
+
+        LinkedMultiValueMap<String, String> requestParams = new LinkedMultiValueMap<>();
+        requestParams.add("sendEmail", "false");
+        requestParams.add("unlinkUser", "false");
+
+        restUserMockMvc.perform(put("/api/users")
+            .contentType(MediaType.APPLICATION_JSON)
+            .content(TestUtil.convertObjectToJsonBytes(managedUserVM))
+            .params(requestParams))
+            .andExpect(status().isOk());
+
+        User reloadedUser = userRepository.findOneWithAuthoritiesByLogin(updatedUser.getLogin()).orElseThrow(NoSuchElementException::new);
+        UserDetails reloadedUserDetails = userDetailsRepository.findOneByUser(reloadedUser).orElseThrow(NoSuchElementException::new);
+        assertThat(reloadedUserDetails.getTrialStatus()).isEqualTo(TrialStatus.TRIAL);
+        assertThat(tokenService.findByUser(reloadedUser)).isNotEmpty();
+        assertThat(tokenService.findByUser(reloadedUser)).extracting(Token::isRenewable).containsOnly(false);
+    }
+
+    @Test
+    @Transactional
+    public void updateUserToRegularConvertsTrialUser() throws Exception {
+        user.setActivated(false);
+        userRepository.saveAndFlush(user);
+
+        UserDetails userDetails = new UserDetails();
+        userDetails.setUser(user);
+        userDetails.setAccountRequestStatus(AccountRequestStatus.APPROVED);
+        userDetails.setTrialStatus(TrialStatus.TRIAL);
+        userDetailsRepository.saveAndFlush(userDetails);
+
+        Token trialToken = new Token();
+        trialToken.setToken(UUID.randomUUID());
+        trialToken.setUser(user);
+        trialToken.setRenewable(false);
+        trialToken.setExpiration(Instant.now().plusSeconds(86400));
+        tokenService.save(trialToken);
+
+        User updatedUser = userRepository.findById(user.getId()).orElseThrow(NoSuchElementException::new);
+        ManagedUserVM managedUserVM = new ManagedUserVM();
+        managedUserVM.setId(updatedUser.getId());
+        managedUserVM.setLogin(updatedUser.getLogin());
+        managedUserVM.setPassword(UPDATED_PASSWORD);
+        managedUserVM.setFirstName(UPDATED_FIRSTNAME);
+        managedUserVM.setLastName(UPDATED_LASTNAME);
+        managedUserVM.setEmail(UPDATED_EMAIL);
+        managedUserVM.setActivated(false);
+        managedUserVM.setImageUrl(UPDATED_IMAGEURL);
+        managedUserVM.setLangKey(UPDATED_LANGKEY);
+        managedUserVM.setTrialStatus(TrialStatus.REGULAR);
+        managedUserVM.setAuthorities(Collections.singleton(AuthoritiesConstants.USER));
+
+        LinkedMultiValueMap<String, String> requestParams = new LinkedMultiValueMap<>();
+        requestParams.add("sendEmail", "false");
+        requestParams.add("unlinkUser", "false");
+
+        restUserMockMvc.perform(put("/api/users")
+            .contentType(MediaType.APPLICATION_JSON)
+            .content(TestUtil.convertObjectToJsonBytes(managedUserVM))
+            .params(requestParams))
+            .andExpect(status().isOk());
+
+        User reloadedUser = userRepository.findOneWithAuthoritiesByLogin(updatedUser.getLogin()).orElseThrow(NoSuchElementException::new);
+        UserDetails reloadedUserDetails = userDetailsRepository.findOneByUser(reloadedUser).orElseThrow(NoSuchElementException::new);
+        assertThat(reloadedUser.getActivated()).isTrue();
+        assertThat(reloadedUserDetails.getTrialStatus()).isEqualTo(TrialStatus.REGULAR);
+        assertThat(tokenService.findByUser(reloadedUser)).extracting(Token::isRenewable).containsOnly(true);
     }
 
     @Test

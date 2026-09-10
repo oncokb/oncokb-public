@@ -57,6 +57,10 @@ public class DomainUserDetailsServiceIT {
     private static final String USER_NINE_EMAIL = "test-user-nine@localhost";
     private static final String USER_TEN_LOGIN = "test-user-ten";
     private static final String USER_TEN_EMAIL = "test-user-ten@localhost";
+    private static final String USER_ELEVEN_LOGIN = "test-user-eleven";
+    private static final String USER_ELEVEN_EMAIL = "test-user-eleven@localhost";
+    private static final String USER_TWELVE_LOGIN = "test-user-twelve";
+    private static final String USER_TWELVE_EMAIL = "test-user-twelve@localhost";
 
     @Autowired
     private UserRepository userRepository;
@@ -240,6 +244,48 @@ public class DomainUserDetailsServiceIT {
         userTrial.setUser(userTen);
         userTrial.setActivationKey("trial-activation-key");
         userTrialRepository.save(userTrial);
+
+        User userEleven = new User();
+        userEleven.setLogin(USER_ELEVEN_LOGIN);
+        userEleven.setPassword(RandomStringUtils.random(60));
+        userEleven.setActivated(true);
+        userEleven.setEmail(USER_ELEVEN_EMAIL);
+        userEleven.setFirstName("userEleven");
+        userEleven.setLastName("doe");
+        userEleven.setLangKey("en");
+        userRepository.save(userEleven);
+        org.mskcc.cbio.oncokb.domain.UserDetails userElevenDetails = new org.mskcc.cbio.oncokb.domain.UserDetails();
+        userElevenDetails.setUser(userEleven);
+        userElevenDetails.setAccountRequestStatus(AccountRequestStatus.APPROVED);
+        userElevenDetails.setTrialStatus(TrialStatus.TRIAL);
+        userDetailsRepository.save(userElevenDetails);
+        UserTrial userElevenTrial = new UserTrial();
+        userElevenTrial.setUser(userEleven);
+        userElevenTrial.setInitiationDate(Instant.now().minus(Duration.ofDays(2)));
+        userElevenTrial.setActivationDate(Instant.now().minus(Duration.ofDays(1)));
+        userElevenTrial.setLicenseAgreementAcceptanceDate(null);
+        userTrialRepository.save(userElevenTrial);
+
+        User userTwelve = new User();
+        userTwelve.setLogin(USER_TWELVE_LOGIN);
+        userTwelve.setPassword(RandomStringUtils.random(60));
+        userTwelve.setActivated(true);
+        userTwelve.setEmail(USER_TWELVE_EMAIL);
+        userTwelve.setFirstName("userTwelve");
+        userTwelve.setLastName("doe");
+        userTwelve.setLangKey("en");
+        userRepository.save(userTwelve);
+        org.mskcc.cbio.oncokb.domain.UserDetails userTwelveDetails = new org.mskcc.cbio.oncokb.domain.UserDetails();
+        userTwelveDetails.setUser(userTwelve);
+        userTwelveDetails.setAccountRequestStatus(AccountRequestStatus.APPROVED);
+        userTwelveDetails.setTrialStatus(TrialStatus.TRIAL);
+        userDetailsRepository.save(userTwelveDetails);
+        UserTrial userTwelveTrial = new UserTrial();
+        userTwelveTrial.setUser(userTwelve);
+        userTwelveTrial.setInitiationDate(Instant.now().minus(Duration.ofDays(2)));
+        userTwelveTrial.setActivationDate(Instant.now().minus(Duration.ofDays(1)));
+        userTwelveTrial.setLicenseAgreementAcceptanceDate(Instant.now().minus(Duration.ofHours(2)));
+        userTrialRepository.save(userTwelveTrial);
     }
 
     @Test
@@ -325,6 +371,19 @@ public class DomainUserDetailsServiceIT {
     public void assertThatPendingTrialTermsUserCannotLogin() {
         assertThatExceptionOfType(ResponseStatusException.class)
             .isThrownBy(() -> domainUserDetailsService.loadUserByUsername(USER_TEN_LOGIN));
+    }
+
+    @Test
+    public void assertThatTrialUserWithoutAcceptedTermsCannotLogin() {
+        assertThatExceptionOfType(ResponseStatusException.class)
+            .isThrownBy(() -> domainUserDetailsService.loadUserByUsername(USER_ELEVEN_LOGIN));
+    }
+
+    @Test
+    public void assertThatTrialUserWithAcceptedTermsCanLogin() {
+        UserDetails userDetails = domainUserDetailsService.loadUserByUsername(USER_TWELVE_LOGIN);
+        assertThat(userDetails).isNotNull();
+        assertThat(userDetails.getUsername()).isEqualTo(USER_TWELVE_LOGIN);
     }
 
     @Test
