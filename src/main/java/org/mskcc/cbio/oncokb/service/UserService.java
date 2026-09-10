@@ -598,17 +598,26 @@ public class UserService {
     @Transactional(readOnly = true)
     public List<UserDTO> findAllUsersWithUserDetailsByUsersIn(List<User> users) {
         List<UserWithDetailsProjection> usersWithDetails = userRepository.findAllUsersWithUserDetailsByUsersIn(users);
+        Map<Long, UserTrial> userTrialsByUserId = getUserTrialsByUserId(
+            usersWithDetails.stream()
+                .map(UserWithDetailsProjection::getUser)
+                .filter(Objects::nonNull)
+                .map(User::getId)
+                .filter(Objects::nonNull)
+                .collect(Collectors.toList())
+        );
         return usersWithDetails
             .stream()
-            .map(this::toUserDTOWithMails)
+            .map(userWithDetails -> toUserDTOWithMails(userWithDetails, userTrialsByUserId))
             .collect(Collectors.toList());
     }
 
-    private UserDTO toUserDTOWithMails(UserWithDetailsProjection userWithDetails) {
+    private UserDTO toUserDTOWithMails(UserWithDetailsProjection userWithDetails, Map<Long, UserTrial> userTrialsByUserId) {
         User user = userWithDetails.getUser();
         UserDetails userDetails = userWithDetails.getUserDetails();
 
-        UserDTO dto = userMapper.userToUserDTO(user, userDetails);
+        UserTrial userTrial = user == null ? null : userTrialsByUserId.get(user.getId());
+        UserDTO dto = userMapper.userToUserDTO(user, userDetails, userTrial);
         dto.setUserMails(userMailsMapper.toDto(user.getUserMails()));
         return dto;
     }
@@ -684,6 +693,7 @@ public class UserService {
             .stream()
             .filter(userDetails -> userDetails.getUser() != null)
             .collect(Collectors.toMap(userDetails -> userDetails.getUser().getId(), userDetails -> userDetails, (left, right) -> left));
+        Map<Long, UserTrial> userTrialsByUserId = getUserTrialsByUserId(userIds);
 
         // Hydration query order is not guaranteed to match the paged id query order.
         // Index by id and then iterate over userIds so Page content order remains stable
@@ -699,7 +709,7 @@ public class UserService {
                 continue;
             }
 
-            UserDTO dto = userMapper.userToUserDTO(user, userDetailsByUserId.get(userId));
+            UserDTO dto = userMapper.userToUserDTO(user, userDetailsByUserId.get(userId), userTrialsByUserId.get(userId));
             dto.setUserMails(userMailsMapper.toDto(user.getUserMails()));
             userDTOs.add(dto);
         }
@@ -783,6 +793,14 @@ public class UserService {
         }
 
         List<UserWithDetailsProjection> rows = userRepository.findUsersWithDetailsByLoginOrEmailIn(normalizedCandidates);
+        Map<Long, UserTrial> userTrialsByUserId = getUserTrialsByUserId(
+            rows.stream()
+                .map(UserWithDetailsProjection::getUser)
+                .filter(Objects::nonNull)
+                .map(User::getId)
+                .filter(Objects::nonNull)
+                .collect(Collectors.toList())
+        );
         Map<String, UserDTO> byLogin = new HashMap<>();
         Map<String, UserDTO> byEmail = new HashMap<>();
 
@@ -792,7 +810,7 @@ public class UserService {
             if (user == null) {
                 continue;
             }
-            UserDTO dto = userMapper.userToUserDTO(user, userDetails);
+            UserDTO dto = userMapper.userToUserDTO(user, userDetails, userTrialsByUserId.get(user.getId()));
 
             if (StringUtils.isNotBlank(user.getLogin())) {
                 byLogin.put(StringUtils.lowerCase(user.getLogin(), Locale.ENGLISH), dto);
@@ -818,6 +836,16 @@ public class UserService {
         }
 
         return resolved;
+    }
+
+    private Map<Long, UserTrial> getUserTrialsByUserId(List<Long> userIds) {
+        if (userIds == null || userIds.isEmpty()) {
+            return Collections.emptyMap();
+        }
+        return userTrialRepository.findByUserIdIn(userIds)
+            .stream()
+            .filter(userTrial -> userTrial.getUser() != null && userTrial.getUser().getId() != null)
+            .collect(Collectors.toMap(userTrial -> userTrial.getUser().getId(), userTrial -> userTrial, (left, right) -> left));
     }
 
     @Transactional(readOnly = true)

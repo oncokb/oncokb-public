@@ -6,6 +6,7 @@ import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 
 import java.util.Optional;
+import java.util.List;
 
 @Repository
 public interface UserTrialRepository extends JpaRepository<UserTrial, Long> {
@@ -14,6 +15,8 @@ public interface UserTrialRepository extends JpaRepository<UserTrial, Long> {
     Optional<UserTrial> findOneByUserId(Long userId);
 
     Optional<UserTrial> findOneByActivationKey(String activationKey);
+
+    List<UserTrial> findByUserIdIn(List<Long> userIds);
 
     void deleteByUser(User user);
 }

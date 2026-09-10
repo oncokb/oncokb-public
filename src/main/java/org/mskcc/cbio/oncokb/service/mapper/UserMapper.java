@@ -3,6 +3,7 @@ package org.mskcc.cbio.oncokb.service.mapper;
 import org.mskcc.cbio.oncokb.domain.Authority;
 import org.mskcc.cbio.oncokb.domain.User;
 import org.mskcc.cbio.oncokb.domain.UserDetails;
+import org.mskcc.cbio.oncokb.domain.UserTrial;
 import org.mskcc.cbio.oncokb.repository.UserDetailsRepository;
 import org.mskcc.cbio.oncokb.repository.UserTrialRepository;
 import org.mskcc.cbio.oncokb.service.dto.UserDTO;
@@ -44,15 +45,21 @@ public class UserMapper {
 
     public UserDTO userToUserDTO(User user) {
         Optional<UserDetails> userDetails = userDetailsRepository.findOneByUser(user);
-        return userToUserDTO(user, userDetails.orElse(null));
+        UserTrial userTrial = userTrialRepository.findOneByUser(user).orElse(null);
+        return userToUserDTO(user, userDetails.orElse(null), userTrial);
     }
 
     public UserDTO userToUserDTO(User user, UserDetails userDetails) {
+        UserTrial userTrial = userTrialRepository.findOneByUser(user).orElse(null);
+        return userToUserDTO(user, userDetails, userTrial);
+    }
+
+    public UserDTO userToUserDTO(User user, UserDetails userDetails, UserTrial userTrial) {
         UserDTO userDTO = new UserDTO(user, userDetails);
         if (userDetails != null) {
             userDTO.setCompany(companyMapper.toDto(userDetails.getCompany()));
         }
-        userTrialRepository.findOneByUser(user).ifPresent(userTrial -> {
+        if (userTrial != null) {
             UserTrialDTO userTrialDTO = new UserTrialDTO();
             userTrialDTO.setId(userTrial.getId());
             userTrialDTO.setUserId(user.getId());
@@ -83,7 +90,7 @@ public class UserMapper {
             trialAccount.setLicenseAgreement(licenseAgreement);
             additionalInfo.setTrialAccount(trialAccount);
             userDTO.setAdditionalInfo(additionalInfo);
-        });
+        }
         return userDTO;
     }
 
