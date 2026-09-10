@@ -3,14 +3,11 @@ package org.mskcc.cbio.oncokb.security;
 import java.util.*;
 import java.util.stream.Collectors;
 import org.apache.commons.lang3.StringUtils;
-import org.mskcc.cbio.oncokb.domain.Token;
 import org.hibernate.validator.internal.constraintvalidators.hv.EmailValidator;
 import org.mskcc.cbio.oncokb.domain.User;
 import org.mskcc.cbio.oncokb.domain.enumeration.AccountRequestStatus;
-import org.mskcc.cbio.oncokb.repository.TokenRepository;
 import org.mskcc.cbio.oncokb.repository.UserDetailsRepository;
 import org.mskcc.cbio.oncokb.repository.UserRepository;
-import org.mskcc.cbio.oncokb.util.TokenUtil;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.security.core.GrantedAuthority;
@@ -32,12 +29,10 @@ public class DomainUserDetailsService implements UserDetailsService {
     private final Logger log = LoggerFactory.getLogger(DomainUserDetailsService.class);
 
     private final UserRepository userRepository;
-    private final TokenRepository tokenRepository;
     private final UserDetailsRepository userDetailsRepository;
 
-    public DomainUserDetailsService(UserRepository userRepository, TokenRepository tokenRepository, UserDetailsRepository userDetailsRepository) {
+    public DomainUserDetailsService(UserRepository userRepository, UserDetailsRepository userDetailsRepository) {
         this.userRepository = userRepository;
-        this.tokenRepository = tokenRepository;
         this.userDetailsRepository = userDetailsRepository;
     }
 
@@ -60,16 +55,12 @@ public class DomainUserDetailsService implements UserDetailsService {
     }
 
     private org.springframework.security.core.userdetails.User createSpringSecurityUser(String lowercaseLogin, User user) {
-        List<Token> tokens = tokenRepository.findByUserLogin(user.getLogin());
-        boolean isTrialUser = !tokens.isEmpty() && TokenUtil.isUserOnTrial(tokens);
-        log.debug("Resolved trial status for user '{}': {}", user.getLogin(), isTrialUser);
-
         Optional<org.mskcc.cbio.oncokb.domain.UserDetails> userDetailsOptional = userDetailsRepository.findOneByUser(user);
         if (!userDetailsOptional.isPresent() || userDetailsOptional.get().getAccountRequestStatus().equals(AccountRequestStatus.UNKNOWN)) {
             log.warn("Account request status missing for user '{}'. Denying login.", user.getLogin());
             throw new UserNotApprovedException(lowercaseLogin);
         }
-
+        
         org.mskcc.cbio.oncokb.domain.UserDetails userDetails = userDetailsOptional.get();
         AccountRequestStatus accountRequestStatus = userDetails.getAccountRequestStatus();
 
@@ -77,26 +68,27 @@ public class DomainUserDetailsService implements UserDetailsService {
             throw new ResponseStatusException(HttpStatus.FORBIDDEN, "User account request has been rejected.");
         }
 
-        if (!user.getActivated() && AccountRequestStatus.APPROVED.equals(accountRequestStatus)) {
-            throw new UserHasActivationKeyException(lowercaseLogin);
-        }
+        if (!user.getActivated()) {
+            if (StringUtils.isNotEmpty(user.getActivationKey())) {
+                throw new UserNotActivatedException(lowercaseLogin);
+            }
 
-        if (!user.getActivated() && StringUtils.isNotEmpty(user.getActivationKey())) {
-            throw new DeactivatedUserException(lowercaseLogin);
-        }
+            if (AccountRequestStatus.APPROVED.equals(accountRequestStatus)) {
+                throw new UserNotActivatedException(lowercaseLogin);
+            }
 
-        if (!user.getActivated() && !isTrialUser && AccountRequestStatus.PENDING_NO_GRACE_PERIOD.equals(accountRequestStatus)) {
-            throw new UserNotApprovedException(lowercaseLogin);
-        }
+            if (AccountRequestStatus.PENDING_NO_GRACE_PERIOD.equals(accountRequestStatus)) {
+                throw new UserNotApprovedException(lowercaseLogin);
+            }
 
-        if (!user.getActivated() && !isTrialUser && !SecurityUtils.isWithinActivationGracePeriod(user, userDetails.getLicenseType())) {
-            throw new ExpiredGracePeriodException(lowercaseLogin);
-        }
+            if (!SecurityUtils.isWithinActivationGracePeriod(user, userDetails.getLicenseType())) {
+                throw new ExpiredGracePeriodException(lowercaseLogin);
+            }
 
-        if (!user.getActivated() && !isTrialUser && !AccountRequestStatus.PENDING.equals(accountRequestStatus)) {
-            throw new UserNotApprovedException(lowercaseLogin);
+            if (!AccountRequestStatus.PENDING.equals(accountRequestStatus)) {
+                throw new UserNotApprovedException(lowercaseLogin);
+            }
         }
-
         List<GrantedAuthority> grantedAuthorities = user.getAuthorities().stream()
             .map(authority -> new SimpleGrantedAuthority(authority.getName()))
             .collect(Collectors.toList());

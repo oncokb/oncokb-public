@@ -598,9 +598,7 @@ export default class UserPage extends React.Component<IUserPage> {
 
   @computed
   get awaitingTrialAgreementAccepted() {
-    // Keep trial-account semantics in sync with backend TokenUtil.isUserOnTrial.
     return (
-      this.isTrialAccount &&
       this.trialInitiated &&
       !this.user.additionalInfo?.trialAccount?.licenseAgreement?.acceptanceDate
     );

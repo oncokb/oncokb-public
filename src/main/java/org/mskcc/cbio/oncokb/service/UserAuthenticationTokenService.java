@@ -8,7 +8,6 @@ import org.mskcc.cbio.oncokb.service.dto.useradditionalinfo.Activation;
 import org.mskcc.cbio.oncokb.service.dto.useradditionalinfo.AdditionalInfoDTO;
 import org.mskcc.cbio.oncokb.service.dto.useradditionalinfo.LicenseAgreement;
 import org.mskcc.cbio.oncokb.service.dto.useradditionalinfo.TrialAccount;
-import org.mskcc.cbio.oncokb.util.TokenUtil;
 import org.mskcc.cbio.oncokb.web.rest.errors.LicenseAgreementNotAcceptedException;
 import org.mskcc.cbio.oncokb.web.rest.errors.TokenExpiredException;
 import org.mskcc.cbio.oncokb.web.rest.errors.TrialAccountExpiredException;
@@ -16,7 +15,6 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.time.Instant;
-import java.util.Collections;
 import java.util.Comparator;
 import java.util.HashMap;
 import java.util.List;
@@ -68,25 +66,21 @@ public class UserAuthenticationTokenService {
             uuid = token.getToken();
         }
 
-        validateTrialLicenseAgreement(userDetails, tokenList);
+        validateTrialLicenseAgreement(userDetails);
 
         return uuid;
     }
 
     public UUID authorizeCurrentUserViaOAuth() {
-        Optional<UserDetailsDTO> userDetails = userDetailsService.findByUserIsCurrentUser();
         List<Token> tokenList = tokenService.findByUserIsCurrentUser();
         if (tokenList.isEmpty()) {
-            Token token = tokenProvider.createTokenForCurrentUserLogin(Optional.empty(), Optional.empty());
-            validateTrialLicenseAgreement(userDetails, Collections.singletonList(token));
-            return token.getToken();
+            return tokenProvider.createTokenForCurrentUserLogin(Optional.empty(), Optional.empty()).getToken();
         }
 
         List<Token> validTokens = tokenList.stream()
             .filter(token -> token.getExpiration().isAfter(Instant.now()))
             .collect(Collectors.toList());
         if (!validTokens.isEmpty()) {
-            validateTrialLicenseAgreement(userDetails, tokenList);
             return validTokens.iterator().next().getToken();
         }
 
@@ -94,9 +88,7 @@ public class UserAuthenticationTokenService {
         // we need to think about whether we want to allow refreshing expired tokens automatically
         // and the behavior of the trial and grace periods.
 
-        UUID uuid = refreshExpiredTokens(tokenList);
-        validateTrialLicenseAgreement(userDetails, tokenList);
-        return uuid;
+        return refreshExpiredTokens(tokenList);
     }
 
     private boolean canRefreshExpiredTokenForCurrentGracePeriodUser(Optional<UserDetailsDTO> userDetails) {
@@ -122,17 +114,16 @@ public class UserAuthenticationTokenService {
             .orElseThrow(TokenExpiredException::new);
     }
 
-    private void validateTrialLicenseAgreement(Optional<UserDetailsDTO> userDetails, List<Token> tokenList) {
+    private void validateTrialLicenseAgreement(Optional<UserDetailsDTO> userDetails) {
         if (userDetails.isPresent()) {
             UserDetailsDTO ud = userDetails.get();
-            boolean isTrialUser = TokenUtil.isUserOnTrial(tokenList);
             boolean userHasTrialKey = Optional.of(ud)
                 .map(UserDetailsDTO::getAdditionalInfo)
                 .map(AdditionalInfoDTO::getTrialAccount)
                 .map(TrialAccount::getActivation)
                 .map(Activation::getKey)
                 .isPresent();
-            boolean trialLicenseNOTAccepted = isTrialUser && userHasTrialKey && !Optional.of(ud)
+            boolean trialLicenseNOTAccepted = userHasTrialKey && !Optional.of(ud)
                 .map(UserDetailsDTO::getAdditionalInfo)
                 .map(AdditionalInfoDTO::getTrialAccount)
                 .map(TrialAccount::getLicenseAgreement)
