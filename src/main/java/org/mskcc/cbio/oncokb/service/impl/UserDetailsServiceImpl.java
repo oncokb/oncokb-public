@@ -8,6 +8,10 @@ import org.mskcc.cbio.oncokb.repository.UserDetailsRepository;
 import org.mskcc.cbio.oncokb.repository.UserTrialRepository;
 import org.mskcc.cbio.oncokb.service.dto.UserDetailsDTO;
 import org.mskcc.cbio.oncokb.service.dto.UserTrialDTO;
+import org.mskcc.cbio.oncokb.service.dto.useradditionalinfo.Activation;
+import org.mskcc.cbio.oncokb.service.dto.useradditionalinfo.AdditionalInfoDTO;
+import org.mskcc.cbio.oncokb.service.dto.useradditionalinfo.LicenseAgreement;
+import org.mskcc.cbio.oncokb.service.dto.useradditionalinfo.TrialAccount;
 import org.mskcc.cbio.oncokb.service.mapper.UserDetailsMapper;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -122,6 +126,25 @@ public class UserDetailsServiceImpl implements UserDetailsService {
             userTrialDTO.setLicenseAgreementVersion(userTrial.getLicenseAgreementVersion());
             userTrialDTO.setLicenseAgreementAcceptanceDate(userTrial.getLicenseAgreementAcceptanceDate());
             userDetailsDTO.setUserTrial(userTrialDTO);
+
+            AdditionalInfoDTO additionalInfo = userDetailsDTO.getAdditionalInfo();
+            if (additionalInfo == null) {
+                additionalInfo = new AdditionalInfoDTO();
+            }
+            TrialAccount trialAccount = new TrialAccount();
+            Activation activation = new Activation();
+            activation.setInitiationDate(userTrial.getInitiationDate());
+            activation.setInitiatedBy(userTrial.getInitiatedBy());
+            activation.setActivationDate(userTrial.getActivationDate());
+            activation.setKey(userTrial.getActivationKey());
+            trialAccount.setActivation(activation);
+            LicenseAgreement licenseAgreement = new LicenseAgreement();
+            licenseAgreement.setName(userTrial.getLicenseAgreementName());
+            licenseAgreement.setVersion(userTrial.getLicenseAgreementVersion());
+            licenseAgreement.setAcceptanceDate(userTrial.getLicenseAgreementAcceptanceDate());
+            trialAccount.setLicenseAgreement(licenseAgreement);
+            additionalInfo.setTrialAccount(trialAccount);
+            userDetailsDTO.setAdditionalInfo(additionalInfo);
         });
         return userDetailsDTO;
     }
