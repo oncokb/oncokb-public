@@ -1,5 +1,7 @@
 name: Application CI
-on: [push, pull_request]
+on:
+    pull_request:
+        branches: [master]
 jobs:
     applications:
         name: oncokb test suite
@@ -28,7 +30,21 @@ jobs:
               run: |
                 chmod +x mvnw
                 ./mvnw -ntp clean verify -P-webpack
-#            - name: Run frontend test
-#              run: yarn run test-ci
             - name: Package application
               run: ./mvnw -ntp package -Pprod -DskipTests
+
+    frontend-tests:
+        name: frontend test suite
+        runs-on: ubuntu-latest
+        timeout-minutes: 40
+        env:
+            NODE_VERSION: 12.16.1
+        steps:
+            - uses: actions/checkout@v2
+            - uses: actions/setup-node@v2
+              with:
+                  node-version: 12.16.1
+            - name: Install node.js packages
+              run: yarn install
+            - name: Run frontend test
+              run: yarn run test -- --ci
