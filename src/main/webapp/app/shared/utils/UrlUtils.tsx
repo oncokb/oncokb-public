@@ -9,11 +9,13 @@ import {
   YOUTUBE_VIDEO_IDS,
 } from 'app/config/constants';
 import {
+  addPromoterMutationLabel,
   encodeSlash,
   getAlterationName,
   getCategoricalAlteration,
   getYouTubeLink,
   IAlteration,
+  isPromoterGenomicAlteration,
 } from 'app/shared/utils/Utils';
 import { Linkout } from 'app/shared/links/Linkout';
 import ExternalLinkIcon from 'app/shared/icons/ExternalLinkIcon';
@@ -155,7 +157,19 @@ export const AlterationPageLink: React.FunctionComponent<{
   onClick?: () => void;
   isTag?: boolean;
 }> = ({ germline = false, isTag = false, ...props }) => {
-  const alterationName = getAlterationName(props.alteration, true);
+  // Only the display text is gene aware; the page link below must keep using
+  // the raw alteration name.
+  const name = getAlterationName(props.alteration, true);
+  const alteration =
+    typeof props.alteration === 'string'
+      ? props.alteration
+      : props.alteration.alteration;
+  const alterationName = isPromoterGenomicAlteration(
+    props.hugoSymbol,
+    alteration
+  )
+    ? addPromoterMutationLabel(name)
+    : name;
   const pageLink = getAlterationPageLink({
     hugoSymbol: props.hugoSymbol,
     alteration: props.alteration,

@@ -852,6 +852,45 @@ export function getAlterationName(
   }
 }
 
+/* ---------------------------------------------------------------------------
+ * TODO: delete this section once genomic (g.) alterations are curated with a
+ * name that says they are promoter mutations. Everything below only exists to
+ * label them on the fly, and is deliberately kept apart from getAlterationName
+ * so it can be removed in one piece.
+ * ------------------------------------------------------------------------ */
+
+// Genes where every genomic (HGVS g.) alteration is located in the promoter
+// region. These alterations are curated individually and their names carry no
+// indication that they are promoter mutations, so we label them for display.
+export const PROMOTER_ONLY_GENOMIC_ALTERATION_GENES = ['TERT'];
+export const PROMOTER_MUTATION_LABEL = 'Promoter mutation';
+
+// Genomic alterations are curated with a reference sequence prefix, e.g.
+// "5:g.1295228G>A", so allow an optional prefix before the "g." part.
+const GENOMIC_ALTERATION_REGEX = /^([^:\s]+:)?g\./i;
+
+export const isPromoterGenomicAlteration = (
+  hugoSymbol: string | undefined,
+  alteration: string
+): boolean => {
+  return (
+    !!hugoSymbol &&
+    PROMOTER_ONLY_GENOMIC_ALTERATION_GENES.includes(hugoSymbol.toUpperCase()) &&
+    GENOMIC_ALTERATION_REGEX.test(alteration.trim())
+  );
+};
+
+/**
+ * Appends the promoter mutation label to an already composed display name.
+ * Only call it for alterations isPromoterGenomicAlteration accepts, and only
+ * for display, never when building links or queries.
+ */
+export function addPromoterMutationLabel(displayName: string): string {
+  return displayName.toLowerCase().includes('promoter')
+    ? displayName
+    : `${displayName} (${PROMOTER_MUTATION_LABEL})`;
+}
+
 export const getGeneCoordinates = (ensemblGenes: EnsemblGene[]) => {
   return sortBy(ensemblGenes, ensemblGene => ensemblGene.referenceGenome)
     .map(
