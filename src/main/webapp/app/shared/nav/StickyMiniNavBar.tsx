@@ -1,5 +1,6 @@
 import React, {
   useEffect,
+  MouseEvent,
   useRef,
   useState,
   createContext,
@@ -17,18 +18,24 @@ function getNavBarSectionElements() {
   return document.querySelectorAll('[mini-nav-bar-header]');
 }
 
+function getHashElement(hash: string) {
+  if (!hash) {
+    return null;
+  }
+  try {
+    return document.querySelector(hash);
+  } catch {
+    return null;
+  }
+}
+
 function useScrollToHash({ stickyHeight }: { stickyHeight: number }) {
   const location = useLocation();
 
   useEffect(() => {
     const hash = location.hash;
     if (hash) {
-      let element: Element | null;
-      try {
-        element = document.querySelector(hash);
-      } catch {
-        element = null;
-      }
+      const element = getHashElement(hash);
       if (element) {
         const targetPosition =
           element.getBoundingClientRect().top + window.scrollY;
@@ -86,6 +93,9 @@ export default function StickyMiniNavBar({
 }: IStickyMiniNavBar) {
   const [headerHeight, setHeaderHeight] = useState(0);
   const [isSticky, setIsSticky] = useState(false);
+  const [hasScrollSinceHashChange, setHasScrollSinceHashChange] = useState(
+    false
+  );
   const [sections, setSections] = useState<
     { id: string; label: string | null; comingSoon: boolean }[]
   >([]);
@@ -94,7 +104,10 @@ export default function StickyMiniNavBar({
   >({});
   const { counter } = useContext(StickyMiniNavBarContext);
   const stickyDivRef = useRef<HTMLDivElement | null>(null);
-  useScrollToHash({
+  const autoScrollHashRef = useRef<string | undefined>(undefined);
+  const autoScrollExpiresAtRef = useRef(0);
+  const highlightTimeoutRef = useRef<number | undefined>(undefined);
+  const hash = useScrollToHash({
     stickyHeight:
       headerHeight +
       (stickyDivRef.current?.getBoundingClientRect().height ?? 0),
@@ -174,6 +187,91 @@ export default function StickyMiniNavBar({
   }, []);
 
   useEffect(() => {
+    setHasScrollSinceHashChange(false);
+    if (hash) {
+      autoScrollHashRef.current = hash;
+      autoScrollExpiresAtRef.current = Date.now() + 2000;
+    } else {
+      autoScrollHashRef.current = undefined;
+      autoScrollExpiresAtRef.current = 0;
+    }
+  }, [hash]);
+
+  const scrollToSection = useCallback(
+    (sectionId: string) => {
+      const sectionHash = `#${sectionId}`;
+      const element = getHashElement(sectionHash);
+      if (!element) {
+        return;
+      }
+
+      const stickyHeight =
+        headerHeight +
+        (stickyDivRef.current?.getBoundingClientRect().height ?? 0);
+      const targetPosition =
+        element.getBoundingClientRect().top + window.scrollY;
+      window.scrollTo({
+        behavior: 'smooth',
+        top: targetPosition - stickyHeight,
+      });
+    },
+    [headerHeight]
+  );
+
+  const onClickSection = useCallback(
+    (event: MouseEvent, sectionId: string) => {
+      const sectionElement = document.getElementById(sectionId);
+      if (sectionElement) {
+        sectionElement.removeAttribute('data-mini-nav-highlight');
+        // Force reflow so repeated clicks retrigger the animation.
+        void sectionElement.offsetWidth;
+        sectionElement.setAttribute('data-mini-nav-highlight', '');
+      }
+      if (highlightTimeoutRef.current !== undefined) {
+        window.clearTimeout(highlightTimeoutRef.current);
+      }
+      highlightTimeoutRef.current = window.setTimeout(() => {
+        sectionElement?.removeAttribute('data-mini-nav-highlight');
+      }, 2500);
+
+      setHasScrollSinceHashChange(false);
+      autoScrollHashRef.current = `#${sectionId}`;
+      autoScrollExpiresAtRef.current = Date.now() + 2000;
+
+      if (hash === `#${sectionId}`) {
+        event.preventDefault();
+        scrollToSection(sectionId);
+      }
+    },
+    [hash, scrollToSection]
+  );
+
+  useEffect(() => {
+    return () => {
+      if (highlightTimeoutRef.current !== undefined) {
+        window.clearTimeout(highlightTimeoutRef.current);
+      }
+    };
+  }, []);
+
+  useEffect(() => {
+    const cancelAutoScroll = () => {
+      autoScrollHashRef.current = undefined;
+      autoScrollExpiresAtRef.current = 0;
+    };
+
+    window.addEventListener('wheel', cancelAutoScroll, { passive: true });
+    window.addEventListener('touchstart', cancelAutoScroll, { passive: true });
+    window.addEventListener('keydown', cancelAutoScroll);
+
+    return () => {
+      window.removeEventListener('wheel', cancelAutoScroll);
+      window.removeEventListener('touchstart', cancelAutoScroll);
+      window.removeEventListener('keydown', cancelAutoScroll);
+    };
+  }, []);
+
+  useEffect(() => {
     const miniNavElement = stickyDivRef.current;
     const headerElement = getHeader();
     if (!miniNavElement || !headerElement) {
@@ -185,12 +283,37 @@ export default function StickyMiniNavBar({
       if (!ticking) {
         requestAnimationFrame(() => {
           const miniNavTop = miniNavElement.getBoundingClientRect().top;
+          const stickyHeight =
+            headerHeight +
+            (stickyDivRef.current?.getBoundingClientRect().height ?? 0);
           const translateY = miniNavTop - headerHeight;
           headerElement.style.transform = `translateY(${Math.min(
             translateY,
             0
           )}px)`;
           setIsSticky(miniNavTop === 0);
+          let isAutoScroll =
+            !!autoScrollHashRef.current &&
+            autoScrollExpiresAtRef.current > Date.now();
+
+          if (isAutoScroll && autoScrollHashRef.current) {
+            const targetElement = getHashElement(autoScrollHashRef.current);
+            if (targetElement) {
+              const targetY =
+                targetElement.getBoundingClientRect().top +
+                window.scrollY -
+                stickyHeight;
+              if (Math.abs(window.scrollY - targetY) <= 2) {
+                autoScrollHashRef.current = undefined;
+                autoScrollExpiresAtRef.current = 0;
+                isAutoScroll = false;
+              }
+            }
+          }
+
+          if (!isAutoScroll && !hasScrollSinceHashChange) {
+            setHasScrollSinceHashChange(true);
+          }
           ticking = false;
         });
       }
@@ -202,26 +325,36 @@ export default function StickyMiniNavBar({
     return () => {
       window.removeEventListener('scroll', handleScroll);
     };
-  }, [headerHeight]);
+  }, [headerHeight, hasScrollSinceHashChange]);
 
-  let currentSectionId: string | undefined = undefined;
+  const hashSectionId = decodeURIComponent(hash).replace(/^#/, '');
+  const hasMatchedHashSection = sections.some(
+    section => section.id === hashSectionId
+  );
 
-  // If a section header is visible then the header at the top of the page wins
-  for (const section of sections) {
-    const passedInfo = passedElements[section.id] ?? {};
-    if (passedInfo.isInView) {
-      currentSectionId = section.id;
-      break;
-    }
-  }
+  let currentSectionId: string | undefined =
+    !hasScrollSinceHashChange && hasMatchedHashSection && hashSectionId
+      ? hashSectionId
+      : undefined;
 
-  // If no section header is in view then pick the last section header
-  // that was scrolled passed
   if (currentSectionId === undefined) {
+    // If a section header is visible then the header at the top of the page wins
     for (const section of sections) {
       const passedInfo = passedElements[section.id] ?? {};
-      if (passedInfo.isPassed) {
+      if (passedInfo.isInView) {
         currentSectionId = section.id;
+        break;
+      }
+    }
+
+    // If no section header is in view then pick the last section header
+    // that was scrolled passed
+    if (currentSectionId === undefined) {
+      for (const section of sections) {
+        const passedInfo = passedElements[section.id] ?? {};
+        if (passedInfo.isPassed) {
+          currentSectionId = section.id;
+        }
       }
     }
   }
@@ -275,6 +408,7 @@ export default function StickyMiniNavBar({
                       style={comingSoon ? { pointerEvents: 'none' } : undefined}
                       key={id}
                       to={`#${id}`}
+                      onClick={event => onClickSection(event, id)}
                       className={classNames(
                         styles.stickySection,
                         isInSection ? styles.stickySectionSelected : ''

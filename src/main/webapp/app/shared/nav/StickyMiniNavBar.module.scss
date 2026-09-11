@@ -51,6 +51,19 @@ $sticky-border: #e3e5ec;
   border-bottom-color: $primary;
 }
 
+@keyframes miniNavTargetFlash {
+  0% {
+    background-color: rgba($primary, 0.26);
+  }
+  100% {
+    background-color: transparent;
+  }
+}
+
+[mini-nav-bar-header][data-mini-nav-highlight] {
+  animation: miniNavTargetFlash 2.5s ease-out forwards;
+}
+
 @media (min-width: 550px) {
   .nav {
     flex-direction: row;
