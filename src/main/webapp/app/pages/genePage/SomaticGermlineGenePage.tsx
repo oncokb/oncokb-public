@@ -16,11 +16,13 @@ import { Else, If, Then } from 'react-if';
 import { Redirect, RouteComponentProps } from 'react-router';
 import { Button, Col, Container, Row } from 'react-bootstrap';
 import {
+  addPromoterMutationLabel,
   getCancerTypeNameFromOncoTreeType,
   getCancerTypesName,
   getFdaImplicationsFromTags,
   getImplicationsFromTags,
   getPageTitle,
+  isPromoterGenomicAlteration,
 } from 'app/shared/utils/Utils';
 import LoadingIndicator, {
   LoaderSize,
@@ -180,6 +182,15 @@ export default class SomaticGermlineGenePage extends React.Component<
       const excludedCancerTypeNames = variant.excludedCancerTypes.map(
         cancerType => getCancerTypeNameFromOncoTreeType(cancerType)
       );
+      // Same name the table has always rendered, only promoter alterations
+      // get the extra label. Keep the filterable/sortable name in sync with
+      // what the table renders.
+      const alterationName = isPromoterGenomicAlteration(
+        this.store.hugoSymbol,
+        variant.variant.alteration
+      )
+        ? addPromoterMutationLabel(variant.variant.name)
+        : variant.variant.name;
       const alterationView = variant.variant.consequence ? (
         <AlterationPageLink
           key={variant.variant.name}
@@ -194,7 +205,7 @@ export default class SomaticGermlineGenePage extends React.Component<
           germline={this.store.germline}
         />
       ) : (
-        <span>{variant.variant.name}</span>
+        <span>{alterationName}</span>
       );
       const cancerTypesName = getCancerTypesName(
         cancerTypeNames,
@@ -236,7 +247,7 @@ export default class SomaticGermlineGenePage extends React.Component<
         variant.drug.forEach(drug => {
           acc.push({
             level: variant.level,
-            alterations: variant.variant.name,
+            alterations: alterationName,
             alterationsView: alterationView,
             drugs: drug,
             cancerTypes: cancerTypesName,
@@ -252,7 +263,7 @@ export default class SomaticGermlineGenePage extends React.Component<
       } else {
         acc.push({
           level: variant.level,
-          alterations: variant.variant.name,
+          alterations: alterationName,
           alterationsView: alterationView,
           drugs: '',
           cancerTypes: cancerTypesName,
