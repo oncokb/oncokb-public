@@ -22,6 +22,7 @@ import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.server.ResponseStatusException;
+import org.mskcc.cbio.oncokb.web.rest.errors.LicenseAgreementNotAcceptedException;
 
 import java.time.Duration;
 import java.time.Instant;
@@ -369,14 +370,16 @@ public class DomainUserDetailsServiceIT {
 
     @Test
     public void assertThatPendingTrialTermsUserCannotLogin() {
-        assertThatExceptionOfType(ResponseStatusException.class)
-            .isThrownBy(() -> domainUserDetailsService.loadUserByUsername(USER_TEN_LOGIN));
+        assertThatExceptionOfType(LicenseAgreementNotAcceptedException.class)
+            .isThrownBy(() -> domainUserDetailsService.loadUserByUsername(USER_TEN_LOGIN))
+            .satisfies(e -> assertThat(e.getParameters()).containsEntry("trialActivationKey", "trial-activation-key"));
     }
 
     @Test
     public void assertThatTrialUserWithoutAcceptedTermsCannotLogin() {
-        assertThatExceptionOfType(ResponseStatusException.class)
-            .isThrownBy(() -> domainUserDetailsService.loadUserByUsername(USER_ELEVEN_LOGIN));
+        assertThatExceptionOfType(LicenseAgreementNotAcceptedException.class)
+            .isThrownBy(() -> domainUserDetailsService.loadUserByUsername(USER_ELEVEN_LOGIN))
+            .satisfies(e -> assertThat(e.getParameters()).doesNotContainKey("trialActivationKey"));
     }
 
     @Test
