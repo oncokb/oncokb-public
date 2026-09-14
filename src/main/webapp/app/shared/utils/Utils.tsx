@@ -865,9 +865,9 @@ export function getAlterationName(
 export const PROMOTER_ONLY_GENOMIC_ALTERATION_GENES = ['TERT'];
 export const PROMOTER_MUTATION_LABEL = 'Promoter mutation';
 
-// Genomic alterations are curated with a reference sequence prefix, e.g.
-// "5:g.1295228G>A", so allow an optional prefix before the "g." part.
-const GENOMIC_ALTERATION_REGEX = /^([^:\s]+:)?g\./i;
+// Per HGVS nomenclature a genomic (g.) description must be preceded by its
+// chromosome, e.g. "5:g.1295228G>A".
+const GENOMIC_ALTERATION_REGEX = /^([1-9]|1[0-9]|2[0-2]|X|Y):g\./;
 
 export const isPromoterGenomicAlteration = (
   hugoSymbol: string | undefined,
