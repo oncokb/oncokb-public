@@ -21,6 +21,7 @@ import org.springframework.stereotype.Component;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.server.ResponseStatusException;
 import org.springframework.http.HttpStatus;
+import org.mskcc.cbio.oncokb.web.rest.errors.LicenseAgreementNotAcceptedException;
 
 /**
  * Authenticate a user from the database.
@@ -77,22 +78,31 @@ public class DomainUserDetailsService implements UserDetailsService {
             throw new ResponseStatusException(HttpStatus.FORBIDDEN, "Your account request was rejected. Please contact contact@oncokb.org.");
         }
 
+        Optional<org.mskcc.cbio.oncokb.domain.UserTrial> userTrialOptional = Optional.empty();
+        if (TrialStatus.TRIAL_PENDING_TERMS_ACCEPTANCE.equals(trialStatus) || TrialStatus.TRIAL.equals(trialStatus)) {
+            userTrialOptional = userTrialRepository.findOneByUser(user);
+        }
+
         if (TrialStatus.TRIAL_PENDING_TERMS_ACCEPTANCE.equals(trialStatus)) {
-            throw new ResponseStatusException(
-                HttpStatus.FORBIDDEN,
-                "Your trial is approved but not active yet. Please accept the trial terms from your activation email."
-            );
+            Map<String, Object> parameters = userTrialOptional
+                .map(org.mskcc.cbio.oncokb.domain.UserTrial::getActivationKey)
+                .filter(StringUtils::isNotBlank)
+                .<Map<String, Object>>map(activationKey -> Collections.singletonMap("trialActivationKey", activationKey))
+                .orElse(Collections.emptyMap());
+            throw new LicenseAgreementNotAcceptedException(parameters);
         }
 
         if (TrialStatus.TRIAL.equals(trialStatus)) {
-            boolean hasAcceptedTerms = userTrialRepository.findOneByUser(user)
+            boolean hasAcceptedTerms = userTrialOptional
                 .map(userTrial -> userTrial.getLicenseAgreementAcceptanceDate() != null)
                 .orElse(false);
             if (!hasAcceptedTerms) {
-                throw new ResponseStatusException(
-                    HttpStatus.FORBIDDEN,
-                    "Trial activation is incomplete. Please use your activation link again or contact support."
-                );
+                Map<String, Object> parameters = userTrialOptional
+                    .map(org.mskcc.cbio.oncokb.domain.UserTrial::getActivationKey)
+                    .filter(StringUtils::isNotBlank)
+                    .<Map<String, Object>>map(activationKey -> Collections.singletonMap("trialActivationKey", activationKey))
+                    .orElse(Collections.emptyMap());
+                throw new LicenseAgreementNotAcceptedException(parameters);
             }
         }
 

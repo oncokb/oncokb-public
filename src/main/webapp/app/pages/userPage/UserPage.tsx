@@ -655,6 +655,18 @@ export default class UserPage extends React.Component<IUserPage> {
     );
   }
 
+  generateTrialActivationKeyInfoOverlay() {
+    return (
+      <>
+        <b>Trial Activation Link</b>
+        <div>
+          {this.props.windowStore.baseUrl}
+          {`${PAGE_ROUTE.ACCOUNT_ACTIVE_TRIAL_FINISH}?key=${this.user.userTrial?.activationKey}`}
+        </div>
+      </>
+    );
+  }
+
   render() {
     return (
       <If condition={this.getUserStatus === PromiseStatus.pending}>
@@ -852,6 +864,13 @@ export default class UserPage extends React.Component<IUserPage> {
                               this.simpleConfirmModalType =
                                 SimpleConfirmModalType.DELETE_RESET_KEY;
                             }}
+                          />
+                          <Label>
+                            <b>Trial Activation Key</b>
+                          </Label>
+                          <KeyInputGroups
+                            keyVal={this.user.userTrial?.activationKey}
+                            infoOverlay={this.generateTrialActivationKeyInfoOverlay()}
                           />
                           <AvField
                             name="resetDate"
