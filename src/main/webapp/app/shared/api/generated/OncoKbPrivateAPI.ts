@@ -164,6 +164,8 @@ export type GermlineVariantAnnotation = {
 
         'query': Query
 
+        'resistanceDescription': "Known Resistance Mutation" | "Potential Resistance Implications" | "Limited Resistance Evidence" | null
+
         'treatments': Array < IndicatorQueryTreatment >
 
         'tumorTypeSummary': string
@@ -855,6 +857,8 @@ export type SomaticVariantAnnotation = {
         'proteinChangeValidation': ProteinChangeValidation
 
         'query': Query
+
+        'resistanceDescription': "Known Resistance Mutation" | "Potential Resistance Implications" | "Limited Resistance Evidence" | null
 
         'treatments': Array < IndicatorQueryTreatment >
 

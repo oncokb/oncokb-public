@@ -2,7 +2,7 @@
   "swagger": "2.0",
   "info": {
     "description": "These endpoints are for private use only.",
-    "version": "v1.6.0",
+    "version": "v1.7.0",
     "title": "OncoKB Private APIs",
     "contact": {
       "name": "OncoKB",
@@ -4152,6 +4152,15 @@
         "query": {
           "$ref": "#/definitions/Query"
         },
+        "resistanceDescription": {
+          "type": "string",
+          "description": "(Nullable) The highest sensitivity level from a list of therapeutic evidences.",
+          "enum": [
+            "Known Resistance Mutation",
+            "Potential Resistance Implications",
+            "Limited Resistance Evidence"
+          ]
+        },
         "treatments": {
           "type": "array",
           "description": "List of therapeutic implications implications. Defaulted to empty list",
@@ -4303,6 +4312,15 @@
         },
         "query": {
           "$ref": "#/definitions/Query"
+        },
+        "resistanceDescription": {
+          "type": "string",
+          "description": "(Nullable) The highest sensitivity level from a list of therapeutic evidences.",
+          "enum": [
+            "Known Resistance Mutation",
+            "Potential Resistance Implications",
+            "Limited Resistance Evidence"
+          ]
         },
         "treatments": {
           "type": "array",

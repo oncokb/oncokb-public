@@ -2,7 +2,7 @@
   "swagger": "2.0",
   "info": {
     "description": "OncoKB, a comprehensive and curated precision oncology knowledge base, offers oncologists detailed, evidence-based information about individual somatic mutations and structural alterations present in patient tumors with the goal of supporting optimal treatment decisions.",
-    "version": "v1.6.0",
+    "version": "v1.7.0",
     "title": "OncoKB APIs",
     "contact": {
       "name": "OncoKB",
@@ -2613,6 +2613,15 @@
         "query": {
           "$ref": "#/definitions/Query"
         },
+        "resistanceDescription": {
+          "type": "string",
+          "description": "(Nullable) The highest sensitivity level from a list of therapeutic evidences.",
+          "enum": [
+            "Known Resistance Mutation",
+            "Potential Resistance Implications",
+            "Limited Resistance Evidence"
+          ]
+        },
         "treatments": {
           "type": "array",
           "description": "List of therapeutic implications implications. Defaulted to empty list",
@@ -4384,6 +4393,15 @@
         },
         "query": {
           "$ref": "#/definitions/Query"
+        },
+        "resistanceDescription": {
+          "type": "string",
+          "description": "(Nullable) The highest sensitivity level from a list of therapeutic evidences.",
+          "enum": [
+            "Known Resistance Mutation",
+            "Potential Resistance Implications",
+            "Limited Resistance Evidence"
+          ]
         },
         "treatments": {
           "type": "array",
