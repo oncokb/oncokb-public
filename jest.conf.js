@@ -13,8 +13,19 @@ module.exports = {
   coveragePathIgnorePatterns: ['<rootDir>/src/test/javascript/'],
   moduleNameMapper: mapTypescriptAliasToJestAlias({
     '\\.(css|scss)$': 'identity-obj-proxy',
+    '^react-helmet-async$':
+      '<rootDir>/src/main/webapp/app/test/reactHelmetAsyncMock.tsx',
   }),
-  reporters: ['default', ['jest-junit', { outputDirectory: './target/test-results/', outputName: 'TESTS-results-jest.xml' }]],
+  reporters: [
+    'default',
+    [
+      'jest-junit',
+      {
+        outputDirectory: './target/test-results/',
+        outputName: 'TESTS-results-jest.xml',
+      },
+    ],
+  ],
   testResultsProcessor: 'jest-sonar-reporter',
   testPathIgnorePatterns: ['<rootDir>/node_modules/'],
   setupFiles: [],
