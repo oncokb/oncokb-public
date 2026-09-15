@@ -8,6 +8,7 @@ import org.mskcc.cbio.oncokb.domain.User;
 import org.mskcc.cbio.oncokb.domain.enumeration.AccountRequestStatus;
 import org.mskcc.cbio.oncokb.domain.enumeration.LicenseStatus;
 import org.mskcc.cbio.oncokb.domain.enumeration.LicenseType;
+import org.mskcc.cbio.oncokb.domain.enumeration.TrialStatus;
 import org.mskcc.cbio.oncokb.repository.UserRepository;
 import org.mskcc.cbio.oncokb.security.AuthoritiesConstants;
 import org.mskcc.cbio.oncokb.security.SecurityUtils;
@@ -164,22 +165,20 @@ public class AccountResource {
 
         userOptional = userService.activateRegistration(key);
         User user = userOptional.orElseThrow(() -> new CustomMessageRuntimeException("User could not be found"));
+        UserDTO userDTO = userMapper.userToUserDTO(user);
 
         boolean activated;
         if (newUserActivation) {
-            UserDTO userDTO = userMapper.userToUserDTO(user);
             activated = activateUser(userDTO, userService.findCompanyCandidate(userDTO));
         } else {
-            // This user exists before, we are looking to extend the expiration date of all tokens associated
-            List<Token> userTokens = tokenService.findByUser(user);
-            boolean userAccountCanNOTBeExtended = !userTokens.stream().filter(token -> token.isRenewable()).findAny().isPresent();
+            boolean userAccountCanNOTBeExtended = TrialStatus.TRIAL.equals(userDTO.getTrialStatus());
             if (userAccountCanNOTBeExtended) {
                 throw new CustomMessageRuntimeException("Your account token is expired and cannot be extended.");
             }
-            Instant defaultExpiration = Instant.now().plusSeconds(tokenProvider.EXPIRATION_TIME_IN_SECONDS);
+            Instant defaultExpiration = Instant.now().plusSeconds(TokenProvider.EXPIRATION_TIME_IN_SECONDS);
             tokenService.findByUser(user).forEach(token -> {
                 // if the extended date based on the current token expiration is before the date in 6month, we should use the bigger one
-                Instant expirationBased = token.getExpiration().plusSeconds(tokenProvider.EXPIRATION_TIME_IN_SECONDS);
+                Instant expirationBased = token.getExpiration().plusSeconds(TokenProvider.EXPIRATION_TIME_IN_SECONDS);
                 token.setExpiration(expirationBased.isBefore(defaultExpiration) ? defaultExpiration : expirationBased);
                 tokenService.save(token);
             });
@@ -523,7 +522,9 @@ public class AccountResource {
     public UserDTO initiateTrialAccountActivation(@RequestBody String login) {
         Optional<User> user = userService.initiateTrialAccountActivation(login);
         if (user.isPresent()) {
-            return userMapper.userToUserDTO(user.get());
+            UserDTO userDTO = userMapper.userToUserDTO(user.get());
+            mailService.sendActiveTrialMail(userDTO, false);
+            return userDTO;
         } else {
             throw new CustomMessageRuntimeException("No user was found");
         }

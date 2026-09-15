@@ -12,7 +12,10 @@ type UserQuickViewModalProps = {
   user: UserDTO | undefined;
   show: boolean;
   onClose: () => void;
-  onUpdateActiveStatus: (authorities: string[]) => void;
+  onUpdateActiveStatus: (
+    authorities: string[],
+    trialStatus: UserDTO['trialStatus']
+  ) => void;
 };
 
 const emptyValue = 'Not provided';
@@ -153,7 +156,10 @@ export const UserQuickViewModal: React.FunctionComponent<UserQuickViewModalProps
         <Button
           variant={activationVariant}
           onClick={() =>
-            props.onUpdateActiveStatus(getActivationAuthorities(user))
+            props.onUpdateActiveStatus(
+              getActivationAuthorities(user),
+              user?.trialStatus || 'REGULAR'
+            )
           }
         >
           {user?.activated

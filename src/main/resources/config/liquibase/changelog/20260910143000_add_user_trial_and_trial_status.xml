@@ -1,0 +1,180 @@
+<databaseChangeLog
+  xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+  xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+  xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog
+          http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-latest.xsd">
+
+  <changeSet author="oncokb" id="20260910143000-1">
+    <addColumn tableName="user_details">
+      <column name="trial_status" type="varchar(64)">
+        <constraints nullable="true"/>
+      </column>
+    </addColumn>
+  </changeSet>
+
+  <changeSet author="oncokb" id="20260910143000-2">
+    <createTable tableName="user_trial">
+      <column name="id" type="bigint" autoIncrement="true">
+        <constraints primaryKey="true" nullable="false"/>
+      </column>
+      <column name="user_id" type="bigint">
+        <constraints nullable="false" unique="true" uniqueConstraintName="ux_user_trial_user_id"/>
+      </column>
+      <column name="initiation_date" type="timestamp">
+        <constraints nullable="true"/>
+      </column>
+      <column name="initiated_by" type="varchar(255)">
+        <constraints nullable="true"/>
+      </column>
+      <column name="activation_date" type="timestamp">
+        <constraints nullable="true"/>
+      </column>
+      <column name="activation_key" type="varchar(255)">
+        <constraints nullable="true"/>
+      </column>
+      <column name="license_agreement_name" type="varchar(255)">
+        <constraints nullable="true"/>
+      </column>
+      <column name="license_agreement_version" type="varchar(255)">
+        <constraints nullable="true"/>
+      </column>
+      <column name="license_agreement_acceptance_date" type="timestamp">
+        <constraints nullable="true"/>
+      </column>
+    </createTable>
+  </changeSet>
+
+  <changeSet author="oncokb" id="20260910143000-3">
+    <addForeignKeyConstraint baseTableName="user_trial"
+      baseColumnNames="user_id"
+      constraintName="fk_user_trial_user_id"
+      referencedTableName="jhi_user"
+      referencedColumnNames="id"/>
+
+    <createIndex tableName="user_trial" indexName="idx_user_trial_activation_key">
+      <column name="activation_key"/>
+    </createIndex>
+  </changeSet>
+
+  <changeSet author="oncokb" id="20260910143000-4" dbms="mysql,mariadb">
+    <sql>
+      INSERT INTO user_trial (
+        user_id,
+        initiation_date,
+        initiated_by,
+        activation_date,
+        activation_key,
+        license_agreement_name,
+        license_agreement_version,
+        license_agreement_acceptance_date
+      )
+      SELECT
+        ud.user_id,
+        CASE JSON_TYPE(JSON_EXTRACT(ud.additional_info, '$.trialAccount.activation.initiationDate'))
+          WHEN 'STRING' THEN STR_TO_DATE(JSON_UNQUOTE(JSON_EXTRACT(ud.additional_info, '$.trialAccount.activation.initiationDate')), '%Y-%m-%dT%H:%i:%s.%fZ')
+          WHEN 'OBJECT' THEN FROM_UNIXTIME(
+            CAST(JSON_UNQUOTE(JSON_EXTRACT(ud.additional_info, '$.trialAccount.activation.initiationDate.seconds')) AS DECIMAL(20, 6)) +
+            COALESCE(CAST(JSON_UNQUOTE(JSON_EXTRACT(ud.additional_info, '$.trialAccount.activation.initiationDate.nanos')) AS DECIMAL(20, 6)) / 1000000000, 0)
+          )
+          WHEN 'INTEGER' THEN FROM_UNIXTIME(CAST(JSON_UNQUOTE(JSON_EXTRACT(ud.additional_info, '$.trialAccount.activation.initiationDate')) AS DECIMAL(20, 6)))
+          ELSE NULL
+        END,
+        JSON_UNQUOTE(JSON_EXTRACT(ud.additional_info, '$.trialAccount.activation.initiatedBy')),
+        CASE JSON_TYPE(JSON_EXTRACT(ud.additional_info, '$.trialAccount.activation.activationDate'))
+          WHEN 'STRING' THEN STR_TO_DATE(JSON_UNQUOTE(JSON_EXTRACT(ud.additional_info, '$.trialAccount.activation.activationDate')), '%Y-%m-%dT%H:%i:%s.%fZ')
+          WHEN 'OBJECT' THEN FROM_UNIXTIME(
+            CAST(JSON_UNQUOTE(JSON_EXTRACT(ud.additional_info, '$.trialAccount.activation.activationDate.seconds')) AS DECIMAL(20, 6)) +
+            COALESCE(CAST(JSON_UNQUOTE(JSON_EXTRACT(ud.additional_info, '$.trialAccount.activation.activationDate.nanos')) AS DECIMAL(20, 6)) / 1000000000, 0)
+          )
+          WHEN 'INTEGER' THEN FROM_UNIXTIME(CAST(JSON_UNQUOTE(JSON_EXTRACT(ud.additional_info, '$.trialAccount.activation.activationDate')) AS DECIMAL(20, 6)))
+          ELSE NULL
+        END,
+        JSON_UNQUOTE(JSON_EXTRACT(ud.additional_info, '$.trialAccount.activation.key')),
+        JSON_UNQUOTE(JSON_EXTRACT(ud.additional_info, '$.trialAccount.licenseAgreement.name')),
+        JSON_UNQUOTE(JSON_EXTRACT(ud.additional_info, '$.trialAccount.licenseAgreement.version')),
+        CASE JSON_TYPE(JSON_EXTRACT(ud.additional_info, '$.trialAccount.licenseAgreement.acceptanceDate'))
+          WHEN 'STRING' THEN STR_TO_DATE(JSON_UNQUOTE(JSON_EXTRACT(ud.additional_info, '$.trialAccount.licenseAgreement.acceptanceDate')), '%Y-%m-%dT%H:%i:%s.%fZ')
+          WHEN 'OBJECT' THEN FROM_UNIXTIME(
+            CAST(JSON_UNQUOTE(JSON_EXTRACT(ud.additional_info, '$.trialAccount.licenseAgreement.acceptanceDate.seconds')) AS DECIMAL(20, 6)) +
+            COALESCE(CAST(JSON_UNQUOTE(JSON_EXTRACT(ud.additional_info, '$.trialAccount.licenseAgreement.acceptanceDate.nanos')) AS DECIMAL(20, 6)) / 1000000000, 0)
+          )
+          WHEN 'INTEGER' THEN FROM_UNIXTIME(CAST(JSON_UNQUOTE(JSON_EXTRACT(ud.additional_info, '$.trialAccount.licenseAgreement.acceptanceDate')) AS DECIMAL(20, 6)))
+          ELSE NULL
+        END
+      FROM user_details ud
+      WHERE JSON_EXTRACT(ud.additional_info, '$.trialAccount') IS NOT NULL;
+    </sql>
+  </changeSet>
+
+  <changeSet author="oncokb" id="20260910143000-5" dbms="h2">
+    <comment>H2 used in tests does not provide JSON extraction functions used by production DBs.</comment>
+    <sql>
+      UPDATE user_details
+      SET additional_info = additional_info
+      WHERE 1 = 0;
+    </sql>
+  </changeSet>
+
+  <changeSet author="oncokb" id="20260910143000-6" dbms="mysql,mariadb">
+    <sql>
+      UPDATE user_details ud
+      LEFT JOIN user_trial ut ON ut.user_id = ud.user_id
+      SET ud.trial_status = CASE
+        WHEN ut.activation_key IS NOT NULL AND ut.license_agreement_acceptance_date IS NULL THEN 'TRIAL_PENDING_TERMS_ACCEPTANCE'
+        WHEN ut.user_id IS NOT NULL THEN 'TRIAL'
+        ELSE 'REGULAR'
+      END
+      WHERE ud.trial_status IS NULL;
+    </sql>
+  </changeSet>
+
+  <changeSet author="oncokb" id="20260910143000-6-h2" dbms="h2">
+    <sql>
+      UPDATE user_details ud
+      SET trial_status = CASE
+        WHEN EXISTS (
+          SELECT 1
+          FROM user_trial ut
+          WHERE ut.user_id = ud.user_id
+            AND ut.activation_key IS NOT NULL
+            AND ut.license_agreement_acceptance_date IS NULL
+        ) THEN 'TRIAL_PENDING_TERMS_ACCEPTANCE'
+        WHEN EXISTS (
+          SELECT 1
+          FROM user_trial ut
+          WHERE ut.user_id = ud.user_id
+        ) THEN 'TRIAL'
+        ELSE 'REGULAR'
+      END
+      WHERE ud.trial_status IS NULL;
+    </sql>
+  </changeSet>
+
+  <changeSet author="oncokb" id="20260910143000-7" dbms="mysql,mariadb">
+    <sql>
+      UPDATE user_details
+      SET additional_info =
+        CASE
+          WHEN additional_info IS NULL THEN NULL
+          ELSE JSON_REMOVE(additional_info, '$.trialAccount')
+        END;
+    </sql>
+  </changeSet>
+
+  <changeSet author="oncokb" id="20260910143000-8" dbms="h2">
+    <sql>
+      UPDATE user_details
+      SET additional_info = additional_info;
+    </sql>
+  </changeSet>
+
+  <changeSet author="oncokb" id="20260910143000-9">
+    <update tableName="user_details">
+      <column name="trial_status" value="REGULAR"/>
+      <where>trial_status IS NULL</where>
+    </update>
+    <addDefaultValue tableName="user_details" columnName="trial_status" columnDataType="varchar(64)" defaultValue="REGULAR"/>
+    <addNotNullConstraint tableName="user_details" columnName="trial_status" columnDataType="varchar(64)"/>
+  </changeSet>
+
+</databaseChangeLog>

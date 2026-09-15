@@ -8,10 +8,40 @@ type UserStatusModalProps = {
   user: UserDTO | undefined;
   show: boolean;
   onCancel: () => void;
-  onConfirm: (sendEmail: boolean, authorities: string[]) => void;
+  onConfirm: (
+    sendEmail: boolean,
+    authorities: string[],
+    trialStatus: UserDTO['trialStatus']
+  ) => void;
 };
 
-export class UserStatusModal extends React.Component<UserStatusModalProps> {
+type UserStatusModalState = {
+  selectedTrialStatus: UserDTO['trialStatus'];
+};
+
+export class UserStatusModal extends React.Component<
+  UserStatusModalProps,
+  UserStatusModalState
+> {
+  state: UserStatusModalState = {
+    selectedTrialStatus: this.props.user?.trialStatus || 'REGULAR',
+  };
+
+  componentDidUpdate(prevProps: UserStatusModalProps) {
+    if (
+      prevProps.user?.id !== this.props.user?.id ||
+      prevProps.show !== this.props.show
+    ) {
+      this.setState({
+        selectedTrialStatus: this.props.user?.trialStatus || 'REGULAR',
+      });
+    }
+  }
+
+  private getTrialStatus() {
+    return this.state.selectedTrialStatus;
+  }
+
   render() {
     const isRequestingApiAccess =
       !this.props.user?.activated &&
@@ -44,6 +74,28 @@ export class UserStatusModal extends React.Component<UserStatusModalProps> {
           )}
           Are you sure to{' '}
           {this.props.user?.activated ? 'deactivate' : 'activate'} the user?
+          <div className="mt-3">
+            <label htmlFor="trial-status-select" className="font-weight-bold">
+              Trial Status
+            </label>
+            <select
+              id="trial-status-select"
+              className="form-control"
+              value={this.state.selectedTrialStatus}
+              onChange={event => {
+                this.setState({
+                  selectedTrialStatus: event.target
+                    .value as UserDTO['trialStatus'],
+                });
+              }}
+            >
+              <option value="REGULAR">Regular</option>
+              <option value="TRIAL">Trial</option>
+              <option value="TRIAL_PENDING_TERMS_ACCEPTANCE">
+                Pending trial terms acceptance
+              </option>
+            </select>
+          </div>
         </Modal.Body>
         <Modal.Footer>
           <Button variant="secondary" onClick={this.props.onCancel}>
@@ -51,7 +103,9 @@ export class UserStatusModal extends React.Component<UserStatusModalProps> {
           </Button>
           <Button
             variant="primary"
-            onClick={() => this.props.onConfirm(true, authorities)}
+            onClick={() =>
+              this.props.onConfirm(true, authorities, this.getTrialStatus())
+            }
           >
             Update
           </Button>
@@ -64,7 +118,13 @@ export class UserStatusModal extends React.Component<UserStatusModalProps> {
             >
               <Button
                 variant="primary"
-                onClick={() => this.props.onConfirm(false, authorities)}
+                onClick={() =>
+                  this.props.onConfirm(
+                    false,
+                    authorities,
+                    this.getTrialStatus()
+                  )
+                }
               >
                 Silent Update
               </Button>

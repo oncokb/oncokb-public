@@ -8,6 +8,7 @@ import org.mskcc.cbio.oncokb.domain.User;
 import org.mskcc.cbio.oncokb.domain.UserDetails;
 import org.mskcc.cbio.oncokb.domain.enumeration.AccountRequestStatus;
 import org.mskcc.cbio.oncokb.domain.enumeration.LicenseType;
+import org.mskcc.cbio.oncokb.domain.enumeration.TrialStatus;
 import org.mskcc.cbio.oncokb.security.SecurityUtils;
 import org.mskcc.cbio.oncokb.service.dto.useradditionalinfo.AdditionalInfoDTO;
 
@@ -56,6 +57,10 @@ public class UserDTO implements Serializable {
     private AdditionalInfoDTO additionalInfo;
 
     private AccountRequestStatus accountRequestStatus;
+
+    private TrialStatus trialStatus;
+
+    private UserTrialDTO userTrial;
 
     @Email
     @Size(min = 5, max = 254)
@@ -130,8 +135,13 @@ public class UserDTO implements Serializable {
             this.country = userDetails.getCountry();
             this.additionalInfo = new Gson().fromJson(userDetails.getAdditionalInfo(), AdditionalInfoDTO.class);
             this.accountRequestStatus = userDetails.getAccountRequestStatus();
+            this.trialStatus = userDetails.getTrialStatus();
         } else {
             this.accountRequestStatus = AccountRequestStatus.UNKNOWN;
+            this.trialStatus = TrialStatus.REGULAR;
+        }
+        if (this.trialStatus == null) {
+            this.trialStatus = TrialStatus.REGULAR;
         }
     }
 
@@ -251,6 +261,22 @@ public class UserDTO implements Serializable {
         return imageUrl;
     }
 
+    public TrialStatus getTrialStatus() {
+        return trialStatus;
+    }
+
+    public void setTrialStatus(TrialStatus trialStatus) {
+        this.trialStatus = trialStatus;
+    }
+
+    public UserTrialDTO getUserTrial() {
+        return userTrial;
+    }
+
+    public void setUserTrial(UserTrialDTO userTrial) {
+        this.userTrial = userTrial;
+    }
+
     public void setImageUrl(String imageUrl) {
         this.imageUrl = imageUrl;
     }
@@ -352,6 +378,7 @@ public class UserDTO implements Serializable {
             ", company=" + company +
             ", city=" + city +
             ", country=" + country +
+            ", trialStatus=" + trialStatus +
             ", imageUrl='" + imageUrl + '\'' +
             ", activated=" + activated +
             ", activationGracePeriodDaysRemaining=" + activationGracePeriodDaysRemaining +
