@@ -167,6 +167,7 @@ public class TokenSecurityConfiguration extends WebSecurityConfigurerAdapter {
             .antMatchers("/api/companies/service-account/token").hasAnyAuthority(AuthoritiesConstants.ROLE_COMPANY_ADMIN)
             .antMatchers("/api/companies/**").hasAnyAuthority(AuthoritiesConstants.ADMIN)
             .antMatchers("/api/company-domains/**").hasAnyAuthority(AuthoritiesConstants.ADMIN)
+            .antMatchers("/api/suspicious-email-domains/**").hasAnyAuthority(AuthoritiesConstants.ADMIN)
 
             .antMatchers("/api/cronjob/**").hasAnyAuthority(AuthoritiesConstants.BOT)
 

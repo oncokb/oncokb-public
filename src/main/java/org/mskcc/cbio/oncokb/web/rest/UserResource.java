@@ -276,7 +276,11 @@ public class UserResource {
         log.debug("REST request to get User : {}", login);
         return ResponseUtil.wrapOrNotFound(
             userService.getUserWithAuthoritiesByLogin(login)
-                .map(user -> userMapper.userToUserDTO(user)));
+                .map(user -> {
+                    UserDTO userDTO = userMapper.userToUserDTO(user);
+                    userService.decorateSuspiciousEmailDomain(userDTO);
+                    return userDTO;
+                }));
     }
 
     /**

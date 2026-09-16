@@ -278,6 +278,10 @@ export type ManagedUserVM = {
 
         'resetKey': string
 
+        'suspiciousEmailDomain': string
+
+        'suspiciousEmailDomainJustification': string
+
         'tokenIsRenewable': boolean
 
         'tokenValidDays': number
@@ -351,6 +355,20 @@ export type SendEmailUserOptionDTO = {
         'licenseType': string
 
         'login': string
+
+};
+export type SuspiciousEmailDomainCreateDTO = {
+    'domain': string
+
+        'justification': string
+
+};
+export type SuspiciousEmailDomainDTO = {
+    'domain': string
+
+        'id': number
+
+        'justification': string
 
 };
 export type TerminationEmailDTO = {
@@ -541,6 +559,10 @@ export type UserDTO = {
         'resetDate': string
 
         'resetKey': string
+
+        'suspiciousEmailDomain': string
+
+        'suspiciousEmailDomainJustification': string
 
         'userMails': Array < UserMailsDTO >
 
@@ -5378,6 +5400,370 @@ export default class API {
             $domain ? : string
     }): Promise < GracePeriodBlacklistVM > {
         return this.getGracePeriodBlacklistUsingGETWithHttpInfo(parameters).then(function(response: request.Response) {
+            return response.body;
+        });
+    };
+    getAllSuspiciousEmailDomainsUsingGETURL(parameters: {
+        $queryParameters ? : any
+    }): string {
+        let queryParameters: any = {};
+        let path = '/api/suspicious-email-domains';
+
+        if (parameters.$queryParameters) {
+            Object.keys(parameters.$queryParameters).forEach(function(parameterName) {
+                var parameter = parameters.$queryParameters[parameterName];
+                queryParameters[parameterName] = parameter;
+            });
+        }
+        let keys = Object.keys(queryParameters);
+        return this.domain + path + (keys.length > 0 ? '?' + (keys.map(key => key + '=' + encodeURIComponent(queryParameters[key])).join('&')) : '');
+    };
+
+    /**
+     * getAllSuspiciousEmailDomains
+     * @method
+     * @name API#getAllSuspiciousEmailDomainsUsingGET
+     */
+    getAllSuspiciousEmailDomainsUsingGETWithHttpInfo(parameters: {
+        $queryParameters ? : any,
+            $domain ? : string
+    }): Promise < request.Response > {
+        const domain = parameters.$domain ? parameters.$domain : this.domain;
+        const errorHandlers = this.errorHandlers;
+        const request = this.request;
+        let path = '/api/suspicious-email-domains';
+        let body: any;
+        let queryParameters: any = {};
+        let headers: any = {};
+        let form: any = {};
+        return new Promise(function(resolve, reject) {
+            headers['Accept'] = '*/*';
+
+            if (parameters.$queryParameters) {
+                Object.keys(parameters.$queryParameters).forEach(function(parameterName) {
+                    var parameter = parameters.$queryParameters[parameterName];
+                    queryParameters[parameterName] = parameter;
+                });
+            }
+
+            request('GET', domain + path, body, headers, queryParameters, form, reject, resolve, errorHandlers);
+
+        });
+    };
+
+    /**
+     * getAllSuspiciousEmailDomains
+     * @method
+     * @name API#getAllSuspiciousEmailDomainsUsingGET
+     */
+    getAllSuspiciousEmailDomainsUsingGET(parameters: {
+            $queryParameters ? : any,
+                $domain ? : string
+        }): Promise < Array < SuspiciousEmailDomainDTO >
+        > {
+            return this.getAllSuspiciousEmailDomainsUsingGETWithHttpInfo(parameters).then(function(response: request.Response) {
+                return response.body;
+            });
+        };
+    createSuspiciousEmailDomainUsingPOSTURL(parameters: {
+        'suspiciousEmailDomainDto': SuspiciousEmailDomainCreateDTO,
+        $queryParameters ? : any
+    }): string {
+        let queryParameters: any = {};
+        let path = '/api/suspicious-email-domains';
+
+        if (parameters.$queryParameters) {
+            Object.keys(parameters.$queryParameters).forEach(function(parameterName) {
+                var parameter = parameters.$queryParameters[parameterName];
+                queryParameters[parameterName] = parameter;
+            });
+        }
+        let keys = Object.keys(queryParameters);
+        return this.domain + path + (keys.length > 0 ? '?' + (keys.map(key => key + '=' + encodeURIComponent(queryParameters[key])).join('&')) : '');
+    };
+
+    /**
+     * createSuspiciousEmailDomain
+     * @method
+     * @name API#createSuspiciousEmailDomainUsingPOST
+     * @param {} suspiciousEmailDomainDto - suspiciousEmailDomainDTO
+     */
+    createSuspiciousEmailDomainUsingPOSTWithHttpInfo(parameters: {
+        'suspiciousEmailDomainDto': SuspiciousEmailDomainCreateDTO,
+        $queryParameters ? : any,
+        $domain ? : string
+    }): Promise < request.Response > {
+        const domain = parameters.$domain ? parameters.$domain : this.domain;
+        const errorHandlers = this.errorHandlers;
+        const request = this.request;
+        let path = '/api/suspicious-email-domains';
+        let body: any;
+        let queryParameters: any = {};
+        let headers: any = {};
+        let form: any = {};
+        return new Promise(function(resolve, reject) {
+            headers['Accept'] = '*/*';
+            headers['Content-Type'] = 'application/json';
+
+            if (parameters['suspiciousEmailDomainDto'] !== undefined) {
+                body = parameters['suspiciousEmailDomainDto'];
+            }
+
+            if (parameters['suspiciousEmailDomainDto'] === undefined) {
+                reject(new Error('Missing required  parameter: suspiciousEmailDomainDto'));
+                return;
+            }
+
+            if (parameters.$queryParameters) {
+                Object.keys(parameters.$queryParameters).forEach(function(parameterName) {
+                    var parameter = parameters.$queryParameters[parameterName];
+                    queryParameters[parameterName] = parameter;
+                });
+            }
+
+            request('POST', domain + path, body, headers, queryParameters, form, reject, resolve, errorHandlers);
+
+        });
+    };
+
+    /**
+     * createSuspiciousEmailDomain
+     * @method
+     * @name API#createSuspiciousEmailDomainUsingPOST
+     * @param {} suspiciousEmailDomainDto - suspiciousEmailDomainDTO
+     */
+    createSuspiciousEmailDomainUsingPOST(parameters: {
+        'suspiciousEmailDomainDto': SuspiciousEmailDomainCreateDTO,
+        $queryParameters ? : any,
+        $domain ? : string
+    }): Promise < SuspiciousEmailDomainDTO > {
+        return this.createSuspiciousEmailDomainUsingPOSTWithHttpInfo(parameters).then(function(response: request.Response) {
+            return response.body;
+        });
+    };
+    updateSuspiciousEmailDomainUsingPUTURL(parameters: {
+        'suspiciousEmailDomainDto': SuspiciousEmailDomainDTO,
+        $queryParameters ? : any
+    }): string {
+        let queryParameters: any = {};
+        let path = '/api/suspicious-email-domains';
+
+        if (parameters.$queryParameters) {
+            Object.keys(parameters.$queryParameters).forEach(function(parameterName) {
+                var parameter = parameters.$queryParameters[parameterName];
+                queryParameters[parameterName] = parameter;
+            });
+        }
+        let keys = Object.keys(queryParameters);
+        return this.domain + path + (keys.length > 0 ? '?' + (keys.map(key => key + '=' + encodeURIComponent(queryParameters[key])).join('&')) : '');
+    };
+
+    /**
+     * updateSuspiciousEmailDomain
+     * @method
+     * @name API#updateSuspiciousEmailDomainUsingPUT
+     * @param {} suspiciousEmailDomainDto - suspiciousEmailDomainDTO
+     */
+    updateSuspiciousEmailDomainUsingPUTWithHttpInfo(parameters: {
+        'suspiciousEmailDomainDto': SuspiciousEmailDomainDTO,
+        $queryParameters ? : any,
+        $domain ? : string
+    }): Promise < request.Response > {
+        const domain = parameters.$domain ? parameters.$domain : this.domain;
+        const errorHandlers = this.errorHandlers;
+        const request = this.request;
+        let path = '/api/suspicious-email-domains';
+        let body: any;
+        let queryParameters: any = {};
+        let headers: any = {};
+        let form: any = {};
+        return new Promise(function(resolve, reject) {
+            headers['Accept'] = '*/*';
+            headers['Content-Type'] = 'application/json';
+
+            if (parameters['suspiciousEmailDomainDto'] !== undefined) {
+                body = parameters['suspiciousEmailDomainDto'];
+            }
+
+            if (parameters['suspiciousEmailDomainDto'] === undefined) {
+                reject(new Error('Missing required  parameter: suspiciousEmailDomainDto'));
+                return;
+            }
+
+            if (parameters.$queryParameters) {
+                Object.keys(parameters.$queryParameters).forEach(function(parameterName) {
+                    var parameter = parameters.$queryParameters[parameterName];
+                    queryParameters[parameterName] = parameter;
+                });
+            }
+
+            request('PUT', domain + path, body, headers, queryParameters, form, reject, resolve, errorHandlers);
+
+        });
+    };
+
+    /**
+     * updateSuspiciousEmailDomain
+     * @method
+     * @name API#updateSuspiciousEmailDomainUsingPUT
+     * @param {} suspiciousEmailDomainDto - suspiciousEmailDomainDTO
+     */
+    updateSuspiciousEmailDomainUsingPUT(parameters: {
+        'suspiciousEmailDomainDto': SuspiciousEmailDomainDTO,
+        $queryParameters ? : any,
+        $domain ? : string
+    }): Promise < SuspiciousEmailDomainDTO > {
+        return this.updateSuspiciousEmailDomainUsingPUTWithHttpInfo(parameters).then(function(response: request.Response) {
+            return response.body;
+        });
+    };
+    getSuspiciousEmailDomainUsingGETURL(parameters: {
+        'id': number,
+        $queryParameters ? : any
+    }): string {
+        let queryParameters: any = {};
+        let path = '/api/suspicious-email-domains/{id}';
+
+        path = path.replace('{id}', parameters['id'] + '');
+
+        if (parameters.$queryParameters) {
+            Object.keys(parameters.$queryParameters).forEach(function(parameterName) {
+                var parameter = parameters.$queryParameters[parameterName];
+                queryParameters[parameterName] = parameter;
+            });
+        }
+        let keys = Object.keys(queryParameters);
+        return this.domain + path + (keys.length > 0 ? '?' + (keys.map(key => key + '=' + encodeURIComponent(queryParameters[key])).join('&')) : '');
+    };
+
+    /**
+     * getSuspiciousEmailDomain
+     * @method
+     * @name API#getSuspiciousEmailDomainUsingGET
+     * @param {integer} id - id
+     */
+    getSuspiciousEmailDomainUsingGETWithHttpInfo(parameters: {
+        'id': number,
+        $queryParameters ? : any,
+        $domain ? : string
+    }): Promise < request.Response > {
+        const domain = parameters.$domain ? parameters.$domain : this.domain;
+        const errorHandlers = this.errorHandlers;
+        const request = this.request;
+        let path = '/api/suspicious-email-domains/{id}';
+        let body: any;
+        let queryParameters: any = {};
+        let headers: any = {};
+        let form: any = {};
+        return new Promise(function(resolve, reject) {
+            headers['Accept'] = '*/*';
+
+            path = path.replace('{id}', parameters['id'] + '');
+
+            if (parameters['id'] === undefined) {
+                reject(new Error('Missing required  parameter: id'));
+                return;
+            }
+
+            if (parameters.$queryParameters) {
+                Object.keys(parameters.$queryParameters).forEach(function(parameterName) {
+                    var parameter = parameters.$queryParameters[parameterName];
+                    queryParameters[parameterName] = parameter;
+                });
+            }
+
+            request('GET', domain + path, body, headers, queryParameters, form, reject, resolve, errorHandlers);
+
+        });
+    };
+
+    /**
+     * getSuspiciousEmailDomain
+     * @method
+     * @name API#getSuspiciousEmailDomainUsingGET
+     * @param {integer} id - id
+     */
+    getSuspiciousEmailDomainUsingGET(parameters: {
+        'id': number,
+        $queryParameters ? : any,
+        $domain ? : string
+    }): Promise < SuspiciousEmailDomainDTO > {
+        return this.getSuspiciousEmailDomainUsingGETWithHttpInfo(parameters).then(function(response: request.Response) {
+            return response.body;
+        });
+    };
+    deleteSuspiciousEmailDomainUsingDELETEURL(parameters: {
+        'id': number,
+        $queryParameters ? : any
+    }): string {
+        let queryParameters: any = {};
+        let path = '/api/suspicious-email-domains/{id}';
+
+        path = path.replace('{id}', parameters['id'] + '');
+
+        if (parameters.$queryParameters) {
+            Object.keys(parameters.$queryParameters).forEach(function(parameterName) {
+                var parameter = parameters.$queryParameters[parameterName];
+                queryParameters[parameterName] = parameter;
+            });
+        }
+        let keys = Object.keys(queryParameters);
+        return this.domain + path + (keys.length > 0 ? '?' + (keys.map(key => key + '=' + encodeURIComponent(queryParameters[key])).join('&')) : '');
+    };
+
+    /**
+     * deleteSuspiciousEmailDomain
+     * @method
+     * @name API#deleteSuspiciousEmailDomainUsingDELETE
+     * @param {integer} id - id
+     */
+    deleteSuspiciousEmailDomainUsingDELETEWithHttpInfo(parameters: {
+        'id': number,
+        $queryParameters ? : any,
+        $domain ? : string
+    }): Promise < request.Response > {
+        const domain = parameters.$domain ? parameters.$domain : this.domain;
+        const errorHandlers = this.errorHandlers;
+        const request = this.request;
+        let path = '/api/suspicious-email-domains/{id}';
+        let body: any;
+        let queryParameters: any = {};
+        let headers: any = {};
+        let form: any = {};
+        return new Promise(function(resolve, reject) {
+            headers['Accept'] = '*/*';
+
+            path = path.replace('{id}', parameters['id'] + '');
+
+            if (parameters['id'] === undefined) {
+                reject(new Error('Missing required  parameter: id'));
+                return;
+            }
+
+            if (parameters.$queryParameters) {
+                Object.keys(parameters.$queryParameters).forEach(function(parameterName) {
+                    var parameter = parameters.$queryParameters[parameterName];
+                    queryParameters[parameterName] = parameter;
+                });
+            }
+
+            request('DELETE', domain + path, body, headers, queryParameters, form, reject, resolve, errorHandlers);
+
+        });
+    };
+
+    /**
+     * deleteSuspiciousEmailDomain
+     * @method
+     * @name API#deleteSuspiciousEmailDomainUsingDELETE
+     * @param {integer} id - id
+     */
+    deleteSuspiciousEmailDomainUsingDELETE(parameters: {
+        'id': number,
+        $queryParameters ? : any,
+        $domain ? : string
+    }): Promise < any > {
+        return this.deleteSuspiciousEmailDomainUsingDELETEWithHttpInfo(parameters).then(function(response: request.Response) {
             return response.body;
         });
     };
