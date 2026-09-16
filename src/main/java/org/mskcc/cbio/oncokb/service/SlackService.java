@@ -30,6 +30,7 @@ import org.mskcc.cbio.oncokb.domain.UserIdMessagePair;
 import org.mskcc.cbio.oncokb.domain.enumeration.*;
 import org.mskcc.cbio.oncokb.domain.enumeration.slack.*;
 import org.mskcc.cbio.oncokb.service.dto.PotentialDuplicateUserSummary;
+import org.mskcc.cbio.oncokb.service.dto.SuspiciousEmailDomainDTO;
 import org.mskcc.cbio.oncokb.service.dto.UserDTO;
 import org.mskcc.cbio.oncokb.service.dto.UserMailsDTO;
 import org.mskcc.cbio.oncokb.service.dto.useradditionalinfo.AdditionalInfoDTO;
@@ -81,6 +82,7 @@ public class SlackService {
     private final MailService mailService;
     private final UserService userService;
     private final UserMailsService userMailsService;
+    private final SuspiciousEmailDomainService suspiciousEmailDomainService;
     private final UserMapper userMapper;
     private final Slack slack;
 
@@ -88,12 +90,14 @@ public class SlackService {
             MailService mailService,
             @Lazy UserService userService,
             UserMailsService userMailsService,
+            SuspiciousEmailDomainService suspiciousEmailDomainService,
             UserMapper userMapper,
             Slack slack) {
         this.applicationProperties = applicationProperties;
         this.mailService = mailService;
         this.userService = userService;
         this.userMailsService = userMailsService;
+        this.suspiciousEmailDomainService = suspiciousEmailDomainService;
         this.userMapper = userMapper;
         this.slack = slack;
     }
@@ -454,6 +458,19 @@ public class SlackService {
                 apiRequestJustification = "[no justification provided]";
             }
             String text = ":information_source: *API Access Requested*: " + apiRequestJustification;
+            blocks.add(SectionBlock.builder().text(MarkdownTextObject.builder().text(text).build()).build());
+        }
+
+        Optional<SuspiciousEmailDomainDTO> suspiciousEmailDomain = Optional.empty();
+        if (StringUtils.isNotBlank(userDTO.getEmail())) {
+            suspiciousEmailDomain = suspiciousEmailDomainService.findOneByDomain(StringUtil.getEmailDomain(userDTO.getEmail()));
+        }
+        if (suspiciousEmailDomain.isPresent()) {
+            String text = String.format(
+                ":warning: *Suspicious email domain detected*: %s\n*Justification*: %s",
+                suspiciousEmailDomain.get().getDomain(),
+                suspiciousEmailDomain.get().getJustification()
+            );
             blocks.add(SectionBlock.builder().text(MarkdownTextObject.builder().text(text).build()).build());
         }
 

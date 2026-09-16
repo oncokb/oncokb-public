@@ -41,6 +41,10 @@
       "description": "O Auth Token Controller"
     },
     {
+      "name": "suspicious-email-domain-resource",
+      "description": "Suspicious Email Domain Resource"
+    },
+    {
       "name": "token-resource",
       "description": "Token Resource"
     },
@@ -2644,6 +2648,204 @@
           },
           "404": {
             "description": "Not Found"
+          }
+        },
+        "deprecated": false
+      }
+    },
+    "/api/suspicious-email-domains": {
+      "get": {
+        "tags": [
+          "suspicious-email-domain-resource"
+        ],
+        "summary": "getAllSuspiciousEmailDomains",
+        "operationId": "getAllSuspiciousEmailDomainsUsingGET",
+        "produces": [
+          "*/*"
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "schema": {
+              "type": "array",
+              "items": {
+                "$ref": "#/definitions/SuspiciousEmailDomainDTO"
+              }
+            }
+          },
+          "401": {
+            "description": "Unauthorized"
+          },
+          "403": {
+            "description": "Forbidden"
+          },
+          "404": {
+            "description": "Not Found"
+          }
+        },
+        "deprecated": false
+      },
+      "post": {
+        "tags": [
+          "suspicious-email-domain-resource"
+        ],
+        "summary": "createSuspiciousEmailDomain",
+        "operationId": "createSuspiciousEmailDomainUsingPOST",
+        "consumes": [
+          "application/json"
+        ],
+        "produces": [
+          "*/*"
+        ],
+        "parameters": [
+          {
+            "in": "body",
+            "name": "suspiciousEmailDomainDTO",
+            "description": "suspiciousEmailDomainDTO",
+            "required": true,
+            "schema": {
+              "$ref": "#/definitions/SuspiciousEmailDomainCreateDTO"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "schema": {
+              "$ref": "#/definitions/SuspiciousEmailDomainDTO"
+            }
+          },
+          "201": {
+            "description": "Created"
+          },
+          "401": {
+            "description": "Unauthorized"
+          },
+          "403": {
+            "description": "Forbidden"
+          },
+          "404": {
+            "description": "Not Found"
+          }
+        },
+        "deprecated": false
+      },
+      "put": {
+        "tags": [
+          "suspicious-email-domain-resource"
+        ],
+        "summary": "updateSuspiciousEmailDomain",
+        "operationId": "updateSuspiciousEmailDomainUsingPUT",
+        "consumes": [
+          "application/json"
+        ],
+        "produces": [
+          "*/*"
+        ],
+        "parameters": [
+          {
+            "in": "body",
+            "name": "suspiciousEmailDomainDTO",
+            "description": "suspiciousEmailDomainDTO",
+            "required": true,
+            "schema": {
+              "$ref": "#/definitions/SuspiciousEmailDomainDTO"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "schema": {
+              "$ref": "#/definitions/SuspiciousEmailDomainDTO"
+            }
+          },
+          "201": {
+            "description": "Created"
+          },
+          "401": {
+            "description": "Unauthorized"
+          },
+          "403": {
+            "description": "Forbidden"
+          },
+          "404": {
+            "description": "Not Found"
+          }
+        },
+        "deprecated": false
+      }
+    },
+    "/api/suspicious-email-domains/{id}": {
+      "get": {
+        "tags": [
+          "suspicious-email-domain-resource"
+        ],
+        "summary": "getSuspiciousEmailDomain",
+        "operationId": "getSuspiciousEmailDomainUsingGET",
+        "produces": [
+          "*/*"
+        ],
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "description": "id",
+            "required": true,
+            "type": "integer",
+            "format": "int64"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "schema": {
+              "$ref": "#/definitions/SuspiciousEmailDomainDTO"
+            }
+          },
+          "401": {
+            "description": "Unauthorized"
+          },
+          "403": {
+            "description": "Forbidden"
+          },
+          "404": {
+            "description": "Not Found"
+          }
+        },
+        "deprecated": false
+      },
+      "delete": {
+        "tags": [
+          "suspicious-email-domain-resource"
+        ],
+        "summary": "deleteSuspiciousEmailDomain",
+        "operationId": "deleteSuspiciousEmailDomainUsingDELETE",
+        "produces": [
+          "*/*"
+        ],
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "description": "id",
+            "required": true,
+            "type": "integer",
+            "format": "int64"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK"
+          },
+          "204": {
+            "description": "No Content"
+          },
+          "401": {
+            "description": "Unauthorized"
+          },
+          "403": {
+            "description": "Forbidden"
           }
         },
         "deprecated": false
@@ -5256,6 +5458,12 @@
         "resetKey": {
           "type": "string"
         },
+        "suspiciousEmailDomain": {
+          "type": "string"
+        },
+        "suspiciousEmailDomainJustification": {
+          "type": "string"
+        },
         "tokenIsRenewable": {
           "type": "boolean"
         },
@@ -5416,6 +5624,42 @@
         }
       },
       "title": "SendEmailUserOptionDTO"
+    },
+    "SuspiciousEmailDomainCreateDTO": {
+      "type": "object",
+      "properties": {
+        "domain": {
+          "type": "string",
+          "minLength": 0,
+          "maxLength": 255
+        },
+        "justification": {
+          "type": "string",
+          "minLength": 0,
+          "maxLength": 2000
+        }
+      },
+      "title": "SuspiciousEmailDomainCreateDTO"
+    },
+    "SuspiciousEmailDomainDTO": {
+      "type": "object",
+      "properties": {
+        "domain": {
+          "type": "string",
+          "minLength": 0,
+          "maxLength": 255
+        },
+        "id": {
+          "type": "integer",
+          "format": "int64"
+        },
+        "justification": {
+          "type": "string",
+          "minLength": 0,
+          "maxLength": 2000
+        }
+      },
+      "title": "SuspiciousEmailDomainDTO"
     },
     "TerminationEmailDTO": {
       "type": "object",
@@ -5840,6 +6084,12 @@
           "format": "date-time"
         },
         "resetKey": {
+          "type": "string"
+        },
+        "suspiciousEmailDomain": {
+          "type": "string"
+        },
+        "suspiciousEmailDomainJustification": {
           "type": "string"
         },
         "userMails": {

@@ -17,6 +17,7 @@ import UserBannerPage from 'app/pages/userBannerManagement/UserBannerPage';
 import CreateUserBannerMessagePage from 'app/pages/CreateUserBannerMessagePage';
 import EditUserBannerMessagePage from 'app/pages/EditUserBannerMessagePage';
 import AuthenticationStore from 'app/store/AuthenticationStore';
+import SuspiciousEmailDomainPage from 'app/pages/suspiciousEmailDomainManagement/SuspiciousEmailDomainPage';
 
 const AdminRoutes = ({
   authenticationStore,
@@ -101,6 +102,13 @@ const AdminRoutes = ({
         exact
         path={PAGE_ROUTE.ADMIN_USER_BANNER_MESSAGES}
         component={UserBannerPage}
+        windowStore={windowStore}
+        authenticationStore={authenticationStore}
+      />
+      <ErrorBoundaryRoute
+        exact
+        path={PAGE_ROUTE.ADMIN_SUSPICIOUS_EMAIL_DOMAINS}
+        component={SuspiciousEmailDomainPage}
         windowStore={windowStore}
         authenticationStore={authenticationStore}
       />
