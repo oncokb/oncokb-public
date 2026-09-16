@@ -169,9 +169,11 @@ export default class SuspiciousEmailDomainPage extends React.Component {
         <Button
           variant="link"
           className="p-0"
+          title="Edit suspicious domain"
+          aria-label="Edit suspicious domain"
           onClick={() => this.onEdit(props.original)}
         >
-          <i className="fa fa-pencil-square-o" />
+          <i className="fa fa-pencil-square-o" aria-hidden="true" />
         </Button>
       ),
     },
@@ -185,9 +187,11 @@ export default class SuspiciousEmailDomainPage extends React.Component {
         <Button
           variant="link"
           className="p-0 text-danger"
+          title="Delete suspicious domain"
+          aria-label="Delete suspicious domain"
           onClick={() => this.openDeleteModal(props.original)}
         >
-          <i className="fa fa-trash" />
+          <i className="fa fa-trash" aria-hidden="true" />
         </Button>
       ),
     },
