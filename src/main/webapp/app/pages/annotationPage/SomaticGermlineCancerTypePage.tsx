@@ -82,7 +82,7 @@ import { RouterStore } from 'mobx-react-router';
 import { SomaticGermlineAlterationTiles } from 'app/shared/tiles/tile-utils';
 import GeneticTypeTag from 'app/components/tag/GeneticTypeTag';
 import VariantOverView from 'app/shared/sections/VariantOverview';
-import ProteinChangeValidationView from 'app/shared/sections/ProteinChangeValidationView';
+import VariantValidationView from 'app/shared/sections/VariantValidationView';
 import styles from './SomaticGermlineCancerTypePage.module.scss';
 import GeneAdditionalInfoSection from 'app/shared/sections/GeneAdditionalInfoSection';
 import { UnknownGeneAlert } from 'app/shared/alert/UnknownGeneAlert';
@@ -229,7 +229,7 @@ export class SomaticGermlineCancerTypePage extends React.Component<
 
   @computed
   get showAdditionalGeneInfo() {
-    return this.additionalGeneInfoToggledTo ?? this.hasInvalidProteinChange;
+    return this.additionalGeneInfoToggledTo ?? this.hasInvalidVariant;
   }
 
   @computed
@@ -248,18 +248,18 @@ export class SomaticGermlineCancerTypePage extends React.Component<
   }
 
   @computed
-  get proteinChangeValidation() {
-    // Germline annotation does not validate the protein change. When we have an
+  get variantValidation() {
+    // Germline annotation does not validate the variant. When we have an
     // alternative variant to point the user to, it replaces the validation
     // feedback entirely, so the page does not also flag the query as invalid.
     return this.store.germline || this.alternativeVariant
       ? undefined
-      : this.store.somaticAnnotationData.result.proteinChangeValidation;
+      : this.store.somaticAnnotationData.result.variantValidation;
   }
 
   @computed
-  get hasInvalidProteinChange() {
-    return this.proteinChangeValidation?.status === 'INVALID';
+  get hasInvalidVariant() {
+    return this.variantValidation?.status === 'INVALID';
   }
 
   @computed
@@ -728,7 +728,7 @@ export class SomaticGermlineCancerTypePage extends React.Component<
                     alteration={this.store.alterationNameWithDiff}
                     proteinAlteration={this.store.alteration?.proteinChange}
                     isGermline={this.store.germline}
-                    isInvalid={this.hasInvalidProteinChange}
+                    isInvalid={this.hasInvalidVariant}
                     extra={
                       <SomaticGermlineCancerTypeSelect
                         pretext="in"
@@ -763,9 +763,9 @@ export class SomaticGermlineCancerTypePage extends React.Component<
                       />
                     }
                   />
-                  {this.proteinChangeValidation?.message && (
-                    <ProteinChangeValidationView
-                      validation={this.proteinChangeValidation}
+                  {this.variantValidation?.message && (
+                    <VariantValidationView
+                      validation={this.variantValidation}
                       hugoSymbol={this.store.hugoSymbol}
                       referenceGenome={this.store.referenceGenomeQuery}
                     />
@@ -793,7 +793,7 @@ export class SomaticGermlineCancerTypePage extends React.Component<
                         />
                       </Col>
                     </Row>
-                  ) : this.hasInvalidProteinChange ? null : (
+                  ) : this.hasInvalidVariant ? null : (
                     <>
                       <Row className={classnames(styles.descriptionContainer)}>
                         <Col>
@@ -837,7 +837,7 @@ export class SomaticGermlineCancerTypePage extends React.Component<
                 </Col>
               </Row>
             </Container>
-            {!alternativeVariant && !this.hasInvalidProteinChange && (
+            {!alternativeVariant && !this.hasInvalidVariant && (
               <>
                 <Container>
                   <Row className="justify-content-center">

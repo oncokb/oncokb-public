@@ -3412,7 +3412,7 @@
         },
         "type": {
           "type": "string",
-          "description": "What is wrong with the query.",
+          "description": "Type of validation error",
           "enum": [
             "REFERENCE_ALLELE_MISMATCH",
             "POSITION_OUT_OF_RANGE",
