@@ -2903,43 +2903,13 @@
         },
         "type": {
           "type": "string",
-          "description": "What is wrong with the query.",
+          "description": "Type of validation error",
           "enum": [
             "REFERENCE_ALLELE_MISMATCH",
             "POSITION_OUT_OF_RANGE",
             "REVERSED_POSITION_RANGE",
             "MALFORMED_ALTERATION",
             "AMBIGUOUS_FUSION_SEPARATOR"
-          ]
-        }
-      }
-    },
-    "ProteinChangeValidation": {
-      "type": "object",
-      "properties": {
-        "message": {
-          "type": "string"
-        },
-        "messageType": {
-          "type": "string",
-          "enum": [
-            "INVALID_PROTEIN_CHANGE",
-            "NORMALIZED_DELETED_SEQUENCE",
-            "NO_PROTEIN_SEQUENCE",
-            "TRANSCRIPT_SERVICE_DISABLED",
-            "TRANSCRIPT_SERVICE_UNAVAILABLE",
-            "AMBIGUOUS_FUSION_SEPARATOR"
-          ]
-        },
-        "normalizedProteinChange": {
-          "type": "string"
-        },
-        "status": {
-          "type": "string",
-          "enum": [
-            "NORMALIZED",
-            "INVALID",
-            "UNCHECKED"
           ]
         }
       }
@@ -3889,6 +3859,36 @@
         }
       }
     },
+    "VariantValidation": {
+      "type": "object",
+      "properties": {
+        "message": {
+          "type": "string"
+        },
+        "messageType": {
+          "type": "string",
+          "enum": [
+            "INVALID_PROTEIN_CHANGE",
+            "NORMALIZED_DELETED_SEQUENCE",
+            "NO_PROTEIN_SEQUENCE",
+            "TRANSCRIPT_SERVICE_DISABLED",
+            "TRANSCRIPT_SERVICE_UNAVAILABLE",
+            "AMBIGUOUS_FUSION_SEPARATOR"
+          ]
+        },
+        "normalizedProteinChange": {
+          "type": "string"
+        },
+        "status": {
+          "type": "string",
+          "enum": [
+            "NORMALIZED",
+            "INVALID",
+            "UNCHECKED"
+          ]
+        }
+      }
+    },
     "MainType": {
       "type": "object",
       "properties": {
@@ -4487,9 +4487,6 @@
           "type": "string",
           "description": "Prognostic summary. Defaulted to \"\""
         },
-        "proteinChangeValidation": {
-          "$ref": "#/definitions/ProteinChangeValidation"
-        },
         "query": {
           "$ref": "#/definitions/Query"
         },
@@ -4518,6 +4515,9 @@
         "variantSummary": {
           "type": "string",
           "description": "Variant summary. Defaulted to \"\""
+        },
+        "variantValidation": {
+          "$ref": "#/definitions/VariantValidation"
         },
         "vue": {
           "type": "boolean"

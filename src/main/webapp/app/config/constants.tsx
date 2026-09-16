@@ -5,7 +5,7 @@ import {
   GermlineVariantAnnotation,
   MainNumber,
   MutationEffectResp,
-  ProteinChangeValidation,
+  VariantValidation,
   Query,
   SomaticVariantAnnotation,
 } from 'app/shared/api/generated/OncoKbPrivateAPI';
@@ -552,7 +552,7 @@ const DEFAULT_ALTERATION: Alteration = {
   variantResidues: '',
 };
 
-export const DEFAULT_PROTEIN_CHANGE_VALIDATION: ProteinChangeValidation = {
+export const DEFAULT_VARIANT_VALIDATION: VariantValidation = {
   message: '',
   messageType: '' as any,
   normalizedProteinChange: '',
@@ -595,7 +595,7 @@ export const DEFAULT_ANNOTATION: SomaticVariantAnnotation = {
   alleleExist: false,
   alteration: DEFAULT_ALTERATION,
   background: '',
-  proteinChangeValidation: DEFAULT_PROTEIN_CHANGE_VALIDATION,
+  variantValidation: DEFAULT_VARIANT_VALIDATION,
   dataVersion: '',
   diagnosticImplications: [],
   diagnosticSummary: '',

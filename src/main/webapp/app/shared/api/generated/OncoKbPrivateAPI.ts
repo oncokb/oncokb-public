@@ -259,16 +259,6 @@ export type ValidationError = {
         'type': "REFERENCE_ALLELE_MISMATCH" | "POSITION_OUT_OF_RANGE" | "REVERSED_POSITION_RANGE" | "MALFORMED_ALTERATION" | "AMBIGUOUS_FUSION_SEPARATOR"
 
 };
-export type ProteinChangeValidation = {
-    'message': string
-
-        'messageType': "INVALID_PROTEIN_CHANGE" | "NORMALIZED_DELETED_SEQUENCE" | "NO_PROTEIN_SEQUENCE" | "TRANSCRIPT_SERVICE_DISABLED" | "TRANSCRIPT_SERVICE_UNAVAILABLE" | "AMBIGUOUS_FUSION_SEPARATOR"
-
-        'normalizedProteinChange': string
-
-        'status': "NORMALIZED" | "INVALID" | "UNCHECKED"
-
-};
 export type GenomicIndicatorQuery = {
     'hugoSymbol': string
 
@@ -671,6 +661,16 @@ export type TranscriptResult = {
         'note': string
 
 };
+export type VariantValidation = {
+    'message': string
+
+        'messageType': "INVALID_PROTEIN_CHANGE" | "NORMALIZED_DELETED_SEQUENCE" | "NO_PROTEIN_SEQUENCE" | "TRANSCRIPT_SERVICE_DISABLED" | "TRANSCRIPT_SERVICE_UNAVAILABLE" | "AMBIGUOUS_FUSION_SEPARATOR"
+
+        'normalizedProteinChange': string
+
+        'status': "NORMALIZED" | "INVALID" | "UNCHECKED"
+
+};
 export type MainType = {
     'id': number
 
@@ -866,8 +866,6 @@ export type SomaticVariantAnnotation = {
 
         'prognosticSummary': string
 
-        'proteinChangeValidation': ProteinChangeValidation
-
         'query': Query
 
         'treatments': Array < IndicatorQueryTreatment >
@@ -879,6 +877,8 @@ export type SomaticVariantAnnotation = {
         'variantExist': boolean
 
         'variantSummary': string
+
+        'variantValidation': VariantValidation
 
         'vue': boolean
 
