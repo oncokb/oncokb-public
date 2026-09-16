@@ -603,10 +603,15 @@ public class UserService {
     @Transactional(readOnly = true)
     public List<UserDTO> findAllUsersWithUserDetailsByUsersIn(List<User> users) {
         List<UserWithDetailsProjection> usersWithDetails = userRepository.findAllUsersWithUserDetailsByUsersIn(users);
-        return usersWithDetails
+        List<UserDTO> userDTOs = usersWithDetails
             .stream()
             .map(this::toUserDTOWithMails)
             .collect(Collectors.toList());
+
+        List<SuspiciousEmailDomainDTO> suspiciousEmailDomains = suspiciousEmailDomainService.findAll();
+        userDTOs.forEach(userDTO -> decorateSuspiciousEmailDomain(userDTO, suspiciousEmailDomains));
+
+        return userDTOs;
     }
 
     private UserDTO toUserDTOWithMails(UserWithDetailsProjection userWithDetails) {
@@ -615,7 +620,6 @@ public class UserService {
 
         UserDTO dto = userMapper.userToUserDTO(user, userDetails);
         dto.setUserMails(userMailsMapper.toDto(user.getUserMails()));
-        decorateSuspiciousEmailDomain(dto);
         return dto;
     }
 
@@ -629,6 +633,28 @@ public class UserService {
         if (suspiciousEmailDomain.isPresent()) {
             userDTO.setSuspiciousEmailDomain(suspiciousEmailDomain.get().getDomain());
             userDTO.setSuspiciousEmailDomainJustification(suspiciousEmailDomain.get().getJustification());
+        }
+    }
+
+    private void decorateSuspiciousEmailDomain(UserDTO userDTO, List<SuspiciousEmailDomainDTO> suspiciousEmailDomains) {
+        if (userDTO == null || StringUtils.isBlank(userDTO.getEmail())) {
+            return;
+        }
+
+        String domain = StringUtils.lowerCase(StringUtil.getEmailDomain(userDTO.getEmail()), Locale.ENGLISH);
+        if (StringUtils.isBlank(domain)) {
+            return;
+        }
+
+        for (SuspiciousEmailDomainDTO suspiciousEmailDomain : suspiciousEmailDomains) {
+            if (suspiciousEmailDomain == null || StringUtils.isBlank(suspiciousEmailDomain.getDomain())) {
+                continue;
+            }
+            if (StringUtils.equalsIgnoreCase(suspiciousEmailDomain.getDomain(), domain)) {
+                userDTO.setSuspiciousEmailDomain(suspiciousEmailDomain.getDomain());
+                userDTO.setSuspiciousEmailDomainJustification(suspiciousEmailDomain.getJustification());
+                break;
+            }
         }
     }
 
@@ -711,6 +737,7 @@ public class UserService {
             .stream()
             .collect(Collectors.toMap(User::getId, user -> user, (left, right) -> left));
 
+        List<SuspiciousEmailDomainDTO> suspiciousEmailDomains = suspiciousEmailDomainService.findAll();
         List<UserDTO> userDTOs = new ArrayList<>(userIds.size());
         for (Long userId : userIds) {
             User user = usersById.get(userId);
@@ -720,7 +747,7 @@ public class UserService {
 
             UserDTO dto = userMapper.userToUserDTO(user, userDetailsByUserId.get(userId));
             dto.setUserMails(userMailsMapper.toDto(user.getUserMails()));
-            decorateSuspiciousEmailDomain(dto);
+            decorateSuspiciousEmailDomain(dto, suspiciousEmailDomains);
             userDTOs.add(dto);
         }
 
