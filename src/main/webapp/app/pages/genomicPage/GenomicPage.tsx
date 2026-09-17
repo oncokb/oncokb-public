@@ -23,6 +23,7 @@ import {
 import WindowStore from 'app/store/WindowStore';
 import AuthenticationStore from 'app/store/AuthenticationStore';
 import { Helmet } from 'react-helmet-async';
+import { getReferenceGenomeFromSearch } from 'app/shared/utils/UrlUtils';
 
 interface MatchParams {
   query: string;
@@ -84,13 +85,15 @@ export default class GenomicPage extends React.Component<GenomicPageProps> {
       reaction(
         () => [props.routing.location.search],
         ([search]) => {
+          const referenceGenome = getReferenceGenomeFromSearch(search);
+          if (referenceGenome) {
+            this.refGenome = referenceGenome;
+            this.store.referenceGenomeQuery = this.refGenome;
+          }
+
           const queryStrings = QueryString.parse(
             search
           ) as AlterationPageSearchQueries;
-          if (queryStrings.refGenome) {
-            this.refGenome = queryStrings.refGenome;
-            this.store.referenceGenomeQuery = this.refGenome;
-          }
           if (queryStrings.tumorType) {
             this.tumorType = queryStrings.tumorType;
             this.store.tumorTypeQuery = this.tumorType;
