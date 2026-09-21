@@ -16,15 +16,23 @@ type UserStatusModalProps = {
 };
 
 type UserStatusModalState = {
-  selectedTrialStatus: UserDTO['trialStatus'];
+  selectedTrialStatus: 'REGULAR' | 'TRIAL';
 };
 
 export class UserStatusModal extends React.Component<
   UserStatusModalProps,
   UserStatusModalState
 > {
+  private toSelectableTrialStatus(
+    trialStatus: UserDTO['trialStatus'] | undefined
+  ): 'REGULAR' | 'TRIAL' {
+    return trialStatus === 'REGULAR' ? 'REGULAR' : 'TRIAL';
+  }
+
   state: UserStatusModalState = {
-    selectedTrialStatus: this.props.user?.trialStatus || 'REGULAR',
+    selectedTrialStatus: this.toSelectableTrialStatus(
+      this.props.user?.trialStatus
+    ),
   };
 
   componentDidUpdate(prevProps: UserStatusModalProps) {
@@ -33,13 +41,20 @@ export class UserStatusModal extends React.Component<
       prevProps.show !== this.props.show
     ) {
       this.setState({
-        selectedTrialStatus: this.props.user?.trialStatus || 'REGULAR',
+        selectedTrialStatus: this.toSelectableTrialStatus(
+          this.props.user?.trialStatus
+        ),
       });
     }
   }
 
   private getTrialStatus() {
-    return this.state.selectedTrialStatus;
+    if (this.state.selectedTrialStatus === 'REGULAR') {
+      return 'REGULAR';
+    }
+    return this.props.user?.trialStatus === 'TRIAL'
+      ? 'TRIAL'
+      : 'TRIAL_PENDING_TERMS_ACCEPTANCE';
   }
 
   render() {
@@ -47,6 +62,12 @@ export class UserStatusModal extends React.Component<
       !this.props.user?.activated &&
       this.props.user?.additionalInfo?.apiAccessRequest?.requested;
     const authorities = [...(this.props.user?.authorities ?? [])];
+    const trialTermsAccepted =
+      this.props.user?.trialStatus === 'TRIAL' &&
+      !!this.props.user?.userTrial?.licenseAgreementAcceptanceDate;
+    const trialTermsPending =
+      this.props.user?.trialStatus === 'TRIAL_PENDING_TERMS_ACCEPTANCE' ||
+      (this.state.selectedTrialStatus === 'TRIAL' && !trialTermsAccepted);
     if (isRequestingApiAccess && !authorities.includes(AUTHORITIES.API)) {
       authorities.push(AUTHORITIES.API);
     }
@@ -84,17 +105,24 @@ export class UserStatusModal extends React.Component<
               value={this.state.selectedTrialStatus}
               onChange={event => {
                 this.setState({
-                  selectedTrialStatus: event.target
-                    .value as UserDTO['trialStatus'],
+                  selectedTrialStatus: event.target.value as
+                    | 'REGULAR'
+                    | 'TRIAL',
                 });
               }}
             >
               <option value="REGULAR">Regular</option>
               <option value="TRIAL">Trial</option>
-              <option value="TRIAL_PENDING_TERMS_ACCEPTANCE">
-                Pending trial terms acceptance
-              </option>
             </select>
+            {trialTermsAccepted && (
+              <div className="text-success mt-2">Trial terms accepted.</div>
+            )}
+            {trialTermsPending && (
+              <div className="text-primary mt-2">
+                Trial terms not accepted yet. Selecting Trial keeps the user in
+                pending trial activation until terms are accepted.
+              </div>
+            )}
           </div>
         </Modal.Body>
         <Modal.Footer>

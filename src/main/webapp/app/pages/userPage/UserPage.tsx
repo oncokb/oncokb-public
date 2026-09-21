@@ -99,7 +99,6 @@ export enum AccountStatus {
 export enum TrialAccountStatus {
   REGULAR = 'regular',
   TRIAL = 'trial',
-  PENDING_TERMS = 'pending trial terms acceptance',
 }
 
 export enum EmailVerifiedStatus {
@@ -236,9 +235,8 @@ export default class UserPage extends React.Component<IUserPage> {
   get defaultSelectedAccountType() {
     switch (this.user.trialStatus) {
       case 'TRIAL':
-        return TrialAccountStatus.TRIAL;
       case 'TRIAL_PENDING_TERMS_ACCEPTANCE':
-        return TrialAccountStatus.PENDING_TERMS;
+        return TrialAccountStatus.TRIAL;
       case 'REGULAR':
       default:
         return TrialAccountStatus.REGULAR;
@@ -431,9 +429,9 @@ export default class UserPage extends React.Component<IUserPage> {
 
       const selectedTrialStatus =
         values.accountType === TrialAccountStatus.TRIAL
-          ? 'TRIAL'
-          : values.accountType === TrialAccountStatus.PENDING_TERMS
-          ? 'TRIAL_PENDING_TERMS_ACCEPTANCE'
+          ? this.user.trialStatus === 'TRIAL'
+            ? 'TRIAL'
+            : 'TRIAL_PENDING_TERMS_ACCEPTANCE'
           : 'REGULAR';
 
       const updatedUser: UserDTO = {
@@ -617,6 +615,14 @@ export default class UserPage extends React.Component<IUserPage> {
     return (
       this.trialInitiated &&
       !this.user.userTrial?.licenseAgreementAcceptanceDate
+    );
+  }
+
+  @computed
+  get acceptedTrialAgreement() {
+    return (
+      this.user.trialStatus === 'TRIAL' &&
+      !!this.user.userTrial?.licenseAgreementAcceptanceDate
     );
   }
 
@@ -1038,11 +1044,15 @@ export default class UserPage extends React.Component<IUserPage> {
                           <div className={'mb-2 font-weight-bold'}>
                             <span className="mr-2">Account Type</span>
                           </div>
+                          {this.acceptedTrialAgreement && (
+                            <b className="text-success">
+                              Trial terms accepted.
+                            </b>
+                          )}
                           {this.awaitingTrialAgreementAccepted && (
                             <b className="text-primary">
-                              This user has not yet accepted their trial
-                              agreement. Once this happens, trial user will be
-                              selected.
+                              Trial terms not accepted yet. This user is pending
+                              trial activation.
                             </b>
                           )}
                           <AvRadioGroup
@@ -1067,10 +1077,6 @@ export default class UserPage extends React.Component<IUserPage> {
                             <AvRadio
                               label={TrialAccountStatus.TRIAL}
                               value={TrialAccountStatus.TRIAL}
-                            />
-                            <AvRadio
-                              label={TrialAccountStatus.PENDING_TERMS}
-                              value={TrialAccountStatus.PENDING_TERMS}
                             />
                           </AvRadioGroup>
                           {this.selectedAccountType ===
