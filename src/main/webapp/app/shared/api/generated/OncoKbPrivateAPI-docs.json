@@ -4396,7 +4396,7 @@
         },
         "resistanceDescription": {
           "type": "string",
-          "description": "(Nullable) The highest sensitivity level from a list of therapeutic evidences.",
+          "description": "(Nullable) Additional resistance information if the oncogenicity equals 'Resistance'",
           "enum": [
             "Known Resistance Mutation",
             "Potential Resistance Implications",
