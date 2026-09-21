@@ -4,6 +4,7 @@ import org.mskcc.cbio.oncokb.domain.Company;
 import org.mskcc.cbio.oncokb.domain.User;
 import org.mskcc.cbio.oncokb.domain.enumeration.AccountRequestStatus;
 import org.mskcc.cbio.oncokb.domain.enumeration.LicenseType;
+import org.mskcc.cbio.oncokb.domain.enumeration.TrialStatus;
 import org.mskcc.cbio.oncokb.config.application.ApplicationProperties;
 import org.mskcc.cbio.oncokb.repository.CompanyRepository;
 import org.mskcc.cbio.oncokb.service.SlackService;
@@ -58,6 +59,7 @@ public class OAuthAutoRegistrationService {
         userDTO.setCountry(DEFAULT_COUNTRY);
         userDTO.setActivated(true);
         userDTO.setAccountRequestStatus(AccountRequestStatus.APPROVED);
+        userDTO.setTrialStatus(TrialStatus.REGULAR);
 
         Set<String> authorities = new HashSet<>(Collections.singletonList(AuthoritiesConstants.USER));
         userDTO.setAuthorities(authorities);

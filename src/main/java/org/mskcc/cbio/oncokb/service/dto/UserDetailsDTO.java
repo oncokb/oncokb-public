@@ -4,6 +4,7 @@ import java.io.Serializable;
 import javax.persistence.Lob;
 import org.mskcc.cbio.oncokb.domain.enumeration.LicenseType;
 import org.mskcc.cbio.oncokb.domain.enumeration.AccountRequestStatus;
+import org.mskcc.cbio.oncokb.domain.enumeration.TrialStatus;
 import org.mskcc.cbio.oncokb.service.dto.useradditionalinfo.AdditionalInfoDTO;
 
 /**
@@ -30,9 +31,13 @@ public class UserDetailsDTO implements Serializable {
 
     private AccountRequestStatus accountRequestStatus;
 
+    private TrialStatus trialStatus;
+
     private Long userId;
 
     private Long companyId;
+
+    private UserTrialDTO userTrial;
 
     public Long getId() {
         return id;
@@ -110,6 +115,14 @@ public class UserDetailsDTO implements Serializable {
         return userId;
     }
 
+    public TrialStatus getTrialStatus() {
+        return trialStatus;
+    }
+
+    public void setTrialStatus(TrialStatus trialStatus) {
+        this.trialStatus = trialStatus;
+    }
+
     public void setUserId(Long userId) {
         this.userId = userId;
     }
@@ -120,6 +133,14 @@ public class UserDetailsDTO implements Serializable {
 
     public void setCompanyId(Long companyId) {
         this.companyId = companyId;
+    }
+
+    public UserTrialDTO getUserTrial() {
+        return userTrial;
+    }
+
+    public void setUserTrial(UserTrialDTO userTrial) {
+        this.userTrial = userTrial;
     }
 
     @Override
@@ -152,8 +173,10 @@ public class UserDetailsDTO implements Serializable {
             ", address='" + getAddress() + "'" +
             ", additionalInfo='" + getAdditionalInfo() + "'" +
             ", accountRequestStatus='" + getAccountRequestStatus() + "'" +
+            ", trialStatus='" + getTrialStatus() + "'" +
             ", userId=" + getUserId() +
             ", companyId=" + getCompanyId() +
+            ", userTrial=" + getUserTrial() +
             "}";
     }
 }

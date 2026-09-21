@@ -8,6 +8,7 @@ import java.io.Serializable;
 
 import org.mskcc.cbio.oncokb.domain.enumeration.LicenseType;
 import org.mskcc.cbio.oncokb.domain.enumeration.AccountRequestStatus;
+import org.mskcc.cbio.oncokb.domain.enumeration.TrialStatus;
 
 /**
  * A UserDetails.
@@ -48,6 +49,10 @@ public class UserDetails implements Serializable {
     @Enumerated(EnumType.STRING)
     @Column(name = "account_request_status")
     private AccountRequestStatus accountRequestStatus;
+
+    @Enumerated(EnumType.STRING)
+    @Column(name = "trial_status")
+    private TrialStatus trialStatus = TrialStatus.REGULAR;
 
     @OneToOne
     @JoinColumn(unique = true)
@@ -195,6 +200,19 @@ public class UserDetails implements Serializable {
     public void setCompany(Company company) {
         this.company = company;
     }
+
+    public TrialStatus getTrialStatus() {
+        return trialStatus;
+    }
+
+    public UserDetails trialStatus(TrialStatus trialStatus) {
+        this.trialStatus = trialStatus;
+        return this;
+    }
+
+    public void setTrialStatus(TrialStatus trialStatus) {
+        this.trialStatus = trialStatus;
+    }
     // jhipster-needle-entity-add-getters-setters - JHipster will add getters and setters here
 
     @Override
@@ -226,6 +244,7 @@ public class UserDetails implements Serializable {
             ", address='" + getAddress() + "'" +
             ", additionalInfo='" + getAdditionalInfo() + "'" +
             ", accountRequestStatus='" + getAccountRequestStatus() + "'" +
+            ", trialStatus='" + getTrialStatus() + "'" +
             "}";
     }
 }
