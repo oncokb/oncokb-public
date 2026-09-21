@@ -900,6 +900,9 @@ public class UserService {
         }
 
         User user = userMapper.userDTOToUser(userDTO);
+        if (Boolean.TRUE.equals(isTrial)) {
+            ensureTrialUserRecordForActivatedTrial(user);
+        }
         Optional<UserDetails> userDetailsOptional = userDetailsRepository.findOneByUser(user);
         if (userDetailsOptional.isPresent()) {
             UserDetails userDetails = userDetailsOptional.get();
@@ -950,6 +953,28 @@ public class UserService {
             }
         }
         return updatedUserDTO;
+    }
+
+    private void ensureTrialUserRecordForActivatedTrial(User user) {
+        Instant now = Instant.now();
+        UserTrial userTrial = userTrialRepository.findOneByUser(user).orElse(new UserTrial());
+        userTrial.setUser(user);
+        if (userTrial.getInitiationDate() == null) {
+            userTrial.setInitiationDate(now);
+        }
+        if (StringUtils.isBlank(userTrial.getInitiatedBy())) {
+            userTrial.setInitiatedBy(SecurityUtils.getCurrentUserLogin().orElse(SYSTEM_ACCOUNT));
+        }
+        userTrial.setActivationDate(now);
+        userTrial.setActivationKey(null);
+        if (StringUtils.isBlank(userTrial.getLicenseAgreementName())) {
+            userTrial.setLicenseAgreementName("Trial License Agreement");
+        }
+        if (StringUtils.isBlank(userTrial.getLicenseAgreementVersion())) {
+            userTrial.setLicenseAgreementVersion("v1");
+        }
+        userTrial.setLicenseAgreementAcceptanceDate(now);
+        userTrialRepository.save(userTrial);
     }
 
     /**

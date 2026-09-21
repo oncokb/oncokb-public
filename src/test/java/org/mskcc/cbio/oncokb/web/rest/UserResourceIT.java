@@ -605,7 +605,71 @@ public class UserResourceIT {
         User reloadedUser = userRepository.findOneWithAuthoritiesByLogin(updatedUser.getLogin()).orElseThrow(NoSuchElementException::new);
         UserDetails reloadedUserDetails = userDetailsRepository.findOneByUser(reloadedUser).orElseThrow(NoSuchElementException::new);
         assertThat(reloadedUserDetails.getTrialStatus()).isEqualTo(TrialStatus.TRIAL);
+        UserTrial reloadedUserTrial = userTrialRepository.findOneByUser(reloadedUser).orElseThrow(NoSuchElementException::new);
+        assertThat(reloadedUserTrial.getActivationKey()).isNull();
+        assertThat(reloadedUserTrial.getActivationDate()).isNotNull();
+        assertThat(reloadedUserTrial.getLicenseAgreementAcceptanceDate()).isNotNull();
         assertThat(tokenService.findByUser(reloadedUser)).isNotEmpty();
+        assertThat(tokenService.findByUser(reloadedUser)).extracting(Token::isRenewable).containsOnly(false);
+    }
+
+    @Test
+    @Transactional
+    public void updateUserWithoutTrialStatusDoesNotChangeExistingTrialState() throws Exception {
+        userRepository.saveAndFlush(user);
+
+        UserDetails userDetails = new UserDetails();
+        userDetails.setUser(user);
+        userDetails.setAccountRequestStatus(AccountRequestStatus.APPROVED);
+        userDetails.setTrialStatus(TrialStatus.TRIAL);
+        userDetailsRepository.saveAndFlush(userDetails);
+
+        UserTrial userTrial = new UserTrial();
+        userTrial.setUser(user);
+        userTrial.setInitiationDate(Instant.now().minusSeconds(7200));
+        userTrial.setInitiatedBy("admin");
+        userTrial.setActivationDate(Instant.now().minusSeconds(3600));
+        userTrial.setActivationKey(null);
+        userTrial.setLicenseAgreementName("Trial License Agreement");
+        userTrial.setLicenseAgreementVersion("v1");
+        userTrial.setLicenseAgreementAcceptanceDate(Instant.now().minusSeconds(3600));
+        userTrialRepository.saveAndFlush(userTrial);
+
+        Token trialToken = new Token();
+        trialToken.setToken(UUID.randomUUID());
+        trialToken.setUser(user);
+        trialToken.setRenewable(false);
+        trialToken.setExpiration(Instant.now().plusSeconds(86400));
+        tokenService.save(trialToken);
+
+        User updatedUser = userRepository.findById(user.getId()).orElseThrow(NoSuchElementException::new);
+        ManagedUserVM managedUserVM = new ManagedUserVM();
+        managedUserVM.setId(updatedUser.getId());
+        managedUserVM.setLogin(updatedUser.getLogin());
+        managedUserVM.setPassword(UPDATED_PASSWORD);
+        managedUserVM.setFirstName(UPDATED_FIRSTNAME);
+        managedUserVM.setLastName(UPDATED_LASTNAME);
+        managedUserVM.setEmail(UPDATED_EMAIL);
+        managedUserVM.setActivated(updatedUser.getActivated());
+        managedUserVM.setImageUrl(UPDATED_IMAGEURL);
+        managedUserVM.setLangKey(UPDATED_LANGKEY);
+        managedUserVM.setAuthorities(Collections.singleton(AuthoritiesConstants.USER));
+
+        LinkedMultiValueMap<String, String> requestParams = new LinkedMultiValueMap<>();
+        requestParams.add("sendEmail", "false");
+        requestParams.add("unlinkUser", "false");
+
+        restUserMockMvc.perform(put("/api/users")
+            .contentType(MediaType.APPLICATION_JSON)
+            .content(TestUtil.convertObjectToJsonBytes(managedUserVM))
+            .params(requestParams))
+            .andExpect(status().isOk());
+
+        User reloadedUser = userRepository.findOneWithAuthoritiesByLogin(updatedUser.getLogin()).orElseThrow(NoSuchElementException::new);
+        UserDetails reloadedUserDetails = userDetailsRepository.findOneByUser(reloadedUser).orElseThrow(NoSuchElementException::new);
+        UserTrial reloadedUserTrial = userTrialRepository.findOneByUser(reloadedUser).orElseThrow(NoSuchElementException::new);
+        assertThat(reloadedUserDetails.getTrialStatus()).isEqualTo(TrialStatus.TRIAL);
+        assertThat(reloadedUserTrial.getLicenseAgreementAcceptanceDate()).isNotNull();
         assertThat(tokenService.findByUser(reloadedUser)).extracting(Token::isRenewable).containsOnly(false);
     }
 

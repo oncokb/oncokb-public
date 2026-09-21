@@ -273,6 +273,42 @@ public class UserUUIDControllerIT {
             .andExpect(jsonPath("$.trialActivationKey").value(trialActivationKey));
     }
 
+    @Test
+    @Transactional
+    public void testTrialWithAcceptedTermsCanAuthenticate() throws Exception {
+        String login = "trial.accepted.terms.user";
+        String rawPassword = "password";
+
+        User user = createUserForAuthentication(login, rawPassword);
+
+        UserDetails userDetails = new UserDetails();
+        userDetails.setUser(user);
+        userDetails.setAccountRequestStatus(AccountRequestStatus.APPROVED);
+        userDetails.setTrialStatus(TrialStatus.TRIAL);
+        userDetailsRepository.save(userDetails);
+
+        UserTrial userTrial = new UserTrial();
+        userTrial.setUser(user);
+        userTrial.setInitiationDate(Instant.now().minusSeconds(7200));
+        userTrial.setActivationDate(Instant.now().minusSeconds(3600));
+        userTrial.setActivationKey(null);
+        userTrial.setLicenseAgreementName("Trial License Agreement");
+        userTrial.setLicenseAgreementVersion("v1");
+        userTrial.setLicenseAgreementAcceptanceDate(Instant.now().minusSeconds(3600));
+        userTrialRepository.save(userTrial);
+
+        LoginVM loginVM = new LoginVM();
+        loginVM.setUsername(login);
+        loginVM.setPassword(rawPassword);
+        loginVM.setRememberMe(false);
+
+        restMockMvc.perform(post("/api/authenticate")
+                .contentType(MediaType.APPLICATION_JSON)
+                .content(TestUtil.convertObjectToJsonBytes(loginVM)))
+            .andExpect(status().isOk())
+            .andExpect(header().string("Authorization", containsString("Bearer ")));
+    }
+
     private User createUserForAuthentication(String login, String rawPassword) {
         User user = new User();
         user.setLogin(login);

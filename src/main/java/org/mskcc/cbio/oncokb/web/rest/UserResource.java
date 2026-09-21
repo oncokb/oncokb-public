@@ -176,7 +176,7 @@ public class UserResource {
         }
 
         Optional<UserDTO> updatedUser;
-        TrialStatus requestedTrialStatus = userDTO.getTrialStatus() == null ? TrialStatus.REGULAR : userDTO.getTrialStatus();
+        TrialStatus requestedTrialStatus = userDTO.getTrialStatus();
         TrialStatus currentTrialStatus = existingUser
             .map(userMapper::userToUserDTO)
             .map(UserDTO::getTrialStatus)
@@ -191,7 +191,7 @@ public class UserResource {
         // transition side effects (trial-init email, token policy changes, activation)
         // run from the latest saved state. Precedence is:
         // TRIAL_PENDING_TERMS_ACCEPTANCE -> TRIAL -> REGULAR.
-        if (updatedUser.isPresent() && requestedTrialStatus != currentTrialStatus) {
+        if (updatedUser.isPresent() && requestedTrialStatus != null && requestedTrialStatus != currentTrialStatus) {
             if (requestedTrialStatus == TrialStatus.TRIAL_PENDING_TERMS_ACCEPTANCE) {
                 Optional<User> initiatedTrialUser = userService.initiateTrialAccountActivation(updatedUser.get().getLogin());
                 if (initiatedTrialUser.isPresent()) {

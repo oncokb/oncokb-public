@@ -102,7 +102,34 @@
           ELSE NULL
         END
       FROM user_details ud
-      WHERE JSON_EXTRACT(ud.additional_info, '$.trialAccount') IS NOT NULL;
+      WHERE JSON_EXTRACT(ud.additional_info, '$.trialAccount') IS NOT NULL
+        AND (
+          (
+            JSON_UNQUOTE(JSON_EXTRACT(ud.additional_info, '$.trialAccount.activation.key')) IS NOT NULL
+            AND JSON_UNQUOTE(JSON_EXTRACT(ud.additional_info, '$.trialAccount.licenseAgreement.acceptanceDate')) IS NULL
+            AND NOT EXISTS (
+              SELECT 1
+              FROM token t
+              WHERE t.user_id = ud.user_id
+                AND t.renewable = 1
+            )
+          )
+          OR (
+            JSON_UNQUOTE(JSON_EXTRACT(ud.additional_info, '$.trialAccount.licenseAgreement.acceptanceDate')) IS NOT NULL
+            AND EXISTS (
+              SELECT 1
+              FROM token t
+              WHERE t.user_id = ud.user_id
+                AND t.renewable = 0
+            )
+            AND NOT EXISTS (
+              SELECT 1
+              FROM token t
+              WHERE t.user_id = ud.user_id
+                AND t.renewable = 1
+            )
+          )
+        );
     </sql>
   </changeSet>
 
@@ -120,11 +147,29 @@
       UPDATE user_details ud
       LEFT JOIN user_trial ut ON ut.user_id = ud.user_id
       SET ud.trial_status = CASE
+        WHEN EXISTS (
+          SELECT 1
+          FROM token t
+          WHERE t.user_id = ud.user_id
+            AND t.renewable = 1
+        ) THEN 'REGULAR'
         WHEN ut.activation_key IS NOT NULL AND ut.license_agreement_acceptance_date IS NULL THEN 'TRIAL_PENDING_TERMS_ACCEPTANCE'
-        WHEN ut.user_id IS NOT NULL THEN 'TRIAL'
+        WHEN ut.user_id IS NOT NULL
+             AND ut.license_agreement_acceptance_date IS NOT NULL
+             AND EXISTS (
+               SELECT 1
+               FROM token t
+               WHERE t.user_id = ud.user_id
+                 AND t.renewable = 0
+             )
+             AND NOT EXISTS (
+               SELECT 1
+               FROM token t
+               WHERE t.user_id = ud.user_id
+                 AND t.renewable = 1
+             ) THEN 'TRIAL'
         ELSE 'REGULAR'
-      END
-      WHERE ud.trial_status IS NULL;
+      END;
     </sql>
   </changeSet>
 
@@ -132,6 +177,12 @@
     <sql>
       UPDATE user_details ud
       SET trial_status = CASE
+        WHEN EXISTS (
+          SELECT 1
+          FROM token t
+          WHERE t.user_id = ud.user_id
+            AND t.renewable = 1
+        ) THEN 'REGULAR'
         WHEN EXISTS (
           SELECT 1
           FROM user_trial ut
@@ -143,10 +194,22 @@
           SELECT 1
           FROM user_trial ut
           WHERE ut.user_id = ud.user_id
+            AND ut.license_agreement_acceptance_date IS NOT NULL
+        )
+        AND EXISTS (
+          SELECT 1
+          FROM token t
+          WHERE t.user_id = ud.user_id
+            AND t.renewable = 0
+        )
+        AND NOT EXISTS (
+          SELECT 1
+          FROM token t
+          WHERE t.user_id = ud.user_id
+            AND t.renewable = 1
         ) THEN 'TRIAL'
         ELSE 'REGULAR'
-      END
-      WHERE ud.trial_status IS NULL;
+      END;
     </sql>
   </changeSet>
 
@@ -175,6 +238,32 @@
     </update>
     <addDefaultValue tableName="user_details" columnName="trial_status" columnDataType="varchar(64)" defaultValue="REGULAR"/>
     <addNotNullConstraint tableName="user_details" columnName="trial_status" columnDataType="varchar(64)"/>
+  </changeSet>
+
+  <changeSet author="oncokb" id="20260910143000-10" dbms="mysql,mariadb">
+    <sql>
+      UPDATE user_details ud
+      SET ud.trial_status = 'REGULAR'
+      WHERE EXISTS (
+        SELECT 1
+        FROM token t
+        WHERE t.user_id = ud.user_id
+          AND t.renewable = 1
+      );
+    </sql>
+  </changeSet>
+
+  <changeSet author="oncokb" id="20260910143000-10-h2" dbms="h2">
+    <sql>
+      UPDATE user_details ud
+      SET trial_status = 'REGULAR'
+      WHERE EXISTS (
+        SELECT 1
+        FROM token t
+        WHERE t.user_id = ud.user_id
+          AND t.renewable = 1
+      );
+    </sql>
   </changeSet>
 
 </databaseChangeLog>
