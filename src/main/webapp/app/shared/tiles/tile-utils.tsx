@@ -41,19 +41,28 @@ function OncogenicInfo({
   isUnknownOncogenicity,
   isVus,
   oncogenicity,
+  resistanceDescription,
 }: {
   isUnknownOncogenicity: boolean;
-  oncogenicity: string | undefined;
+  oncogenicity: SomaticVariantAnnotation['oncogenic'] | undefined;
   isVus: boolean;
   className?: string;
+  resistanceDescription: VariantAnnotation['resistanceDescription'];
 }) {
+  let diplayedOncogenicity: string | undefined = undefined;
+  if (isUnknownOncogenicity) {
+    diplayedOncogenicity = `${ONCOGENICITY.UNKNOWN} Oncogenic Effect`;
+  } else if (oncogenicity === 'Resistance' && resistanceDescription) {
+    diplayedOncogenicity = resistanceDescription;
+  } else if (resistanceDescription) {
+    diplayedOncogenicity = `${oncogenicity}, ${resistanceDescription}`;
+  } else {
+    diplayedOncogenicity = oncogenicity;
+  }
+
   return (
     <span style={{ margin: '0px' }} className="h5">
-      <span>
-        {isUnknownOncogenicity
-          ? `${ONCOGENICITY.UNKNOWN} Oncogenic Effect`
-          : oncogenicity}
-      </span>
+      <span>{diplayedOncogenicity}</span>
       <OncoKBOncogenicityIcon
         oncogenicity={oncogenicity}
         isVus={isVus}
@@ -200,6 +209,7 @@ function createMutationEffectTileProps(
           value: (
             <OncogenicInfo
               oncogenicity={oncogenic}
+              resistanceDescription={variantAnnotation.resistanceDescription}
               isVus={vus}
               isUnknownOncogenicity={isUnknownOncogenicity}
             />
