@@ -1,8 +1,10 @@
 package org.mskcc.cbio.oncokb.web.rest;
 
 import java.io.IOException;
+import java.util.Collections;
 import java.util.List;
 import java.util.Map;
+import java.util.Objects;
 import java.util.concurrent.CompletableFuture;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.stream.Collectors;
@@ -10,6 +12,9 @@ import java.util.stream.Collectors;
 import javax.annotation.PostConstruct;
 
 import org.mskcc.cbio.oncokb.domain.ContentNews;
+import org.mskcc.cbio.oncokb.domain.DeveloperNews;
+import org.mskcc.cbio.oncokb.domain.DeveloperNews.DeveloperPullRequest;
+import org.mskcc.cbio.oncokb.domain.enumeration.DeveloperNewsType;
 import org.mskcc.cbio.oncokb.config.application.ApplicationProperties;
 import org.springframework.core.ParameterizedTypeReference;
 import org.springframework.http.HttpEntity;
@@ -32,6 +37,11 @@ public class NewsResource {
     
     private static final String ONCOKB_DATA_BRANCH = "master";
     private static final String ONCOKB_DATA_RELEASE_FOLDER = "https://api.github.com/repos/knowledgesystems/oncokb-data/contents/RELEASE";
+    
+    private static final String RELEASE_NOTES_REPO = "oncokb/oncokb";
+    private static final String RELEASE_NOTES_RAW_URL = String.format("https://raw.githubusercontent.com/%s/refs/heads/master/release-notes", RELEASE_NOTES_REPO);
+    private static final String RELEASE_NOTES_API_URL = String.format("https://api.github.com/repos/%s/contents/release-notes", RELEASE_NOTES_REPO);
+    private static final String RELEASE_NOTES_DISPLAY_URL = String.format("https://github.com/%s/blob/master", RELEASE_NOTES_REPO);
 
     private final ObjectMapper objectMapper;
     private final ApplicationProperties applicationProperties;
@@ -43,11 +53,17 @@ public class NewsResource {
     }
 
     private static volatile List<ContentNews> contentNews = null;
+    private static volatile List<DeveloperNews> developerNews = Collections.emptyList();
 
     @PostConstruct
-    public void init() { // fetch content news from GitHub
+    public void init() {
+        initDeveloperNews();
+        initContentNews();
+    }
+
+    private void initContentNews() { // fetch content news from GitHub
         String token = applicationProperties.getOncokbDataToken();
-        if (token == "") {
+        if (token.isEmpty()) {
             log.info("OncoKB Data token not set, content news will not be populated");
             return;
         }
@@ -104,6 +120,106 @@ public class NewsResource {
         log.info("Content news initialized");
     }
 
+    private void initDeveloperNews() {
+        try {
+            RestTemplate restTemplate = new RestTemplate();
+            HttpHeaders headers = new HttpHeaders();
+            if (applicationProperties.getGithubToken() != null && !applicationProperties.getGithubToken().isEmpty()) {
+                headers.set(HttpHeaders.AUTHORIZATION, "Bearer " + applicationProperties.getGithubToken());
+            }
+
+            HttpEntity<Void> requestEntity = new HttpEntity<>(headers);
+            ResponseEntity<List<GitHubFile>> response = restTemplate.exchange(
+                RELEASE_NOTES_API_URL,
+                HttpMethod.GET,
+                requestEntity,
+                new ParameterizedTypeReference<List<GitHubFile>>() {}
+            );
+
+            List<GitHubFile> releaseFolders = response.getBody();
+            if (releaseFolders == null) {
+                developerNews = Collections.emptyList();
+                return;
+            }
+
+            List<CompletableFuture<DeveloperNews>> futures = releaseFolders.stream()
+                .filter(file -> "dir".equals(file.type) && file.name != null && file.name.startsWith("v"))
+                .map(file -> CompletableFuture.supplyAsync(() -> fetchDeveloperRelease(file, restTemplate, headers)))
+                .collect(Collectors.toList());
+
+            developerNews = futures.stream()
+                .map(CompletableFuture::join)
+                .filter(Objects::nonNull)
+                .sorted((r1, r2) -> compareSemver(r1.getName(), r2.getName()))
+                .collect(Collectors.toList());
+
+            log.info("Developer news initialized");
+        } catch (Exception e) {
+            log.warn("Error initializing developer news: {}", e.getMessage());
+            developerNews = Collections.emptyList();
+        }
+    }
+
+    private DeveloperNews fetchDeveloperRelease(
+        GitHubFile releaseFolder,
+        RestTemplate restTemplate,
+        HttpHeaders headers
+    ) {
+        try {
+            HttpEntity<Void> requestEntity = new HttpEntity<>(headers);
+            ResponseEntity<List<GitHubFile>> releaseResponse = restTemplate.exchange(
+                String.format("%s/%s", RELEASE_NOTES_API_URL, releaseFolder.name),
+                HttpMethod.GET,
+                requestEntity,
+                new ParameterizedTypeReference<List<GitHubFile>>() {}
+            );
+
+            Map<String, String> metadataFiles = Collections.emptyMap();
+            String publishedAt = null;
+            ResponseEntity<String> metadataResponse = restTemplate.exchange(
+                String.format("%s/%s/metadata.json", RELEASE_NOTES_RAW_URL, releaseFolder.name),
+                HttpMethod.GET,
+                requestEntity,
+                String.class
+            );
+            String metadataBody = metadataResponse.getBody();
+            if (metadataBody != null) {
+                ReleaseMetadata metadata = objectMapper.readValue(metadataBody, ReleaseMetadata.class);
+                if (metadata != null) {
+                    metadataFiles = metadata.files != null ? metadata.files : Collections.emptyMap();
+                    publishedAt = metadata.publishedAt;
+                }
+            }
+            final Map<String, String> metadataFilesMap = metadataFiles;
+
+            List<GitHubFile> filesInRelease = releaseResponse.getBody() == null
+                ? Collections.emptyList()
+                : releaseResponse.getBody();
+
+            List<DeveloperPullRequest> pullRequests = filesInRelease.stream()
+                .filter(file -> file.name != null)
+                .filter(file -> !"metadata.json".equals(file.name))
+                .map(file -> {
+                    String[] parts = file.name.split("-");
+                    DeveloperNewsType type = parts.length > 2
+                        ? DeveloperNewsType.fromValue(parts[2])
+                        : DeveloperNewsType.CHORE;
+                    String title = metadataFilesMap.getOrDefault(file.name, file.name);
+                    return new DeveloperPullRequest(
+                        title,
+                        String.format("%s/%s", RELEASE_NOTES_DISPLAY_URL, file.path),
+                        type
+                    );
+                })
+                .collect(Collectors.toList());
+
+            return new DeveloperNews(releaseFolder.name, publishedAt, pullRequests);
+        } catch (Exception e) {
+            log.warn("Error fetching developer news for release {}: {}", releaseFolder.name, e.getMessage());
+            return null;
+        }
+    }
+
     /**
      * {@code GET  /content-news} : get all OncoKB content news
      *
@@ -114,6 +230,11 @@ public class NewsResource {
         return ResponseEntity.ok(contentNews);
     }
 
+    @GetMapping("/developer-news")
+    public ResponseEntity<List<DeveloperNews>> getDeveloperNews() {
+        return ResponseEntity.ok(developerNews);
+    }
+
     private static class GitHubFile {
         @JsonProperty("path")
         private String path;
@@ -121,6 +242,14 @@ public class NewsResource {
         private String name;
         @JsonProperty("type")
         private String type;
+    }
+
+    private static class ReleaseMetadata {
+        @JsonProperty("published_at")
+        private String publishedAt;
+
+        @JsonProperty("files")
+        private Map<String, String> files = Collections.emptyMap();
     }
 
     private int compareSemver(String v1, String v2) {

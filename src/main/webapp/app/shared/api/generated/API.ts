@@ -157,6 +157,22 @@ export type ContentNews = {
         'history': History
 
 };
+export type DeveloperNews = {
+    'name': string
+
+        'publishedAt': string
+
+        'pullRequests': Array < DeveloperPullRequest >
+
+};
+export type DeveloperPullRequest = {
+    'name': string
+
+        'type': "feat" | "fix" | "chore"
+
+        'url': string
+
+};
 export type EmailSubscriptionDTO = {
     'audience': string
 
@@ -5241,6 +5257,68 @@ export default class API {
         }): Promise < Array < ContentNews >
         > {
             return this.getContentNewsUsingGETWithHttpInfo(parameters).then(function(response: request.Response) {
+                return response.body;
+            });
+        };
+    getDeveloperNewsUsingGETURL(parameters: {
+        $queryParameters ? : any
+    }): string {
+        let queryParameters: any = {};
+        let path = '/api/news/developer-news';
+
+        if (parameters.$queryParameters) {
+            Object.keys(parameters.$queryParameters).forEach(function(parameterName) {
+                var parameter = parameters.$queryParameters[parameterName];
+                queryParameters[parameterName] = parameter;
+            });
+        }
+        let keys = Object.keys(queryParameters);
+        return this.domain + path + (keys.length > 0 ? '?' + (keys.map(key => key + '=' + encodeURIComponent(queryParameters[key])).join('&')) : '');
+    };
+
+    /**
+     * getDeveloperNews
+     * @method
+     * @name API#getDeveloperNewsUsingGET
+     */
+    getDeveloperNewsUsingGETWithHttpInfo(parameters: {
+        $queryParameters ? : any,
+            $domain ? : string
+    }): Promise < request.Response > {
+        const domain = parameters.$domain ? parameters.$domain : this.domain;
+        const errorHandlers = this.errorHandlers;
+        const request = this.request;
+        let path = '/api/news/developer-news';
+        let body: any;
+        let queryParameters: any = {};
+        let headers: any = {};
+        let form: any = {};
+        return new Promise(function(resolve, reject) {
+            headers['Accept'] = '*/*';
+
+            if (parameters.$queryParameters) {
+                Object.keys(parameters.$queryParameters).forEach(function(parameterName) {
+                    var parameter = parameters.$queryParameters[parameterName];
+                    queryParameters[parameterName] = parameter;
+                });
+            }
+
+            request('GET', domain + path, body, headers, queryParameters, form, reject, resolve, errorHandlers);
+
+        });
+    };
+
+    /**
+     * getDeveloperNews
+     * @method
+     * @name API#getDeveloperNewsUsingGET
+     */
+    getDeveloperNewsUsingGET(parameters: {
+            $queryParameters ? : any,
+                $domain ? : string
+        }): Promise < Array < DeveloperNews >
+        > {
+            return this.getDeveloperNewsUsingGETWithHttpInfo(parameters).then(function(response: request.Response) {
                 return response.body;
             });
         };

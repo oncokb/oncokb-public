@@ -1,10 +1,10 @@
 import React from 'react';
 
 import styles from './tag.module.scss';
-import { SoftwareReleaseType } from 'app/pages/newsPage/NewsPage';
+import { DeveloperPullRequest } from 'app/shared/api/generated/API';
 
 export interface IDeveloperChangeTagProps {
-  type: SoftwareReleaseType;
+  type: DeveloperPullRequest['type'];
 }
 
 export default function DeveloperChangeTag({ type }: IDeveloperChangeTagProps) {
