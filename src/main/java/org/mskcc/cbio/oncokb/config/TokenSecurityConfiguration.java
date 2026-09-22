@@ -177,6 +177,7 @@ public class TokenSecurityConfiguration extends WebSecurityConfigurerAdapter {
             .antMatchers("/api/user-banner-messages/**").hasAnyAuthority(AuthoritiesConstants.ADMIN)
 
             .antMatchers("/api/news/content-news").hasAnyAuthority(AuthoritiesConstants.USER)
+            .antMatchers("/api/news/developer-news").permitAll()
 
             .antMatchers("/api/**").hasAnyAuthority(AuthoritiesConstants.PUBLIC_WEBSITE, AuthoritiesConstants.USER)
 
