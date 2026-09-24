@@ -43,6 +43,40 @@ export const getHostLinkWithProtocol = (): string => {
   return `${window.location.protocol}//${window.location.host}`;
 };
 
+export const getReferenceGenomeFromSearch = (
+  search: string
+): REFERENCE_GENOME | undefined => {
+  const trimmedSearch = search.replace(/^[?#]/, '');
+  const parsed = QueryString.parse(trimmedSearch) as {
+    [key: string]: string | string[] | null | undefined;
+  };
+
+  let refGenome = parsed.refGenome;
+  if (!refGenome) {
+    const refGenomeKey = Object.keys(parsed).find(
+      key => key.toLowerCase() === 'refgenome'
+    );
+    if (refGenomeKey) {
+      refGenome = parsed[refGenomeKey];
+    }
+  }
+
+  const refGenomeValue = Array.isArray(refGenome) ? refGenome[0] : refGenome;
+
+  if (!refGenomeValue) {
+    return undefined;
+  }
+
+  const normalizedRefGenome = refGenomeValue.toLowerCase();
+  if (normalizedRefGenome === REFERENCE_GENOME.GRCh37.toLowerCase()) {
+    return REFERENCE_GENOME.GRCh37;
+  }
+  if (normalizedRefGenome === REFERENCE_GENOME.GRCh38.toLowerCase()) {
+    return REFERENCE_GENOME.GRCh38;
+  }
+  return undefined;
+};
+
 export const getGenePageLink = (props: {
   hugoSymbol: string;
   searchQueries?: GenePageSearchQueries;

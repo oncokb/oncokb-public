@@ -44,6 +44,7 @@ import { ClinicalVariant } from 'app/shared/api/generated/OncoKbPrivateAPI';
 import {
   AlterationPageLink,
   getGenePageLink,
+  getReferenceGenomeFromSearch,
   parseGenePagePath,
 } from 'app/shared/utils/UrlUtils';
 import AppStore from 'app/store/AppStore';
@@ -57,10 +58,7 @@ import { FeedbackIcon } from 'app/components/feedback/FeedbackIcon';
 import { FeedbackType } from 'app/components/feedback/types';
 import * as QueryString from 'query-string';
 import { RouterStore } from 'mobx-react-router';
-import {
-  GenePageHashQueries,
-  GenePageSearchQueries,
-} from 'app/shared/route/types';
+import { GenePageHashQueries } from 'app/shared/route/types';
 import AlterationTableTabs from 'app/pages/annotationPage/AlterationTableTabs';
 import { getGeneTypeSentence } from './GeneInfo';
 import OncokbLollipopPlot from './OncokbLollipopPlot';
@@ -455,11 +453,9 @@ export default class SomaticGermlineGenePage extends React.Component<
       reaction(
         () => [props.routing.location.search],
         ([search]) => {
-          const queryStrings = QueryString.parse(
-            search
-          ) as GenePageSearchQueries;
-          if (queryStrings.refGenome) {
-            this.store.referenceGenomeQuery = queryStrings.refGenome;
+          const referenceGenome = getReferenceGenomeFromSearch(search);
+          if (referenceGenome) {
+            this.store.referenceGenomeQuery = referenceGenome;
           }
         },
         { fireImmediately: true }

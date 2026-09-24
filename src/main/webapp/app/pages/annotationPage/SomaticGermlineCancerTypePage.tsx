@@ -21,6 +21,7 @@ import {
 } from 'app/shared/utils/Utils';
 import {
   getAlterationPageLink,
+  getReferenceGenomeFromSearch,
   parseAlterationPagePath,
   AlterationPageLink,
 } from 'app/shared/utils/UrlUtils';
@@ -88,10 +89,6 @@ type MatchParams = {
   tumorType: string;
 };
 
-type SearchParams = {
-  refGenome: REFERENCE_GENOME;
-};
-
 type SomaticGermlineCancerTypePageProps = {
   appStore: AppStore;
   windowStore: WindowStore;
@@ -117,13 +114,13 @@ export class SomaticGermlineCancerTypePage extends React.Component<
   constructor(props: SomaticGermlineCancerTypePageProps) {
     super(props);
     const alterationQuery = decodeSlash(props.match.params.alteration);
-    const searchParams = QueryString.parse(
-      props.location.search
-    ) as SearchParams;
 
     reaction(
       () => [this.props.routing.location.pathname],
       () => {
+        if (!this.store) {
+          return;
+        }
         this.store.hugoSymbolQuery = this.props.match.params.hugoSymbol;
         this.store.alterationQuery =
           decodeSlash(this.props.match.params.alteration) ?? '';
@@ -132,8 +129,22 @@ export class SomaticGermlineCancerTypePage extends React.Component<
       }
     );
     reaction(
+      () => [this.props.routing.location.search],
+      ([search]) => {
+        if (!this.store) {
+          return;
+        }
+        this.store.referenceGenomeQuery =
+          getReferenceGenomeFromSearch(search) || REFERENCE_GENOME.GRCh37;
+      },
+      { fireImmediately: true }
+    );
+    reaction(
       () => [this.geneticType],
       ([geneticType]) => {
+        const referenceGenome =
+          getReferenceGenomeFromSearch(this.props.location.search) ||
+          REFERENCE_GENOME.GRCh37;
         if (props.match.params) {
           this.store = new AnnotationStore({
             type: alterationQuery
@@ -145,7 +156,7 @@ export class SomaticGermlineCancerTypePage extends React.Component<
             tumorTypeQuery: props.match.params.tumorType
               ? decodeSlash(props.match.params.tumorType)
               : props.match.params.tumorType,
-            referenceGenomeQuery: searchParams.refGenome,
+            referenceGenomeQuery: referenceGenome,
           });
           if (this.store.cancerTypeName) {
             this.showMutationEffect = false;
