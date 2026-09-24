@@ -118,6 +118,9 @@ export class SomaticGermlineCancerTypePage extends React.Component<
     reaction(
       () => [this.props.routing.location.pathname],
       () => {
+        if (!this.store) {
+          return;
+        }
         this.store.hugoSymbolQuery = this.props.match.params.hugoSymbol;
         this.store.alterationQuery =
           decodeSlash(this.props.match.params.alteration) ?? '';
@@ -128,6 +131,9 @@ export class SomaticGermlineCancerTypePage extends React.Component<
     reaction(
       () => [this.props.routing.location.search],
       ([search]) => {
+        if (!this.store) {
+          return;
+        }
         this.store.referenceGenomeQuery =
           getReferenceGenomeFromSearch(search) || REFERENCE_GENOME.GRCh37;
       },
