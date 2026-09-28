@@ -34,7 +34,11 @@ import {
 import autobind from 'autobind-decorator';
 import pluralize from 'pluralize';
 import { sortByLevel } from 'app/shared/utils/ReactTableUtils';
-import { AlterationPageLink, GenePageLink } from 'app/shared/utils/UrlUtils';
+import {
+  AlterationPageLink,
+  GenePageLink,
+  getReferenceGenomeFromSearch,
+} from 'app/shared/utils/UrlUtils';
 import {
   ANNOTATION_PAGE_TAB_KEYS,
   COMPONENT_PADDING,
@@ -193,8 +197,9 @@ export default class ActionableGenesPage extends React.Component<
           if (queryStrings.drug) {
             this.drugSearchKeyword = queryStrings.drug;
           }
-          if (queryStrings.refGenome) {
-            this.refGenome = queryStrings.refGenome;
+          const referenceGenome = getReferenceGenomeFromSearch(hash);
+          if (referenceGenome) {
+            this.refGenome = referenceGenome;
           }
           if (queryStrings.sections) {
             const visibleSections = Array.isArray(queryStrings.sections)

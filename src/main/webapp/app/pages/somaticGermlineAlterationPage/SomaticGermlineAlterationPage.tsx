@@ -23,6 +23,7 @@ import {
 } from 'app/shared/utils/Utils';
 import {
   getAlterationPageLink,
+  getReferenceGenomeFromSearch,
   parseAlterationPagePath,
   AlterationPageLink,
 } from 'app/shared/utils/UrlUtils';
@@ -89,10 +90,6 @@ type MatchParams = {
   alteration: string;
 };
 
-type SearchParams = {
-  refGenome: REFERENCE_GENOME;
-};
-
 type SomaticGermlineAlterationPageProps = {
   routing: RouterStore;
   appStore: AppStore;
@@ -119,9 +116,9 @@ export class SomaticGermlineAlterationPage extends React.Component<
   constructor(props: SomaticGermlineAlterationPageProps) {
     super(props);
     const alterationQuery = decodeSlash(props.match.params.alteration);
-    const searchParams = QueryString.parse(
-      props.location.search
-    ) as SearchParams;
+    const referenceGenome =
+      getReferenceGenomeFromSearch(props.location.search) ||
+      REFERENCE_GENOME.GRCh37;
     this.store = new AnnotationStore({
       type: alterationQuery
         ? AnnotationType.PROTEIN_CHANGE
@@ -129,7 +126,7 @@ export class SomaticGermlineAlterationPage extends React.Component<
       hugoSymbolQuery: props.match.params.hugoSymbol,
       alterationQuery,
       germline: this.geneticType === GENETIC_TYPE.GERMLINE,
-      referenceGenomeQuery: searchParams.refGenome,
+      referenceGenomeQuery: referenceGenome,
     });
     if (this.store.cancerTypeName) {
       this.showMutationEffect = false;
@@ -179,6 +176,11 @@ export class SomaticGermlineAlterationPage extends React.Component<
     ) {
       this.store.alterationQuery =
         decodeSlash(this.props.match.params.alteration) ?? '';
+    }
+    if (this.props.location.search !== prevProps.location.search) {
+      this.store.referenceGenomeQuery =
+        getReferenceGenomeFromSearch(this.props.location.search) ||
+        REFERENCE_GENOME.GRCh37;
     }
   }
 
