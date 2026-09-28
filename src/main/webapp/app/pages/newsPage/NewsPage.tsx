@@ -28,6 +28,7 @@ import {
   AlterationUpdates,
   CancerTypeUpdates,
   ContentNews,
+  DeveloperNews,
   GeneUpdates,
   History,
   TreatmentUpdates,
@@ -43,7 +44,6 @@ import {
 import { GenePageLink, SopPageLink } from 'app/shared/utils/UrlUtils';
 import { getPageTitle, scrollWidthOffset } from 'app/shared/utils/Utils';
 import { compareSemver } from 'app/shared/utils/SemverUtils';
-import axios from 'axios';
 import AAC_IMAGE from 'content/images/level_AAC.png';
 import LevelChange from 'content/images/loe-change.png';
 import { inject, observer } from 'mobx-react';
@@ -52,29 +52,18 @@ import * as React from 'react';
 import { Nav, Row, Tab } from 'react-bootstrap';
 import { Helmet } from 'react-helmet-async';
 import { Link } from 'react-router-dom';
-import AuthenticationStore from 'app/store/AuthenticationStore';
 
 type NewsTab = 'scientific' | 'developer' | 'content';
 
-type SoftwareRelease = {
-  name: string;
-  publishedAt: string;
-  pullRequests: { name: string; url: string; type: SoftwareReleaseType }[];
-};
 export type SoftwareReleaseType = 'feat' | 'fix' | 'chore';
 
 interface NewsPageState {
   activeTab: NewsTab;
-  softwareReleases: SoftwareRelease[];
+  softwareReleases: DeveloperNews[];
   contentNews: ContentNews[];
   expandedContentNews: string[];
   expandedContentItems: string[];
 }
-
-const RELEASE_NOTES_REPO = 'oncokb/oncokb';
-const RELEASE_NOTES_RAW_URL = `https://raw.githubusercontent.com/${RELEASE_NOTES_REPO}/refs/heads/master/release-notes`;
-const RELEASE_NOTES_DISPLAY_URL = `https://github.com/${RELEASE_NOTES_REPO}/blob/master`;
-const RELEASE_NOTES_API_URL = `https://api.github.com/repos/${RELEASE_NOTES_REPO}/contents/release-notes`;
 
 @inject('routing')
 @observer
@@ -191,48 +180,12 @@ export default class NewsPage extends React.Component<
       window.scrollTo({ top: 0, behavior: 'auto' });
     }
 
-    const fetchDeveloperNotes = async () => {
-      const response = await axios.get(RELEASE_NOTES_API_URL);
-      const softwareReleasesPromises: Promise<SoftwareRelease>[] = [];
-      for (const file of response.data ?? []) {
-        if (file.name && file.type === 'dir') {
-          softwareReleasesPromises.push(
-            (async () => {
-              const [release, metadata] = await Promise.all([
-                axios.get(`${RELEASE_NOTES_API_URL}/${file.name}`),
-                axios.get(
-                  `${RELEASE_NOTES_RAW_URL}/${file.name}/metadata.json`
-                ),
-              ]);
-
-              return {
-                name: file.name,
-                pullRequests: release.data
-                  .filter((f: any) => f.name !== 'metadata.json')
-                  .map((f: any) => ({
-                    name: metadata.data.files[f.name],
-                    url: `${RELEASE_NOTES_DISPLAY_URL}/${f.path}`,
-                    type: f.name.split('-')[2] ?? 'chore',
-                  })),
-                publishedAt: metadata.data['published_at'],
-              };
-            })()
-          );
-        }
-      }
-
-      const softwareReleases = await Promise.all(softwareReleasesPromises);
-      softwareReleases.sort((r1, r2) => {
-        const [maj1, min1, pat1] = r1.name.slice(1).split('.').map(Number);
-        const [maj2, min2, pat2] = r2.name.slice(1).split('.').map(Number);
-        return maj2 - maj1 || min2 - min1 || pat2 - pat1;
-      });
-      return softwareReleases;
-    };
-
     const fetchNews = async () => {
       const [softwareReleases, contentNews] = await Promise.all([
-        fetchDeveloperNotes(),
+        client
+          .getDeveloperNewsUsingGET({})
+          .then(news => news)
+          .catch(() => []),
         client
           .getContentNewsUsingGET({})
           .then(news => news)
