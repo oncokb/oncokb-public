@@ -43,6 +43,7 @@ public class ApplicationProperties {
     private RateLimitProperties rateLimit = new RateLimitProperties();
     private TokenStatsProperties tokenStats = new TokenStatsProperties();
     private KeycloakProperties keycloak = new KeycloakProperties();
+    private String oncokbDataBranch = "master";
     private String oncokbDataToken = "";
     private UsageLiquibaseProperties usageLiquibase = new UsageLiquibaseProperties();
     private SendGridProperties sendgrid = new SendGridProperties();
@@ -244,6 +245,14 @@ public class ApplicationProperties {
 
     public void setKeycloak(KeycloakProperties keycloak) {
         this.keycloak = keycloak;
+    }
+
+    public String getOncokbDataBranch() {
+        return oncokbDataBranch;
+    }
+
+    public void setOncokbDataBranch(String oncokbDataBranch) {
+        this.oncokbDataBranch = oncokbDataBranch;
     }
 
     public String getOncokbDataToken() {
