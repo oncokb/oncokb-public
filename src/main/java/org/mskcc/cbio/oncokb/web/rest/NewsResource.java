@@ -35,7 +35,6 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 @RequestMapping("/api/news")
 public class NewsResource {
     
-    private static final String ONCOKB_DATA_BRANCH = "master";
     private static final String ONCOKB_DATA_RELEASE_FOLDER = "https://api.github.com/repos/knowledgesystems/oncokb-data/contents/RELEASE";
     
     private static final String RELEASE_NOTES_REPO = "oncokb/oncokb";
@@ -68,8 +67,11 @@ public class NewsResource {
             return;
         }
 
+        String branch = applicationProperties.getOncokbDataBranch(); // branch defaults to master
+        log.info("OncoKB Data branch set to " + branch);
+
         RestTemplate restTemplate = new RestTemplate();
-        String url = String.format("%s?ref=%s", ONCOKB_DATA_RELEASE_FOLDER, ONCOKB_DATA_BRANCH);
+        String url = String.format("%s?ref=%s", ONCOKB_DATA_RELEASE_FOLDER, branch);
         HttpHeaders headers = new HttpHeaders();
         headers.set(HttpHeaders.AUTHORIZATION, "Bearer " + token);
 
@@ -88,7 +90,7 @@ public class NewsResource {
         List<CompletableFuture<Void>> futures = gitHubFiles.stream()
             .filter(file -> "dir".equals(file.type) && file.name != null && file.name.startsWith("v"))
             .map(file -> CompletableFuture.runAsync(() -> {
-                String contentNewsUrl = String.format("%s/%s/content_news.json?ref=%s", ONCOKB_DATA_RELEASE_FOLDER, file.name, ONCOKB_DATA_BRANCH);
+                String contentNewsUrl = String.format("%s/%s/content_news.json?ref=%s", ONCOKB_DATA_RELEASE_FOLDER, file.name, branch);
                 
                 try {
                     HttpEntity<Void> entity = new HttpEntity<>(headers);
