@@ -784,8 +784,11 @@ export default function NewsContent092026() {
               </td>
               <td>
                 <em>Drug(s) added to OncoKB™:</em> Acalabrutinib, Zanubrutinib,
-                Pirtobrutinib (Level R1) <em>Drug(s) promoted in OncoKB™:</em>{' '}
-                Ibrutinib (Level R1, previously Level R2)
+                Pirtobrutinib (Level R1)
+                <br />
+                <br />
+                <em>Drug(s) promoted in OncoKB™:</em> Ibrutinib (Level R1,
+                previously Level R2)
               </td>
               <td>R2</td>
               <td>R1</td>
