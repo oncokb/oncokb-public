@@ -25,6 +25,10 @@ export default function NewsContent092026() {
           All leveled biomarkers associated with Tazemetostat have been removed
           or demoted (see tables below)
         </li>
+        <li>
+          <Link to="/gene/MYD88/somatic">MYD88</Link> annotation with either the
+          GRCh37 or GRCh38 build is now available via our API and on our webpage
+        </li>
       </ul>
       <p>
         <strong>Updated Therapeutic Implications: Sensitivity</strong>
@@ -45,7 +49,7 @@ export default function NewsContent092026() {
               <th>Gene</th>
               <th>Mutation</th>
               <th>Cancer Type</th>
-              <th>Level-associated Drug(s) in OncoKB™</th>
+              <th>Highest Level-associated Drug(s) in OncoKB™</th>
               <th>Drug(s) added to OncoKB™</th>
               <th>Evidence</th>
             </tr>
@@ -146,10 +150,7 @@ export default function NewsContent092026() {
                   Breast Cancer
                 </AlterationPageLink>
               </td>
-              <td>
-                Imlunestrant, Vepdegestrant, Elacestrant (Level 1) Fulvestrant
-                (Level 3A)
-              </td>
+              <td>Imlunestrant, Vepdegestrant, Elacestrant (Level 1)</td>
               <td>
                 Camizestrant + Abemaciclib, Camizestrant + Palbociclib,
                 Camizestrant + Ribociclib (Level1)
@@ -185,10 +186,7 @@ export default function NewsContent092026() {
                   Breast Cancer
                 </AlterationPageLink>
               </td>
-              <td>
-                Imlunestrant, Vepdegestrant (Level 1) Elacestrant (Level 2)
-                Fulvestrant (Level 3A)
-              </td>
+              <td>Imlunestrant, Vepdegestrant (Level 1)</td>
               <td>
                 Camizestrant + Abemaciclib, Camizestrant + Palbociclib,
                 Camizestrant + Ribociclib (Level1)
@@ -228,8 +226,8 @@ export default function NewsContent092026() {
               <td>Tulmimetostat (Level 4)</td>
               <td>
                 PMID:{' '}
-                <a href="https://pubmed.ncbi.nlm.nih.gov/38833522/">38833522</a>{' '}
-                Abstract:{' '}
+                <a href="https://pubmed.ncbi.nlm.nih.gov/38833522/">38833522</a>
+                ; Abstract:{' '}
                 <a href="https://www.asco.org/abstracts-presentations/224714">
                   Drescher et al. Abstract# 3094 ASCO 2023
                 </a>
@@ -245,7 +243,7 @@ export default function NewsContent092026() {
       </div>
       <ul style={{ marginBottom: 0 }}>
         <li style={{ marginBottom: 0 }}>
-          Demotion of tumor type-specific level of evidence for an alteration
+          Demotion of cancer type-specific level of evidence for an alteration
         </li>
       </ul>
       <div className="table-responsive" style={{ marginBottom: '1.5rem' }}>
@@ -340,7 +338,6 @@ export default function NewsContent092026() {
                 <a href="https://www.fda.gov/drugs/drug-alerts-and-statements/fda-alerts-health-care-providers-and-patients-about-increased-risk-new-blood-cancers-tazverik">
                   Withdrawal of Tazemetostat from market
                 </a>
-                ; Increased rate of hematologic second primary malignancies
               </td>
             </tr>
             <tr>
@@ -365,20 +362,21 @@ export default function NewsContent092026() {
                   Epithelioid Sarcoma
                 </AlterationPageLink>
               </td>
-              <td>
-                Tazemetostat <em>Drug(s) added to OncoKB™:</em> SHR2554, HH2853
-                (Level 4)
-              </td>
+              <td>Tazemetostat</td>
               <td>1</td>
-              <td>4</td>
+              <td>
+                4<br />
+                <br />
+                <em>Associated with investigational drug(s):</em> Zeprumetostat,
+                Epsametostat
+              </td>
               <td>
                 <a href="https://www.fda.gov/drugs/drug-alerts-and-statements/fda-alerts-health-care-providers-and-patients-about-increased-risk-new-blood-cancers-tazverik">
                   Withdrawal of Tazemetostat from market
                 </a>
-                ; Increased rate of hematologic second primary malignancies
-                PMID:{' '}
-                <a href="https://pubmed.ncbi.nlm.nih.gov/40821900/">40821900</a>{' '}
-                Abstract:{' '}
+                ; PMID:{' '}
+                <a href="https://pubmed.ncbi.nlm.nih.gov/40821900/">40821900</a>
+                ; Abstract:{' '}
                 <a href="https://urldefense.com/v3/__https://ascopubs.org/doi/10.1200/JCO.2024.42.16_suppl.11549__;!!KVWo1iE!QZW9FuCOMAcBZcF-raU4pjWZVQXYacUwiaxeQ6Wj8CIp6t1T6izQEWWa2j1El665J76s5fLwLtqk6A$">
                   Zhou et al. Abstract#11549. ASCO. 2024
                 </a>
@@ -414,7 +412,6 @@ export default function NewsContent092026() {
                 <a href="https://www.fda.gov/drugs/drug-alerts-and-statements/fda-alerts-health-care-providers-and-patients-about-increased-risk-new-blood-cancers-tazverik">
                   Withdrawal of Tazemetostat from market
                 </a>
-                ; Increased rate of hematologic second primary malignancies
               </td>
             </tr>
             <tr>
@@ -446,7 +443,6 @@ export default function NewsContent092026() {
                 <a href="https://www.fda.gov/drugs/drug-alerts-and-statements/fda-alerts-health-care-providers-and-patients-about-increased-risk-new-blood-cancers-tazverik">
                   Withdrawal of Tazemetostat from market
                 </a>
-                ; Increased rate of hematologic second primary malignancies
               </td>
             </tr>
             <tr>
@@ -478,7 +474,6 @@ export default function NewsContent092026() {
                 <a href="https://www.fda.gov/drugs/drug-alerts-and-statements/fda-alerts-health-care-providers-and-patients-about-increased-risk-new-blood-cancers-tazverik">
                   Withdrawal of Tazemetostat from market
                 </a>
-                ; Increased rate of hematologic second primary malignancies
               </td>
             </tr>
           </tbody>
@@ -486,7 +481,7 @@ export default function NewsContent092026() {
       </div>
       <ul style={{ marginBottom: 0 }}>
         <li style={{ marginBottom: 0 }}>
-          Removal of therapy(s) associated with a tumor type-specific leveled
+          Removal of therapy(s) associated with a cancer-type-specific leveled
           alteration(s) (without changing the alteration's highest level of
           evidence)
         </li>
@@ -535,7 +530,6 @@ export default function NewsContent092026() {
                 <a href="https://www.fda.gov/drugs/drug-alerts-and-statements/fda-alerts-health-care-providers-and-patients-about-increased-risk-new-blood-cancers-tazverik">
                   Withdrawal of Tazemetostat from market
                 </a>
-                ; Increased rate of hematologic second primary malignancies
               </td>
             </tr>
           </tbody>
@@ -568,6 +562,7 @@ export default function NewsContent092026() {
               <td>Somatic</td>
               <td>{getAlternativeGenePageLinks('BTK', false)}</td>
               <td>
+                ⁺
                 <AlterationPageLink
                   hugoSymbol="BTK"
                   alteration="T474"
@@ -601,6 +596,7 @@ export default function NewsContent092026() {
               <td>Somatic</td>
               <td>{getAlternativeGenePageLinks('BTK', false)}</td>
               <td>
+                ⁺
                 <AlterationPageLink
                   hugoSymbol="BTK"
                   alteration="C481"
@@ -638,8 +634,8 @@ export default function NewsContent092026() {
                 ,{' '}
                 <a href="https://pubmed.ncbi.nlm.nih.gov/27571029/">27571029</a>
                 ,{' '}
-                <a href="https://pubmed.ncbi.nlm.nih.gov/38754046/">38754046</a>{' '}
-                Abstract:{' '}
+                <a href="https://pubmed.ncbi.nlm.nih.gov/38754046/">38754046</a>
+                ; Abstract:{' '}
                 <a href="https://ashpublications.org/blood/article/134/Supplement_1/504/426369/Resistance-to-Acalabrutinib-in-CLL-Is-Mediated">
                   Woyach, J. et al. Abstract# 642.CLL, Blood. 2019
                 </a>
@@ -650,6 +646,7 @@ export default function NewsContent092026() {
               <td>Somatic</td>
               <td>{getAlternativeGenePageLinks('BTK', false)}</td>
               <td>
+                ⁺
                 <AlterationPageLink
                   hugoSymbol="BTK"
                   alteration="L528"
@@ -716,8 +713,8 @@ export default function NewsContent092026() {
                 ,{' '}
                 <a href="https://pubmed.ncbi.nlm.nih.gov/39853273/">39853273</a>
                 ,{' '}
-                <a href="https://pubmed.ncbi.nlm.nih.gov/35196427/">35196427</a>{' '}
-                Abstract:{' '}
+                <a href="https://pubmed.ncbi.nlm.nih.gov/35196427/">35196427</a>
+                ; Abstract:{' '}
                 <a href="https://www.sciencedirect.com/science/article/pii/S0006497125048499">
                   Sievers, et al. Abstract# 641. ASH. 2025.
                 </a>
@@ -727,9 +724,10 @@ export default function NewsContent092026() {
         </table>
       </div>
       <p>
+        ⁺{' '}
         <em>
-          * Table: Position-level annotations (T474, C481) apply to variants at
-          these residues not already leveled individually
+          All BTK mutant alleles at positions T474, C481, and L528 are
+          considered oncogenic or likely oncogenic by OncoKB
         </em>
       </p>
       <ul style={{ marginBottom: 0 }}>

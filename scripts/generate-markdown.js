@@ -20,6 +20,9 @@ const objectPropertyMarkRegex = new RegExp(
   'gm'
 );
 const tagMarkerRegex = /^\[\[tag\]\]\s*/i;
+// Footnote markers (e.g. ⁺T474) flag a note below the table. They are part of
+// the displayed cell text but never part of the alteration name itself.
+const footnoteMarkerRegex = /^([⁺†‡])\s*/;
 
 /**
  * Escapes special characters in a string to be used in a regular expression.
@@ -104,9 +107,12 @@ function fixHtmlString(htmlString) {
 }
 
 function parseTaggedMutation(mutationName) {
+  const withoutTag = mutationName.replace(tagMarkerRegex, '').trim();
+  const footnoteMatch = withoutTag.match(footnoteMarkerRegex);
   return {
     isTag: tagMarkerRegex.test(mutationName),
-    mutationName: mutationName.replace(tagMarkerRegex, '').trim(),
+    footnoteMarker: footnoteMatch ? footnoteMatch[1] : '',
+    mutationName: withoutTag.replace(footnoteMarkerRegex, '').trim(),
   };
 }
 
@@ -614,9 +620,14 @@ function addTableHeaderListStyles(state) {
 function createMutationLinks(md, currentGene, mutationNames, germline = false) {
   const allMutationLinks = [];
   for (mutationName of mutationNames) {
-    const { isTag, mutationName: parsedMutationName } = parseTaggedMutation(
-      mutationName
-    );
+    const {
+      isTag,
+      footnoteMarker,
+      mutationName: parsedMutationName,
+    } = parseTaggedMutation(mutationName);
+    if (footnoteMarker) {
+      allMutationLinks.push(createMarkdownTextToken(md, footnoteMarker));
+    }
     let mutationLinks = [
       {
         alteration: parsedMutationName,
