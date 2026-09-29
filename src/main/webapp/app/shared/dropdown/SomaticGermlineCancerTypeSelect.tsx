@@ -4,7 +4,11 @@ import classnames from 'classnames';
 import { COLOR_BLUE } from 'app/config/theme';
 import styles from './SomaticGermlineCancerTypeSelect.module.scss';
 import InfoIcon from '../icons/InfoIcon';
-import { OncoTreeLink, getAlterationPageLink } from '../utils/UrlUtils';
+import {
+  OncoTreeLink,
+  getAlterationPageLink,
+  getReferenceGenomeFromSearch,
+} from '../utils/UrlUtils';
 import { StylesConfig } from 'react-select';
 import { RouterStore } from 'mobx-react-router';
 import { DefaultTooltip } from 'cbioportal-frontend-commons';
@@ -212,12 +216,19 @@ export default function SomaticGermlineCancerTypeSelect({
             }
 
             if (selectedValue) {
+              const referenceGenome = getReferenceGenomeFromSearch(
+                routing.location.search
+              );
+
               routing.history.push(
                 getAlterationPageLink({
                   hugoSymbol,
                   alteration: alterationQuery,
                   germline,
                   cancerType: selectedValue,
+                  searchQueries: referenceGenome
+                    ? { refGenome: referenceGenome }
+                    : undefined,
                   withProtocolHostPrefix: false,
                   isTag,
                 })

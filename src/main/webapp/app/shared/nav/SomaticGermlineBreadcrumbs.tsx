@@ -6,7 +6,11 @@ import {
   IInputBreadcrumb,
   AnnotationBreadcrumbs,
 } from 'app/pages/annotationPage/AnnotationBreadcrumbs';
-import { getAlterationPageLink, getGenePageLink } from '../utils/UrlUtils';
+import {
+  getAlterationPageLink,
+  getGenePageLink,
+  getReferenceGenomeFromSearch,
+} from '../utils/UrlUtils';
 
 export default function SomaticGermlineBreadcrumbs({
   hugoSymbol,
@@ -23,6 +27,8 @@ export default function SomaticGermlineBreadcrumbs({
   germline?: boolean;
   isTag?: boolean;
 }) {
+  const referenceGenome = getReferenceGenomeFromSearch(window.location.search);
+
   const breadcrumbs: (
     | ITextBreadcrumb
     | ILinkBreadcrumb
@@ -36,6 +42,9 @@ export default function SomaticGermlineBreadcrumbs({
       to: getGenePageLink({
         hugoSymbol,
         germline,
+        searchQueries: referenceGenome
+          ? { refGenome: referenceGenome }
+          : undefined,
       }),
     } as ILinkBreadcrumb,
     {
@@ -47,6 +56,9 @@ export default function SomaticGermlineBreadcrumbs({
         alteration: alterationName,
         germline,
         isTag,
+        searchQueries: referenceGenome
+          ? { refGenome: referenceGenome }
+          : undefined,
       }),
     } as ILinkBreadcrumb,
   ];

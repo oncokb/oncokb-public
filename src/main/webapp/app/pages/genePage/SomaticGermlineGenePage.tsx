@@ -692,12 +692,18 @@ export default class SomaticGermlineGenePage extends React.Component<
                             <GeneticTypeTabs
                               onChange={(status: GENETIC_TYPE) => {
                                 this.selectedGeneticType = status;
+                                const referenceGenome = getReferenceGenomeFromSearch(
+                                  this.props.routing.location.search
+                                );
                                 this.props.routing.history.push(
                                   getGenePageLink({
                                     hugoSymbol: this.hugoSymbolQuery,
                                     germline:
                                       this.selectedGeneticType ===
                                       GENETIC_TYPE.GERMLINE,
+                                    searchQueries: referenceGenome
+                                      ? { refGenome: referenceGenome }
+                                      : undefined,
                                   })
                                 );
                               }}
