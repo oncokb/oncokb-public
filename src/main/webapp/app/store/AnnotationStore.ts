@@ -39,9 +39,11 @@ import {
 } from 'app/shared/api/generated/OncoKbPrivateAPI';
 import { BarChartDatum } from 'app/components/barChart/BarChart';
 import {
+  addPromoterMutationLabel,
   getAlterationName,
   getCancerTypeNameFromOncoTreeType,
   isOncogenic,
+  isPromoterGenomicAlteration,
   shortenOncogenicity,
   shortenPathogenicity,
 } from 'app/shared/utils/Utils';
@@ -852,13 +854,20 @@ export class AnnotationStore {
 
   @computed
   get alterationNameWithDiff() {
-    return this.computeAlterationName(
+    const name = this.computeAlterationName(
       this.annotationType,
       this.alteration,
       this.alterationQuery,
       this.selectedAnnotationData,
       true
     );
+    // TODO: remove once genomic (g.) alterations are curated with a name that
+    // says they are promoter mutations. This is display only, alterationName
+    // above is what links and queries should keep using.
+    const alt = this.alteration?.alteration ?? this.alterationQuery;
+    return alt && isPromoterGenomicAlteration(this.hugoSymbol, alt)
+      ? addPromoterMutationLabel(name)
+      : name;
   }
 
   @computed
