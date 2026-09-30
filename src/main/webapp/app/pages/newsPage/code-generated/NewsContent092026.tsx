@@ -153,11 +153,11 @@ export default function NewsContent092026() {
               <td>Imlunestrant, Vepdegestrant, Elacestrant (Level 1)</td>
               <td>
                 Camizestrant + Abemaciclib, Camizestrant + Palbociclib,
-                Camizestrant + Ribociclib (Level1)
+                Camizestrant + Ribociclib (Level 1)
               </td>
               <td>
                 <a href="https://www.fda.gov/drugs/resources-information-approved-drugs/fda-grants-accelerated-approval-camizestrant-cdk46-inhibitor-esr1-mutated-hr-positive-her2-negative">
-                  FDA approval of camizestrantwith a CDK4/6 inhibitor
+                  FDA approval of camizestrant with a CDK4/6 inhibitor
                 </a>
                 ; PMID:{' '}
                 <a href="https://pubmed.ncbi.nlm.nih.gov/42442380/">42442380</a>
@@ -189,11 +189,11 @@ export default function NewsContent092026() {
               <td>Imlunestrant, Vepdegestrant (Level 1)</td>
               <td>
                 Camizestrant + Abemaciclib, Camizestrant + Palbociclib,
-                Camizestrant + Ribociclib (Level1)
+                Camizestrant + Ribociclib (Level 1)
               </td>
               <td>
                 <a href="https://www.fda.gov/drugs/resources-information-approved-drugs/fda-grants-accelerated-approval-camizestrant-cdk46-inhibitor-esr1-mutated-hr-positive-her2-negative">
-                  FDA approval of camizestrantwith a CDK4/6 inhibitor
+                  FDA approval of camizestrant with a CDK4/6 inhibitor
                 </a>
                 ; PMID:{' '}
                 <a href="https://pubmed.ncbi.nlm.nih.gov/42442380/">42442380</a>
@@ -231,7 +231,7 @@ export default function NewsContent092026() {
                 <a href="https://www.asco.org/abstracts-presentations/224714">
                   Drescher et al. Abstract# 3094 ASCO 2023
                 </a>
-                .{' '}
+                ;{' '}
                 <a href="https://urldefense.com/v3/__https://ascopubs.org/doi/10.1200/JCO.2025.43.16_suppl.3102__;!!KVWo1iE!QZW9FuCOMAcBZcF-raU4pjWZVQXYacUwiaxeQ6Wj8CIp6t1T6izQEWWa2j1El665J76s5fJfHeTFSQ$">
                   Duska et al. Abstract# 3102 ASCO 2025
                 </a>
@@ -726,8 +726,9 @@ export default function NewsContent092026() {
       <p>
         ⁺{' '}
         <em>
-          All BTK mutant alleles at positions T474, C481, and L528 are
-          considered oncogenic or likely oncogenic by OncoKB
+          The resistance level is applied to the positional variant for BTK
+          C481, T474, and L528. BTK C481F/R/S/Y are already Level R1, while
+          T474I/S are being promoted from Level R2 to Level R1.
         </em>
       </p>
       <ul style={{ marginBottom: 0 }}>
