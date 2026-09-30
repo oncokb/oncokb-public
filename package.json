@@ -142,7 +142,7 @@
     "json": "^10.0.0",
     "json-loader": "0.5.7",
     "lint-staged": "8.2.1",
-    "markdown-it": "^14.1.0",
+    "markdown-it": "^14.3.1",
     "mini-css-extract-plugin": "0.9.0",
     "moment-locales-webpack-plugin": "1.2.0",
     "node-sass": "^4.12.0",
