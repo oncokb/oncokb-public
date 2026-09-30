@@ -131,6 +131,13 @@ const AnnotatedAlterations: FunctionComponent<{
   alterations: BiologicalVariant[];
   isLargeScreen?: boolean;
 }> = props => {
+  const isMyd88 = props.hugoSymbol.toUpperCase() === 'MYD88';
+  const filteredAlterations = isMyd88
+    ? props.alterations.filter(alteration =>
+        alteration.variant.referenceGenomes?.includes(REFERENCE_GENOME.GRCh37)
+      )
+    : props.alterations;
+
   const style = props.isLargeScreen
     ? {
         width: '80%',
@@ -140,7 +147,7 @@ const AnnotatedAlterations: FunctionComponent<{
     : undefined;
 
   const hasPathogenicity = props.germline
-    ? props.alterations.some(alteration => !!alteration.pathogenic)
+    ? filteredAlterations.some(alteration => !!alteration.pathogenic)
     : false;
 
   const useMutationEffectForGermline = props.germline && !hasPathogenicity; // Pharmocogenic gene like DPYD don't have pathogenicity
@@ -162,7 +169,7 @@ const AnnotatedAlterations: FunctionComponent<{
         </span>
       </div>
       <GenePageTable
-        data={props.alterations}
+        data={filteredAlterations}
         columns={getColumns(
           props.germline,
           props.hugoSymbol,
