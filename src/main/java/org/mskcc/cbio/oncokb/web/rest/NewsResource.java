@@ -258,17 +258,11 @@ public class NewsResource {
         String[] parts1 = v1.replaceFirst("^v", "").split("\\.");
         String[] parts2 = v2.replaceFirst("^v", "").split("\\.");
 
-        int maj1 = Integer.parseInt(parts1[0]);
-        int min1 = Integer.parseInt(parts1[1]);
-        int pat1 = Integer.parseInt(parts1[2]);
-
-        int maj2 = Integer.parseInt(parts2[0]);
-        int min2 = Integer.parseInt(parts2[1]);
-        int pat2 = Integer.parseInt(parts2[2]);
-
-        // Compare major, then minor, then patch (v2 - v1 for descending)
-        if (maj2 != maj1) return maj2 - maj1;
-        if (min2 != min1) return min2 - min1;
-        return pat2 - pat1;
+        for (int i = 0; i < 3; i++) {
+            int n1 = i < parts1.length ? Integer.parseInt(parts1[i]) : 0;
+            int n2 = i < parts2.length ? Integer.parseInt(parts2[i]) : 0;
+            if (n1 != n2) return Integer.compare(n2, n1);
+        }
+        return 0;
     }
 }
