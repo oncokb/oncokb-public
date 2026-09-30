@@ -30,8 +30,15 @@ const footnoteMarkerDisplay = { '⁺': '+' };
 // are rendered as, is the annotation for the table right above it.
 const footnoteParagraphRegex = /^(<sup>|[⁺†‡])/;
 const footnoteFollowsAttr = 'data-footnote-follows';
+const footnoteParagraphAttr = 'data-footnote';
 const DEFAULT_TABLE_MARGIN_BOTTOM = '1.5rem';
-const FOOTNOTE_TABLE_MARGIN_BOTTOM = '0.5rem';
+const FOOTNOTE_TABLE_MARGIN_BOTTOM = '0';
+// The footnote sits flush under its table and is set smaller than the table
+// text so it reads as an annotation of that table rather than as the next
+// block of the page. It carries the spacing the table would have had below
+// it, to separate the pair from whatever follows.
+const FOOTNOTE_PARAGRAPH_STYLE =
+  "{{ marginBottom: '2.5rem', fontSize: '0.875rem' }}";
 
 /**
  * Escapes special characters in a string to be used in a regular expression.
@@ -665,10 +672,7 @@ function addTableFootnoteStyles(state) {
     }
 
     state.tokens[tableOpenIdx].attrSet(footnoteFollowsAttr, 'true');
-    paragraphOpen.attrSet(
-      'style',
-      `margin-bottom: ${DEFAULT_TABLE_MARGIN_BOTTOM}`
-    );
+    paragraphOpen.attrSet(footnoteParagraphAttr, 'true');
   }
 
   return true;
@@ -827,12 +831,22 @@ const md = new MarkdownIt({
     return `<OptimizedImage src={${variableName}} alt="${alt}" style={{ maxWidth: '100%', width: '${width}', cursor: 'zoom-in' }} onClick={() => window.open(${variableName}, '_blank', 'noopener')} />`;
   };
 
+  md.renderer.rules.paragraph_open = function (tokens, idx, options, env, self) {
+    if (tokens[idx].attrGet(footnoteParagraphAttr) === 'true') {
+      return `<p style=${FOOTNOTE_PARAGRAPH_STYLE}>`;
+    }
+    return self.renderToken(tokens, idx, options);
+  };
+
   md.renderer.rules.table_open = function (tokens, idx) {
-    const marginBottom =
-      tokens[idx].attrGet(footnoteFollowsAttr) === 'true'
-        ? FOOTNOTE_TABLE_MARGIN_BOTTOM
-        : DEFAULT_TABLE_MARGIN_BOTTOM;
-    return `<div className="table-responsive" style={{ marginBottom: '${marginBottom}' }}>\n<table className="table">`;
+    const footnoteFollows = tokens[idx].attrGet(footnoteFollowsAttr) === 'true';
+    const marginBottom = footnoteFollows
+      ? FOOTNOTE_TABLE_MARGIN_BOTTOM
+      : DEFAULT_TABLE_MARGIN_BOTTOM;
+    // Bootstrap's .table carries its own bottom margin, which would be added to
+    // the wrapper's and undo the tightened footnote spacing.
+    const tableStyle = footnoteFollows ? ' style={{ marginBottom: 0 }}' : '';
+    return `<div className="table-responsive" style={{ marginBottom: '${marginBottom}' }}>\n<table className="table"${tableStyle}>`;
   };
 
   md.renderer.rules.table_close = function () {

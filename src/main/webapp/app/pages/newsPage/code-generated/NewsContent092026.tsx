@@ -17,15 +17,6 @@ export default function NewsContent092026() {
           Release of <a href="https://sop.oncokb.org/">OncoKB™ SOP v6.4</a>
         </li>
         <li>
-          On May 11, 2026,{' '}
-          <a href="https://www.fda.gov/drugs/drug-alerts-and-statements/fda-alerts-health-care-providers-and-patients-about-increased-risk-new-blood-cancers-tazverik">
-            Tazemetostat was withdrawn from the US market
-          </a>{' '}
-          due to an increased rate of hematologic second primary malignancies.
-          All leveled biomarkers associated with Tazemetostat have been removed
-          or demoted (see tables below)
-        </li>
-        <li>
           <Link to="/gene/MYD88/somatic">MYD88</Link> annotation with either the
           GRCh37 or GRCh38 build is now available via our API and on our webpage
         </li>
@@ -264,6 +255,15 @@ export default function NewsContent092026() {
           </tbody>
         </table>
       </div>
+      <p>
+        On May 11, 2026,{' '}
+        <a href="https://www.fda.gov/drugs/drug-alerts-and-statements/fda-alerts-health-care-providers-and-patients-about-increased-risk-new-blood-cancers-tazverik">
+          Tazemetostat was withdrawn from the US market
+        </a>{' '}
+        due to an increased rate of hematologic second primary malignancies. All
+        leveled biomarkers associated with Tazemetostat have been removed or
+        demoted (see tables below)
+      </p>
       <ul style={{ marginBottom: 0 }}>
         <li style={{ marginBottom: 0 }}>
           Demotion of cancer type-specific level of evidence for an alteration
@@ -574,8 +574,8 @@ export default function NewsContent092026() {
           New alteration(s) with a cancer type-specific level of evidence
         </li>
       </ul>
-      <div className="table-responsive" style={{ marginBottom: '0.5rem' }}>
-        <table className="table">
+      <div className="table-responsive" style={{ marginBottom: '0' }}>
+        <table className="table" style={{ marginBottom: 0 }}>
           <thead>
             <tr>
               <th>Level</th>
@@ -786,7 +786,7 @@ export default function NewsContent092026() {
           </tbody>
         </table>
       </div>
-      <p style={{ marginBottom: '1.5rem' }}>
+      <p style={{ marginBottom: '2.5rem', fontSize: '0.875rem' }}>
         <sup>+</sup>{' '}
         <em>
           The resistance level is applied to the positional variant for BTK
