@@ -43,7 +43,6 @@ import {
 } from 'app/shared/links/SocialMediaLinks';
 import { GenePageLink, SopPageLink } from 'app/shared/utils/UrlUtils';
 import { getPageTitle, scrollWidthOffset } from 'app/shared/utils/Utils';
-import { compareSemver } from 'app/shared/utils/SemverUtils';
 import AAC_IMAGE from 'content/images/level_AAC.png';
 import LevelChange from 'content/images/loe-change.png';
 import { inject, observer } from 'mobx-react';
@@ -110,12 +109,6 @@ export default class NewsPage extends React.Component<
 
   private isExpandedContentItem = (itemKey: string) =>
     this.state.expandedContentItems.includes(itemKey);
-
-  private sortContentNews = (contentNews: ContentNews[]) => {
-    return [...contentNews].sort((newsA, newsB) =>
-      compareSemver(newsA.dataVersion, newsB.dataVersion)
-    );
-  };
 
   private countHistoryGeneUpdates = (geneUpdates: GeneUpdates[] = []) => {
     const geneCount = geneUpdates.length;
@@ -194,7 +187,7 @@ export default class NewsPage extends React.Component<
 
       this.setState({
         softwareReleases,
-        contentNews: this.sortContentNews(contentNews),
+        contentNews,
       });
     };
 
@@ -737,6 +730,7 @@ export default class NewsPage extends React.Component<
                 </p>
               </div>
               <div className="mt-4">
+                <NewsList date={'09302026'} />
                 <NewsList date={'08282026'} />
                 <NewsList date={'07312026'} />
                 <NewsList date={'06252026'} />

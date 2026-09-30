@@ -20,6 +20,18 @@ const objectPropertyMarkRegex = new RegExp(
   'gm'
 );
 const tagMarkerRegex = /^\[\[tag\]\]\s*/i;
+// Footnote markers (e.g. ⁺T474) flag a note below the table. They are part of
+// the displayed cell text but never part of the alteration name itself.
+const footnoteMarkerRegex = /^([⁺†‡])\s*/;
+// The unicode superscript characters render too small next to table text, so the
+// marker is emitted as a <sup> wrapping its full-size equivalent instead.
+const footnoteMarkerDisplay = { '⁺': '+' };
+// A paragraph opening with one of those markers, or with the <sup> the markers
+// are rendered as, is the annotation for the table right above it.
+const footnoteParagraphRegex = /^(<sup>|[⁺†‡])/;
+const footnoteFollowsAttr = 'data-footnote-follows';
+const DEFAULT_TABLE_MARGIN_BOTTOM = '1.5rem';
+const FOOTNOTE_TABLE_MARGIN_BOTTOM = '0.5rem';
 
 /**
  * Escapes special characters in a string to be used in a regular expression.
@@ -96,7 +108,11 @@ function fixHtmlString(htmlString) {
       new RegExp(`isTag="${booleanPropertyMark}(true|false)"`, 'g'),
       (_, isTag) => `isTag={${isTag}}`
     )
-    .replace(/style="margin-bottom: 0"/g, 'style={{ marginBottom: 0 }}')
+    .replace(
+      /style="margin-bottom: ([^"]+)"/g,
+      (_, value) =>
+        `style={{ marginBottom: ${value === '0' ? '0' : `'${value}'`} }}`
+    )
     .replace(objectPropertyMarkRegex, (_, group) => {
       return `{${decodeHtmlEntities(group)}}`;
     })
@@ -104,9 +120,12 @@ function fixHtmlString(htmlString) {
 }
 
 function parseTaggedMutation(mutationName) {
+  const withoutTag = mutationName.replace(tagMarkerRegex, '').trim();
+  const footnoteMatch = withoutTag.match(footnoteMarkerRegex);
   return {
     isTag: tagMarkerRegex.test(mutationName),
-    mutationName: mutationName.replace(tagMarkerRegex, '').trim(),
+    footnoteMarker: footnoteMatch ? footnoteMatch[1] : '',
+    mutationName: withoutTag.replace(footnoteMarkerRegex, '').trim(),
   };
 }
 
@@ -611,12 +630,69 @@ function addTableHeaderListStyles(state) {
   return true;
 }
 
+/**
+ * A paragraph that directly follows a table and starts with a footnote marker
+ * annotates that table, so it is pulled up against it and carries the usual
+ * table spacing below itself to separate it from whatever comes next.
+ */
+function addTableFootnoteStyles(state) {
+  for (let i = 0; i < state.tokens.length; i++) {
+    if (state.tokens[i].type !== 'table_close') {
+      continue;
+    }
+
+    const paragraphOpen = state.tokens[i + 1];
+    const paragraphInline = state.tokens[i + 2];
+    if (
+      !paragraphOpen ||
+      paragraphOpen.type !== 'paragraph_open' ||
+      !paragraphInline ||
+      paragraphInline.type !== 'inline' ||
+      !footnoteParagraphRegex.test(paragraphInline.content.trim())
+    ) {
+      continue;
+    }
+
+    let tableOpenIdx = -1;
+    for (let j = i; j >= 0; j--) {
+      if (state.tokens[j].type === 'table_open') {
+        tableOpenIdx = j;
+        break;
+      }
+    }
+    if (tableOpenIdx < 0) {
+      continue;
+    }
+
+    state.tokens[tableOpenIdx].attrSet(footnoteFollowsAttr, 'true');
+    paragraphOpen.attrSet(
+      'style',
+      `margin-bottom: ${DEFAULT_TABLE_MARGIN_BOTTOM}`
+    );
+  }
+
+  return true;
+}
+
 function createMutationLinks(md, currentGene, mutationNames, germline = false) {
   const allMutationLinks = [];
   for (mutationName of mutationNames) {
-    const { isTag, mutationName: parsedMutationName } = parseTaggedMutation(
-      mutationName
-    );
+    const {
+      isTag,
+      footnoteMarker,
+      mutationName: parsedMutationName,
+    } = parseTaggedMutation(mutationName);
+    if (footnoteMarker) {
+      const [supOpenToken, supCloseToken] = createMarkdownToken(md, 'sup');
+      allMutationLinks.push(
+        supOpenToken,
+        createMarkdownTextToken(
+          md,
+          footnoteMarkerDisplay[footnoteMarker] || footnoteMarker
+        ),
+        supCloseToken
+      );
+    }
     let mutationLinks = [
       {
         alteration: parsedMutationName,
@@ -751,8 +827,12 @@ const md = new MarkdownIt({
     return `<OptimizedImage src={${variableName}} alt="${alt}" style={{ maxWidth: '100%', width: '${width}', cursor: 'zoom-in' }} onClick={() => window.open(${variableName}, '_blank', 'noopener')} />`;
   };
 
-  md.renderer.rules.table_open = function () {
-    return '<div className="table-responsive" style={{ marginBottom: "1.5rem" }}>\n<table className="table">';
+  md.renderer.rules.table_open = function (tokens, idx) {
+    const marginBottom =
+      tokens[idx].attrGet(footnoteFollowsAttr) === 'true'
+        ? FOOTNOTE_TABLE_MARGIN_BOTTOM
+        : DEFAULT_TABLE_MARGIN_BOTTOM;
+    return `<div className="table-responsive" style={{ marginBottom: '${marginBottom}' }}>\n<table className="table">`;
   };
 
   md.renderer.rules.table_close = function () {
@@ -767,11 +847,14 @@ const md = new MarkdownIt({
   md.core.ruler.push('add-table-header-list-styles', state =>
     addTableHeaderListStyles(state)
   );
+  md.core.ruler.push('add-table-footnote-styles', state =>
+    addTableFootnoteStyles(state)
+  );
   md.core.ruler.push('fix-styles', state => {
     for (const token of state.tokens) {
       if (token.attrs != null && token.attrs.length > 0) {
         token.attrs = token.attrs.filter(([name, value]) => {
-          return name !== 'style' || value === 'margin-bottom: 0';
+          return name !== 'style' || value.startsWith('margin-bottom: ');
         });
       }
       if (token.type === 'table_open') {
