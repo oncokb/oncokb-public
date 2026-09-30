@@ -50,7 +50,7 @@ export default function NewsContent092026() {
               <th>Mutation</th>
               <th>Cancer Type</th>
               <th>Highest Level-associated Drug(s) in OncoKB™</th>
-              <th>Drug(s) added to OncoKB™</th>
+              <th>Drug(s) Added to OncoKB™</th>
               <th>Evidence</th>
             </tr>
           </thead>
@@ -150,16 +150,27 @@ export default function NewsContent092026() {
                   Breast Cancer
                 </AlterationPageLink>
               </td>
-              <td>Imlunestrant, Vepdegestrant, Elacestrant (Level 1)</td>
               <td>
-                Camizestrant + Abemaciclib, Camizestrant + Palbociclib,
+                Imlunestrant,
+                <br />
+                Vepdegestrant,
+                <br />
+                Elacestrant (Level 1)
+              </td>
+              <td>
+                Camizestrant + Abemaciclib,
+                <br />
+                Camizestrant + Palbociclib,
+                <br />
                 Camizestrant + Ribociclib (Level 1)
               </td>
               <td>
                 <a href="https://www.fda.gov/drugs/resources-information-approved-drugs/fda-grants-accelerated-approval-camizestrant-cdk46-inhibitor-esr1-mutated-hr-positive-her2-negative">
                   FDA approval of camizestrant with a CDK4/6 inhibitor
                 </a>
-                ; PMID:{' '}
+                <br />
+                <br />
+                PMID:{' '}
                 <a href="https://pubmed.ncbi.nlm.nih.gov/42442380/">42442380</a>
               </td>
             </tr>
@@ -186,16 +197,25 @@ export default function NewsContent092026() {
                   Breast Cancer
                 </AlterationPageLink>
               </td>
-              <td>Imlunestrant, Vepdegestrant (Level 1)</td>
               <td>
-                Camizestrant + Abemaciclib, Camizestrant + Palbociclib,
+                Imlunestrant,
+                <br />
+                Vepdegestrant (Level 1)
+              </td>
+              <td>
+                Camizestrant + Abemaciclib,
+                <br />
+                Camizestrant + Palbociclib,
+                <br />
                 Camizestrant + Ribociclib (Level 1)
               </td>
               <td>
                 <a href="https://www.fda.gov/drugs/resources-information-approved-drugs/fda-grants-accelerated-approval-camizestrant-cdk46-inhibitor-esr1-mutated-hr-positive-her2-negative">
                   FDA approval of camizestrant with a CDK4/6 inhibitor
                 </a>
-                ; PMID:{' '}
+                <br />
+                <br />
+                PMID:{' '}
                 <a href="https://pubmed.ncbi.nlm.nih.gov/42442380/">42442380</a>
               </td>
             </tr>
@@ -227,11 +247,14 @@ export default function NewsContent092026() {
               <td>
                 PMID:{' '}
                 <a href="https://pubmed.ncbi.nlm.nih.gov/38833522/">38833522</a>
-                ; Abstract:{' '}
+                <br />
+                <br />
+                Abstract:{' '}
                 <a href="https://www.asco.org/abstracts-presentations/224714">
                   Drescher et al. Abstract# 3094 ASCO 2023
                 </a>
-                ;{' '}
+                <br />
+                <br />
                 <a href="https://urldefense.com/v3/__https://ascopubs.org/doi/10.1200/JCO.2025.43.16_suppl.3102__;!!KVWo1iE!QZW9FuCOMAcBZcF-raU4pjWZVQXYacUwiaxeQ6Wj8CIp6t1T6izQEWWa2j1El665J76s5fJfHeTFSQ$">
                   Duska et al. Abstract# 3102 ASCO 2025
                 </a>
@@ -254,7 +277,7 @@ export default function NewsContent092026() {
               <th>Gene</th>
               <th>Mutation</th>
               <th>Cancer Type</th>
-              <th>Drug(s) removed from OncoKB™</th>
+              <th>Drug(s) Removed from OncoKB™</th>
               <th>Previous Level</th>
               <th>Updated Level</th>
               <th>Evidence</th>
@@ -374,9 +397,13 @@ export default function NewsContent092026() {
                 <a href="https://www.fda.gov/drugs/drug-alerts-and-statements/fda-alerts-health-care-providers-and-patients-about-increased-risk-new-blood-cancers-tazverik">
                   Withdrawal of Tazemetostat from market
                 </a>
-                ; PMID:{' '}
+                <br />
+                <br />
+                PMID:{' '}
                 <a href="https://pubmed.ncbi.nlm.nih.gov/40821900/">40821900</a>
-                ; Abstract:{' '}
+                <br />
+                <br />
+                Abstract:{' '}
                 <a href="https://urldefense.com/v3/__https://ascopubs.org/doi/10.1200/JCO.2024.42.16_suppl.11549__;!!KVWo1iE!QZW9FuCOMAcBZcF-raU4pjWZVQXYacUwiaxeQ6Wj8CIp6t1T6izQEWWa2j1El665J76s5fLwLtqk6A$">
                   Zhou et al. Abstract#11549. ASCO. 2024
                 </a>
@@ -524,7 +551,11 @@ export default function NewsContent092026() {
                   All Solid Tumors
                 </AlterationPageLink>
               </td>
-              <td>Tulmimetostat, Zavabresib (Level 4)</td>
+              <td>
+                Tulmimetostat,
+                <br />
+                Zavabresib (Level 4)
+              </td>
               <td>Tazemetostat (Level 4)</td>
               <td>
                 <a href="https://www.fda.gov/drugs/drug-alerts-and-statements/fda-alerts-health-care-providers-and-patients-about-increased-risk-new-blood-cancers-tazverik">
@@ -543,7 +574,7 @@ export default function NewsContent092026() {
           New alteration(s) with a cancer type-specific level of evidence
         </li>
       </ul>
-      <div className="table-responsive" style={{ marginBottom: '1.5rem' }}>
+      <div className="table-responsive" style={{ marginBottom: '0.5rem' }}>
         <table className="table">
           <thead>
             <tr>
@@ -552,7 +583,7 @@ export default function NewsContent092026() {
               <th>Gene(s)</th>
               <th>Mutation</th>
               <th>Cancer Type</th>
-              <th>Drug(s) added to OncoKB™</th>
+              <th>Drug(s) Added to OncoKB™</th>
               <th>Evidence</th>
             </tr>
           </thead>
@@ -562,7 +593,7 @@ export default function NewsContent092026() {
               <td>Somatic</td>
               <td>{getAlternativeGenePageLinks('BTK', false)}</td>
               <td>
-                ⁺
+                <sup>+</sup>
                 <AlterationPageLink
                   hugoSymbol="BTK"
                   alteration="T474"
@@ -581,7 +612,15 @@ export default function NewsContent092026() {
                   Chronic Lymphocytic Leukemia/Small Lymphocytic Lymphoma
                 </AlterationPageLink>
               </td>
-              <td>Ibrutinib, Acalabrutinib, Zanubrutinib, Pirtobrutinib</td>
+              <td>
+                Ibrutinib,
+                <br />
+                Acalabrutinib,
+                <br />
+                Zanubrutinib,
+                <br />
+                Pirtobrutinib
+              </td>
               <td>
                 PMID:{' '}
                 <a href="https://pubmed.ncbi.nlm.nih.gov/35196427/">35196427</a>
@@ -596,7 +635,7 @@ export default function NewsContent092026() {
               <td>Somatic</td>
               <td>{getAlternativeGenePageLinks('BTK', false)}</td>
               <td>
-                ⁺
+                <sup>+</sup>
                 <AlterationPageLink
                   hugoSymbol="BTK"
                   alteration="C481"
@@ -615,7 +654,13 @@ export default function NewsContent092026() {
                   Chronic Lymphocytic Leukemia/Small Lymphocytic Lymphoma
                 </AlterationPageLink>
               </td>
-              <td>Ibrutinib, Acalabrutinib, Zanubrutinib</td>
+              <td>
+                Ibrutinib,
+                <br />
+                Acalabrutinib,
+                <br />
+                Zanubrutinib
+              </td>
               <td>
                 PMID:{' '}
                 <a href="https://pubmed.ncbi.nlm.nih.gov/39908431/">39908431</a>
@@ -635,7 +680,9 @@ export default function NewsContent092026() {
                 <a href="https://pubmed.ncbi.nlm.nih.gov/27571029/">27571029</a>
                 ,{' '}
                 <a href="https://pubmed.ncbi.nlm.nih.gov/38754046/">38754046</a>
-                ; Abstract:{' '}
+                <br />
+                <br />
+                Abstract:{' '}
                 <a href="https://ashpublications.org/blood/article/134/Supplement_1/504/426369/Resistance-to-Acalabrutinib-in-CLL-Is-Mediated">
                   Woyach, J. et al. Abstract# 642.CLL, Blood. 2019
                 </a>
@@ -646,7 +693,7 @@ export default function NewsContent092026() {
               <td>Somatic</td>
               <td>{getAlternativeGenePageLinks('BTK', false)}</td>
               <td>
-                ⁺
+                <sup>+</sup>
                 <AlterationPageLink
                   hugoSymbol="BTK"
                   alteration="L528"
@@ -665,7 +712,15 @@ export default function NewsContent092026() {
                   Chronic Lymphocytic Leukemia/Small Lymphocytic Lymphoma
                 </AlterationPageLink>
               </td>
-              <td>Ibrutinib, Acalabrutinib, Zanubrutinib, Pirtobrutinib</td>
+              <td>
+                Ibrutinib,
+                <br />
+                Acalabrutinib,
+                <br />
+                Zanubrutinib,
+                <br />
+                Pirtobrutinib
+              </td>
               <td>
                 PMID:{' '}
                 <a href="https://pubmed.ncbi.nlm.nih.gov/26182309/">26182309</a>
@@ -706,7 +761,13 @@ export default function NewsContent092026() {
                   Chronic Lymphocytic Leukemia/Small Lymphocytic Lymphoma
                 </AlterationPageLink>
               </td>
-              <td>Ibrutinib, Zanubrutinib, Pirtobrutinib</td>
+              <td>
+                Ibrutinib,
+                <br />
+                Zanubrutinib,
+                <br />
+                Pirtobrutinib
+              </td>
               <td>
                 PMID:{' '}
                 <a href="https://pubmed.ncbi.nlm.nih.gov/38754046/">38754046</a>
@@ -714,7 +775,9 @@ export default function NewsContent092026() {
                 <a href="https://pubmed.ncbi.nlm.nih.gov/39853273/">39853273</a>
                 ,{' '}
                 <a href="https://pubmed.ncbi.nlm.nih.gov/35196427/">35196427</a>
-                ; Abstract:{' '}
+                <br />
+                <br />
+                Abstract:{' '}
                 <a href="https://www.sciencedirect.com/science/article/pii/S0006497125048499">
                   Sievers, et al. Abstract# 641. ASH. 2025.
                 </a>
@@ -723,8 +786,8 @@ export default function NewsContent092026() {
           </tbody>
         </table>
       </div>
-      <p>
-        ⁺{' '}
+      <p style={{ marginBottom: '1.5rem' }}>
+        <sup>+</sup>{' '}
         <em>
           The resistance level is applied to the positional variant for BTK
           C481, T474, and L528. BTK C481F/R/S/Y are already Level R1, while
@@ -782,7 +845,10 @@ export default function NewsContent092026() {
                 </AlterationPageLink>
               </td>
               <td>
-                <em>Drug(s) added to OncoKB™:</em> Acalabrutinib, Zanubrutinib,
+                <em>Drug(s) added to OncoKB™:</em> Acalabrutinib,
+                <br />
+                Zanubrutinib,
+                <br />
                 Pirtobrutinib (Level R1)
                 <br />
                 <br />
