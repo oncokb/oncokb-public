@@ -532,6 +532,8 @@ export type SomaticIndicatorQueryResp = {
 
         'query': Query
 
+        'resistanceDescription': "Known Resistance Mutation" | "Potential Resistance Implications" | "Limited Resistance Evidence" | null
+
         'treatments': Array < IndicatorQueryTreatment >
 
         'tumorTypeSummary': string
@@ -589,6 +591,8 @@ export type GermlineIndicatorQueryResp = {
         'prognosticSummary': string
 
         'query': Query
+
+        'resistanceDescription': "Known Resistance Mutation" | "Potential Resistance Implications" | "Limited Resistance Evidence" | null
 
         'treatments': Array < IndicatorQueryTreatment >
 
