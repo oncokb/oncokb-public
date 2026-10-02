@@ -206,7 +206,8 @@ class SuspiciousEmailDomainResourceIT {
         suspiciousEmailDomainRepository.saveAndFlush(suspiciousEmailDomain);
         int databaseSizeBeforeUpdate = suspiciousEmailDomainRepository.findAll().size();
 
-        SuspiciousEmailDomain updated = suspiciousEmailDomainRepository.findById(suspiciousEmailDomain.getId()).orElseThrow();
+        SuspiciousEmailDomain updated = suspiciousEmailDomainRepository.findById(suspiciousEmailDomain.getId())
+            .orElseThrow(() -> new IllegalStateException("SuspiciousEmailDomain not found"));
         em.detach(updated);
         updated.setDomain(UPDATED_DOMAIN);
         updated.setJustification(UPDATED_JUSTIFICATION);
@@ -219,7 +220,8 @@ class SuspiciousEmailDomainResourceIT {
 
         List<SuspiciousEmailDomain> list = suspiciousEmailDomainRepository.findAll();
         assertThat(list).hasSize(databaseSizeBeforeUpdate);
-        SuspiciousEmailDomain testItem = suspiciousEmailDomainRepository.findById(suspiciousEmailDomain.getId()).orElseThrow();
+        SuspiciousEmailDomain testItem = suspiciousEmailDomainRepository.findById(suspiciousEmailDomain.getId())
+            .orElseThrow(() -> new IllegalStateException("SuspiciousEmailDomain not found"));
         assertThat(testItem.getDomain()).isEqualTo(UPDATED_DOMAIN);
         assertThat(testItem.getJustification()).isEqualTo(UPDATED_JUSTIFICATION);
     }
@@ -264,7 +266,8 @@ class SuspiciousEmailDomainResourceIT {
             .andExpect(status().isBadRequest());
 
         assertThat(suspiciousEmailDomainRepository.findAll()).hasSize(databaseSizeBefore);
-        SuspiciousEmailDomain unchanged = suspiciousEmailDomainRepository.findById(second.getId()).orElseThrow();
+        SuspiciousEmailDomain unchanged = suspiciousEmailDomainRepository.findById(second.getId())
+            .orElseThrow(() -> new IllegalStateException("SuspiciousEmailDomain not found"));
         assertThat(unchanged.getDomain()).isEqualTo("b.org");
     }
 
