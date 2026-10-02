@@ -1,5 +1,4 @@
 import React from 'react';
-import request from 'superagent';
 import Select from 'react-select';
 import { action, computed, observable } from 'mobx';
 import { inject, observer } from 'mobx-react';
@@ -38,7 +37,6 @@ import {
   getGracePeriodDaysRemaining,
   hasGracePeriodAccess,
 } from 'app/shared/utils/GracePeriodUtils';
-import { getClientInstanceURL } from 'app/shared/utils/DevUtils';
 import { UserQuickViewModal } from './UserQuickViewModal';
 
 type UserAuthorityOption = {
@@ -340,6 +338,21 @@ export default class UserDetailsPage extends React.Component<{
     return `Yes (${getGracePeriodDaysRemaining(user)} days)`;
   }
 
+  private isPendingUser(user: UserDTO) {
+    return (
+      user.accountRequestStatus === 'PENDING' ||
+      user.accountRequestStatus === 'PENDING_NO_GRACE_PERIOD'
+    );
+  }
+
+  private shouldFlagSuspiciousDomain(user: UserDTO) {
+    return this.isPendingUser(user) && !!this.getSuspiciousEmailDomain(user);
+  }
+
+  private getSuspiciousEmailDomain(user: UserDTO) {
+    return (user as any).suspiciousEmailDomain as string | undefined;
+  }
+
   private getUserMailTags(user: UserDTO) {
     const userMails = user.userMails || [];
     const tags = userMails
@@ -435,8 +448,18 @@ export default class UserDetailsPage extends React.Component<{
       sortMethod: defaultSortMethod,
       onFilter: (data: UserDTO, keyword) =>
         filterByKeyword(data.email, keyword),
-      Cell(props: { original: UserDTO }) {
-        return <span>{props.original.email}</span>;
+      Cell: (props: { original: UserDTO }) => {
+        return (
+          <div>
+            <span>{props.original.email}</span>
+            {this.shouldFlagSuspiciousDomain(props.original) && (
+              <div className={styles.suspiciousEmailFlag}>
+                Suspicious domain:{' '}
+                {this.getSuspiciousEmailDomain(props.original)}
+              </div>
+            )}
+          </div>
+        );
       },
     },
     {

@@ -21,6 +21,13 @@ function getDisplayValue(value: string | undefined) {
   return value || emptyValue;
 }
 
+function isPendingUser(user: UserDTO | undefined) {
+  return (
+    user?.accountRequestStatus === 'PENDING' ||
+    user?.accountRequestStatus === 'PENDING_NO_GRACE_PERIOD'
+  );
+}
+
 function getActivationAuthorities(user: UserDTO | undefined) {
   const authorities = [...(user?.authorities ?? [])];
   const isRequestingApiAccess =
@@ -31,6 +38,16 @@ function getActivationAuthorities(user: UserDTO | undefined) {
   }
 
   return authorities;
+}
+
+function getSuspiciousEmailDomain(user: UserDTO | undefined) {
+  return (user as any)?.suspiciousEmailDomain as string | undefined;
+}
+
+function getSuspiciousEmailDomainJustification(user: UserDTO | undefined) {
+  return (user as any)?.suspiciousEmailDomainJustification as
+    | string
+    | undefined;
 }
 
 export const UserQuickViewModal: React.FunctionComponent<UserQuickViewModalProps> = props => {
@@ -129,6 +146,18 @@ export const UserQuickViewModal: React.FunctionComponent<UserQuickViewModalProps
           content={getDisplayValue(user?.additionalInfo?.userCompany?.useCase)}
           direction={'vertical'}
         />
+        {isPendingUser(user) && getSuspiciousEmailDomain(user) && (
+          <Alert variant="warning" className={styles.suspiciousEmailAlert}>
+            <div>
+              <strong>Suspicious email domain detected:</strong>{' '}
+              {getSuspiciousEmailDomain(user)}
+            </div>
+            <div>
+              <strong>Justification:</strong>{' '}
+              {getDisplayValue(getSuspiciousEmailDomainJustification(user))}
+            </div>
+          </Alert>
+        )}
         <InfoRow
           title={<h6>API Access Justification</h6>}
           content={getDisplayValue(apiAccessJustification)}

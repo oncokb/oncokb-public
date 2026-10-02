@@ -64,6 +64,13 @@ const AccountMenuItemsAuthenticated: React.FunctionComponent<{
           {PAGE_TITLE.ADMIN_COMPANY_DETAILS}
         </MenuItem>
         <MenuItem
+          icon="exclamation-triangle"
+          to={PAGE_ROUTE.ADMIN_SUSPICIOUS_EMAIL_DOMAINS}
+          onClick={props.onItemClick}
+        >
+          {PAGE_TITLE.ADMIN_SUSPICIOUS_EMAIL_DOMAINS}
+        </MenuItem>
+        <MenuItem
           icon="bar-chart"
           to={PAGE_ROUTE.ADMIN_USAGE_ANALYSIS}
           onClick={props.onItemClick}

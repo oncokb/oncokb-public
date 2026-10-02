@@ -27,6 +27,7 @@ import org.mskcc.cbio.oncokb.service.dto.useradditionalinfo.*;
 import org.mskcc.cbio.oncokb.service.dto.CompanyDTO;
 import org.mskcc.cbio.oncokb.service.dto.PotentialDuplicateUserSummary;
 import org.mskcc.cbio.oncokb.service.dto.SendEmailUserOptionDTO;
+import org.mskcc.cbio.oncokb.service.dto.SuspiciousEmailDomainDTO;
 import org.mskcc.cbio.oncokb.service.dto.UserDTO;
 import org.mskcc.cbio.oncokb.service.mapper.UserMailsMapper;
 import org.mskcc.cbio.oncokb.service.mapper.UserMapper;
@@ -109,6 +110,8 @@ public class UserService {
 
     private final AuditEventService auditEventService;
 
+    private final SuspiciousEmailDomainService suspiciousEmailDomainService;
+
     @Autowired
     private UserMapper userMapper;
 
@@ -136,7 +139,8 @@ public class UserService {
         AuditEventService auditEventService,
         CompanyDomainRepository companyDomainRepository,
         CompanyRepository companyRepository,
-        GracePeriodBlackListService gracePeriodBlackListService) {
+        GracePeriodBlackListService gracePeriodBlackListService,
+        SuspiciousEmailDomainService suspiciousEmailDomainService) {
         this.userRepository = userRepository;
         this.userDetailsRepository = userDetailsRepository;
         this.passwordEncoder = passwordEncoder;
@@ -155,6 +159,7 @@ public class UserService {
         this.companyDomainRepository = companyDomainRepository;
         this.companyRepository = companyRepository;
         this.gracePeriodBlackListService = gracePeriodBlackListService;
+        this.suspiciousEmailDomainService = suspiciousEmailDomainService;
     }
 
     public Optional<User> activateRegistration(String key) {
@@ -598,10 +603,15 @@ public class UserService {
     @Transactional(readOnly = true)
     public List<UserDTO> findAllUsersWithUserDetailsByUsersIn(List<User> users) {
         List<UserWithDetailsProjection> usersWithDetails = userRepository.findAllUsersWithUserDetailsByUsersIn(users);
-        return usersWithDetails
+        List<UserDTO> userDTOs = usersWithDetails
             .stream()
             .map(this::toUserDTOWithMails)
             .collect(Collectors.toList());
+
+        List<SuspiciousEmailDomainDTO> suspiciousEmailDomains = suspiciousEmailDomainService.findAll();
+        userDTOs.forEach(userDTO -> decorateSuspiciousEmailDomain(userDTO, suspiciousEmailDomains));
+
+        return userDTOs;
     }
 
     private UserDTO toUserDTOWithMails(UserWithDetailsProjection userWithDetails) {
@@ -611,6 +621,41 @@ public class UserService {
         UserDTO dto = userMapper.userToUserDTO(user, userDetails);
         dto.setUserMails(userMailsMapper.toDto(user.getUserMails()));
         return dto;
+    }
+
+    public void decorateSuspiciousEmailDomain(UserDTO userDTO) {
+        if (userDTO == null || StringUtils.isBlank(userDTO.getEmail())) {
+            return;
+        }
+
+        String domain = StringUtil.getEmailDomain(userDTO.getEmail());
+        Optional<SuspiciousEmailDomainDTO> suspiciousEmailDomain = suspiciousEmailDomainService.findOneByDomain(domain);
+        if (suspiciousEmailDomain.isPresent()) {
+            userDTO.setSuspiciousEmailDomain(suspiciousEmailDomain.get().getDomain());
+            userDTO.setSuspiciousEmailDomainJustification(suspiciousEmailDomain.get().getJustification());
+        }
+    }
+
+    private void decorateSuspiciousEmailDomain(UserDTO userDTO, List<SuspiciousEmailDomainDTO> suspiciousEmailDomains) {
+        if (userDTO == null || StringUtils.isBlank(userDTO.getEmail())) {
+            return;
+        }
+
+        String domain = StringUtils.lowerCase(StringUtil.getEmailDomain(userDTO.getEmail()), Locale.ENGLISH);
+        if (StringUtils.isBlank(domain)) {
+            return;
+        }
+
+        for (SuspiciousEmailDomainDTO suspiciousEmailDomain : suspiciousEmailDomains) {
+            if (suspiciousEmailDomain == null || StringUtils.isBlank(suspiciousEmailDomain.getDomain())) {
+                continue;
+            }
+            if (StringUtils.equalsIgnoreCase(suspiciousEmailDomain.getDomain(), domain)) {
+                userDTO.setSuspiciousEmailDomain(suspiciousEmailDomain.getDomain());
+                userDTO.setSuspiciousEmailDomainJustification(suspiciousEmailDomain.getJustification());
+                break;
+            }
+        }
     }
 
     @Transactional(readOnly = true)
@@ -692,6 +737,7 @@ public class UserService {
             .stream()
             .collect(Collectors.toMap(User::getId, user -> user, (left, right) -> left));
 
+        List<SuspiciousEmailDomainDTO> suspiciousEmailDomains = suspiciousEmailDomainService.findAll();
         List<UserDTO> userDTOs = new ArrayList<>(userIds.size());
         for (Long userId : userIds) {
             User user = usersById.get(userId);
@@ -701,6 +747,7 @@ public class UserService {
 
             UserDTO dto = userMapper.userToUserDTO(user, userDetailsByUserId.get(userId));
             dto.setUserMails(userMailsMapper.toDto(user.getUserMails()));
+            decorateSuspiciousEmailDomain(dto, suspiciousEmailDomains);
             userDTOs.add(dto);
         }
 

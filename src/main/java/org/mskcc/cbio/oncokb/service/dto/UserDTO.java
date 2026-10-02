@@ -91,6 +91,10 @@ public class UserDTO implements Serializable {
 
     private List<UserMailsDTO> userMails;
 
+    private String suspiciousEmailDomain;
+
+    private String suspiciousEmailDomainJustification;
+
     public UserDTO() {
         // Empty constructor needed for Jackson.
     }
@@ -337,6 +341,22 @@ public class UserDTO implements Serializable {
 
     public void setUserMails(List<UserMailsDTO> userMails) {
         this.userMails = userMails;
+    }
+
+    public String getSuspiciousEmailDomain() {
+        return suspiciousEmailDomain;
+    }
+
+    public void setSuspiciousEmailDomain(String suspiciousEmailDomain) {
+        this.suspiciousEmailDomain = suspiciousEmailDomain;
+    }
+
+    public String getSuspiciousEmailDomainJustification() {
+        return suspiciousEmailDomainJustification;
+    }
+
+    public void setSuspiciousEmailDomainJustification(String suspiciousEmailDomainJustification) {
+        this.suspiciousEmailDomainJustification = suspiciousEmailDomainJustification;
     }
 
     // prettier-ignore

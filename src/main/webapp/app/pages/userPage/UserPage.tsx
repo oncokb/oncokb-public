@@ -611,6 +611,31 @@ export default class UserPage extends React.Component<IUserPage> {
       : 'Generate Trial Activation Link';
   }
 
+  @computed
+  get isPendingRequest() {
+    return (
+      this.user.accountRequestStatus === 'PENDING' ||
+      this.user.accountRequestStatus === 'PENDING_NO_GRACE_PERIOD'
+    );
+  }
+
+  @computed
+  get showSuspiciousEmailFlag() {
+    return this.isPendingRequest && !!this.suspiciousEmailDomain;
+  }
+
+  @computed
+  get suspiciousEmailDomain() {
+    return (this.user as any).suspiciousEmailDomain as string | undefined;
+  }
+
+  @computed
+  get suspiciousEmailDomainJustification() {
+    return (this.user as any).suspiciousEmailDomainJustification as
+      | string
+      | undefined;
+  }
+
   generateActivationKeyInfoOverlay() {
     return (
       <>
@@ -732,6 +757,15 @@ export default class UserPage extends React.Component<IUserPage> {
                             }
                             disabled
                           />
+                          {this.showSuspiciousEmailFlag && (
+                            <Alert variant="warning" className="mt-2">
+                              <strong>Suspicious email domain:</strong>{' '}
+                              {this.suspiciousEmailDomain}
+                              <br />
+                              <strong>Justification:</strong>{' '}
+                              {this.suspiciousEmailDomainJustification}
+                            </Alert>
+                          )}
                           <AvGroup>
                             <div className={'mb-2 font-bold'}>
                               Email Verified

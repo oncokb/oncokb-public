@@ -5,6 +5,7 @@ Use this when changing backend request parameters or response schemas that affec
 ## Preconditions
 
 - Use Node from `.nvmrc` (`12.16.1`).
+- Use Java 8 compatible language/API features in code changes (avoid APIs introduced after Java 8, such as `Optional.orElseThrow()` with no supplier).
 - Ensure the expected backend services are running before fetch steps:
   - Main app docs: `http://localhost:9090/v2/api-docs`
   - OncoKB docs: `http://localhost:8080/app/api/v1/v2/api-docs?group=Private%20APIs` and `http://localhost:8080/app/api/private/v2/api-docs`

@@ -38,6 +38,7 @@ import org.mskcc.cbio.oncokb.domain.enumeration.MailType;
 import org.mskcc.cbio.oncokb.repository.UserDetailsRepository;
 import org.mskcc.cbio.oncokb.repository.UserRepository;
 import org.mskcc.cbio.oncokb.service.*;
+import org.mskcc.cbio.oncokb.service.dto.SuspiciousEmailDomainDTO;
 import org.mskcc.cbio.oncokb.service.dto.UserDTO;
 import org.mskcc.cbio.oncokb.service.dto.useradditionalinfo.AdditionalInfoDTO;
 import org.mskcc.cbio.oncokb.service.dto.useradditionalinfo.ApiAccessRequest;
@@ -114,6 +115,9 @@ public class SlackControllerIT {
     private SpringTemplateEngine templateEngine;
     @Autowired
     private UserMailsService userMailsService;
+
+    @Autowired
+    private SuspiciousEmailDomainService suspiciousEmailDomainService;
 
     private SlackService slackService;
     @Autowired
@@ -195,7 +199,15 @@ public class SlackControllerIT {
             applicationProperties,
             new SendGridService(applicationProperties)
         );
-        slackService = new SlackService(applicationProperties, mailService, userService, userMailsService, userMapper, slack);
+        slackService = new SlackService(
+            applicationProperties,
+            mailService,
+            userService,
+            userMailsService,
+            suspiciousEmailDomainService,
+            userMapper,
+            slack
+        );
         slackController = new SlackController(userService, userRepository, mailService, slackService, userMapper);
 
         /******************************
@@ -224,6 +236,40 @@ public class SlackControllerIT {
     @AfterEach
     void tearDown() {
         userService.deleteUser(DEFAULT_USER_EMAIL);
+    }
+
+    @Test
+    void testExpandIncludesSuspiciousEmailDomainWarning() throws IOException, MessagingException {
+        SuspiciousEmailDomainDTO suspiciousDomain = new SuspiciousEmailDomainDTO();
+        suspiciousDomain.setDomain("example.com");
+        suspiciousDomain.setJustification("Known disposable provider");
+        SuspiciousEmailDomainDTO createdDomain = suspiciousEmailDomainService.save(suspiciousDomain);
+
+        try {
+            BlockActionPayload actionJSON = getBlockActionPayload(ActionId.EXPAND);
+            Gson snakeCase = GsonFactory.createSnakeCase();
+            slackController.approveUser(snakeCase.toJson(actionJSON));
+
+            String url = urlCaptor.getValue();
+            Payload payload = payloadCaptor.getValue();
+
+            assertThat(url).isEqualTo(USER_REGISTRATION_WEBHOOK);
+
+            String warningText = payload.getBlocks().stream()
+                .filter(SectionBlock.class::isInstance)
+                .map(SectionBlock.class::cast)
+                .filter(block -> block.getText() != null)
+                .map(block -> block.getText().getText())
+                .filter(text -> text.contains("Suspicious email domain detected"))
+                .findFirst()
+                .orElse("");
+
+            assertThat(warningText)
+                .contains(":warning: *Suspicious email domain detected*: example.com")
+                .contains("\n*Justification*: Known disposable provider");
+        } finally {
+            suspiciousEmailDomainService.delete(createdDomain.getId());
+        }
     }
 
     @Test

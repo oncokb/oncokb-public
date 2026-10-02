@@ -22,6 +22,7 @@ import org.mskcc.cbio.oncokb.domain.Company;
 import org.mskcc.cbio.oncokb.domain.enumeration.LicenseStatus;
 import org.mskcc.cbio.oncokb.domain.enumeration.LicenseType;
 import org.mskcc.cbio.oncokb.service.dto.PotentialDuplicateUserSummary;
+import org.mskcc.cbio.oncokb.service.dto.SuspiciousEmailDomainDTO;
 import org.mskcc.cbio.oncokb.service.dto.UserDTO;
 import org.mskcc.cbio.oncokb.service.dto.useradditionalinfo.AdditionalInfoDTO;
 import org.mskcc.cbio.oncokb.service.dto.useradditionalinfo.ApiAccessRequest;
@@ -69,6 +70,9 @@ class SlackServiceIT {
     @Mock
     private UserMailsService userMailsService;
 
+    @Mock
+    private SuspiciousEmailDomainService suspiciousEmailDomainService;
+
     @Captor
     private ArgumentCaptor<String> urlCaptor;
 
@@ -89,7 +93,16 @@ class SlackServiceIT {
 
         doReturn(new ArrayList<PotentialDuplicateUserSummary>()).when(userService).getPotentialDuplicateAccountsByUser(any(UserDTO.class));
         doReturn(new ArrayList<>()).when(userMailsService).findUserMailsByUserAndMailTypeIn(any(User.class), anyList());
-        slackService = new SlackService(applicationProperties, mailService, userService, userMailsService, userMapper, slack);
+        doReturn(Optional.empty()).when(suspiciousEmailDomainService).findOneByDomain(any(String.class));
+        slackService = new SlackService(
+            applicationProperties,
+            mailService,
+            userService,
+            userMailsService,
+            suspiciousEmailDomainService,
+            userMapper,
+            slack
+        );
     }
 
     private void setMockResponse(Integer code) throws IOException {
@@ -284,5 +297,48 @@ class SlackServiceIT {
         assertThat(duplicateUserInfoBlock.get().getText().getText())
             .endsWith("… [exceeded slack character limit]");
         assertThat(duplicateUserInfoBlock.get().getText().getText().length()).isLessThanOrEqualTo(2000);
+    }
+
+    @Test
+    void testSuspiciousEmailDomainWarningIncludedInSlackPayload() throws IOException {
+        UserDTO user = new UserDTO();
+        setMockResponse(200);
+        user.setId(1L);
+        user.setLogin("john.doe@suspicious.com");
+        user.setEmail("john.doe@suspicious.com");
+        user.setFirstName("john");
+        user.setLastName("doe");
+        user.setJobTitle("job title");
+        user.setCompanyName("company name");
+        user.setCity("city");
+        user.setCountry("country");
+        user.setLicenseType(LicenseType.COMMERCIAL);
+
+        SuspiciousEmailDomainDTO suspiciousDomain = new SuspiciousEmailDomainDTO();
+        suspiciousDomain.setId(99L);
+        suspiciousDomain.setDomain("suspicious.com");
+        suspiciousDomain.setJustification("Known disposable provider");
+        doReturn(Optional.of(suspiciousDomain)).when(suspiciousEmailDomainService).findOneByDomain("suspicious.com");
+
+        slackService.sendUserRegistrationToChannel(user, false, null);
+        verify(slack).send(urlCaptor.capture(), payloadCaptor.capture());
+
+        assertThat(urlCaptor.getValue()).isEqualTo(USER_REGISTRATION_WEBHOOK);
+
+        String warningText = payloadCaptor.getValue()
+            .getBlocks()
+            .stream()
+            .filter(SectionBlock.class::isInstance)
+            .map(SectionBlock.class::cast)
+            .filter(sectionBlock -> sectionBlock.getText() != null)
+            .map(sectionBlock -> sectionBlock.getText().getText())
+            .filter(text -> text.contains("Suspicious email domain detected"))
+            .findFirst()
+            .orElse("");
+
+        assertThat(warningText)
+            .contains(":warning: *Suspicious email domain detected*: suspicious.com")
+            .contains("\n*Justification*: Known disposable provider");
+        verify(suspiciousEmailDomainService).findOneByDomain("suspicious.com");
     }
 }
