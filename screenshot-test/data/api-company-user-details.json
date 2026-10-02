@@ -27,6 +27,8 @@
   "imageUrl": "",
   "activated": true,
   "accountRequestStatus": "APPROVED",
+  "trialStatus": "REGULAR",
+  "userTrial": null,
   "langKey": "en",
   "activationKey": null,
   "resetKey": null,

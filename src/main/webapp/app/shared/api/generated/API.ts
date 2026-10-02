@@ -298,7 +298,11 @@ export type ManagedUserVM = {
 
         'tokenValidDays': number
 
+        'trialStatus': "REGULAR" | "TRIAL_PENDING_TERMS_ACCEPTANCE" | "TRIAL"
+
         'userMails': Array < UserMailsDTO >
+
+        'userTrial': UserTrialDTO
 
 };
 export type PasswordChangeDTO = {
@@ -558,7 +562,11 @@ export type UserDTO = {
 
         'resetKey': string
 
+        'trialStatus': "REGULAR" | "TRIAL_PENDING_TERMS_ACCEPTANCE" | "TRIAL"
+
         'userMails': Array < UserMailsDTO >
+
+        'userTrial': UserTrialDTO
 
 };
 export type UserDetailsDTO = {
@@ -582,7 +590,11 @@ export type UserDetailsDTO = {
 
         'licenseType': "ACADEMIC" | "COMMERCIAL" | "RESEARCH_IN_COMMERCIAL" | "HOSPITAL"
 
+        'trialStatus': "REGULAR" | "TRIAL_PENDING_TERMS_ACCEPTANCE" | "TRIAL"
+
         'userId': number
+
+        'userTrial': UserTrialDTO
 
 };
 export type UserMails = {
@@ -621,6 +633,26 @@ export type UserRegistrationSummary = {
         'licenseType': string
 
         'total': number
+
+};
+export type UserTrialDTO = {
+    'activationDate': string
+
+        'activationKey': string
+
+        'id': number
+
+        'initiatedBy': string
+
+        'initiationDate': string
+
+        'licenseAgreementAcceptanceDate': string
+
+        'licenseAgreementName': string
+
+        'licenseAgreementVersion': string
+
+        'userId': number
 
 };
 export type VerifyCompanyNameVM = {

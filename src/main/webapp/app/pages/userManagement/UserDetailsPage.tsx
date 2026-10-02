@@ -205,7 +205,10 @@ export default class UserDetailsPage extends React.Component<{
   }
 
   @action.bound
-  updateQuickViewUserActiveStatus(authorities: string[]) {
+  updateQuickViewUserActiveStatus(
+    authorities: string[],
+    trialStatus: UserDTO['trialStatus']
+  ) {
     if (this.currentSelected.user === undefined) {
       notifyError(new Error('No user specified'));
       return;
@@ -216,12 +219,17 @@ export default class UserDetailsPage extends React.Component<{
       ...this.currentSelected.user,
       activated: !this.currentSelected.user.activated,
       authorities,
+      trialStatus,
     };
     this.updateUser(userToUpdate, true);
   }
 
   @action.bound
-  updateActiveStatus(sendEmail: boolean, authorities: string[]) {
+  updateActiveStatus(
+    sendEmail: boolean,
+    authorities: string[],
+    trialStatus: UserDTO['trialStatus']
+  ) {
     this.showUpdateStatusModal = false;
     if (this.currentSelected.user === undefined) {
       notifyError(new Error('No user specified'));
@@ -231,6 +239,7 @@ export default class UserDetailsPage extends React.Component<{
       ...this.currentSelected.user,
       activated: !this.currentSelected.user.activated,
       authorities,
+      trialStatus,
     };
     this.updateUser(userToUpdate, sendEmail);
   }
