@@ -18,6 +18,7 @@ import {
   articles2Citations,
   isCategoricalAlteration,
   isPositionalAlteration,
+  getCanonicalFusionAlteration,
 } from 'app/shared/utils/Utils';
 import {
   getAlterationPageLink,
@@ -25,7 +26,13 @@ import {
   parseAlterationPagePath,
   AlterationPageLink,
 } from 'app/shared/utils/UrlUtils';
-import { computed, reaction, action, observable } from 'mobx';
+import {
+  computed,
+  reaction,
+  action,
+  observable,
+  IReactionDisposer,
+} from 'mobx';
 import { GENETIC_TYPE } from 'app/components/geneticTypeTabs/GeneticTypeTabs';
 import { observer, inject } from 'mobx-react';
 import classnames from 'classnames';
@@ -76,7 +83,7 @@ import { RouterStore } from 'mobx-react-router';
 import { SomaticGermlineAlterationTiles } from 'app/shared/tiles/tile-utils';
 import GeneticTypeTag from 'app/components/tag/GeneticTypeTag';
 import VariantOverView from 'app/shared/sections/VariantOverview';
-import ProteinChangeValidationView from 'app/shared/sections/ProteinChangeValidationView';
+import VariantValidationView from 'app/shared/sections/VariantValidationView';
 import styles from './SomaticGermlineCancerTypePage.module.scss';
 import GeneAdditionalInfoSection from 'app/shared/sections/GeneAdditionalInfoSection';
 import { UnknownGeneAlert } from 'app/shared/alert/UnknownGeneAlert';
@@ -111,74 +118,113 @@ export class SomaticGermlineCancerTypePage extends React.Component<
   // open it by default without overriding an explicit choice afterwards.
   @observable additionalGeneInfoToggledTo?: boolean;
 
+  readonly reactions: IReactionDisposer[] = [];
+
   constructor(props: SomaticGermlineCancerTypePageProps) {
     super(props);
     const alterationQuery = decodeSlash(props.match.params.alteration);
+    this.reactions.push(
+      reaction(
+        () => [this.props.routing.location.pathname],
+        () => {
+          if (!this.store) {
+            return;
+          }
+          this.store.hugoSymbolQuery = this.props.match.params.hugoSymbol;
+          this.store.alterationQuery =
+            decodeSlash(this.props.match.params.alteration) ?? '';
+          this.store.tumorTypeQuery =
+            decodeSlash(this.props.match.params.tumorType) ?? '';
+        }
+      ),
+      reaction(
+        () => [this.props.routing.location.search],
+        ([search]) => {
+          if (!this.store) {
+            return;
+          }
+          this.store.referenceGenomeQuery =
+            getReferenceGenomeFromSearch(search) || REFERENCE_GENOME.GRCh37;
+        },
+        { fireImmediately: true }
+      ),
+      reaction(
+        () => [this.geneticType],
+        ([geneticType]) => {
+          const referenceGenome =
+            getReferenceGenomeFromSearch(this.props.location.search) ||
+            REFERENCE_GENOME.GRCh37;
+          if (props.match.params) {
+            this.store = new AnnotationStore({
+              type: alterationQuery
+                ? AnnotationType.PROTEIN_CHANGE
+                : AnnotationType.GENE,
+              hugoSymbolQuery: props.match.params.hugoSymbol,
+              alterationQuery,
+              germline: geneticType === GENETIC_TYPE.GERMLINE,
+              tumorTypeQuery: props.match.params.tumorType
+                ? decodeSlash(props.match.params.tumorType)
+                : props.match.params.tumorType,
+              referenceGenomeQuery: referenceGenome,
+            });
+            if (this.store.cancerTypeName) {
+              this.showMutationEffect = false;
+            }
+          }
+        },
+        true
+      ),
+      reaction(
+        () => [props.location.hash],
+        ([hash]) => {
+          const queryStrings = QueryString.parse(
+            hash
+          ) as AlterationPageHashQueries;
+          if (queryStrings.tab) {
+            if (queryStrings.tab === ANNOTATION_PAGE_TAB_KEYS.FDA) {
+              this.props.appStore.inFdaRecognizedContent = true;
+            }
+          }
+        },
+        true
+      ),
+      reaction(
+        () => this.canonicalFusionAlteration,
+        this.redirectToCanonicalPage
+      )
+    );
+  }
 
-    reaction(
-      () => [this.props.routing.location.pathname],
-      () => {
-        if (!this.store) {
-          return;
-        }
-        this.store.hugoSymbolQuery = this.props.match.params.hugoSymbol;
-        this.store.alterationQuery =
-          decodeSlash(this.props.match.params.alteration) ?? '';
-        this.store.tumorTypeQuery =
-          decodeSlash(this.props.match.params.tumorType) ?? '';
-      }
+  componentWillUnmount() {
+    this.reactions.forEach(componentReaction => componentReaction());
+  }
+
+  @computed
+  get canonicalFusionAlteration() {
+    if (!this.annotationData.isComplete) {
+      return undefined;
+    }
+    return getCanonicalFusionAlteration(
+      this.store.alterationQuery,
+      this.annotationData.result.query.alteration
     );
-    reaction(
-      () => [this.props.routing.location.search],
-      ([search]) => {
-        if (!this.store) {
-          return;
-        }
-        this.store.referenceGenomeQuery =
-          getReferenceGenomeFromSearch(search) || REFERENCE_GENOME.GRCh37;
-      },
-      { fireImmediately: true }
-    );
-    reaction(
-      () => [this.geneticType],
-      ([geneticType]) => {
-        const referenceGenome =
-          getReferenceGenomeFromSearch(this.props.location.search) ||
-          REFERENCE_GENOME.GRCh37;
-        if (props.match.params) {
-          this.store = new AnnotationStore({
-            type: alterationQuery
-              ? AnnotationType.PROTEIN_CHANGE
-              : AnnotationType.GENE,
-            hugoSymbolQuery: props.match.params.hugoSymbol,
-            alterationQuery,
-            germline: geneticType === GENETIC_TYPE.GERMLINE,
-            tumorTypeQuery: props.match.params.tumorType
-              ? decodeSlash(props.match.params.tumorType)
-              : props.match.params.tumorType,
-            referenceGenomeQuery: referenceGenome,
-          });
-          if (this.store.cancerTypeName) {
-            this.showMutationEffect = false;
-          }
-        }
-      },
-      true
-    );
-    reaction(
-      () => [props.location.hash],
-      ([hash]) => {
-        const queryStrings = QueryString.parse(
-          hash
-        ) as AlterationPageHashQueries;
-        if (queryStrings.tab) {
-          if (queryStrings.tab === ANNOTATION_PAGE_TAB_KEYS.FDA) {
-            this.props.appStore.inFdaRecognizedContent = true;
-          }
-        }
-      },
-      true
-    );
+  }
+
+  @action.bound
+  redirectToCanonicalPage(canonicalAlteration?: string) {
+    if (!canonicalAlteration) {
+      return;
+    }
+    this.props.routing.history.replace({
+      pathname: getAlterationPageLink({
+        hugoSymbol: this.store.hugoSymbol,
+        alteration: canonicalAlteration,
+        cancerType: this.store.cancerTypeName,
+        germline: this.store.germline,
+      }),
+      search: this.props.location.search,
+      hash: this.props.location.hash,
+    });
   }
 
   @action.bound
@@ -193,7 +239,7 @@ export class SomaticGermlineCancerTypePage extends React.Component<
 
   @computed
   get showAdditionalGeneInfo() {
-    return this.additionalGeneInfoToggledTo ?? this.hasInvalidProteinChange;
+    return this.additionalGeneInfoToggledTo ?? this.hasInvalidVariant;
   }
 
   @computed
@@ -212,18 +258,18 @@ export class SomaticGermlineCancerTypePage extends React.Component<
   }
 
   @computed
-  get proteinChangeValidation() {
-    // Germline annotation does not validate the protein change. When we have an
+  get variantValidation() {
+    // Germline annotation does not validate the variant. When we have an
     // alternative variant to point the user to, it replaces the validation
     // feedback entirely, so the page does not also flag the query as invalid.
     return this.store.germline || this.alternativeVariant
       ? undefined
-      : this.store.somaticAnnotationData.result.proteinChangeValidation;
+      : this.store.somaticAnnotationData.result.variantValidation;
   }
 
   @computed
-  get hasInvalidProteinChange() {
-    return this.proteinChangeValidation?.status === 'INVALID';
+  get hasInvalidVariant() {
+    return this.variantValidation?.status === 'INVALID';
   }
 
   @computed
@@ -692,7 +738,7 @@ export class SomaticGermlineCancerTypePage extends React.Component<
                     alteration={this.store.alterationNameWithDiff}
                     proteinAlteration={this.store.alteration?.proteinChange}
                     isGermline={this.store.germline}
-                    isInvalid={this.hasInvalidProteinChange}
+                    isInvalid={this.hasInvalidVariant}
                     extra={
                       <SomaticGermlineCancerTypeSelect
                         pretext="in"
@@ -727,9 +773,9 @@ export class SomaticGermlineCancerTypePage extends React.Component<
                       />
                     }
                   />
-                  {this.proteinChangeValidation?.message && (
-                    <ProteinChangeValidationView
-                      validation={this.proteinChangeValidation}
+                  {this.variantValidation?.message && (
+                    <VariantValidationView
+                      validation={this.variantValidation}
                       hugoSymbol={this.store.hugoSymbol}
                       referenceGenome={this.store.referenceGenomeQuery}
                     />
@@ -757,7 +803,7 @@ export class SomaticGermlineCancerTypePage extends React.Component<
                         />
                       </Col>
                     </Row>
-                  ) : this.hasInvalidProteinChange ? null : (
+                  ) : this.hasInvalidVariant ? null : (
                     <>
                       <Row className={classnames(styles.descriptionContainer)}>
                         <Col>
@@ -801,7 +847,7 @@ export class SomaticGermlineCancerTypePage extends React.Component<
                 </Col>
               </Row>
             </Container>
-            {!alternativeVariant && !this.hasInvalidProteinChange && (
+            {!alternativeVariant && !this.hasInvalidVariant && (
               <>
                 <Container>
                   <Row className="justify-content-center">

@@ -73,6 +73,16 @@ export default class SearchInfoIcon extends React.Component<
               ],
             },
             {
+              key: 'fusion',
+              content: [
+                { key: 'fusion-0', content: 'Fusion' },
+                {
+                  key: 'fusion-1',
+                  content: this.getQueryLink('BCR::ABL1 Fusion'),
+                },
+              ],
+            },
+            {
               key: 'cancerType',
               content: [
                 { key: 'cancerType-0', content: 'Cancer Type' },
