@@ -5,14 +5,17 @@ import org.mskcc.cbio.oncokb.config.Constants;
 import org.mskcc.cbio.oncokb.domain.Token;
 import org.mskcc.cbio.oncokb.domain.User;
 import org.mskcc.cbio.oncokb.domain.UserDetails;
+import org.mskcc.cbio.oncokb.domain.UserTrial;
 import org.mskcc.cbio.oncokb.domain.Authority;
 import org.mskcc.cbio.oncokb.domain.enumeration.AccountRequestStatus;
 import org.mskcc.cbio.oncokb.domain.enumeration.BulkEmailAudience;
 import org.mskcc.cbio.oncokb.domain.enumeration.LicenseType;
+import org.mskcc.cbio.oncokb.domain.enumeration.TrialStatus;
 import org.mskcc.cbio.oncokb.repository.AuthorityRepository;
 import org.mskcc.cbio.oncokb.repository.projection.PotentialDuplicateUserProjection;
 import org.mskcc.cbio.oncokb.repository.UserDetailsRepository;
 import org.mskcc.cbio.oncokb.repository.UserRepository;
+import org.mskcc.cbio.oncokb.repository.UserTrialRepository;
 import org.mskcc.cbio.oncokb.security.AuthoritiesConstants;
 import org.mskcc.cbio.oncokb.service.dto.PotentialDuplicateUserSummary;
 import org.mskcc.cbio.oncokb.service.dto.UserDTO;
@@ -46,6 +49,7 @@ import java.util.Collections;
 import java.util.LinkedHashSet;
 import java.util.List;
 import java.util.Map;
+import java.util.NoSuchElementException;
 import java.util.Optional;
 import java.util.Set;
 import java.util.UUID;
@@ -96,6 +100,9 @@ public class UserServiceIT {
 
     @Autowired
     private TokenService tokenService;
+
+    @Autowired
+    private UserTrialRepository userTrialRepository;
 
     @Autowired
     private AuditingHandler auditingHandler;
@@ -338,6 +345,11 @@ public class UserServiceIT {
     @Test
     public void assertThatUserWithAtLeastOneRenewableTokenIsRegular() {
         User savedUser = userRepository.saveAndFlush(user);
+        UserDetails userDetails = new UserDetails();
+        userDetails.setUser(savedUser);
+        userDetails.setAccountRequestStatus(AccountRequestStatus.APPROVED);
+        userDetails.setTrialStatus(TrialStatus.REGULAR);
+        userDetailsRepository.saveAndFlush(userDetails);
 
         Token renewableToken = new Token();
         renewableToken.setToken(UUID.randomUUID());
@@ -365,6 +377,11 @@ public class UserServiceIT {
     @Test
     public void assertThatUserWithOnlyNonRenewableTokensIsOnTrial() {
         User savedUser = userRepository.saveAndFlush(user);
+        UserDetails userDetails = new UserDetails();
+        userDetails.setUser(savedUser);
+        userDetails.setAccountRequestStatus(AccountRequestStatus.APPROVED);
+        userDetails.setTrialStatus(TrialStatus.TRIAL);
+        userDetailsRepository.saveAndFlush(userDetails);
 
         Token nonRenewableToken = new Token();
         nonRenewableToken.setToken(UUID.randomUUID());
@@ -434,6 +451,79 @@ public class UserServiceIT {
         assertThat(tokens).extracting(Token::isRenewable).allMatch(renewable -> renewable.equals(false));
         assertThat(tokens.get(0).getExpiration())
             .isCloseTo(longerUserTokenLength, within(timeDiffToleranceInMilliseconds, ChronoUnit.MILLIS));
+    }
+
+    @Test
+    public void assertThatConvertUserToRegularClearsPendingTrialData() {
+        user.setActivated(false);
+        User savedUser = userRepository.saveAndFlush(user);
+
+        UserDetails userDetails = new UserDetails();
+        userDetails.setUser(savedUser);
+        userDetails.setAccountRequestStatus(AccountRequestStatus.APPROVED);
+        userDetails.setTrialStatus(TrialStatus.TRIAL_PENDING_TERMS_ACCEPTANCE);
+        userDetailsRepository.saveAndFlush(userDetails);
+
+        UserTrial userTrial = new UserTrial();
+        userTrial.setUser(savedUser);
+        userTrial.setInitiationDate(Instant.now().minus(1, ChronoUnit.DAYS));
+        userTrial.setActivationKey("pending-trial-key");
+        userTrialRepository.saveAndFlush(userTrial);
+
+        Token token = new Token();
+        token.setToken(UUID.randomUUID());
+        token.setUser(savedUser);
+        token.setRenewable(false);
+        token.setExpiration(Instant.now().plus(7, ChronoUnit.DAYS));
+        tokenService.save(token);
+
+        UserDTO userDTO = userMapper.userToUserDTO(savedUser);
+        userService.convertUserToRegular(userDTO);
+
+        User reloadedUser = userRepository.findOneById(savedUser.getId()).orElseThrow(NoSuchElementException::new);
+        UserDetails reloadedDetails = userDetailsRepository.findOneByUser(reloadedUser).orElseThrow(NoSuchElementException::new);
+
+        assertThat(reloadedUser.getActivated()).isTrue();
+        assertThat(reloadedDetails.getTrialStatus()).isEqualTo(TrialStatus.REGULAR);
+        assertThat(userTrialRepository.findOneByUser(reloadedUser)).isEmpty();
+        assertThat(tokenService.findByUser(reloadedUser)).extracting(Token::isRenewable).containsOnly(true);
+    }
+
+    @Test
+    public void assertThatConvertUserToRegularKeepsActivatedTrialHistory() {
+        User savedUser = userRepository.saveAndFlush(user);
+
+        UserDetails userDetails = new UserDetails();
+        userDetails.setUser(savedUser);
+        userDetails.setAccountRequestStatus(AccountRequestStatus.APPROVED);
+        userDetails.setTrialStatus(TrialStatus.TRIAL);
+        userDetailsRepository.saveAndFlush(userDetails);
+
+        Instant activationDate = Instant.now().minus(2, ChronoUnit.DAYS);
+        UserTrial userTrial = new UserTrial();
+        userTrial.setUser(savedUser);
+        userTrial.setInitiationDate(Instant.now().minus(3, ChronoUnit.DAYS));
+        userTrial.setActivationDate(activationDate);
+        userTrial.setLicenseAgreementAcceptanceDate(activationDate);
+        userTrialRepository.saveAndFlush(userTrial);
+
+        Token token = new Token();
+        token.setToken(UUID.randomUUID());
+        token.setUser(savedUser);
+        token.setRenewable(false);
+        token.setExpiration(Instant.now().plus(7, ChronoUnit.DAYS));
+        tokenService.save(token);
+
+        UserDTO userDTO = userMapper.userToUserDTO(savedUser);
+        userService.convertUserToRegular(userDTO);
+
+        User reloadedUser = userRepository.findOneById(savedUser.getId()).orElseThrow(NoSuchElementException::new);
+        UserDetails reloadedDetails = userDetailsRepository.findOneByUser(reloadedUser).orElseThrow(NoSuchElementException::new);
+
+        assertThat(reloadedDetails.getTrialStatus()).isEqualTo(TrialStatus.REGULAR);
+        assertThat(userTrialRepository.findOneByUser(reloadedUser)).isPresent();
+        assertThat(userTrialRepository.findOneByUser(reloadedUser).get().getActivationDate()).isEqualTo(activationDate);
+        assertThat(tokenService.findByUser(reloadedUser)).extracting(Token::isRenewable).containsOnly(true);
     }
 
     @Test

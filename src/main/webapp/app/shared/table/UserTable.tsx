@@ -71,11 +71,17 @@ export class UserTable extends React.Component<IUserTableProps> {
   }
 
   @action
-  updateActiveStatus(sendEmail: boolean) {
+  updateActiveStatus(
+    sendEmail: boolean,
+    authorities: string[],
+    trialStatus: UserDTO['trialStatus']
+  ) {
     if (this.currentSelectedUser) {
       const userToUpdate: UserDTO = {
         ...this.currentSelectedUser,
         activated: !this.currentSelectedUser.activated,
+        authorities,
+        trialStatus,
       };
       this.updateUser(userToUpdate, sendEmail, false, this.props.onUpdateUser);
     } else {
@@ -93,19 +99,12 @@ export class UserTable extends React.Component<IUserTableProps> {
   private getAccountStatus(user: UserDTO) {
     let status = '';
     if (this.props.licenseStatus === LicenseStatus.TRIAL) {
-      if (
-        !user.additionalInfo?.trialAccount?.activation?.activationDate &&
-        user.additionalInfo?.trialAccount?.activation?.key
-      ) {
+      if (user.trialStatus === 'TRIAL_PENDING_TERMS_ACCEPTANCE') {
         status += ' (Pending)';
-      } else if (
-        this.props.usersTokens.some(
-          token => token.user.id === user.id && token.renewable
-        )
-      ) {
-        status += ' (Regular)';
-      } else {
+      } else if (user.trialStatus === 'TRIAL') {
         status += ' (Trial)';
+      } else {
+        status += ' (Regular)';
       }
     }
     return status;
