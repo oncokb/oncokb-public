@@ -1,17 +1,17 @@
 import React from 'react';
 import { Alert } from 'react-bootstrap';
-import { ProteinChangeValidation } from 'app/shared/api/generated/OncoKbPrivateAPI';
+import { VariantValidation } from 'app/shared/api/generated/OncoKbPrivateAPI';
 import {
   HGVS_NOMENCLATURE_LINK,
   ONCOKB_SUPPORT_EMAIL,
   REFERENCE_GENOME,
 } from 'app/config/constants';
 import ExternalLinkIcon from 'app/shared/icons/ExternalLinkIcon';
-import styles from './ProteinChangeValidationView.module.scss';
+import styles from './VariantValidationView.module.scss';
 
-type ProteinChangeValidationViewProps = {
-  // Protein change validation returned by the annotation API
-  validation: ProteinChangeValidation;
+type VariantValidationViewProps = {
+  // Variant validation returned by the annotation API
+  validation: VariantValidation;
   // Gene being annotated, e.g. "BRAF"
   hugoSymbol: string;
   referenceGenome: REFERENCE_GENOME;
@@ -21,7 +21,7 @@ const SupportEmailLink: React.FunctionComponent = () => (
   <a href={`mailto:${ONCOKB_SUPPORT_EMAIL}`}>{ONCOKB_SUPPORT_EMAIL}</a>
 );
 
-const ProteinChangeValidationView: React.FunctionComponent<ProteinChangeValidationViewProps> = ({
+const VariantValidationView: React.FunctionComponent<VariantValidationViewProps> = ({
   validation,
   hugoSymbol,
   referenceGenome,
@@ -82,4 +82,4 @@ const ProteinChangeValidationView: React.FunctionComponent<ProteinChangeValidati
   }
 };
 
-export default ProteinChangeValidationView;
+export default VariantValidationView;

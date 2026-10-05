@@ -20,6 +20,7 @@ import {
   isPositionalAlteration,
   getCategoricalAlterationDescription,
   getImplicationsFromTags,
+  getCanonicalFusionAlteration,
 } from 'app/shared/utils/Utils';
 import {
   getAlterationPageLink,
@@ -27,7 +28,13 @@ import {
   parseAlterationPagePath,
   AlterationPageLink,
 } from 'app/shared/utils/UrlUtils';
-import { computed, reaction, action, observable } from 'mobx';
+import {
+  computed,
+  reaction,
+  action,
+  observable,
+  IReactionDisposer,
+} from 'mobx';
 import { GENETIC_TYPE } from 'app/components/geneticTypeTabs/GeneticTypeTabs';
 import { observer, inject } from 'mobx-react';
 import styles from './SomaticGermlineAlterationPage.module.scss';
@@ -79,7 +86,7 @@ import { RouterStore } from 'mobx-react-router';
 import { SomaticGermlineAlterationTiles } from 'app/shared/tiles/tile-utils';
 import GeneticTypeTag from 'app/components/tag/GeneticTypeTag';
 import VariantOverView from 'app/shared/sections/VariantOverview';
-import ProteinChangeValidationView from 'app/shared/sections/ProteinChangeValidationView';
+import VariantValidationView from 'app/shared/sections/VariantValidationView';
 import GeneAdditionalInfoSection from 'app/shared/sections/GeneAdditionalInfoSection';
 import InfoIcon from 'app/shared/icons/InfoIcon';
 import { UnknownGeneAlert } from 'app/shared/alert/UnknownGeneAlert';
@@ -113,6 +120,8 @@ export class SomaticGermlineAlterationPage extends React.Component<
   // open it by default without overriding an explicit choice afterwards.
   @observable additionalGeneInfoToggledTo?: boolean;
 
+  readonly reactions: IReactionDisposer[] = [];
+
   constructor(props: SomaticGermlineAlterationPageProps) {
     super(props);
     const alterationQuery = decodeSlash(props.match.params.alteration);
@@ -132,21 +141,59 @@ export class SomaticGermlineAlterationPage extends React.Component<
       this.showMutationEffect = false;
     }
 
-    reaction(
-      () => [props.location.hash],
-      ([hash]) => {
-        const queryStrings = QueryString.parse(
-          hash
-        ) as AlterationPageHashQueries;
-        if (queryStrings.tab) {
-          this.selectedTab = queryStrings.tab;
-          if (queryStrings.tab === ANNOTATION_PAGE_TAB_KEYS.FDA) {
-            this.props.appStore.inFdaRecognizedContent = true;
+    this.reactions.push(
+      reaction(
+        () => [props.location.hash],
+        ([hash]) => {
+          const queryStrings = QueryString.parse(
+            hash
+          ) as AlterationPageHashQueries;
+          if (queryStrings.tab) {
+            this.selectedTab = queryStrings.tab;
+            if (queryStrings.tab === ANNOTATION_PAGE_TAB_KEYS.FDA) {
+              this.props.appStore.inFdaRecognizedContent = true;
+            }
           }
-        }
-      },
-      true
+        },
+        true
+      ),
+      reaction(
+        () => this.canonicalFusionAlteration,
+        this.redirectToCanonicalPage
+      )
     );
+  }
+
+  componentWillUnmount() {
+    this.reactions.forEach(componentReaction => componentReaction());
+  }
+
+  @computed
+  get canonicalFusionAlteration() {
+    if (!this.annotationData.isComplete) {
+      return undefined;
+    }
+    return getCanonicalFusionAlteration(
+      this.store.alterationQuery,
+      this.annotationData.result.query.alteration
+    );
+  }
+
+  @action.bound
+  redirectToCanonicalPage(canonicalAlteration?: string) {
+    if (!canonicalAlteration) {
+      return;
+    }
+    this.props.routing.history.replace({
+      pathname: getAlterationPageLink({
+        hugoSymbol: this.store.hugoSymbol,
+        alteration: canonicalAlteration,
+        cancerType: this.store.cancerTypeName,
+        germline: this.store.germline,
+      }),
+      search: this.props.location.search,
+      hash: this.props.location.hash,
+    });
   }
 
   @action.bound
@@ -161,7 +208,7 @@ export class SomaticGermlineAlterationPage extends React.Component<
 
   @computed
   get showAdditionalGeneInfo() {
-    return this.additionalGeneInfoToggledTo ?? this.hasInvalidProteinChange;
+    return this.additionalGeneInfoToggledTo ?? this.hasInvalidVariant;
   }
 
   @action.bound
@@ -204,18 +251,18 @@ export class SomaticGermlineAlterationPage extends React.Component<
   }
 
   @computed
-  get proteinChangeValidation() {
-    // Germline annotation does not validate the protein change. When we have an
+  get variantValidation() {
+    // Germline annotation does not validate the variant. When we have an
     // alternative variant to point the user to, it replaces the validation
     // feedback entirely, so the page does not also flag the query as invalid.
     return this.store.germline || this.alternativeVariant
       ? undefined
-      : this.store.somaticAnnotationData.result.proteinChangeValidation;
+      : this.store.somaticAnnotationData.result.variantValidation;
   }
 
   @computed
-  get hasInvalidProteinChange() {
-    return this.proteinChangeValidation?.status === 'INVALID';
+  get hasInvalidVariant() {
+    return this.variantValidation?.status === 'INVALID';
   }
 
   @computed
@@ -699,11 +746,11 @@ export class SomaticGermlineAlterationPage extends React.Component<
                     alteration={this.store.alterationNameWithDiff}
                     proteinAlteration={this.store.alteration?.proteinChange}
                     isGermline={this.store.germline}
-                    isInvalid={this.hasInvalidProteinChange}
+                    isInvalid={this.hasInvalidVariant}
                   />
-                  {this.proteinChangeValidation?.message && (
-                    <ProteinChangeValidationView
-                      validation={this.proteinChangeValidation}
+                  {this.variantValidation?.message && (
+                    <VariantValidationView
+                      validation={this.variantValidation}
                       hugoSymbol={this.store.hugoSymbol}
                       referenceGenome={this.store.referenceGenomeQuery}
                     />
@@ -733,7 +780,7 @@ export class SomaticGermlineAlterationPage extends React.Component<
                         />
                       </Col>
                     </Row>
-                  ) : this.hasInvalidProteinChange ? null : (
+                  ) : this.hasInvalidVariant ? null : (
                     <>
                       <Row className={classnames(styles.descriptionContainer)}>
                         <Col>
@@ -779,7 +826,7 @@ export class SomaticGermlineAlterationPage extends React.Component<
                 </Col>
               </Row>
             </Container>
-            {!alternativeVariant && !this.hasInvalidProteinChange && (
+            {!alternativeVariant && !this.hasInvalidVariant && (
               <>
                 <Container>
                   <Row className="justify-content-center">

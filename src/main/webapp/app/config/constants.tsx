@@ -5,7 +5,7 @@ import {
   GermlineVariantAnnotation,
   MainNumber,
   MutationEffectResp,
-  ProteinChangeValidation,
+  VariantValidation,
   Query,
   SomaticVariantAnnotation,
 } from 'app/shared/api/generated/OncoKbPrivateAPI';
@@ -552,7 +552,7 @@ const DEFAULT_ALTERATION: Alteration = {
   variantResidues: '',
 };
 
-export const DEFAULT_PROTEIN_CHANGE_VALIDATION: ProteinChangeValidation = {
+export const DEFAULT_VARIANT_VALIDATION: VariantValidation = {
   message: '',
   messageType: '' as any,
   normalizedProteinChange: '',
@@ -560,7 +560,7 @@ export const DEFAULT_PROTEIN_CHANGE_VALIDATION: ProteinChangeValidation = {
 };
 
 export const DEFAULT_ANNOTATION: SomaticVariantAnnotation = {
-  alterationValidationError: null,
+  errors: [],
   alternativeOncoKbVariant: {
     gene: '',
     inputVariant: '',
@@ -595,7 +595,7 @@ export const DEFAULT_ANNOTATION: SomaticVariantAnnotation = {
   alleleExist: false,
   alteration: DEFAULT_ALTERATION,
   background: '',
-  proteinChangeValidation: DEFAULT_PROTEIN_CHANGE_VALIDATION,
+  variantValidation: DEFAULT_VARIANT_VALIDATION,
   dataVersion: '',
   diagnosticImplications: [],
   diagnosticSummary: '',
@@ -820,6 +820,10 @@ export const PATHOGENIC_VARIANTS = 'Pathogenic Variants';
 export const AMPLIFICATION = 'Amplification';
 export const DELETION = 'Deletion';
 export const FUSIONS = 'Fusions';
+// HGNC separates fusion gene partners with "::". A single hyphen is still accepted
+// by the API for backwards compatibility, but is ambiguous when a partner symbol
+// itself contains a hyphen (e.g. NKX3-1, HLA-A).
+export const FUSION_SEPARATOR = '::';
 export const TRUNCATING_MUTATIONS = 'Truncating Mutations';
 export const OTHER_BIOMARKERS = 'Other Biomarkers';
 export const GAIN_OF_FUNCTION_MUTATIONS = 'Gain-of-function Mutations';
