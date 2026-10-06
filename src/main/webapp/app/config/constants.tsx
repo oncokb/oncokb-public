@@ -560,7 +560,8 @@ export const DEFAULT_PROTEIN_CHANGE_VALIDATION: ProteinChangeValidation = {
 };
 
 export const DEFAULT_ANNOTATION: SomaticVariantAnnotation = {
-  alterationValidationError: null,
+  errors: [],
+  cancerHotspot: null as any,
   alternativeOncoKbVariant: {
     gene: '',
     inputVariant: '',
@@ -740,6 +741,7 @@ export enum PAGE_ROUTE {
   GERMLINE_ALTERATION = '/gene/:hugoSymbol/germline/:alteration',
   SOMATIC_TUMOR_TYPE = '/gene/:hugoSymbol/somatic/:alteration/:tumorType',
   GERMLINE_TUMOR_TYPE = '/gene/:hugoSymbol/germline/:alteration/:tumorType',
+  SOMATIC_HOTSPOT = '/gene/:hugoSymbol/somatic/hotspot/:residue',
   SOMATIC_TAG = '/gene/:hugoSymbol/somatic/tag/:tag',
   SOMATIC_TAG_TUMOR_TYPE = '/gene/:hugoSymbol/somatic/tag/:tag/:tumorType',
   HGVSG = '/hgvsg',
@@ -1218,6 +1220,8 @@ export const FDA_SUBMISSION_URL_SUFFIX = {
 };
 
 export const MAX_SERVICE_ACCOUNT_TOKENS = 10;
+
+export const CANCER_HOTSPOTS_LINK = 'https://www.cancerhotspots.org/';
 
 export const CLINVAR_VARIANT_BASE_URL =
   'https://www.ncbi.nlm.nih.gov/clinvar/variation';

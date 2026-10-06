@@ -20,6 +20,17 @@
   font-family: $font-family-sans-serif !important;
 }
 
+.itemHeader a {
+  color: inherit;
+  text-decoration: none;
+
+  &:hover,
+  &:focus {
+    color: $blue;
+    text-decoration: underline;
+  }
+}
+
 .stringValue {
   font-family: $font-family-sans-serif-bold !important;
   font-size: 1.5rem !important;
@@ -31,6 +42,11 @@
 
 .alterationTileContainer {
   flex-grow: 1;
+}
+
+.hotspotTileContainer {
+  flex-grow: 0;
+  max-width: 20%;
 }
 
 @media (min-width: 600px) {
@@ -46,6 +62,24 @@
   gap: 8px;
   box-shadow: $default-box-shadow;
   border-radius: 8px;
+}
+
+.hotspotTile {
+  border-left: 3px solid $cancer-hotspot-orange;
+}
+
+.hotspotTileShrink {
+  min-width: 0;
+}
+
+.hotspotTile .alterationTileItems > * {
+  min-width: 0;
+}
+
+.hotspotTile .itemHeader {
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
 }
 
 .alterationTileColumnMerge {

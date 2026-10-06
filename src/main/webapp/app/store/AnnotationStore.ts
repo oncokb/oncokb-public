@@ -532,6 +532,27 @@ export class AnnotationStore {
     default: DEFAULT_ANNOTATION,
   });
 
+  readonly hotspotAnnotation = remoteData<SomaticVariantAnnotation | undefined>(
+    {
+      await: () => [this.somaticAnnotationData],
+      invoke: async () => {
+        const annotation = this.somaticAnnotationData.result;
+        if (!annotation.hotspot || annotation.variantExist) {
+          return undefined;
+        }
+        try {
+          return await privateClient.utilHotspotAnnotationGetUsingGET({
+            hugoSymbol: this.hugoSymbol,
+            residue: this.alterationName,
+          });
+        } catch (e) {
+          return undefined;
+        }
+      },
+      default: undefined,
+    }
+  );
+
   readonly germlineAnnotationResult = remoteData<GermlineVariantAnnotation>({
     await: () => [this.gene],
     invoke: () => {
