@@ -1043,12 +1043,11 @@ const getAlterationInfoForTag = (
   tag: Tag,
   evidence: Evidence,
   hugoSymbol: string,
-  isFda: boolean,
-  isOnlyTagEvidence: boolean
+  isFda: boolean
 ): [string, JSX.Element] => {
   let alterationsName: string;
   let alterationsView: JSX.Element;
-  if (!isOnlyTagEvidence && evidence.alterations.length > 0) {
+  if (evidence.alterations.length > 0) {
     alterationsName = evidence.alterations
       .map(alt => alt.alteration)
       .join(', ');
@@ -1122,12 +1121,15 @@ const getImplicationsFromTag = (
       continue;
     }
 
+    if (isOnlyTagEvidence && evidence.alterations.length > 0) {
+      continue;
+    }
+
     const [alterationsName, alterationsView] = getAlterationInfoForTag(
       tag,
       evidence,
       hugoSymbol,
-      false,
-      isOnlyTagEvidence
+      false
     );
     const level = levelOfEvidence2Level(evidence.levelOfEvidence);
     const fdaLevel = levelOfEvidence2Level(evidence.fdaLevel);
@@ -1263,12 +1265,15 @@ const getFdaImplicationsFromTag = (
       continue;
     }
 
+    if (isOnlyTagEvidence && evidence.alterations.length > 0) {
+      continue;
+    }
+
     const [alterationsName, alterationsView] = getAlterationInfoForTag(
       tag,
       evidence,
       hugoSymbol,
-      true,
-      isOnlyTagEvidence
+      true
     );
     const fdaLevel = levelOfEvidence2Level(evidence.fdaLevel);
     const cancerTypes = evidence.cancerTypes.map(cancerType =>
