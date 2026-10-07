@@ -79,7 +79,7 @@ export const GRID_BREAKPOINTS = {
   LG: 1050,
   XL: 1500,
 };
-export const MSK_LOGO_ICON_CUTOFF = 1260;
+export const MSK_LOGO_ICON_CUTOFF = 1500;
 export const HGVS_NOMENCLATURE_LINK = 'https://hgvs-nomenclature.org/stable/';
 export const SOP_LINK = 'https://sop.oncokb.org';
 export const FAQ_LINK = 'https://faq.oncokb.org';
@@ -687,7 +687,7 @@ export enum PAGE_TITLE {
   FDA_NGS = 'FDA fact sheet',
 
   LOGOUT = 'Log out',
-  LOGIN = 'Login/Sign up',
+  LOGIN = 'Login / Register',
   NEWS = 'Latest News',
   ONCOLOGY_TX = 'FDA-Approved Oncology Therapies',
   PRIVACY = 'OncoKB™ Digital Tracker Governance Privacy Policy',
