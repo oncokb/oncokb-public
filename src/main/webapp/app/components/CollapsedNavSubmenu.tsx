@@ -41,10 +41,6 @@ export const SUB_PAGES: SubpageLink[] = [
   { title: 'CDx', subPaths: [{ link: PAGE_ROUTE.CDX }] },
   { title: 'Cancer Genes', subPaths: [{ link: PAGE_ROUTE.CANCER_GENES }] },
   {
-    title: 'License',
-    subPaths: [{ link: PAGE_ROUTE.TERMS }, { link: PAGE_ROUTE.REGISTER }],
-  },
-  {
     title: 'News',
     subPaths: [
       { link: PAGE_ROUTE.NEWS },
@@ -79,8 +75,11 @@ export const SUB_PAGES: SubpageLink[] = [
       { title: 'Team', link: PAGE_ROUTE.TEAM },
       { title: 'FDA Recognition', link: PAGE_ROUTE.FDA_RECOGNITION },
       { title: 'Standard Operating Procedure', link: PAGE_ROUTE.SOP },
+      { title: 'License', link: PAGE_ROUTE.TERMS },
       { title: 'Privacy', link: PAGE_ROUTE.PRIVACY },
       { title: 'FAQ', link: PAGE_ROUTE.FAQ_ACCESS },
+      // Untitled so it stays out of the dropdown but still highlights About.
+      { link: PAGE_ROUTE.REGISTER },
     ],
   },
 ];

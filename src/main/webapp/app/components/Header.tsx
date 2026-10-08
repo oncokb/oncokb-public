@@ -348,6 +348,7 @@ class Header extends React.Component<IHeaderProps> {
         onMouseEnter={this.enterSearchBar}
         onMouseLeave={this.leaveSearchBar}
         onBlur={this.leaveSearchBar}
+        className="d-flex align-items-center"
       >
         <i className={'fa fa-search'} />
       </Nav.Item>
@@ -426,11 +427,14 @@ class Header extends React.Component<IHeaderProps> {
                         />
                       ) : (
                         <Nav.Item
-                          className={classnames('login-nav-item', {
-                            active:
-                              this.props.location?.pathname ===
-                              PAGE_ROUTE.LOGIN,
-                          })}
+                          className={classnames(
+                            'login-nav-item d-flex align-items-center',
+                            {
+                              active:
+                                this.props.location?.pathname ===
+                                PAGE_ROUTE.LOGIN,
+                            }
+                          )}
                         >
                           <NavLink
                             className="nav-link"
@@ -445,7 +449,10 @@ class Header extends React.Component<IHeaderProps> {
                       )}
                     </>
                   )}
-                  <Nav.Item style={{ paddingRight: 0 }}>
+                  <Nav.Item
+                    className="d-flex align-items-center"
+                    style={{ paddingRight: 0 }}
+                  >
                     <MskccLogo
                       imageHeight={35}
                       size={

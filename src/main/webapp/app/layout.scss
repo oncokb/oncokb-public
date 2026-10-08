@@ -51,10 +51,6 @@ $view-wrapper-default-p-y: 2rem !default;
   }
 
   .navbar-nav > .nav-item {
-    line-height: 1.5rem;
-  }
-
-  .navbar-nav > .nav-item {
     padding: 0 0.25rem 0.25rem 0.25rem;
     margin: 0.25rem 0;
   }
@@ -83,7 +79,6 @@ $view-wrapper-default-p-y: 2rem !default;
   }
 
   .navbar-nav > .nav-item {
-    line-height: 2rem;
     text-align: center;
   }
 
@@ -98,10 +93,4 @@ $view-wrapper-default-p-y: 2rem !default;
 @include media-breakpoint-up(md) {
   $header-height: 4.5rem;
   @include sticky-panel-under-header($header-height);
-}
-
-@include media-breakpoint-up(xl) {
-  .navbar-nav > .nav-item {
-    line-height: 2.5rem;
-  }
 }
