@@ -152,6 +152,8 @@ export type Contact = {
 export type ContentNews = {
     'dataVersion': string
 
+        'date': string
+
         'germlineHistory': History
 
         'history': History
