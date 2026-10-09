@@ -34,6 +34,7 @@ import {
   TreatmentUpdates,
   Update,
 } from 'app/shared/api/generated/API';
+import InfoIcon from 'app/shared/icons/InfoIcon';
 import OptimizedImage from 'app/shared/image/OptimizedImage';
 import { LevelOfEvidencePageLink } from 'app/shared/links/LevelOfEvidencePageLink';
 import { Linkout } from 'app/shared/links/Linkout';
@@ -43,6 +44,7 @@ import {
 } from 'app/shared/links/SocialMediaLinks';
 import { GenePageLink, SopPageLink } from 'app/shared/utils/UrlUtils';
 import { getPageTitle, scrollWidthOffset } from 'app/shared/utils/Utils';
+import { DefaultTooltip } from 'cbioportal-frontend-commons';
 import AAC_IMAGE from 'content/images/level_AAC.png';
 import LevelChange from 'content/images/loe-change.png';
 import { inject, observer } from 'mobx-react';
@@ -55,6 +57,25 @@ import { Link } from 'react-router-dom';
 type NewsTab = 'scientific' | 'developer' | 'content';
 
 export type SoftwareReleaseType = 'feat' | 'fix' | 'chore';
+
+interface ContentChangeBreakdown {
+  gene: number;
+  alteration: number;
+  cancerType: number;
+  treatment: number;
+}
+
+interface ChangeBreakdownItem {
+  label: string;
+  count: number;
+}
+
+type WordDiffType = 'common' | 'added' | 'removed';
+
+interface WordDiffPart {
+  text: string;
+  type: WordDiffType;
+}
 
 interface NewsPageState {
   activeTab: NewsTab;
@@ -110,9 +131,171 @@ export default class NewsPage extends React.Component<
   private isExpandedContentItem = (itemKey: string) =>
     this.state.expandedContentItems.includes(itemKey);
 
+  private formatChangeCount = (changeCount: number): string =>
+    `${changeCount} change${changeCount === 1 ? '' : 's'}`;
+
+  private getEmptyChangeBreakdown = (): ContentChangeBreakdown => ({
+    gene: 0,
+    alteration: 0,
+    cancerType: 0,
+    treatment: 0,
+  });
+
+  private getTotalChangesFromBreakdown = (
+    breakdown: ContentChangeBreakdown
+  ): number =>
+    breakdown.gene +
+    breakdown.alteration +
+    breakdown.cancerType +
+    breakdown.treatment;
+
+  private getTreatmentChangeBreakdown = (
+    treatmentUpdate: TreatmentUpdates
+  ): ContentChangeBreakdown => ({
+    ...this.getEmptyChangeBreakdown(),
+    treatment: treatmentUpdate.updates?.length || 0,
+  });
+
+  private getCancerTypeChangeBreakdown = (
+    cancerTypeUpdate: CancerTypeUpdates
+  ): ContentChangeBreakdown => {
+    return (cancerTypeUpdate.treatmentUpdates || []).reduce(
+      (total, treatmentUpdate) => {
+        const treatmentBreakdown = this.getTreatmentChangeBreakdown(
+          treatmentUpdate
+        );
+
+        return {
+          ...total,
+          treatment: total.treatment + treatmentBreakdown.treatment,
+        };
+      },
+      {
+        ...this.getEmptyChangeBreakdown(),
+        cancerType: cancerTypeUpdate.updates?.length || 0,
+      }
+    );
+  };
+
+  private getAlterationChangeBreakdown = (
+    alterationUpdate: AlterationUpdates
+  ): ContentChangeBreakdown => {
+    return (alterationUpdate.cancerTypeUpdates || []).reduce(
+      (total, cancerTypeUpdate) => {
+        const cancerTypeBreakdown = this.getCancerTypeChangeBreakdown(
+          cancerTypeUpdate
+        );
+
+        return {
+          ...total,
+          cancerType: total.cancerType + cancerTypeBreakdown.cancerType,
+          treatment: total.treatment + cancerTypeBreakdown.treatment,
+        };
+      },
+      {
+        ...this.getEmptyChangeBreakdown(),
+        alteration: alterationUpdate.updates?.length || 0,
+      }
+    );
+  };
+
+  private getGeneChangeBreakdown = (
+    geneUpdate: GeneUpdates
+  ): ContentChangeBreakdown => {
+    return (geneUpdate.alterationUpdates || []).reduce(
+      (total, alterationUpdate) => {
+        const alterationBreakdown = this.getAlterationChangeBreakdown(
+          alterationUpdate
+        );
+
+        return {
+          ...total,
+          alteration: total.alteration + alterationBreakdown.alteration,
+          cancerType: total.cancerType + alterationBreakdown.cancerType,
+          treatment: total.treatment + alterationBreakdown.treatment,
+        };
+      },
+      {
+        ...this.getEmptyChangeBreakdown(),
+        gene: geneUpdate.updates?.length || 0,
+      }
+    );
+  };
+
+  private renderChangeBreakdownTooltip = (
+    breakdownItems: ChangeBreakdownItem[]
+  ): JSX.Element => (
+    <div className="text-left" style={{ minWidth: '190px' }}>
+      <div className="font-weight-bold mb-1">Change breakdown</div>
+      {breakdownItems.map((item, index) => (
+        <div
+          key={item.label}
+          className={`d-flex justify-content-between ${
+            index < breakdownItems.length - 1 ? 'mb-1' : ''
+          }`}
+        >
+          <span>{item.label}</span>
+          <span className="ml-3 font-weight-bold">{item.count}</span>
+        </div>
+      ))}
+    </div>
+  );
+
+  private renderChangeCountWithInfo = (
+    totalChanges: number,
+    breakdownItems: ChangeBreakdownItem[]
+  ): JSX.Element => (
+    <DefaultTooltip
+      placement="top"
+      overlay={this.renderChangeBreakdownTooltip(breakdownItems)}
+    >
+      <span
+        className="d-inline-flex align-items-center px-2 py-1 mr-2"
+        style={{
+          backgroundColor: '#eef4fb',
+          border: '1px solid #dce8f7',
+          borderRadius: '999px',
+          lineHeight: 1,
+          fontWeight: 400,
+          fontSize: '0.75rem',
+        }}
+      >
+        <span className="text-muted" style={{ fontWeight: 400 }}>
+          {this.formatChangeCount(totalChanges)}
+        </span>
+        <InfoIcon className="ml-1 text-muted" style={{ fontSize: '0.7rem' }} />
+      </span>
+    </DefaultTooltip>
+  );
+
+  private countTreatmentChanges = (treatmentUpdate: TreatmentUpdates): number =>
+    this.getTotalChangesFromBreakdown(
+      this.getTreatmentChangeBreakdown(treatmentUpdate)
+    );
+
+  private countCancerTypeChanges = (
+    cancerTypeUpdate: CancerTypeUpdates
+  ): number =>
+    this.getTotalChangesFromBreakdown(
+      this.getCancerTypeChangeBreakdown(cancerTypeUpdate)
+    );
+
+  private countAlterationChanges = (
+    alterationUpdate: AlterationUpdates
+  ): number =>
+    this.getTotalChangesFromBreakdown(
+      this.getAlterationChangeBreakdown(alterationUpdate)
+    );
+
+  private countGeneChanges = (geneUpdate: GeneUpdates): number =>
+    this.getTotalChangesFromBreakdown(this.getGeneChangeBreakdown(geneUpdate));
+
   private countHistoryGeneUpdates = (geneUpdates: GeneUpdates[] = []) => {
-    const geneCount = geneUpdates.length;
-    const updateCount = geneUpdates.reduce(
+    const visibleGeneUpdates = geneUpdates.filter(
+      geneUpdate => this.countGeneChanges(geneUpdate) > 0
+    );
+    const geneCount = visibleGeneUpdates.length;
+    const updateCount = visibleGeneUpdates.reduce(
       (total, geneUpdate) =>
         total +
         (geneUpdate.updates?.length || 0) +
@@ -150,7 +333,7 @@ export default class NewsPage extends React.Component<
     const summaryParts = [
       geneCount > 0 ? `${geneCount} gene${geneCount === 1 ? '' : 's'}` : null,
       updateCount > 0
-        ? `${updateCount} change${updateCount === 1 ? '' : 's'}`
+        ? `${updateCount} annotation change${updateCount === 1 ? '' : 's'}`
         : null,
     ].filter(Boolean);
 
@@ -198,6 +381,116 @@ export default class NewsPage extends React.Component<
     return value && value.trim() ? value : '—';
   }
 
+  private tokenizeForWordDiff(text: string): string[] {
+    const tokens = text.match(/[^\s]+\s*|\s+/g);
+    return tokens || [];
+  }
+
+  private normalizeWordToken(token: string): string {
+    return token.replace(/\s+$/g, '');
+  }
+
+  private getWordDiffParts(oldValue: string, newValue: string): WordDiffPart[] {
+    const oldTokens = this.tokenizeForWordDiff(oldValue);
+    const newTokens = this.tokenizeForWordDiff(newValue);
+    const oldLength = oldTokens.length;
+    const newLength = newTokens.length;
+    const lcsMatrix: number[][] = Array.from({ length: oldLength + 1 }, () =>
+      Array(newLength + 1).fill(0)
+    );
+
+    for (let i = 1; i <= oldLength; i++) {
+      for (let j = 1; j <= newLength; j++) {
+        if (
+          this.normalizeWordToken(oldTokens[i - 1]) ===
+          this.normalizeWordToken(newTokens[j - 1])
+        ) {
+          lcsMatrix[i][j] = lcsMatrix[i - 1][j - 1] + 1;
+        } else {
+          lcsMatrix[i][j] = Math.max(lcsMatrix[i - 1][j], lcsMatrix[i][j - 1]);
+        }
+      }
+    }
+
+    const diffParts: WordDiffPart[] = [];
+    let i = oldLength;
+    let j = newLength;
+
+    while (i > 0 && j > 0) {
+      if (
+        this.normalizeWordToken(oldTokens[i - 1]) ===
+        this.normalizeWordToken(newTokens[j - 1])
+      ) {
+        diffParts.unshift({ text: newTokens[j - 1], type: 'common' });
+        i--;
+        j--;
+      } else if (lcsMatrix[i - 1][j] >= lcsMatrix[i][j - 1]) {
+        diffParts.unshift({ text: oldTokens[i - 1], type: 'removed' });
+        i--;
+      } else {
+        diffParts.unshift({ text: newTokens[j - 1], type: 'added' });
+        j--;
+      }
+    }
+
+    while (i > 0) {
+      diffParts.unshift({ text: oldTokens[i - 1], type: 'removed' });
+      i--;
+    }
+
+    while (j > 0) {
+      diffParts.unshift({ text: newTokens[j - 1], type: 'added' });
+      j--;
+    }
+
+    return diffParts.reduce((merged: WordDiffPart[], part) => {
+      const previousPart = merged[merged.length - 1];
+      if (previousPart && previousPart.type === part.type) {
+        previousPart.text += part.text;
+      } else {
+        merged.push({ ...part });
+      }
+      return merged;
+    }, []);
+  }
+
+  private renderWordDiffParts(
+    diffParts: WordDiffPart[],
+    type: 'new' | 'old'
+  ): React.ReactNode {
+    const visibleTypes =
+      type === 'new' ? ['common', 'added'] : ['common', 'removed'];
+
+    return diffParts
+      .filter(part => visibleTypes.includes(part.type))
+      .map((part, index) => {
+        const isHighlightedPart =
+          (type === 'new' && part.type === 'added') ||
+          (type === 'old' && part.type === 'removed');
+
+        if (!isHighlightedPart) {
+          return (
+            <React.Fragment key={`${part.type}-${index}`}>
+              {part.text}
+            </React.Fragment>
+          );
+        }
+
+        return (
+          <mark
+            key={`${part.type}-${index}`}
+            style={{
+              backgroundColor: type === 'new' ? '#a7e3b5' : '#f3b5bc',
+              padding: '0 0.15rem',
+              borderRadius: '0.2rem',
+            }}
+          >
+            {part.text}
+          </mark>
+        );
+      });
+  }
+
   private getContentChangeOperation(
     update: Update
   ): ContentFieldChangeOperation {
@@ -221,53 +514,68 @@ export default class NewsPage extends React.Component<
 
     return (
       <ul className="mb-0 pl-0" style={{ listStyle: 'none' }}>
-        {updates.map((update, index) => (
-          <li
-            key={`${update.field}-${update.operation}-${index}`}
-            className="mb-3 d-flex align-items-start"
-            style={{
-              backgroundColor: '#f9fbff',
-              border: '1px solid #e8eff6',
-              borderRadius: '0.75rem',
-              padding: '0.75rem',
-            }}
-          >
-            <div className="flex-grow-1">
-              <div className="d-flex flex-wrap align-items-center mb-1">
-                <span className="font-weight-bold mr-2">{update.field}</span>
-                {this.renderUpdateBadge(update)}
-              </div>
-              <div className="mt-2">
-                <i>New:</i>
-                <div
-                  style={{
-                    backgroundColor: '#d4edda',
-                    color: '#212529',
-                    padding: '0.55rem 0.75rem',
-                    borderRadius: '0.35rem',
-                  }}
-                >
-                  + {this.formatDiffValue(update.new)}
+        {updates.map((update, index) => {
+          const hasOldAndNew = !!update.old?.trim() && !!update.new?.trim();
+          const formattedNewValue = this.formatDiffValue(update.new);
+          const formattedOldValue = this.formatDiffValue(update.old);
+          const wordDiffParts = hasOldAndNew
+            ? this.getWordDiffParts(formattedOldValue, formattedNewValue)
+            : [];
+
+          return (
+            <li
+              key={`${update.field}-${update.operation}-${index}`}
+              className="mb-3 d-flex align-items-start"
+              style={{
+                backgroundColor: '#f9fbff',
+                border: '1px solid #e8eff6',
+                borderRadius: '0.75rem',
+                padding: '0.75rem',
+              }}
+            >
+              <div className="flex-grow-1">
+                <div className="d-flex flex-wrap align-items-center mb-1">
+                  <span className="font-weight-bold mr-2">{update.field}</span>
+                  {this.renderUpdateBadge(update)}
                 </div>
-                {update.old && update.old.trim() ? (
-                  <div style={{ marginTop: '0.5rem' }}>
-                    <i>Old:</i>
-                    <div
-                      style={{
-                        backgroundColor: '#f8d7da',
-                        color: '#212529',
-                        padding: '0.55rem 0.75rem',
-                        borderRadius: '0.35rem',
-                      }}
-                    >
-                      - {this.formatDiffValue(update.old)}
-                    </div>
+                <div className="mt-2">
+                  <i>New:</i>
+                  <div
+                    style={{
+                      backgroundColor: '#d4edda',
+                      color: '#212529',
+                      padding: '0.55rem 0.75rem',
+                      borderRadius: '0.35rem',
+                    }}
+                  >
+                    +{' '}
+                    {hasOldAndNew
+                      ? this.renderWordDiffParts(wordDiffParts, 'new')
+                      : formattedNewValue}
                   </div>
-                ) : null}
+                  {update.old && update.old.trim() ? (
+                    <div style={{ marginTop: '0.5rem' }}>
+                      <i>Old:</i>
+                      <div
+                        style={{
+                          backgroundColor: '#f8d7da',
+                          color: '#212529',
+                          padding: '0.55rem 0.75rem',
+                          borderRadius: '0.35rem',
+                        }}
+                      >
+                        -{' '}
+                        {hasOldAndNew
+                          ? this.renderWordDiffParts(wordDiffParts, 'old')
+                          : formattedOldValue}
+                      </div>
+                    </div>
+                  ) : null}
+                </div>
               </div>
-            </div>
-          </li>
-        ))}
+            </li>
+          );
+        })}
       </ul>
     );
   }
@@ -276,7 +584,11 @@ export default class NewsPage extends React.Component<
     treatmentUpdates: TreatmentUpdates[] = [],
     parentKey: string
   ): JSX.Element | null {
-    if (!treatmentUpdates.length) {
+    const visibleTreatmentUpdates = treatmentUpdates.filter(
+      treatmentUpdate => this.countTreatmentChanges(treatmentUpdate) > 0
+    );
+
+    if (!visibleTreatmentUpdates.length) {
       return null;
     }
 
@@ -285,9 +597,13 @@ export default class NewsPage extends React.Component<
         <div className="text-uppercase text-muted small font-weight-bold mb-2">
           Treatments
         </div>
-        {treatmentUpdates.map((treatmentUpdate, index) => {
+        {visibleTreatmentUpdates.map(treatmentUpdate => {
           const itemKey = `${parentKey}-${treatmentUpdate.treatment}`;
           const isExpanded = this.isExpandedContentItem(itemKey);
+          const changeBreakdown = this.getTreatmentChangeBreakdown(
+            treatmentUpdate
+          );
+          const totalChanges = this.countTreatmentChanges(treatmentUpdate);
 
           return (
             <div
@@ -311,10 +627,12 @@ export default class NewsPage extends React.Component<
                   <div className="d-flex justify-content-between align-items-center">
                     <span>{treatmentUpdate.treatment}</span>
                     <div className="d-flex align-items-center">
-                      <small className="text-muted mr-2">
-                        {treatmentUpdate.updates?.length || 0} change
-                        {treatmentUpdate.updates?.length === 1 ? '' : 's'}
-                      </small>
+                      {this.renderChangeCountWithInfo(totalChanges, [
+                        {
+                          label: 'Treatment changes',
+                          count: changeBreakdown.treatment,
+                        },
+                      ])}
                       <span
                         className="text-primary font-weight-bold"
                         style={{ fontSize: '1.2rem' }}
@@ -341,7 +659,11 @@ export default class NewsPage extends React.Component<
     cancerTypeUpdates: CancerTypeUpdates[] = [],
     parentKey: string
   ): JSX.Element | null {
-    if (!cancerTypeUpdates.length) {
+    const visibleCancerTypeUpdates = cancerTypeUpdates.filter(
+      cancerTypeUpdate => this.countCancerTypeChanges(cancerTypeUpdate) > 0
+    );
+
+    if (!visibleCancerTypeUpdates.length) {
       return null;
     }
 
@@ -350,9 +672,13 @@ export default class NewsPage extends React.Component<
         <div className="text-uppercase text-muted small font-weight-bold mb-2">
           Cancer Types
         </div>
-        {cancerTypeUpdates.map((cancerTypeUpdate, index) => {
+        {visibleCancerTypeUpdates.map(cancerTypeUpdate => {
           const itemKey = `${parentKey}-${cancerTypeUpdate.cancerType}`;
           const isExpanded = this.isExpandedContentItem(itemKey);
+          const changeBreakdown = this.getCancerTypeChangeBreakdown(
+            cancerTypeUpdate
+          );
+          const totalChanges = this.countCancerTypeChanges(cancerTypeUpdate);
 
           return (
             <div
@@ -376,16 +702,16 @@ export default class NewsPage extends React.Component<
                   <div className="d-flex justify-content-between align-items-center">
                     <span>{cancerTypeUpdate.cancerType}</span>
                     <div className="d-flex align-items-center">
-                      <small className="text-muted mr-2">
-                        {(cancerTypeUpdate.updates?.length || 0) +
-                          (cancerTypeUpdate.treatmentUpdates?.length || 0)}{' '}
-                        change
-                        {(cancerTypeUpdate.updates?.length || 0) +
-                          (cancerTypeUpdate.treatmentUpdates?.length || 0) ===
-                        1
-                          ? ''
-                          : 's'}
-                      </small>
+                      {this.renderChangeCountWithInfo(totalChanges, [
+                        {
+                          label: 'Cancer type changes',
+                          count: changeBreakdown.cancerType,
+                        },
+                        {
+                          label: 'Treatment changes',
+                          count: changeBreakdown.treatment,
+                        },
+                      ])}
                       <span
                         className="text-primary font-weight-bold"
                         style={{ fontSize: '1.2rem' }}
@@ -416,7 +742,11 @@ export default class NewsPage extends React.Component<
     alterationUpdates: AlterationUpdates[] = [],
     parentKey: string
   ): JSX.Element | null {
-    if (!alterationUpdates.length) {
+    const visibleAlterationUpdates = alterationUpdates.filter(
+      alterationUpdate => this.countAlterationChanges(alterationUpdate) > 0
+    );
+
+    if (!visibleAlterationUpdates.length) {
       return null;
     }
 
@@ -425,9 +755,13 @@ export default class NewsPage extends React.Component<
         <div className="text-uppercase text-muted small font-weight-bold mb-2">
           Alterations
         </div>
-        {alterationUpdates.map((alterationUpdate, index) => {
+        {visibleAlterationUpdates.map(alterationUpdate => {
           const itemKey = `${parentKey}-${alterationUpdate.alteration}`;
           const isExpanded = this.isExpandedContentItem(itemKey);
+          const changeBreakdown = this.getAlterationChangeBreakdown(
+            alterationUpdate
+          );
+          const totalChanges = this.countAlterationChanges(alterationUpdate);
 
           return (
             <div
@@ -451,17 +785,20 @@ export default class NewsPage extends React.Component<
                   <div className="d-flex justify-content-between align-items-center">
                     <span>{alterationUpdate.alteration}</span>
                     <div className="d-flex align-items-center">
-                      <small className="text-muted mr-2">
-                        {(alterationUpdate.updates?.length || 0) +
-                          (alterationUpdate.cancerTypeUpdates?.length ||
-                            0)}{' '}
-                        change
-                        {(alterationUpdate.updates?.length || 0) +
-                          (alterationUpdate.cancerTypeUpdates?.length || 0) ===
-                        1
-                          ? ''
-                          : 's'}
-                      </small>
+                      {this.renderChangeCountWithInfo(totalChanges, [
+                        {
+                          label: 'Alteration changes',
+                          count: changeBreakdown.alteration,
+                        },
+                        {
+                          label: 'Cancer type changes',
+                          count: changeBreakdown.cancerType,
+                        },
+                        {
+                          label: 'Treatment changes',
+                          count: changeBreakdown.treatment,
+                        },
+                      ])}
                       <span
                         className="text-primary font-weight-bold"
                         style={{ fontSize: '1.2rem' }}
@@ -493,15 +830,21 @@ export default class NewsPage extends React.Component<
     dataVersion: string,
     historyType: 'somatic' | 'germline' = 'somatic'
   ): JSX.Element | null {
-    if (!geneUpdates.length) {
+    const visibleGeneUpdates = geneUpdates.filter(
+      geneUpdate => this.countGeneChanges(geneUpdate) > 0
+    );
+
+    if (!visibleGeneUpdates.length) {
       return null;
     }
 
     return (
       <div>
-        {geneUpdates.map((geneUpdate, index) => {
+        {visibleGeneUpdates.map(geneUpdate => {
           const itemKey = `${dataVersion}-${historyType}-${geneUpdate.hugoSymbol}`;
           const isExpanded = this.isExpandedContentItem(itemKey);
+          const changeBreakdown = this.getGeneChangeBreakdown(geneUpdate);
+          const totalChanges = this.countGeneChanges(geneUpdate);
 
           return (
             <div
@@ -525,16 +868,24 @@ export default class NewsPage extends React.Component<
                   <div className="d-flex justify-content-between align-items-center">
                     <span>{geneUpdate.hugoSymbol}</span>
                     <div className="d-flex align-items-center">
-                      <small className="text-muted mr-2">
-                        {(geneUpdate.updates?.length || 0) +
-                          (geneUpdate.alterationUpdates?.length || 0)}{' '}
-                        change
-                        {(geneUpdate.updates?.length || 0) +
-                          (geneUpdate.alterationUpdates?.length || 0) ===
-                        1
-                          ? ''
-                          : 's'}
-                      </small>
+                      {this.renderChangeCountWithInfo(totalChanges, [
+                        {
+                          label: 'Gene changes',
+                          count: changeBreakdown.gene,
+                        },
+                        {
+                          label: 'Alteration changes',
+                          count: changeBreakdown.alteration,
+                        },
+                        {
+                          label: 'Cancer type changes',
+                          count: changeBreakdown.cancerType,
+                        },
+                        {
+                          label: 'Treatment changes',
+                          count: changeBreakdown.treatment,
+                        },
+                      ])}
                       <span
                         className="text-primary font-weight-bold"
                         style={{ fontSize: '1.2rem' }}
@@ -571,10 +922,66 @@ export default class NewsPage extends React.Component<
       return null;
     }
 
+    const itemKey = `history-section-${dataVersion}-${historyType}`;
+    const isExpanded = this.isExpandedContentItem(itemKey);
+    const { geneCount, updateCount } = this.countHistoryGeneUpdates(
+      geneUpdates
+    );
+    if (updateCount === 0) {
+      return null;
+    }
+    const sectionSummary = [
+      geneCount > 0 ? `${geneCount} gene${geneCount === 1 ? '' : 's'}` : null,
+      updateCount > 0
+        ? `${updateCount} annotation change${updateCount === 1 ? '' : 's'}`
+        : null,
+    ]
+      .filter(Boolean)
+      .join(' • ');
+    const sectionAccentShade =
+      historyType === 'somatic' ? '#8b98a7' : '#a0a7af';
+    const sectionBorderStyle = historyType === 'somatic' ? 'solid' : 'dashed';
     return (
-      <div className="mb-4">
-        <h6 className="text-uppercase text-muted mb-2">{title}</h6>
-        {this.renderGeneUpdates(geneUpdates, dataVersion, historyType)}
+      <div
+        className="mb-0"
+        style={{
+          border: `1px solid ${sectionAccentShade}55`,
+          borderStyle: sectionBorderStyle,
+          borderLeft: `4px solid ${sectionAccentShade}`,
+          borderRadius: '0.75rem',
+          backgroundColor: '#ffffff',
+          padding: '0.75rem 0.9rem',
+        }}
+      >
+        <div className="text-dark">
+          <button
+            type="button"
+            className="btn btn-link p-0 w-100 text-left"
+            onClick={() => this.toggleExpandedContentItem(itemKey)}
+            aria-expanded={isExpanded}
+            style={{ textDecoration: 'none', color: 'inherit' }}
+          >
+            <div className="d-flex justify-content-between align-items-center">
+              <div>
+                <h6 className="text-uppercase text-muted mb-0">{title}</h6>
+                <p className="text-muted mb-0 small">{sectionSummary}</p>
+              </div>
+              <div className="d-flex align-items-center ml-2">
+                <span
+                  className="font-weight-bold"
+                  style={{ color: '#5d6875', fontSize: '1.2rem' }}
+                >
+                  {isExpanded ? '▾' : '▸'}
+                </span>
+              </div>
+            </div>
+          </button>
+        </div>
+        {isExpanded && (
+          <div className="mt-2">
+            {this.renderGeneUpdates(geneUpdates, dataVersion, historyType)}
+          </div>
+        )}
       </div>
     );
   };
@@ -590,14 +997,29 @@ export default class NewsPage extends React.Component<
           const isExpanded = this.state.expandedContentNews.includes(
             newsItem.dataVersion
           );
+          const parsedDate = newsItem.date ? new Date(newsItem.date) : null;
+          const formattedDate =
+            parsedDate && !isNaN(parsedDate.getTime())
+              ? parsedDate.toLocaleDateString('en-US', {
+                  year: 'numeric',
+                  month: 'short',
+                  day: 'numeric',
+                })
+              : newsItem.date;
           const somaticGeneUpdates = this.getHistoryGeneUpdates(
             newsItem.history
           );
           const germlineGeneUpdates = this.getHistoryGeneUpdates(
             newsItem.germlineHistory
           );
+          const somaticCounts = this.countHistoryGeneUpdates(
+            somaticGeneUpdates
+          );
+          const germlineCounts = this.countHistoryGeneUpdates(
+            germlineGeneUpdates
+          );
           const hasAnyHistory =
-            somaticGeneUpdates.length > 0 || germlineGeneUpdates.length > 0;
+            somaticCounts.updateCount > 0 || germlineCounts.updateCount > 0;
 
           return (
             <div key={newsItem.dataVersion} className="col-12 mb-4">
@@ -627,12 +1049,19 @@ export default class NewsPage extends React.Component<
                             'No detailed changes listed'}
                         </p>
                       </div>
-                      <span
-                        className="text-primary font-weight-bold"
-                        style={{ fontSize: '1.2rem' }}
-                      >
-                        {isExpanded ? '−' : '+'}
-                      </span>
+                      <div className="d-flex align-items-center">
+                        {formattedDate && (
+                          <h6 className="text-primary mb-0 mr-3">
+                            {formattedDate}
+                          </h6>
+                        )}
+                        <span
+                          className="text-primary font-weight-bold"
+                          style={{ fontSize: '1.2rem' }}
+                        >
+                          {isExpanded ? '−' : '+'}
+                        </span>
+                      </div>
                     </div>
                   </button>
                 </div>
@@ -642,20 +1071,23 @@ export default class NewsPage extends React.Component<
                     style={{ backgroundColor: '#ffffff' }}
                   >
                     {hasAnyHistory ? (
-                      <>
+                      <div
+                        className="d-flex flex-column"
+                        style={{ gap: '0.75rem' }}
+                      >
                         {this.renderHistorySection(
-                          'Somatic Changes',
+                          'Somatic Annotation Changes',
                           somaticGeneUpdates,
                           newsItem.dataVersion,
                           'somatic'
                         )}
                         {this.renderHistorySection(
-                          'Germline Changes',
+                          'Germline Annotation Changes',
                           germlineGeneUpdates,
                           newsItem.dataVersion,
                           'germline'
                         )}
-                      </>
+                      </div>
                     ) : (
                       <p className="text-muted mb-0">
                         No detailed changes listed
@@ -1259,35 +1691,49 @@ export default class NewsPage extends React.Component<
                       types, treatments, and associated annotations, as well as
                       granular editorial changes to scientific descriptions.
                     </p>
-                    <div className="d-flex flex-wrap align-items-center">
-                      <div className="d-flex align-items-center mb-2">
+                    <div
+                      className="px-3 py-3"
+                      style={{
+                        border: '1px solid #d8dee6',
+                        borderRadius: '0.6rem',
+                        backgroundColor: '#f8f9fb',
+                      }}
+                    >
+                      <div className="mb-2">
+                        <span className="font-weight-bold text-dark mr-2">
+                          Change types:
+                        </span>
+                        <span className="text-muted">
+                          hover over each tag to see details
+                        </span>
+                      </div>
+                      <div className="d-flex flex-wrap align-items-center">
                         <ContentChangeTag showTooltip type="add" />
-                        <span className="ml-1">Addition</span>
-                      </div>
-                      <span className="mx-2 mb-2">&middot;</span>
-                      <div className="d-flex align-items-center mb-2">
+                        <span className="mx-2">&middot;</span>
                         <ContentChangeTag showTooltip type="delete" />
-                        <span className="ml-1">Deletion</span>
-                      </div>
-                      <span className="mx-2 mb-2">&middot;</span>
-                      <div className="d-flex align-items-center mb-2">
+                        <span className="mx-2">&middot;</span>
                         <ContentChangeTag showTooltip type="update" />
-                        <span className="ml-1">Update</span>
-                      </div>
-                      <span className="mx-2 mb-2">&middot;</span>
-                      <div className="d-flex align-items-center mb-2">
+                        <span className="mx-2">&middot;</span>
                         <ContentChangeTag showTooltip type="name change" />
-                        <span className="ml-1">Name Change</span>
-                      </div>
-                      <span className="mx-2 mb-2">&middot;</span>
-                      <div className="d-flex align-items-center mb-2">
+                        <span className="mx-2">&middot;</span>
                         <ContentChangeTag showTooltip type="demote" />
-                        <span className="ml-1">Demotion</span>
-                      </div>
-                      <span className="mx-2 mb-2">&middot;</span>
-                      <div className="d-flex align-items-center mb-2">
+                        <span className="mx-2">&middot;</span>
                         <ContentChangeTag showTooltip type="promote" />
-                        <span className="ml-1">Promotion</span>
+                      </div>
+                      <div
+                        className="mt-3 pt-2"
+                        style={{ borderTop: '1px solid #e3e8ee' }}
+                      >
+                        <div className="mb-0" style={{ lineHeight: 1.3 }}>
+                          <span className="font-weight-bold text-dark mr-2">
+                            Ordering:
+                          </span>
+                          <span className="text-muted">
+                            within each expanded section, entries are listed
+                            chronologically from oldest to newest (top to
+                            bottom).
+                          </span>
+                        </div>
                       </div>
                     </div>
                   </div>
