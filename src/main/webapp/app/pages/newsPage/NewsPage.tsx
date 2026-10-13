@@ -383,12 +383,8 @@ export default class NewsPage extends React.Component<
   }
 
   private tokenizeForWordDiff(text: string): string[] {
-    const tokens = text.match(/[^\s]+\s*|\s+/g);
+    const tokens = text.match(/\S+|\s+/g);
     return tokens || [];
-  }
-
-  private normalizeWordToken(token: string): string {
-    return token.replace(/\s+$/g, '');
   }
 
   private getWordDiffParts(oldValue: string, newValue: string): WordDiffPart[] {
@@ -402,10 +398,7 @@ export default class NewsPage extends React.Component<
 
     for (let i = 1; i <= oldLength; i++) {
       for (let j = 1; j <= newLength; j++) {
-        if (
-          this.normalizeWordToken(oldTokens[i - 1]) ===
-          this.normalizeWordToken(newTokens[j - 1])
-        ) {
+        if (oldTokens[i - 1] === newTokens[j - 1]) {
           lcsMatrix[i][j] = lcsMatrix[i - 1][j - 1] + 1;
         } else {
           lcsMatrix[i][j] = Math.max(lcsMatrix[i - 1][j], lcsMatrix[i][j - 1]);
@@ -418,10 +411,7 @@ export default class NewsPage extends React.Component<
     let j = newLength;
 
     while (i > 0 && j > 0) {
-      if (
-        this.normalizeWordToken(oldTokens[i - 1]) ===
-        this.normalizeWordToken(newTokens[j - 1])
-      ) {
+      if (oldTokens[i - 1] === newTokens[j - 1]) {
         diffParts.unshift({ text: newTokens[j - 1], type: 'common' });
         i--;
         j--;
@@ -547,6 +537,7 @@ export default class NewsPage extends React.Component<
                       color: '#212529',
                       padding: '0.55rem 0.75rem',
                       borderRadius: '0.35rem',
+                      whiteSpace: 'pre-wrap',
                     }}
                   >
                     +{' '}
@@ -563,6 +554,7 @@ export default class NewsPage extends React.Component<
                           color: '#212529',
                           padding: '0.55rem 0.75rem',
                           borderRadius: '0.35rem',
+                          whiteSpace: 'pre-wrap',
                         }}
                       >
                         -{' '}
