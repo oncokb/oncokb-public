@@ -8,15 +8,66 @@ type UserStatusModalProps = {
   user: UserDTO | undefined;
   show: boolean;
   onCancel: () => void;
-  onConfirm: (sendEmail: boolean, authorities: string[]) => void;
+  onConfirm: (
+    sendEmail: boolean,
+    authorities: string[],
+    trialStatus: UserDTO['trialStatus']
+  ) => void;
 };
 
-export class UserStatusModal extends React.Component<UserStatusModalProps> {
+type UserStatusModalState = {
+  selectedTrialStatus: 'REGULAR' | 'TRIAL';
+};
+
+export class UserStatusModal extends React.Component<
+  UserStatusModalProps,
+  UserStatusModalState
+> {
+  private toSelectableTrialStatus(
+    trialStatus: UserDTO['trialStatus'] | undefined
+  ): 'REGULAR' | 'TRIAL' {
+    return trialStatus === 'REGULAR' ? 'REGULAR' : 'TRIAL';
+  }
+
+  state: UserStatusModalState = {
+    selectedTrialStatus: this.toSelectableTrialStatus(
+      this.props.user?.trialStatus
+    ),
+  };
+
+  componentDidUpdate(prevProps: UserStatusModalProps) {
+    if (
+      prevProps.user?.id !== this.props.user?.id ||
+      prevProps.show !== this.props.show
+    ) {
+      this.setState({
+        selectedTrialStatus: this.toSelectableTrialStatus(
+          this.props.user?.trialStatus
+        ),
+      });
+    }
+  }
+
+  private getTrialStatus() {
+    if (this.state.selectedTrialStatus === 'REGULAR') {
+      return 'REGULAR';
+    }
+    return this.props.user?.trialStatus === 'TRIAL'
+      ? 'TRIAL'
+      : 'TRIAL_PENDING_TERMS_ACCEPTANCE';
+  }
+
   render() {
     const isRequestingApiAccess =
       !this.props.user?.activated &&
       this.props.user?.additionalInfo?.apiAccessRequest?.requested;
     const authorities = [...(this.props.user?.authorities ?? [])];
+    const trialTermsAccepted =
+      this.props.user?.trialStatus === 'TRIAL' &&
+      !!this.props.user?.userTrial?.licenseAgreementAcceptanceDate;
+    const trialTermsPending =
+      this.props.user?.trialStatus === 'TRIAL_PENDING_TERMS_ACCEPTANCE' ||
+      (this.state.selectedTrialStatus === 'TRIAL' && !trialTermsAccepted);
     if (isRequestingApiAccess && !authorities.includes(AUTHORITIES.API)) {
       authorities.push(AUTHORITIES.API);
     }
@@ -44,6 +95,35 @@ export class UserStatusModal extends React.Component<UserStatusModalProps> {
           )}
           Are you sure to{' '}
           {this.props.user?.activated ? 'deactivate' : 'activate'} the user?
+          <div className="mt-3">
+            <label htmlFor="trial-status-select" className="font-weight-bold">
+              Trial Status
+            </label>
+            <select
+              id="trial-status-select"
+              className="form-control"
+              value={this.state.selectedTrialStatus}
+              onChange={event => {
+                this.setState({
+                  selectedTrialStatus: event.target.value as
+                    | 'REGULAR'
+                    | 'TRIAL',
+                });
+              }}
+            >
+              <option value="REGULAR">Regular</option>
+              <option value="TRIAL">Trial</option>
+            </select>
+            {trialTermsAccepted && (
+              <div className="text-success mt-2">Trial terms accepted.</div>
+            )}
+            {trialTermsPending && (
+              <div className="text-primary mt-2">
+                Trial terms not accepted yet. Selecting Trial keeps the user in
+                pending trial activation until terms are accepted.
+              </div>
+            )}
+          </div>
         </Modal.Body>
         <Modal.Footer>
           <Button variant="secondary" onClick={this.props.onCancel}>
@@ -51,7 +131,9 @@ export class UserStatusModal extends React.Component<UserStatusModalProps> {
           </Button>
           <Button
             variant="primary"
-            onClick={() => this.props.onConfirm(true, authorities)}
+            onClick={() =>
+              this.props.onConfirm(true, authorities, this.getTrialStatus())
+            }
           >
             Update
           </Button>
@@ -64,7 +146,13 @@ export class UserStatusModal extends React.Component<UserStatusModalProps> {
             >
               <Button
                 variant="primary"
-                onClick={() => this.props.onConfirm(false, authorities)}
+                onClick={() =>
+                  this.props.onConfirm(
+                    false,
+                    authorities,
+                    this.getTrialStatus()
+                  )
+                }
               >
                 Silent Update
               </Button>
