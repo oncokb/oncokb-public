@@ -3,8 +3,15 @@ package org.mskcc.cbio.oncokb.service.mapper;
 import org.mskcc.cbio.oncokb.domain.Authority;
 import org.mskcc.cbio.oncokb.domain.User;
 import org.mskcc.cbio.oncokb.domain.UserDetails;
+import org.mskcc.cbio.oncokb.domain.UserTrial;
 import org.mskcc.cbio.oncokb.repository.UserDetailsRepository;
+import org.mskcc.cbio.oncokb.repository.UserTrialRepository;
 import org.mskcc.cbio.oncokb.service.dto.UserDTO;
+import org.mskcc.cbio.oncokb.service.dto.UserTrialDTO;
+import org.mskcc.cbio.oncokb.service.dto.useradditionalinfo.Activation;
+import org.mskcc.cbio.oncokb.service.dto.useradditionalinfo.AdditionalInfoDTO;
+import org.mskcc.cbio.oncokb.service.dto.useradditionalinfo.LicenseAgreement;
+import org.mskcc.cbio.oncokb.service.dto.useradditionalinfo.TrialAccount;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -26,6 +33,9 @@ public class UserMapper {
     @Autowired
     CompanyMapper companyMapper;
 
+    @Autowired
+    UserTrialRepository userTrialRepository;
+
     public List<UserDTO> usersToUserDTOs(List<User> users) {
         return users.stream()
             .filter(Objects::nonNull)
@@ -35,13 +45,51 @@ public class UserMapper {
 
     public UserDTO userToUserDTO(User user) {
         Optional<UserDetails> userDetails = userDetailsRepository.findOneByUser(user);
-        return userToUserDTO(user, userDetails.orElse(null));
+        UserTrial userTrial = userTrialRepository.findOneByUser(user).orElse(null);
+        return userToUserDTO(user, userDetails.orElse(null), userTrial);
     }
 
     public UserDTO userToUserDTO(User user, UserDetails userDetails) {
+        UserTrial userTrial = userTrialRepository.findOneByUser(user).orElse(null);
+        return userToUserDTO(user, userDetails, userTrial);
+    }
+
+    public UserDTO userToUserDTO(User user, UserDetails userDetails, UserTrial userTrial) {
         UserDTO userDTO = new UserDTO(user, userDetails);
         if (userDetails != null) {
             userDTO.setCompany(companyMapper.toDto(userDetails.getCompany()));
+        }
+        if (userTrial != null) {
+            UserTrialDTO userTrialDTO = new UserTrialDTO();
+            userTrialDTO.setId(userTrial.getId());
+            userTrialDTO.setUserId(user.getId());
+            userTrialDTO.setInitiationDate(userTrial.getInitiationDate());
+            userTrialDTO.setInitiatedBy(userTrial.getInitiatedBy());
+            userTrialDTO.setActivationDate(userTrial.getActivationDate());
+            userTrialDTO.setActivationKey(userTrial.getActivationKey());
+            userTrialDTO.setLicenseAgreementName(userTrial.getLicenseAgreementName());
+            userTrialDTO.setLicenseAgreementVersion(userTrial.getLicenseAgreementVersion());
+            userTrialDTO.setLicenseAgreementAcceptanceDate(userTrial.getLicenseAgreementAcceptanceDate());
+            userDTO.setUserTrial(userTrialDTO);
+
+            AdditionalInfoDTO additionalInfo = userDTO.getAdditionalInfo();
+            if (additionalInfo == null) {
+                additionalInfo = new AdditionalInfoDTO();
+            }
+            TrialAccount trialAccount = new TrialAccount();
+            Activation activation = new Activation();
+            activation.setInitiationDate(userTrial.getInitiationDate());
+            activation.setInitiatedBy(userTrial.getInitiatedBy());
+            activation.setActivationDate(userTrial.getActivationDate());
+            activation.setKey(userTrial.getActivationKey());
+            trialAccount.setActivation(activation);
+            LicenseAgreement licenseAgreement = new LicenseAgreement();
+            licenseAgreement.setName(userTrial.getLicenseAgreementName());
+            licenseAgreement.setVersion(userTrial.getLicenseAgreementVersion());
+            licenseAgreement.setAcceptanceDate(userTrial.getLicenseAgreementAcceptanceDate());
+            trialAccount.setLicenseAgreement(licenseAgreement);
+            additionalInfo.setTrialAccount(trialAccount);
+            userDTO.setAdditionalInfo(additionalInfo);
         }
         return userDTO;
     }
