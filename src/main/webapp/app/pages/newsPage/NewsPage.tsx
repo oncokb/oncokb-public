@@ -14,6 +14,7 @@ import {
   PAGE_TITLE,
   SOP_LINK,
 } from 'app/config/constants';
+import { COLOR_BLUE } from 'app/config/theme';
 import { Version } from 'app/pages/LevelOfEvidencePage';
 import { FdaApprovalLink } from 'app/pages/newsPage/Links';
 import { NewlyAddedGenesListItem } from 'app/pages/newsPage/NewlyAddedGenesListItem';
@@ -939,14 +940,12 @@ export default class NewsPage extends React.Component<
       .filter(Boolean)
       .join(' • ');
     const sectionAccentShade =
-      historyType === 'somatic' ? '#8b98a7' : '#a0a7af';
-    const sectionBorderStyle = historyType === 'somatic' ? 'solid' : 'dashed';
+      historyType === 'somatic' ? COLOR_BLUE : '#78a6d8';
     return (
       <div
         className="mb-0"
         style={{
-          border: `1px solid ${sectionAccentShade}55`,
-          borderStyle: sectionBorderStyle,
+          border: '1px solid #dce8f7',
           borderLeft: `4px solid ${sectionAccentShade}`,
           borderRadius: '0.75rem',
           backgroundColor: '#ffffff',
@@ -963,7 +962,7 @@ export default class NewsPage extends React.Component<
           >
             <div className="d-flex justify-content-between align-items-center">
               <div>
-                <h6 className="text-uppercase text-muted mb-0">{title}</h6>
+                <h6 className="text-muted mb-0">{title}</h6>
                 <p className="text-muted mb-0 small">{sectionSummary}</p>
               </div>
               <div className="d-flex align-items-center ml-2">
@@ -1691,40 +1690,30 @@ export default class NewsPage extends React.Component<
                       types, treatments, and associated annotations, as well as
                       granular editorial changes to scientific descriptions.
                     </p>
-                    <div
-                      className="px-3 py-3"
-                      style={{
-                        border: '1px solid #d8dee6',
-                        borderRadius: '0.6rem',
-                        backgroundColor: '#f8f9fb',
-                      }}
-                    >
-                      <div className="mb-2">
-                        <span className="font-weight-bold text-dark mr-2">
-                          Change types:
-                        </span>
-                        <span className="text-muted">
-                          hover over each tag to see details
-                        </span>
-                      </div>
-                      <div className="d-flex flex-wrap align-items-center">
-                        <ContentChangeTag showTooltip type="add" />
-                        <span className="mx-2">&middot;</span>
-                        <ContentChangeTag showTooltip type="delete" />
-                        <span className="mx-2">&middot;</span>
-                        <ContentChangeTag showTooltip type="update" />
-                        <span className="mx-2">&middot;</span>
-                        <ContentChangeTag showTooltip type="name change" />
-                        <span className="mx-2">&middot;</span>
-                        <ContentChangeTag showTooltip type="demote" />
-                        <span className="mx-2">&middot;</span>
-                        <ContentChangeTag showTooltip type="promote" />
-                      </div>
-                      <div
-                        className="mt-3 pt-2"
-                        style={{ borderTop: '1px solid #e3e8ee' }}
-                      >
-                        <div className="mb-0" style={{ lineHeight: 1.3 }}>
+                    <div className="py-1">
+                      <ul className="mb-0 pl-3" style={{ lineHeight: 1.4 }}>
+                        <li className="mb-3">
+                          <span className="font-weight-bold text-dark mr-2">
+                            Change types:
+                          </span>
+                          <span className="text-muted">
+                            hover over each tag to see details
+                          </span>
+                          <div className="d-flex flex-wrap align-items-center mt-2">
+                            <ContentChangeTag showTooltip type="add" />
+                            <span className="mx-2">&middot;</span>
+                            <ContentChangeTag showTooltip type="delete" />
+                            <span className="mx-2">&middot;</span>
+                            <ContentChangeTag showTooltip type="update" />
+                            <span className="mx-2">&middot;</span>
+                            <ContentChangeTag showTooltip type="name change" />
+                            <span className="mx-2">&middot;</span>
+                            <ContentChangeTag showTooltip type="demote" />
+                            <span className="mx-2">&middot;</span>
+                            <ContentChangeTag showTooltip type="promote" />
+                          </div>
+                        </li>
+                        <li className="mb-0">
                           <span className="font-weight-bold text-dark mr-2">
                             Ordering:
                           </span>
@@ -1733,8 +1722,8 @@ export default class NewsPage extends React.Component<
                             chronologically from oldest to newest (top to
                             bottom).
                           </span>
-                        </div>
-                      </div>
+                        </li>
+                      </ul>
                     </div>
                   </div>
                   <div className="mt-4">
