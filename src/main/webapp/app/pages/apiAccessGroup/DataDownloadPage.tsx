@@ -142,9 +142,7 @@ const DownloadButtonGroups: React.FunctionComponent<{
             These database dumps are needed for users who want to run OncoKB
             locally. Please refer to the OncoKB{' '}
             <Link
-              to={
-                'https://github.com/jfkonecn/oncokb#run-with-docker-containers'
-              }
+              to={'https://github.com/oncokb/oncokb#run-with-docker-containers'}
             >
               readme
             </Link>{' '}
