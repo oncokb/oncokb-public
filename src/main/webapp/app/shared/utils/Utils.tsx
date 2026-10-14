@@ -496,22 +496,25 @@ export function getDefaultColumnDefinition<T>(
       return {
         id: TABLE_COLUMN_KEY.FDA_LEVEL,
         Header: (
-          <div className={'d-flex justify-content-center'}>
-            <span>FDA Level of Evidence</span>
-            <InfoIcon
-              className={'ml-1'}
-              overlay={
-                <span>
-                  For more information about the FDA Level of Evidence, please
-                  see{' '}
-                  <LevelOfEvidencePageLink levelType={LEVEL_TYPES.FDA}>
-                    <b>HERE</b>
-                  </LevelOfEvidencePageLink>
-                  .
-                </span>
-              }
-            />
-          </div>
+          <span>
+            FDA Level of{' '}
+            <span style={{ whiteSpace: 'nowrap' }}>
+              Evidence
+              <InfoIcon
+                className={'ml-1'}
+                overlay={
+                  <span>
+                    For more information about the FDA Level of Evidence, please
+                    see{' '}
+                    <LevelOfEvidencePageLink levelType={LEVEL_TYPES.FDA}>
+                      <b>HERE</b>
+                    </LevelOfEvidencePageLink>
+                    .
+                  </span>
+                }
+              />
+            </span>
+          </span>
         ),
         accessor: 'level',
         width: 250,
@@ -1155,6 +1158,7 @@ const getImplicationsFromTag = (
           drugs: getTreatmentNameByPriority(treatment),
           cancerTypes: cancerTypesName,
           cancerTypesArray: cancerTypes,
+          excludedCancerTypesArray: excludedCancerTypes,
           cancerTypesView: (
             <>
               <WithSeparator separator={', '}>
@@ -1195,6 +1199,7 @@ const getImplicationsFromTag = (
         drugs: '',
         cancerTypes: cancerTypesName,
         cancerTypesArray: cancerTypes,
+        excludedCancerTypesArray: excludedCancerTypes,
         cancerTypesView: (
           <>
             <WithSeparator separator={', '}>
