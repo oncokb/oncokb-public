@@ -85,11 +85,10 @@ const getColumns = (
   };
   const hotspotColumn = {
     Header: <span>Hotspot</span>,
-    accessor: 'variant',
+    accessor: (data: BiologicalVariant) => !!data.hotspot?.isHotspot,
     id: 'hotspot',
     minWidth: 120,
     width: 120,
-    sortable: false,
     Cell(props: { original: BiologicalVariant }) {
       if (!props.original.hotspot?.isHotspot) {
         return <></>;
