@@ -1689,7 +1689,7 @@ export default class NewsPage extends React.Component<
                             Change types:
                           </span>
                           <span className="text-muted">
-                            hover over each tag to see details
+                            hover over each tag to see details.
                           </span>
                           <div className="d-flex flex-wrap align-items-center mt-2">
                             <ContentChangeTag showTooltip type="add" />
