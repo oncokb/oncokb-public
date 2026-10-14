@@ -12,6 +12,7 @@ public class ContentNews {
     private String dataVersion;
     private History history;
     private History germlineHistory;
+    private String date;
 
     @JsonCreator
     public ContentNews(@JsonProperty("history") History history, @JsonProperty("germline_history") History germlineHistory) {
@@ -33,6 +34,14 @@ public class ContentNews {
 
     public History getGermlineHistory() {
         return germlineHistory;
+    }
+
+    public String getDate() {
+        return date;
+    }
+
+    public void setDate(String date) {
+        this.date = date;
     }
 
     public static class History {
