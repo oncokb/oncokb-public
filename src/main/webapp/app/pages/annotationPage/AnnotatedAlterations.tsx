@@ -22,7 +22,6 @@ import {
   CancerHotspotLink,
 } from 'app/components/cancerHotspot/CancerHotspot';
 import { SearchColumn } from 'app/components/oncokbTable/OncoKBTable';
-import { FilterTypes } from 'app/components/oncokbTable/filters/types';
 
 const HOTSPOT_ICON_SIZE = 18;
 
@@ -36,8 +35,6 @@ const getColumns = (
     accessor: 'variant',
     onFilter: (data: BiologicalVariant, keyword: string) =>
       filterByKeyword(data.variant.name, keyword),
-    filterType: FilterTypes.STRING as const,
-    getColumnFilterValue: (data: BiologicalVariant) => data.variant.name,
     Cell(props: { original: BiologicalVariant }) {
       return (
         <>
@@ -93,9 +90,6 @@ const getColumns = (
     minWidth: 120,
     width: 120,
     sortable: false,
-    filterType: FilterTypes.STRING as const,
-    getColumnFilterValue: (data: BiologicalVariant) =>
-      data.hotspot?.isHotspot ? 'Yes' : 'No',
     Cell(props: { original: BiologicalVariant }) {
       if (!props.original.hotspot?.isHotspot) {
         return <></>;
@@ -122,15 +116,11 @@ const getColumns = (
       ...getDefaultColumnDefinition(TABLE_COLUMN_KEY.ONCOGENICITY),
       onFilter: (data: BiologicalVariant, keyword: string) =>
         filterByKeyword(data.oncogenic, keyword),
-      filterType: FilterTypes.STRING as const,
-      getColumnFilterValue: (data: BiologicalVariant) => data.oncogenic,
     },
     {
       ...getDefaultColumnDefinition(TABLE_COLUMN_KEY.MUTATION_EFFECT),
       onFilter: (data: BiologicalVariant, keyword: string) =>
         filterByKeyword(data.mutationEffect, keyword),
-      filterType: FilterTypes.STRING as const,
-      getColumnFilterValue: (data: BiologicalVariant) => data.mutationEffect,
     },
     hotspotColumn,
     descriptionColumn,
@@ -148,25 +138,18 @@ const getColumns = (
           ...getDefaultColumnDefinition(TABLE_COLUMN_KEY.MUTATION_EFFECT),
           onFilter: (data: BiologicalVariant, keyword: string) =>
             filterByKeyword(data.mutationEffect, keyword),
-          filterType: FilterTypes.STRING as const,
-          getColumnFilterValue: (data: BiologicalVariant) =>
-            data.mutationEffect,
         }
       : {
           Header: <span>Pathogenicity</span>,
           accessor: 'pathogenic',
           onFilter: (data: BiologicalVariant, keyword: string) =>
             filterByKeyword(data.pathogenic, keyword),
-          filterType: FilterTypes.STRING as const,
-          getColumnFilterValue: (data: BiologicalVariant) => data.pathogenic,
         },
     {
       Header: <span>Penetrance</span>,
       accessor: 'penetrance',
       onFilter: (data: BiologicalVariant, keyword: string) =>
         filterByKeyword(data.penetrance, keyword),
-      filterType: FilterTypes.STRING as const,
-      getColumnFilterValue: (data: BiologicalVariant) => data.penetrance,
     },
     // Hiding because not in use now, but will be in the future
     // {

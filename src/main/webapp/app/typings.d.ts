@@ -19,6 +19,5 @@ declare module '*.png' {
 }
 
 declare module 'availity-reactstrap-validation';
-declare module 'enzyme-adapter-react-16';
 declare module 'react-responsive-tabs';
 declare module 'victory';
