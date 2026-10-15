@@ -18,7 +18,6 @@ import {
   Treatment as EvidenceTreatment,
   TumorTypeEntity,
 } from 'app/shared/api/generated/OncoKbPrivateAPI';
-import Select from 'react-select';
 import {
   FdaLevelIcon,
   getCancerTypeNameFromOncoTreeType,
@@ -41,7 +40,6 @@ import {
 } from 'app/shared/utils/UrlUtils';
 import {
   ANNOTATION_PAGE_TAB_KEYS,
-  COMPONENT_PADDING,
   DEFAULT_REFERENCE_GENOME,
   FDA_LEVELS,
   LEVEL_CLASSIFICATION,
@@ -58,10 +56,15 @@ import {
 import { RouterStore } from 'mobx-react-router';
 import AuthenticationStore from 'app/store/AuthenticationStore';
 import * as QueryString from 'query-string';
-import OncoKBTable from 'app/components/oncokbTable/OncoKBTable';
+import OncoKBTable, {
+  ColumnFilters,
+  filterByColumnFilters,
+  SearchColumn,
+} from 'app/components/oncokbTable/OncoKBTable';
+import { FilterTypes } from 'app/components/oncokbTable/filters/types';
+import { prefetchRelevantCancerTypeNames } from 'app/components/oncokbTable/filters/cancerTypeFilterUtils';
 import { AuthDownloadButton } from 'app/components/authDownloadButton/AuthDownloadButton';
 import LevelSelectionRow from './LevelSelectionRow';
-import CancerTypeSelect from 'app/shared/dropdown/CancerTypeSelect';
 import {
   ActionableGenesPageHashQueries,
   AlterationPageHashQueries,
@@ -95,6 +98,10 @@ type Treatment = {
   drugs: string;
 };
 
+type TreatmentRow = Treatment & { isTag?: boolean };
+
+const GENETIC_TYPE_COLUMN_ID = 'geneticType';
+
 type ActionableGenesPageProps = {
   authenticationStore: AuthenticationStore;
   routing: RouterStore;
@@ -108,10 +115,7 @@ export default class ActionableGenesPage extends React.Component<
   ActionableGenesPageProps,
   any
 > {
-  @observable relevantCancerTypeSearchKeyword = '';
-  @observable drugSearchKeyword = '';
-  @observable geneSearchKeyword = '';
-  @observable geneticTypeFilter = '';
+  @observable.ref columnFilters: ColumnFilters = {};
   @observable refGenome = DEFAULT_REFERENCE_GENOME;
   @observable levelSelected: {
     [level in LEVELS]: boolean;
@@ -123,19 +127,6 @@ export default class ActionableGenesPage extends React.Component<
     [LEVEL_TYPES.FDA]: false,
   };
   @observable collapseInit = false;
-
-  readonly allMainTypes = remoteData<string[]>({
-    await: () => [],
-    async invoke() {
-      const result = await privateClient.utilsTumorTypesGetUsingGET({});
-      return uniq(
-        result
-          .filter(cancerType => cancerType.level >= 0)
-          .map(cancerType => cancerType.mainType)
-      ).sort();
-    },
-    default: [],
-  });
 
   readonly evidencesByLevel = remoteData<EvidencesByLevel>({
     await: () => [],
@@ -186,16 +177,24 @@ export default class ActionableGenesPage extends React.Component<
             }
           }
           if (queryStrings.hugoSymbol) {
-            this.geneSearchKeyword = queryStrings.hugoSymbol;
+            this.setColumnFilter(
+              TABLE_COLUMN_KEY.HUGO_SYMBOL,
+              queryStrings.hugoSymbol
+            );
           }
-          if (queryStrings.tumorType) {
-            this.relevantCancerTypeSearchKeyword = queryStrings.tumorType;
-          }
-          if (queryStrings.cancerType) {
-            this.relevantCancerTypeSearchKeyword = queryStrings.cancerType;
+          const cancerType = queryStrings.cancerType || queryStrings.tumorType;
+          if (cancerType) {
+            const cancerTypes = Array.isArray(cancerType)
+              ? cancerType
+              : [cancerType];
+            this.setColumnFilter(
+              TABLE_COLUMN_KEY.EVIDENCE_CANCER_TYPE,
+              cancerTypes
+            );
+            this.refreshAfterCancerTypeLookup(cancerTypes);
           }
           if (queryStrings.drug) {
-            this.drugSearchKeyword = queryStrings.drug;
+            this.setColumnFilter(TABLE_COLUMN_KEY.DRUGS, queryStrings.drug);
           }
           const referenceGenome = getReferenceGenomeFromSearch(hash);
           if (referenceGenome) {
@@ -231,8 +230,10 @@ export default class ActionableGenesPage extends React.Component<
             this.collapseStatus[LEVEL_TYPES.PX] = false;
             this.props.appStore.inFdaRecognizedContent = true;
             this.clearSelectedLevels('ONCOKB');
-            this.drugSearchKeyword = '';
-            this.geneticTypeFilter = '';
+            this.clearColumnFilters([
+              TABLE_COLUMN_KEY.DRUGS,
+              GENETIC_TYPE_COLUMN_ID,
+            ]);
           } else {
             if (
               !(
@@ -276,6 +277,55 @@ export default class ActionableGenesPage extends React.Component<
         this.levelSelected[oncokbLevel] = false;
       }
     });
+  }
+
+  @action
+  setColumnFilter(columnId: string, values: string | string[]) {
+    const newValues = Array.isArray(values) ? values : [values];
+    const currValues = this.columnFilters[columnId] as Set<string> | undefined;
+    if (
+      currValues &&
+      currValues.size === newValues.length &&
+      newValues.every(value => currValues.has(value))
+    ) {
+      return;
+    }
+    this.columnFilters = {
+      ...this.columnFilters,
+      [columnId]: new Set(newValues),
+    };
+  }
+
+  refreshAfterCancerTypeLookup(cancerTypes: string[]) {
+    prefetchRelevantCancerTypeNames(cancerTypes).then(
+      action(() => {
+        this.columnFilters = { ...this.columnFilters };
+      })
+    );
+  }
+
+  getColumnFilterHashValue(columnId: string): string[] | undefined {
+    const values = this.columnFilters[columnId] as Set<string> | undefined;
+    return values && values.size > 0 ? Array.from(values) : undefined;
+  }
+
+  @action
+  clearColumnFilters(columnIds: string[]) {
+    const newFilters = { ...this.columnFilters };
+    columnIds.forEach(columnId => delete newFilters[columnId]);
+    this.columnFilters = newFilters;
+  }
+
+  @autobind
+  @action
+  updateColumnFilters(columnFilters: ColumnFilters) {
+    const { [TABLE_COLUMN_KEY.LEVEL]: levels, ...otherFilters } = columnFilters;
+    const levelSelected = this.initLevelSelected();
+    ((levels || new Set()) as Set<LEVELS>).forEach(level => {
+      levelSelected[level] = true;
+    });
+    this.levelSelected = levelSelected;
+    this.columnFilters = otherFilters;
   }
 
   componentWillUnmount(): void {
@@ -390,14 +440,21 @@ export default class ActionableGenesPage extends React.Component<
     if (this.selectedLevels.length > 0) {
       queryString.levels = this.selectedLevels;
     }
-    if (this.geneSearchKeyword) {
-      queryString.hugoSymbol = this.geneSearchKeyword;
+    const hugoSymbols = this.getColumnFilterHashValue(
+      TABLE_COLUMN_KEY.HUGO_SYMBOL
+    );
+    if (hugoSymbols) {
+      queryString.hugoSymbol = hugoSymbols;
     }
-    if (this.relevantCancerTypeSearchKeyword) {
-      queryString.cancerType = this.relevantCancerTypeSearchKeyword;
+    const cancerTypes = this.getColumnFilterHashValue(
+      TABLE_COLUMN_KEY.EVIDENCE_CANCER_TYPE
+    );
+    if (cancerTypes) {
+      queryString.cancerType = cancerTypes;
     }
-    if (this.drugSearchKeyword) {
-      queryString.drug = this.drugSearchKeyword;
+    const drugs = this.getColumnFilterHashValue(TABLE_COLUMN_KEY.DRUGS);
+    if (drugs) {
+      queryString.drug = drugs;
     }
     const visibleSections = Object.values(this.collapseStatus).filter(
       sectionStatus => sectionStatus
@@ -458,50 +515,23 @@ export default class ActionableGenesPage extends React.Component<
   }
 
   @computed
-  get filteredTreatments(): (Treatment & { isTag?: boolean })[] {
-    return this.allTreatments.filter(treatment => {
-      let match = true;
-      if (
-        this.geneSearchKeyword &&
-        treatment.hugoSymbol !== this.geneSearchKeyword
-      ) {
-        match = false;
-      }
-      if (
-        this.relevantCancerTypeSearchKeyword &&
-        treatment.relevantCancerTypes.filter(rct => {
-          if (rct.code) {
-            return (
-              rct.code === this.relevantCancerTypeSearchKeyword ||
-              rct.subtype === this.relevantCancerTypeSearchKeyword
-            );
-          } else {
-            return rct.mainType === this.relevantCancerTypeSearchKeyword;
-          }
-        }).length === 0
-      ) {
-        match = false;
-      }
-      if (
-        this.drugSearchKeyword &&
-        !treatment.uniqueDrugs.includes(this.drugSearchKeyword)
-      ) {
-        match = false;
-      }
-      if (this.geneticTypeFilter === 'germline' && !treatment.germline) {
-        match = false;
-      }
-      if (this.geneticTypeFilter === 'somatic' && treatment.germline) {
-        match = false;
-      }
-      if (
-        this.selectedLevels.length > 0 &&
-        !this.selectedLevels.includes(treatment.level)
-      ) {
-        match = false;
-      }
-      return match;
-    });
+  get tableColumnFilters(): ColumnFilters {
+    if (this.selectedLevels.length === 0) {
+      return this.columnFilters;
+    }
+    return {
+      ...this.columnFilters,
+      [TABLE_COLUMN_KEY.LEVEL]: new Set(this.selectedLevels),
+    };
+  }
+
+  @computed
+  get filteredTreatments(): TreatmentRow[] {
+    return filterByColumnFilters(
+      this.allTreatments,
+      this.columns,
+      this.tableColumnFilters
+    );
   }
 
   @computed
@@ -511,11 +541,8 @@ export default class ActionableGenesPage extends React.Component<
 
   @computed
   get secondLayerFilterEnabled() {
-    return (
-      !!this.geneticTypeFilter ||
-      !!this.geneSearchKeyword ||
-      !!this.relevantCancerTypeSearchKeyword ||
-      !!this.drugSearchKeyword
+    return this.columns.some(
+      column => (this.columnFilters[column.id!]?.size ?? 0) > 0
     );
   }
 
@@ -528,13 +555,6 @@ export default class ActionableGenesPage extends React.Component<
   get filteredGenes() {
     return uniq(
       this.filteredTreatments.map(treatment => treatment.hugoSymbol)
-    ).sort();
-  }
-
-  @computed
-  get filteredDrugs() {
-    return uniq(
-      this.filteredTreatments.map(treatment => treatment.uniqueDrugs).flat()
     ).sort();
   }
 
@@ -591,48 +611,6 @@ export default class ActionableGenesPage extends React.Component<
     }, [] as string[]);
   }
 
-  @computed
-  get drugSelectValue() {
-    return this.drugSearchKeyword
-      ? {
-          label: this.drugSearchKeyword,
-          value: this.drugSearchKeyword,
-        }
-      : null;
-  }
-
-  @computed
-  get tumorTypeSelectValue() {
-    return this.relevantCancerTypeSearchKeyword
-      ? {
-          label: this.relevantCancerTypeSearchKeyword,
-          value: this.relevantCancerTypeSearchKeyword,
-        }
-      : null;
-  }
-
-  @computed
-  get geneSelectValue() {
-    return this.geneSearchKeyword
-      ? {
-          label: this.geneSearchKeyword,
-          value: this.geneSearchKeyword,
-        }
-      : null;
-  }
-
-  @computed
-  get geneticTypeSelectValue() {
-    return this.geneticTypeFilter
-      ? {
-          label:
-            this.geneticTypeFilter.charAt(0).toUpperCase() +
-            this.geneticTypeFilter.slice(1),
-          value: this.geneticTypeFilter,
-        }
-      : null;
-  }
-
   @autobind
   @action
   updateLevelSelection(levelOfEvidence: LEVELS) {
@@ -659,10 +637,7 @@ export default class ActionableGenesPage extends React.Component<
   @action
   clearFilters() {
     this.levelSelected = this.initLevelSelected();
-    this.relevantCancerTypeSearchKeyword = '';
-    this.drugSearchKeyword = '';
-    this.geneSearchKeyword = '';
-    this.geneticTypeFilter = '';
+    this.columnFilters = {};
   }
 
   @autobind
@@ -810,12 +785,16 @@ export default class ActionableGenesPage extends React.Component<
   }
 
   @computed
-  get columns() {
-    const commonColumns = [
+  get columns(): SearchColumn<TreatmentRow>[] {
+    const commonColumns: SearchColumn<TreatmentRow>[] = [
       {
         ...getDefaultColumnDefinition(TABLE_COLUMN_KEY.LEVEL),
         Header: <span>Level</span>,
-        minWidth: 120,
+        width: 105,
+        minWidth: 105,
+        filterType: FilterTypes.LEVEL,
+        getColumnFilterValue: (treatment: TreatmentRow) =>
+          treatment.level as LEVELS,
         Cell(props: any) {
           return (
             <div className={'my-1 d-flex justify-content-center'}>
@@ -835,9 +814,12 @@ export default class ActionableGenesPage extends React.Component<
         },
       },
       {
-        id: 'geneticType',
+        id: GENETIC_TYPE_COLUMN_ID,
         Header: <span>Setting</span>,
         accessor: 'germline',
+        filterType: FilterTypes.STRING,
+        getColumnFilterValue: (treatment: TreatmentRow) =>
+          treatment.germline ? 'Germline' : 'Somatic',
         sortMethod(a: boolean, b: boolean) {
           return a === b ? 0 : a ? 1 : -1;
         },
@@ -852,6 +834,8 @@ export default class ActionableGenesPage extends React.Component<
       {
         ...getDefaultColumnDefinition(TABLE_COLUMN_KEY.HUGO_SYMBOL),
         minWidth: 110,
+        filterType: FilterTypes.STRING,
+        getColumnFilterValue: (treatment: TreatmentRow) => treatment.hugoSymbol,
         style: { whiteSpace: 'normal' },
         Cell: (props: { original: Treatment }) => {
           const hashQueries: GenePageHashQueries = {};
@@ -876,6 +860,9 @@ export default class ActionableGenesPage extends React.Component<
         id: TABLE_COLUMN_KEY.ALTERATIONS,
         Header: <span>Alterations</span>,
         accessor: 'alterations',
+        filterType: FilterTypes.STRING,
+        getColumnFilterValue: (treatment: TreatmentRow) =>
+          treatment.alterations.map(alteration => alteration.name),
         minWidth: 200,
         style: { whiteSpace: 'normal' },
         defaultSortDesc: false,
@@ -904,12 +891,24 @@ export default class ActionableGenesPage extends React.Component<
         Header: <span>Cancer Types</span>,
         minWidth: 300,
         accessor: 'cancerTypesName',
+        filterType: FilterTypes.CANCER_TYPE,
+        getColumnFilterValue: (treatment: TreatmentRow) =>
+          treatment.cancerTypes.map(cancerType =>
+            getCancerTypeNameFromOncoTreeType(cancerType)
+          ),
+        getColumnExcludedFilterValue: (treatment: TreatmentRow) =>
+          treatment.excludedCancerTypes.map(cancerType =>
+            getCancerTypeNameFromOncoTreeType(cancerType)
+          ),
       },
     ];
     if (this.drugRelatedLevelSelected) {
       commonColumns.push({
         ...getDefaultColumnDefinition(TABLE_COLUMN_KEY.DRUGS),
         minWidth: 300,
+        filterType: FilterTypes.STRING,
+        getColumnFilterValue: (treatment: TreatmentRow) =>
+          treatment.uniqueDrugs,
         style: { whiteSpace: 'normal' },
         Cell(props: { original: Treatment }) {
           return <span>{props.original.drugs}</span>;
@@ -927,7 +926,9 @@ export default class ActionableGenesPage extends React.Component<
         this.germlineEvidencesByLevel.isPending;
     const tableProps = {
       disableSearch: true,
-      data: this.filteredTreatments,
+      data: this.allTreatments,
+      columnFilters: this.tableColumnFilters,
+      onColumnFiltersChange: this.updateColumnFilters,
       loading,
       columns: this.columns,
       defaultPageSize: 10,
@@ -1072,99 +1073,6 @@ export default class ActionableGenesPage extends React.Component<
           ></meta>
         </Helmet>
         {levelSelectionSection}
-        <Row
-          style={{ paddingLeft: '0.5rem', paddingRight: '0.5rem' }}
-          className={'mb-2'}
-        >
-          {!this.fdaSectionIsOpen && (
-            <Col
-              className={classnames(...COMPONENT_PADDING)}
-              lg={this.drugRelatedLevelSelected ? 3 : 4}
-              xs={12}
-            >
-              <Select
-                value={this.geneticTypeSelectValue}
-                placeholder={'Germline / Somatic'}
-                options={[
-                  { value: 'germline', label: 'Germline' },
-                  { value: 'somatic', label: 'Somatic' },
-                ]}
-                isClearable={true}
-                onChange={(selectedOption: any) =>
-                  (this.geneticTypeFilter = selectedOption
-                    ? selectedOption.value
-                    : '')
-                }
-              />
-            </Col>
-          )}
-          <Col
-            className={classnames(...COMPONENT_PADDING)}
-            lg={
-              this.fdaSectionIsOpen ? 6 : this.drugRelatedLevelSelected ? 3 : 4
-            }
-            xs={12}
-          >
-            <Select
-              value={this.geneSelectValue}
-              placeholder={`${this.filteredGenes.length} actionable ${pluralize(
-                'gene',
-                this.filteredGenes.length
-              )}`}
-              options={this.filteredGenes.map(hugoSymbol => {
-                return {
-                  value: hugoSymbol,
-                  label: hugoSymbol,
-                };
-              })}
-              isClearable={true}
-              onChange={(selectedOption: any) =>
-                (this.geneSearchKeyword = selectedOption
-                  ? selectedOption.label
-                  : '')
-              }
-            />
-          </Col>
-          <Col
-            className={classnames(...COMPONENT_PADDING)}
-            lg={
-              this.fdaSectionIsOpen ? 6 : this.drugRelatedLevelSelected ? 3 : 4
-            }
-            xs={12}
-          >
-            <CancerTypeSelect
-              cancerType={this.relevantCancerTypeSearchKeyword}
-              onChange={(selectedOption: any) =>
-                (this.relevantCancerTypeSearchKeyword = selectedOption
-                  ? selectedOption.value
-                  : '')
-              }
-            />
-          </Col>
-          {this.drugRelatedLevelSelected && (
-            <Col className={classnames(...COMPONENT_PADDING)} lg={3} xs={12}>
-              <Select
-                value={this.drugSelectValue}
-                placeholder={`${this.filteredDrugs.length} ${pluralize(
-                  'drug',
-                  this.filteredDrugs.length
-                )}`}
-                options={this.filteredDrugs.map(drug => {
-                  return {
-                    value: drug,
-                    label: drug,
-                  };
-                })}
-                isClearable={true}
-                onChange={(selectedOption: any) =>
-                  (this.drugSearchKeyword = selectedOption
-                    ? selectedOption.label
-                    : '')
-                }
-              />
-            </Col>
-          )}
-        </Row>
         <Row className={'mb-2'}>
           <Col className="d-flex">
             <span>{this.filterResult}</span>

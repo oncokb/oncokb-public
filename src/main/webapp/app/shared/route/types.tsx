@@ -21,10 +21,10 @@ export type AlterationPageHashQueries = AnnotationPageHashQueries & {};
 export type ActionableGenesPageHashQueries = {
   sections?: LEVEL_TYPES[];
   levels?: string[];
-  hugoSymbol?: string;
-  tumorType?: string;
-  cancerType?: string;
-  drug?: string;
+  hugoSymbol?: string | string[];
+  tumorType?: string | string[];
+  cancerType?: string | string[];
+  drug?: string | string[];
   refGenome?: REFERENCE_GENOME;
 };
 
