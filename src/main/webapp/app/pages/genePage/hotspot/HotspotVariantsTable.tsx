@@ -1,5 +1,8 @@
 import React, { FunctionComponent } from 'react';
-import { BiologicalVariant } from 'app/shared/api/generated/OncoKbPrivateAPI';
+import {
+  BiologicalVariant,
+  CancerHotspot,
+} from 'app/shared/api/generated/OncoKbPrivateAPI';
 import { SearchColumn } from 'app/components/oncokbTable/OncoKBTable';
 import { GenePageTable } from 'app/pages/genePage/GenePageTable';
 import { AlterationPageLink } from 'app/shared/utils/UrlUtils';
@@ -7,7 +10,11 @@ import {
   filterByKeyword,
   getDefaultColumnDefinition,
 } from 'app/shared/utils/Utils';
-import { REFERENCE_GENOME, TABLE_COLUMN_KEY } from 'app/config/constants';
+import {
+  HOTSPOT_TYPE,
+  REFERENCE_GENOME,
+  TABLE_COLUMN_KEY,
+} from 'app/config/constants';
 import { LongText } from 'app/oncokb-frontend-commons/src/components/LongText';
 
 const getColumns = (hugoSymbol: string): SearchColumn<BiologicalVariant>[] => [
@@ -55,15 +62,26 @@ const getColumns = (hugoSymbol: string): SearchColumn<BiologicalVariant>[] => [
   },
 ];
 
+const getDescription = ({ hugoSymbol, residue, type }: CancerHotspot) => {
+  if (type === HOTSPOT_TYPE.IN_FRAME_INDEL) {
+    return `The following in-frame indels overlapping residues ${residue.replace(
+      '-',
+      '_'
+    )} in ${hugoSymbol} are specifically curated in OncoKB:`;
+  }
+  if (type === HOTSPOT_TYPE.SPLICE_SITE) {
+    return `The following splice site mutations at the ${hugoSymbol} ${residue} hotspot have their own individual curations in OncoKB.`;
+  }
+  return `The following missense mutations at the ${hugoSymbol} ${residue} hotspot have literature-based evidence of oncogenicity in OncoKB:`;
+};
+
 const HotspotVariantsTable: FunctionComponent<{
-  hugoSymbol: string;
-  variants: BiologicalVariant[];
-  description?: React.ReactNode;
-}> = props => (
+  hotspot: CancerHotspot;
+}> = ({ hotspot }) => (
   <GenePageTable
-    data={props.variants}
-    columns={getColumns(props.hugoSymbol)}
-    description={props.description}
+    data={hotspot.curatedVariants}
+    columns={getColumns(hotspot.hugoSymbol)}
+    description={getDescription(hotspot)}
     isPending={false}
     defaultSorted={[
       {
