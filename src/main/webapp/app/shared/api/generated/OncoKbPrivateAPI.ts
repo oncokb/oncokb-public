@@ -386,8 +386,6 @@ export type VariantHotspot = {
 export type CancerHotspot = {
     'curatedVariants': Array < BiologicalVariant >
 
-        'curatedVariantsDescription': string
-
         'hugoSymbol': string
 
         'name': string

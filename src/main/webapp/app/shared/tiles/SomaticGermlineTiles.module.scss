@@ -44,11 +44,6 @@
   flex-grow: 1;
 }
 
-.hotspotTileContainer {
-  flex-grow: 0;
-  max-width: 20%;
-}
-
 @media (min-width: 600px) {
   .alterationTiles {
     flex-wrap: nowrap;
@@ -64,46 +59,8 @@
   border-radius: 8px;
 }
 
-.hotspotTile {
-  border-left: 3px solid $cancer-hotspot-orange;
-}
-
-.hotspotTitleIcon {
-  // Span the title's full line box (Bootstrap headings use line-height 1.2)
-  // so the flame reads as the same size as the text next to it.
-  width: 1.2em;
-  height: 1.2em;
-  margin-right: 0.25em;
-}
-
-.hotspotSourceLink {
-  font-family: $font-family-sans-serif !important;
-}
-
-// Reserve the external link icon's space up front so revealing it on hover
-// only fades it in and does not resize the tile.
-.hotspotSourceLink a i,
-.hotspotSourceLink a:hover i {
-  max-width: 15px;
-  margin-left: 0.5rem;
-}
-
 .hotspotTileStandalone {
   flex-grow: 0;
-}
-
-.hotspotTileShrink {
-  min-width: 0;
-}
-
-.hotspotTile .alterationTileItems > * {
-  min-width: 0;
-}
-
-.hotspotTile .itemHeader {
-  white-space: nowrap;
-  overflow: hidden;
-  text-overflow: ellipsis;
 }
 
 .alterationTileColumnMerge {

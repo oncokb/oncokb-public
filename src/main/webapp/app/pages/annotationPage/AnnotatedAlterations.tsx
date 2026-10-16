@@ -18,9 +18,11 @@ import SummaryWithRefs from 'app/oncokb-frontend-commons/src/components/SummaryW
 import React, { FunctionComponent } from 'react';
 import { GenePageTable } from 'app/pages/genePage/GenePageTable';
 import {
-  CancerHotspotIcon,
+  CancerHotspotImage,
   CancerHotspotLink,
+  CancerHotspotTooltipContent,
 } from 'app/components/cancerHotspot/CancerHotspot';
+import InfoIcon from 'app/shared/icons/InfoIcon';
 import { SearchColumn } from 'app/components/oncokbTable/OncoKBTable';
 
 const HOTSPOT_ICON_SIZE = 18;
@@ -84,7 +86,16 @@ const getColumns = (
     },
   };
   const hotspotColumn = {
-    Header: <span>Hotspot</span>,
+    Header: (
+      <span className="d-inline-flex align-items-center">
+        Hotspot
+        <InfoIcon
+          className="ml-1"
+          overlay={() => <CancerHotspotTooltipContent />}
+          placement="top"
+        />
+      </span>
+    ),
     accessor: (data: BiologicalVariant) => !!data.hotspot?.isHotspot,
     id: 'hotspot',
     minWidth: 120,
@@ -103,7 +114,7 @@ const getColumns = (
               size={HOTSPOT_ICON_SIZE}
             />
           ) : (
-            <CancerHotspotIcon size={HOTSPOT_ICON_SIZE} />
+            <CancerHotspotImage size={HOTSPOT_ICON_SIZE} />
           )}
         </div>
       );

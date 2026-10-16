@@ -14,7 +14,7 @@ export const CancerHotspotTooltipContent: React.FunctionComponent<{}> = () => (
     </div>
     <div className={'mt-1'}>
       This mutant allele was identified as a statistically significant recurrent
-      hotspot in a population-scale cohort of tumor samples comprised of several
+      hotspot in a population-scale cohort of tumor samples composed of several
       cancer types using methodology based in part on{' '}
       <Linkout link={getNCBIlink('/pubmed/26619011')}>
         Chang et al. 2016
@@ -30,7 +30,7 @@ export const CancerHotspotTooltipContent: React.FunctionComponent<{}> = () => (
       .
     </div>
     <div className={'mt-1'}>
-      {ONCOKB_TM} only annotates recurrent mutant allele hotspots (3D clustered
+      {ONCOKB_TM} annotates recurrent mutant allele hotspots (3D clustered
       hotspots are not included).
     </div>
     <div className={'mt-1'}>
@@ -40,21 +40,32 @@ export const CancerHotspotTooltipContent: React.FunctionComponent<{}> = () => (
   </div>
 );
 
-export const CancerHotspotIcon: React.FunctionComponent<{
+export const CancerHotspotImage: React.FunctionComponent<{
   className?: string;
   size?: number;
 }> = ({ size = 36, ...props }) => (
+  <img
+    className={props.className}
+    width={size}
+    height={size}
+    src={cancerHotspotImg}
+    alt={'Recurrent Hotspot Symbol'}
+  />
+);
+
+export const CancerHotspotIcon: React.FunctionComponent<{
+  className?: string;
+  size?: number;
+}> = props => (
   <DefaultTooltip
     overlay={() => <CancerHotspotTooltipContent />}
     placement={'top'}
   >
-    <img
-      className={props.className}
-      width={size}
-      height={size}
-      src={cancerHotspotImg}
-      alt={'Recurrent Hotspot Symbol'}
-    />
+    {/* The tooltip attaches its mouse handlers to its direct child, so the
+    image needs a DOM wrapper to receive them. */}
+    <span className="d-inline-flex">
+      <CancerHotspotImage {...props} />
+    </span>
   </DefaultTooltip>
 );
 
@@ -68,7 +79,7 @@ export const CancerHotspotLink: React.FunctionComponent<{
     className={styles.hotspotLink}
     aria-label={props.ariaLabel}
   >
-    <CancerHotspotIcon size={props.size} />
+    <CancerHotspotImage size={props.size} />
     <i className={classnames('fa fa-external-link', styles.icon)} />
   </Link>
 );

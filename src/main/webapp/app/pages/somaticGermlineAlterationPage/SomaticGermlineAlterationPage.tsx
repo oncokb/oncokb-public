@@ -797,7 +797,6 @@ export class SomaticGermlineAlterationPage extends React.Component<
                         variantAnnotation={this.annotationData.result}
                         isGermline={this.store.germline}
                         grch37Isoform={this.store.gene.result.grch37Isoform}
-                        cancerHotspot={this.positionalHotspot}
                       />
                     </Col>
                   </Row>
@@ -838,6 +837,17 @@ export class SomaticGermlineAlterationPage extends React.Component<
                             />
                           </>
                         )}
+                      {this.positionalHotspot &&
+                        this.positionalHotspot.curatedVariants.length > 0 && (
+                          <>
+                            <MiniNavBarHeader id="annotated-hotspot-alterations">
+                              {`Annotated ${this.store.hugoSymbol} ${this.positionalHotspot.name} Alterations`}
+                            </MiniNavBarHeader>
+                            <HotspotVariantsTable
+                              hotspot={this.positionalHotspot}
+                            />
+                          </>
+                        )}
                       <div className="d-flex align-items-center">
                         <MiniNavBarHeader id="clinical-implications">
                           <span>Clinical Implications for this Biomarker</span>
@@ -865,22 +875,6 @@ export class SomaticGermlineAlterationPage extends React.Component<
                         onChangeTab={this.onChangeTab}
                         routing={this.props.routing}
                       />
-                      {this.positionalHotspot &&
-                        this.positionalHotspot.curatedVariants.length > 0 && (
-                          <>
-                            <MiniNavBarHeader id="annotated-hotspot-alterations">
-                              {`Annotated ${this.store.hugoSymbol} ${this.positionalHotspot.name} Alterations`}
-                            </MiniNavBarHeader>
-                            <HotspotVariantsTable
-                              hugoSymbol={this.store.hugoSymbol}
-                              variants={this.positionalHotspot.curatedVariants}
-                              description={
-                                this.positionalHotspot
-                                  .curatedVariantsDescription
-                              }
-                            />
-                          </>
-                        )}
                     </Col>
                   </Row>
                 </Container>

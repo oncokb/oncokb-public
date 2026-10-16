@@ -3283,9 +3283,6 @@
             "$ref": "#/definitions/BiologicalVariant"
           }
         },
-        "curatedVariantsDescription": {
-          "type": "string"
-        },
         "hugoSymbol": {
           "type": "string"
         },
