@@ -8,18 +8,30 @@ import {
   REFERENCE_GENOME,
   TABLE_COLUMN_KEY,
 } from 'app/config/constants';
-import { AlterationPageLink } from 'app/shared/utils/UrlUtils';
+import {
+  AlterationPageLink,
+  getCancerHotspotPageLink,
+} from 'app/shared/utils/UrlUtils';
 import { Citations } from 'app/shared/api/generated/OncoKbAPI';
 import { DescriptionTooltip } from 'app/pages/annotationPage/DescriptionTooltip';
 import SummaryWithRefs from 'app/oncokb-frontend-commons/src/components/SummaryWithRefs';
 import React, { FunctionComponent } from 'react';
 import { GenePageTable } from 'app/pages/genePage/GenePageTable';
+import {
+  CancerHotspotImage,
+  CancerHotspotLink,
+  CancerHotspotTooltipContent,
+} from 'app/components/cancerHotspot/CancerHotspot';
+import InfoIcon from 'app/shared/icons/InfoIcon';
+import { SearchColumn } from 'app/components/oncokbTable/OncoKBTable';
+
+const HOTSPOT_ICON_SIZE = 18;
 
 const getColumns = (
   germline: boolean,
   hugoSymbol: string,
   useMutationEffectForGermline: boolean
-) => {
+): SearchColumn<BiologicalVariant>[] => {
   const altColumn = {
     ...getDefaultColumnDefinition(TABLE_COLUMN_KEY.ALTERATION),
     accessor: 'variant',
@@ -73,6 +85,41 @@ const getColumns = (
       );
     },
   };
+  const hotspotColumn = {
+    Header: (
+      <span className="d-inline-flex align-items-center">
+        Hotspot
+        <InfoIcon
+          className="ml-1"
+          overlay={() => <CancerHotspotTooltipContent />}
+          placement="top"
+        />
+      </span>
+    ),
+    accessor: (data: BiologicalVariant) => !!data.hotspot?.isHotspot,
+    id: 'hotspot',
+    minWidth: 120,
+    width: 120,
+    Cell(props: { original: BiologicalVariant }) {
+      if (!props.original.hotspot?.isHotspot) {
+        return <></>;
+      }
+      const hotspot = props.original.hotspot;
+      return (
+        <div style={{ display: 'flex', justifyContent: 'flex-start' }}>
+          {hotspot.residue ? (
+            <CancerHotspotLink
+              link={getCancerHotspotPageLink({ hugoSymbol, hotspot })}
+              ariaLabel={`${hugoSymbol} ${hotspot.name} hotspot`}
+              size={HOTSPOT_ICON_SIZE}
+            />
+          ) : (
+            <CancerHotspotImage size={HOTSPOT_ICON_SIZE} />
+          )}
+        </div>
+      );
+    },
+  };
   const somaticColumns = [
     altColumn,
     {
@@ -85,6 +132,7 @@ const getColumns = (
       onFilter: (data: BiologicalVariant, keyword: string) =>
         filterByKeyword(data.mutationEffect, keyword),
     },
+    hotspotColumn,
     descriptionColumn,
   ];
   const germlineColumns = [

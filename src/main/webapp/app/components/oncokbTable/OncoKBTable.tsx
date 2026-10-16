@@ -18,6 +18,7 @@ interface ITableWithSearchBox<T> extends Partial<TableProps<T>> {
   columns: SearchColumn<T>[];
   loading?: boolean;
   filters?: React.FunctionComponent;
+  description?: React.ReactNode;
   className?: string;
   serverSideSearch?: boolean;
   searchKeyword?: string;
@@ -64,10 +65,19 @@ export default class OncoKBTable<T> extends React.Component<
 
     return (
       <div>
-        {this.props.filters === undefined && this.props.disableSearch ? (
+        {this.props.filters === undefined &&
+        this.props.description === undefined &&
+        this.props.disableSearch ? (
           <></>
         ) : (
-          <div className="row">
+          <div
+            className={classNames('row', {
+              'align-items-end': this.props.description !== undefined,
+            })}
+          >
+            {this.props.description !== undefined && (
+              <div className="col-sm">{this.props.description}</div>
+            )}
             <div className="col-auto">
               {this.props.filters === undefined ? (
                 <></>
@@ -75,7 +85,11 @@ export default class OncoKBTable<T> extends React.Component<
                 <this.props.filters />
               )}
             </div>
-            <div className="col-sm">
+            <div
+              className={
+                this.props.description !== undefined ? 'col-sm-4' : 'col-sm'
+              }
+            >
               {this.props.disableSearch ? (
                 <></>
               ) : (
