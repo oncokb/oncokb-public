@@ -5,11 +5,14 @@ import org.mskcc.cbio.oncokb.domain.Authority;
 import org.mskcc.cbio.oncokb.domain.Token;
 import org.mskcc.cbio.oncokb.domain.User;
 import org.mskcc.cbio.oncokb.domain.UserDetails;
+import org.mskcc.cbio.oncokb.domain.UserTrial;
 import org.mskcc.cbio.oncokb.domain.enumeration.AccountRequestStatus;
 import org.mskcc.cbio.oncokb.domain.enumeration.LicenseType;
+import org.mskcc.cbio.oncokb.domain.enumeration.TrialStatus;
 import org.mskcc.cbio.oncokb.repository.AuthorityRepository;
 import org.mskcc.cbio.oncokb.repository.UserDetailsRepository;
 import org.mskcc.cbio.oncokb.repository.UserRepository;
+import org.mskcc.cbio.oncokb.repository.UserTrialRepository;
 import org.mskcc.cbio.oncokb.security.AuthoritiesConstants;
 import org.mskcc.cbio.oncokb.service.TokenService;
 import org.mskcc.cbio.oncokb.web.rest.vm.LoginVM;
@@ -34,6 +37,7 @@ import static org.hamcrest.Matchers.containsString;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.content;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.header;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 @AutoConfigureMockMvc
@@ -62,6 +66,9 @@ public class UserUUIDControllerIT {
 
     @Autowired
     private UserDetailsRepository userDetailsRepository;
+
+    @Autowired
+    private UserTrialRepository userTrialRepository;
 
     @Autowired
     private TokenService tokenService;
@@ -199,5 +206,121 @@ public class UserUUIDControllerIT {
                 .content(TestUtil.convertObjectToJsonBytes(loginVM)))
             .andExpect(status().isOk())
             .andExpect(header().string("Authorization", containsString("Bearer ")));
+    }
+
+    @Test
+    @Transactional
+    public void testPendingTrialTermsLoginIncludesTrialActivationKey() throws Exception {
+        String login = "pending.trial.terms.user";
+        String rawPassword = "password";
+        String trialActivationKey = "pending-trial-key-123";
+
+        User user = createUserForAuthentication(login, rawPassword);
+
+        UserDetails userDetails = new UserDetails();
+        userDetails.setUser(user);
+        userDetails.setAccountRequestStatus(AccountRequestStatus.APPROVED);
+        userDetails.setTrialStatus(TrialStatus.TRIAL_PENDING_TERMS_ACCEPTANCE);
+        userDetailsRepository.save(userDetails);
+
+        UserTrial userTrial = new UserTrial();
+        userTrial.setUser(user);
+        userTrial.setActivationKey(trialActivationKey);
+        userTrialRepository.save(userTrial);
+
+        LoginVM loginVM = new LoginVM();
+        loginVM.setUsername(login);
+        loginVM.setPassword(rawPassword);
+        loginVM.setRememberMe(false);
+
+        restMockMvc.perform(post("/api/authenticate")
+                .contentType(MediaType.APPLICATION_JSON)
+                .content(TestUtil.convertObjectToJsonBytes(loginVM)))
+            .andExpect(status().isUnauthorized())
+            .andExpect(jsonPath("$.trialActivationKey").value(trialActivationKey));
+    }
+
+    @Test
+    @Transactional
+    public void testTrialWithoutAcceptedTermsLoginIncludesTrialActivationKey() throws Exception {
+        String login = "trial.missing.terms.user";
+        String rawPassword = "password";
+        String trialActivationKey = "trial-missing-terms-key-123";
+
+        User user = createUserForAuthentication(login, rawPassword);
+
+        UserDetails userDetails = new UserDetails();
+        userDetails.setUser(user);
+        userDetails.setAccountRequestStatus(AccountRequestStatus.APPROVED);
+        userDetails.setTrialStatus(TrialStatus.TRIAL);
+        userDetailsRepository.save(userDetails);
+
+        UserTrial userTrial = new UserTrial();
+        userTrial.setUser(user);
+        userTrial.setActivationKey(trialActivationKey);
+        userTrial.setLicenseAgreementAcceptanceDate(null);
+        userTrialRepository.save(userTrial);
+
+        LoginVM loginVM = new LoginVM();
+        loginVM.setUsername(login);
+        loginVM.setPassword(rawPassword);
+        loginVM.setRememberMe(false);
+
+        restMockMvc.perform(post("/api/authenticate")
+                .contentType(MediaType.APPLICATION_JSON)
+                .content(TestUtil.convertObjectToJsonBytes(loginVM)))
+            .andExpect(status().isUnauthorized())
+            .andExpect(jsonPath("$.trialActivationKey").value(trialActivationKey));
+    }
+
+    @Test
+    @Transactional
+    public void testTrialWithAcceptedTermsCanAuthenticate() throws Exception {
+        String login = "trial.accepted.terms.user";
+        String rawPassword = "password";
+
+        User user = createUserForAuthentication(login, rawPassword);
+
+        UserDetails userDetails = new UserDetails();
+        userDetails.setUser(user);
+        userDetails.setAccountRequestStatus(AccountRequestStatus.APPROVED);
+        userDetails.setTrialStatus(TrialStatus.TRIAL);
+        userDetailsRepository.save(userDetails);
+
+        UserTrial userTrial = new UserTrial();
+        userTrial.setUser(user);
+        userTrial.setInitiationDate(Instant.now().minusSeconds(7200));
+        userTrial.setActivationDate(Instant.now().minusSeconds(3600));
+        userTrial.setActivationKey(null);
+        userTrial.setLicenseAgreementName("Trial License Agreement");
+        userTrial.setLicenseAgreementVersion("v1");
+        userTrial.setLicenseAgreementAcceptanceDate(Instant.now().minusSeconds(3600));
+        userTrialRepository.save(userTrial);
+
+        LoginVM loginVM = new LoginVM();
+        loginVM.setUsername(login);
+        loginVM.setPassword(rawPassword);
+        loginVM.setRememberMe(false);
+
+        restMockMvc.perform(post("/api/authenticate")
+                .contentType(MediaType.APPLICATION_JSON)
+                .content(TestUtil.convertObjectToJsonBytes(loginVM)))
+            .andExpect(status().isOk())
+            .andExpect(header().string("Authorization", containsString("Bearer ")));
+    }
+
+    private User createUserForAuthentication(String login, String rawPassword) {
+        User user = new User();
+        user.setLogin(login);
+        user.setEmail(login + "@example.com");
+        user.setFirstName("Trial");
+        user.setLastName("User");
+        user.setLangKey("en");
+        user.setActivated(true);
+        user.setPassword(passwordEncoder.encode(rawPassword));
+        Authority userAuthority = authorityRepository.findById(AuthoritiesConstants.USER)
+            .orElseThrow(() -> new IllegalStateException("Missing ROLE_USER authority"));
+        user.setAuthorities(Collections.singleton(userAuthority));
+        return userRepository.save(user);
     }
 }
