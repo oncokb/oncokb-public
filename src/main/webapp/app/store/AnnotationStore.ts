@@ -22,10 +22,12 @@ import {
   DEFAULT_GENE,
   DEFAULT_GENE_NUMBER,
   EVIDENCE_TYPES,
+  HOTSPOT_TYPE,
   REFERENCE_GENOME,
 } from 'app/config/constants';
 import {
   BiologicalVariant,
+  CancerHotspot,
   CancerTypeCount,
   ClinicalVariant,
   EnsemblGene,
@@ -43,6 +45,7 @@ import {
   getAlterationName,
   getCancerTypeNameFromOncoTreeType,
   isOncogenic,
+  isPositionalAlteration,
   isPromoterGenomicAlteration,
   shortenOncogenicity,
   shortenPathogenicity,
@@ -530,6 +533,46 @@ export class AnnotationStore {
       });
     },
     default: DEFAULT_ANNOTATION,
+  });
+
+  /**
+   * The single residue hotspot a positional alteration page is about, eg BRAF
+   * V600: the page shows its tile and its curated alterations. Undefined on any
+   * other page, and when the hotspot endpoint has no hotspot for the position.
+   */
+  readonly positionalHotspot = remoteData<CancerHotspot | undefined>({
+    await: () => [this.somaticAnnotationData],
+    invoke: async () => {
+      const annotation = this.somaticAnnotationData.result;
+      const query = annotation.query;
+      if (
+        this.germline ||
+        !annotation.hotspot ||
+        !isPositionalAlteration(
+          query.proteinStart,
+          query.proteinEnd,
+          query.consequence
+        )
+      ) {
+        return undefined;
+      }
+      try {
+        const hotspotAnnotation = await privateClient.utilHotspotAnnotationGetUsingGET(
+          {
+            hugoSymbol: this.hugoSymbol,
+            alteration: this.alterationName,
+            referenceGenome: this.referenceGenomeQuery,
+          }
+        );
+        const hotspot = hotspotAnnotation.cancerHotspot;
+        return hotspot?.type === HOTSPOT_TYPE.SINGLE_RESIDUE
+          ? hotspot
+          : undefined;
+      } catch (e) {
+        return undefined;
+      }
+    },
+    default: undefined,
   });
 
   readonly germlineAnnotationResult = remoteData<GermlineVariantAnnotation>({

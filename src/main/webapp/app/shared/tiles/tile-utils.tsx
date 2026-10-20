@@ -30,6 +30,7 @@ import {
   COLOR_ICON_WITH_INFO,
   COLOR_ICON_WITHOUT_INFO,
 } from 'app/config/theme';
+import { CancerHotspotIcon } from 'app/components/cancerHotspot/CancerHotspot';
 import {
   MutationEffect,
   Oncogenicity,
@@ -37,18 +38,25 @@ import {
 } from 'app/components/oncokbMutationMapper/OncokbMutationMapper';
 import axios from 'axios';
 
+const HOTSPOT_ICON_SIZE = 18;
+
 function OncogenicInfo({
   isUnknownOncogenicity,
   isVus,
   oncogenicity,
+  isHotspot,
 }: {
   isUnknownOncogenicity: boolean;
   oncogenicity: string | undefined;
   isVus: boolean;
+  isHotspot: boolean;
   className?: string;
 }) {
   return (
-    <span style={{ margin: '0px' }} className="h5">
+    <span
+      style={{ margin: '0px' }}
+      className={classnames('h5', 'd-inline-flex', 'align-items-center')}
+    >
       <span>
         {isUnknownOncogenicity
           ? `${ONCOGENICITY.UNKNOWN} Oncogenic Effect`
@@ -57,8 +65,11 @@ function OncogenicInfo({
       <OncoKBOncogenicityIcon
         oncogenicity={oncogenicity}
         isVus={isVus}
-        classNameParent={classnames('d-inline-block my-auto')}
+        classNameParent={classnames('d-inline-block')}
       />
+      {isHotspot && (
+        <CancerHotspotIcon className="ml-1" size={HOTSPOT_ICON_SIZE} />
+      )}
     </span>
   );
 }
@@ -187,6 +198,8 @@ function createMutationEffectTileProps(
     ? undefined
     : (variantAnnotation as SomaticVariantAnnotation).oncogenic;
   const vus = variantAnnotation.vus;
+  const isHotspot =
+    !isGermline && !!(variantAnnotation as SomaticVariantAnnotation).hotspot;
 
   const isUnknownOncogenicity =
     !oncogenic || oncogenic === ONCOGENICITY.UNKNOWN;
@@ -196,12 +209,15 @@ function createMutationEffectTileProps(
       [
         {
           title: 'Oncogenicity',
-          show: !isGermline && (!isUnknownOncogenicity || !isPositionalAlt),
+          show:
+            !isGermline &&
+            (!isUnknownOncogenicity || !isPositionalAlt || isHotspot),
           value: (
             <OncogenicInfo
               oncogenicity={oncogenic}
               isVus={vus}
               isUnknownOncogenicity={isUnknownOncogenicity}
+              isHotspot={isHotspot}
             />
           ),
         },
@@ -212,6 +228,32 @@ function createMutationEffectTileProps(
             (mutationEffect.knownEffect !== MUTATION_EFFECT.UNKNOWN ||
               isPositionalAlt),
           value: <MutationEffectIcon mutationEffect={mutationEffect} />,
+        },
+      ],
+    ],
+  };
+}
+
+export function createHotspotOncogenicityTileProps(
+  annotation: SomaticVariantAnnotation
+): AlterationTileProps {
+  const { oncogenic } = annotation;
+  return {
+    title: 'Mutation Effect',
+    items: [
+      [
+        {
+          title: 'Oncogenicity',
+          value: (
+            <OncogenicInfo
+              oncogenicity={oncogenic}
+              isVus={annotation.vus}
+              isUnknownOncogenicity={
+                !oncogenic || oncogenic === ONCOGENICITY.UNKNOWN
+              }
+              isHotspot={annotation.hotspot}
+            />
+          ),
         },
       ],
     ],

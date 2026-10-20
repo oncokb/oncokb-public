@@ -40,7 +40,7 @@ spring:
     # changed database name
     url: jdbc:mysql://localhost:3306/oncokb_public?useUnicode=true&characterEncoding=utf8&useSSL=false&useLegacyDatetimeCode=false&serverTimezone=UTC&createDatabaseIfNotExist=true
     username: root
-    password: root
+    password: rootroot
     hikari:
       poolName: Hikari
       auto-commit: false
@@ -125,7 +125,7 @@ application:
   profile: dev
   base-url: 'http://localhost:9095'
   # This is the proxy link to oncokb-core
-  api-proxy-url: 'http://localhost:8080/oncokb'
+  api-proxy-url: 'http://localhost:8080/app'
   sitemap-enabled: false
   google-webmaster-verification:
   token-usage-check:

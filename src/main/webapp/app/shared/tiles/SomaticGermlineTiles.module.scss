@@ -20,6 +20,17 @@
   font-family: $font-family-sans-serif !important;
 }
 
+.itemHeader a {
+  color: inherit;
+  text-decoration: none;
+
+  &:hover,
+  &:focus {
+    color: $blue;
+    text-decoration: underline;
+  }
+}
+
 .stringValue {
   font-family: $font-family-sans-serif-bold !important;
   font-size: 1.5rem !important;
@@ -46,6 +57,10 @@
   gap: 8px;
   box-shadow: $default-box-shadow;
   border-radius: 8px;
+}
+
+.hotspotTileStandalone {
+  flex-grow: 0;
 }
 
 .alterationTileColumnMerge {
