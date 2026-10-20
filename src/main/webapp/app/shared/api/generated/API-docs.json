@@ -5166,6 +5166,9 @@
         "dataVersion": {
           "type": "string"
         },
+        "date": {
+          "type": "string"
+        },
         "germlineHistory": {
           "$ref": "#/definitions/History"
         },
