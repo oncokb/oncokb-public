@@ -334,7 +334,7 @@ export default class NewsPage extends React.Component<
     const summaryParts = [
       geneCount > 0 ? `${geneCount} gene${geneCount === 1 ? '' : 's'}` : null,
       updateCount > 0
-        ? `${updateCount} annotation change${updateCount === 1 ? '' : 's'}`
+        ? `${updateCount} change${updateCount === 1 ? '' : 's'}`
         : null,
     ].filter(Boolean);
 
@@ -926,7 +926,7 @@ export default class NewsPage extends React.Component<
     const sectionSummary = [
       geneCount > 0 ? `${geneCount} gene${geneCount === 1 ? '' : 's'}` : null,
       updateCount > 0
-        ? `${updateCount} annotation change${updateCount === 1 ? '' : 's'}`
+        ? `${updateCount} change${updateCount === 1 ? '' : 's'}`
         : null,
     ]
       .filter(Boolean)
@@ -1676,11 +1676,12 @@ export default class NewsPage extends React.Component<
                 <>
                   <div>
                     <p className="mb-3">
-                      This changelog provides a comprehensive record of all
-                      changes to {ONCOKB_TM} scientific content for each data
-                      release, including updates to genes, alterations, cancer
-                      types, treatments, and associated annotations, as well as
-                      granular editorial changes to scientific descriptions.
+                      This changelog documents changes to {ONCOKB_TM} scientific
+                      content, organized by data release. It covers annotations
+                      related to genes, alterations, and cancer types, as well
+                      as therapeutic, diagnostic, and prognostic implications.
+                      Editorial revisions to scientific descriptions are also
+                      included.
                     </p>
                     <div className="py-1">
                       <ul className="mb-0 pl-3" style={{ lineHeight: 1.4 }}>
@@ -1689,7 +1690,7 @@ export default class NewsPage extends React.Component<
                             Change types:
                           </span>
                           <span className="text-muted">
-                            hover over each tag to see details.
+                            hover over each tag for its definition.
                           </span>
                           <div className="d-flex flex-wrap align-items-center mt-2">
                             <ContentChangeTag showTooltip type="add" />
@@ -1710,9 +1711,8 @@ export default class NewsPage extends React.Component<
                             Ordering:
                           </span>
                           <span className="text-muted">
-                            within each expanded section, entries are listed
-                            chronologically from oldest to newest (top to
-                            bottom).
+                            within each release, entries are listed newest to
+                            oldest.
                           </span>
                         </li>
                       </ul>

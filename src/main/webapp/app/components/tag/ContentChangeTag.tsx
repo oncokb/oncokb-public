@@ -33,12 +33,12 @@ export default function ContentChangeTag({
         'New content was added, either a new entry or a field that was previously empty.';
       break;
     case 'delete':
-      label = 'Deletion';
+      label = 'Removal';
       classname = styles.deletedTag;
       tooltipText = 'Existing content was removed.';
       break;
     case 'update':
-      label = 'Update';
+      label = 'Revision';
       classname = styles.updatedTag;
       tooltipText =
         'Existing content was revised. Old and new values are shown below.';
