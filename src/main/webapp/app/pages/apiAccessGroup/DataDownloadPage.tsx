@@ -59,81 +59,95 @@ const DownloadButtonGroups: React.FunctionComponent<{
     majorVersion < 7 || (majorVersion === 7 && minorVersion < 3);
   return (
     <>
-      {props.data.hasAllCuratedGenes ? (
+      <div className="mb-3">
+        <div className="font-weight-bold mb-1">Data Reports</div>
+        {props.data.hasAllCuratedGenes ? (
+          <AuthDownloadButton
+            className={BUTTON_CLASS_NAME}
+            fileName={`all_curated_genes_${props.data.version}.tsv`}
+            getDownloadData={() => {
+              return oncokbClient.utilsAllCuratedGenesTxtGetUsingGET({
+                version: props.data.version,
+              });
+            }}
+            buttonText="All Curated Genes"
+          />
+        ) : null}
+        {props.data.hasCancerGeneList ? (
+          <AuthDownloadButton
+            className={BUTTON_CLASS_NAME}
+            fileName={`cancer_gene_list_${props.data.version}.tsv`}
+            getDownloadData={() => {
+              return oncokbClient.utilsCancerGeneListTxtGetUsingGET({
+                version: props.data.version,
+              });
+            }}
+            buttonText="Cancer Gene List"
+          />
+        ) : null}
+        {props.data.hasAllActionableVariants && (
+          <AuthDownloadButton
+            className={BUTTON_CLASS_NAME}
+            fileName={`all_actionable_variants_${props.data.version}.tsv`}
+            getDownloadData={async () => {
+              const data = await oncokbClient.utilsAllActionableVariantsTxtGetUsingGET(
+                {
+                  version: props.data.version,
+                }
+              );
+              return data;
+            }}
+            buttonText="All Actionable Variants"
+          />
+        )}
+        {props.data.hasAllAnnotatedVariants && (
+          <AuthDownloadButton
+            className={BUTTON_CLASS_NAME}
+            fileName={`all_annotated_variants_${props.data.version}.tsv`}
+            getDownloadData={async () => {
+              const data = await oncokbClient.utilsAllAnnotatedVariantsTxtGetUsingGET(
+                {
+                  version: props.data.version,
+                }
+              );
+              return data;
+            }}
+            buttonText="All Annotated Variants"
+          />
+        )}
         <AuthDownloadButton
+          disabled={versionsIsLessThan73}
+          title={
+            versionsIsLessThan73
+              ? 'Not available for versions below 7.3'
+              : undefined
+          }
           className={BUTTON_CLASS_NAME}
-          fileName={`all_curated_genes_${props.data.version}.tsv`}
-          getDownloadData={() => {
-            return oncokbClient.utilsAllCuratedGenesTxtGetUsingGET({
-              version: props.data.version,
-            });
-          }}
-          buttonText="All Curated Genes"
-        />
-      ) : null}
-      {props.data.hasCancerGeneList ? (
-        <AuthDownloadButton
-          className={BUTTON_CLASS_NAME}
-          fileName={`cancer_gene_list_${props.data.version}.tsv`}
-          getDownloadData={() => {
-            return oncokbClient.utilsCancerGeneListTxtGetUsingGET({
-              version: props.data.version,
-            });
-          }}
-          buttonText="Cancer Gene List"
-        />
-      ) : null}
-      {props.data.hasAllActionableVariants && (
-        <AuthDownloadButton
-          className={BUTTON_CLASS_NAME}
-          fileName={`all_actionable_variants_${props.data.version}.tsv`}
+          fileName={`all_genomic_indicators_${props.data.version}.tsv`}
           getDownloadData={async () => {
-            const data = await oncokbClient.utilsAllActionableVariantsTxtGetUsingGET(
+            const data = await oncokbClient.utilsAllGenomicIndicatorsTxtGetUsingGET(
               {
                 version: props.data.version,
               }
             );
             return data;
           }}
-          buttonText="All Actionable Variants"
+          buttonText="All Genomic Indicators"
         />
-      )}
-      {props.data.hasAllAnnotatedVariants && (
-        <AuthDownloadButton
-          className={BUTTON_CLASS_NAME}
-          fileName={`all_annotated_variants_${props.data.version}.tsv`}
-          getDownloadData={async () => {
-            const data = await oncokbClient.utilsAllAnnotatedVariantsTxtGetUsingGET(
-              {
-                version: props.data.version,
-              }
-            );
-            return data;
-          }}
-          buttonText="All Annotated Variants"
-        />
-      )}
-      <AuthDownloadButton
-        disabled={versionsIsLessThan73}
-        title={
-          versionsIsLessThan73
-            ? 'Not available for versions below 7.3'
-            : undefined
-        }
-        className={BUTTON_CLASS_NAME}
-        fileName={`all_genomic_indicators_${props.data.version}.tsv`}
-        getDownloadData={async () => {
-          const data = await oncokbClient.utilsAllGenomicIndicatorsTxtGetUsingGET(
-            {
-              version: props.data.version,
-            }
-          );
-          return data;
-        }}
-        buttonText="All Genomic Indicators"
-      />
+      </div>
       {props.data.hasSqlDump ? (
-        <>
+        <div className="mb-3">
+          <div className="font-weight-bold mb-1">Database Dumps</div>
+          <p className="rounded">
+            These database dumps are needed for users who want to run OncoKB
+            locally. Please refer to the OncoKB{' '}
+            <Link
+              to={'https://github.com/oncokb/oncokb#run-with-docker-containers'}
+            >
+              readme
+            </Link>{' '}
+            for more information.
+          </p>
           <AuthDownloadButton
             className={BUTTON_CLASS_NAME}
             fileName={`oncokb_${props.data.version.replace('.', '_')}.sql.gz`}
@@ -145,7 +159,7 @@ const DownloadButtonGroups: React.FunctionComponent<{
               );
               return data;
             }}
-            buttonText="Data Dump"
+            buttonText="OncoKB Data"
           />
           <AuthDownloadButton
             disabled={versionIsLessThan4}
@@ -171,9 +185,9 @@ const DownloadButtonGroups: React.FunctionComponent<{
               );
               return data;
             }}
-            buttonText="Transcript Data"
+            buttonText="OncoKB Transcript Data"
           />
-        </>
+        </div>
       ) : null}
     </>
   );
@@ -284,11 +298,6 @@ export default class DataDownloadPage extends React.Component<{
               )}
               , the latest
             </h6>
-            <p className="rounded">
-              The transcript database serves OncoKB metadata included gene,
-              transcript, sequence, etc. Only required for local installations
-              that will utilize the /byGenomicChange and /byHGVSg endpoints
-            </p>
             <DownloadButtonGroups data={this.dataAvailability.result[0]} />
 
             {this.dataAvailability.result.length > 1 ? (
