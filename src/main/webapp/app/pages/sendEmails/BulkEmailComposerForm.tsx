@@ -1,7 +1,7 @@
 import React from 'react';
 import Select from 'react-select';
 import { LoadingButton } from 'app/shared/button/LoadingButton';
-import { Button } from 'react-bootstrap';
+import { Alert, Button } from 'react-bootstrap';
 import styles from './BulkEmailComposerForm.module.scss';
 
 type Option = {
@@ -123,30 +123,31 @@ const BulkEmailComposerForm = ({
           />
         </fieldset>
 
-        <fieldset className={styles.fieldGroup}>
-          <legend className={styles.fieldLabel}>Recipients</legend>
-          <Select
-            inputId="bulk-recipients"
-            isLoading={isLoadingRecipients}
-            isDisabled={audience !== BulkEmailAudience.CUSTOM}
-            isMulti
-            closeMenuOnSelect={false}
-            placeholder="Select users"
-            value={selectedRecipients}
-            options={recipientOptions}
-            isClearable
-            onInputChange={(inputValue: string, meta: { action: string }) => {
-              onRecipientSearchChange(inputValue, meta.action);
-              return inputValue;
-            }}
-            onChange={(selectedOption: any) => {
-              const options = Array.isArray(selectedOption)
-                ? selectedOption
-                : [];
-              onRecipientsChange(options);
-            }}
-          />
-        </fieldset>
+        {audience === BulkEmailAudience.CUSTOM && (
+          <fieldset className={styles.fieldGroup}>
+            <legend className={styles.fieldLabel}>Recipients</legend>
+            <Select
+              inputId="bulk-recipients"
+              isLoading={isLoadingRecipients}
+              isMulti
+              closeMenuOnSelect={false}
+              placeholder="Select users"
+              value={selectedRecipients}
+              options={recipientOptions}
+              isClearable
+              onInputChange={(inputValue: string, meta: { action: string }) => {
+                onRecipientSearchChange(inputValue, meta.action);
+                return inputValue;
+              }}
+              onChange={(selectedOption: any) => {
+                const options = Array.isArray(selectedOption)
+                  ? selectedOption
+                  : [];
+                onRecipientsChange(options);
+              }}
+            />
+          </fieldset>
+        )}
 
         <fieldset className={styles.fieldGroup}>
           <legend className={styles.fieldLabel}>From</legend>
@@ -367,12 +368,19 @@ const BulkEmailComposerForm = ({
           <LoadingButton
             variant="primary"
             type="submit"
-            disabled={!canSend}
+            disabled={!canSend || isSending}
             loading={isSending}
           >
             Send
           </LoadingButton>
         </div>
+        {isSending && (
+          <Alert variant="info" className="mt-3">
+            Sending emails. Large audiences are sent in batches and this can
+            take several minutes. Please keep this page open and do not click
+            Send again.
+          </Alert>
+        )}
       </form>
     </section>
   );

@@ -306,6 +306,113 @@ class MailServiceBulkEmailTest {
         assertThat(requestCaptor.getValue().getGroupsToDisplay()).containsExactly(101L, 102L, 103L, 104L);
     }
 
+    @Test
+    void sendBulkEmailWithLicenseContext_splitsRecipientsIntoBatches() throws Exception {
+        enableSendGrid("http://localhost:65535");
+        doReturn(true).when(sendGridService).isConfigured();
+        configureBulkType(BulkEmailAudience.ALL_USERS, 102L);
+        configureNewsTemplate("d-news-template");
+        applicationProperties.getSendgrid().setMaxRecipientsPerRequest(2);
+
+        SendGridSendResult result = new SendGridSendResult();
+        result.setStatusCode(202);
+        doReturn(result).when(sendGridService).sendTemplatedMail(any(SendGridMailRequest.class));
+
+        List<UserDTO> recipients = Arrays.asList(
+            user(1L, "u1", "u1@example.org"),
+            user(2L, "u2", "u2@example.org"),
+            user(3L, "u3", "u3@example.org"),
+            user(4L, "u4", "u4@example.org"),
+            user(5L, "u5", "u5@example.org")
+        );
+
+        String response = mailService.sendBulkEmailWithLicenseContext(
+            recipients,
+            "no-reply@oncokb.org",
+            null,
+            "admin",
+            BulkEmailAudience.ALL_USERS,
+            null
+        );
+
+        assertThat(response).isEqualTo("Queued 5 emails via SendGrid for audience ALL_USERS.");
+        ArgumentCaptor<SendGridMailRequest> requestCaptor = ArgumentCaptor.forClass(SendGridMailRequest.class);
+        verify(sendGridService, times(3)).sendTemplatedMail(requestCaptor.capture());
+        assertThat(requestCaptor.getAllValues())
+            .extracting(request -> request.getRecipients().size())
+            .containsExactly(2, 2, 1);
+        verify(userMailsService, times(5)).save(any(UserMailsDTO.class));
+    }
+
+    @Test
+    void sendBulkEmailWithLicenseContext_countsCcTowardsBatchLimit() throws Exception {
+        enableSendGrid("http://localhost:65535");
+        doReturn(true).when(sendGridService).isConfigured();
+        configureBulkType(BulkEmailAudience.ALL_USERS, 102L);
+        configureNewsTemplate("d-news-template");
+        applicationProperties.getSendgrid().setMaxRecipientsPerRequest(4);
+
+        SendGridSendResult result = new SendGridSendResult();
+        result.setStatusCode(202);
+        doReturn(result).when(sendGridService).sendTemplatedMail(any(SendGridMailRequest.class));
+
+        List<UserDTO> recipients = Arrays.asList(
+            user(1L, "u1", "u1@example.org"),
+            user(2L, "u2", "u2@example.org"),
+            user(3L, "u3", "u3@example.org")
+        );
+
+        mailService.sendBulkEmailWithLicenseContext(
+            recipients,
+            "no-reply@oncokb.org",
+            "cc@example.org",
+            "admin",
+            BulkEmailAudience.ALL_USERS,
+            null
+        );
+
+        ArgumentCaptor<SendGridMailRequest> requestCaptor = ArgumentCaptor.forClass(SendGridMailRequest.class);
+        verify(sendGridService, times(2)).sendTemplatedMail(requestCaptor.capture());
+        assertThat(requestCaptor.getAllValues())
+            .extracting(request -> request.getRecipients().size())
+            .containsExactly(2, 1);
+    }
+
+    @Test
+    void sendBulkEmailWithLicenseContext_reportsPartialProgressWhenBatchFails() throws Exception {
+        enableSendGrid("http://localhost:65535");
+        doReturn(true).when(sendGridService).isConfigured();
+        configureBulkType(BulkEmailAudience.ALL_USERS, 102L);
+        configureNewsTemplate("d-news-template");
+        applicationProperties.getSendgrid().setMaxRecipientsPerRequest(2);
+
+        SendGridSendResult result = new SendGridSendResult();
+        result.setStatusCode(202);
+        doReturn(result)
+            .doThrow(new SendGridIntegrationException("failed", 400, "{\"errors\":[]}", null))
+            .when(sendGridService).sendTemplatedMail(any(SendGridMailRequest.class));
+
+        List<UserDTO> recipients = Arrays.asList(
+            user(1L, "u1", "u1@example.org"),
+            user(2L, "u2", "u2@example.org"),
+            user(3L, "u3", "u3@example.org")
+        );
+
+        assertThatThrownBy(() ->
+            mailService.sendBulkEmailWithLicenseContext(
+                recipients,
+                "no-reply@oncokb.org",
+                null,
+                "admin",
+                BulkEmailAudience.ALL_USERS,
+                null
+            )
+        )
+            .isInstanceOf(IllegalStateException.class)
+            .hasMessage("SendGrid request for batch 2 of 2 failed with status 400. 2 of 3 emails were queued before the failure.");
+        verify(userMailsService, times(2)).save(any(UserMailsDTO.class));
+    }
+
     private void enableSendGrid(String baseUrl) {
         SendGridProperties sendGridProperties = applicationProperties.getSendgrid();
         sendGridProperties.setEnabled(true);

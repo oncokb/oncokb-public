@@ -10,6 +10,8 @@ import org.mskcc.cbio.oncokb.service.dto.sendgrid.SendGridSendResult;
 import org.mskcc.cbio.oncokb.service.dto.sendgrid.SendGridSuppression;
 import org.mskcc.cbio.oncokb.service.dto.sendgrid.SendGridSuppressionPayload;
 import org.mskcc.cbio.oncokb.service.dto.sendgrid.SendGridSuppressionsEnvelope;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.http.HttpEntity;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpMethod;
@@ -31,6 +33,8 @@ public class SendGridService {
     private static final String SENDGRID_GROUP_SUPPRESSION_PATH = "/v3/asm/groups/{groupId}/suppressions/{email}";
     private static final String SENDGRID_GROUP_SUPPRESSIONS_PATH = "/v3/asm/groups/{groupId}/suppressions";
     private static final String SENDGRID_SUPPRESSIONS_PATH = "/v3/asm/suppressions/{email}";
+
+    private final Logger log = LoggerFactory.getLogger(SendGridService.class);
 
     private final ApplicationProperties applicationProperties;
 
@@ -59,12 +63,26 @@ public class SendGridService {
             result.setMessageId(response.getHeaders().getFirst("X-Message-Id"));
             return result;
         } catch (HttpStatusCodeException e) {
+            // SendGrid explains rejections (e.g. too many recipients) in the JSON response body.
+            String responseBody = e.getResponseBodyAsString();
+            log.error(
+                "SendGrid mail send request failed with status {} for {} personalizations: {}",
+                e.getRawStatusCode(),
+                payload.getPersonalizations().size(),
+                responseBody
+            );
             throw new SendGridIntegrationException(
                 "SendGrid mail send request failed with status " + e.getRawStatusCode() + ".",
                 e.getRawStatusCode(),
+                responseBody,
                 e
             );
         } catch (RestClientException e) {
+            log.error(
+                "SendGrid mail send request failed for {} personalizations",
+                payload.getPersonalizations().size(),
+                e
+            );
             throw new SendGridIntegrationException("SendGrid mail send request failed.", null, e);
         }
     }

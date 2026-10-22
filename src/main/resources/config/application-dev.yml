@@ -196,7 +196,7 @@ application:
     schema: oncokb_metrics
   sendgrid:
     enabled: false
-    base-url: http://localhost:8086
+    base-url: http://localhost:9999
     api-key: dummy-key
     news-template: d-news-template
     news-template-no-unsubscribe: d-news-template-no-unsubscribe
