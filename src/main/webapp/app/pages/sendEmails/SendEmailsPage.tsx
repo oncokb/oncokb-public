@@ -188,13 +188,17 @@ export default class UserManagementPage extends React.Component<{
             cc: '',
             by: this.props.authenticationStore.account!.login,
             audience: this.bulkAudience,
-            recipients,
+            // The backend resolves recipients for non-CUSTOM audiences and rejects explicit ones.
+            recipients:
+              this.bulkAudience === BulkEmailAudience.CUSTOM
+                ? recipients
+                : undefined,
             dynamicContent,
           } as any;
           const response = await client.sendBulkUserMailsUsingPOST({
             request: bulkRequest,
           });
-          const message = response || `Sent ${recipients.length} emails.`;
+          const message = response || 'Sent the emails.';
           notifySuccess(message);
         } else {
           await client.sendUserMailsUsingPOST({

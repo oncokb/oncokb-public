@@ -535,47 +535,137 @@ public class MailService {
             );
         }
 
-        SendGridMailRequest request = new SendGridMailRequest();
-        request.setFromEmail(from);
-        request.setTemplateId(templateId);
-
         Long asmGroupId = bulkConfig.getAsmGroupId();
-        if (asmGroupId != null) {
-            request.setAsmGroupId(asmGroupId);
-            request.setGroupsToDisplay(resolveAllConfiguredAsmGroupIds());
-        }
+        List<Long> groupsToDisplay = asmGroupId != null ? resolveAllConfiguredAsmGroupIds() : Collections.emptyList();
 
-        List<SendGridRecipient> requestRecipients = recipients.stream().map(user -> {
-            Map<String, Object> dynamicData = new LinkedHashMap<>();
-            if (dynamicContent != null) {
-                dynamicData.putAll(dynamicContent);
+        List<List<UserDTO>> batches = partitionBulkRecipients(recipients, cc);
+        log.info(
+            "Starting bulk email for audience {} to {} recipients in {} batches (template={}, asmGroupId={}, from={}, cc={}, by={})",
+            audience.name(),
+            recipients.size(),
+            batches.size(),
+            templateId,
+            asmGroupId,
+            from,
+            cc,
+            sender
+        );
+
+        int queuedCount = 0;
+        for (int i = 0; i < batches.size(); i++) {
+            List<UserDTO> batch = batches.get(i);
+            int batchNumber = i + 1;
+
+            SendGridMailRequest request = new SendGridMailRequest();
+            request.setFromEmail(from);
+            request.setTemplateId(templateId);
+            if (asmGroupId != null) {
+                request.setAsmGroupId(asmGroupId);
+                request.setGroupsToDisplay(groupsToDisplay);
             }
-            dynamicData.put("firstName", user.getFirstName());
-            dynamicData.put("lastName", user.getLastName());
+            request.setRecipients(batch.stream()
+                .map(user -> toSendGridRecipient(user, cc, dynamicContent))
+                .collect(Collectors.toList()));
 
-            SendGridRecipient recipient = new SendGridRecipient();
-            recipient.setToEmail(user.getEmail());
-            recipient.setCcEmail(cc);
-            recipient.setDynamicTemplateData(dynamicData);
-            return recipient;
-        }).collect(Collectors.toList());
-        request.setRecipients(requestRecipients);
+            if (log.isDebugEnabled()) {
+                log.debug(
+                    "Bulk email batch {}/{} recipients: {}",
+                    batchNumber,
+                    batches.size(),
+                    batch.stream().map(UserDTO::getEmail).collect(Collectors.joining(", "))
+                );
+            }
 
-        try {
-            SendGridSendResult response = sendGridService.sendTemplatedMail(request);
+            SendGridSendResult response;
+            try {
+                response = sendGridService.sendTemplatedMail(request);
+            } catch (SendGridIntegrationException e) {
+                log.error(
+                    "Bulk email batch {}/{} ({} recipients) for audience {} failed with status {}. {} of {} emails were queued before the failure. SendGrid response: {}",
+                    batchNumber,
+                    batches.size(),
+                    batch.size(),
+                    audience.name(),
+                    e.getStatusCode(),
+                    queuedCount,
+                    recipients.size(),
+                    e.getResponseBody(),
+                    e
+                );
+                String statusMessage = e.getStatusCode() != null ? " with status " + e.getStatusCode() : "";
+                throw new IllegalStateException(
+                    "SendGrid request for batch " + batchNumber + " of " + batches.size() + " failed" + statusMessage + ". "
+                        + queuedCount + " of " + recipients.size() + " emails were queued before the failure.",
+                    e
+                );
+            }
 
             if (response.getStatusCode() < 200 || response.getStatusCode() >= 300) {
-                throw new IllegalStateException("SendGrid request was not accepted: " + response.getStatusCode());
+                log.error(
+                    "Bulk email batch {}/{} for audience {} was not accepted by SendGrid (status {}). {} of {} emails were queued before the failure.",
+                    batchNumber,
+                    batches.size(),
+                    audience.name(),
+                    response.getStatusCode(),
+                    queuedCount,
+                    recipients.size()
+                );
+                throw new IllegalStateException(
+                    "SendGrid request for batch " + batchNumber + " of " + batches.size() + " was not accepted: "
+                        + response.getStatusCode() + ". " + queuedCount + " of " + recipients.size()
+                        + " emails were queued before the failure."
+                );
             }
 
-            recipients.forEach(user -> addUserMailsRecord(user, mailType, from, sender));
-            return "Queued " + recipients.size() + " emails via SendGrid for audience " + audience.name() + ".";
-        } catch (SendGridIntegrationException e) {
-            if (e.getStatusCode() != null) {
-                throw new IllegalStateException("SendGrid request failed with status " + e.getStatusCode() + ".", e);
-            }
-            throw new IllegalStateException("SendGrid request failed.", e);
+            batch.forEach(user -> addUserMailsRecord(user, mailType, from, sender));
+            queuedCount += batch.size();
+            log.info(
+                "Bulk email batch {}/{} for audience {} accepted by SendGrid (status {}, messageId={}, recipients={}, total queued {}/{})",
+                batchNumber,
+                batches.size(),
+                audience.name(),
+                response.getStatusCode(),
+                response.getMessageId(),
+                batch.size(),
+                queuedCount,
+                recipients.size()
+            );
         }
+
+        log.info("Finished bulk email for audience {}: queued {} emails in {} batches", audience.name(), queuedCount, batches.size());
+        return "Queued " + queuedCount + " emails via SendGrid for audience " + audience.name() + ".";
+    }
+
+    private SendGridRecipient toSendGridRecipient(UserDTO user, String cc, Map<String, Object> dynamicContent) {
+        Map<String, Object> dynamicData = new LinkedHashMap<>();
+        if (dynamicContent != null) {
+            dynamicData.putAll(dynamicContent);
+        }
+        dynamicData.put("firstName", user.getFirstName());
+        dynamicData.put("lastName", user.getLastName());
+
+        SendGridRecipient recipient = new SendGridRecipient();
+        recipient.setToEmail(user.getEmail());
+        recipient.setCcEmail(cc);
+        recipient.setDynamicTemplateData(dynamicData);
+        return recipient;
+    }
+
+    /**
+     * Splits recipients so each SendGrid request stays under the per-request address limit.
+     * Every recipient becomes its own personalization, and a cc is repeated in each one,
+     * so a cc halves how many recipients fit in a single request.
+     */
+    private List<List<UserDTO>> partitionBulkRecipients(List<UserDTO> recipients, String cc) {
+        int maxAddressesPerRequest = Math.max(1, applicationProperties.getSendgrid().getMaxRecipientsPerRequest());
+        int addressesPerRecipient = StringUtils.isNotBlank(cc) ? 2 : 1;
+        int batchSize = Math.max(1, maxAddressesPerRequest / addressesPerRecipient);
+
+        List<List<UserDTO>> batches = new ArrayList<>();
+        for (int start = 0; start < recipients.size(); start += batchSize) {
+            batches.add(recipients.subList(start, Math.min(start + batchSize, recipients.size())));
+        }
+        return batches;
     }
 
     private SendGridProperties.BulkEmailTypeConfig resolveBulkEmailTypeConfig(BulkEmailAudience audience) {

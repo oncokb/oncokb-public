@@ -7,6 +7,6 @@ services:
     container_name: oncokb-sendgrid-mock
     restart: unless-stopped
     environment:
-      - LISTEN_ADDR=:8086
+      - LISTEN_ADDR=:9999
     ports:
-      - 8086:8086
+      - 9999:9999

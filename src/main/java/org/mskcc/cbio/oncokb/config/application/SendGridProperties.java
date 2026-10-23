@@ -11,7 +11,17 @@ public class SendGridProperties {
     private String baseUrl;
     private String newsTemplate;
     private String newsTemplateNoUnsubscribe;
+    // SendGrid rejects a /v3/mail/send request whose to + cc + bcc addresses exceed 1000.
+    private int maxRecipientsPerRequest = 1000;
     private BulkEmailTypesConfig bulkEmailTypes = new BulkEmailTypesConfig();
+
+    public int getMaxRecipientsPerRequest() {
+        return maxRecipientsPerRequest;
+    }
+
+    public void setMaxRecipientsPerRequest(int maxRecipientsPerRequest) {
+        this.maxRecipientsPerRequest = maxRecipientsPerRequest;
+    }
 
     public boolean isEnabled() {
         return enabled;

@@ -778,7 +778,7 @@ public class UserServiceIT {
 
     @Test
     @Transactional
-    public void assertThatGetBulkEmailAudienceUsersForDevelopersReturnsOnlyApiUsersWithEmail() {
+    public void assertThatGetBulkEmailAudienceUsersForDevelopersReturnsOnlyActiveApiUsersWithEmail() {
         User apiUser = saveUserWithAuthorities("bulk-api-" + UUID.randomUUID().toString().substring(0, 8), true, AuthoritiesConstants.API);
         User apiUserNoEmail = saveUserWithAuthorities("bulk-api-no-email-" + UUID.randomUUID().toString().substring(0, 8), false, AuthoritiesConstants.API);
         User apiLocalhostUser = saveUserWithEmailAndAuthorities(
@@ -787,6 +787,7 @@ public class UserServiceIT {
             AuthoritiesConstants.API
         );
         User regularUser = saveUserWithAuthorities("bulk-regular-" + UUID.randomUUID().toString().substring(0, 8), true);
+        User inactiveApiUser = saveInactiveUserWithAuthorities("bulk-api-inactive-" + UUID.randomUUID().toString().substring(0, 8), AuthoritiesConstants.API);
 
         List<UserDTO> users = userService.getBulkEmailAudienceUsers(BulkEmailAudience.DEVELOPERS);
         Set<String> logins = new LinkedHashSet<>();
@@ -798,11 +799,12 @@ public class UserServiceIT {
         assertThat(logins).doesNotContain(apiUserNoEmail.getLogin());
         assertThat(logins).doesNotContain(apiLocalhostUser.getLogin());
         assertThat(logins).doesNotContain(regularUser.getLogin());
+        assertThat(logins).doesNotContain(inactiveApiUser.getLogin());
     }
 
     @Test
     @Transactional
-    public void assertThatGetBulkEmailAudienceUsersForAllUsersExcludesServiceAccountsAndBlankEmails() {
+    public void assertThatGetBulkEmailAudienceUsersForAllUsersExcludesServiceAccountsBlankEmailsAndInactiveUsers() {
         User regularUser = saveUserWithAuthorities("bulk-all-regular-" + UUID.randomUUID().toString().substring(0, 8), true);
         User localhostUser = saveUserWithEmailAndAuthorities(
             "bulk-all-localhost-" + UUID.randomUUID().toString().substring(0, 8),
@@ -814,6 +816,7 @@ public class UserServiceIT {
             AuthoritiesConstants.ROLE_SERVICE_ACCOUNT
         );
         User noEmailUser = saveUserWithAuthorities("bulk-all-no-email-" + UUID.randomUUID().toString().substring(0, 8), false);
+        User inactiveUser = saveInactiveUserWithAuthorities("bulk-all-inactive-" + UUID.randomUUID().toString().substring(0, 8));
 
         List<UserDTO> users = userService.getBulkEmailAudienceUsers(BulkEmailAudience.ALL_USERS);
         Set<String> logins = new LinkedHashSet<>();
@@ -825,6 +828,7 @@ public class UserServiceIT {
         assertThat(logins).doesNotContain(localhostUser.getLogin());
         assertThat(logins).doesNotContain(serviceAccount.getLogin());
         assertThat(logins).doesNotContain(noEmailUser.getLogin());
+        assertThat(logins).doesNotContain(inactiveUser.getLogin());
     }
 
     @Test
@@ -1111,6 +1115,12 @@ public class UserServiceIT {
         userDetails.setCountry("USA");
         userDetailsRepository.saveAndFlush(userDetails);
         return managedUser;
+    }
+
+    private User saveInactiveUserWithAuthorities(String login, String... authorityNames) {
+        User user = saveUserWithAuthorities(login, true, authorityNames);
+        user.setActivated(false);
+        return userRepository.saveAndFlush(user);
     }
 
     private User saveUserWithEmailAndAuthorities(String login, String email, String... authorityNames) {
