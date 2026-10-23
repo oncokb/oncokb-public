@@ -818,6 +818,7 @@ public class UserService {
 
         return users.stream()
             .filter(Objects::nonNull)
+            .filter(User::getActivated)
             .filter(user -> StringUtils.isNotBlank(user.getEmail()))
             .filter(user -> !StringUtils.endsWithIgnoreCase(user.getEmail(), "@localhost"))
             .map(userMapper::userToUserDTO)
