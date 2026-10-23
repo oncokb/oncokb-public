@@ -1,10 +1,11 @@
 import OncoKBTable, {
+  ColumnFilters,
+  filterByColumnFilters,
   SearchColumn,
 } from 'app/components/oncokbTable/OncoKBTable';
-import Select from 'react-select';
+import { FilterTypes } from 'app/components/oncokbTable/filters/types';
 import companionDiagnosticDevices from 'content/files/companionDiagnosticDevices/companion_diagnostic_devices.json';
 import {
-  COMPONENT_PADDING,
   LG_TABLE_FIXED_HEIGHT,
   ONCOKB_TM,
   PAGE_DESCRIPTION,
@@ -13,29 +14,23 @@ import {
 import {
   filterByKeyword,
   getAllTumorTypesName,
+  getCancerTypeNameFromOncoTreeType,
   getPageTitle,
 } from 'app/shared/utils/Utils';
-import React, { useEffect, useState, useMemo } from 'react';
+import React, { useState, useMemo } from 'react';
 import { Button, Col, Row } from 'react-bootstrap';
-import classnames from 'classnames';
 import WithSeparator from 'react-with-separator';
 import { AlterationPageLink, GenePageLink } from 'app/shared/utils/UrlUtils';
 import { pluralize } from 'cbioportal-frontend-commons';
 import { downloadFile } from 'app/shared/utils/FileUtils';
-import CancerTypeSelect from 'app/shared/dropdown/CancerTypeSelect';
 import {
   sortByStringArray,
   tumorTypeSortMethod,
 } from 'app/shared/utils/ReactTableUtils';
-import privateClient from 'app/shared/api/oncokbPrivateClientInstance';
-import {
-  TumorType,
-  TumorTypeEntity,
-} from 'app/shared/api/generated/OncoKbPrivateAPI';
 import { FdaSubmissionLink } from 'app/shared/links/FdaSubmissionLink';
 import { Linkout } from 'app/shared/links/Linkout';
 import InfoIcon from 'app/shared/icons/InfoIcon';
-import { sortByKey, uniq, uniqBy } from 'app/shared/utils/LodashUtils';
+import { uniq } from 'app/shared/utils/LodashUtils';
 import { Helmet } from 'react-helmet-async';
 
 export interface ICompanionDiagnosticDevice {
@@ -136,11 +131,6 @@ interface IGene {
   hgncId: string | null;
   alterations: IAlteration[] | null;
 }
-
-type SelectOption = {
-  value: string;
-  label: string;
-};
 
 const referenceColumnInfo = (
   <div>
@@ -252,240 +242,188 @@ const downloadCDx = () => {
   );
 };
 
-const CompanionDiagnosticDevicePage: React.FunctionComponent<{}> = () => {
-  const [hasFilter, setHasFilter] = useState(false);
-  const [filteredCDx, setFilteredCdx] = useState<ICompanionDiagnosticDevice[]>(
-    parsedCDx
-  );
-  const [selectedAlterations, setSelectedAlterations] = useState<
-    SelectOption[]
-  >([]);
-  const [selectedGenes, setSelectedGenes] = useState<SelectOption[]>([]);
-  const [selectedCancerTypes, setSelectedCancerTypes] = useState<
-    SelectOption[]
-  >([]);
-  const [selectedDrugs, setSelectedDrugs] = useState<SelectOption[]>([]);
-  const [selectedCDxs, setSelectedCDxs] = useState<SelectOption[]>([]);
-
-  useEffect(() => {
-    const filterPresent =
-      selectedCancerTypes.length > 0 ||
-      selectedDrugs.length > 0 ||
-      selectedCDxs.length > 0 ||
-      selectedAlterations.length > 0 ||
-      selectedGenes.length > 0;
-    setHasFilter(filterPresent);
-
-    const getFilteredCdx = async () => {
-      if (filterPresent) {
-        let rcts: TumorTypeEntity[] = [];
-        for (const ct of selectedCancerTypes) {
-          rcts = rcts.concat(
-            await privateClient.utilRelevantTumorTypesGetUsingGET({
-              tumorType: ct.label,
-            })
-          );
-        }
-        const filtered = parsedCDx.filter(cdx => {
-          if (
-            selectedCDxs.length > 0 &&
-            selectedCDxs.filter(selectedCDx =>
-              `${cdx.name} (${cdx.manufacturer})`
-                .toLowerCase()
-                .includes(selectedCDx.value.toLowerCase())
-            ).length === 0
-          ) {
-            return false;
-          }
-          if (
-            selectedGenes.length > 0 &&
-            selectedGenes.filter(selectedGene =>
-              cdx.biomarkerAssociation.gene.includes(selectedGene.value)
-            ).length === 0
-          ) {
-            return false;
-          }
-
-          if (selectedCancerTypes.length > 0) {
-            if (
-              cdx.biomarkerAssociation.cancerTypes.filter(ct => {
-                if (
-                  rcts.filter(rct => {
-                    if (rct.code) {
-                      return rct.code === ct.code || rct.subtype === ct.subtype;
-                    } else {
-                      return rct.mainType === ct.mainType;
-                    }
-                  }).length === 0
-                ) {
-                  return false;
-                }
-                return true;
-              }).length === 0
-            ) {
-              return false;
-            }
-          }
-          if (
-            selectedDrugs.length > 0 &&
-            selectedDrugs.filter(selectedDrug =>
-              cdx.biomarkerAssociation.drugs
-                .toLowerCase()
-                .includes(selectedDrug.value.toLowerCase())
-            ).length === 0
-          ) {
-            return false;
-          }
-          if (
-            selectedAlterations.length > 0 &&
-            cdx.biomarkerAssociation.alterations.filter(a =>
-              selectedAlterations.some(sa =>
-                sa.value.toLowerCase().includes(a.toLowerCase())
-              )
-            ).length === 0
-          ) {
-            return false;
-          }
-          return true;
-        });
-        setFilteredCdx([...filtered]);
-      } else {
-        setFilteredCdx(parsedCDx);
-      }
-    };
-
-    getFilteredCdx();
-  }, [
-    selectedGenes,
-    selectedCancerTypes,
-    selectedDrugs,
-    selectedCDxs,
-    selectedAlterations,
-  ]);
-
-  const clearFilters = () => {
-    setSelectedCancerTypes([]);
-    setSelectedDrugs([]);
-    setSelectedCDxs([]);
-    setSelectedGenes([]);
-    setSelectedAlterations([]);
-  };
-
-  const columns: SearchColumn<ICompanionDiagnosticDevice>[] = [
-    {
-      id: 'gene',
-      accessor: 'biomarkerAssociation.gene',
-      Header: <span>Gene</span>,
-      Cell(tableProps: { original: ICompanionDiagnosticDevice }): JSX.Element {
-        return (
-          <GenePageLink
-            hugoSymbol={tableProps.original.biomarkerAssociation.gene}
-          />
-        );
-      },
+const columns: SearchColumn<ICompanionDiagnosticDevice>[] = [
+  {
+    id: 'gene',
+    accessor: 'biomarkerAssociation.gene',
+    Header: <span>Gene</span>,
+    filterType: FilterTypes.STRING,
+    getColumnFilterValue: (cdx: ICompanionDiagnosticDevice) =>
+      cdx.biomarkerAssociation.gene,
+    Cell(tableProps: { original: ICompanionDiagnosticDevice }): JSX.Element {
+      return (
+        <GenePageLink
+          hugoSymbol={tableProps.original.biomarkerAssociation.gene}
+        />
+      );
     },
-    {
-      id: 'alterations',
-      accessor: 'biomarkerAssociation.alterations',
-      Header: <span>Alteration(s)</span>,
-      Cell(tableProps: { original: ICompanionDiagnosticDevice }): JSX.Element {
-        return (
-          <WithSeparator separator={', '}>
-            {tableProps.original.biomarkerAssociation.alterations.map(a => (
-              <AlterationPageLink
-                key={a}
-                hugoSymbol={tableProps.original.biomarkerAssociation.gene}
-                alteration={a}
-              />
-            ))}
-          </WithSeparator>
-        );
-      },
-      defaultSortDesc: false,
-      sortMethod: sortByStringArray,
+    minWidth: 100,
+    maxWidth: 105,
+  },
+  {
+    id: 'alterations',
+    accessor: 'biomarkerAssociation.alterations',
+    Header: <span>Alteration(s)</span>,
+    filterType: FilterTypes.STRING,
+    getColumnFilterValue: (cdx: ICompanionDiagnosticDevice) =>
+      cdx.biomarkerAssociation.alterations,
+    Cell(tableProps: { original: ICompanionDiagnosticDevice }): JSX.Element {
+      return (
+        <WithSeparator separator={', '}>
+          {tableProps.original.biomarkerAssociation.alterations.map(a => (
+            <AlterationPageLink
+              key={a}
+              hugoSymbol={tableProps.original.biomarkerAssociation.gene}
+              alteration={a}
+            />
+          ))}
+        </WithSeparator>
+      );
     },
-    {
-      id: 'cancerTypes',
-      accessor: 'biomarkerAssociation.cancerTypes',
-      Header: <span>Cancer Type(s)</span>,
-      Cell(tableProps: { original: ICompanionDiagnosticDevice }): JSX.Element {
-        return (
-          <span>
-            {getAllTumorTypesName(
-              tableProps.original.biomarkerAssociation.cancerTypes
-            )}
-          </span>
-        );
-      },
-      sortMethod: tumorTypeSortMethod,
-      minWidth: 150,
-    },
-    {
-      id: 'drugs',
-      accessor: 'biomarkerAssociation.drugs',
-      Header: <span>Drug(s)</span>,
-      Cell(tableProps: { original: ICompanionDiagnosticDevice }): JSX.Element {
-        return <span>{tableProps.original.biomarkerAssociation.drugs}</span>;
-      },
-      minWidth: 150,
-    },
-    {
-      id: 'name',
-      accessor: 'name',
-      Header: <span>Companion Diagnostic Device</span>,
-      onFilter: (data: ICompanionDiagnosticDevice, keyword) =>
-        filterByKeyword(data.name, keyword),
-      Cell(tableProps: { original: ICompanionDiagnosticDevice }): JSX.Element {
-        return (
-          <span>
-            {`${tableProps.original.name} (${tableProps.original.manufacturer})`}
-          </span>
-        );
-      },
-      minWidth: 200,
-    },
-    {
-      id: 'specimenType',
-      accessor: 'specimenTypes',
-      Header: <span>Specimen Type(s)</span>,
-      Cell(tableProps: { original: ICompanionDiagnosticDevice }): JSX.Element {
-        return <span>{tableProps.original?.specimenTypes?.join(', ')}</span>;
-      },
-      sortMethod: sortByStringArray,
-    },
-    { accessor: 'platformType', Header: <span>Platform Type</span> },
-    {
-      id: 'fdaSubmission',
-      Header: (
-        <span>
-          Reference(s){' '}
-          <InfoIcon
-            className={'ml-2'}
-            overlay={<span>{referenceColumnInfo}</span>}
-          />
-        </span>
+    defaultSortDesc: false,
+    sortMethod: sortByStringArray,
+    minWidth: 160,
+    maxWidth: 180,
+  },
+  {
+    id: 'cancerTypes',
+    accessor: 'biomarkerAssociation.cancerTypes',
+    Header: <span>Cancer Type(s)</span>,
+    filterType: FilterTypes.CANCER_TYPE,
+    getColumnFilterValue: (cdx: ICompanionDiagnosticDevice) =>
+      cdx.biomarkerAssociation.cancerTypes.map(
+        getCancerTypeNameFromOncoTreeType
       ),
-      Cell(tableProps: { original: ICompanionDiagnosticDevice }): JSX.Element {
-        const assoc = tableProps.original.biomarkerAssociation;
-        // TODO: Remove once we support https://github.com/oncokb/oncokb-pipeline/issues/969
-        // Reason is that this association is pending on FDA, so there is no PMA.
-        if (assoc.associationId === 319) {
-          return <span>PMA not available as of 11/24/25</span>;
-        }
-        return (
-          <WithSeparator separator=", ">
-            {assoc.fdaSubmissions.map((fdaSubmission: IFdaSubmission) => (
-              <FdaSubmissionLink
-                key={`${fdaSubmission.id}-${fdaSubmission.number}-${fdaSubmission.supplementNumber}`}
-                fdaSubmission={fdaSubmission}
-              />
-            ))}
-          </WithSeparator>
-        );
-      },
-      sortable: false,
+    getColumnExcludedFilterValue: () => [],
+    Cell(tableProps: { original: ICompanionDiagnosticDevice }): JSX.Element {
+      return (
+        <span>
+          {getAllTumorTypesName(
+            tableProps.original.biomarkerAssociation.cancerTypes
+          )}
+        </span>
+      );
     },
-  ];
+    sortMethod: tumorTypeSortMethod,
+    minWidth: 160,
+  },
+  {
+    id: 'drugs',
+    accessor: 'biomarkerAssociation.drugs',
+    Header: <span>Drug(s)</span>,
+    filterType: FilterTypes.STRING,
+    getColumnFilterValue: (cdx: ICompanionDiagnosticDevice) =>
+      cdx.biomarkerAssociation.drugs,
+    Cell(tableProps: { original: ICompanionDiagnosticDevice }): JSX.Element {
+      return (
+        <span>
+          {tableProps.original.biomarkerAssociation.drugs
+            .split(/([+,])/)
+            .map((part, index) =>
+              part === '+' || part === ',' ? (
+                <React.Fragment key={index}>
+                  {part}
+                  <wbr />
+                </React.Fragment>
+              ) : (
+                part
+              )
+            )}
+        </span>
+      );
+    },
+    minWidth: 135,
+    maxWidth: 135,
+  },
+  {
+    id: 'name',
+    accessor: 'name',
+    Header: <span>Companion Diagnostic Device</span>,
+    filterType: FilterTypes.STRING,
+    getColumnFilterValue: (cdx: ICompanionDiagnosticDevice) =>
+      `${cdx.name} (${cdx.manufacturer})`,
+    onFilter: (data: ICompanionDiagnosticDevice, keyword) =>
+      filterByKeyword(data.name, keyword),
+    Cell(tableProps: { original: ICompanionDiagnosticDevice }): JSX.Element {
+      return (
+        <span>
+          {`${tableProps.original.name} (${tableProps.original.manufacturer})`}
+        </span>
+      );
+    },
+    minWidth: 195,
+  },
+  {
+    id: 'specimenType',
+    accessor: 'specimenTypes',
+    Header: <span>Specimen Type(s)</span>,
+    filterType: FilterTypes.STRING,
+    getColumnFilterValue: (cdx: ICompanionDiagnosticDevice) =>
+      cdx.specimenTypes,
+    Cell(tableProps: { original: ICompanionDiagnosticDevice }): JSX.Element {
+      return <span>{tableProps.original?.specimenTypes?.join(', ')}</span>;
+    },
+    sortMethod: sortByStringArray,
+    minWidth: 140,
+    maxWidth: 150,
+  },
+  {
+    accessor: 'platformType',
+    Header: <span>Platform Type</span>,
+    filterType: FilterTypes.STRING,
+    getColumnFilterValue: (cdx: ICompanionDiagnosticDevice) =>
+      cdx.platformType || undefined,
+    minWidth: 130,
+    maxWidth: 130,
+  },
+  {
+    id: 'fdaSubmission',
+    Header: (
+      <span>
+        Reference(s){' '}
+        <InfoIcon
+          className={'ml-2'}
+          overlay={<span>{referenceColumnInfo}</span>}
+        />
+      </span>
+    ),
+    Cell(tableProps: { original: ICompanionDiagnosticDevice }): JSX.Element {
+      const assoc = tableProps.original.biomarkerAssociation;
+      // TODO: Remove once we support https://github.com/oncokb/oncokb-pipeline/issues/969
+      // Reason is that this association is pending on FDA, so there is no PMA.
+      if (assoc.associationId === 319) {
+        return <span>PMA not available as of 11/24/25</span>;
+      }
+      return (
+        <WithSeparator separator=", ">
+          {assoc.fdaSubmissions.map((fdaSubmission: IFdaSubmission) => (
+            <FdaSubmissionLink
+              key={`${fdaSubmission.id}-${fdaSubmission.number}-${fdaSubmission.supplementNumber}`}
+              fdaSubmission={fdaSubmission}
+            />
+          ))}
+        </WithSeparator>
+      );
+    },
+    sortable: false,
+    minWidth: 130,
+    maxWidth: 135,
+  },
+];
+
+const CompanionDiagnosticDevicePage: React.FunctionComponent<{}> = () => {
+  const [columnFilters, setColumnFilters] = useState<ColumnFilters>({});
+
+  const filteredCDx = useMemo(
+    () => filterByColumnFilters(parsedCDx, columns, columnFilters),
+    [columnFilters]
+  );
+
+  const hasFilter = Object.keys(columnFilters).some(
+    columnId => columnFilters[columnId].size > 0
+  );
+
+  const clearFilters = () => setColumnFilters({});
 
   const filteredCancerTypes = useMemo(() => {
     return uniq(
@@ -569,110 +507,6 @@ const CompanionDiagnosticDevicePage: React.FunctionComponent<{}> = () => {
           </div>
         </Col>
       </Row>
-      <Row
-        style={{ paddingLeft: '0.5rem', paddingRight: '0.5rem' }}
-        className={'mb-2'}
-      >
-        <Col className={classnames(...COMPONENT_PADDING)} lg={2} md={6} xs={12}>
-          <Select
-            placeholder={'Gene(s)'}
-            options={sortByKey(
-              uniqBy(
-                parsedCDx.map(cdx => ({
-                  label: cdx.biomarkerAssociation.gene,
-                  value: cdx.biomarkerAssociation.gene,
-                })),
-                'label'
-              ),
-              'label'
-            )}
-            isClearable={true}
-            isMulti
-            value={selectedGenes}
-            closeMenuOnSelect={false}
-            onChange={(selectedOptions: any[] | undefined) => {
-              setSelectedGenes(selectedOptions || []);
-            }}
-          />
-        </Col>
-        <Col className={classnames(...COMPONENT_PADDING)} lg={2} md={6} xs={12}>
-          <Select
-            placeholder={'Alteration(s)'}
-            options={sortByKey(
-              uniq(
-                parsedCDx.reduce((acc, curr) => {
-                  acc = acc.concat(curr.biomarkerAssociation.alterations);
-                  return acc;
-                }, [] as string[])
-              ).map(alt => ({
-                label: alt,
-                value: alt,
-              })),
-              'label'
-            )}
-            isClearable={true}
-            isMulti
-            value={selectedAlterations}
-            closeMenuOnSelect={false}
-            onChange={(selectedOptions: any[] | undefined) => {
-              setSelectedAlterations(selectedOptions || []);
-            }}
-          />
-        </Col>
-        <Col className={classnames(...COMPONENT_PADDING)} lg={3} md={6} xs={12}>
-          <CancerTypeSelect
-            isMulti
-            cancerTypes={selectedCancerTypes.map(ct => ct.label)}
-            onChange={(selectedOptions: any) => {
-              setSelectedCancerTypes(selectedOptions ? selectedOptions : []);
-            }}
-          />
-        </Col>
-        <Col className={classnames(...COMPONENT_PADDING)} lg={2} md={6} xs={12}>
-          <Select
-            placeholder={'Drug(s)'}
-            options={sortByKey(
-              uniqBy(
-                parsedCDx.map(cdx => ({
-                  label: cdx.biomarkerAssociation.drugs,
-                  value: cdx.biomarkerAssociation.drugs,
-                })),
-                'label'
-              ),
-              'label'
-            )}
-            isClearable={true}
-            isMulti
-            value={selectedDrugs}
-            closeMenuOnSelect={false}
-            onChange={(selectedOption: any) => {
-              setSelectedDrugs(selectedOption || []);
-            }}
-          />
-        </Col>
-        <Col className={classnames(...COMPONENT_PADDING)} lg={3} md={6} xs={12}>
-          <Select
-            placeholder={'CDx'}
-            options={sortByKey(
-              uniqBy(
-                parsedCDx.map(cdx => ({
-                  label: `${cdx.name} (${cdx.manufacturer})`,
-                  value: `${cdx.name} (${cdx.manufacturer})`,
-                })),
-                'label'
-              ),
-              'label'
-            )}
-            isClearable={true}
-            isMulti
-            value={selectedCDxs}
-            closeMenuOnSelect={false}
-            onChange={(selectedOption: any) => {
-              setSelectedCDxs(selectedOption || []);
-            }}
-          />
-        </Col>
-      </Row>
       <Row>
         <Col className={'d-flex align-items-center justify-content-between'}>
           <div>
@@ -703,7 +537,9 @@ const CompanionDiagnosticDevicePage: React.FunctionComponent<{}> = () => {
         <Col className={'mt-2'}>
           <OncoKBTable
             columns={columns}
-            data={filteredCDx}
+            data={parsedCDx}
+            columnFilters={columnFilters}
+            onColumnFiltersChange={setColumnFilters}
             pageSize={filteredCDx.length < 10 ? 10 : filteredCDx.length}
             disableSearch
             style={{

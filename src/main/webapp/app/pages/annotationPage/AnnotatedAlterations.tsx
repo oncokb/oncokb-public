@@ -14,17 +14,21 @@ import { DescriptionTooltip } from 'app/pages/annotationPage/DescriptionTooltip'
 import SummaryWithRefs from 'app/oncokb-frontend-commons/src/components/SummaryWithRefs';
 import React, { FunctionComponent } from 'react';
 import { GenePageTable } from 'app/pages/genePage/GenePageTable';
+import { SearchColumn } from 'app/components/oncokbTable/OncoKBTable';
+import { FilterTypes } from 'app/components/oncokbTable/filters/types';
 
 const getColumns = (
   germline: boolean,
   hugoSymbol: string,
   useMutationEffectForGermline: boolean
-) => {
+): SearchColumn<BiologicalVariant>[] => {
   const altColumn = {
     ...getDefaultColumnDefinition(TABLE_COLUMN_KEY.ALTERATION),
     accessor: 'variant',
     onFilter: (data: BiologicalVariant, keyword: string) =>
       filterByKeyword(data.variant.name, keyword),
+    filterType: FilterTypes.STRING as const,
+    getColumnFilterValue: (data: BiologicalVariant) => data.variant.name,
     Cell(props: { original: BiologicalVariant }) {
       return (
         <>
@@ -45,6 +49,8 @@ const getColumns = (
   };
   const descriptionColumn = {
     ...getDefaultColumnDefinition(TABLE_COLUMN_KEY.DESCRIPTION),
+    minWidth: 115,
+    width: 115,
     accessor(d: BiologicalVariant) {
       return useMutationEffectForGermline
         ? {
@@ -79,11 +85,15 @@ const getColumns = (
       ...getDefaultColumnDefinition(TABLE_COLUMN_KEY.ONCOGENICITY),
       onFilter: (data: BiologicalVariant, keyword: string) =>
         filterByKeyword(data.oncogenic, keyword),
+      filterType: FilterTypes.STRING as const,
+      getColumnFilterValue: (data: BiologicalVariant) => data.oncogenic,
     },
     {
       ...getDefaultColumnDefinition(TABLE_COLUMN_KEY.MUTATION_EFFECT),
       onFilter: (data: BiologicalVariant, keyword: string) =>
         filterByKeyword(data.mutationEffect, keyword),
+      filterType: FilterTypes.STRING as const,
+      getColumnFilterValue: (data: BiologicalVariant) => data.mutationEffect,
     },
     descriptionColumn,
   ];
@@ -94,24 +104,34 @@ const getColumns = (
       accessor: 'variant.proteinChange',
       onFilter: (data: BiologicalVariant, keyword: string) =>
         filterByKeyword(data.variant.proteinChange, keyword),
+      filterType: FilterTypes.STRING as const,
+      getColumnFilterValue: (data: BiologicalVariant) =>
+        data.variant.proteinChange,
     },
     useMutationEffectForGermline
       ? {
           ...getDefaultColumnDefinition(TABLE_COLUMN_KEY.MUTATION_EFFECT),
           onFilter: (data: BiologicalVariant, keyword: string) =>
             filterByKeyword(data.mutationEffect, keyword),
+          filterType: FilterTypes.STRING as const,
+          getColumnFilterValue: (data: BiologicalVariant) =>
+            data.mutationEffect,
         }
       : {
           Header: <span>Pathogenicity</span>,
           accessor: 'pathogenic',
           onFilter: (data: BiologicalVariant, keyword: string) =>
             filterByKeyword(data.pathogenic, keyword),
+          filterType: FilterTypes.STRING as const,
+          getColumnFilterValue: (data: BiologicalVariant) => data.pathogenic,
         },
     {
       Header: <span>Penetrance</span>,
       accessor: 'penetrance',
       onFilter: (data: BiologicalVariant, keyword: string) =>
         filterByKeyword(data.penetrance, keyword),
+      filterType: FilterTypes.STRING as const,
+      getColumnFilterValue: (data: BiologicalVariant) => data.penetrance,
     },
     // Hiding because not in use now, but will be in the future
     // {

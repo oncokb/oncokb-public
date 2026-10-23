@@ -1,7 +1,10 @@
-import React, { useEffect, useMemo, useState } from 'react';
+import React, { useMemo, useState } from 'react';
 import OncoKBTable, {
+  ColumnFilters,
+  filterByColumnFilters,
   SearchColumn,
 } from 'app/components/oncokbTable/OncoKBTable';
+import { FilterTypes } from 'app/components/oncokbTable/filters/types';
 import fdaTxs from 'content/files/oncologyTherapies/fda_approved_oncology_therapies.json';
 import fdaTxsExcel from 'content/files/oncologyTherapies/fda_approved_oncology_therapies.xlsx';
 import {
@@ -15,10 +18,8 @@ import InfoIcon from 'app/shared/icons/InfoIcon';
 import ShowHideText from 'app/shared/texts/ShowHideText';
 import { Linkout } from 'app/shared/links/Linkout';
 import styles from 'app/index.module.scss';
-import { Input } from 'reactstrap';
-import Select from 'react-select';
 import pluralize from 'pluralize';
-import { sortByKey, uniq, uniqBy } from 'app/shared/utils/LodashUtils';
+import { uniq } from 'app/shared/utils/LodashUtils';
 import { getPageTitle } from 'app/shared/utils/Utils';
 import { Helmet } from 'react-helmet-async';
 
@@ -31,11 +32,6 @@ type FdaApprovedOncologyTherapy = {
   targetedTx: string;
   pxTx: string;
   ngsTest: string;
-};
-
-type SelectOption = {
-  value: string;
-  label: string;
 };
 
 type SelectionButtonProps = {
@@ -74,36 +70,12 @@ const SelectionButton: React.FunctionComponent<SelectionButtonProps> = props => 
   );
 };
 
-const sortAndUniqByValue = (
-  txs: FdaApprovedOncologyTherapy[],
-  key: keyof FdaApprovedOncologyTherapy,
-  separators?: string[]
-) => {
-  return sortByKey(
-    uniqBy(
-      txs.reduce((acc, tx: FdaApprovedOncologyTherapy) => {
-        const methods =
-          (separators || []).length > 0
-            ? tx[key]
-                .split(new RegExp(`${separators?.join('|')}`))
-                .map(method => method.trim())
-            : [tx[key]];
-        const options = methods
-          .filter(method => !!method.trim())
-          .map((method: string) => {
-            return {
-              value: method,
-              label: method,
-            };
-          });
-        acc.push(...options);
-        return acc;
-      }, [] as SelectOption[]),
-      'value'
-    ),
-    'value'
-  );
-};
+const BIOMARKER_COLUMN_ID = 'biomarker';
+
+const stripFootnoteMarker = (value: string) => value.replace(/\*$/, '');
+
+const simplifyDrugTarget = (drugTarget: string) =>
+  drugTarget.replace(/\(.*\)/, '').trim();
 
 const footnotes = {
   classAgent: (
@@ -125,6 +97,7 @@ const footnotes = {
   ),
   ngsTest: (
     <div>
+      <div>{STAT_CLASSIFICATION.DETECT_NGS}</div>
       <ul style={HEADER_TOOLTIP_STYLE}>
         <li>
           Classification applies only to drugs labeled as Precision oncology
@@ -224,137 +197,160 @@ const DefinitionTooltip: React.FunctionComponent<{
 const OncologyTherapiesPage: React.FunctionComponent<{}> = props => {
   const [showDefinition, setShowDefinition] = useState(false);
 
-  const [hasFilter, setHasFilter] = useState(false);
   const [poOnly, setPoOnly] = useState(true);
   const [targetedOnly, setTargetedOnly] = useState(false);
-  const [biomarkerSearch, setBiomarkerSearch] = useState('');
-  const [selectedTherapies, setSelectedTherapies] = useState<SelectOption[]>(
-    []
-  );
-  const [selectedAgents, setSelectedAgents] = useState<SelectOption[]>([]);
-  const [selectedDrugTargets, setSelectedTargets] = useState<SelectOption[]>(
-    []
-  );
-  const [classificationStats, setClassificationStats] = useState<{
-    [key: string]: number;
-  }>({});
+  const [columnFilters, setColumnFilters] = useState<ColumnFilters>({});
 
-  const simplifyDrugTarget = (drugTarget: string) =>
-    drugTarget.replace(/\(.*\)/, '').trim();
-  const columns: SearchColumn<FdaApprovedOncologyTherapy>[] = [
-    {
-      accessor: 'year',
-      Header: <span>Year of drug’s first FDA-approval</span>,
-      Cell(tableProps: { original: FdaApprovedOncologyTherapy }) {
-        if (tableProps.original.year.endsWith('*')) {
-          return (
-            <span>
-              {tableProps.original.year.slice(
-                0,
-                tableProps.original.year.length - 1
-              )}
-              <DefinitionTooltip footnoteKey={'unclearYear'} />
-            </span>
+  const columns = useMemo(() => {
+    const allColumns: SearchColumn<FdaApprovedOncologyTherapy>[] = [
+      {
+        accessor: 'year',
+        minWidth: 130,
+        maxWidth: 170,
+        Header: <span>Year of drug’s first FDA-approval</span>,
+        filterType: FilterTypes.STRING,
+        getColumnFilterValue: (tx: FdaApprovedOncologyTherapy) =>
+          stripFootnoteMarker(tx.year),
+        Cell(tableProps: { original: FdaApprovedOncologyTherapy }) {
+          if (tableProps.original.year.endsWith('*')) {
+            return (
+              <span>
+                {tableProps.original.year.slice(
+                  0,
+                  tableProps.original.year.length - 1
+                )}
+                <DefinitionTooltip footnoteKey={'unclearYear'} />
+              </span>
+            );
+          } else {
+            return tableProps.original.year;
+          }
+        },
+      },
+      {
+        accessor: 'tx',
+        minWidth: 140,
+        maxWidth: 140,
+        Header: <span>FDA-approved drug(s)</span>,
+        filterType: FilterTypes.STRING,
+        getColumnFilterValue: (tx: FdaApprovedOncologyTherapy) =>
+          stripFootnoteMarker(tx.tx),
+        Cell(tableProps: { original: FdaApprovedOncologyTherapy }) {
+          if (tableProps.original.tx.endsWith('*')) {
+            return (
+              <span>
+                {tableProps.original.tx.slice(
+                  0,
+                  tableProps.original.tx.length - 1
+                )}
+                <DefinitionTooltip footnoteKey={'fdaUnapproved'} />
+              </span>
+            );
+          } else {
+            return tableProps.original.tx;
+          }
+        },
+      },
+      {
+        id: BIOMARKER_COLUMN_ID,
+        minWidth: 145,
+        maxWidth: 200,
+        sortable: false,
+        filterType: FilterTypes.STRING,
+        getColumnFilterValue: (tx: FdaApprovedOncologyTherapy) =>
+          tx.biomarker
+            .split('\n')
+            .map(biomarker => biomarker.replace(/^\*/, '').trim()),
+        Header: (
+          <span>
+            FDA drug label listed biomarker(s)
+            <DefinitionTooltip footnoteKey={'biomarker'} />
+          </span>
+        ),
+        Cell(cell: { original: FdaApprovedOncologyTherapy }) {
+          if (cell.original.biomarker.includes('\n')) {
+            return (
+              <ul>
+                {cell.original.biomarker.split('\n').map(item => (
+                  <li>{item}</li>
+                ))}
+              </ul>
+            );
+          } else {
+            return <span>{cell.original.biomarker}</span>;
+          }
+        },
+      },
+      {
+        accessor: 'agentClass',
+        minWidth: 130,
+        maxWidth: 300,
+        filterType: FilterTypes.STRING,
+        getColumnFilterValue: (tx: FdaApprovedOncologyTherapy) => tx.agentClass,
+        Header: (
+          <span>
+            Class of agent(s)
+            <DefinitionTooltip footnoteKey={'classAgent'} />
+          </span>
+        ),
+      },
+      {
+        accessor: 'drugTarget',
+        minWidth: 150,
+        filterType: FilterTypes.STRING,
+        getColumnFilterValue: (tx: FdaApprovedOncologyTherapy) =>
+          simplifyDrugTarget(tx.drugTarget),
+        Header: (
+          <span>
+            Mechanism of action or drug target
+            <DefinitionTooltip footnoteKey={'classAgent'} />
+          </span>
+        ),
+      },
+      {
+        accessor: 'targetedTx',
+        minWidth: 105,
+        maxWidth: 105,
+        Header: <span>{STAT_CLASSIFICATION.TARGETED}</span>,
+        Cell(tableProps: { original: FdaApprovedOncologyTherapy }) {
+          return tableProps.original.targetedTx === 'Y' ? (
+            <i className="fa fa-check" />
+          ) : (
+            ''
           );
-        } else {
-          return tableProps.original.year;
-        }
+        },
       },
-    },
-    {
-      accessor: 'tx',
-      Header: <span>FDA-approved drug(s)</span>,
-      Cell(tableProps: { original: FdaApprovedOncologyTherapy }) {
-        if (tableProps.original.tx.endsWith('*')) {
-          return (
-            <span>
-              {tableProps.original.tx.slice(
-                0,
-                tableProps.original.tx.length - 1
-              )}
-              <DefinitionTooltip footnoteKey={'fdaUnapproved'} />
-            </span>
+      {
+        accessor: 'pxTx',
+        minWidth: 105,
+        maxWidth: 105,
+        Header: <span>{STAT_CLASSIFICATION.PO}</span>,
+        Cell(tableProps: { original: FdaApprovedOncologyTherapy }) {
+          return tableProps.original.pxTx === 'Y' ? (
+            <i className="fa fa-check" />
+          ) : (
+            ''
           );
-        } else {
-          return tableProps.original.tx;
-        }
+        },
       },
-    },
-    {
-      show: poOnly,
-      sortable: false,
-      Header: (
-        <span>
-          FDA drug label listed biomarker(s)
-          <DefinitionTooltip footnoteKey={'biomarker'} />
-        </span>
-      ),
-      Cell(cell: { original: FdaApprovedOncologyTherapy }) {
-        if (cell.original.biomarker.includes('\n')) {
-          return (
-            <ul>
-              {cell.original.biomarker.split('\n').map(item => (
-                <li>{item}</li>
-              ))}
-            </ul>
-          );
-        } else {
-          return <span>{cell.original.biomarker}</span>;
-        }
+      {
+        accessor: 'ngsTest',
+        minWidth: 155,
+        maxWidth: 175,
+        filterType: FilterTypes.STRING,
+        getColumnFilterValue: (tx: FdaApprovedOncologyTherapy) => tx.ngsTest,
+        Header: (
+          <span>
+            Biomarker detectable by DNA/NGS?
+            <DefinitionTooltip footnoteKey={'ngsTest'} />
+          </span>
+        ),
       },
-    },
-    {
-      accessor: 'agentClass',
-      Header: (
-        <span>
-          Class of agent(s)
-          <DefinitionTooltip footnoteKey={'classAgent'} />
-        </span>
-      ),
-    },
-    {
-      accessor: 'drugTarget',
-      Header: (
-        <span>
-          Mechanism of action or drug target
-          <DefinitionTooltip footnoteKey={'classAgent'} />
-        </span>
-      ),
-    },
-    {
-      accessor: 'targetedTx',
-      width: 80,
-      Header: <span>{STAT_CLASSIFICATION.TARGETED}</span>,
-      Cell(tableProps: { original: FdaApprovedOncologyTherapy }) {
-        return tableProps.original.targetedTx === 'Y' ? (
-          <i className="fa fa-check" />
-        ) : (
-          ''
-        );
-      },
-    },
-    {
-      accessor: 'pxTx',
-      width: 90,
-      Header: <span>{STAT_CLASSIFICATION.PO}</span>,
-      Cell(tableProps: { original: FdaApprovedOncologyTherapy }) {
-        return tableProps.original.pxTx === 'Y' ? (
-          <i className="fa fa-check" />
-        ) : (
-          ''
-        );
-      },
-    },
-    {
-      accessor: 'ngsTest',
-      Header: (
-        <span>
-          {STAT_CLASSIFICATION.DETECT_NGS}{' '}
-          <DefinitionTooltip footnoteKey={'ngsTest'} />
-        </span>
-      ),
-    },
-  ];
+    ];
+    return poOnly
+      ? allColumns
+      : allColumns.filter(column => column.id !== BIOMARKER_COLUMN_ID);
+  }, [poOnly]);
 
   const poTxs = useMemo(() => {
     return fdaTxs.filter((tx: FdaApprovedOncologyTherapy) => {
@@ -375,71 +371,26 @@ const OncologyTherapiesPage: React.FunctionComponent<{}> = props => {
       return fdaTxs;
     }
   }, [fdaTxs, poOnly, targetedOnly]);
-  const drugTargetOptions: SelectOption[] = useMemo(() => {
-    return uniq(
-      txs.map((tx: FdaApprovedOncologyTherapy) =>
-        simplifyDrugTarget(tx.drugTarget)
-      )
-    )
-      .sort()
-      .map((tx: string) => {
-        return {
-          value: tx,
-          label: tx,
-        };
-      });
-  }, [txs]);
 
-  const filteredTxs: FdaApprovedOncologyTherapy[] = useMemo(() => {
-    return txs.filter((tx: FdaApprovedOncologyTherapy) => {
-      if (
-        selectedTherapies.length > 0 &&
-        selectedTherapies.filter(selectedTx => tx.tx === selectedTx.value)
-          .length === 0
-      ) {
-        return false;
-      }
-      if (
-        selectedAgents.length > 0 &&
-        selectedAgents.filter(agentClass => tx.agentClass === agentClass.value)
-          .length === 0
-      ) {
-        return false;
-      }
-      if (
-        selectedDrugTargets.length > 0 &&
-        selectedDrugTargets.filter(
-          drugTarget => simplifyDrugTarget(tx.drugTarget) === drugTarget.value
-        ).length === 0
-      ) {
-        return false;
-      }
-      if (
-        biomarkerSearch &&
-        (!tx.biomarker ||
-          !tx.biomarker.toLowerCase().includes(biomarkerSearch.toLowerCase()))
-      ) {
-        return false;
-      }
-      return true;
-    });
-  }, [
-    txs,
-    selectedTherapies,
-    selectedAgents,
-    selectedDrugTargets,
-    biomarkerSearch,
-  ]);
+  const filteredTxs: FdaApprovedOncologyTherapy[] = useMemo(
+    () => filterByColumnFilters(txs, columns, columnFilters),
+    [txs, columns, columnFilters]
+  );
 
-  useEffect(() => {
-    setHasFilter(
-      !!biomarkerSearch ||
-        selectedTherapies.length > 0 ||
-        selectedAgents.length > 0 ||
-        selectedDrugTargets.length > 0
-    );
-  }, [selectedTherapies, selectedAgents, selectedDrugTargets, biomarkerSearch]);
-  useEffect(() => {
+  const hasFilter = Object.keys(columnFilters).some(
+    columnId => columnFilters[columnId].size > 0
+  );
+
+  const showTherapies = (po: boolean, targeted: boolean) => {
+    setPoOnly(po);
+    setTargetedOnly(targeted);
+    if (!po && columnFilters[BIOMARKER_COLUMN_ID]) {
+      const { [BIOMARKER_COLUMN_ID]: _, ...otherFilters } = columnFilters;
+      setColumnFilters(otherFilters);
+    }
+  };
+
+  const classificationStats = useMemo(() => {
     const stats = {
       [STAT_CLASSIFICATION.TARGETED]: 0,
       [STAT_CLASSIFICATION.PO]: 0,
@@ -456,20 +407,14 @@ const OncologyTherapiesPage: React.FunctionComponent<{}> = props => {
         stats[STAT_CLASSIFICATION.DETECT_NGS]++;
       }
     });
-    setClassificationStats(stats);
+    return stats;
   }, [filteredTxs]);
 
   const numFilteredTxs = useMemo(() => {
     return uniq(filteredTxs.map((tx: FdaApprovedOncologyTherapy) => tx.tx))
       .length;
   }, [filteredTxs]);
-  const clearFilters = () => {
-    setBiomarkerSearch('');
-    setTargetedOnly(false);
-    setSelectedTherapies([]);
-    setSelectedTargets([]);
-    setSelectedAgents([]);
-  };
+  const clearFilters = () => setColumnFilters({});
 
   return (
     <>
@@ -530,10 +475,7 @@ const OncologyTherapiesPage: React.FunctionComponent<{}> = props => {
         <Row>
           <Col md={4} xs={12} className={'mb-2'}>
             <SelectionButton
-              onClick={() => {
-                setPoOnly(true);
-                setTargetedOnly(false);
-              }}
+              onClick={() => showTherapies(true, false)}
               active={poOnly}
               title={'Precision Oncology Therapies'}
               subtitle={'FDA-Approved'}
@@ -542,10 +484,7 @@ const OncologyTherapiesPage: React.FunctionComponent<{}> = props => {
           </Col>
           <Col md={4} xs={12} className={'mb-2'}>
             <SelectionButton
-              onClick={() => {
-                setPoOnly(false);
-                setTargetedOnly(true);
-              }}
+              onClick={() => showTherapies(false, true)}
               active={targetedOnly}
               title={'Targeted Therapies'}
               subtitle={'FDA-Approved'}
@@ -554,67 +493,13 @@ const OncologyTherapiesPage: React.FunctionComponent<{}> = props => {
           </Col>
           <Col md={4} xs={12} className={'mb-2'}>
             <SelectionButton
-              onClick={() => {
-                setPoOnly(false);
-                setTargetedOnly(false);
-              }}
+              onClick={() => showTherapies(false, false)}
               active={!poOnly && !targetedOnly}
               title={'Oncology Therapies'}
               subtitle={'FDA-Approved'}
               numTherapies={fdaTxs.length}
             />
           </Col>
-        </Row>
-        <Row className={'mt-2'}>
-          <Col lg={poOnly ? 3 : 4} md={6} xs={12} className={'mb-2'}>
-            <Select
-              placeholder={'Select drug(s)'}
-              options={sortAndUniqByValue(txs, 'tx', [])}
-              isClearable={true}
-              value={selectedTherapies}
-              isMulti
-              closeMenuOnSelect={false}
-              onChange={(selectedOptions: any[]) => {
-                setSelectedTherapies(selectedOptions || []);
-              }}
-            />
-          </Col>
-          <Col lg={poOnly ? 3 : 4} md={6} xs={12} className={'mb-2'}>
-            <Select
-              placeholder={'Select class of agent(s)'}
-              options={sortAndUniqByValue(txs, 'agentClass', [])}
-              isClearable={true}
-              value={selectedAgents}
-              isMulti
-              closeMenuOnSelect={false}
-              onChange={(selectedOptions: any[]) => {
-                setSelectedAgents(selectedOptions || []);
-              }}
-            />
-          </Col>
-          <Col lg={poOnly ? 3 : 4} md={6} xs={12} className={'mb-2'}>
-            <Select
-              placeholder={'Select mechanism of action'}
-              options={drugTargetOptions}
-              isClearable={true}
-              value={selectedDrugTargets}
-              isMulti
-              closeMenuOnSelect={false}
-              onChange={(selectedOptions: any[]) => {
-                setSelectedTargets(selectedOptions || []);
-              }}
-            />
-          </Col>
-          {poOnly && (
-            <Col lg={3} md={6} xs={12} className={'mb-2'}>
-              <Input
-                style={{ height: 38 }}
-                placeholder={'Search biomarker'}
-                value={biomarkerSearch}
-                onChange={event => setBiomarkerSearch(event.target.value)}
-              />
-            </Col>
-          )}
         </Row>
       </div>
       <Row>
@@ -672,7 +557,9 @@ const OncologyTherapiesPage: React.FunctionComponent<{}> = props => {
           <OncoKBTable
             className={'po-tx-table'}
             columns={columns}
-            data={filteredTxs}
+            data={txs}
+            columnFilters={columnFilters}
+            onColumnFiltersChange={setColumnFilters}
             pageSize={filteredTxs.length < 10 ? 10 : filteredTxs.length}
             disableSearch
             defaultSorted={[
