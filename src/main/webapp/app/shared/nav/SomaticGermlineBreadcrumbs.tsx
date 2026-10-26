@@ -1,4 +1,5 @@
 import React from 'react';
+import { useHistory } from 'react-router-dom';
 import {
   ITextBreadcrumb,
   ILinkBreadcrumb,
@@ -11,6 +12,8 @@ import {
   getGenePageLink,
   getReferenceGenomeFromSearch,
 } from '../utils/UrlUtils';
+import { REFERENCE_GENOME } from 'app/config/constants';
+import { Option } from 'app/shared/select/FormSelectWithLabelField';
 
 export default function SomaticGermlineBreadcrumbs({
   hugoSymbol,
@@ -19,6 +22,7 @@ export default function SomaticGermlineBreadcrumbs({
   cancerTypeName,
   germline,
   isTag = false,
+  selectedReferenceGenome,
 }: {
   hugoSymbol: string;
   alterationNameWithDiff: string;
@@ -26,7 +30,10 @@ export default function SomaticGermlineBreadcrumbs({
   cancerTypeName: string | undefined;
   germline?: boolean;
   isTag?: boolean;
+  // When set, a reference genome dropdown is shown first, like on the HGVSg page
+  selectedReferenceGenome?: REFERENCE_GENOME;
 }) {
+  const history = useHistory();
   const referenceGenome = getReferenceGenomeFromSearch(window.location.search);
 
   const breadcrumbs: (
@@ -62,6 +69,29 @@ export default function SomaticGermlineBreadcrumbs({
       }),
     } as ILinkBreadcrumb,
   ];
+
+  if (selectedReferenceGenome) {
+    breadcrumbs.unshift({
+      type: 'dropdown',
+      key: 'referenceGenome',
+      text: selectedReferenceGenome,
+      onChange(selectedOption: Option) {
+        history.push(
+          getAlterationPageLink({
+            hugoSymbol,
+            alteration: alterationName,
+            cancerType: cancerTypeName,
+            germline,
+            isTag,
+            searchQueries: {
+              refGenome: selectedOption.value as REFERENCE_GENOME,
+            },
+          }) + history.location.hash
+        );
+      },
+      options: [REFERENCE_GENOME.GRCh37, REFERENCE_GENOME.GRCh38],
+    } as IDropdownBreadcrumb);
+  }
 
   if (cancerTypeName) {
     breadcrumbs.push({
