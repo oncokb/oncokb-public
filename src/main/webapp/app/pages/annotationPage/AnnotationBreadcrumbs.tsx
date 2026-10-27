@@ -149,8 +149,6 @@ const DropdownBreadcrumb: React.FunctionComponent<IDropdownBreadcrumb> = props =
       <If condition={editing}>
         <Then>
           <Select
-            // Focus on mount and open the menu, so one click on the edit icon
-            // shows the options
             autoFocus
             openMenuOnFocus
             isSearchable={false}
@@ -241,8 +239,6 @@ export const AnnotationBreadcrumbs: React.FunctionComponent<{
           text: breadcrumb.text,
           active: index === props.breadcrumbs.length - 1,
         };
-        // Truncate long names only. The dropdown and input end in an edit
-        // icon that overflow: hidden would clip.
         const truncatedClassName = styles.breadcrumb;
         switch (breadcrumb.type) {
           case 'text':

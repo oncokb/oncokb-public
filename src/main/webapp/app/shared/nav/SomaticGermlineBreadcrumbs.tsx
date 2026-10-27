@@ -30,7 +30,6 @@ export default function SomaticGermlineBreadcrumbs({
   cancerTypeName: string | undefined;
   germline?: boolean;
   isTag?: boolean;
-  // When set, a reference genome dropdown is shown first, like on the HGVSg page
   selectedReferenceGenome?: REFERENCE_GENOME;
 }) {
   const history = useHistory();
