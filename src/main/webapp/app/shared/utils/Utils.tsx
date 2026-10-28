@@ -11,6 +11,7 @@ import {
   DELETION,
   EVIDENCE_TYPES,
   FUSIONS,
+  FUSION_SEPARATOR,
   GENERAL_ONCOGENICITY,
   GENERAL_PATHOGENICITY,
   LEVEL_PRIORITY,
@@ -811,6 +812,30 @@ export const isCategoricalAlteration = (alteration: string) => {
       alteration.toLowerCase().startsWith(alt.toLowerCase())
     ).length > 0
   );
+};
+
+/**
+ * The API canonicalizes fusion nomenclature to the HGNC "::" separator, so a page
+ * reached through the legacy single-hyphen form (e.g. "BCR-ABL1 Fusion") should
+ * settle on the canonical URL. Returns the canonical alteration when the annotated
+ * name is a fusion that differs from what was queried, otherwise undefined.
+ */
+export const getCanonicalFusionAlteration = (
+  alterationQuery: string | undefined,
+  annotatedAlteration: string | undefined
+): string | undefined => {
+  if (!alterationQuery || !annotatedAlteration) {
+    return undefined;
+  }
+  if (annotatedAlteration === alterationQuery) {
+    return undefined;
+  }
+  // Restricted to fusions on purpose. The API also normalizes protein changes
+  // (e.g. "Val600Glu" to "V600E"), which the pages render as-is by design.
+  if (!annotatedAlteration.includes(FUSION_SEPARATOR)) {
+    return undefined;
+  }
+  return annotatedAlteration;
 };
 
 export const getCategoricalAlteration = (alteration: string) => {
