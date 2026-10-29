@@ -178,6 +178,7 @@ export default class AnnotationPage extends React.Component<
             drugs: getTreatmentNameByPriority(treatment),
             cancerTypes: cancerTypesName,
             cancerTypesArray: cancerTypes,
+            excludedCancerTypesArray: excludedCancerTypes,
             cancerTypesView: (
               <>
                 <WithSeparator separator={', '}>
@@ -235,6 +236,7 @@ export default class AnnotationPage extends React.Component<
           drugs: '',
           cancerTypes: cancerTypesName,
           cancerTypesArray: cancerTypes,
+          excludedCancerTypesArray: excludedCancerTypes,
           cancerTypesView: (
             <>
               <WithSeparator separator={', '}>

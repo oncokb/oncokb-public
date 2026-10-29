@@ -6,12 +6,14 @@ import {
   Gene,
 } from 'app/shared/api/generated/OncoKbAPI';
 import { inject, observer } from 'mobx-react';
+import { computed } from 'mobx';
 import { defaultSortMethod } from 'app/shared/utils/ReactTableUtils';
 import { GenePageLink } from 'app/shared/utils/UrlUtils';
 import { Col, Row } from 'react-bootstrap';
 import OncoKBTable, {
   SearchColumn,
 } from 'app/components/oncokbTable/OncoKBTable';
+import { FilterTypes } from 'app/components/oncokbTable/filters/types';
 import {
   filterByKeyword,
   getDefaultColumnDefinition,
@@ -67,6 +69,10 @@ const getPanelGeneCount = (
   return data.filter(cancerGene => cancerGene[key]).length;
 };
 
+const toYesNo = (value: boolean) => (value ? 'Yes' : 'No');
+const sortYesFirst = (a: string, b: string) =>
+  a === b ? 0 : a === 'Yes' ? -1 : 1;
+
 type ExtendCancerGene = CancerGene & {
   numOfSources: number;
   annotated: boolean;
@@ -80,330 +86,369 @@ export default class CancerGenesPage extends React.Component<{
 }> {
   private fetchedDate = '11/17/2020';
 
-  private columns: SearchColumn<ExtendCancerGene>[] = [
-    {
-      ...getDefaultColumnDefinition(TABLE_COLUMN_KEY.HUGO_SYMBOL),
-      onFilter: (data: ExtendCancerGene, keyword) =>
-        filterByKeyword(data.hugoSymbol, keyword) ||
-        filterByKeyword(data.geneAliases.join(', '), keyword),
-      Cell(props: { original: ExtendCancerGene }) {
-        const hugoInfo = [
-          props.original.annotated ? (
-            <GenePageLink hugoSymbol={props.original.hugoSymbol} />
+  @computed
+  get columns(): SearchColumn<ExtendCancerGene>[] {
+    return [
+      {
+        ...getDefaultColumnDefinition(TABLE_COLUMN_KEY.HUGO_SYMBOL),
+        filterType: FilterTypes.STRING,
+        getColumnFilterValue: (gene: ExtendCancerGene) => gene.hugoSymbol,
+        onFilter: (data: ExtendCancerGene, keyword) =>
+          filterByKeyword(data.hugoSymbol, keyword) ||
+          filterByKeyword(data.geneAliases.join(', '), keyword),
+        Cell(props: { original: ExtendCancerGene }) {
+          const hugoInfo = [
+            props.original.annotated ? (
+              <GenePageLink hugoSymbol={props.original.hugoSymbol} />
+            ) : (
+              `${props.original.hugoSymbol}`
+            ),
+          ];
+          if (
+            props.original.geneAliases &&
+            props.original.geneAliases.length > 0
+          ) {
+            hugoInfo.push(
+              <CommonInfoIcon
+                overlay={
+                  <GeneAliasesDescription
+                    geneAliases={props.original.geneAliases}
+                  />
+                }
+              />
+            );
+          }
+          return <WithSeparator separator={' '}>{hugoInfo}</WithSeparator>;
+        },
+      },
+      {
+        id: 'oncokbAnnotated',
+        Header: (
+          <span>
+            {ONCOKB_TM}
+            <br />
+            Annotated
+          </span>
+        ),
+        accessor: 'oncokbAnnotated',
+        filterType: FilterTypes.STRING,
+        getColumnFilterValue: (gene: ExtendCancerGene) =>
+          toYesNo(gene.oncokbAnnotated),
+        sortColumnFilterValues: sortYesFirst,
+        style: { textAlign: 'center' },
+        minWidth: 100,
+        sortMethod: defaultSortMethod,
+        Cell: (props: { original: ExtendCancerGene }) => {
+          return props.original.oncokbAnnotated ? (
+            <i className="fa fa-check" />
           ) : (
-            `${props.original.hugoSymbol}`
-          ),
-        ];
-        if (
-          props.original.geneAliases &&
-          props.original.geneAliases.length > 0
-        ) {
-          hugoInfo.push(
-            <CommonInfoIcon
-              overlay={
-                <GeneAliasesDescription
-                  geneAliases={props.original.geneAliases}
-                />
-              }
+            <FeedbackIcon
+              feedback={{
+                type: FeedbackType.ANNOTATION,
+                annotation: {
+                  gene: props.original.hugoSymbol,
+                },
+              }}
+              appStore={this.props.appStore}
             />
           );
-        }
-        return <WithSeparator separator={' '}>{hugoInfo}</WithSeparator>;
+        },
       },
-    },
-    {
-      id: 'oncokbAnnotated',
-      Header: (
-        <span>
-          {ONCOKB_TM}
-          <br />
-          Annotated
-        </span>
-      ),
-      accessor: 'oncokbAnnotated',
-      style: { textAlign: 'center' },
-      minWidth: 100,
-      sortMethod: defaultSortMethod,
-      Cell: (props: { original: ExtendCancerGene }) => {
-        return props.original.oncokbAnnotated ? (
-          <i className="fa fa-check" />
-        ) : (
-          <FeedbackIcon
-            feedback={{
-              type: FeedbackType.ANNOTATION,
-              annotation: {
-                gene: props.original.hugoSymbol,
-              },
-            }}
-            appStore={this.props.appStore}
-          />
-        );
+      {
+        id: 'geneType',
+        Header: (
+          <>
+            <span>Oncogene/TSG</span>
+            <InfoIcon
+              overlay={
+                <div>
+                  <span>As categorised by {ONCOKB_TM}</span>
+                  <br />
+                  <br />
+                  <span>
+                    <b>Neither</b> - Neither an oncogene nor tumor supressor
+                  </span>
+                  <br />
+                  <span>
+                    <b>Insufficient Evidence</b> - Insufficient evidence to
+                    classify as an oncogene or tumor suppressor
+                  </span>
+                </div>
+              }
+            />
+          </>
+        ),
+        minWidth: 140,
+        accessor: 'geneTypeText',
+        filterType: FilterTypes.STRING,
+        getColumnFilterValue: (gene: ExtendCancerGene) => gene.geneTypeText,
+        onFilter: (data: ExtendCancerGene, keyword) =>
+          filterByKeyword(data.geneType, keyword),
+        sortMethod: (a: string, b: string) => a.localeCompare(b),
       },
-    },
-    {
-      id: 'geneType',
-      Header: (
-        <>
-          <span>Oncogene/TSG</span>
-          <InfoIcon
-            overlay={
-              <div>
-                <span>As categorised by {ONCOKB_TM}</span>
-                <br />
-                <br />
+      {
+        id: 'mSKImpact',
+        Header: (
+          <>
+            <span>{MSK_IMPACT_TM}</span>
+            <InfoIcon
+              overlay={
                 <span>
-                  <b>Neither</b> - Neither an oncogene nor tumor supressor
+                  Gene is part of the{' '}
+                  <a
+                    href="https://www.mskcc.org/msk-impact"
+                    target="_blank"
+                    rel="noopener noreferrer"
+                  >
+                    {MSK_IMPACT_TM} panel
+                  </a>{' '}
+                  (
+                  {getPanelGeneCount(
+                    this.extendedCancerGene.result,
+                    'mSKImpact'
+                  )}{' '}
+                  genes, {this.fetchedDate})
                 </span>
-                <br />
+              }
+            />
+          </>
+        ),
+        minWidth: 120,
+        accessor: 'mSKImpact',
+        filterType: FilterTypes.STRING,
+        getColumnFilterValue: (gene: ExtendCancerGene) =>
+          toYesNo(gene.mSKImpact),
+        sortColumnFilterValues: sortYesFirst,
+        style: { textAlign: 'center' },
+        sortable: true,
+        Cell(props: { original: ExtendCancerGene }) {
+          return props.original.mSKImpact ? <i className="fa fa-check" /> : '';
+        },
+      },
+      {
+        id: 'mSKHeme',
+        Header: (
+          <>
+            <span>
+              {MSK_IMPACT_TM}
+              <br />
+              Heme
+            </span>
+            <InfoIcon
+              overlay={
                 <span>
-                  <b>Insufficient Evidence</b> - Insufficient evidence to
-                  classify as an oncogene or tumor suppressor
+                  Gene is part of the{' '}
+                  <a
+                    href="https://www.mskcc.org/msk-impact"
+                    target="_blank"
+                    rel="noopener noreferrer"
+                  >
+                    {MSK_IMPACT_TM} Heme and HemePACT panels
+                  </a>{' '}
+                  (
+                  {getPanelGeneCount(this.extendedCancerGene.result, 'mSKHeme')}{' '}
+                  genes, {this.fetchedDate})
                 </span>
-              </div>
-            }
-          />
-        </>
-      ),
-      minWidth: 140,
-      accessor: 'geneTypeText',
-      onFilter: (data: ExtendCancerGene, keyword) =>
-        filterByKeyword(data.geneType, keyword),
-      sortMethod: (a: string, b: string) => a.localeCompare(b),
-    },
-    {
-      id: 'mSKImpact',
-      Header: (props: {
-        original: ExtendCancerGene;
-        data: ExtendCancerGene[];
-      }) => (
-        <>
-          <span>{MSK_IMPACT_TM}</span>
-          <InfoIcon
-            overlay={
-              <span>
-                Gene is part of the{' '}
-                <a
-                  href="https://www.mskcc.org/msk-impact"
-                  target="_blank"
-                  rel="noopener noreferrer"
-                >
-                  {MSK_IMPACT_TM} panel
-                </a>{' '}
-                ({getPanelGeneCount(props.data, 'mSKImpact')} genes,{' '}
-                {this.fetchedDate})
-              </span>
-            }
-          />
-        </>
-      ),
-      minWidth: 120,
-      accessor: 'mSKImpact',
-      style: { textAlign: 'center' },
-      sortable: true,
-      Cell(props: { original: ExtendCancerGene }) {
-        return props.original.mSKImpact ? <i className="fa fa-check" /> : '';
+              }
+            />
+          </>
+        ),
+        style: { textAlign: 'center' },
+        accessor: 'mSKHeme',
+        filterType: FilterTypes.STRING,
+        getColumnFilterValue: (gene: ExtendCancerGene) => toYesNo(gene.mSKHeme),
+        sortColumnFilterValues: sortYesFirst,
+        minWidth: 120,
+        sortable: true,
+        Cell(props: { original: ExtendCancerGene }) {
+          return props.original.mSKHeme ? <i className="fa fa-check" /> : '';
+        },
       },
-    },
-    {
-      id: 'mSKHeme',
-      Header: (props: {
-        original: ExtendCancerGene;
-        data: ExtendCancerGene[];
-      }) => (
-        <>
-          <span>
-            {MSK_IMPACT_TM}
-            <br />
-            Heme
-          </span>
-          <InfoIcon
-            overlay={
-              <span>
-                Gene is part of the{' '}
-                <a
-                  href="https://www.mskcc.org/msk-impact"
-                  target="_blank"
-                  rel="noopener noreferrer"
-                >
-                  {MSK_IMPACT_TM} Heme and HemePACT panels
-                </a>{' '}
-                ({getPanelGeneCount(props.data, 'mSKHeme')} genes,{' '}
-                {this.fetchedDate})
-              </span>
-            }
-          />
-        </>
-      ),
-      style: { textAlign: 'center' },
-      accessor: 'mSKHeme',
-      minWidth: 120,
-      sortable: true,
-      Cell(props: { original: ExtendCancerGene }) {
-        return props.original.mSKHeme ? <i className="fa fa-check" /> : '';
+      {
+        id: 'foundation',
+        Header: (
+          <>
+            <span>
+              Foundation One
+              <br />
+              CDx
+            </span>
+            <InfoIcon
+              overlay={
+                <span>
+                  Gene is part of the{' '}
+                  <a
+                    href="https://assets.ctfassets.net/w98cd481qyp0/YqqKHaqQmFeqc5ueQk48w/0a34fcdaa3a71dbe460cdcb01cebe8ad/F1CDx_Technical_Specifications_072020.pdf"
+                    target="_blank"
+                    rel="noopener noreferrer"
+                  >
+                    FoundationOne CDx panel
+                  </a>{' '}
+                  (
+                  {getPanelGeneCount(
+                    this.extendedCancerGene.result,
+                    'foundation'
+                  )}{' '}
+                  genes, {this.fetchedDate})
+                </span>
+              }
+            />
+          </>
+        ),
+        style: { textAlign: 'center' },
+        accessor: 'foundation',
+        filterType: FilterTypes.STRING,
+        getColumnFilterValue: (gene: ExtendCancerGene) =>
+          toYesNo(gene.foundation),
+        sortColumnFilterValues: sortYesFirst,
+        minWidth: 100,
+        sortable: true,
+        Cell(props: { original: ExtendCancerGene }) {
+          return props.original.foundation ? <i className="fa fa-check" /> : '';
+        },
       },
-    },
-    {
-      id: 'foundation',
-      Header: (props: {
-        original: ExtendCancerGene;
-        data: ExtendCancerGene[];
-      }) => (
-        <>
-          <span>
-            Foundation One
-            <br />
-            CDx
-          </span>
-          <InfoIcon
-            overlay={
-              <span>
-                Gene is part of the{' '}
-                <a
-                  href="https://assets.ctfassets.net/w98cd481qyp0/YqqKHaqQmFeqc5ueQk48w/0a34fcdaa3a71dbe460cdcb01cebe8ad/F1CDx_Technical_Specifications_072020.pdf"
-                  target="_blank"
-                  rel="noopener noreferrer"
-                >
-                  FoundationOne CDx panel
-                </a>{' '}
-                ({getPanelGeneCount(props.data, 'foundation')} genes,{' '}
-                {this.fetchedDate})
-              </span>
-            }
-          />
-        </>
-      ),
-      style: { textAlign: 'center' },
-      accessor: 'foundation',
-      minWidth: 100,
-      sortable: true,
-      Cell(props: { original: ExtendCancerGene }) {
-        return props.original.foundation ? <i className="fa fa-check" /> : '';
+      {
+        id: 'foundationHeme',
+        Header: (
+          <>
+            <span>
+              Foundation One
+              <br />
+              Heme
+            </span>
+            <InfoIcon
+              overlay={
+                <span>
+                  Gene is part of the{' '}
+                  <a
+                    href="https://assets.ctfassets.net/w98cd481qyp0/42r1cTE8VR4137CaHrsaen/baf91080cb3d78a52ada10c6358fa130/FoundationOne_Heme_Technical_Specifications.pdf"
+                    target="_blank"
+                    rel="noopener noreferrer"
+                  >
+                    FoundationOne Heme panel
+                  </a>{' '}
+                  (
+                  {getPanelGeneCount(
+                    this.extendedCancerGene.result,
+                    'foundationHeme'
+                  )}{' '}
+                  genes, {this.fetchedDate})
+                </span>
+              }
+            />
+          </>
+        ),
+        minWidth: 120,
+        style: { textAlign: 'center' },
+        accessor: 'foundationHeme',
+        filterType: FilterTypes.STRING,
+        getColumnFilterValue: (gene: ExtendCancerGene) =>
+          toYesNo(gene.foundationHeme),
+        sortColumnFilterValues: sortYesFirst,
+        sortable: true,
+        Cell(props: { original: ExtendCancerGene }) {
+          return props.original.foundationHeme ? (
+            <i className="fa fa-check" />
+          ) : (
+            ''
+          );
+        },
       },
-    },
-    {
-      id: 'foundationHeme',
-      Header: (props: {
-        original: ExtendCancerGene;
-        data: ExtendCancerGene[];
-      }) => (
-        <>
-          <span>
-            Foundation One
-            <br />
-            Heme
-          </span>
-          <InfoIcon
-            overlay={
-              <span>
-                Gene is part of the{' '}
-                <a
-                  href="https://assets.ctfassets.net/w98cd481qyp0/42r1cTE8VR4137CaHrsaen/baf91080cb3d78a52ada10c6358fa130/FoundationOne_Heme_Technical_Specifications.pdf"
-                  target="_blank"
-                  rel="noopener noreferrer"
-                >
-                  FoundationOne Heme panel
-                </a>{' '}
-                ({getPanelGeneCount(props.data, 'foundationHeme')} genes,{' '}
-                {this.fetchedDate})
-              </span>
-            }
-          />
-        </>
-      ),
-      minWidth: 120,
-      style: { textAlign: 'center' },
-      accessor: 'foundationHeme',
-      sortable: true,
-      Cell(props: { original: ExtendCancerGene }) {
-        return props.original.foundationHeme ? (
-          <i className="fa fa-check" />
-        ) : (
-          ''
-        );
+      {
+        id: 'vogelstein',
+        Header: (
+          <>
+            <span>Vogelstein et al. 2013</span>
+            <InfoIcon
+              overlay={
+                <span>
+                  Gene is part of the published{' '}
+                  <a
+                    href="https://science.sciencemag.org/content/339/6127/1546.full"
+                    target="_blank"
+                    rel="noopener noreferrer"
+                  >
+                    Vogelstein et al. Science, 2013
+                  </a>{' '}
+                  cancer gene list (
+                  {getPanelGeneCount(
+                    this.extendedCancerGene.result,
+                    'vogelstein'
+                  )}{' '}
+                  genes, 03/29/2013)
+                </span>
+              }
+            />
+          </>
+        ),
+        style: { textAlign: 'center' },
+        minWidth: 110,
+        accessor: 'vogelstein',
+        filterType: FilterTypes.STRING,
+        getColumnFilterValue: (gene: ExtendCancerGene) =>
+          toYesNo(gene.vogelstein),
+        sortColumnFilterValues: sortYesFirst,
+        sortable: true,
+        Cell(props: { original: ExtendCancerGene }) {
+          return props.original.vogelstein ? <i className="fa fa-check" /> : '';
+        },
       },
-    },
-    {
-      id: 'vogelstein',
-      Header: (props: {
-        original: ExtendCancerGene;
-        data: ExtendCancerGene[];
-      }) => (
-        <>
-          <span>Vogelstein et al. 2013</span>
-          <InfoIcon
-            overlay={
-              <span>
-                Gene is part of the published{' '}
-                <a
-                  href="https://science.sciencemag.org/content/339/6127/1546.full"
-                  target="_blank"
-                  rel="noopener noreferrer"
-                >
-                  Vogelstein et al. Science, 2013
-                </a>{' '}
-                cancer gene list ({getPanelGeneCount(props.data, 'vogelstein')}{' '}
-                genes, 03/29/2013)
-              </span>
-            }
-          />
-        </>
-      ),
-      style: { textAlign: 'center' },
-      minWidth: 110,
-      accessor: 'vogelstein',
-      sortable: true,
-      Cell(props: { original: ExtendCancerGene }) {
-        return props.original.vogelstein ? <i className="fa fa-check" /> : '';
+      {
+        id: 'sangerCGC',
+        Header: (
+          <>
+            <span>
+              COSMIC Cancer Gene Census
+              <br />
+              Tier 1
+            </span>
+            <InfoIcon
+              overlay={
+                <span>
+                  Gene is part of the{' '}
+                  <a
+                    href="https://cancer.sanger.ac.uk/cosmic/census?tier=1"
+                    target="_blank"
+                    rel="noopener noreferrer"
+                  >
+                    COSMIC Cancer Gene Census Tier 1
+                  </a>{' '}
+                  (
+                  {getPanelGeneCount(
+                    this.extendedCancerGene.result,
+                    'sangerCGC'
+                  )}{' '}
+                  genes, v99 - 28th November 2023)
+                </span>
+              }
+            />
+          </>
+        ),
+        style: { textAlign: 'center' },
+        minWidth: 160,
+        accessor: 'sangerCGC',
+        filterType: FilterTypes.STRING,
+        getColumnFilterValue: (gene: ExtendCancerGene) =>
+          toYesNo(gene.sangerCGC),
+        sortColumnFilterValues: sortYesFirst,
+        sortable: true,
+        Cell(props: { original: ExtendCancerGene }) {
+          return props.original.sangerCGC ? <i className="fa fa-check" /> : '';
+        },
       },
-    },
-    {
-      id: 'sangerCGC',
-      Header: (props: {
-        original: ExtendCancerGene;
-        data: ExtendCancerGene[];
-      }) => (
-        <>
-          <span>
-            COSMIC Cancer Gene Census
-            <br />
-            Tier 1
-          </span>
-          <InfoIcon
-            overlay={
-              <span>
-                Gene is part of the{' '}
-                <a
-                  href="https://cancer.sanger.ac.uk/cosmic/census?tier=1"
-                  target="_blank"
-                  rel="noopener noreferrer"
-                >
-                  COSMIC Cancer Gene Census Tier 1
-                </a>{' '}
-                ({getPanelGeneCount(props.data, 'sangerCGC')} genes, v99 - 28th
-                November 2023)
-              </span>
-            }
-          />
-        </>
-      ),
-      style: { textAlign: 'center' },
-      minWidth: 160,
-      accessor: 'sangerCGC',
-      sortable: true,
-      Cell(props: { original: ExtendCancerGene }) {
-        return props.original.sangerCGC ? <i className="fa fa-check" /> : '';
+      {
+        id: 'numOfSources',
+        Header: <span># of Sources</span>,
+        style: { textAlign: 'center' },
+        sortable: true,
+        onFilter: (data: ExtendCancerGene, keyword) =>
+          filterByKeyword(data.numOfSources.toString(), keyword),
+        accessor: 'numOfSources',
+        filterType: FilterTypes.NUMBER,
+        getColumnFilterValue: (gene: ExtendCancerGene) => gene.numOfSources,
       },
-    },
-    {
-      id: 'numOfSources',
-      Header: () => '# of Sources',
-      style: { textAlign: 'center' },
-      sortable: true,
-      onFilter: (data: ExtendCancerGene, keyword) =>
-        filterByKeyword(data.numOfSources.toString(), keyword),
-      accessor: 'numOfSources',
-    },
-  ];
+    ];
+  }
 
   private readonly cancerGenes = remoteData<CancerGene[]>({
     await: () => [],
@@ -502,6 +547,7 @@ export default class CancerGenesPage extends React.Component<{
               <OncoKBTable
                 data={this.extendedCancerGene.result}
                 columns={this.columns}
+                className={'no-header-ellipsis'}
                 showPagination={true}
                 minRows={1}
                 loading={this.extendedCancerGene.isPending}

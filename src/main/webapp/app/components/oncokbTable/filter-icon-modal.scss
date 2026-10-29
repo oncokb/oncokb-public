@@ -1,0 +1,253 @@
+.rc-tooltip.filter-tooltip {
+  opacity: 1;
+
+  .rc-tooltip-inner {
+    background-color: transparent;
+    box-shadow: none;
+    border: 0;
+    padding: 0;
+    min-height: 0;
+  }
+
+  .rc-tooltip-arrow {
+    display: none;
+  }
+}
+
+.filter-overlay {
+  position: absolute;
+  top: 15px;
+  left: -200px;
+  background-color: #fff;
+  border: 1px solid #ddd;
+  border-radius: 4px;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.15);
+  padding: 10px;
+  min-width: 200px;
+  max-width: 400px;
+  width: max-content;
+}
+
+.filter-overlay input[placeholder='Search'] {
+  height: 28px;
+  line-height: 1.2;
+  padding: 4px 8px;
+  font-size: 1rem;
+}
+
+.checkbox-list {
+  display: flex;
+  flex-direction: column;
+  margin-top: 10px;
+  max-height: 300px;
+  overflow-y: auto;
+}
+
+.checkbox-list input[type='checkbox'] {
+  margin-top: 5px;
+}
+
+.checkbox-list label {
+  padding-left: 5px;
+  font-size: 1rem;
+  margin-bottom: 0;
+}
+
+$table-icon-transition-duration: 150ms;
+$table-icon-transition-easing: cubic-bezier(0.4, 0, 0.2, 1);
+
+.filterable-header {
+  display: flex;
+  align-items: center;
+}
+
+.filterable-header-label {
+  flex: 1 1 auto;
+  min-width: 0;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  word-break: normal;
+  overflow-wrap: normal;
+}
+
+.no-header-ellipsis .filterable-header-label {
+  overflow: visible;
+  text-overflow: clip;
+  overflow-wrap: break-word;
+}
+
+.filter-component {
+  flex-shrink: 0;
+  margin-left: 0.5rem;
+  opacity: 0;
+  transition: opacity $table-icon-transition-duration
+    $table-icon-transition-easing;
+}
+
+.rt-th:hover .filter-component,
+.filter-component:focus-within,
+.filter-component.filter-component-visible {
+  opacity: 1;
+}
+
+.filter-icon {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 1.35rem;
+  height: 1.35rem;
+  border-radius: 3px;
+  cursor: pointer;
+  transition: background-color $table-icon-transition-duration
+      $table-icon-transition-easing,
+    color $table-icon-transition-duration $table-icon-transition-easing;
+
+  .fa {
+    line-height: 1;
+  }
+
+  &:hover {
+    background-color: #e0e1e2;
+  }
+}
+
+.filter-component-open .filter-icon {
+  background-color: #d4d5d7;
+}
+
+.filter-icon-active {
+  color: $warning;
+}
+
+.level-filter-menu {
+  width: 340px;
+}
+
+.level-filter-intro {
+  margin-bottom: 0.5rem;
+  color: $grey;
+  font-size: 0.875rem;
+  line-height: 1.4;
+}
+
+.level-filter-groups {
+  max-height: 360px;
+  overflow-y: auto;
+}
+
+.level-filter-group {
+  padding: 0.5rem 0;
+
+  & + & {
+    border-top: 1px solid $light-grey;
+  }
+
+  label {
+    margin-bottom: 0;
+  }
+}
+
+.level-filter-group-title {
+  font-weight: 600;
+}
+
+.level-filter-option {
+  margin-left: 21px;
+  padding: 2px 4px;
+  border-radius: 3px;
+  transition: background-color $table-icon-transition-duration
+    $table-icon-transition-easing;
+
+  &:hover,
+  &.level-filter-option-selected {
+    background-color: $pale-blue-grey;
+  }
+
+  label {
+    width: 100%;
+    align-items: center !important;
+  }
+}
+
+.level-filter-option-icon {
+  display: inline-flex;
+  justify-content: center;
+  flex-shrink: 0;
+  width: 26px;
+  margin-right: 0.5rem;
+}
+
+.level-filter-option-text {
+  display: flex;
+  flex-direction: column;
+  line-height: 1.25;
+}
+
+.level-filter-option-label {
+  font-weight: 500;
+}
+
+.level-filter-option-description {
+  color: $grey;
+  font-size: 0.8rem;
+}
+
+.level-filter-disabled {
+  opacity: 0.45;
+
+  label {
+    cursor: not-allowed;
+  }
+
+  input[type='checkbox'] + label:hover {
+    color: inherit;
+    transform: none;
+  }
+
+  input[type='checkbox'] + label:hover:before {
+    content: '\f096';
+    color: $grey;
+    opacity: 1;
+    transform: translateY(1px) scale(1);
+  }
+}
+
+.level-filter-option.level-filter-disabled:hover {
+  background-color: transparent;
+}
+
+.level-filter-group.level-filter-disabled {
+  opacity: 1;
+
+  .level-filter-group-header {
+    opacity: 0.45;
+  }
+}
+
+@keyframes filter-overlay-enter {
+  from {
+    opacity: 0;
+    transform: translateY(-4px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.filter-overlay {
+  animation: filter-overlay-enter $table-icon-transition-duration
+    $table-icon-transition-easing;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .filter-component,
+  .filter-icon,
+  .level-filter-option {
+    transition: none;
+  }
+
+  .filter-overlay {
+    animation: none;
+  }
+}

@@ -14,6 +14,7 @@ import {
   DEFAULT_MESSAGE_HEME_ONLY_DX,
   DEFAULT_MESSAGE_HEME_ONLY_PX,
   LEVEL_TYPES,
+  LEVELS,
   ONCOKB_TM,
   PAGE_ROUTE,
   REFERENCE_GENOME,
@@ -24,10 +25,12 @@ import { BiologicalVariant } from 'app/shared/api/generated/OncoKbPrivateAPI';
 import { GenePageTable } from 'app/pages/genePage/GenePageTable';
 import AppStore from 'app/store/AppStore';
 import { SearchColumn } from 'app/components/oncokbTable/OncoKBTable';
+import { FilterTypes } from 'app/components/oncokbTable/filters/types';
 import {
   filterByKeyword,
   getDefaultColumnDefinition,
   IAlteration,
+  levelOfEvidence2Level,
 } from 'app/shared/utils/Utils';
 import {
   AlterationPageLink,
@@ -70,6 +73,58 @@ export interface IEvidenceTableTabProps {
   authenticationStore?: AuthenticationStore; // it will be injected directly
   hideFda?: boolean;
 }
+
+const LEVEL_COLUMN_WIDTH = 105;
+const CITATIONS_COLUMN_WIDTH = 120;
+const DESCRIPTION_ICON_COLUMN_WIDTH = 115;
+
+const getNumOfReferences = (implication: TherapeuticImplication) =>
+  implication.citations.abstracts.length + implication.citations.pmids.length;
+
+const levelColumn: SearchColumn<TherapeuticImplication> = {
+  ...getDefaultColumnDefinition(TABLE_COLUMN_KEY.LEVEL),
+  width: LEVEL_COLUMN_WIDTH,
+  minWidth: LEVEL_COLUMN_WIDTH,
+  onFilter: (data: TherapeuticImplication, keyword) =>
+    filterByKeyword(data.level, keyword),
+  filterType: FilterTypes.LEVEL,
+  getColumnFilterValue: (data: TherapeuticImplication) => data.level as LEVELS,
+};
+
+const alterationsColumn: SearchColumn<TherapeuticImplication> = {
+  ...getDefaultColumnDefinition(TABLE_COLUMN_KEY.ALTERATIONS),
+  Cell(props: { original: TherapeuticImplication }) {
+    return props.original.alterationsView;
+  },
+  onFilter: (data: TherapeuticImplication, keyword) =>
+    filterByKeyword(data.alterations, keyword),
+  filterType: FilterTypes.STRING,
+  getColumnFilterValue: (data: TherapeuticImplication) =>
+    data.alterations.split(', '),
+};
+
+const citationsColumn: SearchColumn<TherapeuticImplication> = {
+  ...getDefaultColumnDefinition(TABLE_COLUMN_KEY.CITATIONS),
+  width: CITATIONS_COLUMN_WIDTH,
+  minWidth: CITATIONS_COLUMN_WIDTH,
+  filterType: FilterTypes.NUMBER,
+  getColumnFilterValue: getNumOfReferences,
+  Cell(props: { original: TherapeuticImplication }) {
+    return (
+      <DefaultTooltip
+        placement={'left'}
+        overlay={() => (
+          <CitationTooltip
+            pmids={props.original.citations.pmids}
+            abstracts={props.original.citations.abstracts}
+          />
+        )}
+      >
+        <span>{getNumOfReferences(props.original)}</span>
+      </DefaultTooltip>
+    );
+  },
+};
 
 @inject('windowStore', 'appStore', 'authenticationStore')
 @observer
@@ -272,7 +327,8 @@ export default class AlterationTableTabs extends React.Component<
     ) {
       descriptionColumn = {
         ...descriptionColumn,
-        width: 100,
+        width: DESCRIPTION_ICON_COLUMN_WIDTH,
+        minWidth: DESCRIPTION_ICON_COLUMN_WIDTH,
         Cell() {
           return (
             <div style={{ display: 'flex', justifyContent: 'center' }}>
@@ -281,8 +337,8 @@ export default class AlterationTableTabs extends React.Component<
                   <span>
                     Get access to our treatment descriptions by{' '}
                     <Link to={PAGE_ROUTE.LOGIN}> logging in </Link> or by{' '}
-                    <Link to={getLoginRouteForRegister()}>registering</Link>{' '}
-                    an account.
+                    <Link to={getLoginRouteForRegister()}>registering</Link> an
+                    account.
                   </span>
                 }
               />
@@ -292,42 +348,9 @@ export default class AlterationTableTabs extends React.Component<
       };
     }
 
-    const citationColumn = {
-      ...getDefaultColumnDefinition(TABLE_COLUMN_KEY.CITATIONS),
-      Cell(props: { original: TherapeuticImplication }) {
-        const numOfReferences =
-          props.original.citations.abstracts.length +
-          props.original.citations.pmids.length;
-        return (
-          <DefaultTooltip
-            placement={'left'}
-            overlay={() => (
-              <CitationTooltip
-                pmids={props.original.citations.pmids}
-                abstracts={props.original.citations.abstracts}
-              />
-            )}
-          >
-            <span>{numOfReferences}</span>
-          </DefaultTooltip>
-        );
-      },
-    };
-
     const therapeuticTableColumns: SearchColumn<TherapeuticImplication>[] = [
-      {
-        ...getDefaultColumnDefinition(TABLE_COLUMN_KEY.LEVEL),
-        onFilter: (data: TherapeuticImplication, keyword) =>
-          filterByKeyword(data.level, keyword),
-      },
-      {
-        ...getDefaultColumnDefinition(TABLE_COLUMN_KEY.ALTERATIONS),
-        Cell(props: { original: TherapeuticImplication }) {
-          return props.original.alterationsView;
-        },
-        onFilter: (data: TherapeuticImplication, keyword) =>
-          filterByKeyword(data.alterations, keyword),
-      },
+      levelColumn,
+      alterationsColumn,
       {
         ...getDefaultColumnDefinition(TABLE_COLUMN_KEY.EVIDENCE_CANCER_TYPE),
         Cell(props: { original: TherapeuticImplication }) {
@@ -335,16 +358,23 @@ export default class AlterationTableTabs extends React.Component<
         },
         onFilter: (data: TherapeuticImplication, keyword) =>
           filterByKeyword(data.cancerTypes, keyword),
+        filterType: FilterTypes.CANCER_TYPE,
+        getColumnFilterValue: (data: TherapeuticImplication) =>
+          data.cancerTypesArray,
+        getColumnExcludedFilterValue: (data: TherapeuticImplication) =>
+          data.excludedCancerTypesArray,
       },
       {
         ...getDefaultColumnDefinition(TABLE_COLUMN_KEY.DRUGS),
         onFilter: (data: TherapeuticImplication, keyword) =>
           filterByKeyword(data.drugs, keyword),
+        filterType: FilterTypes.STRING,
+        getColumnFilterValue: (data: TherapeuticImplication) => data.drugs,
       },
       ...(this.props.authenticationStore?.isAuthenticatedAndApprovedUser &&
       this.txHasDescriptions
         ? []
-        : [citationColumn]),
+        : [citationsColumn]),
       ...(this.txHasDescriptions ? [descriptionColumn] : []),
     ];
 
@@ -359,6 +389,8 @@ export default class AlterationTableTabs extends React.Component<
         accessor: 'variant',
         onFilter: (data: BiologicalVariant, keyword) =>
           filterByKeyword(data.variant.name, keyword),
+        filterType: FilterTypes.STRING,
+        getColumnFilterValue: (data: BiologicalVariant) => data.variant.name,
         Cell: (props: { original: BiologicalVariant }) => {
           return (
             <>
@@ -380,14 +412,20 @@ export default class AlterationTableTabs extends React.Component<
         ...getDefaultColumnDefinition(TABLE_COLUMN_KEY.ONCOGENICITY),
         onFilter: (data: BiologicalVariant, keyword) =>
           filterByKeyword(data.oncogenic, keyword),
+        filterType: FilterTypes.STRING,
+        getColumnFilterValue: (data: BiologicalVariant) => data.oncogenic,
       },
       {
         ...getDefaultColumnDefinition(TABLE_COLUMN_KEY.MUTATION_EFFECT),
         onFilter: (data: BiologicalVariant, keyword) =>
           filterByKeyword(data.mutationEffect, keyword),
+        filterType: FilterTypes.STRING,
+        getColumnFilterValue: (data: BiologicalVariant) => data.mutationEffect,
       },
       {
         ...getDefaultColumnDefinition(TABLE_COLUMN_KEY.DESCRIPTION),
+        width: DESCRIPTION_ICON_COLUMN_WIDTH,
+        minWidth: DESCRIPTION_ICON_COLUMN_WIDTH,
         accessor(d) {
           return {
             abstracts: d.mutationEffectAbstracts,
@@ -417,66 +455,45 @@ export default class AlterationTableTabs extends React.Component<
   @computed
   get dxpxTableColumns(): SearchColumn<TherapeuticImplication>[] {
     return [
-      {
-        ...getDefaultColumnDefinition(TABLE_COLUMN_KEY.LEVEL),
-        onFilter: (data: TherapeuticImplication, keyword) =>
-          filterByKeyword(data.level, keyword),
-      },
-      {
-        ...getDefaultColumnDefinition(TABLE_COLUMN_KEY.ALTERATIONS),
-        Cell(props: { original: TherapeuticImplication }) {
-          return props.original.alterationsView;
-        },
-        onFilter: (data: TherapeuticImplication, keyword) =>
-          filterByKeyword(data.alterations, keyword),
-      },
+      levelColumn,
+      alterationsColumn,
       {
         ...getDefaultColumnDefinition(TABLE_COLUMN_KEY.EVIDENCE_CANCER_TYPE),
         onFilter: (data: TherapeuticImplication, keyword) =>
           filterByKeyword(data.cancerTypes, keyword),
+        filterType: FilterTypes.CANCER_TYPE,
+        getColumnFilterValue: (data: TherapeuticImplication) =>
+          data.cancerTypesArray,
+        getColumnExcludedFilterValue: (data: TherapeuticImplication) =>
+          data.excludedCancerTypesArray,
         Cell(props: { original: TherapeuticImplication }) {
           return props.original.cancerTypesView;
         },
         minWidth: 250,
       },
-      {
-        ...getDefaultColumnDefinition(TABLE_COLUMN_KEY.CITATIONS),
-        minWidth: 50,
-        Cell(props: { original: TherapeuticImplication }) {
-          const numOfReferences =
-            props.original.citations.abstracts.length +
-            props.original.citations.pmids.length;
-          return (
-            <DefaultTooltip
-              placement={'left'}
-              overlay={() => (
-                <CitationTooltip
-                  pmids={props.original.citations.pmids}
-                  abstracts={props.original.citations.abstracts}
-                />
-              )}
-            >
-              <span>{numOfReferences}</span>
-            </DefaultTooltip>
-          );
-        },
-      },
+      citationsColumn,
     ];
   }
 
   @computed
-  get fdaTableColumns() {
+  get fdaTableColumns(): SearchColumn<FdaImplication>[] {
     return [
       {
         ...getDefaultColumnDefinition(TABLE_COLUMN_KEY.FDA_LEVEL),
+        width: 180,
         onFilter: (data: FdaImplication, keyword: string) =>
           filterByKeyword(data.level, keyword),
+        filterType: FilterTypes.LEVEL,
+        getColumnFilterValue: (data: FdaImplication) =>
+          levelOfEvidence2Level(data.level),
       },
       {
         ...getDefaultColumnDefinition(TABLE_COLUMN_KEY.ALTERATION),
         Cell(props: { original: FdaImplication }) {
           return props.original.alterationView;
         },
+        filterType: FilterTypes.STRING,
+        getColumnFilterValue: (data: FdaImplication) => data.alteration.name,
       },
       {
         id: TABLE_COLUMN_KEY.CANCER_TYPE,
@@ -491,6 +508,8 @@ export default class AlterationTableTabs extends React.Component<
         },
         onFilter: (data: FdaImplication, keyword: string) =>
           filterByKeyword(data.cancerType, keyword),
+        filterType: FilterTypes.STRING,
+        getColumnFilterValue: (data: FdaImplication) => data.cancerType,
       },
     ];
   }

@@ -250,6 +250,7 @@ export default class SomaticGermlineGenePage extends React.Component<
             drugs: drug,
             cancerTypes: cancerTypesName,
             cancerTypesArray: cancerTypeNames,
+            excludedCancerTypesArray: excludedCancerTypeNames,
             drugDescription: variant.drugDescription,
             cancerTypesView,
             citations: {
@@ -266,6 +267,7 @@ export default class SomaticGermlineGenePage extends React.Component<
           drugs: '',
           cancerTypes: cancerTypesName,
           cancerTypesArray: cancerTypeNames,
+          excludedCancerTypesArray: excludedCancerTypeNames,
           drugDescription: variant.drugDescription,
           cancerTypesView,
           citations: {

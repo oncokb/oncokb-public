@@ -328,6 +328,13 @@ input[type='radio'] {
   }
 }
 
+input[type='checkbox']:indeterminate {
+  + label:before {
+    content: '\f147';
+    color: $blue;
+  }
+}
+
 input[type='checkbox']:checked {
   + label:before {
     content: '\f046';
@@ -366,29 +373,102 @@ input[type='radio']:checked {
 
 // Overwrite react-table styles
 .oncokbReactTable.ReactTable {
-  .-sort-desc {
-    box-shadow: none !important;
+  .rt-resizer {
+    width: 8px;
+    right: -4px;
 
-    &:before {
-      font-family: FontAwesome;
-      content: '\f0dd';
-      float: right;
+    &:after {
+      content: '';
+      position: absolute;
+      top: 0;
+      bottom: 0;
+      left: 3px;
+      width: 2px;
+      background-color: $primary;
+      opacity: 0;
+      transition: opacity 150ms cubic-bezier(0.4, 0, 0.2, 1);
+    }
+
+    &:hover:after,
+    &:active:after {
+      opacity: 1;
     }
   }
 
-  .-sort-asc {
-    box-shadow: none !important;
+  .rt-th.-cursor-pointer {
+    padding-right: 24px;
+
+    &:before,
+    &:after {
+      position: absolute;
+      top: 50%;
+      right: 10px;
+      transform: translateY(-50%);
+      font-family: FontAwesome;
+      line-height: 1;
+      opacity: 0.3;
+      transition: opacity 150ms cubic-bezier(0.4, 0, 0.2, 1);
+    }
 
     &:before {
-      font-family: FontAwesome;
       content: '\f0de';
-      float: right;
+    }
+
+    &:after {
+      content: '\f0dd';
+    }
+
+    &:hover:before,
+    &:hover:after {
+      opacity: 0.55;
+    }
+  }
+
+  .rt-th.-sort-asc,
+  .rt-th.-sort-desc {
+    box-shadow: none !important;
+  }
+
+  .rt-th.-cursor-pointer.-sort-asc,
+  .rt-th.-cursor-pointer.-sort-asc:hover {
+    &:before {
+      opacity: 1;
+    }
+
+    &:after {
+      opacity: 0;
+    }
+  }
+
+  .rt-th.-cursor-pointer.-sort-desc,
+  .rt-th.-cursor-pointer.-sort-desc:hover {
+    &:before {
+      opacity: 0;
+    }
+
+    &:after {
+      opacity: 1;
+    }
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    .rt-th.-cursor-pointer:before,
+    .rt-th.-cursor-pointer:after,
+    .rt-resizer:after {
+      transition: none;
     }
   }
 
   .rt-table {
     .rt-thead {
+      .rt-th {
+        display: flex;
+        align-items: center;
+      }
+
       .rt-resizable-header-content {
+        flex: 1 1 auto;
+        min-width: 0;
         text-align: left;
         white-space: normal;
         word-break: break-word;
@@ -418,18 +498,6 @@ input[type='radio']:checked {
 }
 .RRT__panel {
   border-top: 1px solid $primary !important;
-}
-
-.oncokbReactTable.ReactTable.fixedHeight {
-  .rt-table {
-    .rt-thead {
-      .rt-th:last-child {
-        // We fixed header so the scroll bar on the tbody occupies this width causing the header and body misalignment.
-        // Adding additional space to the last column of the table to align them.
-        margin-right: 15px;
-      }
-    }
-  }
 }
 
 .po-tx-table ul {

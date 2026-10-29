@@ -15,6 +15,7 @@ import { LongText } from 'app/oncokb-frontend-commons/src/components/LongText';
 import { Evidence } from 'app/shared/api/generated/OncoKbAPI';
 import AlleleStateTag from 'app/components/tag/AlleleStateTag';
 import { genomicIndicatorNameSortMethod } from 'app/shared/utils/ReactTableUtils';
+import { FilterTypes } from 'app/components/oncokbTable/filters/types';
 
 const parseAlleleStateFromIndicatorName = (
   name: string
@@ -37,6 +38,65 @@ const parseAlleleStateFromIndicatorName = (
   return { displayName: name };
 };
 
+const columns: SearchColumn<Evidence>[] = [
+  {
+    Header: <span>Genomic Indicator</span>,
+    maxWidth: 240,
+    id: 'name',
+    accessor: 'name',
+    sortMethod: genomicIndicatorNameSortMethod,
+    filterType: FilterTypes.STRING,
+    getColumnFilterValue: (evidence: Evidence) =>
+      parseAlleleStateFromIndicatorName(evidence.name).displayName,
+    Cell(row: { original: Evidence }) {
+      const { displayName, alleleState } = parseAlleleStateFromIndicatorName(
+        row.original.name
+      );
+      return (
+        <>
+          <div>{displayName}</div>
+          {alleleState && <AlleleStateTag alleleState={alleleState} />}
+        </>
+      );
+    },
+  },
+  {
+    Header: <span>Inheritance</span>,
+    id: 'inheritance',
+    accessor: 'knownEffect',
+    filterType: FilterTypes.STRING,
+    getColumnFilterValue: (evidence: Evidence) => evidence.knownEffect,
+    maxWidth: 200,
+    Cell(row: { original: Evidence }) {
+      return <span>{row.original.knownEffect}</span>;
+    },
+  },
+  {
+    Header: <span>Associated Variants</span>,
+    id: 'associatedVariants',
+    accessor: (evidence: Evidence) =>
+      evidence.alterations.map(alt => getAlterationName(alt)).join(', '),
+    filterType: FilterTypes.STRING,
+    getColumnFilterValue: (evidence: Evidence) =>
+      evidence.alterations.map(alt => getAlterationName(alt)),
+    maxWidth: 240,
+    Cell(row: { original: Evidence }) {
+      return (
+        <span>
+          {row.original.alterations
+            .map(alt => getAlterationName(alt))
+            .join(', ')}
+        </span>
+      );
+    },
+  },
+  {
+    Header: <span>Description</span>,
+    accessor: 'description',
+    sortable: false,
+  },
+];
+
 export const GenomicIndicatorTable: React.FunctionComponent<{
   data: Evidence[];
   isPending: boolean;
@@ -45,48 +105,6 @@ export const GenomicIndicatorTable: React.FunctionComponent<{
     genomicIndicatorNameSortMethod(a.name, b.name)
   );
 
-  const columns: SearchColumn<Evidence>[] = [
-    {
-      Header: <span>Genomic Indicator</span>,
-      maxWidth: 200,
-      id: 'name',
-      Cell(row: { original: Evidence }) {
-        const { displayName, alleleState } = parseAlleleStateFromIndicatorName(
-          row.original.name
-        );
-        return (
-          <>
-            <div>{displayName}</div>
-            {alleleState && <AlleleStateTag alleleState={alleleState} />}
-          </>
-        );
-      },
-    },
-    {
-      Header: <span>Inheritance</span>,
-      maxWidth: 200,
-      Cell(row: { original: Evidence }) {
-        return <span>{row.original.knownEffect}</span>;
-      },
-    },
-    {
-      Header: <span>Associated Variants</span>,
-      maxWidth: 200,
-      Cell(row: { original: Evidence }) {
-        return (
-          <span>
-            {row.original.alterations
-              .map(alt => getAlterationName(alt))
-              .join(', ')}
-          </span>
-        );
-      },
-    },
-    {
-      Header: <span>Description</span>,
-      accessor: 'description',
-    },
-  ];
   return (
     <OncoKBTable
       data={sortedData}

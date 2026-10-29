@@ -97,6 +97,7 @@ export type TherapeuticImplication = {
   alterationsView: JSX.Element;
   drugs: string;
   cancerTypesArray: string[];
+  excludedCancerTypesArray: string[];
   cancerTypes: string;
   cancerTypesView: JSX.Element;
   citations: Citations;
