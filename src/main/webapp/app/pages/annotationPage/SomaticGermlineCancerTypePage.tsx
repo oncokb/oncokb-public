@@ -726,6 +726,7 @@ export class SomaticGermlineCancerTypePage extends React.Component<
                     cancerTypeName={this.store.cancerTypeName}
                     alterationNameWithDiff={this.store.alterationNameWithDiff}
                     germline={this.store.germline}
+                    selectedReferenceGenome={this.store.referenceGenomeQuery}
                   />
                   <GermlineSomaticHeader
                     includeEmailLink

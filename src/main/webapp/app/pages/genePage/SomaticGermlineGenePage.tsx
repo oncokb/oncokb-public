@@ -537,10 +537,9 @@ export default class SomaticGermlineGenePage extends React.Component<
       newTabKey !== ANNOTATION_PAGE_TAB_KEYS.FDA
     ) {
       this.props.appStore.showFdaModal = true;
-    } else {
-      const newHash: GenePageHashQueries = { tab: newTabKey };
-      window.location.hash = QueryString.stringify(newHash);
     }
+    const newHash: GenePageHashQueries = { tab: newTabKey };
+    window.location.hash = QueryString.stringify(newHash);
   }
 
   @computed

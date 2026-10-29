@@ -177,10 +177,9 @@ export default class GenomicPage extends React.Component<GenomicPageProps> {
       newTabKey !== ANNOTATION_PAGE_TAB_KEYS.FDA
     ) {
       this.props.appStore.showFdaModal = true;
-    } else {
-      const newHash: AlterationPageHashQueries = { tab: newTabKey };
-      window.location.hash = QueryString.stringify(newHash);
     }
+    const newHash: AlterationPageHashQueries = { tab: newTabKey };
+    window.location.hash = QueryString.stringify(newHash);
     this.selectedTab = newTabKey;
   }
 

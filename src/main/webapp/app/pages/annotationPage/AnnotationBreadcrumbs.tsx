@@ -6,7 +6,6 @@ import Select from 'react-select';
 import { REFERENCE_GENOME } from 'app/config/constants';
 import { COLOR_BLUE } from 'app/config/theme';
 import { Option } from 'app/shared/select/FormSelectWithLabelField';
-import classnames from 'classnames';
 import styles from './AnnotationBreadcrumbs.module.scss';
 
 export type BreadcrumbType = 'text' | 'link' | 'input' | 'dropdown';
@@ -150,8 +149,10 @@ const DropdownBreadcrumb: React.FunctionComponent<IDropdownBreadcrumb> = props =
       <If condition={editing}>
         <Then>
           <Select
-            menuIsOpen
-            closeMenuOnBlur
+            autoFocus
+            openMenuOnFocus
+            isSearchable={false}
+            onMenuClose={() => setEditing(false)}
             theme={theme => ({
               ...theme,
               colors: {
@@ -237,15 +238,18 @@ export const AnnotationBreadcrumbs: React.FunctionComponent<{
           key: index,
           text: breadcrumb.text,
           active: index === props.breadcrumbs.length - 1,
-          className: classnames(styles.breadcrumb),
         };
+        const truncatedClassName = styles.breadcrumb;
         switch (breadcrumb.type) {
           case 'text':
-            return <TextBreadcrumb {...commonProps} />;
+            return (
+              <TextBreadcrumb {...commonProps} className={truncatedClassName} />
+            );
           case 'link':
             return (
               <LinkBreadcrumb
                 {...commonProps}
+                className={truncatedClassName}
                 type={'link'}
                 to={breadcrumb.to}
               />
@@ -268,7 +272,13 @@ export const AnnotationBreadcrumbs: React.FunctionComponent<{
               />
             );
           default:
-            return <TextBreadcrumb {...commonProps} type={'text'} />;
+            return (
+              <TextBreadcrumb
+                {...commonProps}
+                type={'text'}
+                className={truncatedClassName}
+              />
+            );
         }
       })}
     </Breadcrumb>

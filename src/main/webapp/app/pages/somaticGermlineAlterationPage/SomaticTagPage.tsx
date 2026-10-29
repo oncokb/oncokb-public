@@ -162,10 +162,9 @@ const SomaticTagPage = inject(
       newTabKey !== ANNOTATION_PAGE_TAB_KEYS.FDA
     ) {
       props.appStore.showFdaModal = true;
-    } else {
-      const newHash: AlterationPageHashQueries = { tab: newTabKey };
-      window.location.hash = QueryString.stringify(newHash);
     }
+    const newHash: AlterationPageHashQueries = { tab: newTabKey };
+    window.location.hash = QueryString.stringify(newHash);
     setSelectedTab(newTabKey);
   }
 
