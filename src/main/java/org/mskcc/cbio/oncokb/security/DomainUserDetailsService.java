@@ -125,7 +125,8 @@ public class DomainUserDetailsService implements UserDetailsService {
             if (!SecurityUtils.isWithinActivationGracePeriod(user, userDetails.getLicenseType())) {
                 throw new ResponseStatusException(
                     HttpStatus.FORBIDDEN,
-                    "Your temporary access expired while your request is still pending review."
+                    "Your temporary access has expired and your account request is still pending review. " +
+                        "Please contact contact@oncokb.org for assistance."
                 );
             }
 
