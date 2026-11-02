@@ -28,6 +28,7 @@ import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.MvcResult;
 import org.springframework.transaction.annotation.Transactional;
 
+import javax.persistence.EntityManager;
 import java.time.Instant;
 import java.util.Collections;
 import java.util.UUID;
@@ -75,6 +76,9 @@ public class UserUUIDControllerIT {
 
     @Autowired
     private PasswordEncoder passwordEncoder;
+
+    @Autowired
+    private EntityManager em;
 
     @ParameterizedTest
     @ValueSource(booleans = {true, false})
@@ -307,6 +311,52 @@ public class UserUUIDControllerIT {
                 .content(TestUtil.convertObjectToJsonBytes(loginVM)))
             .andExpect(status().isOk())
             .andExpect(header().string("Authorization", containsString("Bearer ")));
+    }
+
+    @Test
+    @Transactional
+    public void testExpiredGracePeriodLoginReturnsActionableMessage() throws Exception {
+        String login = "expired.grace.user";
+        String rawPassword = "password";
+
+        User user = new User();
+        user.setLogin(login);
+        user.setEmail("expired.grace.user@example.com.br");
+        user.setFirstName("Expired");
+        user.setLastName("Grace");
+        user.setLangKey("en");
+        user.setActivated(false);
+        user.setPassword(passwordEncoder.encode(rawPassword));
+        user = userRepository.saveAndFlush(user);
+
+        // Auditing overwrites createdDate on save, so backdate it directly to put the user past the grace period.
+        em.createNativeQuery("update jhi_user set created_date = :createdDate where id = :id")
+            .setParameter("createdDate", java.sql.Timestamp.from(Instant.parse("2020-01-01T00:00:00Z")))
+            .setParameter("id", user.getId())
+            .executeUpdate();
+        em.clear();
+        user = userRepository.findById(user.getId())
+            .orElseThrow(() -> new IllegalStateException("Missing expired grace period user"));
+
+        UserDetails userDetails = new UserDetails();
+        userDetails.setUser(user);
+        userDetails.setAccountRequestStatus(AccountRequestStatus.PENDING);
+        userDetails.setLicenseType(LicenseType.COMMERCIAL);
+        userDetailsRepository.save(userDetails);
+
+        LoginVM loginVM = new LoginVM();
+        loginVM.setUsername(user.getEmail());
+        loginVM.setPassword(rawPassword);
+        loginVM.setRememberMe(false);
+
+        restMockMvc.perform(post("/api/authenticate")
+                .contentType(MediaType.APPLICATION_JSON)
+                .content(TestUtil.convertObjectToJsonBytes(loginVM)))
+            .andExpect(status().isUnauthorized())
+            .andExpect(jsonPath("$.detail").value(
+                "Your temporary access has expired and your account request is still pending review. " +
+                    "Please contact contact@oncokb.org for assistance."
+            ));
     }
 
     private User createUserForAuthentication(String login, String rawPassword) {
