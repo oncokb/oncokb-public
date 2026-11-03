@@ -24,7 +24,7 @@ export default class RefComponent extends React.Component<{
     //     (Abstract: Fakih et al. Abstract# 3003, ASCO 2019.)
     const abstractParts = parts
       .slice(1)
-      .join('Abstract')
+      .join('abstract')
       .split(/(?=http)/i);
     const isAbstract = !(abstractParts.length < 2);
 
