@@ -32,7 +32,7 @@ import {
   getAlterationPageLink,
   getHotspotPageLink,
 } from 'app/shared/utils/UrlUtils';
-import { createHotspotOncogenicityTileProps } from 'app/shared/tiles/tile-utils';
+import { createHotspotMutationEffectTileProps } from 'app/shared/tiles/tile-utils';
 import ShowHideText from 'app/shared/texts/ShowHideText';
 import MutationEffectDescription from 'app/pages/annotationPage/MutationEffectDescription';
 import HotspotVariantsTable from 'app/pages/genePage/hotspot/HotspotVariantsTable';
@@ -249,7 +249,7 @@ const SomaticHotspotPage = inject(
                     <SomaticGermlineTiles
                       tiles={[
                         {
-                          ...createHotspotOncogenicityTileProps(annotation),
+                          ...createHotspotMutationEffectTileProps(annotation),
                           // The only tile on the page, so size it to its
                           // content instead of stretching across the row.
                           containerClassName: tileStyles.hotspotTileStandalone,

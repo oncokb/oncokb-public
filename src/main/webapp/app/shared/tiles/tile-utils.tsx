@@ -234,7 +234,7 @@ function createMutationEffectTileProps(
   };
 }
 
-export function createHotspotOncogenicityTileProps(
+export function createHotspotMutationEffectTileProps(
   annotation: SomaticVariantAnnotation
 ): AlterationTileProps {
   const { oncogenic } = annotation;
@@ -253,6 +253,14 @@ export function createHotspotOncogenicityTileProps(
               }
               isHotspot={annotation.hotspot}
             />
+          ),
+        },
+        // Shown even when unknown, matching positional alteration pages.
+        {
+          title: 'Biological Effect',
+          show: !!annotation.mutationEffect,
+          value: (
+            <MutationEffectIcon mutationEffect={annotation.mutationEffect} />
           ),
         },
       ],

@@ -267,14 +267,6 @@ export type GenomicIndicatorQuery = {
         'variant': string
 
 };
-export type GenomicIndicatorQuery = {
-    'hugoSymbol': string
-
-        'inheritanceMechanisms': Array < "AUTOSOMAL_DOMINANT" | "AUTOSOMAL_RECESSIVE" | "X_LINKED_RECESSIVE" | "CARRIER" >
-
-        'variant': string
-
-};
 export type MatchVariantRequest = {
     'oncokbVariants': Array < MatchVariant >
 
