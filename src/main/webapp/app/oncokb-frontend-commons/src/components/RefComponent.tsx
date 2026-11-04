@@ -36,7 +36,10 @@ export default class RefComponent extends React.Component<{
 
     if (isAbstract) {
       abstract = abstractParts[0].replace(/^[:\s]*/g, '').trim();
-      abstractLink = abstractParts[1].replace(/[\\)]*$/g, '').trim();
+      abstractLink = this.props.content
+        .split(/(?=http)/i)[1]
+        ?.replace(/[\\)]*$/g, '')
+        .trim();
       prefix = 'Abstract: ';
       link = (
         <a target="_blank" rel="noopener noreferrer" href={abstractLink}>
