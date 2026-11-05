@@ -12,6 +12,24 @@ export default class RefComponent extends React.Component<{
   componentType: 'tooltip' | 'linkout';
 }> {
   render() {
+    if (
+      this.props.content.startsWith('(https://') &&
+      this.props.content.endsWith(')')
+    ) {
+      const link = this.props.content.substring(
+        1,
+        this.props.content.length - 1
+      );
+      return (
+        <>
+          (
+          <a target="_blank" rel="noopener noreferrer" href={link}>
+            {link}
+          </a>
+          )
+        </>
+      );
+    }
     const parts = this.props.content.split(/pmid|nct|abstract/i);
 
     if (parts.length < 2) {
