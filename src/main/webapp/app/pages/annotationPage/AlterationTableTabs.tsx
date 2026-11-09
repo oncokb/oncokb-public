@@ -126,6 +126,17 @@ const citationsColumn: SearchColumn<TherapeuticImplication> = {
   },
 };
 
+// Font used by the tab titles (`.RRT__tab` in index.scss). Tab widths depend on it.
+const TAB_TITLE_FONT = '1em "Gotham Medium"';
+
+// FontFaceSet (document.fonts) is not in the TypeScript 3.8 DOM typings.
+const getDocumentFonts = ():
+  | {
+      check: (font: string) => boolean;
+      load: (font: string) => Promise<unknown>;
+    }
+  | undefined => (document as any).fonts;
+
 @inject('windowStore', 'appStore', 'authenticationStore')
 @observer
 export default class AlterationTableTabs extends React.Component<
@@ -135,6 +146,9 @@ export default class AlterationTableTabs extends React.Component<
   @observable selectedTab: ANNOTATION_PAGE_TAB_KEYS;
   @observable defaultSelectedTab: ANNOTATION_PAGE_TAB_KEYS =
     ANNOTATION_PAGE_TAB_KEYS.BIOLOGICAL;
+  // Treat the font as loaded when the browser cannot tell us, so we never wait on it.
+  @observable tabTitleFontLoaded =
+    getDocumentFonts()?.check(TAB_TITLE_FONT) ?? true;
 
   constructor(props: any) {
     super(props);
@@ -142,6 +156,34 @@ export default class AlterationTableTabs extends React.Component<
       this.selectedTab = props.selectedTab;
       this.defaultSelectedTab = props.selectedTab;
     }
+  }
+
+  componentDidMount() {
+    if (!this.tabTitleFontLoaded) {
+      const markLoaded = () => (this.tabTitleFontLoaded = true);
+      getDocumentFonts()?.load(TAB_TITLE_FONT).then(markLoaded, markLoaded);
+    }
+  }
+
+  /**
+   * React key for <Tabs>. Changing it remounts the component so it re-measures every tab.
+   *
+   * react-responsive-tabs measures tab widths only when it mounts or when the number of tabs
+   * changes, and then decides which tabs fit and which go into the "..." menu. Two cases leave it
+   * with widths that are too small, so tabs that should collapse stay visible and wrap onto a
+   * second row (seen on mobile widths, and as the flaky "Gene Page without Login - Registration
+   * Hover - Mobile" screenshot test, see #1453):
+   * - It measured before the tab title font loaded. The fallback font is narrower.
+   * - It re-measured while some tabs were in the "..." menu. That menu is `display: none`, so
+   *   those tabs measure 0px wide.
+   * A fresh mount renders every tab visibly before measuring, so neither case applies.
+   */
+  @computed
+  get tabsRemountKey() {
+    return [
+      this.tabTitleFontLoaded ? 'font-loaded' : 'font-pending',
+      ...this.tabs.map(tab => tab.key),
+    ].join('|');
   }
 
   getTabDescription(key: ANNOTATION_PAGE_TAB_KEYS) {
@@ -579,6 +621,7 @@ export default class AlterationTableTabs extends React.Component<
   render() {
     return (
       <Tabs
+        key={this.tabsRemountKey}
         selectedTabKey={
           this.tabs.some(tab => tab.key === this.selectedTab)
             ? this.selectedTab
