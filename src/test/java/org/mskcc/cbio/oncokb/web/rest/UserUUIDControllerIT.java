@@ -107,13 +107,13 @@ public class UserUUIDControllerIT {
             restMockMvc.perform(post("/api/authenticate")
                     .contentType(MediaType.APPLICATION_JSON)
                     .content(TestUtil.convertObjectToJsonBytes(loginVM)))
-                .andExpect(status().isUnauthorized())
+                .andExpect(status().isForbidden())
                 .andExpect(content().string(containsString("rejected")));
         } else {
             restMockMvc.perform(post("/api/authenticate")
                     .contentType(MediaType.APPLICATION_JSON)
                     .content(TestUtil.convertObjectToJsonBytes(loginVM)))
-                .andExpect(status().isUnauthorized());
+                .andExpect(status().isForbidden());
         }
     }
 

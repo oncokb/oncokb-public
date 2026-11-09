@@ -19,6 +19,7 @@ public final class ErrorConstants {
     public static URI DATABASE_READ_ONLY;
     public static URI TOO_MANY_TOKENS;
     public static URI ACTIVATION_KEY_NOT_FOUND_TYPE;
+    public static URI ACCOUNT_ACCESS_DENIED_TYPE;
 
     private ErrorConstants(ApplicationProperties applicationProperties) {
         PROBLEM_BASE_URL = applicationProperties.getBaseUrl() + "/problem";
@@ -32,5 +33,6 @@ public final class ErrorConstants {
         DATABASE_READ_ONLY = URI.create(PROBLEM_BASE_URL + "/database-read-only");
         TOO_MANY_TOKENS = URI.create(PROBLEM_BASE_URL + "/too-many-tokens");
         ACTIVATION_KEY_NOT_FOUND_TYPE = URI.create(PROBLEM_BASE_URL + "/activation-key-not-found");
+        ACCOUNT_ACCESS_DENIED_TYPE = URI.create(PROBLEM_BASE_URL + "/account-access-denied");
     }
 }
