@@ -326,8 +326,8 @@ public class DomainUserDetailsServiceIT {
 
     // Disable this test while we still have the ACTIVATION_GRACE_PERIOD_CREATED_DATE_FLOOR
     // @Test
-    // public void assertThatExpiredGracePeriodExceptionIsThrownForPostGracePeriodUsers() {
-    //     assertThatExceptionOfType(ExpiredGracePeriodException.class).isThrownBy(
+    // public void assertThatAccountAccessDeniedIsThrownForPostGracePeriodUsers() {
+    //     assertThatExceptionOfType(AccountAccessDeniedException.class).isThrownBy(
     //         () -> domainUserDetailsService.loadUserByUsername(USER_THREE_LOGIN));
     // }
 
