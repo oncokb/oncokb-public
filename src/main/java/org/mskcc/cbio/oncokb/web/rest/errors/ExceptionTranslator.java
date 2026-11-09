@@ -16,7 +16,6 @@ import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.client.HttpClientErrorException;
 import org.springframework.web.context.request.NativeWebRequest;
 import org.springframework.web.context.request.WebRequest;
-import org.springframework.web.server.ResponseStatusException;
 import org.springframework.core.env.Environment;
 import org.zalando.problem.DefaultProblem;
 import org.zalando.problem.Problem;
@@ -162,19 +161,6 @@ public class ExceptionTranslator implements ProblemHandling, SecurityAdviceTrait
 
     @Override
     public ProblemBuilder prepare(final Throwable throwable, final StatusType status, final URI type) {
-        // ResponseStatusException reasons are written for end users, so show them verbatim. This also
-        // covers ones wrapped by Spring Security during login (e.g. InternalAuthenticationServiceException).
-        // Otherwise the detail is prefixed with "403 FORBIDDEN" and, in production, any reason containing
-        // an email address (e.g. "contact@oncokb.org.") is replaced by the package-name check below.
-        Optional<String> responseStatusReason = findResponseStatusReason(throwable);
-        if (responseStatusReason.isPresent()) {
-            return Problem.builder()
-                .withType(type)
-                .withTitle(status.getReasonPhrase())
-                .withStatus(status)
-                .withDetail(responseStatusReason.get());
-        }
-
         Collection<String> activeProfiles = Arrays.asList(env.getActiveProfiles());
 
         if (activeProfiles.contains(JHipsterConstants.SPRING_PROFILE_PRODUCTION)) {
@@ -222,18 +208,6 @@ public class ExceptionTranslator implements ProblemHandling, SecurityAdviceTrait
                 .filter(cause -> isCausalChainsEnabled())
                 .map(this::toProblem)
                 .orElse(null));
-    }
-
-    private Optional<String> findResponseStatusReason(Throwable throwable) {
-        Throwable current = throwable;
-        while (current != null) {
-            if (current instanceof ResponseStatusException) {
-                return Optional.ofNullable(((ResponseStatusException) current).getReason())
-                    .filter(StringUtils::isNotBlank);
-            }
-            current = current.getCause();
-        }
-        return Optional.empty();
     }
 
     private boolean containsPackageName(String message) {
