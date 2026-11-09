@@ -74,6 +74,7 @@ public class DomainUserDetailsService implements UserDetailsService {
         TrialStatus trialStatus = userDetails.getTrialStatus() == null ? TrialStatus.REGULAR : userDetails.getTrialStatus();
 
         if (AccountRequestStatus.REJECTED.equals(accountRequestStatus)) {
+            log.info("Denying login for user '{}': account request was rejected.", user.getLogin());
             throw new AccountAccessDeniedException("Your account request was rejected. Please contact contact@oncokb.org.");
         }
 
@@ -115,12 +116,14 @@ public class DomainUserDetailsService implements UserDetailsService {
             }
 
             if (AccountRequestStatus.PENDING_NO_GRACE_PERIOD.equals(accountRequestStatus)) {
+                log.info("Denying login for user '{}': account is pending review with no grace period.", user.getLogin());
                 throw new AccountAccessDeniedException(
                     "Your account is pending manual review. Grace period is not available for this account."
                 );
             }
 
             if (!SecurityUtils.isWithinActivationGracePeriod(user, userDetails.getLicenseType())) {
+                log.info("Denying login for user '{}': activation grace period expired while account request is pending.", user.getLogin());
                 throw new AccountAccessDeniedException(
                     "Your temporary access has expired and your account request is still pending review. " +
                         "Please contact contact@oncokb.org for assistance."
@@ -128,6 +131,7 @@ public class DomainUserDetailsService implements UserDetailsService {
             }
 
             if (!AccountRequestStatus.PENDING.equals(accountRequestStatus)) {
+                log.warn("Denying login for user '{}': unexpected account request status {}.", user.getLogin(), accountRequestStatus);
                 throw new AccountAccessDeniedException("Your account is not approved yet.");
             }
         }
