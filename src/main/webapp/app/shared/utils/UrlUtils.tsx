@@ -2,6 +2,7 @@ import { Link } from 'react-router-dom';
 import React from 'react';
 import {
   DEFAULT_REFERENCE_GENOME,
+  HOTSPOT_TYPE,
   ONCOKB_TM,
   PAGE_ROUTE,
   REFERENCE_GENOME,
@@ -131,6 +132,21 @@ export const GenePageLink: React.FunctionComponent<{
   );
 };
 
+// The /hotspot route is for hotspots that are not an alteration of their own:
+// in-frame indel ranges (/gene/PIK3R1/somatic/hotspot/439-470) and splice sites
+// (/gene/PIK3R1/somatic/hotspot/X582). A single residue hotspot is its
+// positional alteration page instead; see getCancerHotspotPageLink.
+export const getHotspotPageLink = (props: {
+  hugoSymbol: string;
+  residue: string;
+  withProtocolHostPrefix?: boolean;
+}): string => {
+  const pageLink = `${PAGE_ROUTE.GENE_HEADER}/${props.hugoSymbol}/somatic/hotspot/${props.residue}`;
+  return props.withProtocolHostPrefix
+    ? `${getHostLinkWithProtocol()}${pageLink}`
+    : pageLink;
+};
+
 export const getAlterationPageLink = (props: {
   hugoSymbol: string;
   alteration: IAlteration | string;
@@ -178,6 +194,22 @@ export const getAlterationPageLink = (props: {
   }
   return pageLink;
 };
+
+// The page describing a hotspot: the positional alteration page for a single
+// residue (/gene/BRAF/somatic/V600), the hotspot page for anything else.
+export const getCancerHotspotPageLink = (props: {
+  hugoSymbol: string;
+  hotspot: { residue: string; type: string };
+}): string =>
+  props.hotspot.type === HOTSPOT_TYPE.SINGLE_RESIDUE
+    ? getAlterationPageLink({
+        hugoSymbol: props.hugoSymbol,
+        alteration: props.hotspot.residue,
+      })
+    : getHotspotPageLink({
+        hugoSymbol: props.hugoSymbol,
+        residue: props.hotspot.residue,
+      });
 
 export const AlterationPageLink: React.FunctionComponent<{
   hugoSymbol: string;
