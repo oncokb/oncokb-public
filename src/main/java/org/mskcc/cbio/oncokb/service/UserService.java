@@ -320,7 +320,9 @@ public class UserService {
         agreement.setAcceptanceDate(Instant.now());
         agreement.setActivationKey(null);
         benchmarkingAgreementRepository.save(agreement);
-        return Optional.of(userMapper.userToUserDTO(user));
+        UserDTO userDTO = userMapper.userToUserDTO(user);
+        slackService.sendConfirmationOnUserAcceptsBenchmarkingAgreement(userDTO);
+        return Optional.of(userDTO);
     }
 
     public User registerUser(UserDTO userDTO, String password) {

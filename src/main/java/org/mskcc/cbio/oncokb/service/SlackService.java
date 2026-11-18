@@ -230,6 +230,29 @@ public class SlackService {
         }
     }
 
+    @Async
+    public void sendConfirmationOnUserAcceptsBenchmarkingAgreement(UserDTO userDTO) {
+        Payload payload = Payload.builder()
+            .text(userDTO.getEmail() + " has read and agreed to the benchmarking agreement.")
+            .build();
+
+        try {
+            slack.send(this.applicationProperties.getSlack().getUserRegistrationWebhook(), payload);
+
+            mailService.sendEmailFromTemplate(
+                userDTO,
+                MailType.BENCHMARKING_AGREEMENT_IS_ACCEPTED,
+                "Benchmarking Agreement Accepted",
+                applicationProperties.getEmailAddresses().getLicenseAddress(),
+                applicationProperties.getEmailAddresses().getContactAddress(),
+                null,
+                null
+            );
+        } catch (IOException e) {
+            log.warn("Failed to send benchmarking agreement confirmation message to slack", e);
+        }
+    }
+
     public List<UserIdMessagePair> getAllUnapprovedUserRequestsSentAfter(int daysAgo) {
         List<UserIdMessagePair> userList = new ArrayList<>();
         final String REQUEST_MESSAGE_TEXT = "This content can't be displayed.";
