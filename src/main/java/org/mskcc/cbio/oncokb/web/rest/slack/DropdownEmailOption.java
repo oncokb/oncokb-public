@@ -206,6 +206,17 @@ public enum DropdownEmailOption {
         .modalSubject(ModalEmailSubject.DEFAULT)
         .collapsedNote("Rejected user due to alumni email address")
         .expandedNote("The user has been rejected due to alumni email address."))
+    , SEND_BENCHMARKING_AGREEMENT(new DropdownEmailOptionBuilder()
+        .blockId(BlockId.SEND_BENCHMARKING_AGREEMENT_NOTE)
+        .actionId(ActionId.SEND_BENCHMARKING_AGREEMENT_EMAIL)
+        .confirmActionId(ActionId.CONFIRM_SEND_BENCHMARKING_AGREEMENT_EMAIL)
+        .mailType(MailType.BENCHMARKING_AGREEMENT)
+        .category(DropdownEmailCategory.CLARIFY)
+        .dropdownKey("Send Benchmarking Agreement")
+        .modalTitle("Benchmarking Agreement")
+        .modalSubject(ModalEmailSubject.DEFAULT)
+        .collapsedNote("Sent benchmarking agreement")
+        .expandedNote("The user has been sent a benchmarking agreement to sign"))
     ;
 
     // blockId/actionId

@@ -62,6 +62,8 @@ public class UserDTO implements Serializable {
 
     private UserTrialDTO userTrial;
 
+    private Boolean benchmarkingAgreementAccepted;
+
     @Email
     @Size(min = 5, max = 254)
     private String email;
@@ -281,6 +283,14 @@ public class UserDTO implements Serializable {
         this.userTrial = userTrial;
     }
 
+    public Boolean getBenchmarkingAgreementAccepted() {
+        return benchmarkingAgreementAccepted;
+    }
+
+    public void setBenchmarkingAgreementAccepted(Boolean benchmarkingAgreementAccepted) {
+        this.benchmarkingAgreementAccepted = benchmarkingAgreementAccepted;
+    }
+
     public void setImageUrl(String imageUrl) {
         this.imageUrl = imageUrl;
     }
@@ -399,6 +409,7 @@ public class UserDTO implements Serializable {
             ", city=" + city +
             ", country=" + country +
             ", trialStatus=" + trialStatus +
+            ", benchmarkingAgreementAccepted=" + benchmarkingAgreementAccepted +
             ", imageUrl='" + imageUrl + '\'' +
             ", activated=" + activated +
             ", activationGracePeriodDaysRemaining=" + activationGracePeriodDaysRemaining +

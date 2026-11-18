@@ -456,6 +456,37 @@ public class MailServiceIT {
         assertThat(message.getRecipients(Message.RecipientType.CC)[0].toString()).isEqualTo(LICENSE_ADDR);
     }
 
+    @Test
+    public void testSendEmailFromSlackBenchmarkingAgreement() throws Exception {
+        String testSubject = "Benchmarking Agreement";
+        String testUserEmail = "john.doe@example.com";
+        String testLink = "https://oncokb.org/account/benchmarking-agreement?key=abc123";
+
+        UserDTO user = new UserDTO();
+        user.setLogin("john");
+        user.setEmail(testUserEmail);
+        user.setLangKey("en");
+
+        mailService.sendEmailFromSlack(
+            user,
+            testSubject,
+            "Please sign here:\n" + testLink,
+            MailType.BENCHMARKING_AGREEMENT,
+            "test"
+        );
+
+        verify(javaMailSender).send(messageCaptor.capture());
+        MimeMessage message = messageCaptor.getValue();
+
+        assertThat(message.getSubject()).isEqualTo(testSubject);
+        assertThat(message.getAllRecipients()[0].toString()).isEqualTo(testUserEmail);
+        assertThat(message.getFrom()[0].toString()).isEqualTo(jHipsterProperties.getMail().getFrom());
+        assertThat(message.getRecipients(Message.RecipientType.CC)).isNull();
+        assertThat(message.getDataHandler().getContentType()).isEqualTo("text/html;charset=UTF-8");
+        assertThat(message.getContent().toString())
+            .contains("<a href=\"" + testLink + "\">" + testLink + "</a>");
+    }
+
     /**
      * Convert a lang key to the Java locale.
      */

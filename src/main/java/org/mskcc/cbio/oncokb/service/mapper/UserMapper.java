@@ -1,9 +1,11 @@
 package org.mskcc.cbio.oncokb.service.mapper;
 
 import org.mskcc.cbio.oncokb.domain.Authority;
+import org.mskcc.cbio.oncokb.domain.BenchmarkingAgreement;
 import org.mskcc.cbio.oncokb.domain.User;
 import org.mskcc.cbio.oncokb.domain.UserDetails;
 import org.mskcc.cbio.oncokb.domain.UserTrial;
+import org.mskcc.cbio.oncokb.repository.BenchmarkingAgreementRepository;
 import org.mskcc.cbio.oncokb.repository.UserDetailsRepository;
 import org.mskcc.cbio.oncokb.repository.UserTrialRepository;
 import org.mskcc.cbio.oncokb.service.dto.UserDTO;
@@ -35,6 +37,9 @@ public class UserMapper {
 
     @Autowired
     UserTrialRepository userTrialRepository;
+
+    @Autowired
+    BenchmarkingAgreementRepository benchmarkingAgreementRepository;
 
     public List<UserDTO> usersToUserDTOs(List<User> users) {
         return users.stream()
@@ -91,6 +96,10 @@ public class UserMapper {
             additionalInfo.setTrialAccount(trialAccount);
             userDTO.setAdditionalInfo(additionalInfo);
         }
+        BenchmarkingAgreement benchmarkingAgreement = benchmarkingAgreementRepository.findOneByUser(user).orElse(null);
+        userDTO.setBenchmarkingAgreementAccepted(
+            benchmarkingAgreement != null && benchmarkingAgreement.getAcceptanceDate() != null
+        );
         return userDTO;
     }
 

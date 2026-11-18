@@ -1218,6 +1218,12 @@ export default class UserPage extends React.Component<IUserPage> {
                               value={AccountStatus.INACTIVATED}
                             />
                           </AvRadioGroup>
+                          <div className="mt-2">
+                            <b>Benchmarking agreement accepted:</b>{' '}
+                            {this.user.benchmarkingAgreementAccepted
+                              ? 'Yes'
+                              : 'No'}
+                          </div>
                           <div className={'my-2 font-weight-bold'}>
                             User Authorities
                           </div>
