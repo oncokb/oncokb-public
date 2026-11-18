@@ -1,0 +1,37 @@
+<?xml version="1.0" encoding="utf-8"?>
+<databaseChangeLog
+    xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-3.9.xsd">
+
+    <property name="autoIncrement" value="true"/>
+
+    <changeSet id="20261118120000-1" author="opencode">
+        <createTable tableName="benchmarking_agreement">
+            <column name="id" type="bigint" autoIncrement="${autoIncrement}">
+                <constraints primaryKey="true" nullable="false"/>
+            </column>
+            <column name="user_id" type="bigint">
+                <constraints nullable="false" unique="true" uniqueConstraintName="ux_benchmarking_agreement_user_id"/>
+            </column>
+            <column name="initiation_date" type="timestamp"/>
+            <column name="initiated_by" type="varchar(255)"/>
+            <column name="activation_key" type="varchar(255)"/>
+            <column name="agreement_name" type="varchar(255)"/>
+            <column name="agreement_version" type="varchar(255)"/>
+            <column name="acceptance_date" type="timestamp"/>
+        </createTable>
+    </changeSet>
+
+    <changeSet id="20261118120000-2" author="opencode">
+        <addForeignKeyConstraint baseTableName="benchmarking_agreement"
+            baseColumnNames="user_id"
+            constraintName="fk_benchmarking_agreement_user_id"
+            referencedTableName="jhi_user"
+            referencedColumnNames="id"/>
+
+        <createIndex tableName="benchmarking_agreement" indexName="idx_benchmarking_agreement_activation_key">
+            <column name="activation_key"/>
+        </createIndex>
+    </changeSet>
+</databaseChangeLog>

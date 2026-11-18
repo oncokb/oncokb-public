@@ -21,6 +21,7 @@ import org.mskcc.cbio.oncokb.repository.UserDetailsRepository;
 import org.mskcc.cbio.oncokb.repository.UserRepository;
 import org.mskcc.cbio.oncokb.repository.projection.PotentialDuplicateUserProjection;
 import org.mskcc.cbio.oncokb.repository.UserTrialRepository;
+import org.mskcc.cbio.oncokb.repository.BenchmarkingAgreementRepository;
 import org.mskcc.cbio.oncokb.repository.projection.UserWithDetailsProjection;
 import org.mskcc.cbio.oncokb.security.AuthoritiesConstants;
 import org.mskcc.cbio.oncokb.security.SecurityUtils;
@@ -83,6 +84,8 @@ public class UserService {
 
     private final UserTrialRepository userTrialRepository;
 
+    private final BenchmarkingAgreementRepository benchmarkingAgreementRepository;
+
     private final PasswordEncoder passwordEncoder;
 
     private final AuthorityRepository authorityRepository;
@@ -129,6 +132,7 @@ public class UserService {
         UserRepository userRepository,
         UserDetailsRepository userDetailsRepository,
         UserTrialRepository userTrialRepository,
+        BenchmarkingAgreementRepository benchmarkingAgreementRepository,
         PasswordEncoder passwordEncoder,
         AuthorityRepository authorityRepository,
         JHipsterProperties jHipsterProperties,
@@ -149,6 +153,7 @@ public class UserService {
         this.userRepository = userRepository;
         this.userDetailsRepository = userDetailsRepository;
         this.userTrialRepository = userTrialRepository;
+        this.benchmarkingAgreementRepository = benchmarkingAgreementRepository;
         this.passwordEncoder = passwordEncoder;
         this.authorityRepository = authorityRepository;
         this.jHipsterProperties = jHipsterProperties;
@@ -277,6 +282,44 @@ public class UserService {
         userTrialRepository.save(userTrial);
 
         slackService.sendConfirmationOnUserAcceptsTrialAgreement(userDTO, Instant.now().plusSeconds(TRIAL_PERIOD_IN_DAYS * DAY_IN_SECONDS));
+        return Optional.of(userMapper.userToUserDTO(user));
+    }
+
+    public Optional<String> initiateBenchmarkingAgreement(String login) {
+        Optional<User> userOptional = userRepository.findOneWithAuthoritiesByLogin(login);
+        if (!userOptional.isPresent()) {
+            return Optional.empty();
+        }
+
+        User user = userOptional.get();
+        Instant now = Instant.now();
+        BenchmarkingAgreement agreement = benchmarkingAgreementRepository.findOneByUser(user).orElse(new BenchmarkingAgreement());
+        agreement.setUser(user);
+        agreement.setInitiationDate(now);
+        agreement.setInitiatedBy(SecurityUtils.getCurrentUserLogin().orElse("slack"));
+        agreement.setActivationKey(RandomUtil.generateResetKey());
+        agreement.setAgreementName("Benchmarking Agreement");
+        agreement.setAgreementVersion("v1");
+        agreement.setAcceptanceDate(null);
+        benchmarkingAgreementRepository.save(agreement);
+        return Optional.of(agreement.getActivationKey());
+    }
+
+    public Optional<BenchmarkingAgreement> findBenchmarkingAgreementByActivationKey(String key) {
+        return benchmarkingAgreementRepository.findOneByActivationKey(key);
+    }
+
+    public Optional<UserDTO> finishBenchmarkingAgreementActivation(String key) {
+        Optional<BenchmarkingAgreement> agreementOptional = benchmarkingAgreementRepository.findOneByActivationKey(key);
+        if (!agreementOptional.isPresent()) {
+            return Optional.empty();
+        }
+
+        BenchmarkingAgreement agreement = agreementOptional.get();
+        User user = agreement.getUser();
+        agreement.setAcceptanceDate(Instant.now());
+        agreement.setActivationKey(null);
+        benchmarkingAgreementRepository.save(agreement);
         return Optional.of(userMapper.userToUserDTO(user));
     }
 

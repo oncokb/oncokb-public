@@ -36,6 +36,8 @@ public enum ActionId {
     , CONFIRM_SEND_REJECTION_US_SANCTION_EMAIL("confirm-send-rejection-us-sanction-email")
     , SEND_REJECT_ALUMNI_ADDRESS_EMAIL("send-reject-alumni-address-email")
     , CONFIRM_SEND_REJECT_ALUMNI_ADDRESS_EMAIL("confirm-send-reject-alumni-address-email")
+    , SEND_BENCHMARKING_AGREEMENT_EMAIL("send-benchmarking-agreement-email")
+    , CONFIRM_SEND_BENCHMARKING_AGREEMENT_EMAIL("confirm-send-benchmarking-agreement-email")
     , COLLAPSE("collapse")
     , UPDATE_USER("update-user")
     , INPUT_SUBJECT("input-subject")

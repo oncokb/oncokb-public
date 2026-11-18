@@ -1,0 +1,25 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+  <title th:text="#{email.benchmarking.agreement.title}"></title>
+  <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+  <link rel="shortcut icon" th:href="@{|${baseUrl}/favicon.ico|}" />
+</head>
+<body>
+<p th:text="'Dear ' + ${user.firstName} + ' ' + ${user.lastName} + ','"></p>
+
+<p>
+  Please review and sign the benchmarking agreement at the link below:
+</p>
+
+<p>
+  <a th:with="url=(@{|${baseUrl}/account/benchmarking-agreement|})" th:href="${url}"
+     th:text="${url}">Benchmarking Agreement Link</a>
+</p>
+
+<p>
+  <div th:text="#{email.closing}">Sincerely,</div>
+  <div th:text="#{email.signature}">The OncoKB Team</div>
+</p>
+</body>
+</html>

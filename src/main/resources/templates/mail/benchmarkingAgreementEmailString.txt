@@ -1,0 +1,3 @@
+Please review and sign the benchmarking agreement at the link below:
+
+{benchmarkingAgreementLink}

@@ -894,6 +894,7 @@ public class SlackService {
         String callbackId = null;
         String subject = null;
         String intro = DEFAULT_INTRO;
+        String benchmarkingAgreementActivationKey = null;
         if (mailOption.isPresent()) {
             try {
                 title.setText(mailOption.get().getModalTitle().orElse(""));
@@ -903,6 +904,10 @@ public class SlackService {
                     intro = "Thank you for your interest in OncoKB.\n\n";
                 } else if (MailType.HOSPITAL_APPROVAL_HIGH_VOLUME.equals(mailOption.get().getMailType())) {
                     intro = "";
+                } else if (MailType.BENCHMARKING_AGREEMENT.equals(mailOption.get().getMailType())) {
+                    subject = "OncoKB Benchmarking Agreement";
+                    intro = "";
+                    benchmarkingAgreementActivationKey = userService.initiateBenchmarkingAgreement(userDTO.getLogin()).orElse(null);
                 }
             } catch (Exception e) {
                 log.warn("Unable to find email template file");
@@ -911,7 +916,11 @@ public class SlackService {
         StringBuilder bodySb = new StringBuilder().append(GREETING).append(intro);
         if (mailOption.isPresent()) {
             try {
-                bodySb.append(getStringFromResourceTemplateMailTextFile(mailOption.get().getMailType().getStringTemplateName().orElse("")));
+                bodySb.append(getStringFromResourceTemplateMailTextFile(
+                    mailOption.get().getMailType().getStringTemplateName().orElse(""),
+                    userDTO,
+                    benchmarkingAgreementActivationKey
+                ));
             } catch (Exception e) {
                 log.warn("Unable to find email template file");
             }
@@ -952,7 +961,7 @@ public class SlackService {
         return null;
     }
 
-    private String getStringFromResourceTemplateMailTextFile(String fileName) {
+    private String getStringFromResourceTemplateMailTextFile(String fileName, UserDTO userDTO, String benchmarkingAgreementActivationKey) {
         StringBuilder sb = new StringBuilder();
 
         URL targetFileUrl = getClass().getClassLoader().getResource("templates/mail/" + fileName);
@@ -964,7 +973,16 @@ public class SlackService {
             }
         }
 
-        return sb.toString();
+        String emailBody = sb.toString();
+        if (userDTO != null) {
+            emailBody = emailBody.replace("{email}", userDTO.getEmail() == null ? "" : userDTO.getEmail());
+            String agreementLink = applicationProperties.getBaseUrl() + "/account/benchmarking-agreement";
+            if (StringUtils.isNotBlank(benchmarkingAgreementActivationKey)) {
+                agreementLink = agreementLink + "?key=" + benchmarkingAgreementActivationKey;
+            }
+            emailBody = emailBody.replace("{benchmarkingAgreementLink}", agreementLink);
+        }
+        return emailBody.replace("{baseUrl}", applicationProperties.getBaseUrl());
     }
 
     private Optional<LayoutBlock> getBlockWithId(List<LayoutBlock> blocks, BlockId blockId) {

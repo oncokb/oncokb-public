@@ -676,6 +676,7 @@ export enum PAGE_TITLE {
   CDX = 'FDA Cleared or Approved Companion Diagnostic Devices',
   DATA_DOWNLOAD = 'Data Download',
   FAQ = 'Frequently Asked Question',
+  BENCHMARKING_AGREEMENT = 'Benchmarking Agreement',
   FDA_RECOGNITION = 'OncoKB™ is now an FDA-recognized Public Human Genetic Variant Database*',
   HOME = "OncoKB™ - MSK's Precision Oncology Knowledge Base",
   DX = 'OncoKB™ Diagnostic Levels of Evidence',
@@ -705,6 +706,7 @@ export enum PAGE_DESCRIPTION {
   CANCER_GENES = 'OncoKB™ Cancer Gene List consists with more than one thousand genes based on their inclusion in various different sequencing panels, the Sanger Cancer Gene Census, or Vogelstein et al. (2013).',
   CDX = 'Companion diagnostic devices (CDx) that are US- Food and Drug Administration (FDA) approved or cleared to guide treatment decisions in cancer for the safe and efficient use of oncology drugs (per the FDA’s List of Cleared or Approved Companion Diagnostic Devices (In Vitro and Imaging Tools)). Only the companion diagnostics that are included in the FDA-drug labels of OncoKB™ level 1 precision oncology drugs and determine the list of OncoKB™ level 1 biomarkers are listed below.',
   FAQ = 'Most frequently asked questions compiled by OncoKB™ team members.',
+  BENCHMARKING_AGREEMENT = 'Review and sign the OncoKB benchmarking agreement.',
   FDA_RECOGNITION = 'As the first somatic human variant database to be recognized by the FDA, OncoKB™ is dedicated to providing curated, evidence-based information on cancer gene mutations.',
   HOME = 'OncoKB™ is a precision oncology knowledge base developed at Memorial Sloan Kettering Cancer Center that contains biological and clinical information about genomic alterations in cancer.',
   LEVELS = 'To communicate the clinical utility of individual mutant alleles consistently, OncoKB developed a levels of evidence classification system. It takes into account the site of tumor origin, by recognizing that the effects of targeted inhibitors vary by tumor lineage, even in cancers that share the same mutant allele',
@@ -724,6 +726,7 @@ export enum PAGE_ROUTE {
   PREMIUM_API_DOCS = '/premium-api-docs',
   DATA_DOWNLOAD = '/data-download',
   FAQ_ACCESS = '/faq',
+  BENCHMARKING_AGREEMENT = '/account/benchmarking-agreement',
   LEGACY_CANCER_GENES = '/cancerGenes',
   CANCER_GENES = '/cancer-genes',
   LEGACY_ACTIONABLE_GENE = '/actionableGenes',
@@ -1170,6 +1173,7 @@ export const UNAUTHORIZED_ALLOWED_PATH = [
   PAGE_ROUTE.ACCOUNT_PASSWORD_RESET_REQUEST,
   PAGE_ROUTE.ACCOUNT_PASSWORD_RESET_FINISH,
   PAGE_ROUTE.ACCOUNT_VERIFY,
+  PAGE_ROUTE.BENCHMARKING_AGREEMENT,
   PAGE_ROUTE.REGISTER,
 ];
 
