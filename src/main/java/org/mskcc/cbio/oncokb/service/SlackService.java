@@ -220,8 +220,8 @@ public class SlackService {
                 MailType.TRIAL_ACCOUNT_IS_ACTIVATED,
                 "Trial Account Activated",
                 applicationProperties.getEmailAddresses().getLicenseAddress(),
+                applicationProperties.getEmailAddresses().getLicenseAddress(),
                 applicationProperties.getEmailAddresses().getContactAddress(),
-                null,
                 null,
                 context
             );
@@ -243,6 +243,7 @@ public class SlackService {
                 userDTO,
                 MailType.BENCHMARKING_AGREEMENT_IS_ACCEPTED,
                 "Benchmarking Agreement Accepted",
+                applicationProperties.getEmailAddresses().getLicenseAddress(),
                 applicationProperties.getEmailAddresses().getLicenseAddress(),
                 applicationProperties.getEmailAddresses().getContactAddress(),
                 null,

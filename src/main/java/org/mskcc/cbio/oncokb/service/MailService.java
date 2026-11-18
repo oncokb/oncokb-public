@@ -268,18 +268,35 @@ public class MailService {
             String defaultEmailSendFrom = applicationProperties.getEmailAddresses().getRegistrationAddress();
             log.info("defaultEmailSendFrom in sendEmailFromSlack is '{}'", defaultEmailSendFrom);
             String ccAddress = null;
+            boolean isBenchmarkingAgreement = MailType.BENCHMARKING_AGREEMENT.equals(mailType);
+            if (isBenchmarkingAgreement) {
+                defaultEmailSendFrom = jHipsterProperties.getMail().getFrom();
+            }
             if (MailType.CLARIFY_HOSPITAL_USE.equals(mailType)
                 || MailType.HOSPITAL_APPROVAL_HIGH_VOLUME.equals(mailType)
                 || MailType.CLARIFY_COMMERCIAL_USE.equals(mailType)) {
                 defaultEmailSendFrom = applicationProperties.getEmailAddresses().getLicenseAddress();
                 ccAddress = defaultEmailSendFrom;
             }
-            sendEmail(user.getEmail(), defaultEmailSendFrom, ccAddress, subject, body, null, false, false);
+            String emailBody = body;
+            if (isBenchmarkingAgreement) {
+                emailBody = toHtmlWithClickableLinks(body);
+            }
+            sendEmail(user.getEmail(), defaultEmailSendFrom, ccAddress, subject, emailBody, null, false, isBenchmarkingAgreement);
             addUserMailsRecord(user, mailType, defaultEmailSendFrom, StringUtils.isNotEmpty(sendBy) ? sendBy : "Through slack, unknown sender");
             log.info("Sent email to User '{}'", user.getEmail());
         } catch (MailException | MessagingException e) {
             log.error("Email could not be sent to user '{}'", user.getEmail(), e);
         }
+    }
+
+    private String toHtmlWithClickableLinks(String body) {
+        String escaped = body == null ? "" : body
+            .replace("&", "&amp;")
+            .replace("<", "&lt;")
+            .replace(">", "&gt;");
+        String linked = escaped.replaceAll("(https?://[^\\s<]+)", "<a href=\"$1\">$1</a>");
+        return linked.replace("\n", "<br/>");
     }
 
     @Async
