@@ -825,9 +825,15 @@ const md = new MarkdownIt({
   // thumbnail width, e.g. ![alt](../../../../content/images/example.png "400px")
   md.renderer.rules.image = function (tokens, idx) {
     const token = tokens[idx];
-    const variableName = registerImage(token.attrGet('src'));
+    const src = token.attrGet('src');
+    const variableName = registerImage(src);
     const alt = md.utils.escapeHtml(token.content || '');
     const width = token.attrGet('title') || DEFAULT_IMAGE_WIDTH;
+    const isHotspotIcon =
+      path.basename((src || '').replace(/\\/g, '/')) === 'cancer-hotspots.svg';
+    if (isHotspotIcon) {
+      return `<OptimizedImage src={${variableName}} alt="${alt}" style={{ maxWidth: '100%', width: '${width}' }} />`;
+    }
     return `<OptimizedImage src={${variableName}} alt="${alt}" style={{ maxWidth: '100%', width: '${width}', cursor: 'zoom-in' }} onClick={() => window.open(${variableName}, '_blank', 'noopener')} />`;
   };
 
