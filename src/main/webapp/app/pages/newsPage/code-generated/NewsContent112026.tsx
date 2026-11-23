@@ -177,10 +177,19 @@ export default function NewsContent112026() {
                 <AlterationPageLink
                   hugoSymbol="ALK"
                   alteration="Fusions"
-                  cancerType="Langerhans Cell Histiocytosis, Rosai-Dorfman Disease"
+                  cancerType="Langerhans Cell Histiocytosis"
                   germline={false}
                 >
-                  Langerhans Cell Histiocytosis, Rosai-Dorfman Disease
+                  Langerhans Cell Histiocytosis
+                </AlterationPageLink>
+                ,{' '}
+                <AlterationPageLink
+                  hugoSymbol="ALK"
+                  alteration="Fusions"
+                  cancerType="Rosai-Dorfman Disease"
+                  germline={false}
+                >
+                  Rosai-Dorfman Disease
                 </AlterationPageLink>
               </td>
               <td>Crizotinib</td>
@@ -240,10 +249,27 @@ export default function NewsContent112026() {
                 <AlterationPageLink
                   hugoSymbol="CSF1R"
                   alteration="Oncogenic Mutations"
-                  cancerType="Erdheim-Chester Disease, Langerhans Cell Histiocytosis, Rosai-Dorfman Disease"
+                  cancerType="Erdheim-Chester Disease"
                   germline={false}
                 >
-                  Erdheim-Chester Disease, Langerhans Cell Histiocytosis,
+                  Erdheim-Chester Disease
+                </AlterationPageLink>
+                ,{' '}
+                <AlterationPageLink
+                  hugoSymbol="CSF1R"
+                  alteration="Oncogenic Mutations"
+                  cancerType="Langerhans Cell Histiocytosis"
+                  germline={false}
+                >
+                  Langerhans Cell Histiocytosis
+                </AlterationPageLink>
+                ,{' '}
+                <AlterationPageLink
+                  hugoSymbol="CSF1R"
+                  alteration="Oncogenic Mutations"
+                  cancerType="Rosai-Dorfman Disease"
+                  germline={false}
+                >
                   Rosai-Dorfman Disease
                 </AlterationPageLink>
               </td>
@@ -301,10 +327,27 @@ export default function NewsContent112026() {
                 <AlterationPageLink
                   hugoSymbol="PIK3CA"
                   alteration="Oncogenic Mutations"
-                  cancerType="Erdheim-Chester Disease, Langerhans Cell Histiocytosis, Rosai-Dorfman Disease"
+                  cancerType="Erdheim-Chester Disease"
                   germline={false}
                 >
-                  Erdheim-Chester Disease, Langerhans Cell Histiocytosis,
+                  Erdheim-Chester Disease
+                </AlterationPageLink>
+                ,{' '}
+                <AlterationPageLink
+                  hugoSymbol="PIK3CA"
+                  alteration="Oncogenic Mutations"
+                  cancerType="Langerhans Cell Histiocytosis"
+                  germline={false}
+                >
+                  Langerhans Cell Histiocytosis
+                </AlterationPageLink>
+                ,{' '}
+                <AlterationPageLink
+                  hugoSymbol="PIK3CA"
+                  alteration="Oncogenic Mutations"
+                  cancerType="Rosai-Dorfman Disease"
+                  germline={false}
+                >
                   Rosai-Dorfman Disease
                 </AlterationPageLink>
               </td>
@@ -336,10 +379,27 @@ export default function NewsContent112026() {
                 <AlterationPageLink
                   hugoSymbol="RET"
                   alteration="Fusions"
-                  cancerType="Erdheim-Chester Disease, Langerhans Cell Histiocytosis, Rosai-Dorfman Disease"
+                  cancerType="Erdheim-Chester Disease"
                   germline={false}
                 >
-                  Erdheim-Chester Disease, Langerhans Cell Histiocytosis,
+                  Erdheim-Chester Disease
+                </AlterationPageLink>
+                ,{' '}
+                <AlterationPageLink
+                  hugoSymbol="RET"
+                  alteration="Fusions"
+                  cancerType="Langerhans Cell Histiocytosis"
+                  germline={false}
+                >
+                  Langerhans Cell Histiocytosis
+                </AlterationPageLink>
+                ,{' '}
+                <AlterationPageLink
+                  hugoSymbol="RET"
+                  alteration="Fusions"
+                  cancerType="Rosai-Dorfman Disease"
+                  germline={false}
+                >
                   Rosai-Dorfman Disease
                 </AlterationPageLink>
               </td>
