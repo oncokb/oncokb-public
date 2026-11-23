@@ -1,0 +1,27 @@
+.hotspotLink {
+  display: inline-flex;
+  align-items: center;
+  line-height: 1;
+}
+
+.hotspotLink:hover {
+  text-decoration: none;
+}
+
+.icon {
+  display: inline-flex;
+  align-items: center;
+  line-height: 1;
+  opacity: 0;
+  max-width: 0;
+  transform: translateY(0.075em);
+  transition: max-width 0.3s ease-in-out, opacity 0.3s linear,
+    margin-left 0.3s ease-in-out;
+}
+
+.hotspotLink:hover .icon,
+.hotspotLink:focus .icon {
+  opacity: 1;
+  max-width: 15px;
+  margin-left: 0.25rem;
+}

@@ -5347,6 +5347,7 @@ export default class OncoKbAPI {
     utilsAllCuratedGenesGetUsingGETURL(parameters: {
         'version' ? : string,
         'includeEvidence' ? : boolean,
+        'hugoSymbol' ? : string,
         $queryParameters ? : any
     }): string {
         let queryParameters: any = {};
@@ -5357,6 +5358,10 @@ export default class OncoKbAPI {
 
         if (parameters['includeEvidence'] !== undefined) {
             queryParameters['includeEvidence'] = parameters['includeEvidence'];
+        }
+
+        if (parameters['hugoSymbol'] !== undefined) {
+            queryParameters['hugoSymbol'] = parameters['hugoSymbol'];
         }
 
         if (parameters.$queryParameters) {
@@ -5375,10 +5380,12 @@ export default class OncoKbAPI {
      * @name OncoKbAPI#utilsAllCuratedGenesGetUsingGET
      * @param {string} version - The data version
      * @param {boolean} includeEvidence - Include gene summary and background
+     * @param {string} hugoSymbol - The gene symbol used in Human Genome Organisation. Gene aliases are accepted. The symbol is case-sensitive. When specified, only the curated gene matching this symbol is returned. Only supported for the latest data version, so it may be combined with version only when that version is the latest. Example: BRAF
      */
     utilsAllCuratedGenesGetUsingGETWithHttpInfo(parameters: {
         'version' ? : string,
         'includeEvidence' ? : boolean,
+        'hugoSymbol' ? : string,
         $queryParameters ? : any,
             $domain ? : string
     }): Promise < request.Response > {
@@ -5402,6 +5409,10 @@ export default class OncoKbAPI {
                 queryParameters['includeEvidence'] = parameters['includeEvidence'];
             }
 
+            if (parameters['hugoSymbol'] !== undefined) {
+                queryParameters['hugoSymbol'] = parameters['hugoSymbol'];
+            }
+
             if (parameters.$queryParameters) {
                 Object.keys(parameters.$queryParameters).forEach(function(parameterName) {
                     var parameter = parameters.$queryParameters[parameterName];
@@ -5420,10 +5431,12 @@ export default class OncoKbAPI {
      * @name OncoKbAPI#utilsAllCuratedGenesGetUsingGET
      * @param {string} version - The data version
      * @param {boolean} includeEvidence - Include gene summary and background
+     * @param {string} hugoSymbol - The gene symbol used in Human Genome Organisation. Gene aliases are accepted. The symbol is case-sensitive. When specified, only the curated gene matching this symbol is returned. Only supported for the latest data version, so it may be combined with version only when that version is the latest. Example: BRAF
      */
     utilsAllCuratedGenesGetUsingGET(parameters: {
             'version' ? : string,
             'includeEvidence' ? : boolean,
+            'hugoSymbol' ? : string,
             $queryParameters ? : any,
                 $domain ? : string
         }): Promise < Array < CuratedGene >
