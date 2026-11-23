@@ -1,17 +1,15 @@
 - We are thrilled to announce that OncoKB is the recipient of an NIH U24 grant to support feature development and research aimed specifically to benefit our academic community and community clinicians who make up ≥90% of registered users under a free academic license. Accordingly, we are pleased to add [Dr. Irina Iles, Program Officer](https://cancercontrol.cancer.gov/brp/about/staff/iles) and [Dr. Sarah Kalia, Project Coordinator](https://epi.grants.cancer.gov/staff/kalia.html) to our External Advisory Board as non-voting ex-officio members.
-- We have updated our annotation of [Tumor Mutational Burden-High (TMB-H)](https://www.oncokb.org/gene/Other%20Biomarkers/somatic/TMB-H?refGenome=GRCh38) to adhere to new guidance following [FDA’s traditional approval](https://www.fda.gov/drugs/cancer-approvals/fda-grants-traditional-approval-pembrolizumab-or-pembrolizumab-and-berahyaluronidase-alfa-pmph) of pembrolizumab in TMB-H solid tumors. The revised guidance has changed the TMB-H threshold from ≥10 mutations per megabase (mut/Mb) to ≥13 mut/Mb based on clinical efficacy data from the [phase III KEYNOTE-158 (NCT02628067) trial:](https://pmc.ncbi.nlm.nih.gov/articles/PMC8416776/)
+- We have updated our annotation of [Tumor Mutational Burden-High (TMB-H)](https://www.oncokb.org/gene/Other%20Biomarkers/somatic/TMB-H?refGenome=GRCh38) to adhere to new guidance following [FDA’s traditional approval](https://www.fda.gov/drugs/cancer-approvals/fda-grants-traditional-approval-pembrolizumab-or-pembrolizumab-and-berahyaluronidase-alfa-pmph) of pembrolizumab in TMB-H solid tumors. The revised guidance has changed the TMB-H threshold from ≥10 mutations per megabase (mut/Mb) to ≥13 mut/Mb based on clinical efficacy data from the [phase III KEYNOTE-158 (NCT02628067) trial](https://pmc.ncbi.nlm.nih.gov/articles/PMC8416776/) of pembrolizumab in patients with multiple types of advanced (unresectable or metastatic) cancers that progressed following prior treatment:
 
-| TMB Status (mut/Mb) | N   | ORR (95% CI) |
-| ------------------- | :-- | :----------- |
-| ≥13                 | 70  | 37% (26-50)  |
-| ≥10 to \<13         | 32  | 13% (4-29)   |
+| **TMB Status (mut/Mb)** | **N** | **ORR (95% CI)** |
+| ----------------------- | :---- | :--------------- |
+| ≥13                     | 70    | 37% (26-50)      |
+| ≥10 to \<13             | 32    | 13% (4-29)       |
 
-Non-randomized, multicenter, multi-cohort trial of pembrolizumab in patients with multiple types of advanced (unresectable or metastatic) cancers that progressed following prior treatment
-
-- New hotspot visualization: Our Annotated Alterations table now indicates whether a curated gene-alteration represents or overlaps with a recurrent [cancer hotspot](https://www.cancerhotspots.org/#/home) as defined by [Chang et al. 2017](https://pubmed.ncbi.nlm.nih.gov/29247016/) and [Bandlamudi et al. 2026](https://pubmed.ncbi.nlm.nih.gov/41895280/). Click the ![Hotspot icon](../../../../content/images/cancer-hotspots.svg '18px') (fire) icon to access the curated hotspot page. Note: hotspots are positional not allele specific alterations (e.g., **PIK3CA H1047**, **PIK3CA 436_466 In-frame Indels)**.  
+- **New hotspot visualization**: Our Annotated Alterations table now indicates whether a curated gene-alteration represents or overlaps with a recurrent [cancer hotspot](https://www.cancerhotspots.org/#/home) as defined by [Chang et al. 2017](https://pubmed.ncbi.nlm.nih.gov/29247016/) and [Bandlamudi et al. 2026](https://pubmed.ncbi.nlm.nih.gov/41895280/). Click the fire icon (![Hotspot icon](../../../../content/images/cancer-hotspots.svg '18px')) to access the curated hotspot page. Note: hotspots are positional not allele specific alterations (e.g., [PIK3CA H1047](https://www.oncokb.org/gene/PIK3CA/somatic/H1047), [PIK3CA 436_466 In-frame Indels](https://www.oncokb.org/gene/PIK3CA/somatic/hotspot/436-466)).  
   <br />
   ![Annotated Alterations hotspot example](../../../../content/images/annotated-alterations-hotspot.png '900px')
-- Release of [OncoKB™ SOP v6.](https://sop.oncokb.org/)
+- Release of [OncoKB™ SOP v6.5](https://sop.oncokb.org/)
 - Update to our [FDA Cleared or Approved Companion Diagnostic Devices](https://www.oncokb.org/companion-diagnostic-devices) (CDx) page
 - Update to our [FDA-Approved Oncology Therapies](https://www.oncokb.org/oncology-therapies) page
 - Update to our [FAQ page](https://www.oncokb.org/faq) to reflect our hotspot changes

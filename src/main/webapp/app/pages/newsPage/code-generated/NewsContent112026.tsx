@@ -16,7 +16,7 @@ export default function NewsContent112026() {
   return (
     <>
       <ul style={{ marginBottom: 0 }}>
-        <li style={{ marginBottom: 0 }}>
+        <li>
           We are thrilled to announce that OncoKB is the recipient of an NIH U24
           grant to support feature development and research aimed specifically
           to benefit our academic community and community clinicians who make up
@@ -44,17 +44,26 @@ export default function NewsContent112026() {
           changed the TMB-H threshold from ≥10 mutations per megabase (mut/Mb)
           to ≥13 mut/Mb based on clinical efficacy data from the{' '}
           <a href="https://pmc.ncbi.nlm.nih.gov/articles/PMC8416776/">
-            phase III KEYNOTE-158 (NCT02628067) trial:
-          </a>
+            phase III KEYNOTE-158 (NCT02628067) trial
+          </a>{' '}
+          of pembrolizumab in patients with multiple types of advanced
+          (unresectable or metastatic) cancers that progressed following prior
+          treatment:
         </li>
       </ul>
       <div className="table-responsive" style={{ marginBottom: '1.5rem' }}>
         <table className="table">
           <thead>
             <tr>
-              <th>TMB Status (mut/Mb)</th>
-              <th>N</th>
-              <th>ORR (95% CI)</th>
+              <th>
+                <strong>TMB Status (mut/Mb)</strong>
+              </th>
+              <th>
+                <strong>N</strong>
+              </th>
+              <th>
+                <strong>ORR (95% CI)</strong>
+              </th>
             </tr>
           </thead>
           <tbody>
@@ -71,16 +80,11 @@ export default function NewsContent112026() {
           </tbody>
         </table>
       </div>
-      <p>
-        Non-randomized, multicenter, multi-cohort trial of pembrolizumab in
-        patients with multiple types of advanced (unresectable or metastatic)
-        cancers that progressed following prior treatment
-      </p>
       <ul>
         <li>
-          New hotspot visualization: Our Annotated Alterations table now
-          indicates whether a curated gene-alteration represents or overlaps
-          with a recurrent{' '}
+          <strong>New hotspot visualization</strong>: Our Annotated Alterations
+          table now indicates whether a curated gene-alteration represents or
+          overlaps with a recurrent{' '}
           <a href="https://www.cancerhotspots.org/#/home">cancer hotspot</a> as
           defined by{' '}
           <a href="https://pubmed.ncbi.nlm.nih.gov/29247016/">
@@ -90,16 +94,20 @@ export default function NewsContent112026() {
           <a href="https://pubmed.ncbi.nlm.nih.gov/41895280/">
             Bandlamudi et al. 2026
           </a>
-          . Click the{' '}
+          . Click the fire icon (
           <OptimizedImage
             src={CancerHotspotsImg}
             alt="Hotspot icon"
             style={{ maxWidth: '100%', width: '18px' }}
-          />{' '}
-          (fire) icon to access the curated hotspot page. Note: hotspots are
-          positional not allele specific alterations (e.g.,{' '}
-          <strong>PIK3CA H1047</strong>,{' '}
-          <strong>PIK3CA 436_466 In-frame Indels)</strong>.<br />
+          />
+          ) to access the curated hotspot page. Note: hotspots are positional
+          not allele specific alterations (e.g.,{' '}
+          <Link to="/gene/PIK3CA/somatic/H1047">PIK3CA H1047</Link>,{' '}
+          <Link to="/gene/PIK3CA/somatic/hotspot/436-466">
+            PIK3CA 436_466 In-frame Indels
+          </Link>
+          ).
+          <br />
           <br />
           <OptimizedImage
             src={AnnotatedAlterationsHotspotImg}
@@ -111,7 +119,7 @@ export default function NewsContent112026() {
           />
         </li>
         <li>
-          Release of <a href="https://sop.oncokb.org/">OncoKB™ SOP v6.</a>
+          Release of <a href="https://sop.oncokb.org/">OncoKB™ SOP v6.5</a>
         </li>
         <li>
           Update to our{' '}

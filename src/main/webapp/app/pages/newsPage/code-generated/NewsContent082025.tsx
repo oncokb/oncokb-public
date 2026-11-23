@@ -13,7 +13,7 @@ export default function NewsContent082025() {
   return (
     <>
       <ul style={{ marginBottom: 0 }}>
-        <li style={{ marginBottom: 0 }}>
+        <li>
           Update to our{' '}
           <Link to="/oncology-therapies">FDA-Approved Oncology Therapies</Link>{' '}
           page

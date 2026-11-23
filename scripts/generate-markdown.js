@@ -627,9 +627,16 @@ function addTableHeaderListStyles(state) {
     }
 
     token.attrSet('style', 'margin-bottom: 0');
-    for (let j = i + 1; j < listEndIdx; j++) {
-      if (state.tokens[j].type === 'list_item_open') {
-        state.tokens[j].attrSet('style', 'margin-bottom: 0');
+    // Only the last top-level item sits directly above the table; earlier
+    // items keep their normal spacing.
+    for (let j = listEndIdx - 1; j > i; j--) {
+      const itemToken = state.tokens[j];
+      if (
+        itemToken.type === 'list_item_open' &&
+        itemToken.level === token.level + 1
+      ) {
+        itemToken.attrSet('style', 'margin-bottom: 0');
+        break;
       }
     }
   }
