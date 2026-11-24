@@ -2072,7 +2072,7 @@
   {
     "year": "2023",
     "tx": "Elacestrant",
-    "biomarker": "ESR1 Ligand-binding domain missense mutations and\nER+/HER2-",
+    "biomarker": "ESR1 Ligand-binding domain missense mutations and ER+/HER2-",
     "agentClass": "Hormone therapy",
     "drugTarget": "Selective estrogen receptor degrader (SERD)",
     "targetedTx": "Y",
@@ -2752,7 +2752,7 @@
   {
     "year": "2026",
     "tx": "Giredestrant + Everolimus",
-    "biomarker": "ESR1 Ligand-binding domain missense mutations and\nER+/HER2-",
+    "biomarker": "ESR1 Ligand-binding domain missense mutations and ER+/HER2-",
     "agentClass": "Hormone therapy and large molecule inhibitor combination",
     "drugTarget": "Selective estrogen receptor degrader (SERD) + mTOR inhibitor",
     "targetedTx": "Y",
