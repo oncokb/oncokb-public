@@ -1153,7 +1153,7 @@ export default class NewsPage extends React.Component<
                 </p>
               </div>
               <div className="mt-4">
-                <NewsList date={'11242026'} />
+                <NewsList date={'11252026'} />
                 <NewsList date={'10292026'} />
                 <NewsList date={'09302026'} />
                 <NewsList date={'08282026'} />

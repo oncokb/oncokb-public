@@ -324,7 +324,7 @@ const EVIDENCE_COLUMN_SEPARATOR = '; ';
 // https://stackoverflow.com/questions/41947168/is-it-possible-to-use-keyof-operator-on-literals-instead-of-interfaces
 
 export const NEWS_BY_DATE: { [date: string]: NewsData } = {
-  '11242026': {
+  '11252026': {
     rawComponent: <NewsContent112026 />,
   },
   '10292026': {
