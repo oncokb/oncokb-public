@@ -135,6 +135,8 @@ application:
   profile: prod
   base-url: 'https://www.oncokb.org'
   api-proxy-url: 'http://oncokb-core:8888'
+  # Production overrides replace this list. Keep /api/v1/mcp alongside all existing prefixes.
+  token-usage-check: /api/v1/mcp
   sitemap-enabled: true
   redis:
     enabled: true

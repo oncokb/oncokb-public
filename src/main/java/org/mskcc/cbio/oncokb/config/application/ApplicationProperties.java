@@ -21,6 +21,8 @@ public class ApplicationProperties {
     private String name;
     private String baseUrl = "";
     private String apiProxyUrl;
+    private int mcpMaxRequestBytes = 1024 * 1024;
+    private int mcpReadTimeoutMs = 30000;
     private String s3Bucket = "oncokb-v2";
     private SlackProperties slack;
     private ProjectProfile profile;
@@ -62,6 +64,28 @@ public class ApplicationProperties {
 
     public void setBaseUrl(String baseUrl) {
         this.baseUrl = baseUrl;
+    }
+
+    public int getMcpMaxRequestBytes() {
+        return mcpMaxRequestBytes;
+    }
+
+    public void setMcpMaxRequestBytes(int mcpMaxRequestBytes) {
+        if (mcpMaxRequestBytes < 1 || mcpMaxRequestBytes == Integer.MAX_VALUE) {
+            throw new IllegalArgumentException("MCP request size limit must be positive and below Integer.MAX_VALUE");
+        }
+        this.mcpMaxRequestBytes = mcpMaxRequestBytes;
+    }
+
+    public int getMcpReadTimeoutMs() {
+        return mcpReadTimeoutMs;
+    }
+
+    public void setMcpReadTimeoutMs(int mcpReadTimeoutMs) {
+        if (mcpReadTimeoutMs <= 0) {
+            throw new IllegalArgumentException("MCP read timeout must be positive");
+        }
+        this.mcpReadTimeoutMs = mcpReadTimeoutMs;
     }
 
     public String getApiProxyUrl() {

@@ -21,6 +21,6 @@ public class RateLimitConfiguration implements WebMvcConfigurer {
             // This is too broad and is impacting users who are using our servers normally.
             //.addPathPatterns("/api/v1/annotate/**")
             //.addPathPatterns("/api/v1/utils/**")
-            .addPathPatterns("/api/tokens/**");
+            .addPathPatterns("/api/tokens/**", "/api/v1/mcp");
     }
 }
