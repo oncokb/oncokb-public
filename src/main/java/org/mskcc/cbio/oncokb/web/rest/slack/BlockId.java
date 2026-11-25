@@ -29,6 +29,7 @@ public enum BlockId {
     , BODY_INPUT("body-input")
     , API_ACCESS("api-access")
     , COUNTRY_WARNING("country-warning")
+    , SEND_BENCHMARKING_AGREEMENT_NOTE("send-benchmarking-agreement-note")
     ;
 
     String id;

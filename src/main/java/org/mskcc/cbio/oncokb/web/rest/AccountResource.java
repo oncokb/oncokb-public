@@ -3,6 +3,7 @@ package org.mskcc.cbio.oncokb.web.rest;
 import org.mskcc.cbio.oncokb.config.application.ApplicationProperties;
 import org.mskcc.cbio.oncokb.domain.Company;
 import org.mskcc.cbio.oncokb.domain.CompanyCandidate;
+import org.mskcc.cbio.oncokb.domain.BenchmarkingAgreement;
 import org.mskcc.cbio.oncokb.domain.Token;
 import org.mskcc.cbio.oncokb.domain.User;
 import org.mskcc.cbio.oncokb.domain.enumeration.AccountRequestStatus;
@@ -555,6 +556,34 @@ public class AccountResource {
             }
         }
         throw new CustomMessageRuntimeException("No key found");
+    }
+
+    @GetMapping(path = "/account/benchmarking-agreement/info")
+    public BenchmarkingAgreementVM getBenchmarkingAgreementInfo(@RequestParam String key) {
+        Optional<BenchmarkingAgreement> agreementOptional = userService.findBenchmarkingAgreementByActivationKey(key);
+        if (agreementOptional.isPresent()) {
+            BenchmarkingAgreement agreement = agreementOptional.get();
+            User user = agreement.getUser();
+            return new BenchmarkingAgreementVM(
+                user.getFirstName(),
+                user.getLastName(),
+                agreement.getAgreementName(),
+                agreement.getAgreementVersion()
+            );
+        }
+        throw new CustomMessageRuntimeException("No key found");
+    }
+
+    @PostMapping(path = "/account/benchmarking-agreement/finish")
+    public UserDTO finishBenchmarkingAgreement(@RequestBody KeyAndTermsVM keyAndTermsVM) {
+        if (keyAndTermsVM.getReadAndAgreeWithTheTerms() != Boolean.TRUE) {
+            throw new CustomMessageRuntimeException("You have to read and agree with the terms.");
+        }
+        Optional<UserDTO> userDTOOptional = userService.finishBenchmarkingAgreementActivation(keyAndTermsVM.getKey());
+        if (userDTOOptional.isPresent()) {
+            return userDTOOptional.get();
+        }
+        throw new CustomMessageRuntimeException("No user was found for this activation key");
     }
 
     @PostMapping(path = "/account/resend-verification")

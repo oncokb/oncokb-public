@@ -46,6 +46,7 @@ import GenomicReport from 'app/pages/patientReport/GenomicReport';
 import SomaticTagPage from 'app/pages/somaticGermlineAlterationPage/SomaticTagPage';
 import SomaticHotspotPage from 'app/pages/somaticGermlineAlterationPage/SomaticHotspotPage';
 import SomaticTagCancerTypePage from 'app/pages/annotationPage/SomaticTagCancerTypePage';
+import BenchmarkingAgreementPage from 'app/pages/BenchmarkingAgreementPage';
 
 const REGISTRATION_HOVER_GENE_PAGE_LIMIT = 5;
 const getOldLevelsRedirectRoute = (hash: string) => {
@@ -526,6 +527,16 @@ const AppRoutes = (props: {
           appStore={props.appStore}
           path={PAGE_ROUTE.ACCOUNT_ACTIVE_TRIAL_FINISH}
           render={ReadOnlyMode(ActivateTrialFinish)}
+          windowStore={props.windowStore}
+          authenticationStore={props.authenticationStore}
+          pageContainer={PageContainer}
+        />
+        <RecaptchaBoundaryRoute
+          exact
+          isUserAuthenticated={false}
+          appStore={props.appStore}
+          path={PAGE_ROUTE.BENCHMARKING_AGREEMENT}
+          component={BenchmarkingAgreementPage}
           windowStore={props.windowStore}
           authenticationStore={props.authenticationStore}
           pageContainer={PageContainer}

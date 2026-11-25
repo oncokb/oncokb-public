@@ -306,6 +306,92 @@
         "deprecated": false
       }
     },
+    "/api/account/benchmarking-agreement/finish": {
+      "post": {
+        "tags": [
+          "account-resource"
+        ],
+        "summary": "finishBenchmarkingAgreement",
+        "operationId": "finishBenchmarkingAgreementUsingPOST",
+        "consumes": [
+          "application/json"
+        ],
+        "produces": [
+          "*/*"
+        ],
+        "parameters": [
+          {
+            "in": "body",
+            "name": "keyAndTermsVM",
+            "description": "keyAndTermsVM",
+            "required": true,
+            "schema": {
+              "$ref": "#/definitions/KeyAndTermsVM"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "schema": {
+              "$ref": "#/definitions/UserDTO"
+            }
+          },
+          "201": {
+            "description": "Created"
+          },
+          "401": {
+            "description": "Unauthorized"
+          },
+          "403": {
+            "description": "Forbidden"
+          },
+          "404": {
+            "description": "Not Found"
+          }
+        },
+        "deprecated": false
+      }
+    },
+    "/api/account/benchmarking-agreement/info": {
+      "get": {
+        "tags": [
+          "account-resource"
+        ],
+        "summary": "getBenchmarkingAgreementInfo",
+        "operationId": "getBenchmarkingAgreementInfoUsingGET",
+        "produces": [
+          "*/*"
+        ],
+        "parameters": [
+          {
+            "name": "key",
+            "in": "query",
+            "description": "key",
+            "required": true,
+            "type": "string"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "schema": {
+              "$ref": "#/definitions/BenchmarkingAgreementVM"
+            }
+          },
+          "401": {
+            "description": "Unauthorized"
+          },
+          "403": {
+            "description": "Forbidden"
+          },
+          "404": {
+            "description": "Not Found"
+          }
+        },
+        "deprecated": false
+      }
+    },
     "/api/account/change-password": {
       "post": {
         "tags": [
@@ -2441,6 +2527,7 @@
               "REJECTION",
               "REJECTION_US_SANCTION",
               "REJECT_ALUMNI_ADDRESS",
+              "BENCHMARKING_AGREEMENT",
               "PASSWORD_RESET",
               "LICENSE_REVIEW_COMMERCIAL",
               "LICENSE_REVIEW_RESEARCH_COMMERCIAL",
@@ -2458,6 +2545,7 @@
               "ACTIVATE_FREE_TRIAL",
               "TRIAL_ACCOUNT_IS_ABOUT_TO_EXPIRE",
               "TRIAL_ACCOUNT_IS_ACTIVATED",
+              "BENCHMARKING_AGREEMENT_IS_ACCEPTED",
               "DATA_USAGE_EXCEEDS_THRESHOLD",
               "TOKEN_HAS_BEEN_EXPOSED",
               "TOKEN_HAS_BEEN_EXPOSED_USER",
@@ -4870,6 +4958,24 @@
       },
       "title": "ApiAccessRequest"
     },
+    "BenchmarkingAgreementVM": {
+      "type": "object",
+      "properties": {
+        "agreementName": {
+          "type": "string"
+        },
+        "agreementVersion": {
+          "type": "string"
+        },
+        "firstName": {
+          "type": "string"
+        },
+        "lastName": {
+          "type": "string"
+        }
+      },
+      "title": "BenchmarkingAgreementVM"
+    },
     "BulkUserMailRequestVM": {
       "type": "object",
       "required": [
@@ -5370,6 +5476,7 @@
             "REJECTION",
             "REJECTION_US_SANCTION",
             "REJECT_ALUMNI_ADDRESS",
+            "BENCHMARKING_AGREEMENT",
             "PASSWORD_RESET",
             "LICENSE_REVIEW_COMMERCIAL",
             "LICENSE_REVIEW_RESEARCH_COMMERCIAL",
@@ -5387,6 +5494,7 @@
             "ACTIVATE_FREE_TRIAL",
             "TRIAL_ACCOUNT_IS_ABOUT_TO_EXPIRE",
             "TRIAL_ACCOUNT_IS_ACTIVATED",
+            "BENCHMARKING_AGREEMENT_IS_ACCEPTED",
             "DATA_USAGE_EXCEEDS_THRESHOLD",
             "TOKEN_HAS_BEEN_EXPOSED",
             "TOKEN_HAS_BEEN_EXPOSED_USER",
@@ -5434,6 +5542,9 @@
           "items": {
             "type": "string"
           }
+        },
+        "benchmarkingAgreementAccepted": {
+          "type": "boolean"
         },
         "city": {
           "type": "string",
@@ -6082,6 +6193,9 @@
             "type": "string"
           }
         },
+        "benchmarkingAgreementAccepted": {
+          "type": "boolean"
+        },
         "city": {
           "type": "string",
           "minLength": 2,
@@ -6286,6 +6400,7 @@
             "REJECTION",
             "REJECTION_US_SANCTION",
             "REJECT_ALUMNI_ADDRESS",
+            "BENCHMARKING_AGREEMENT",
             "PASSWORD_RESET",
             "LICENSE_REVIEW_COMMERCIAL",
             "LICENSE_REVIEW_RESEARCH_COMMERCIAL",
@@ -6303,6 +6418,7 @@
             "ACTIVATE_FREE_TRIAL",
             "TRIAL_ACCOUNT_IS_ABOUT_TO_EXPIRE",
             "TRIAL_ACCOUNT_IS_ACTIVATED",
+            "BENCHMARKING_AGREEMENT_IS_ACCEPTED",
             "DATA_USAGE_EXCEEDS_THRESHOLD",
             "TOKEN_HAS_BEEN_EXPOSED",
             "TOKEN_HAS_BEEN_EXPOSED_USER",
@@ -6355,6 +6471,7 @@
             "REJECTION",
             "REJECTION_US_SANCTION",
             "REJECT_ALUMNI_ADDRESS",
+            "BENCHMARKING_AGREEMENT",
             "PASSWORD_RESET",
             "LICENSE_REVIEW_COMMERCIAL",
             "LICENSE_REVIEW_RESEARCH_COMMERCIAL",
@@ -6372,6 +6489,7 @@
             "ACTIVATE_FREE_TRIAL",
             "TRIAL_ACCOUNT_IS_ABOUT_TO_EXPIRE",
             "TRIAL_ACCOUNT_IS_ACTIVATED",
+            "BENCHMARKING_AGREEMENT_IS_ACCEPTED",
             "DATA_USAGE_EXCEEDS_THRESHOLD",
             "TOKEN_HAS_BEEN_EXPOSED",
             "TOKEN_HAS_BEEN_EXPOSED_USER",
