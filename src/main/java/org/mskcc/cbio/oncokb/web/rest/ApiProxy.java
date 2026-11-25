@@ -1,5 +1,8 @@
 package org.mskcc.cbio.oncokb.web.rest;
 
+import com.fasterxml.jackson.core.JsonFactory;
+import com.fasterxml.jackson.core.JsonParser;
+import com.fasterxml.jackson.core.JsonToken;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 import org.mskcc.cbio.oncokb.config.application.ApplicationProperties;
@@ -27,6 +30,7 @@ import springfox.documentation.annotations.ApiIgnore;
 import javax.mail.MessagingException;
 import javax.servlet.http.HttpServletRequest;
 import javax.annotation.PostConstruct;
+import java.io.IOException;
 import java.net.URI;
 import java.net.URISyntaxException;
 import java.nio.charset.StandardCharsets;
@@ -41,6 +45,9 @@ import java.util.stream.Collectors;
 @RestController
 @RequestMapping("/api")
 public class ApiProxy {
+    private static final String MCP_PATH = "/api/v1/mcp";
+    private static final JsonFactory MCP_JSON = new JsonFactory();
+
     private final Logger log = LoggerFactory.getLogger(ApiProxy.class);
 
     @Autowired
@@ -79,12 +86,89 @@ public class ApiProxy {
             .collect(Collectors.toList());
     }
 
+    @RequestMapping(path = "/v1/mcp")
+    public ResponseEntity<byte[]> proxyMcp(@RequestBody(required = false) byte[] body, HttpMethod method, HttpServletRequest request)
+        throws URISyntaxException {
+        if (!request.getRequestURI().equals(request.getContextPath() + MCP_PATH)) {
+            return ResponseEntity.notFound().build();
+        }
+        if (method != HttpMethod.POST) {
+            return ResponseEntity.status(HttpStatus.METHOD_NOT_ALLOWED).allow(HttpMethod.POST).build();
+        }
+        if (tokenUsageCheckList.contains(MCP_PATH)) {
+            getMcpToolName(body).ifPresent(name -> recordTokenStats(request, 1, "#" + name));
+        }
+        return apiProxyService.exchangeMcpRequest(body, request);
+    }
+
+    private Optional<String> getMcpToolName(byte[] body) {
+        if (body == null || body.length == 0) {
+            return Optional.empty();
+        }
+        try (JsonParser parser = MCP_JSON.createParser(body)) {
+            if (parser.nextToken() != JsonToken.START_OBJECT) {
+                return Optional.empty();
+            }
+            String version = null;
+            String method = null;
+            String name = null;
+            boolean hasRequestId = false;
+            while (parser.nextToken() == JsonToken.FIELD_NAME) {
+                String field = parser.getCurrentName();
+                JsonToken value = parser.nextToken();
+                switch (field) {
+                    case "jsonrpc":
+                        version = value == JsonToken.VALUE_STRING ? parser.getText() : null;
+                        break;
+                    case "method":
+                        method = value == JsonToken.VALUE_STRING ? parser.getText() : null;
+                        break;
+                    case "id":
+                        hasRequestId = value == JsonToken.VALUE_STRING || value == JsonToken.VALUE_NUMBER_INT;
+                        break;
+                    case "params":
+                        name = readMcpToolName(parser);
+                        break;
+                    default:
+                        break;
+                }
+                parser.skipChildren();
+            }
+            // The existing usage resource column is varchar(255).
+            if (parser.currentToken() == JsonToken.END_OBJECT && parser.nextToken() == null
+                && "2.0".equals(version) && "tools/call".equals(method) && hasRequestId
+                && name != null && !name.trim().isEmpty() && ("POST " + MCP_PATH + "#" + name).length() <= 255) {
+                return Optional.of(name);
+            }
+        } catch (IOException e) {
+            // The core server handles malformed JSON-RPC bodies.
+        }
+        return Optional.empty();
+    }
+
+    private String readMcpToolName(JsonParser parser) throws IOException {
+        String name = null;
+        if (parser.currentToken() == JsonToken.START_OBJECT) {
+            while (parser.nextToken() == JsonToken.FIELD_NAME) {
+                String field = parser.getCurrentName();
+                JsonToken value = parser.nextToken();
+                if ("name".equals(field)) {
+                    name = value == JsonToken.VALUE_STRING ? parser.getText() : null;
+                }
+                parser.skipChildren();
+            }
+        }
+        return name;
+    }
+
     @RequestMapping(path = "/**", method = {RequestMethod.GET, RequestMethod.POST, RequestMethod.HEAD})
     public ResponseEntity<String> proxy(@RequestBody(required = false) String body, HttpMethod method, HttpServletRequest request)
         throws URISyntaxException {
         URI uri = apiProxyService.prepareURI(request);
 
-        boolean needsToBeRecorded = tokenUsageCheckList.stream().anyMatch(api -> request.getRequestURI().startsWith(api));
+        boolean needsToBeRecorded = tokenUsageCheckList.stream()
+            .filter(api -> !MCP_PATH.equals(api))
+            .anyMatch(api -> request.getRequestURI().startsWith(api));
 
         if (needsToBeRecorded) {
             recordTokenStats(request, getUsageCount(body, method));
@@ -171,6 +255,10 @@ public class ApiProxy {
     }
 
     private void recordTokenStats(HttpServletRequest request, int usageCount) {
+        recordTokenStats(request, usageCount, "");
+    }
+
+    private void recordTokenStats(HttpServletRequest request, int usageCount, String resourceSuffix) {
         if (applicationProperties.getDbReadOnly()) {
             return;
         }
@@ -191,7 +279,7 @@ public class ApiProxy {
         if (ipAddress == null) {
             ipAddress = Optional.ofNullable(request.getRemoteAddr()).orElse("");
         }
-        String resource = request.getMethod() + " " + request.getRequestURI();
+        String resource = request.getMethod() + " " + request.getRequestURI() + resourceSuffix;
         Instant accessTime = Instant.now();
 
         try {

@@ -135,6 +135,7 @@ application:
   profile: prod
   base-url: 'https://www.oncokb.org'
   api-proxy-url: 'http://oncokb-core:8888'
+  token-usage-check: /api/v1/mcp
   sitemap-enabled: true
   redis:
     enabled: true

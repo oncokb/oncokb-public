@@ -21,6 +21,7 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
 import org.springframework.security.web.firewall.StrictHttpFirewall;
 import org.springframework.security.web.header.writers.ReferrerPolicyHeaderWriter;
+import org.springframework.security.web.util.matcher.AntPathRequestMatcher;
 import org.springframework.web.filter.CorsFilter;
 import org.zalando.problem.spring.web.advice.security.SecurityProblemSupport;
 
@@ -29,6 +30,8 @@ import org.zalando.problem.spring.web.advice.security.SecurityProblemSupport;
 @EnableGlobalMethodSecurity(prePostEnabled = true, securedEnabled = true)
 @Import(SecurityProblemSupport.class)
 public class TokenSecurityConfiguration extends WebSecurityConfigurerAdapter {
+
+    private static final String MCP_PATH = "/api/v1/mcp";
 
     private final TokenProvider tokenProvider;
     private final CorsFilter corsFilter;
@@ -67,8 +70,9 @@ public class TokenSecurityConfiguration extends WebSecurityConfigurerAdapter {
 
     @Override
     public void configure(WebSecurity web) {
+        AntPathRequestMatcher mcpPath = new AntPathRequestMatcher(MCP_PATH);
         web.ignoring()
-            .antMatchers(HttpMethod.OPTIONS, "/**")
+            .requestMatchers(request -> HttpMethod.OPTIONS.matches(request.getMethod()) && !mcpPath.matches(request))
             .antMatchers("/app/**/*.{js,html}")
             .antMatchers("/*.xml")
             .antMatchers("/i18n/**")
@@ -145,6 +149,7 @@ public class TokenSecurityConfiguration extends WebSecurityConfigurerAdapter {
             .antMatchers("/api/v1/utils/allGenomicIndicators.txt").hasAnyAuthority(AuthoritiesConstants.PREMIUM_USER, AuthoritiesConstants.ADMIN, AuthoritiesConstants.DATA_DOWNLOAD)
             .antMatchers("/api/v1/utils/genomicIndicators").hasAnyAuthority(AuthoritiesConstants.PREMIUM_USER, AuthoritiesConstants.ADMIN)
 
+            .antMatchers(MCP_PATH).hasAnyAuthority(AuthoritiesConstants.API, AuthoritiesConstants.ROLE_SERVICE_ACCOUNT)
             .antMatchers("/api/v1/**").hasAnyAuthority(AuthoritiesConstants.ADMIN)
 
             .antMatchers("/api/account/reset-password/init").permitAll()
