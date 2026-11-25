@@ -41,14 +41,19 @@ import org.springframework.web.cors.UrlBasedCorsConfigurationSource;
 import org.springframework.web.filter.CorsFilter;
 import org.springframework.web.servlet.config.annotation.EnableWebMvc;
 
+import javax.servlet.http.Cookie;
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletRequestWrapper;
 import java.io.IOException;
 import java.net.InetSocketAddress;
+import java.net.ServerSocket;
 import java.nio.charset.StandardCharsets;
 import java.time.Duration;
 import java.util.Collections;
 import java.util.Optional;
 import java.util.UUID;
 import java.util.concurrent.BlockingQueue;
+import java.util.concurrent.CountDownLatch;
 import java.util.concurrent.LinkedBlockingQueue;
 import java.util.concurrent.TimeUnit;
 
@@ -57,6 +62,7 @@ import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.ArgumentMatchers.eq;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.verifyNoInteractions;
+import static org.mockito.Mockito.verifyNoMoreInteractions;
 import static org.mockito.Mockito.when;
 import static org.springframework.security.test.web.servlet.setup.SecurityMockMvcConfigurers.springSecurity;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.delete;
@@ -65,6 +71,7 @@ import static org.springframework.test.web.servlet.request.MockMvcRequestBuilder
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.content;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.header;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 @SpringJUnitConfig(McpGatewayTest.Config.class)
@@ -72,6 +79,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 @TestPropertySource(properties = "jhipster.clientApp.name=oncokbPublicApp")
 class McpGatewayTest {
     private static final String PATH = "/api/v1/mcp";
+    private static final int MAX_REQUEST_BYTES = 32768;
     private static final String JSON = "application/json;charset=UTF-8";
     private static final byte[] ERROR = "{\"jsonrpc\":\"2.0\",\"error\":{\"code\":-32602,\"message\":\"Invalid params\"}}"
         .getBytes(StandardCharsets.UTF_8);
@@ -80,6 +88,9 @@ class McpGatewayTest {
 
     @Autowired
     private WebApplicationContext context;
+
+    @Autowired
+    private ApplicationProperties properties;
 
     @MockBean
     private TokenProvider tokenProvider;
@@ -101,7 +112,21 @@ class McpGatewayTest {
     @BeforeEach
     void setup() {
         CORE_REQUESTS.clear();
-        mvc = MockMvcBuilders.webAppContextSetup(context).apply(springSecurity()).build();
+        mvc = MockMvcBuilders.webAppContextSetup(context).apply(springSecurity())
+            .addFilters((request, response, chain) -> {
+                HttpServletRequest httpRequest = (HttpServletRequest) request;
+                if ("chunked".equals(httpRequest.getHeader("Transfer-Encoding"))) {
+                    // MockMvc ordinarily reports the array length even for simulated chunked requests.
+                    chain.doFilter(new HttpServletRequestWrapper(httpRequest) {
+                        @Override
+                        public long getContentLengthLong() {
+                            return -1;
+                        }
+                    }, response);
+                } else {
+                    chain.doFilter(request, response);
+                }
+            }).build();
     }
 
     @AfterAll
@@ -162,8 +187,14 @@ class McpGatewayTest {
                 .header("Authorization", "Bearer " + token).contentType(JSON)
                 .header("Accept", "application/json, text/event-stream")
                 .header("MCP-Protocol-Version", "2025-03-26")
-                .header("Mcp-Session-Id", "session-1").content(body))
+                .header("Mcp-Session-Id", "session-1").cookie(new Cookie("session", "private")).content(body))
             .andExpect(status().is(upstreamStatus)).andExpect(header().string("Content-Type", JSON))
+            .andExpect(header().string("Mcp-Session-Id", "from-core"))
+            .andExpect(header().string("MCP-Protocol-Version", "2025-06-18"))
+            .andExpect(header().doesNotExist("Connection"))
+            .andExpect(header().doesNotExist("Keep-Alive"))
+            .andExpect(header().doesNotExist("X-Upstream-Hop"))
+            .andExpect(header().doesNotExist("Set-Cookie"))
             .andExpect(content().bytes(ERROR));
         CoreRequest upstream = CORE_REQUESTS.poll(1, TimeUnit.SECONDS);
         assertThat(upstream.body).isEqualTo(body);
@@ -172,6 +203,90 @@ class McpGatewayTest {
         assertThat(upstream.protocolVersion).isEqualTo("2025-03-26");
         assertThat(upstream.sessionId).isEqualTo("session-1");
         assertThat(upstream.authorization).isNull();
+        assertThat(upstream.cookie).isNull();
+    }
+
+    @Test
+    void dropsAllowListedHeadersNominatedByConnection() throws Exception {
+        mvc.perform(request(token(AuthoritiesConstants.API), "{}").queryParam("status", "200")
+                .header("Mcp-Session-Id", "hop-by-hop"))
+            .andExpect(status().isOk())
+            .andExpect(header().doesNotExist("Mcp-Session-Id"))
+            .andExpect(header().string("MCP-Protocol-Version", "2025-06-18"));
+    }
+
+    @Test
+    void returnsJsonRpcBadGatewayWithRequestIdWhenCorePortIsClosed() throws Exception {
+        int port;
+        try (ServerSocket socket = new ServerSocket()) {
+            socket.bind(new InetSocketAddress("127.0.0.1", 0));
+            port = socket.getLocalPort();
+        }
+
+        String coreUrl = properties.getApiProxyUrl();
+        try {
+            properties.setApiProxyUrl("http://127.0.0.1:" + port);
+            mvc.perform(request(token(AuthoritiesConstants.API), "{\"jsonrpc\":\"2.0\",\"id\":\"quoted\\\"id\",\"method\":\"ping\"}"))
+                .andExpect(status().isBadGateway())
+                .andExpect(content().contentType(MediaType.APPLICATION_JSON))
+                .andExpect(jsonPath("$.jsonrpc").value("2.0"))
+                .andExpect(jsonPath("$.id").value("quoted\"id"))
+                .andExpect(jsonPath("$.error.code").value(-32000));
+        } finally {
+            properties.setApiProxyUrl(coreUrl);
+        }
+    }
+
+    @Test
+    void returnsJsonRpcGatewayTimeoutWithNullIdWhenCoreDelays() throws Exception {
+        HttpServer delayedCore = HttpServer.create(new InetSocketAddress("127.0.0.1", 0), 0);
+        CountDownLatch release = new CountDownLatch(1);
+        delayedCore.createContext(PATH, exchange -> {
+            try {
+                release.await(5, TimeUnit.SECONDS);
+            } catch (InterruptedException e) {
+                Thread.currentThread().interrupt();
+            } finally {
+                exchange.close();
+            }
+        });
+        delayedCore.start();
+
+        String coreUrl = properties.getApiProxyUrl();
+        try {
+            properties.setApiProxyUrl("http://127.0.0.1:" + delayedCore.getAddress().getPort());
+            mvc.perform(request(token(AuthoritiesConstants.API), "{\"jsonrpc\":\"2.0\",\"method\":\"ping\"}"))
+                .andExpect(status().isGatewayTimeout())
+                .andExpect(content().contentType(MediaType.APPLICATION_JSON))
+                .andExpect(content().json("{\"jsonrpc\":\"2.0\",\"id\":null,\"error\":{\"code\":-32001}}"));
+        } finally {
+            properties.setApiProxyUrl(coreUrl);
+            release.countDown();
+            delayedCore.stop(0);
+        }
+    }
+
+    @ParameterizedTest
+    @ValueSource(booleans = {false, true})
+    void rejectsOversizedBodiesWithOrWithoutContentLength(boolean chunked) throws Exception {
+        byte[] body = new byte[MAX_REQUEST_BYTES + 1];
+        MockHttpServletRequestBuilder requestBuilder = request(token(AuthoritiesConstants.API), "").content(body);
+        if (chunked) {
+            requestBuilder.header("Transfer-Encoding", "chunked");
+        }
+        mvc.perform(requestBuilder).andExpect(status().isPayloadTooLarge())
+            .andExpect(content().contentType(MediaType.APPLICATION_JSON))
+            .andExpect(jsonPath("$.error.code").value(-32003));
+        assertThat(CORE_REQUESTS).isEmpty();
+        verifyNoInteractions(tokenStats);
+    }
+
+    @Test
+    void forwardsChunkedBodyAtSizeLimit() throws Exception {
+        byte[] body = new byte[MAX_REQUEST_BYTES];
+        mvc.perform(request(token(AuthoritiesConstants.API), "").header("Transfer-Encoding", "chunked").content(body))
+            .andExpect(status().isAccepted());
+        assertThat(CORE_REQUESTS.poll(1, TimeUnit.SECONDS).body).isEqualTo(body);
     }
 
     @Test
@@ -201,6 +316,32 @@ class McpGatewayTest {
             mvc.perform(request(token, body)).andExpect(status().isAccepted());
             verify(tokenStats).saveTokenStats(eq(token), eq("127.0.0.1"), eq("POST " + PATH + "#" + tool), eq(1), any());
         }
+    }
+
+    @ParameterizedTest
+    @ValueSource(strings = {"1.25", "null", "\"call-id\"", "false", "{\"client\":1}"})
+    void countsToolsCallWithAnyPresentId(String id) throws Exception {
+        UUID token = token(AuthoritiesConstants.API);
+        String body = "{\"jsonrpc\":\"2.0\",\"id\":" + id
+            + ",\"method\":\"tools/call\",\"params\":{\"name\":\"get_levels\"}}";
+        mvc.perform(request(token, body)).andExpect(status().isAccepted());
+        verify(tokenStats).saveTokenStats(eq(token), eq("127.0.0.1"), eq("POST " + PATH + "#get_levels"), eq(1), any());
+    }
+
+    @Test
+    void checksStoredResourceLengthIncludingContextPath() throws Exception {
+        UUID token = token(AuthoritiesConstants.API);
+        String pathWithContext = "/ctx" + PATH;
+        String prefix = "POST " + pathWithContext + "#";
+        String tool = String.join("", Collections.nCopies(255 - prefix.length(), "a"));
+        String template = "{\"jsonrpc\":\"2.0\",\"id\":1,\"method\":\"tools/call\",\"params\":{\"name\":\"%s\"}}";
+        for (String name : new String[] {tool, tool + "a"}) {
+            mvc.perform(post(pathWithContext).contextPath("/ctx").header("Authorization", "Bearer " + token)
+                    .contentType(MediaType.APPLICATION_JSON).content(String.format(template, name)))
+                .andExpect(status().isAccepted());
+        }
+        verify(tokenStats).saveTokenStats(eq(token), eq("127.0.0.1"), eq(prefix + tool), eq(1), any());
+        verifyNoMoreInteractions(tokenStats);
     }
 
     @ParameterizedTest
@@ -249,6 +390,7 @@ class McpGatewayTest {
         private final String protocolVersion;
         private final String sessionId;
         private final String authorization;
+        private final String cookie;
 
         CoreRequest(HttpExchange exchange) throws IOException {
             body = StreamUtils.copyToByteArray(exchange.getRequestBody());
@@ -257,6 +399,7 @@ class McpGatewayTest {
             protocolVersion = exchange.getRequestHeaders().getFirst("MCP-Protocol-Version");
             sessionId = exchange.getRequestHeaders().getFirst("Mcp-Session-Id");
             authorization = exchange.getRequestHeaders().getFirst("Authorization");
+            cookie = exchange.getRequestHeaders().getFirst("Cookie");
         }
     }
 
@@ -268,7 +411,7 @@ class McpGatewayTest {
         @Bean
         ApplicationProperties applicationProperties() throws IOException {
             core = HttpServer.create(new InetSocketAddress("127.0.0.1", 0), 0);
-            core.createContext(PATH, exchange -> {
+            core.createContext("/", exchange -> {
                 try {
                     CORE_REQUESTS.add(new CoreRequest(exchange));
                     String query = exchange.getRequestURI().getQuery();
@@ -276,6 +419,14 @@ class McpGatewayTest {
                         exchange.sendResponseHeaders(202, -1);
                     } else {
                         exchange.getResponseHeaders().set("Content-Type", JSON);
+                        exchange.getResponseHeaders().set("Mcp-Session-Id", "from-core");
+                        exchange.getResponseHeaders().set("MCP-Protocol-Version", "2025-06-18");
+                        exchange.getResponseHeaders().set("Keep-Alive", "timeout=5");
+                        String connection = "hop-by-hop".equals(exchange.getRequestHeaders().getFirst("Mcp-Session-Id"))
+                            ? "mcp-session-id, X-Upstream-Hop" : "X-Upstream-Hop";
+                        exchange.getResponseHeaders().set("Connection", connection);
+                        exchange.getResponseHeaders().set("X-Upstream-Hop", "private");
+                        exchange.getResponseHeaders().set("Set-Cookie", "private=1");
                         exchange.sendResponseHeaders(Integer.parseInt(query.substring("status=".length())), ERROR.length);
                         exchange.getResponseBody().write(ERROR);
                     }
@@ -288,6 +439,8 @@ class McpGatewayTest {
             ApplicationProperties properties = new ApplicationProperties();
             properties.setApiProxyUrl("http://127.0.0.1:" + core.getAddress().getPort());
             properties.setTokenUsageCheck(PATH);
+            properties.setMcpMaxRequestBytes(MAX_REQUEST_BYTES);
+            properties.setMcpReadTimeoutMs(600);
             properties.setDbReadOnly(false);
             properties.getRateLimit().setCapacity(2);
             properties.getRateLimit().setRefillPeriod(Duration.ofHours(1));
