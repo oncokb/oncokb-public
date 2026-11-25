@@ -22,8 +22,6 @@ jobs:
               with:
                   distribution: 'temurin'
                   java-version: 11
-            - name: Stop MySQL server
-              run: sudo /etc/init.d/mysql stop
             - name: Install node.js packages
               run: yarn install
             - name: Run backend test

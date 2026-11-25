@@ -20,6 +20,10 @@ const objectPropertyMarkRegex = new RegExp(
   'gm'
 );
 const tagMarkerRegex = /^\[\[tag\]\]\s*/i;
+// Separates multiple cancer types in a single table cell (e.g.
+// "Erdheim-Chester Disease @ Rosai-Dorfman Disease"). A comma can't be used
+// because some cancer type names contain one.
+const CANCER_TYPE_SEPARATOR = '@';
 // Footnote markers (e.g. ⁺T474) flag a note below the table. They are part of
 // the displayed cell text but never part of the alteration name itself.
 const footnoteMarkerRegex = /^([⁺†‡])\s*/;
@@ -422,30 +426,48 @@ function addAutoTableLinks(md, state) {
       }
     } else if (inTd && columnIdx === cancerTypeIdx && token.type === 'inline') {
       const child = token.children[0];
+      if (!child) {
+        continue;
+      }
+
+      // Cancer type names can contain commas, so multiple cancer types in one
+      // cell are separated with CANCER_TYPE_SEPARATOR instead. The separator
+      // is always displayed as a comma, even when no links are created.
+      const cancerTypeNames = child.content
+        .split(CANCER_TYPE_SEPARATOR)
+        .map(x => x.trim())
+        .filter(x => x !== '');
+      child.content = cancerTypeNames.join(', ');
+
       if (
         currentGene === '' ||
         currentGene.includes(',') ||
         !currentMutationLinkableForCancerType ||
-        currentMutationNamesForCancerType.length === 0
+        currentMutationNamesForCancerType.length === 0 ||
+        cancerTypeNames.length === 0
       ) {
-        continue;
-      }
-
-      const cancerTypeName = child.content.trim();
-      if (cancerTypeName === '') {
         continue;
       }
 
       if (enableCancerTypeLinks) {
         const isGermline = currentGeneSetting === 'germline';
-        token.children = createCancerTypeLink(
-          md,
-          currentGene,
-          currentMutationNamesForCancerType[0],
-          cancerTypeName,
-          cancerTypeName,
-          isGermline
-        );
+        const cancerTypeLinks = [];
+        cancerTypeNames.forEach((cancerTypeName, idx) => {
+          if (idx > 0) {
+            cancerTypeLinks.push(createMarkdownTextToken(md, ', '));
+          }
+          cancerTypeLinks.push(
+            ...createCancerTypeLink(
+              md,
+              currentGene,
+              currentMutationNamesForCancerType[0],
+              cancerTypeName,
+              cancerTypeName,
+              isGermline
+            )
+          );
+        });
+        token.children = cancerTypeLinks;
       }
     } else if (inTh && ['Gene', 'Gene(s)'].includes(token.content)) {
       geneIdx = columnIdx;
@@ -627,9 +649,16 @@ function addTableHeaderListStyles(state) {
     }
 
     token.attrSet('style', 'margin-bottom: 0');
-    for (let j = i + 1; j < listEndIdx; j++) {
-      if (state.tokens[j].type === 'list_item_open') {
-        state.tokens[j].attrSet('style', 'margin-bottom: 0');
+    // Only the last top-level item sits directly above the table; earlier
+    // items keep their normal spacing.
+    for (let j = listEndIdx - 1; j > i; j--) {
+      const itemToken = state.tokens[j];
+      if (
+        itemToken.type === 'list_item_open' &&
+        itemToken.level === token.level + 1
+      ) {
+        itemToken.attrSet('style', 'margin-bottom: 0');
+        break;
       }
     }
   }
@@ -825,9 +854,15 @@ const md = new MarkdownIt({
   // thumbnail width, e.g. ![alt](../../../../content/images/example.png "400px")
   md.renderer.rules.image = function (tokens, idx) {
     const token = tokens[idx];
-    const variableName = registerImage(token.attrGet('src'));
+    const src = token.attrGet('src');
+    const variableName = registerImage(src);
     const alt = md.utils.escapeHtml(token.content || '');
     const width = token.attrGet('title') || DEFAULT_IMAGE_WIDTH;
+    const isHotspotIcon =
+      path.basename((src || '').replace(/\\/g, '/')) === 'cancer-hotspots.svg';
+    if (isHotspotIcon) {
+      return `<OptimizedImage src={${variableName}} alt="${alt}" style={{ maxWidth: '100%', width: '${width}' }} />`;
+    }
     return `<OptimizedImage src={${variableName}} alt="${alt}" style={{ maxWidth: '100%', width: '${width}', cursor: 'zoom-in' }} onClick={() => window.open(${variableName}, '_blank', 'noopener')} />`;
   };
 

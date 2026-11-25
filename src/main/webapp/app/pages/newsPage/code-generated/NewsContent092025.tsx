@@ -13,7 +13,7 @@ export default function NewsContent092025() {
   return (
     <>
       <ul style={{ marginBottom: 0 }}>
-        <li style={{ marginBottom: 0 }}>
+        <li>
           We have updated the Level 1 annotation of ERBB2 Tyrosine Kinase Domain
           activating mutations in NSCLC (in association with zongertinib) to
           exclude the following mutations, which fall outside the TKD (ERBB2
