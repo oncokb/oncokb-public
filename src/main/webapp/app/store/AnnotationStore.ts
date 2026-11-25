@@ -542,12 +542,16 @@ export class AnnotationStore {
    * other page, and when the hotspot endpoint has no hotspot for the position.
    */
   readonly positionalHotspot = remoteData<CancerHotspot | undefined>({
-    await: () => [this.somaticAnnotationData],
+    // Germline pages have no hotspot, so skip the somatic annotation request:
+    // waiting on it would leave the germline page loading if that request fails.
+    await: () => (this.germline ? [] : [this.somaticAnnotationData]),
     invoke: async () => {
+      if (this.germline) {
+        return undefined;
+      }
       const annotation = this.somaticAnnotationData.result;
       const query = annotation.query;
       if (
-        this.germline ||
         !annotation.hotspot ||
         !isPositionalAlteration(
           query.proteinStart,
