@@ -201,12 +201,9 @@ const AnnotatedAlterations: FunctionComponent<{
   alterations: BiologicalVariant[];
   isLargeScreen?: boolean;
 }> = props => {
-  const isMyd88 = props.hugoSymbol.toUpperCase() === 'MYD88';
-  const filteredAlterations = isMyd88
-    ? props.alterations.filter(alteration =>
-        alteration.variant.referenceGenomes?.includes(REFERENCE_GENOME.GRCh37)
-      )
-    : props.alterations;
+  const filteredAlterations = props.alterations.filter(alteration =>
+    alteration.variant.referenceGenomes?.includes(REFERENCE_GENOME.GRCh37)
+  );
 
   const style = props.isLargeScreen
     ? {
