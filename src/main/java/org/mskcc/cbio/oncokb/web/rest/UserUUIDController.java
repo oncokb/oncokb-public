@@ -15,7 +15,7 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
-import org.mskcc.cbio.oncokb.web.rest.errors.LicenseAgreementNotAcceptedException;
+import org.zalando.problem.ThrowableProblem;
 
 import javax.validation.Valid;
 import java.util.UUID;
@@ -48,9 +48,13 @@ public class UserUUIDController {
         try {
             authentication = authenticationManager.authenticate(authenticationToken);
         } catch (AuthenticationException ex) {
-            LicenseAgreementNotAcceptedException trialException = findLicenseAgreementException(ex);
-            if (trialException != null) {
-                throw trialException;
+            // DaoAuthenticationProvider wraps exceptions thrown by DomainUserDetailsService in an
+            // InternalAuthenticationServiceException, which ExceptionTranslator would turn into a generic 401.
+            // Rethrow problems such as LicenseAgreementNotAcceptedException and AccountAccessDeniedException
+            // directly so the client gets their intended status, detail, and parameters.
+            ThrowableProblem problem = findProblemCause(ex);
+            if (problem != null) {
+                throw problem;
             }
             throw ex;
         }
@@ -63,11 +67,11 @@ public class UserUUIDController {
         return new ResponseEntity<>(uuid, httpHeaders, HttpStatus.OK);
     }
 
-    private LicenseAgreementNotAcceptedException findLicenseAgreementException(Throwable throwable) {
+    private ThrowableProblem findProblemCause(Throwable throwable) {
         Throwable current = throwable;
         while (current != null) {
-            if (current instanceof LicenseAgreementNotAcceptedException) {
-                return (LicenseAgreementNotAcceptedException) current;
+            if (current instanceof ThrowableProblem) {
+                return (ThrowableProblem) current;
             }
             current = current.getCause();
         }

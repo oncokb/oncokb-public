@@ -19,8 +19,7 @@ import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Component;
 import org.springframework.transaction.annotation.Transactional;
-import org.springframework.web.server.ResponseStatusException;
-import org.springframework.http.HttpStatus;
+import org.mskcc.cbio.oncokb.web.rest.errors.AccountAccessDeniedException;
 import org.mskcc.cbio.oncokb.web.rest.errors.LicenseAgreementNotAcceptedException;
 
 /**
@@ -67,7 +66,7 @@ public class DomainUserDetailsService implements UserDetailsService {
         Optional<org.mskcc.cbio.oncokb.domain.UserDetails> userDetailsOptional = userDetailsRepository.findOneByUser(user);
         if (!userDetailsOptional.isPresent() || userDetailsOptional.get().getAccountRequestStatus().equals(AccountRequestStatus.UNKNOWN)) {
             log.warn("Account request status missing for user '{}'. Denying login.", user.getLogin());
-            throw new ResponseStatusException(HttpStatus.FORBIDDEN, "Account setup is incomplete. Please contact support.");
+            throw new AccountAccessDeniedException("Account setup is incomplete. Please contact support.");
         }
 
         org.mskcc.cbio.oncokb.domain.UserDetails userDetails = userDetailsOptional.get();
@@ -75,7 +74,8 @@ public class DomainUserDetailsService implements UserDetailsService {
         TrialStatus trialStatus = userDetails.getTrialStatus() == null ? TrialStatus.REGULAR : userDetails.getTrialStatus();
 
         if (AccountRequestStatus.REJECTED.equals(accountRequestStatus)) {
-            throw new ResponseStatusException(HttpStatus.FORBIDDEN, "Your account request was rejected. Please contact contact@oncokb.org.");
+            log.info("Denying login for user '{}': account request was rejected.", user.getLogin());
+            throw new AccountAccessDeniedException("Your account request was rejected. Please contact contact@oncokb.org.");
         }
 
         Optional<org.mskcc.cbio.oncokb.domain.UserTrial> userTrialOptional = Optional.empty();
@@ -116,21 +116,23 @@ public class DomainUserDetailsService implements UserDetailsService {
             }
 
             if (AccountRequestStatus.PENDING_NO_GRACE_PERIOD.equals(accountRequestStatus)) {
-                throw new ResponseStatusException(
-                    HttpStatus.FORBIDDEN,
+                log.info("Denying login for user '{}': account is pending review with no grace period.", user.getLogin());
+                throw new AccountAccessDeniedException(
                     "Your account is pending manual review. Grace period is not available for this account."
                 );
             }
 
             if (!SecurityUtils.isWithinActivationGracePeriod(user, userDetails.getLicenseType())) {
-                throw new ResponseStatusException(
-                    HttpStatus.FORBIDDEN,
-                    "Your temporary access expired while your request is still pending review."
+                log.info("Denying login for user '{}': activation grace period expired while account request is pending.", user.getLogin());
+                throw new AccountAccessDeniedException(
+                    "Your temporary access has expired and your account request is still pending review. " +
+                        "Please contact contact@oncokb.org for assistance."
                 );
             }
 
             if (!AccountRequestStatus.PENDING.equals(accountRequestStatus)) {
-                throw new ResponseStatusException(HttpStatus.FORBIDDEN, "Your account is not approved yet.");
+                log.warn("Denying login for user '{}': unexpected account request status {}.", user.getLogin(), accountRequestStatus);
+                throw new AccountAccessDeniedException("Your account is not approved yet.");
             }
         }
         List<GrantedAuthority> grantedAuthorities = user.getAuthorities().stream()

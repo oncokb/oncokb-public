@@ -21,7 +21,7 @@ import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.transaction.annotation.Transactional;
-import org.springframework.web.server.ResponseStatusException;
+import org.mskcc.cbio.oncokb.web.rest.errors.AccountAccessDeniedException;
 import org.mskcc.cbio.oncokb.web.rest.errors.LicenseAgreementNotAcceptedException;
 
 import java.time.Duration;
@@ -326,8 +326,8 @@ public class DomainUserDetailsServiceIT {
 
     // Disable this test while we still have the ACTIVATION_GRACE_PERIOD_CREATED_DATE_FLOOR
     // @Test
-    // public void assertThatExpiredGracePeriodExceptionIsThrownForPostGracePeriodUsers() {
-    //     assertThatExceptionOfType(ExpiredGracePeriodException.class).isThrownBy(
+    // public void assertThatAccountAccessDeniedIsThrownForPostGracePeriodUsers() {
+    //     assertThatExceptionOfType(AccountAccessDeniedException.class).isThrownBy(
     //         () -> domainUserDetailsService.loadUserByUsername(USER_THREE_LOGIN));
     // }
 
@@ -345,13 +345,13 @@ public class DomainUserDetailsServiceIT {
 
     @Test
     public void assertThatRejectedUserThrowsForbidden() {
-        assertThatExceptionOfType(ResponseStatusException.class)
+        assertThatExceptionOfType(AccountAccessDeniedException.class)
             .isThrownBy(() -> domainUserDetailsService.loadUserByUsername(USER_SIX_LOGIN));
     }
 
     @Test
     public void assertThatUnknownAccountStatusThrowsUserNotApproved() {
-        assertThatExceptionOfType(ResponseStatusException.class)
+        assertThatExceptionOfType(AccountAccessDeniedException.class)
             .isThrownBy(() -> domainUserDetailsService.loadUserByUsername(USER_SEVEN_LOGIN));
     }
 
@@ -364,7 +364,7 @@ public class DomainUserDetailsServiceIT {
 
     @Test
     public void assertThatPendingNoGracePeriodUserCannotLogin() {
-        assertThatExceptionOfType(ResponseStatusException.class)
+        assertThatExceptionOfType(AccountAccessDeniedException.class)
             .isThrownBy(() -> domainUserDetailsService.loadUserByUsername(USER_NINE_LOGIN));
     }
 
