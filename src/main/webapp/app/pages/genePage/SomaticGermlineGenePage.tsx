@@ -758,7 +758,10 @@ export default class SomaticGermlineGenePage extends React.Component<
                                   />
                                   <If
                                     condition={
-                                      this.store.gene.result.entrezGeneId > 0 &&
+                                      // An entrezGeneId of -2 is used for "Other Biomarkers",
+                                      // which has no prevalence data to plot.
+                                      this.store.gene.result.entrezGeneId !==
+                                        -2 &&
                                       this.store.mutationMapperDataPortal.result
                                         .length > 0 &&
                                       !this.isGermline
