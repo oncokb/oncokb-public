@@ -1,6 +1,7 @@
 import Tooltip from 'rc-tooltip';
 import { getNCBIlink, getNCTlink } from '../lib/urls';
 import * as React from 'react';
+import { REF_URL } from 'app/config/constants/regex';
 
 import { ReferenceList } from './ReferenceList';
 
@@ -12,21 +13,25 @@ export default class RefComponent extends React.Component<{
   componentType: 'tooltip' | 'linkout';
 }> {
   render() {
-    if (
-      this.props.content.startsWith('(https://') &&
-      this.props.content.endsWith(')')
-    ) {
-      const link = this.props.content.substring(
-        1,
-        this.props.content.length - 1
-      );
+    // PMID/NCT/Abstract references get their own rendering below; any other
+    // reference only links the https URL it contains and keeps the rest as text.
+    const isKnownRefType = /^\(\s*(pmid|nct|abstract)/i.test(
+      this.props.content
+    );
+    const inner = this.props.content.substring(
+      1,
+      this.props.content.length - 1
+    );
+    const urlMatch = inner.match(REF_URL);
+    if (!isKnownRefType && urlMatch && urlMatch.index !== undefined) {
+      const url = urlMatch[0];
       return (
         <>
-          (
-          <a target="_blank" rel="noopener noreferrer" href={link}>
-            {link}
+          ({inner.substring(0, urlMatch.index)}
+          <a target="_blank" rel="noopener noreferrer" href={url}>
+            {url}
           </a>
-          )
+          {inner.substring(urlMatch.index + url.length)})
         </>
       );
     }
