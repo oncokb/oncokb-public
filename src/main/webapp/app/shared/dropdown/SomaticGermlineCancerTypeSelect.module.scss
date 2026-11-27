@@ -1,6 +1,9 @@
+// Fills the parent up to max-width. The min-width is what parents wrap on
+// (capped by viewport so it still fits on phones).
 .cancerTypeWrapper {
-  min-width: 30dvw;
-  //min-width: clamp(20px, 100dvw, 100%);
+  min-width: unquote(
+    'min(20rem, 60vw)'
+  ); // unquote: our Sass can't mix units in min()
   width: 100%;
   max-width: 600px;
   z-index: 200;

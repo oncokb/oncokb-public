@@ -31,12 +31,7 @@ export default function GermlineSomaticHeader({
       : proteinAlteration;
   return (
     <h1 className={classnames(styles.header, 'h2')}>
-      <div
-        className={classnames(
-          styles.headerContent,
-          proteinAlteration ? styles.col4 : undefined
-        )}
-      >
+      <div className={styles.headerContent}>
         <span
           className={classnames(styles.headerContentGene, styles.centerContent)}
         >

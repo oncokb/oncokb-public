@@ -3,34 +3,38 @@
   margin-bottom: 1rem !important;
 }
 
+// Items flow inline and wrap onto a new line when they don't fit, so long
+// alteration names push the cancer type select down instead of overlapping it.
 .headerContent {
-  display: grid;
-  gap: 0.5rem;
-  grid-template-columns: 1fr;
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+}
+
+// Margins instead of `gap`: flexbox gap needs Chrome 84+, and the screenshot
+// tests run Puppeteer 1.20 (Chromium 78), where it is silently ignored.
+.headerContent > *,
+.centerContent.extraContent > * {
+  margin-right: 0.5rem;
+}
+
+.headerContent > :last-child,
+.centerContent.extraContent > :last-child {
+  margin-right: 0;
 }
 
 .centerContent {
   display: flex;
   align-items: center;
-  justify-items: center;
-}
-
-.centerContent.extraContent {
-  gap: 0.5rem;
 }
 
 .headerContentGene {
-  word-wrap: break-word;
+  overflow-wrap: anywhere;
 }
 
-@media (min-width: 800px) {
-  .headerContent {
-    --inner-columns: 1;
-    grid-template-columns:
-      max-content repeat(var(--inner-columns), minmax(0, max-content))
-      1fr;
-  }
-  .headerContent.col4 {
-    --inner-columns: 2;
-  }
+// Basis 0 + default min-width: auto means this wraps to its own line as soon as
+// its min-content width (tags + select min-width + icons) no longer fits, then
+// grows to fill whatever line it is on.
+.extraContent {
+  flex: 1 1 0;
 }
