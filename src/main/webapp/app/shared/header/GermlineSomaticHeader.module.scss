@@ -9,7 +9,9 @@
   display: flex;
   flex-wrap: wrap;
   align-items: center;
-  gap: 0.5rem;
+  // Heading font is large, so the gap needs to be bigger than a normal word space.
+  column-gap: 1rem;
+  row-gap: 0.75rem;
 }
 
 .centerContent {
