@@ -76,7 +76,7 @@
     "string-strip-html": "^4.4.5",
     "tslib": "1.11.1",
     "typeface-open-sans": "^0.0.54",
-    "uuid": "7.0.3",
+    "uuid": "14.0.0",
     "vanilla-cookieconsent": "3.1.0",
     "victory": "^31.0.22"
   },
