@@ -9,16 +9,23 @@
   display: flex;
   flex-wrap: wrap;
   align-items: center;
-  gap: 0.5rem;
+}
+
+// Margins instead of `gap`: flexbox gap needs Chrome 84+, and the screenshot
+// tests run Puppeteer 1.20 (Chromium 78), where it is silently ignored.
+.headerContent > *,
+.centerContent.extraContent > * {
+  margin-right: 0.5rem;
+}
+
+.headerContent > :last-child,
+.centerContent.extraContent > :last-child {
+  margin-right: 0;
 }
 
 .centerContent {
   display: flex;
   align-items: center;
-}
-
-.centerContent.extraContent {
-  gap: 0.5rem;
 }
 
 .headerContentGene {
