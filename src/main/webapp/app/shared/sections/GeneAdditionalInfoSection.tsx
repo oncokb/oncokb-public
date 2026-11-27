@@ -20,6 +20,11 @@ const GeneAdditionalInfoSection: React.FunctionComponent<GeneAdditionalInfoSecti
   show,
   onToggle,
 }) => {
+  // Negative Entrez IDs are pseudo-genes like "Other Biomarkers", which have no NCBI/Ensembl info.
+  if (gene.entrezGeneId < 0) {
+    return null;
+  }
+
   const grch37ensemblGene = findLast(
     ensemblGenes,
     item => item.referenceGenome === REFERENCE_GENOME.GRCh37
